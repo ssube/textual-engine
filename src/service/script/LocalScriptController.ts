@@ -1,9 +1,8 @@
 import { ScriptController, ScriptFunction, ScriptScope, ScriptTarget } from '.';
+import { RoomStep } from './common/RoomStep';
 
 const BASE_SCRIPTS: Array<[string, ScriptFunction]> = [
-  ['step', async function (this: ScriptTarget, scope: ScriptScope) {
-    console.log('step script', this, scope);
-  }],
+  ['room-step', RoomStep],
 ];
 
 export class LocalScriptController implements ScriptController {
@@ -29,6 +28,5 @@ export class LocalScriptController implements ScriptController {
     }
 
     await script.call(target, scope);
-    console.log('invoked script', script);
   }
 }

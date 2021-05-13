@@ -4,6 +4,7 @@ import { Metadata } from '../meta/Metadata';
 import { Item } from './Item';
 
 export interface Actor {
+  type: 'actor',
   meta: Metadata;
   items: Array<Item>;
   skills: SkillMap;

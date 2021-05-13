@@ -163,6 +163,7 @@ export class LocalStateController implements StateController {
 
   protected createActor(template: Template<Actor>): Actor {
     const actor: Actor = {
+      type: 'actor',
       items: [],
       meta: {
         desc: template.base.meta.desc.base,
@@ -183,6 +184,7 @@ export class LocalStateController implements StateController {
 
   protected createItem(template: Template<Item>): Item {
     return {
+      type: 'item',
       meta: {
         desc: template.base.meta.desc.base,
         id: `${template.base.meta.id.base}-${this.counter.next('item')}`,
@@ -195,6 +197,7 @@ export class LocalStateController implements StateController {
 
   protected createRoom(template: Template<Room>): Room {
     return {
+      type: 'room',
       actors: [],
       items: [],
       meta: {

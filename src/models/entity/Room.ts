@@ -5,6 +5,7 @@ import { Item } from './Item';
 import { Portal } from './Portal';
 
 export interface Room {
+  type: 'room',
   meta: Metadata;
   actors: Array<Actor>;
   items: Array<Item>;

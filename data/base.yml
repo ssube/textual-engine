@@ -48,7 +48,7 @@ worlds:
                   dest:
                     base: bar
             slots: !map {
-              step: step
+              step: room-step
             }
         - base:
             meta:
@@ -68,7 +68,9 @@ worlds:
                     base: east window
                   dest:
                     base: foo
-            slots: !map {}
+            slots: !map {
+              step: room-step
+            }
     # unused
     dialogue: []
     scripts: []

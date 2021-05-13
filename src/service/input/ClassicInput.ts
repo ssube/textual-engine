@@ -4,6 +4,7 @@ const REMOVED_WORDS = new Set([
   'a',
   'an',
   'at',
+  'on',
   'the',
   'to',
   'toward',

@@ -140,10 +140,18 @@ export class LocalStateController implements StateController {
       throw new Error('state has not been initialized');
     }
 
+    const scope = {
+      data: {
+        time,
+      },
+      script: this.script,
+      state: this.state,
+    };
+
     for (const room of this.state.rooms) {
       await this.script.invoke(room, 'step', {
+        ...scope,
         room,
-        time,
       });
 
       for (const actor of room.actors) {
@@ -151,27 +159,27 @@ export class LocalStateController implements StateController {
         const [command] = await input.last();
 
         await this.script.invoke(actor, 'step', {
+          ...scope,
           actor,
           command,
           room,
-          time,
         });
 
         for (const item of actor.items) {
           await this.script.invoke(item, 'step', {
+            ...scope,
             actor,
             item,
             room,
-            time,
           });
         }
       }
 
       for (const item of room.items) {
         await this.script.invoke(item, 'step', {
+          ...scope,
           item,
           room,
-          time,
         });
       }
     }

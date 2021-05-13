@@ -1,3 +1,5 @@
+import { NotFoundError } from '@apextoaster/js-utils';
+
 import { Input } from '.';
 import { Actor, ActorType } from '../../models/entity/Actor';
 
@@ -21,7 +23,7 @@ export class ActorInputMapper {
     if (input) {
       return input;
     } else {
-      throw new Error('no input for actor');
+      throw new NotFoundError('no input for actor');
     }
   }
 

@@ -1,6 +1,8 @@
-import { InvalidArgumentError } from '@apextoaster/js-utils';
+import { doesExist, InvalidArgumentError } from '@apextoaster/js-utils';
+
 import { ScriptScope, ScriptTarget } from '..';
 import { decrementKey } from '../../../utils/map';
+import { Command } from '../../input';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
   console.log('step script', this.meta.id, Object.keys(scope));
@@ -11,12 +13,11 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
 
   console.log(`actor has ${this.items.length} inventory items`);
 
-  if (Array.isArray(scope.cmds)) {
-    console.log(`actor ${this.meta.name} has ${scope.cmds.length} commands to act upon`);
-
-    for (const cmd of scope.cmds) {
-      console.log(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
-    }
+  if (doesExist(scope.command)) {
+    const cmd = scope.command as Command;
+    console.log(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
+  } else {
+    console.log(`${this.meta.name} has nothing to do`);
   }
 
   const hp = decrementKey(this.stats, 'health');

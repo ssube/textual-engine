@@ -148,11 +148,11 @@ export class LocalStateController implements StateController {
 
       for (const actor of room.actors) {
         const input = await this.input.get(actor);
-        const cmds = await input.last();
+        const [command] = await input.last();
 
         await this.script.invoke(actor, 'step', {
           actor,
-          cmds,
+          command,
           room,
           time,
         });

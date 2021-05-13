@@ -1,4 +1,4 @@
-import { StatMap, VerbMap } from '../../utils/types';
+import { StatMap, VerbMap } from '../../util/types';
 import { Metadata } from '../meta/Metadata';
 
 export interface Item {

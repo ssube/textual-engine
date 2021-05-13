@@ -1,17 +1,18 @@
 import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { Logger } from 'noicejs';
 
 import { CreateParams, StateController } from '.';
-import { Actor, ActorType } from '../../models/entity/Actor';
-import { Item } from '../../models/entity/Item';
-import { PortalGroups } from '../../models/entity/Portal';
-import { Room } from '../../models/entity/Room';
-import { Template } from '../../models/meta/Template';
-import { ReactionConfig, SidebarConfig, State } from '../../models/State';
-import { World } from '../../models/World';
-import { Counter } from '../../utils/counter';
-import { LocalCounter } from '../../utils/counter/LocalCounter';
-import { Random } from '../../utils/random';
-import { MathRandom } from '../../utils/random/MathRandom';
+import { Actor, ActorType } from '../../model/entity/Actor';
+import { Item } from '../../model/entity/Item';
+import { PortalGroups } from '../../model/entity/Portal';
+import { Room } from '../../model/entity/Room';
+import { Template } from '../../model/meta/Template';
+import { ReactionConfig, SidebarConfig, State } from '../../model/State';
+import { World } from '../../model/World';
+import { Counter } from '../../util/counter';
+import { LocalCounter } from '../../util/counter/LocalCounter';
+import { Random } from '../../util/random';
+import { MathRandom } from '../../util/random/MathRandom';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { ScriptController } from '../script';
 import { LocalScriptController } from '../script/LocalScriptController';
@@ -19,17 +20,19 @@ import { LocalScriptController } from '../script/LocalScriptController';
 export class LocalStateController implements StateController {
   protected counter: Counter;
   protected input: ActorInputMapper;
+  protected logger: Logger;
   protected random: Random;
   protected script: ScriptController;
 
   protected state?: State;
   protected world?: World;
 
-  constructor(input: ActorInputMapper) {
+  constructor(input: ActorInputMapper, logger: Logger) {
     this.counter = new LocalCounter();
     this.input = input;
+    this.logger = logger;
     this.random = new MathRandom();
-    this.script = new LocalScriptController();
+    this.script = new LocalScriptController(logger);
   }
 
   /**
@@ -57,7 +60,10 @@ export class LocalStateController implements StateController {
 
     // pick a starting room and create it
     const startRoomId = world.start.rooms[this.random.nextInt(world.start.rooms.length)];
-    console.log(world.templates.rooms, startRoomId);
+    this.logger.debug({
+      rooms: world.templates.rooms,
+      startRoomId,
+    }, 'generating start room');
     const startRoomTemplate = world.templates.rooms.find((it) => it.base.meta.id.base === startRoomId);
     if (isNil(startRoomTemplate)) {
       throw new NotFoundError('invalid start room');
@@ -72,7 +78,10 @@ export class LocalStateController implements StateController {
     const portalGroups = this.gatherPortals(startRoomTemplate);
     for (const [group, portal] of portalGroups) {
       const nextRoomId = Array.from(portal.dests)[this.random.nextInt(portal.dests.size)];
-      console.log('next room', nextRoomId, world.templates.rooms);
+      this.logger.debug({
+        nextRoomId,
+        rooms: world.templates.rooms,
+      }, 'generating next room');
 
       const nextRoomTemplate = world.templates.rooms.find((it) => it.base.meta.id.base === nextRoomId);
       if (isNil(nextRoomTemplate)) {
@@ -98,7 +107,7 @@ export class LocalStateController implements StateController {
       throw new NotFoundError('invalid start actor');
     }
     const startActor = this.createActor(startActorTemplate);
-    startActor.kind = ActorType.PLAYER;
+    startActor.actorType = ActorType.PLAYER;
 
     // add to state and the start room
     state.focus.actor = startActor.meta.id;
@@ -144,6 +153,7 @@ export class LocalStateController implements StateController {
       data: {
         time,
       },
+      logger: this.logger,
       script: this.script,
       state: this.state,
     };
@@ -188,7 +198,7 @@ export class LocalStateController implements StateController {
   protected createActor(template: Template<Actor>): Actor {
     const actor: Actor = {
       type: 'actor',
-      kind: ActorType.DEFAULT,
+      actorType: ActorType.DEFAULT,
       items: [],
       meta: {
         desc: template.base.meta.desc.base,
@@ -201,7 +211,7 @@ export class LocalStateController implements StateController {
     };
 
     for (const itemTemplateId of template.base.items) {
-      const itemTemplate = this.world!.templates.items.find((it) => it.base.meta.id.base === itemTemplateId.id);
+      const itemTemplate = mustExist(this.world).templates.items.find((it) => it.base.meta.id.base === itemTemplateId.id);
       if (isNil(itemTemplate)) {
         throw new NotFoundError('invalid item in actor');
       }
@@ -230,11 +240,12 @@ export class LocalStateController implements StateController {
     const actors = [];
 
     for (const actorTemplateId of template.base.actors) {
-      const actorTemplate = world.templates.actors.find((it) => {
-        console.log('actor find', actorTemplateId, it.base.meta);
-        return it.base.meta.id.base === actorTemplateId.id;
-      });
-      console.log('create actor for room', actorTemplateId, actorTemplate, world.templates.actors);
+      const actorTemplate = world.templates.actors.find((it) => it.base.meta.id.base === actorTemplateId.id);
+      this.logger.debug({
+        actors: world.templates.actors,
+        actorTemplateId,
+        actorTemplate,
+      }, 'create actor for room');
 
       if (isNil(actorTemplate)) {
         throw new NotFoundError('invalid actor in room');
@@ -267,7 +278,9 @@ export class LocalStateController implements StateController {
     const groups: PortalGroups = new Map();
 
     for (const portal of template.base.portals) {
-      console.log('portal group', portal);
+      this.logger.debug({
+        portal,
+      }, 'grouping portal');
       const groupName = portal.base.group.base;
       const group = groups.get(groupName);
 

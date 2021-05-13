@@ -1,7 +1,8 @@
 import { doesExist, isNil } from '@apextoaster/js-utils';
+import { Logger } from 'noicejs';
 
 import { ScriptController, ScriptFunction, ScriptScope, ScriptTarget, ScriptTargetFilter } from '.';
-import { State } from '../../models/State';
+import { State } from '../../model/State';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
 import { RoomStep } from './common/RoomStep';
@@ -13,24 +14,26 @@ const BASE_SCRIPTS: Array<[string, ScriptFunction]> = [
 ];
 
 export class LocalScriptController implements ScriptController {
+  protected logger: Logger;
   protected scripts: Map<string, ScriptFunction>;
 
-  constructor() {
+  constructor(logger: Logger) {
+    this.logger = logger;
     this.scripts = new Map(BASE_SCRIPTS);
   }
 
   async invoke(target: ScriptTarget, slot: string, scope: ScriptScope): Promise<void> {
-    console.log(`invoke ${slot} on ${target.meta.id}`);
+    this.logger.debug(`invoke ${slot} on ${target.meta.id}`);
 
     const scriptName = target.slots.get(slot);
     if (isNil(scriptName)) {
-      console.log('target does not have script defined for slot');
+      this.logger.debug('target does not have script defined for slot');
       return;
     }
 
     const script = this.scripts.get(scriptName);
     if (isNil(script)) {
-      console.log(`unknown script ${scriptName}`);
+      this.logger.error(`unknown script ${scriptName}`);
       return;
     }
 

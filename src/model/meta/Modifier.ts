@@ -1,4 +1,4 @@
-import { SkillMap, StatMap, VerbMap } from '../../utils/types';
+import { SkillMap, StatMap, VerbMap } from '../../util/types';
 
 export interface Modifier {
   name: {

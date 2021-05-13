@@ -1,9 +1,10 @@
-import { Actor } from '../../models/entity/Actor';
-import { Item } from '../../models/entity/Item';
-import { Room } from '../../models/entity/Room';
-import { Metadata } from '../../models/meta/Metadata';
-import { State } from '../../models/State';
-import { Immutable } from '../../utils/types';
+import { Logger } from 'noicejs';
+import { Actor } from '../../model/entity/Actor';
+import { Item } from '../../model/entity/Item';
+import { Room } from '../../model/entity/Room';
+import { Metadata } from '../../model/meta/Metadata';
+import { State } from '../../model/State';
+import { Immutable } from '../../util/types';
 import { Command } from '../input';
 
 export type SlotMap = Map<string, string>;
@@ -16,6 +17,8 @@ export interface ScriptScope {
    * Assorted data, primitives only.
    */
   data: Record<string, number | string>;
+
+  logger: Logger;
 
   /**
    * Immutable reference to state for broadcast, lookups, etc.

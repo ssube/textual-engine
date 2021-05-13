@@ -1,9 +1,11 @@
 import { isNil } from '@apextoaster/js-utils';
 import { promises } from 'fs';
+import { LogLevel } from 'noicejs';
 import { argv, exit, stdin, stdout } from 'process';
 import { createInterface } from 'readline';
 
-import { ActorType } from './models/entity/Actor';
+import { BunyanLogger } from './logger/BunyanLogger';
+import { ActorType } from './model/entity/Actor';
 import { ActorInputMapper } from './service/input/ActorInputMapper';
 import { BehaviorInput } from './service/input/BehaviorInput';
 import { ClassicInput } from './service/input/ClassicInput';
@@ -11,7 +13,13 @@ import { YamlParser } from './service/parser/YamlParser';
 import { LocalStateController } from './service/state/LocalStateController';
 
 export async function main(args: Array<string>) {
-  console.log('text adventure', args);
+  const logger = BunyanLogger.create({
+    level: LogLevel.DEBUG,
+    name: 'textual-engine',
+  });
+  logger.debug({
+    args,
+  }, 'text adventure');
 
   const rl = createInterface({
     input: stdin,
@@ -20,7 +28,10 @@ export async function main(args: Array<string>) {
   });
 
   // create DI container and services
-  console.log(ClassicInput, YamlParser);
+  logger.debug({
+    ClassicInput,
+    YamlParser,
+  }, 'starting services');
   const input = new ClassicInput();
   const inputMapper = new ActorInputMapper({
     [ActorType.DEFAULT]: new BehaviorInput(),
@@ -28,7 +39,7 @@ export async function main(args: Array<string>) {
     [ActorType.REMOTE]: input,
   });
   const parser = new YamlParser();
-  const stateCtrl = new LocalStateController(inputMapper);
+  const stateCtrl = new LocalStateController(inputMapper, logger);
 
   // load data files
   const dataStr = await promises.readFile(args[2], {
@@ -39,7 +50,7 @@ export async function main(args: Array<string>) {
   // create state from world
   const world = data.worlds.find((it) => it.meta.id === args[3]);
   if (isNil(world)) {
-    console.log('invalid world');
+    logger.error('invalid world');
     exit(1);
   }
 
@@ -58,7 +69,9 @@ export async function main(args: Array<string>) {
 
     // parse last input
     const cmd = await input.parse(line);
-    console.log(cmd);
+    logger.debug({
+      cmd,
+    }, 'parsed command');
 
     // step world
     const now = Date.now();
@@ -79,4 +92,8 @@ export async function main(args: Array<string>) {
   }));
 }
 
-main(argv).then(() => console.log('done')).catch((err) => console.error('error in main', err));
+main(argv).then(() => {
+  console.log('done');
+}).catch((err) => {
+  console.error('error in main', err);
+});

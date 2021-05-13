@@ -1,7 +1,7 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 
 import { Input } from '.';
-import { Actor, ActorType } from '../../models/entity/Actor';
+import { Actor, ActorType } from '../../model/entity/Actor';
 
 export type InputMapperOptions = Record<ActorType, Input>;
 
@@ -15,7 +15,7 @@ export class ActorInputMapper {
   }
 
   add(actor: Actor) {
-    this.actors.set(actor.meta.id, this.inputs[actor.kind]);
+    this.actors.set(actor.meta.id, this.inputs[actor.actorType]);
   }
 
   get(actor: Actor): Input {

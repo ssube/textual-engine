@@ -1,5 +1,5 @@
-import { State } from '../../models/State';
-import { World } from '../../models/World';
+import { State } from '../../model/State';
+import { World } from '../../model/World';
 
 export interface CreateParams {
   /**

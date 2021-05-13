@@ -1,4 +1,4 @@
-import { isNil } from "@apextoaster/js-utils";
+import { doesExist, isNil } from "@apextoaster/js-utils";
 
 export function decrementKey<T>(map: Map<T, number>, key: T, step = 1, min = 0): number {
   const last = map.get(key);
@@ -21,5 +21,14 @@ export function incrementKey<T>(map: Map<T, number>, key: T, step = 1, max = 255
     const next = Math.min(max, last + step);
     map.set(key, next);
     return next;
+  }
+}
+
+export function getKey<T>(map: Map<T, number>, key: T, defaultValue = 0): number {
+  const last = map.get(key);
+  if (doesExist(last)) {
+    return last;
+  } else {
+    return defaultValue;
   }
 }

@@ -1,5 +1,5 @@
 import { SlotMap } from '../../service/script';
-import { SkillMap, StatMap } from '../../utils/types';
+import { SkillMap, StatMap } from '../../util/types';
 import { Metadata } from '../meta/Metadata';
 import { Item } from './Item';
 
@@ -15,7 +15,7 @@ export interface Actor {
   /**
    * @todo should be named type, but that was already used
    */
-  kind: ActorType,
+  actorType: ActorType,
 
   meta: Metadata;
   items: Array<Item>;

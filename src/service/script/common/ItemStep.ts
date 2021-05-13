@@ -1,9 +1,12 @@
 import { ScriptScope, ScriptTarget } from '..';
 
 export async function ItemStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
-  console.log('step script', this.meta.id, Object.keys(scope));
+  scope.logger.debug({
+    meta: this.meta,
+    scope: Object.keys(scope),
+  }, 'step script');
 
   if (this.type === 'item') {
-    console.log(`item has ${this.slots.size} verbs`);
+    scope.logger.debug(`item has ${this.slots.size} verbs`);
   }
 }

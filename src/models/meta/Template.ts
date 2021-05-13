@@ -1,3 +1,4 @@
+import { Metadata } from './Metadata';
 import { Modifier } from './Modifier';
 
 export interface TemplateNumber {
@@ -11,10 +12,21 @@ export interface TemplateString {
   base: string;
 }
 
+export interface TemplateRef {
+  type: 'id';
+  id: string;
+}
+
+export interface BaseEntity {
+  meta: Metadata;
+}
+
 export type TemplatePrimitive<T> =
-  T extends number ? TemplateNumber :
-  T extends string ? TemplateString :
-  T extends Array<infer V> ? Array<Template<V>> :
+  T extends number ? TemplateNumber :                 // number -> range
+  T extends string ? TemplateString :                 // string -> template
+  T extends BaseEntity ? TemplateRef :                // entity -> id
+  T extends Array<BaseEntity> ? Array<TemplateRef> :  // Array<entity> -> Array<id>
+  T extends Array<infer V> ? Array<Template<V>> :     // Array<V> -> Array<Template<V>>
   T extends Map<infer K, infer V> ? Map<K, BaseTemplate<V>> :
   T extends object ? BaseTemplate<T> :
   never;

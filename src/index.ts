@@ -1,7 +1,11 @@
+import { isNil } from '@apextoaster/js-utils';
 import { promises } from 'fs';
 import { argv, exit, stdin, stdout } from 'process';
 import { createInterface } from 'readline';
 
+import { ActorType } from './models/entity/Actor';
+import { ActorInputMapper } from './service/input/ActorInputMapper';
+import { BehaviorInput } from './service/input/BehaviorInput';
 import { ClassicInput } from './service/input/ClassicInput';
 import { YamlParser } from './service/parser/YamlParser';
 import { LocalStateController } from './service/state/LocalStateController';
@@ -18,8 +22,13 @@ export async function main(args: Array<string>) {
   // create DI container and services
   console.log(ClassicInput, YamlParser);
   const input = new ClassicInput();
+  const inputMapper = new ActorInputMapper({
+    [ActorType.DEFAULT]: new BehaviorInput(),
+    [ActorType.PLAYER]: input,
+    [ActorType.REMOTE]: input,
+  });
   const parser = new YamlParser();
-  const stateCtrl = new LocalStateController();
+  const stateCtrl = new LocalStateController(inputMapper);
 
   // load data files
   const dataStr = await promises.readFile(args[2], {
@@ -29,7 +38,7 @@ export async function main(args: Array<string>) {
 
   // create state from world
   const world = data.worlds.find((it) => it.meta.id === args[3]);
-  if (world === null || world === undefined) {
+  if (isNil(world)) {
     console.log('invalid world');
     exit(1);
   }

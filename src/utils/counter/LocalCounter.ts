@@ -1,4 +1,6 @@
-import { Counter } from ".";
+import { isNil } from '@apextoaster/js-utils';
+
+import { Counter } from '.';
 
 const INITIAL_VALUE = 0;
 
@@ -11,7 +13,7 @@ export class LocalCounter implements Counter {
 
   next(group: string) {
     const last = this.groups.get(group);
-    if (last === null || last === undefined) {
+    if (isNil(last)) {
       this.groups.set(group, INITIAL_VALUE);
       return INITIAL_VALUE;
     } else {

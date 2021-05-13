@@ -1,5 +1,7 @@
+import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+
 import { CreateParams, StateController } from '.';
-import { Actor } from '../../models/entity/Actor';
+import { Actor, ActorType } from '../../models/entity/Actor';
 import { Item } from '../../models/entity/Item';
 import { PortalGroups } from '../../models/entity/Portal';
 import { Room } from '../../models/entity/Room';
@@ -10,19 +12,22 @@ import { Counter } from '../../utils/counter';
 import { LocalCounter } from '../../utils/counter/LocalCounter';
 import { Random } from '../../utils/random';
 import { MathRandom } from '../../utils/random/MathRandom';
+import { ActorInputMapper } from '../input/ActorInputMapper';
 import { ScriptController } from '../script';
 import { LocalScriptController } from '../script/LocalScriptController';
 
 export class LocalStateController implements StateController {
   protected counter: Counter;
+  protected input: ActorInputMapper;
   protected random: Random;
   protected script: ScriptController;
 
   protected state?: State;
   protected world?: World;
 
-  constructor() {
+  constructor(input: ActorInputMapper) {
     this.counter = new LocalCounter();
+    this.input = input;
     this.random = new MathRandom();
     this.script = new LocalScriptController();
   }
@@ -46,12 +51,16 @@ export class LocalStateController implements StateController {
       rooms: [],
     };
 
+    // save state for later
+    this.state = state;
+    this.world = world;
+
     // pick a starting room and create it
     const startRoomId = world.start.rooms[this.random.nextInt(world.start.rooms.length)];
     console.log(world.templates.rooms, startRoomId);
     const startRoomTemplate = world.templates.rooms.find((it) => it.base.meta.id.base === startRoomId);
-    if (startRoomTemplate === null || startRoomTemplate === undefined) {
-      throw new Error('invalid start room');
+    if (isNil(startRoomTemplate)) {
+      throw new NotFoundError('invalid start room');
     }
     const startRoom = this.createRoom(startRoomTemplate);
 
@@ -66,8 +75,8 @@ export class LocalStateController implements StateController {
       console.log('next room', nextRoomId, world.templates.rooms);
 
       const nextRoomTemplate = world.templates.rooms.find((it) => it.base.meta.id.base === nextRoomId);
-      if (nextRoomTemplate === null || nextRoomTemplate === undefined) {
-        throw new Error('invalid next room');
+      if (isNil(nextRoomTemplate)) {
+        throw new NotFoundError('invalid next room');
       }
 
       const nextRoom = this.createRoom(nextRoomTemplate);
@@ -85,18 +94,16 @@ export class LocalStateController implements StateController {
     // pick a starting actor and create it
     const startActorId = world.start.actors[this.random.nextInt(world.start.actors.length)];
     const startActorTemplate = world.templates.actors.find((it) => it.base.meta.id.base === startActorId);
-    if (startActorTemplate === null || startActorTemplate === undefined) {
-      throw new Error('invalid start actor');
+    if (isNil(startActorTemplate)) {
+      throw new NotFoundError('invalid start actor');
     }
     const startActor = this.createActor(startActorTemplate);
+    startActor.kind = ActorType.PLAYER;
 
     // add to state and the start room
     state.focus.actor = startActor.meta.id;
     startRoom.actors.push(startActor);
-
-    // save state for later
-    this.state = state;
-    this.world = world;
+    this.input.add(startActor);
   }
 
   /**
@@ -114,7 +121,7 @@ export class LocalStateController implements StateController {
    * Save the current world state.
    */
   async save(): Promise<State> {
-    if (this.state === null || this.state === undefined) {
+    if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
     return this.state;
@@ -124,7 +131,7 @@ export class LocalStateController implements StateController {
    * Step the internal world state, simulating some turns and time passing.
    */
   async step(time: number) {
-    if (this.state === null || this.state === undefined) {
+    if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
 
@@ -135,8 +142,12 @@ export class LocalStateController implements StateController {
       });
 
       for (const actor of room.actors) {
+        const input = await this.input.get(actor);
+        const cmds = await input.last();
+
         await this.script.invoke(actor, 'step', {
           actor,
+          cmds,
           room,
           time,
         });
@@ -164,6 +175,7 @@ export class LocalStateController implements StateController {
   protected createActor(template: Template<Actor>): Actor {
     const actor: Actor = {
       type: 'actor',
+      kind: ActorType.DEFAULT,
       items: [],
       meta: {
         desc: template.base.meta.desc.base,
@@ -172,10 +184,15 @@ export class LocalStateController implements StateController {
       },
       skills: new Map(),
       slots: new Map(template.base.slots),
-      stats: new Map(),
+      stats: new Map(template.base.stats),
     };
 
-    for (const itemTemplate of template.base.items) {
+    for (const itemTemplateId of template.base.items) {
+      const itemTemplate = this.world!.templates.items.find((it) => it.base.meta.id.base === itemTemplateId.id);
+      if (isNil(itemTemplate)) {
+        throw new NotFoundError('invalid item in actor');
+      }
+
       actor.items.push(this.createItem(itemTemplate));
     }
 
@@ -196,9 +213,29 @@ export class LocalStateController implements StateController {
   }
 
   protected createRoom(template: Template<Room>): Room {
+    const world = mustExist(this.world);
+    const actors = [];
+
+    for (const actorTemplateId of template.base.actors) {
+      const actorTemplate = world.templates.actors.find((it) => {
+        console.log('actor find', actorTemplateId, it.base.meta);
+        return it.base.meta.id.base === actorTemplateId.id;
+      });
+      console.log('create actor for room', actorTemplateId, actorTemplate, world.templates.actors);
+
+      if (isNil(actorTemplate)) {
+        throw new NotFoundError('invalid actor in room');
+      }
+
+      const actor = this.createActor(actorTemplate);
+
+      this.input.add(actor);
+      actors.push(actor);
+    }
+
     return {
       type: 'room',
-      actors: [],
+      actors,
       items: [],
       meta: {
         desc: template.base.meta.desc.base,

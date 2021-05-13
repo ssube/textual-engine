@@ -1,7 +1,11 @@
 import { Command, Input } from '.';
 
 export class ClassicInput implements Input {
-  constructor() {}
+  protected lastParse: Array<Command>;
+
+  constructor() {
+    this.lastParse = [];
+  }
 
   async tokenize(input: string): Promise<string[]> {
     return input.split(' ');
@@ -11,9 +15,15 @@ export class ClassicInput implements Input {
     const tokens = await this.tokenize(input);
     const [verb, ...targets] = tokens;
 
-    return [{
+    this.lastParse = [{
       verb,
       target: targets.join(' '),
     }];
+
+    return this.lastParse;
+  }
+
+  async last(): Promise<Command[]> {
+    return this.lastParse;
   }
 }

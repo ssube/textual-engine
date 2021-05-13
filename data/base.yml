@@ -18,6 +18,9 @@ worlds:
               desc:
                 base: bin
             items: []
+            slots: !map {
+              step: actor-step
+            }
         - base:
             meta:
               id:
@@ -27,6 +30,12 @@ worlds:
               desc:
                 base: bon
             items: []
+            stats: !map {
+              health: 14
+            }
+            slots: !map {
+              step: actor-step
+            }
       items: []
       rooms:
         - base:
@@ -37,7 +46,9 @@ worlds:
                 base: foo
               desc:
                 base: foo
-            actors: []
+            actors:
+              - id: bon
+              - id: bon
             items: []
             portals:
               - base:

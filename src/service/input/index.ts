@@ -15,4 +15,9 @@ export interface Input {
    * for keywords and respecting parts of speech.
    */
   parse(input: string): Promise<Array<Command>>;
+
+  /**
+   * Return the last set of parsed commands again.
+   */
+  last(): Promise<Array<Command>>;
 }

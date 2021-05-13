@@ -1,10 +1,10 @@
 import { Command, Input } from '.';
 
 export class ClassicInput implements Input {
-  protected lastParse: Array<Command>;
+  protected history: Array<Command>;
 
   constructor() {
-    this.lastParse = [];
+    this.history = [];
   }
 
   async tokenize(input: string): Promise<string[]> {
@@ -15,15 +15,18 @@ export class ClassicInput implements Input {
     const tokens = await this.tokenize(input);
     const [verb, ...targets] = tokens;
 
-    this.lastParse = [{
+    const cmd: Command = {
+      input,
       verb,
       target: targets.join(' '),
-    }];
+    };
 
-    return this.lastParse;
+    this.history.push(cmd);
+
+    return [cmd];
   }
 
   async last(): Promise<Command[]> {
-    return this.lastParse;
+    return this.history;
   }
 }

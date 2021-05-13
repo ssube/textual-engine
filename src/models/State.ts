@@ -26,6 +26,6 @@ export interface State {
     room: string;
   };
 
-  input: Array<string>;
+  input: Map<string, Array<string>>;
   rooms: Array<Room>;
 }

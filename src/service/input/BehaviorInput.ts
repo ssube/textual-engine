@@ -1,6 +1,7 @@
 import { Command, Input } from '.';
 
 const WAIT_CMDS = [{
+  input: 'wait turn',
   verb: 'wait',
   target: 'turn',
 }];

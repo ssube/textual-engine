@@ -48,13 +48,15 @@ export async function main(args: Array<string>) {
     seed: '',
   });
 
+  let turnCount = 0;
   let lastNow = Date.now();
   // while playing:
+  rl.setPrompt(`turn ${turnCount} > `);
   rl.prompt();
   for await (const line of rl) {
     await stateCtrl.next();
 
-    // take input
+    // parse last input
     const cmd = await input.parse(line);
     console.log(cmd);
 
@@ -63,6 +65,8 @@ export async function main(args: Array<string>) {
     await stateCtrl.step(now - lastNow);
     lastNow = now;
 
+    // wait for input
+    rl.setPrompt(`turn ${++turnCount} > `);
     rl.prompt()
   }
 

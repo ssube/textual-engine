@@ -25,6 +25,14 @@ export class ActorInputMapper {
     }
   }
 
+  async history(): Promise<Map<string, Array<string>>> {
+    const history = new Map();
+    for (const [actor, input] of this.actors) {
+      history.set(actor, await input.last());
+    }
+    return history;
+  }
+
   protected getInput(type: ActorType): Input {
     const input = this.inputs[type];
     if (input) {

@@ -47,7 +47,7 @@ export class LocalStateController implements StateController {
         actor: '',
         room: '',
       },
-      input: [],
+      input: new Map(),
       rooms: [],
     };
 
@@ -124,7 +124,12 @@ export class LocalStateController implements StateController {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
-    return this.state;
+
+    const input = await this.input.history();
+    return {
+      ...this.state,
+      input,
+    };
   }
 
   /**

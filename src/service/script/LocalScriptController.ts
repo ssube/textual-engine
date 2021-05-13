@@ -1,7 +1,7 @@
-import { ScriptTarget, ScriptController } from ".";
+import { ScriptController, ScriptScope, ScriptTarget } from '.';
 
 export class LocalScriptController implements ScriptController {
-  invoke(target: ScriptTarget, slot: string): Promise<void> {
-    throw new Error("Method not implemented.");
+  async invoke(target: ScriptTarget, slot: string, scope: ScriptScope): Promise<void> {
+    console.log('invoke script', target, slot, scope);
   }
 }

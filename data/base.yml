@@ -1,0 +1,72 @@
+saves: [] # template file
+worlds:
+  - meta:
+      id: test
+      name: test world
+      desc: this is a test adventure
+    start:
+      actors: [bin, bon]
+      rooms: [foo, bar]
+    templates:
+      actors:
+        - base:
+            meta:
+              id:
+                base: bin
+              name:
+                base: bin
+              desc:
+                base: bin
+            items: []
+        - base:
+            meta:
+              id:
+                base: bon
+              name:
+                base: bon
+              desc:
+                base: bon
+            items: []
+      items: []
+      rooms:
+        - base:
+            meta:
+              id:
+                base: foo
+              name:
+                base: foo
+              desc:
+                base: foo
+            actors: []
+            items: []
+            portals:
+              - base:
+                  group:
+                    base: west
+                  name:
+                    base: west door
+                  dest:
+                    base: bar
+            slots: !map {}
+        - base:
+            meta:
+              id:
+                base: bar
+              name:
+                base: bar
+              desc:
+                base: bar
+            actors: []
+            items: []
+            portals:
+              - base:
+                  group:
+                    base: east
+                  name:
+                    base: east window
+                  dest:
+                    base: foo
+            slots: !map {}
+    # unused
+    dialogue: []
+    scripts: []

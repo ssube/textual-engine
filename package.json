@@ -1,0 +1,16 @@
+{
+  "name": "text-adventure",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "ssube <seansube@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.1",
+    "@types/node": "^15.0.3",
+    "esm": "^3.2.25",
+    "js-yaml": "^4.1.0",
+    "ts-node": "^9.1.1",
+    "tslib": "^2.2.0",
+    "typescript": "^4.2.4"
+  }
+}

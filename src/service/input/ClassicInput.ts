@@ -1,10 +1,19 @@
-import { Command, Input } from ".";
+import { Command, Input } from '.';
 
 export class ClassicInput implements Input {
-  tokenize(input: string): Promise<string[]> {
-    throw new Error("Method not implemented.");
+  constructor() {}
+
+  async tokenize(input: string): Promise<string[]> {
+    return input.split(' ');
   }
-  parse(input: string): Promise<Command[]> {
-    throw new Error("Method not implemented.");
+
+  async parse(input: string): Promise<Command[]> {
+    const tokens = await this.tokenize(input);
+    const [verb, ...targets] = tokens;
+
+    return [{
+      verb,
+      target: targets.join(' '),
+    }];
   }
 }

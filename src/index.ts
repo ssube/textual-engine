@@ -1,8 +1,7 @@
 import { isNil } from '@apextoaster/js-utils';
 import { promises } from 'fs';
 import { LogLevel } from 'noicejs';
-import { argv, exit, stdin, stdout } from 'process';
-import { createInterface } from 'readline';
+import { argv, exit } from 'process';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
@@ -10,6 +9,7 @@ import { ActorInputMapper } from './service/input/ActorInputMapper';
 import { BehaviorInput } from './service/input/BehaviorInput';
 import { ClassicInput } from './service/input/ClassicInput';
 import { YamlParser } from './service/parser/YamlParser';
+import { LineRender } from './service/render/LineRender';
 import { LocalStateController } from './service/state/LocalStateController';
 
 export async function main(args: Array<string>) {
@@ -21,11 +21,7 @@ export async function main(args: Array<string>) {
     args,
   }, 'text adventure');
 
-  const rl = createInterface({
-    input: stdin,
-    output: stdout,
-    prompt: '> ',
-  });
+  const render = new LineRender();
 
   // create DI container and services
   logger.debug({
@@ -61,11 +57,15 @@ export async function main(args: Array<string>) {
 
   let turnCount = 0;
   let lastNow = Date.now();
+
   // while playing:
-  rl.setPrompt(`turn ${turnCount} > `);
-  rl.prompt();
-  for await (const line of rl) {
-    await stateCtrl.next();
+  while (true) {
+    // wait for input
+    const line = await render.read(`turn ${++turnCount} > `);
+    if (line === 'quit') {
+      await render.stop();
+      break;
+    }
 
     // parse last input
     const cmd = await input.parse(line);
@@ -76,11 +76,6 @@ export async function main(args: Array<string>) {
     // step world
     const now = Date.now();
     await stateCtrl.step(now - lastNow);
-    lastNow = now;
-
-    // wait for input
-    rl.setPrompt(`turn ${++turnCount} > `);
-    rl.prompt()
   }
 
   const state = await stateCtrl.save();
@@ -90,6 +85,7 @@ export async function main(args: Array<string>) {
     }],
     worlds: [],
   });
+
   logger.info({
     state: stateStr,
   }, 'saved world state');

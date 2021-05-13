@@ -11,9 +11,9 @@ import { ReactionConfig, SidebarConfig, State } from '../../model/State';
 import { World } from '../../model/World';
 import { Counter } from '../../util/counter';
 import { LocalCounter } from '../../util/counter/LocalCounter';
-import { Random } from '../../util/random';
-import { MathRandom } from '../../util/random/MathRandom';
 import { ActorInputMapper } from '../input/ActorInputMapper';
+import { RandomGenerator } from '../random';
+import { MathRandomGenerator } from '../random/MathRandom';
 import { ScriptController, SuppliedScope } from '../script';
 import { LocalScriptController } from '../script/LocalScriptController';
 
@@ -21,7 +21,7 @@ export class LocalStateController implements StateController {
   protected counter: Counter;
   protected input: ActorInputMapper;
   protected logger: Logger;
-  protected random: Random;
+  protected random: RandomGenerator;
   protected script: ScriptController;
 
   protected state?: State;
@@ -33,7 +33,7 @@ export class LocalStateController implements StateController {
     this.logger = logger.child({
       kind: LocalStateController.name,
     });
-    this.random = new MathRandom();
+    this.random = new MathRandomGenerator();
     this.script = new LocalScriptController(logger);
   }
 

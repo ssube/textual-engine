@@ -1,7 +1,7 @@
 import { doesExist, isNil } from '@apextoaster/js-utils';
 import { Logger } from 'noicejs';
 
-import { ScriptController, ScriptFunction, ScriptScope, ScriptTarget, ScriptTargetFilter } from '.';
+import { ScriptController, ScriptFunction, ScriptTarget, ScriptTargetFilter, SuppliedScope } from '.';
 import { State } from '../../model/State';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
@@ -18,11 +18,13 @@ export class LocalScriptController implements ScriptController {
   protected scripts: Map<string, ScriptFunction>;
 
   constructor(logger: Logger) {
-    this.logger = logger;
+    this.logger = logger.child({
+      kind: LocalScriptController.name,
+    });
     this.scripts = new Map(BASE_SCRIPTS);
   }
 
-  async invoke(target: ScriptTarget, slot: string, scope: ScriptScope): Promise<void> {
+  async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
     this.logger.debug(`invoke ${slot} on ${target.meta.id}`);
 
     const scriptName = target.slots.get(slot);
@@ -37,10 +39,16 @@ export class LocalScriptController implements ScriptController {
       return;
     }
 
-    await script.call(target, scope, this);
+    await script.call(target, {
+      ...scope,
+      logger: this.logger.child({
+        script: scriptName,
+      }),
+      script: this,
+    });
   }
 
-  async broadcast(state: State, filter: ScriptTargetFilter, slot: string, scope: ScriptScope): Promise<void> {
+  async broadcast(state: State, filter: ScriptTargetFilter, slot: string, scope: SuppliedScope): Promise<void> {
     for (const room of state.rooms) {
       if (this.match(room, filter)) {
         await this.invoke(room, slot, scope);

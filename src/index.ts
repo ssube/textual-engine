@@ -84,12 +84,15 @@ export async function main(args: Array<string>) {
   }
 
   const state = await stateCtrl.save();
-  console.dir(parser.save({
+  const stateStr = parser.save({
     saves: [{
       state,
     }],
     worlds: [],
-  }));
+  });
+  logger.info({
+    state: stateStr,
+  }, 'saved world state');
 }
 
 main(argv).then(() => {

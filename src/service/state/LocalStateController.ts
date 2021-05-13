@@ -14,7 +14,7 @@ import { LocalCounter } from '../../util/counter/LocalCounter';
 import { Random } from '../../util/random';
 import { MathRandom } from '../../util/random/MathRandom';
 import { ActorInputMapper } from '../input/ActorInputMapper';
-import { ScriptController } from '../script';
+import { ScriptController, SuppliedScope } from '../script';
 import { LocalScriptController } from '../script/LocalScriptController';
 
 export class LocalStateController implements StateController {
@@ -30,7 +30,9 @@ export class LocalStateController implements StateController {
   constructor(input: ActorInputMapper, logger: Logger) {
     this.counter = new LocalCounter();
     this.input = input;
-    this.logger = logger;
+    this.logger = logger.child({
+      kind: LocalStateController.name,
+    });
     this.random = new MathRandom();
     this.script = new LocalScriptController(logger);
   }
@@ -149,12 +151,10 @@ export class LocalStateController implements StateController {
       throw new Error('state has not been initialized');
     }
 
-    const scope = {
+    const scope: SuppliedScope = {
       data: {
         time,
       },
-      logger: this.logger,
-      script: this.script,
       state: this.state,
     };
 

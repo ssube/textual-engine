@@ -1,6 +1,6 @@
-import { ScriptController, ScriptScope, ScriptTarget } from '..';
+import { ScriptScope, ScriptTarget } from '..';
 
-export async function RoomStep(this: ScriptTarget, scope: ScriptScope, script: ScriptController): Promise<void> {
+export async function RoomStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
   scope.logger.debug({
     meta: this.meta,
     scope: Object.keys(scope),
@@ -10,7 +10,7 @@ export async function RoomStep(this: ScriptTarget, scope: ScriptScope, script: S
     scope.logger.debug(`room has ${this.portals.length} portals`);
   }
 
-  await script.broadcast(scope.state, {
+  await scope.script.broadcast(scope.state, {
     id: 'bon',
   }, 'use', scope);
 }

@@ -10,7 +10,7 @@ import { Command } from '../input';
 export type SlotMap = Map<string, string>;
 
 export type ScriptTarget = Room | Item | Actor;
-export type ScriptFunction = (this: ScriptTarget, scope: ScriptScope, script: ScriptController) => Promise<void>;
+export type ScriptFunction = (this: ScriptTarget, scope: ScriptScope) => Promise<void>;
 
 export interface ScriptScope {
   /**
@@ -19,6 +19,8 @@ export interface ScriptScope {
   data: Record<string, number | string>;
 
   logger: Logger;
+
+  script: ScriptController;
 
   /**
    * Immutable reference to state for broadcast, lookups, etc.
@@ -32,9 +34,11 @@ export interface ScriptScope {
   room?: Room;
 }
 
+export type SuppliedScope = Omit<ScriptScope, 'logger' | 'script'>;
+
 export type ScriptTargetFilter = Partial<Metadata>;
 
 export interface ScriptController {
-  broadcast(state: Immutable<State>, filter: ScriptTargetFilter, slot: string, scope: ScriptScope): Promise<void>;
-  invoke(target: ScriptTarget, slot: string, scope: ScriptScope): Promise<void>;
+  broadcast(state: Immutable<State>, filter: ScriptTargetFilter, slot: string, scope: SuppliedScope): Promise<void>;
+  invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void>;
 }

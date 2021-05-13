@@ -51,7 +51,7 @@ export async function main(args: Array<string>) {
 
     // step world
     const now = Date.now();
-    stateCtrl.step(now - lastNow);
+    await stateCtrl.step(now - lastNow);
     lastNow = now;
 
     rl.prompt()

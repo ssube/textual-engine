@@ -47,7 +47,9 @@ worlds:
                     base: west door
                   dest:
                     base: bar
-            slots: !map {}
+            slots: !map {
+              step: step
+            }
         - base:
             meta:
               id:

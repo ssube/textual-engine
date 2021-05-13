@@ -94,6 +94,7 @@ export class LocalStateController implements StateController {
     state.focus.actor = startActor.meta.id;
     startRoom.actors.push(startActor);
 
+    // save state for later
     this.state = state;
     this.world = world;
   }
@@ -128,15 +129,20 @@ export class LocalStateController implements StateController {
     }
 
     for (const room of this.state.rooms) {
+      await this.script.invoke(room, 'step', {
+        room,
+        time,
+      });
+
       for (const actor of room.actors) {
-        this.script.invoke(actor, 'step', {
+        await this.script.invoke(actor, 'step', {
           actor,
           room,
           time,
         });
 
         for (const item of actor.items) {
-          this.script.invoke(item, 'step', {
+          await this.script.invoke(item, 'step', {
             actor,
             item,
             room,
@@ -146,7 +152,7 @@ export class LocalStateController implements StateController {
       }
 
       for (const item of room.items) {
-        this.script.invoke(item, 'step', {
+        await this.script.invoke(item, 'step', {
           item,
           room,
           time,
@@ -164,7 +170,7 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
       },
       skills: new Map(),
-      slots: new Map(),
+      slots: new Map(template.base.slots),
       stats: new Map(),
     };
 
@@ -183,7 +189,7 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
       },
       stats: new Map(),
-      slots: new Map(),
+      slots: new Map(template.base.slots),
     };
   }
 
@@ -197,7 +203,7 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
       },
       portals: [],
-      slots: new Map(),
+      slots: new Map(template.base.slots),
     };
   }
 

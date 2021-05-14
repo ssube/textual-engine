@@ -104,27 +104,31 @@ export async function main(args: Array<string>) {
   render.promptSync(`turn ${turnCount} > `);
 
   for await (const line of render.stream()) {
-    if (line === 'quit') {
-      await render.stop();
-      continue;
+    switch (line) {
+      case 'quit':
+        await render.stop();
+        break;
+      case 'debug':
+        await debugState(render, state);
+        break;
+      case 'help':
+        await render.show('help');
+        break;
+      default: {
+        // parse last input
+        const cmd = await input.parse(line);
+        logger.debug({
+          cmd,
+        }, 'parsed command');
+
+        // step world
+        const now = Date.now();
+        await stateCtrl.step(now - lastNow);
+
+        // wait for input
+        render.promptSync(`turn ${++turnCount} > `);
+      }
     }
-
-    if (line === 'debug') {
-      await debugState(render, state);
-    }
-
-    // parse last input
-    const cmd = await input.parse(line);
-    logger.debug({
-      cmd,
-    }, 'parsed command');
-
-    // step world
-    const now = Date.now();
-    await stateCtrl.step(now - lastNow);
-
-    // wait for input
-    render.promptSync(`turn ${++turnCount} > `);
   }
 
   const saveState = await stateCtrl.save();

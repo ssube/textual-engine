@@ -1,4 +1,4 @@
-import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { doesExist, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { Logger } from 'noicejs';
 
 import { CreateParams, StateController } from '.';
@@ -43,7 +43,7 @@ export class LocalStateController implements StateController {
   /**
    * Create a new world state from a world template.
    */
-  async from(world: World, params: CreateParams) {
+  async from(world: World, params: CreateParams): Promise<State> {
     const state: State = {
       config: {
         reaction: ReactionConfig.REACTION_STAT,
@@ -92,6 +92,8 @@ export class LocalStateController implements StateController {
     state.focus.actor = startActor.meta.id;
     startRoom.actors.push(startActor);
     this.input.add(startActor);
+
+    return state;
   }
 
   /**
@@ -293,24 +295,36 @@ export class LocalStateController implements StateController {
       return [];
     }
 
+    // TODO: group first, union dests
+    const groups: Map<string, string> = new Map();
     const results: Array<Portal> = [];
 
     for (const portal of portals) {
-      const destTemplateId = renderString(portal.dest);
-      const destTemplate = mustExist(this.world).templates.rooms.find((it) => it.base.meta.id.base === destTemplateId);
+      const existing = groups.get(portal.group.base);
 
-      if (isNil(destTemplate)) {
-        throw new NotFoundError('invalid room in portal dest');
+      if (doesExist(existing)) {
+        results.push({
+          dest: existing,
+          group: renderString(portal.group),
+          name: renderString(portal.name),
+        });
+      } else {
+        const destTemplateId = renderString(portal.dest);
+        const destTemplate = mustExist(this.world).templates.rooms.find((it) => it.base.meta.id.base === destTemplateId);
+
+        if (isNil(destTemplate)) {
+          throw new NotFoundError('invalid room in portal dest');
+        }
+
+        const destRoom = this.createRoom(destTemplate, depth - 1);
+        mustExist(this.state).rooms.push(destRoom);
+
+        results.push({
+          dest: destRoom.meta.id,
+          group: renderString(portal.group),
+          name: renderString(portal.name),
+        });
       }
-
-      const destRoom = this.createRoom(destTemplate, depth - 1);
-      mustExist(this.state).rooms.push(destRoom);
-
-      results.push({
-        dest: destRoom.meta.id,
-        group: renderString(portal.group),
-        name: renderString(portal.name),
-      });
     }
 
     return results;

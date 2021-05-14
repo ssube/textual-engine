@@ -17,7 +17,7 @@ export interface StateController {
   /**
    * Create a new world state from a world template.
    */
-  from(world: World, params: CreateParams): Promise<void>;
+  from(world: World, params: CreateParams): Promise<State>;
 
   /**
    * Load an existing world state.

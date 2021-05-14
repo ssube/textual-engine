@@ -33,6 +33,7 @@ export class LineRender implements Render {
 
   async show(msg: string): Promise<void> {
     this.reader.write(msg);
+    this.reader.write('\n');
   }
 
   async stop() {

@@ -5,19 +5,20 @@ worlds:
       name: test world
       desc: this is a test adventure
     start:
-      actors: [bin, bon]
-      rooms: [foo, bar]
+      actors: [actor-bat, actor-goblin]
+      rooms: [room-dungeon, room-cave]
     templates:
       actors:
         - base:
             meta:
               id:
-                base: bin
+                base: actor-bat
               name:
-                base: bin
+                base: Bat
               desc:
-                base: bin
-            items: []
+                base: flying bat
+            items:
+              - id: item-bat-teeth
             skills: !map {}
             stats: !map
               health:
@@ -28,13 +29,13 @@ worlds:
         - base:
             meta:
               id:
-                base: bon
+                base: actor-goblin
               name:
-                base: bon
+                base: Goblin
               desc:
-                base: bon
+                base: ugly goblin
             items:
-              - id: sword
+              - id: item-sword
             skills: !map {}
             stats: !map
               health:
@@ -48,11 +49,22 @@ worlds:
         - base:
             meta:
               id:
-                base: sword
+                base: item-bat-teeth
+              name:
+                base: Bat Teeth
+              desc:
+                base: sharp bat teeth
+            slots: !map {}
+            stats: !map {}
+            verbs: !map {}
+        - base:
+            meta:
+              id:
+                base: item-sword
               name:
                 base: Sword
               desc:
-                base: a short sword
+                base: short sword
             slots: !map {}
             stats: !map {}
             verbs: !map {}
@@ -60,14 +72,14 @@ worlds:
         - base:
             meta:
               id:
-                base: foo
+                base: room-dungeon
               name:
-                base: foo
+                base: Dungeon
               desc:
-                base: foo
+                base: damp dungeon
             actors:
-              - id: bon
-              - id: bon
+              - id: actor-goblin
+              - id: actor-goblin
             items: []
             portals:
               - group:
@@ -75,7 +87,7 @@ worlds:
                 name:
                   base: west door
                 dest:
-                  base: bar
+                  base: room-cave
             slots: !map
               step:
                 base: room-step
@@ -83,11 +95,11 @@ worlds:
         - base:
             meta:
               id:
-                base: bar
+                base: room-cave
               name:
-                base: bar
+                base: Cave
               desc:
-                base: bar
+                base: wet cave
             actors: []
             items: []
             portals:
@@ -96,7 +108,7 @@ worlds:
                 name:
                   base: east window
                 dest:
-                  base: foo
+                  base: room-dungeon
             slots: !map
               step:
                 base: room-step

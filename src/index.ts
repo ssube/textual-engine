@@ -11,6 +11,7 @@ import { ClassicInput } from './service/input/ClassicInput';
 import { YamlParser } from './service/parser/YamlParser';
 import { LineRender } from './service/render/LineRender';
 import { LocalStateController } from './service/state/LocalStateController';
+import { debugState } from './util/debug';
 
 export async function main(args: Array<string>) {
   const logger = BunyanLogger.create({
@@ -50,7 +51,7 @@ export async function main(args: Array<string>) {
     exit(1);
   }
 
-  stateCtrl.from(world, {
+  const state = await stateCtrl.from(world, {
     rooms: 10,
     seed: '',
   });
@@ -67,6 +68,10 @@ export async function main(args: Array<string>) {
       break;
     }
 
+    if (line === 'debug') {
+      await debugState(render, state);
+    }
+
     // parse last input
     const cmd = await input.parse(line);
     logger.debug({
@@ -78,16 +83,16 @@ export async function main(args: Array<string>) {
     await stateCtrl.step(now - lastNow);
   }
 
-  const state = await stateCtrl.save();
-  const stateStr = parser.save({
+  const saveState = await stateCtrl.save();
+  const saveStr = parser.save({
     saves: [{
-      state,
+      state: saveState,
     }],
     worlds: [],
   });
 
   logger.info({
-    state: stateStr,
+    state: saveStr,
   }, 'saved world state');
 }
 

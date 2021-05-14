@@ -1,5 +1,5 @@
 export interface Portal {
-  dest: string;
+  dest: string; // TODO: should this be the room instance? id? matcher?
   group: string;
   name: string;
 }

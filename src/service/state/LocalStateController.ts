@@ -4,9 +4,9 @@ import { Logger } from 'noicejs';
 import { CreateParams, StateController } from '.';
 import { Actor, ActorType } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
-import { PortalGroups } from '../../model/entity/Portal';
+import { Portal, PortalGroups } from '../../model/entity/Portal';
 import { Room } from '../../model/entity/Room';
-import { Template } from '../../model/meta/Template';
+import { BaseTemplate, Template } from '../../model/meta/Template';
 import { ReactionConfig, SidebarConfig, State } from '../../model/State';
 import { World } from '../../model/World';
 import { Counter } from '../../util/counter';
@@ -17,6 +17,8 @@ import { RandomGenerator } from '../random';
 import { MathRandomGenerator } from '../random/MathRandom';
 import { ScriptController, SuppliedScope } from '../script';
 import { LocalScriptController } from '../script/LocalScriptController';
+
+const PORTAL_DEPTH = 2;
 
 export class LocalStateController implements StateController {
   protected counter: Counter;
@@ -233,7 +235,7 @@ export class LocalStateController implements StateController {
     };
   }
 
-  protected createRoom(template: Template<Room>): Room {
+  protected createRoom(template: Template<Room>, depth = PORTAL_DEPTH): Room {
     const world = mustExist(this.world);
     const actors = [];
 
@@ -264,7 +266,7 @@ export class LocalStateController implements StateController {
         id: `${template.base.meta.id.base}-${this.counter.next('room')}`,
         name: template.base.meta.name.base,
       },
-      portals: [],
+      portals: this.populatePortals(template.base.portals, depth),
       slots: renderStringMap(template.base.slots),
       verbs: new Map()
     };
@@ -295,5 +297,33 @@ export class LocalStateController implements StateController {
     }
 
     return groups;
+  }
+
+  protected populatePortals(portals: Array<BaseTemplate<Portal>>, depth: number): Array<Portal> {
+    if (depth < 0) {
+      return [];
+    }
+
+    const results: Array<Portal> = [];
+
+    for (const portal of portals) {
+      const destTemplateId = renderString(portal.dest);
+      const destTemplate = mustExist(this.world).templates.rooms.find((it) => it.base.meta.id.base === destTemplateId);
+
+      if (isNil(destTemplate)) {
+        throw new NotFoundError('invalid room in portal dest');
+      }
+
+      const destRoom = this.createRoom(destTemplate, depth - 1);
+      mustExist(this.state).rooms.push(destRoom);
+
+      results.push({
+        dest: destRoom.meta.id,
+        group: renderString(portal.group),
+        name: renderString(portal.name),
+      });
+    }
+
+    return results;
   }
 }

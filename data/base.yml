@@ -18,6 +18,7 @@ worlds:
               desc:
                 base: bin
             items: []
+            skills: !map {}
             stats: !map
               health:
                 min: 3
@@ -32,7 +33,9 @@ worlds:
                 base: bon
               desc:
                 base: bon
-            items: []
+            items:
+              - id: sword
+            skills: !map {}
             stats: !map
               health:
                 min: 14
@@ -41,7 +44,18 @@ worlds:
                 base: actor-hit
               step:
                 base: actor-step
-      items: []
+      items:
+        - base:
+            meta:
+              id:
+                base: sword
+              name:
+                base: Sword
+              desc:
+                base: a short sword
+            slots: !map {}
+            stats: !map {}
+            verbs: !map {}
       rooms:
         - base:
             meta:
@@ -65,6 +79,7 @@ worlds:
             slots: !map
               step:
                 base: room-step
+            verbs: !map {}
         - base:
             meta:
               id:
@@ -85,6 +100,7 @@ worlds:
             slots: !map
               step:
                 base: room-step
+            verbs: !map {}
     # unused
     dialogue: []
     scripts: []

@@ -1,4 +1,5 @@
-import { Template, TemplateNumber, TemplateString } from "../../model/meta/Template";
+import { TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/meta/Template';
+import { VerbMap, VerbSlot } from '../types';
 
 export function renderString(input: TemplateString) {
   return input.base;
@@ -23,6 +24,21 @@ export function renderStringMap(input: Map<string, TemplateString>): Map<string,
 
   for (const [key, value] of input) {
     result.set(key, renderString(value));
+  }
+
+  return result;
+}
+
+export function renderVerbMap(input: TemplatePrimitive<VerbMap>): VerbMap {
+  const result = new Map();
+
+  for (const [key, value] of input) {
+    const verb: VerbSlot = {
+      slot: value.slot.base,
+      data: {},
+    };
+
+    result.set(key, verb);
   }
 
   return result;

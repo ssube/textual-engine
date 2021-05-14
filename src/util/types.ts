@@ -8,7 +8,7 @@ export type Immutable<T> =
     T extends Array<infer U> ? ReadonlyArray<Immutable<U>> :
     T extends Map<infer K, infer V> ? ReadonlyMap<Immutable<K>, Immutable<V>> :
     T extends Set<infer S> ? ReadonlySet<Immutable<S>> :
-    {readonly [P in keyof T]: Immutable<T[P]>}
+    { readonly [P in keyof T]: Immutable<T[P]> }
 
 export type KeyList<T> = Array<keyof T>;
 
@@ -26,10 +26,12 @@ export type StatMap = Map<string, number>;
 
 export type ScriptData = Record<string, number | string>;
 
+export interface VerbSlot {
+  slot: string;
+  data: ScriptData;
+}
+
 /**
  * Map of verbs (actions) to script keys.
  */
-export type VerbMap = Map<string, {
-    slot: string;
-    data: ScriptData;
-}>;
+export type VerbMap = Map<string, VerbSlot>;

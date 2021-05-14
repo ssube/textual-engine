@@ -22,7 +22,7 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
   }
 
   if (doesExist(scope.room)) {
-    scope.logger.debug(`${this.meta.name} is in ${scope.room.meta.name}`);
+    scope.logger.debug(`${this.meta.name} is in ${scope.room.meta.name} (${scope.room.meta.id})`);
     if (this.actorType === ActorType.PLAYER) {
       scope.logger.debug(`${this.meta.name} can see: ${scope.room.meta.desc}`);
 

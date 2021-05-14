@@ -11,7 +11,7 @@ import { ReactionConfig, SidebarConfig, State } from '../../model/State';
 import { World } from '../../model/World';
 import { Counter } from '../../util/counter';
 import { LocalCounter } from '../../util/counter/LocalCounter';
-import { renderNumberMap, renderString, renderStringMap } from '../../util/template';
+import { renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
 import { MathRandomGenerator } from '../random/MathRandom';
@@ -78,32 +78,6 @@ export class LocalStateController implements StateController {
     // add to state
     state.focus.room = startRoom.meta.id;
     state.rooms.push(startRoom);
-
-    // generate more rooms based on start room's doors
-    const portalGroups = this.gatherPortals(startRoomTemplate);
-    for (const [group, portal] of portalGroups) {
-      const nextRoomId = Array.from(portal.dests)[this.random.nextInt(portal.dests.size)];
-      this.logger.debug({
-        nextRoomId,
-        rooms: world.templates.rooms,
-      }, 'generating next room');
-
-      const nextRoomTemplate = world.templates.rooms.find((it) => it.base.meta.id.base === nextRoomId);
-      if (isNil(nextRoomTemplate)) {
-        throw new NotFoundError('invalid next room');
-      }
-
-      const nextRoom = this.createRoom(nextRoomTemplate);
-      state.rooms.push(nextRoom);
-
-      for (const portalName of portal.sources) {
-        startRoom.portals.push({
-          dest: nextRoom.meta.id,
-          group,
-          name: portalName,
-        });
-      }
-    }
 
     // pick a starting actor and create it
     const startActorId = world.start.actors[this.random.nextInt(world.start.actors.length)];
@@ -195,30 +169,29 @@ export class LocalStateController implements StateController {
   }
 
   protected createActor(template: Template<Actor>): Actor {
-    const actor: Actor = {
-      type: 'actor',
-      actorType: ActorType.DEFAULT,
-      items: [],
-      meta: {
-        desc: template.base.meta.desc.base,
-        id: `${template.base.meta.id.base}-${this.counter.next('actor')}`,
-        name: template.base.meta.name.base,
-      },
-      skills: new Map(),
-      slots: renderStringMap(template.base.slots),
-      stats: renderNumberMap(template.base.stats),
-    };
-
+    const items = [];
     for (const itemTemplateId of template.base.items) {
       const itemTemplate = mustExist(this.world).templates.items.find((it) => it.base.meta.id.base === itemTemplateId.id);
       if (isNil(itemTemplate)) {
         throw new NotFoundError('invalid item in actor');
       }
 
-      actor.items.push(this.createItem(itemTemplate));
+      items.push(this.createItem(itemTemplate));
     }
 
-    return actor;
+    return {
+      type: 'actor',
+      actorType: ActorType.DEFAULT,
+      items,
+      meta: {
+        desc: template.base.meta.desc.base,
+        id: `${template.base.meta.id.base}-${this.counter.next('actor')}`,
+        name: template.base.meta.name.base,
+      },
+      skills: renderNumberMap(template.base.skills),
+      slots: renderStringMap(template.base.slots),
+      stats: renderNumberMap(template.base.stats),
+    };
   }
 
   protected createItem(template: Template<Item>): Item {
@@ -229,16 +202,16 @@ export class LocalStateController implements StateController {
         id: `${template.base.meta.id.base}-${this.counter.next('item')}`,
         name: template.base.meta.name.base,
       },
-      stats: new Map(),
+      stats: renderNumberMap(template.base.stats),
       slots: renderStringMap(template.base.slots),
-      verbs: new Map(),
+      verbs: renderVerbMap(template.base.verbs),
     };
   }
 
   protected createRoom(template: Template<Room>, depth = PORTAL_DEPTH): Room {
     const world = mustExist(this.world);
-    const actors = [];
 
+    const actors = [];
     for (const actorTemplateId of template.base.actors) {
       const actorTemplate = world.templates.actors.find((it) => it.base.meta.id.base === actorTemplateId.id);
       this.logger.debug({
@@ -252,15 +225,31 @@ export class LocalStateController implements StateController {
       }
 
       const actor = this.createActor(actorTemplate);
-
-      this.input.add(actor);
       actors.push(actor);
+      this.input.add(actor);
+    }
+
+    const items = [];
+    for (const itemTemplateId of template.base.items) {
+      const itemTemplate = world.templates.items.find((it) => it.base.meta.id.base === itemTemplateId.id);
+      this.logger.debug({
+        items: world.templates.items,
+        itemTemplateId,
+        itemTemplate,
+      }, 'create item for room');
+
+      if (isNil(itemTemplate)) {
+        throw new NotFoundError('invalid item in room');
+      }
+
+      const item = this.createItem(itemTemplate);
+      items.push(item);
     }
 
     return {
       type: 'room',
       actors,
-      items: [],
+      items,
       meta: {
         desc: template.base.meta.desc.base,
         id: `${template.base.meta.id.base}-${this.counter.next('room')}`,
@@ -268,7 +257,7 @@ export class LocalStateController implements StateController {
       },
       portals: this.populatePortals(template.base.portals, depth),
       slots: renderStringMap(template.base.slots),
-      verbs: new Map()
+      verbs: renderVerbMap(template.base.verbs),
     };
   }
 
@@ -325,5 +314,36 @@ export class LocalStateController implements StateController {
     }
 
     return results;
+  }
+
+  protected populateV2() {
+    // generate more rooms based on start room's doors
+
+    /*
+    const portalGroups = this.gatherPortals(startRoomTemplate);
+    for (const [group, portal] of portalGroups) {
+      const nextRoomId = Array.from(portal.dests)[this.random.nextInt(portal.dests.size)];
+      this.logger.debug({
+        nextRoomId,
+        rooms: this.world.templates.rooms,
+      }, 'generating next room');
+
+      const nextRoomTemplate = this.world.templates.rooms.find((it) => it.base.meta.id.base === nextRoomId);
+      if (isNil(nextRoomTemplate)) {
+        throw new NotFoundError('invalid next room');
+      }
+
+      const nextRoom = this.createRoom(nextRoomTemplate);
+      this.state.rooms.push(nextRoom);
+
+      for (const portalName of portal.sources) {
+        startRoom.portals.push({
+          dest: nextRoom.meta.id,
+          group,
+          name: portalName,
+        });
+      }
+    }
+    */
   }
 }

@@ -78,6 +78,15 @@ export class LocalStateController implements StateController {
     });
     this.focus.on('room', (id: string) => {
       state.focus.room = id;
+
+      const room = mustExist(this.state).rooms.find((it) => it.meta.id === id);
+      if (isNil(room)) {
+        throw new NotFoundError('invalid room for focus, does not exist in state');
+      }
+
+      this.populateRoom(room, PORTAL_DEPTH).catch((err) => {
+        this.logger.warn(err, 'error populating room portals on focus');
+      });
     });
 
     // reseed the prng
@@ -362,6 +371,23 @@ export class LocalStateController implements StateController {
     }
 
     return results;
+  }
+
+  protected async populateRoom(room: Room, depth: number): Promise<void> {
+    if (depth < 0) {
+      return;
+    }
+
+    // get template
+    const template = findByBaseId(mustExist(this.world).templates.rooms, room.meta.template);
+
+    if (room.portals.length === template.base.portals.length) {
+      this.logger.debug({ room }, 'portals have already been populated');
+      return;
+    }
+
+    // extend map
+    room.portals = await this.populatePortals(template.base.portals, depth);
   }
 
   protected populateV2() {

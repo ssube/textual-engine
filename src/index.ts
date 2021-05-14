@@ -16,7 +16,7 @@ import { debugState } from './util/debug';
 
 export async function main(args: Array<string>) {
   const logger = BunyanLogger.create({
-    level: LogLevel.DEBUG,
+    level: LogLevel.INFO,
     name: 'textual-engine',
   });
   logger.info({
@@ -58,7 +58,7 @@ export async function main(args: Array<string>) {
 
   const state = await stateCtrl.from(world, {
     rooms: 10,
-    seed: '',
+    seed: args[4],
   });
 
   let turnCount = 0;

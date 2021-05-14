@@ -2,7 +2,7 @@ import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/
 
 import { ScriptScope, ScriptTarget } from '..';
 import { Actor, ActorType } from '../../../model/entity/Actor';
-import { SLOT_HIT, SLOT_USE } from '../../../util/constants';
+import { SLOT_HIT, SLOT_LOOK, SLOT_MOVE, SLOT_TAKE, SLOT_USE } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/map';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
@@ -41,10 +41,11 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
 }
 
 const knownVerbs = new Map([
-  ['hit', ActorStepHit],
-  ['move', ActorStepMove],
-  ['take', ActorStepTake],
-  ['use', ActorStepUse],
+  [SLOT_HIT, ActorStepHit],
+  [SLOT_LOOK, ActorStepLook],
+  [SLOT_MOVE, ActorStepMove],
+  [SLOT_TAKE, ActorStepTake],
+  [SLOT_USE, ActorStepUse],
 ]);
 
 export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise<void> {
@@ -63,6 +64,10 @@ export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise
 export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<void> {
   const target = this; // TODO: find actual target
   await scope.script.invoke(target, SLOT_HIT, scope);
+}
+
+export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {
+  scope.logger.debug('look command not implemented');
 }
 
 export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<void> {
@@ -87,9 +92,9 @@ export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<vo
 }
 
 export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<void> {
-
-      scope.logger.debug('take command not implemented');
+  scope.logger.debug('take command not implemented');
 }
+
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {
   const target = this; // TODO: find actual target
   await scope.script.invoke(target, SLOT_USE, scope);

@@ -11,6 +11,7 @@ import { ReactionConfig, SidebarConfig, State } from '../../model/State';
 import { World } from '../../model/World';
 import { Counter } from '../../util/counter';
 import { LocalCounter } from '../../util/counter/LocalCounter';
+import { renderNumberMap, renderString, renderStringMap } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
 import { MathRandomGenerator } from '../random/MathRandom';
@@ -202,8 +203,8 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
       },
       skills: new Map(),
-      slots: new Map(template.base.slots),
-      stats: new Map(template.base.stats),
+      slots: renderStringMap(template.base.slots),
+      stats: renderNumberMap(template.base.stats),
     };
 
     for (const itemTemplateId of template.base.items) {
@@ -227,7 +228,8 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
       },
       stats: new Map(),
-      slots: new Map(template.base.slots),
+      slots: renderStringMap(template.base.slots),
+      verbs: new Map(),
     };
   }
 
@@ -263,7 +265,8 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
       },
       portals: [],
-      slots: new Map(template.base.slots),
+      slots: renderStringMap(template.base.slots),
+      verbs: new Map()
     };
   }
 
@@ -277,16 +280,16 @@ export class LocalStateController implements StateController {
       this.logger.debug({
         portal,
       }, 'grouping portal');
-      const groupName = portal.base.group.base;
+      const groupName = portal.group.base;
       const group = groups.get(groupName);
 
       if (group) {
-        group.dests.add(portal.base.dest.base);
-        group.sources.add(portal.base.name.base);
+        group.dests.add(portal.dest.base);
+        group.sources.add(portal.name.base);
       } else {
         groups.set(groupName, {
-          dests: new Set([portal.base.dest.base]),
-          sources: new Set([portal.base.name.base]),
+          dests: new Set([portal.dest.base]),
+          sources: new Set([portal.name.base]),
         });
       }
     }

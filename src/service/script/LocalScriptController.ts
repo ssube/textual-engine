@@ -2,6 +2,7 @@ import { doesExist, isNil } from '@apextoaster/js-utils';
 import { Logger } from 'noicejs';
 
 import { ScriptController, ScriptFunction, ScriptTarget, ScriptTargetFilter, SuppliedScope } from '.';
+import { Metadata } from '../../model/meta/Metadata';
 import { State } from '../../model/State';
 import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';
@@ -33,7 +34,7 @@ export class LocalScriptController implements ScriptController {
 
     const scriptName = target.slots.get(slot);
     if (isNil(scriptName)) {
-      this.logger.debug('target does not have script defined for slot');
+      this.logger.debug({ slot }, 'target does not have a script defined for slot');
       return;
     }
 
@@ -54,6 +55,13 @@ export class LocalScriptController implements ScriptController {
 
   async broadcast(state: State, filter: ScriptTargetFilter, slot: string, scope: SuppliedScope): Promise<void> {
     for (const room of state.rooms) {
+      if (doesExist(filter.room)) {
+        if (this.matchMeta(room, filter.room) === false) {
+          // skip rooms that do not match
+          continue;
+        }
+      }
+
       if (this.match(room, filter)) {
         await this.invoke(room, slot, scope);
       }
@@ -79,14 +87,26 @@ export class LocalScriptController implements ScriptController {
   }
 
   match(target: ScriptTarget, filter: ScriptTargetFilter): boolean {
+    let matched = true;
+
+    if (doesExist(filter.meta)) {
+      matched = matched && this.matchMeta(target, filter.meta);
+    }
+
+    return matched;
+  }
+
+  matchMeta(target: ScriptTarget, filter: Partial<Metadata>): boolean {
+    let matched = true;
+
     if (doesExist(filter.id)) {
-      return target.meta.id.toLocaleLowerCase().startsWith(filter.id);
+      matched = matched && target.meta.id.toLocaleLowerCase().startsWith(filter.id);
     }
 
     if (doesExist(filter.name)) {
-      return target.meta.id.toLocaleLowerCase().includes(filter.name);
+      matched = matched && target.meta.name.toLocaleLowerCase().includes(filter.name);
     }
 
-    return false;
+    return matched;
   }
 }

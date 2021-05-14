@@ -22,13 +22,13 @@ export interface BaseEntity {
 }
 
 export type TemplatePrimitive<T> =
-  T extends number ? TemplateNumber :                 // number -> range
-  T extends string ? TemplateString :                 // string -> template
-  T extends BaseEntity ? TemplateRef :                // entity -> id
-  T extends Array<BaseEntity> ? Array<TemplateRef> :  // Array<entity> -> Array<id>
-  T extends Array<infer V> ? Array<Template<V>> :     // Array<V> -> Array<Template<V>>
-  T extends Map<infer K, infer V> ? Map<K, BaseTemplate<V>> :
-  T extends object ? BaseTemplate<T> :
+  T extends number ? TemplateNumber :                               // number -> range
+  T extends string ? TemplateString :                               // string -> template
+  T extends BaseEntity ? TemplateRef :                              // entity -> id
+  T extends Array<BaseEntity> ? Array<TemplateRef> :                // Array<entity> -> Array<id>
+  T extends Array<infer V> ? Array<TemplatePrimitive<V>> :          // Array<V> -> Array<Template<V>>
+  T extends Map<infer K, infer V> ? Map<K, TemplatePrimitive<V>> :  // Map<K, V> -> Map<K, Template<V>>
+  T extends object ? BaseTemplate<T> :                              // {[K]: V] -> {[K]: Template<V>}
   never;
 
 export type BaseTemplate<T> = {

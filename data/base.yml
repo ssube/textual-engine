@@ -18,9 +18,12 @@ worlds:
               desc:
                 base: bin
             items: []
-            slots: !map {
-              step: actor-step
-            }
+            stats: !map
+              health:
+                min: 3
+            slots: !map
+              step:
+                base: actor-step
         - base:
             meta:
               id:
@@ -30,12 +33,14 @@ worlds:
               desc:
                 base: bon
             items: []
-            stats: !map {
-              health: 14
-            }
-            slots: !map {
-              step: actor-step
-            }
+            stats: !map
+              health:
+                min: 14
+            slots: !map
+              hit:
+                base: actor-hit
+              step:
+                base: actor-step
       items: []
       rooms:
         - base:
@@ -51,16 +56,15 @@ worlds:
               - id: bon
             items: []
             portals:
-              - base:
-                  group:
-                    base: west
-                  name:
-                    base: west door
-                  dest:
-                    base: bar
-            slots: !map {
-              step: room-step
-            }
+              - group:
+                  base: west
+                name:
+                  base: west door
+                dest:
+                  base: bar
+            slots: !map
+              step:
+                base: room-step
         - base:
             meta:
               id:
@@ -72,16 +76,15 @@ worlds:
             actors: []
             items: []
             portals:
-              - base:
-                  group:
-                    base: east
-                  name:
-                    base: east window
-                  dest:
-                    base: foo
-            slots: !map {
-              step: room-step
-            }
+              - group:
+                  base: east
+                name:
+                  base: east window
+                dest:
+                  base: foo
+            slots: !map
+              step:
+                base: room-step
     # unused
     dialogue: []
     scripts: []

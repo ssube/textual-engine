@@ -11,7 +11,7 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
   }, 'step script');
 
   if (this.type !== 'actor') {
-    throw new InvalidArgumentError('incorrect target type');
+    throw new InvalidArgumentError('script target must be an actor');
   }
 
   if (getKey(this.stats, 'health') <= 0) {
@@ -20,8 +20,6 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
   } else {
     decrementKey(this.stats, 'health');
   }
-
-  scope.logger.debug(`actor has ${this.items.length} inventory items`);
 
   if (doesExist(scope.room)) {
     scope.logger.debug(`${this.meta.name} is in ${scope.room.meta.name}`);
@@ -35,7 +33,6 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
   }
 
   if (doesExist(scope.command)) {
-    scope.logger.debug(`${this.meta.name} will ${scope.command.verb} the ${scope.command.target}`);
     await ActorStepCommand.call(this, scope);
   } else {
     scope.logger.debug(`${this.meta.name} has nothing to do`);
@@ -45,10 +42,12 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
 export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise<void> {
   const cmd = mustExist(scope.command);
 
+  scope.logger.debug(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
+
   switch (cmd.verb) {
     case 'hit': {
       const target = this; // TODO: find actual target
-      scope.script.invoke(target, 'hit', scope);
+      await scope.script.invoke(target, 'hit', scope);
       break;
     }
     case 'move':
@@ -59,7 +58,7 @@ export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise
       break;
     case 'use': {
       const target = this; // TODO: find actual target
-      scope.script.invoke(target, 'use', scope);
+      await scope.script.invoke(target, 'use', scope);
       break;
     }
     default:

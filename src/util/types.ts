@@ -17,12 +17,19 @@ export type KeyList<T> = Array<keyof T>;
  */
 export type SkillMap = Map<string, number>;
 
+export type SlotMap = Map<string, string>;
+
 /**
  * Map of stat names to their current value.
  */
 export type StatMap = Map<string, number>;
 
+export type ScriptData = Record<string, number | string>;
+
 /**
  * Map of verbs (actions) to script keys.
  */
-export type VerbMap = Map<string, string>;
+export type VerbMap = Map<string, {
+    slot: string;
+    data: ScriptData;
+}>;

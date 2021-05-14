@@ -1,4 +1,4 @@
-import { SlotMap } from '../../service/script';
+import { SlotMap, VerbMap } from '../../util/types';
 import { Metadata } from '../meta/Metadata';
 import { Actor } from './Actor';
 import { Item } from './Item';
@@ -11,4 +11,5 @@ export interface Room {
   items: Array<Item>;
   portals: Array<Portal>;
   slots: SlotMap;
+  verbs: VerbMap;
 }

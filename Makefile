@@ -8,7 +8,7 @@ install:
 	yarn
 
 run: build
-	node --require esm out/index.js data/base.yml test
+	node --require esm out/index.js data/base.yml test test
 
 push:
 	git push github $(shell git rev-parse --abbrev-ref HEAD)

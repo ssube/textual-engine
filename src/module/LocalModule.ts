@@ -13,10 +13,7 @@ import { LocalCounter } from '../util/counter/LocalCounter';
 
 export interface LocalModuleOptions {
   inputs: InputTypes;
-  logger: {
-    level: LogLevel;
-    name: string;
-  };
+  seed: string;
 }
 
 export class LocalModule extends Module {
@@ -58,17 +55,14 @@ export class LocalModule extends Module {
 
   @Provides(INJECT_LOGGER)
   protected getLogger() {
-    if (isNil(this.logger)) {
-      this.logger = BunyanLogger.create(this.options.logger);
-    }
-
-    return this.logger;
+    return mustExist(this.logger);
   }
 
   @Provides(INJECT_RANDOM)
   protected async getRandom() {
     if (isNil(this.random)) {
       this.random = await mustExist(this.container).create(SeedRandomGenerator);
+      this.random.reseed(this.options.seed);
     }
 
     return this.random;

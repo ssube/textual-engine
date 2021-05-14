@@ -1,10 +1,10 @@
 import { isNil } from '@apextoaster/js-utils';
 import { promises } from 'fs';
-import { BaseOptions, Container, Logger, LogLevel } from 'noicejs';
+import { Container, LogLevel } from 'noicejs';
 import { argv, exit } from 'process';
 
+import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import { INJECT_LOGGER } from './module';
 import { LocalModule } from './module/LocalModule';
 import { BehaviorInput } from './service/input/BehaviorInput';
 import { ClassicInput } from './service/input/ClassicInput';
@@ -15,34 +15,31 @@ import { debugState } from './util/debug';
 
 export async function main(args: Array<string>) {
   const input = new ClassicInput();
+  const logger = BunyanLogger.create({
+    level: LogLevel.DEBUG,
+    name: 'textual-engine',
+  });
+  logger.info({
+    args,
+  }, 'textual adventure');
+
   const module = new LocalModule({
     inputs: {
       [ActorType.DEFAULT]: new BehaviorInput(),
       [ActorType.PLAYER]: input,
       [ActorType.REMOTE]: new BehaviorInput(),
     },
-    logger: {
-      level: LogLevel.DEBUG,
-      name: 'textual-engine',
-    },
+    seed: args[4],
   });
 
   const container = Container.from(module);
-  await container.configure();
-
-  const logger = await container.create<Logger, BaseOptions>(INJECT_LOGGER);
-  logger.debug({
-    args,
-  }, 'text adventure');
-
-  const render = new LineRender();
+  await container.configure({
+    logger,
+  });
 
   // create DI container and services
-  logger.debug({
-    ClassicInput,
-    YamlParser,
-  }, 'starting services');
-  const parser = new YamlParser();
+  const parser = await container.create(YamlParser);
+  const render = await container.create(LineRender);
   const stateCtrl = await container.create(LocalStateController);
 
   // load data files

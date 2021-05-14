@@ -19,7 +19,7 @@ export class LineRender extends EventEmitter implements Render {
     });
   }
 
-  async read(prompt: string): Promise<string> {
+  async read(): Promise<string> {
     const result = new Promise<string>((res, rej) => {
       this.reader.once('SIGINT', () => {
         this.reader.removeAllListeners();
@@ -32,7 +32,7 @@ export class LineRender extends EventEmitter implements Render {
       });
     });
 
-    this.promptSync(prompt);
+    this.reader.prompt();
 
     return result;
   }
@@ -64,7 +64,7 @@ export class LineRender extends EventEmitter implements Render {
           return {done: true, value: ''};
         } else {
           try {
-            const line = await this.read(' - ');
+            const line = await this.read();
             return {done: false, value: line};
           } catch (err) {
             return {done: true, value: err.msg};

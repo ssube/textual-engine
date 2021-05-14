@@ -78,19 +78,12 @@ export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<vo
     return;
   }
 
-  const targetRoom = scope.state.rooms.find((it) => it.meta.id === targetPortal.dest) as Room; // TODO: keep this immutable
-  if (isNil(targetRoom)) {
-    scope.logger.warn(`destination ${targetPortal.dest} of portal ${targetPortal.name} does not exist`);
-    return;
+  // move the actor and focus
+  await scope.transfer.moveActor(this.meta.id, currentRoom.meta.id, targetPortal.dest);
+
+  if (this.actorType === ActorType.PLAYER) {
+    await scope.focus.setRoom(targetPortal.dest);
   }
-
-  // move the actor
-  currentRoom.actors.splice(currentRoom.actors.indexOf(this), 1);
-  targetRoom.actors.push(this);
-
-  // move the focus
-  scope.logger.debug(`${this.meta.name} is moving to ${targetRoom.meta.name} (${targetRoom.meta.id})`);
-  scope.focus.set('room', targetRoom.meta.id);
 }
 
 export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<void> {

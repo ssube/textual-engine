@@ -13,10 +13,9 @@ import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJE
 import { PORTAL_DEPTH } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { findByBaseId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
-import { WatchableMap } from '../../util/WatchableMap';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
-import { ScriptController, SuppliedScope } from '../script';
+import { ScriptController, ScriptFocus, ScriptTransfer, SuppliedScope } from '../script';
 
 export interface LocalStateControllerOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
@@ -34,7 +33,9 @@ export class LocalStateController implements StateController {
   protected random: RandomGenerator;
   protected script: ScriptController;
 
-  protected focus?: WatchableMap;
+  protected focus?: ScriptFocus;
+  protected transfer?: ScriptTransfer;
+
   protected state?: State;
   protected world?: World;
 
@@ -72,22 +73,46 @@ export class LocalStateController implements StateController {
     this.world = world;
 
     // register focus
-    this.focus = new WatchableMap();
-    this.focus.on('actor', (id: string) => {
-      state.focus.actor = id;
-    });
-    this.focus.on('room', (id: string) => {
-      const room = mustExist(this.state).rooms.find((it) => it.meta.id === id);
-      if (isNil(room)) {
-        throw new NotFoundError('invalid room for focus, does not exist in state');
+    this.focus = {
+      setActor: async (id: string) => {
+        state.focus.actor = id;
+      },
+      setRoom: async (id: string) => {
+        const room = mustExist(this.state).rooms.find((it) => it.meta.id === id);
+        if (isNil(room)) {
+          throw new NotFoundError('invalid room for focus, does not exist in state');
+        }
+
+        try {
+          await this.populateRoom(room, PORTAL_DEPTH);
+        } catch (err) {
+          this.logger.error(err, 'error populating room portals on focus');
+        }
+
+        state.focus.room = id;
       }
+    };
 
-      this.populateRoom(room, PORTAL_DEPTH).catch((err) => {
-        this.logger.warn(err, 'error populating room portals on focus');
-      });
+    this.transfer = {
+      moveActor: async (id: string, source: string, dest: string) => {
+        const targetRoom = state.rooms.find((it) => it.meta.id === dest);
+        if (isNil(targetRoom)) {
+          this.logger.warn(`destination room ${dest} does not exist`);
+          return;
+        }
 
-      state.focus.room = id;
-    });
+        const currentRoom = mustExist(state.rooms.find((it) => it.meta.id === source));
+        const targetActor = mustExist(currentRoom.actors.find((it) => it.meta.id === id));
+
+        // move the actor
+        this.logger.debug(`${id} is moving to from ${currentRoom.meta.name} (${currentRoom.meta.id}) to ${targetRoom.meta.name} (${targetRoom.meta.id})`);
+        currentRoom.actors.splice(currentRoom.actors.indexOf(targetActor), 1);
+        targetRoom.actors.push(targetActor);
+      },
+      moveItem: async (id: string, source: string, dest: string) => {
+        throw new Error('method not implemented');
+      },
+    };
 
     // reseed the prng
     this.random.reseed(params.seed);
@@ -158,6 +183,10 @@ export class LocalStateController implements StateController {
       throw new Error('state has not been initialized');
     }
 
+    if (isNil(this.transfer)) {
+      throw new Error('transfer has not been initialized');
+    }
+
     const start = Date.now();
 
     const scope: SuppliedScope = {
@@ -166,6 +195,7 @@ export class LocalStateController implements StateController {
       },
       focus: this.focus,
       state: this.state,
+      transfer: this.transfer,
     };
 
     for (const room of this.state.rooms) {
@@ -392,6 +422,7 @@ export class LocalStateController implements StateController {
     }
 
     // extend map
+    this.logger.debug(`populating ${template.base.portals.length} portals in room ${room.meta.id}`);
     room.portals = await this.populatePortals(template.base.portals, depth);
   }
 }

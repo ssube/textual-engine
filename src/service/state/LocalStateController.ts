@@ -1,4 +1,4 @@
-import { doesExist, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { doesExist, isNil, mustCoalesce, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateController } from '.';
@@ -12,7 +12,7 @@ import { World } from '../../model/World';
 import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
 import { PORTAL_DEPTH } from '../../util/constants';
 import { Counter } from '../../util/counter';
-import { renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
+import { findByBaseId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
 import { ScriptController, SuppliedScope } from '../script';
@@ -69,13 +69,16 @@ export class LocalStateController implements StateController {
     this.state = state;
     this.world = world;
 
+    // reseed the prng
+    this.random.reseed(params.seed);
+
     // pick a starting room and create it
     const startRoomId = world.start.rooms[this.random.nextInt(world.start.rooms.length)];
     this.logger.debug({
       rooms: world.templates.rooms,
       startRoomId,
     }, 'generating start room');
-    const startRoomTemplate = world.templates.rooms.find((it) => it.base.meta.id.base === startRoomId);
+    const startRoomTemplate = findByBaseId(world.templates.rooms, startRoomId);
     if (isNil(startRoomTemplate)) {
       throw new NotFoundError('invalid start room');
     }
@@ -87,7 +90,7 @@ export class LocalStateController implements StateController {
 
     // pick a starting actor and create it
     const startActorId = world.start.actors[this.random.nextInt(world.start.actors.length)];
-    const startActorTemplate = world.templates.actors.find((it) => it.base.meta.id.base === startActorId);
+    const startActorTemplate = findByBaseId(world.templates.actors, startActorId);
     if (isNil(startActorTemplate)) {
       throw new NotFoundError('invalid start actor');
     }
@@ -176,9 +179,11 @@ export class LocalStateController implements StateController {
   }
 
   protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {
+    const world = mustExist(this.world);
+
     const items = [];
     for (const itemTemplateId of template.base.items) {
-      const itemTemplate = mustExist(this.world).templates.items.find((it) => it.base.meta.id.base === itemTemplateId.id);
+      const itemTemplate = findByBaseId(world.templates.items, itemTemplateId.id);
       if (isNil(itemTemplate)) {
         throw new NotFoundError('invalid item in actor');
       }
@@ -227,7 +232,7 @@ export class LocalStateController implements StateController {
 
     const actors = [];
     for (const actorTemplateId of template.base.actors) {
-      const actorTemplate = world.templates.actors.find((it) => it.base.meta.id.base === actorTemplateId.id);
+      const actorTemplate = findByBaseId(world.templates.actors, actorTemplateId.id);
       this.logger.debug({
         actors: world.templates.actors,
         actorTemplateId,
@@ -244,7 +249,7 @@ export class LocalStateController implements StateController {
 
     const items = [];
     for (const itemTemplateId of template.base.items) {
-      const itemTemplate = world.templates.items.find((it) => it.base.meta.id.base === itemTemplateId.id);
+      const itemTemplate = findByBaseId(world.templates.items, itemTemplateId.id);
       this.logger.debug({
         items: world.templates.items,
         itemTemplateId,
@@ -321,8 +326,9 @@ export class LocalStateController implements StateController {
           name: renderString(portal.name),
         });
       } else {
+        const world = mustCoalesce(this.world);
         const destTemplateId = renderString(portal.dest);
-        const destTemplate = mustExist(this.world).templates.rooms.find((it) => it.base.meta.id.base === destTemplateId);
+        const destTemplate = findByBaseId(world.templates.rooms, destTemplateId);
 
         if (isNil(destTemplate)) {
           throw new NotFoundError('invalid room in portal dest');

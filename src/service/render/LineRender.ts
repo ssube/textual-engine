@@ -1,3 +1,4 @@
+import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
@@ -6,45 +7,46 @@ import { Render } from '.';
 
 export class LineRender extends EventEmitter implements Render {
   protected closed: boolean;
-  protected reader: LineInterface;
+  protected reader?: LineInterface;
 
   constructor() {
     super();
 
     this.closed = false;
-    this.reader = createInterface({
-      input: stdin,
-      output: stdout,
-      prompt: '> ',
-    });
   }
 
   async read(): Promise<string> {
+    const reader = mustExist(this.reader);
+
     const result = new Promise<string>((res, rej) => {
-      this.reader.once('SIGINT', () => {
-        this.reader.removeAllListeners();
+      reader.once('SIGINT', () => {
+        reader.removeAllListeners();
         res('quit');
       });
 
-      this.reader.once('line', (line: string) => {
-        this.reader.removeAllListeners();
+      reader.once('line', (line: string) => {
+        reader.removeAllListeners();
         res(line);
       });
     });
 
-    this.reader.prompt();
+    reader.prompt();
 
     return result;
   }
 
   promptSync(prompt: string): void {
-    this.reader.setPrompt(prompt);
-    this.reader.prompt();
+    const reader = mustExist(this.reader);
+
+    reader.setPrompt(prompt);
+    reader.prompt();
   }
 
   async show(msg: string): Promise<void> {
-    this.reader.write(msg);
-    this.reader.write('\n');
+    const reader = mustExist(this.reader);
+
+    reader.write(msg);
+    reader.write('\n');
   }
 
   showSync(msg: string): void {
@@ -52,22 +54,35 @@ export class LineRender extends EventEmitter implements Render {
     process.stdout.write('\n');
   }
 
+  async start(prompt: string) {
+    this.reader = createInterface({
+      input: stdin,
+      output: stdout,
+      prompt: '> ',
+    });
+
+    this.reader.setPrompt(prompt);
+  }
+
   async stop() {
     this.closed = true;
-    this.reader.close();
+
+    if (doesExist(this.reader)) {
+      this.reader.close();
+    }
   }
 
   stream(): AsyncIterableIterator<string> {
     const iter = {
       next: async () => {
         if (this.closed) {
-          return {done: true, value: ''};
+          return { done: true, value: '' };
         } else {
           try {
             const line = await this.read();
-            return {done: false, value: line};
+            return { done: false, value: line };
           } catch (err) {
-            return {done: true, value: err.msg};
+            return { done: true, value: err.msg };
           }
         }
       },

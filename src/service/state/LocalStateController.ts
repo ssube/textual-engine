@@ -77,8 +77,6 @@ export class LocalStateController implements StateController {
       state.focus.actor = id;
     });
     this.focus.on('room', (id: string) => {
-      state.focus.room = id;
-
       const room = mustExist(this.state).rooms.find((it) => it.meta.id === id);
       if (isNil(room)) {
         throw new NotFoundError('invalid room for focus, does not exist in state');
@@ -87,6 +85,8 @@ export class LocalStateController implements StateController {
       this.populateRoom(room, PORTAL_DEPTH).catch((err) => {
         this.logger.warn(err, 'error populating room portals on focus');
       });
+
+      state.focus.room = id;
     });
 
     // reseed the prng

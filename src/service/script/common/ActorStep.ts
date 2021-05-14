@@ -72,7 +72,9 @@ export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<vo
 
   const targetPortal = currentRoom.portals.find((it) => it.name === targetName);
   if (isNil(targetPortal)) {
-    scope.logger.warn(`portal ${targetName} not found`);
+    scope.logger.warn({
+      portals: currentRoom.portals,
+    }, `portal ${targetName} not found`);
     return;
   }
 

@@ -1,9 +1,9 @@
 import { isNil } from '@apextoaster/js-utils';
+import { createHook } from 'async_hooks';
 import * as Logger from 'bunyan';
 import { promises } from 'fs';
 import { BaseOptions, Container, LogLevel } from 'noicejs';
 import { argv, exit } from 'process';
-import { createHook } from 'async_hooks';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
@@ -101,7 +101,7 @@ export async function main(args: Array<string>) {
   let lastNow = Date.now();
 
   // while playing:
-  render.promptSync(`turn ${turnCount} > `);
+  await render.start(`turn ${turnCount} > `);
 
   for await (const line of render.stream()) {
     switch (line) {

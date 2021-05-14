@@ -1,7 +1,8 @@
-import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 
 import { ScriptScope, ScriptTarget } from '..';
 import { Actor, ActorType } from '../../../model/entity/Actor';
+import { Room } from '../../../model/entity/Room';
 import { decrementKey, getKey } from '../../../util/map';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
@@ -39,29 +40,62 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
   }
 }
 
+const knownVerbs = new Map([
+  ['hit', ActorStepHit],
+  ['move', ActorStepMove],
+  ['take', ActorStepTake],
+  ['use', ActorStepUse],
+]);
+
 export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise<void> {
   const cmd = mustExist(scope.command);
 
   scope.logger.debug(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
 
-  switch (cmd.verb) {
-    case 'hit': {
-      const target = this; // TODO: find actual target
-      await scope.script.invoke(target, 'hit', scope);
-      break;
-    }
-    case 'move':
-      scope.logger.debug('move command not implemented');
-      break;
-    case 'take':
-      scope.logger.debug('take command not implemented');
-      break;
-    case 'use': {
-      const target = this; // TODO: find actual target
-      await scope.script.invoke(target, 'use', scope);
-      break;
-    }
-    default:
-      scope.logger.warn('unknown verb');
+  const verb = knownVerbs.get(cmd.verb);
+  if (doesExist(verb)) {
+    await verb.call(this, scope);
+  } else {
+    scope.logger.warn('unknown verb');
   }
+}
+
+export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<void> {
+  const target = this; // TODO: find actual target
+  await scope.script.invoke(target, 'hit', scope);
+}
+
+export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<void> {
+  // find the new room
+  const currentRoom = mustExist(scope.room);
+  const targetName = mustExist(scope.command).target;
+
+  const targetPortal = currentRoom.portals.find((it) => it.name === targetName);
+  if (isNil(targetPortal)) {
+    scope.logger.warn(`portal ${targetName} not found`);
+    return;
+  }
+
+  const targetRoom = scope.state.rooms.find((it) => it.meta.id === targetPortal.dest) as Room; // TODO: keep this immutable
+  if (isNil(targetRoom)) {
+    scope.logger.warn(`destination ${targetPortal.dest} of portal ${targetPortal.name} does not exist`);
+    return;
+  }
+
+  // move the actor
+  currentRoom.actors.splice(currentRoom.actors.indexOf(this), 1);
+  targetRoom.actors.push(this);
+
+  // move the focus
+  scope.logger.debug(`${this.meta.name} is moving to ${targetRoom.meta.name} (${targetRoom.meta.id})`);
+  scope.focus.set('room', targetRoom.meta.id);
+}
+
+export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<void> {
+
+      scope.logger.debug('take command not implemented');
+}
+export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {
+  const target = this; // TODO: find actual target
+  await scope.script.invoke(target, 'use', scope);
 }

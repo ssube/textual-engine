@@ -22,7 +22,7 @@ worlds:
             skills: !map {}
             stats: !map
               health:
-                min: 3
+                min: 30
             slots: !map
               hit:
                 base: actor-hit

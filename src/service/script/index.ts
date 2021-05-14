@@ -6,6 +6,7 @@ import { Room } from '../../model/entity/Room';
 import { Metadata } from '../../model/meta/Metadata';
 import { State } from '../../model/State';
 import { Immutable, ScriptData } from '../../util/types';
+import { WatchableMap } from '../../util/WatchableMap';
 import { Command } from '../input';
 
 export type ScriptTarget = Room | Item | Actor;
@@ -16,6 +17,8 @@ export interface ScriptScope {
    * Assorted data, primitives only.
    */
   data: ScriptData;
+
+  focus: WatchableMap;
 
   logger: Logger;
 

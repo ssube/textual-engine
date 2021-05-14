@@ -9,13 +9,8 @@ export enum ActorType {
 }
 
 export interface Actor {
-  type: 'actor',
-
-  /**
-   * @todo should be named type, but that was already used
-   */
-  actorType: ActorType,
-
+  type: 'actor';
+  actorType: ActorType;
   meta: Metadata;
   items: Array<Item>;
   skills: SkillMap;

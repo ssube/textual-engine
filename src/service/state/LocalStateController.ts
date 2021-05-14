@@ -13,6 +13,7 @@ import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJE
 import { PORTAL_DEPTH } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { findByBaseId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
+import { WatchableMap } from '../../util/WatchableMap';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
 import { ScriptController, SuppliedScope } from '../script';
@@ -33,6 +34,7 @@ export class LocalStateController implements StateController {
   protected random: RandomGenerator;
   protected script: ScriptController;
 
+  protected focus?: WatchableMap;
   protected state?: State;
   protected world?: World;
 
@@ -68,6 +70,15 @@ export class LocalStateController implements StateController {
     // save state for later
     this.state = state;
     this.world = world;
+
+    // register focus
+    this.focus = new WatchableMap();
+    this.focus.on('actor', (id: string) => {
+      state.focus.actor = id;
+    });
+    this.focus.on('room', (id: string) => {
+      state.focus.room = id;
+    });
 
     // reseed the prng
     this.random.reseed(params.seed);
@@ -130,6 +141,10 @@ export class LocalStateController implements StateController {
    * Step the internal world state, simulating some turns and time passing.
    */
   async step(time: number) {
+    if (isNil(this.focus)) {
+      throw new Error('focus has not been initialized');
+    }
+
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
@@ -138,6 +153,7 @@ export class LocalStateController implements StateController {
       data: {
         time,
       },
+      focus: this.focus,
       state: this.state,
     };
 

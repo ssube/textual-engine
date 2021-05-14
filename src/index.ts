@@ -101,13 +101,12 @@ export async function main(args: Array<string>) {
   let lastNow = Date.now();
 
   // while playing:
-  while (true) {
-    // wait for input
-    const line = await render.read(`turn ${++turnCount} > `);
+  render.promptSync(`turn ${turnCount} > `);
+
+  for await (const line of render.stream()) {
     if (line === 'quit') {
-      // await stream.flush();
       await render.stop();
-      break;
+      continue;
     }
 
     if (line === 'debug') {
@@ -123,6 +122,9 @@ export async function main(args: Array<string>) {
     // step world
     const now = Date.now();
     await stateCtrl.step(now - lastNow);
+
+    // wait for input
+    render.promptSync(`turn ${++turnCount} > `);
   }
 
   const saveState = await stateCtrl.save();

@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 
 import { Render } from '../../service/render';
 
-var nameFromLevel = {
+const nameFromLevel = {
 	10: 'trace',
 	20: 'debug',
 	30: 'info',
@@ -39,6 +39,11 @@ export class RenderStream extends EventEmitter {
     const level = record.level as keyof typeof nameFromLevel;
     const levelName = nameFromLevel[level];
 
-    return `${levelName} - ${record.msg}`;
+    if (level <= 10) {
+      const json = JSON.stringify(record);
+      return `${levelName} - ${record.msg} (${json})`;
+    } else {
+      return `${levelName} - ${record.msg}`;
+    }
   }
 }

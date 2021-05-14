@@ -3,4 +3,5 @@ export interface Render {
   show(msg: string): Promise<void>;
   showSync(msg: string): void;
   stop(): Promise<void>;
+  stream(): AsyncIterableIterator<string>;
 }

@@ -158,6 +158,8 @@ export class LocalStateController implements StateController {
       throw new Error('state has not been initialized');
     }
 
+    const start = Date.now();
+
     const scope: SuppliedScope = {
       data: {
         time,
@@ -201,6 +203,9 @@ export class LocalStateController implements StateController {
         });
       }
     }
+
+    const spent = Date.now() - start;
+    this.logger.debug({ spent, time }, 'finished world state step');
   }
 
   protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {

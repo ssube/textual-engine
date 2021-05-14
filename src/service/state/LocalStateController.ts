@@ -10,7 +10,7 @@ import { BaseTemplate, Template } from '../../model/meta/Template';
 import { ReactionConfig, SidebarConfig, State } from '../../model/State';
 import { World } from '../../model/World';
 import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
-import { PORTAL_DEPTH } from '../../util/constants';
+import { PORTAL_DEPTH, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { findByBaseId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
@@ -108,6 +108,16 @@ export class LocalStateController implements StateController {
         this.logger.debug(`${id} is moving to from ${currentRoom.meta.name} (${currentRoom.meta.id}) to ${targetRoom.meta.name} (${targetRoom.meta.id})`);
         currentRoom.actors.splice(currentRoom.actors.indexOf(targetActor), 1);
         targetRoom.actors.push(targetActor);
+
+        await this.script.invoke(targetRoom, SLOT_ENTER, {
+          actor: targetActor,
+          data: {
+            source,
+          },
+          focus: mustExist(this.focus),
+          transfer: mustExist(this.transfer),
+          state,
+        });
       },
       moveItem: async (id: string, source: string, dest: string) => {
         throw new Error('method not implemented');
@@ -199,7 +209,7 @@ export class LocalStateController implements StateController {
     };
 
     for (const room of this.state.rooms) {
-      await this.script.invoke(room, 'step', {
+      await this.script.invoke(room, SLOT_STEP, {
         ...scope,
         room,
       });
@@ -208,7 +218,7 @@ export class LocalStateController implements StateController {
         const input = await this.input.get(actor);
         const [command] = await input.last();
 
-        await this.script.invoke(actor, 'step', {
+        await this.script.invoke(actor, SLOT_STEP, {
           ...scope,
           actor,
           command,
@@ -216,7 +226,7 @@ export class LocalStateController implements StateController {
         });
 
         for (const item of actor.items) {
-          await this.script.invoke(item, 'step', {
+          await this.script.invoke(item, SLOT_STEP, {
             ...scope,
             actor,
             item,
@@ -226,7 +236,7 @@ export class LocalStateController implements StateController {
       }
 
       for (const item of room.items) {
-        await this.script.invoke(item, 'step', {
+        await this.script.invoke(item, SLOT_STEP, {
           ...scope,
           item,
           room,

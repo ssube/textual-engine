@@ -2,7 +2,7 @@ import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/
 
 import { ScriptScope, ScriptTarget } from '..';
 import { Actor, ActorType } from '../../../model/entity/Actor';
-import { Room } from '../../../model/entity/Room';
+import { SLOT_HIT, SLOT_USE } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/map';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
@@ -62,7 +62,7 @@ export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise
 
 export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<void> {
   const target = this; // TODO: find actual target
-  await scope.script.invoke(target, 'hit', scope);
+  await scope.script.invoke(target, SLOT_HIT, scope);
 }
 
 export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<void> {
@@ -92,5 +92,5 @@ export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<vo
 }
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {
   const target = this; // TODO: find actual target
-  await scope.script.invoke(target, 'use', scope);
+  await scope.script.invoke(target, SLOT_USE, scope);
 }

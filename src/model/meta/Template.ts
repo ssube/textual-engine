@@ -24,6 +24,7 @@ export interface BaseEntity {
 export type TemplatePrimitive<T> =
   T extends number ? TemplateNumber :                               // number -> range
   T extends string ? TemplateString :                               // string -> template
+  T extends Metadata ? BaseTemplate<Omit<Metadata, 'template'>> :   // Metadata + template -> Metadata
   T extends BaseEntity ? TemplateRef :                              // entity -> id
   T extends Array<BaseEntity> ? Array<TemplateRef> :                // Array<entity> -> Array<id>
   T extends Array<infer V> ? Array<TemplatePrimitive<V>> :          // Array<V> -> Array<Template<V>>

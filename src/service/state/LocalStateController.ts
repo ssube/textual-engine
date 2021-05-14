@@ -1,5 +1,5 @@
 import { doesExist, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
-import { Logger } from 'noicejs';
+import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateController } from '.';
 import { Actor, ActorType } from '../../model/entity/Actor';
@@ -9,17 +9,23 @@ import { Room } from '../../model/entity/Room';
 import { BaseTemplate, Template } from '../../model/meta/Template';
 import { ReactionConfig, SidebarConfig, State } from '../../model/State';
 import { World } from '../../model/World';
+import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
+import { PORTAL_DEPTH } from '../../util/constants';
 import { Counter } from '../../util/counter';
-import { LocalCounter } from '../../util/counter/LocalCounter';
 import { renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
-import { MathRandomGenerator } from '../random/MathRandom';
 import { ScriptController, SuppliedScope } from '../script';
-import { LocalScriptController } from '../script/LocalScriptController';
 
-const PORTAL_DEPTH = 2;
+export interface LocalStateControllerOptions extends BaseOptions {
+  [INJECT_COUNTER]: Counter;
+  [INJECT_INPUT_MAPPER]: ActorInputMapper;
+  [INJECT_LOGGER]: Logger;
+  [INJECT_RANDOM]: RandomGenerator;
+  [INJECT_SCRIPT]: ScriptController;
+}
 
+@Inject(INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT)
 export class LocalStateController implements StateController {
   protected counter: Counter;
   protected input: ActorInputMapper;
@@ -30,14 +36,14 @@ export class LocalStateController implements StateController {
   protected state?: State;
   protected world?: World;
 
-  constructor(input: ActorInputMapper, logger: Logger) {
-    this.counter = new LocalCounter();
-    this.input = input;
-    this.logger = logger.child({
+  constructor(options: LocalStateControllerOptions) {
+    this.counter = options[INJECT_COUNTER];
+    this.input = options[INJECT_INPUT_MAPPER];
+    this.logger = options[INJECT_LOGGER].child({
       kind: LocalStateController.name,
     });
-    this.random = new MathRandomGenerator();
-    this.script = new LocalScriptController(logger);
+    this.random = options[INJECT_RANDOM];
+    this.script = options[INJECT_SCRIPT];
   }
 
   /**
@@ -189,6 +195,7 @@ export class LocalStateController implements StateController {
         desc: template.base.meta.desc.base,
         id: `${template.base.meta.id.base}-${this.counter.next('actor')}`,
         name: template.base.meta.name.base,
+        template: template.base.meta.id.base,
       },
       skills: renderNumberMap(template.base.skills),
       slots: renderStringMap(template.base.slots),
@@ -203,6 +210,7 @@ export class LocalStateController implements StateController {
         desc: template.base.meta.desc.base,
         id: `${template.base.meta.id.base}-${this.counter.next('item')}`,
         name: template.base.meta.name.base,
+        template: template.base.meta.id.base,
       },
       stats: renderNumberMap(template.base.stats),
       slots: renderStringMap(template.base.slots),
@@ -256,6 +264,7 @@ export class LocalStateController implements StateController {
         desc: template.base.meta.desc.base,
         id: `${template.base.meta.id.base}-${this.counter.next('room')}`,
         name: template.base.meta.name.base,
+        template: template.base.meta.id.base,
       },
       portals: this.populatePortals(template.base.portals, depth),
       slots: renderStringMap(template.base.slots),

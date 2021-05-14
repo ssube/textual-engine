@@ -1,11 +1,11 @@
 import { isNil } from '@apextoaster/js-utils';
 import { promises } from 'fs';
-import { LogLevel } from 'noicejs';
+import { BaseOptions, Container, Logger, LogLevel } from 'noicejs';
 import { argv, exit } from 'process';
 
-import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import { ActorInputMapper } from './service/input/ActorInputMapper';
+import { INJECT_LOGGER } from './module';
+import { LocalModule } from './module/LocalModule';
 import { BehaviorInput } from './service/input/BehaviorInput';
 import { ClassicInput } from './service/input/ClassicInput';
 import { YamlParser } from './service/parser/YamlParser';
@@ -14,10 +14,23 @@ import { LocalStateController } from './service/state/LocalStateController';
 import { debugState } from './util/debug';
 
 export async function main(args: Array<string>) {
-  const logger = BunyanLogger.create({
-    level: LogLevel.DEBUG,
-    name: 'textual-engine',
+  const input = new ClassicInput();
+  const module = new LocalModule({
+    inputs: {
+      [ActorType.DEFAULT]: new BehaviorInput(),
+      [ActorType.PLAYER]: input,
+      [ActorType.REMOTE]: new BehaviorInput(),
+    },
+    logger: {
+      level: LogLevel.DEBUG,
+      name: 'textual-engine',
+    },
   });
+
+  const container = Container.from(module);
+  await container.configure();
+
+  const logger = await container.create<Logger, BaseOptions>(INJECT_LOGGER);
   logger.debug({
     args,
   }, 'text adventure');
@@ -29,14 +42,8 @@ export async function main(args: Array<string>) {
     ClassicInput,
     YamlParser,
   }, 'starting services');
-  const input = new ClassicInput();
-  const inputMapper = new ActorInputMapper({
-    [ActorType.DEFAULT]: new BehaviorInput(),
-    [ActorType.PLAYER]: input,
-    [ActorType.REMOTE]: input,
-  });
   const parser = new YamlParser();
-  const stateCtrl = new LocalStateController(inputMapper, logger);
+  const stateCtrl = await container.create(LocalStateController);
 
   // load data files
   const dataStr = await promises.readFile(args[2], {

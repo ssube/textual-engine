@@ -1,9 +1,10 @@
 import { doesExist, isNil } from '@apextoaster/js-utils';
-import { Logger } from 'noicejs';
+import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ScriptController, ScriptFunction, ScriptTarget, ScriptTargetFilter, SuppliedScope } from '.';
 import { Metadata } from '../../model/meta/Metadata';
 import { State } from '../../model/State';
+import { INJECT_LOGGER } from '../../module';
 import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
@@ -18,12 +19,17 @@ const BASE_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['room-step', RoomStep],
 ];
 
+export interface LocalScriptControllerOptions extends BaseOptions {
+  [INJECT_LOGGER]: Logger;
+}
+
+@Inject(INJECT_LOGGER)
 export class LocalScriptController implements ScriptController {
   protected logger: Logger;
   protected scripts: Map<string, ScriptFunction>;
 
-  constructor(logger: Logger) {
-    this.logger = logger.child({
+  constructor(options: LocalScriptControllerOptions) {
+    this.logger = options[INJECT_LOGGER].child({
       kind: LocalScriptController.name,
     });
     this.scripts = new Map(BASE_SCRIPTS);

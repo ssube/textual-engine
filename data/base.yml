@@ -24,6 +24,8 @@ worlds:
               health:
                 min: 3
             slots: !map
+              hit:
+                base: actor-hit
               step:
                 base: actor-step
         - base:

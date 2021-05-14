@@ -1,17 +1,22 @@
 import { NotFoundError } from '@apextoaster/js-utils';
+import { BaseOptions } from 'noicejs';
 
 import { Input } from '.';
 import { Actor, ActorType } from '../../model/entity/Actor';
 
-export type InputMapperOptions = Record<ActorType, Input>;
+export type InputTypes = Record<ActorType, Input>;
+
+export interface ActorInputMapperOptions extends BaseOptions {
+  inputs: InputTypes;
+}
 
 export class ActorInputMapper {
   protected actors: Map<string, Input>;
-  protected inputs: InputMapperOptions;
+  protected inputs: InputTypes;
 
-  constructor(options: InputMapperOptions) {
+  constructor(options: ActorInputMapperOptions) {
     this.actors = new Map();
-    this.inputs = options;
+    this.inputs = options.inputs;
   }
 
   add(actor: Actor) {

@@ -124,10 +124,6 @@ export class LocalStateController implements StateController {
     this.state = state;
   }
 
-  async next() {
-    return true;
-  }
-
   /**
    * Save the current world state.
    */

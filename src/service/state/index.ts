@@ -33,9 +33,4 @@ export interface StateController {
    * Step the internal world state, simulating some turns and time passing.
    */
   step(time: number): Promise<void>;
-
-  /**
-   * Ready for the next step.
-   */
-  next(): Promise<boolean>;
 }

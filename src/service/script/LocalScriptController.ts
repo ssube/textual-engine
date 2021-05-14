@@ -3,13 +3,17 @@ import { Logger } from 'noicejs';
 
 import { ScriptController, ScriptFunction, ScriptTarget, ScriptTargetFilter, SuppliedScope } from '.';
 import { State } from '../../model/State';
+import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
+import { ItemUse } from './common/ItemUse';
 import { RoomStep } from './common/RoomStep';
 
 const BASE_SCRIPTS: Array<[string, ScriptFunction]> = [
+  ['actor-hit', ActorHit],
   ['actor-step', ActorStep],
   ['item-step', ItemStep],
+  ['item-use', ItemUse],
   ['room-step', RoomStep],
 ];
 

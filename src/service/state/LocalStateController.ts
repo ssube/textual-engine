@@ -389,35 +389,4 @@ export class LocalStateController implements StateController {
     // extend map
     room.portals = await this.populatePortals(template.base.portals, depth);
   }
-
-  protected populateV2() {
-    // generate more rooms based on start room's doors
-
-    /*
-    const portalGroups = this.gatherPortals(startRoomTemplate);
-    for (const [group, portal] of portalGroups) {
-      const nextRoomId = Array.from(portal.dests)[this.random.nextInt(portal.dests.size)];
-      this.logger.debug({
-        nextRoomId,
-        rooms: this.world.templates.rooms,
-      }, 'generating next room');
-
-      const nextRoomTemplate = this.world.templates.rooms.find((it) => it.base.meta.id.base === nextRoomId);
-      if (isNil(nextRoomTemplate)) {
-        throw new NotFoundError('invalid next room');
-      }
-
-      const nextRoom = this.createRoom(nextRoomTemplate);
-      this.state.rooms.push(nextRoom);
-
-      for (const portalName of portal.sources) {
-        startRoom.portals.push({
-          dest: nextRoom.meta.id,
-          group,
-          name: portalName,
-        });
-      }
-    }
-    */
-  }
 }

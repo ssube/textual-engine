@@ -1,7 +1,9 @@
 import { isNil } from '@apextoaster/js-utils';
+import * as Logger from 'bunyan';
 import { promises } from 'fs';
 import { BaseOptions, Container, LogLevel } from 'noicejs';
 import { argv, exit } from 'process';
+import { createHook } from 'async_hooks';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
@@ -12,13 +14,38 @@ import { BehaviorInput } from './service/input/BehaviorInput';
 import { YamlParser } from './service/parser/YamlParser';
 import { LineRender } from './service/render/LineRender';
 import { LocalStateController } from './service/state/LocalStateController';
+import { PORTAL_DEPTH } from './util/constants';
 import { debugState } from './util/debug';
+import { RenderStream } from './util/logger/RenderStream';
 
 export async function main(args: Array<string>) {
+  const asyncOps = new Map();
+  const asyncHook = createHook({
+    init(asyncId, type, triggerAsyncId, resource) {
+      asyncOps.set(asyncId, type);
+    },
+    destroy(asyncId) {
+      asyncOps.delete(asyncId);
+    },
+    promiseResolve(asyncId) {
+      asyncOps.delete(asyncId);
+    },
+  });
+
+  asyncHook.enable();
+
+  function asyncDebug() {
+    for (const [key, type] of asyncOps) {
+      console.log(`async: ${key} is ${type}`);
+    }
+  }
+
   const logger = BunyanLogger.create({
     level: LogLevel.INFO,
     name: 'textual-engine',
+    stream: process.stderr,
   });
+
   logger.info({
     args,
   }, 'textual adventure');
@@ -38,9 +65,18 @@ export async function main(args: Array<string>) {
   });
 
   // create DI container and services
+  const render = await container.create(LineRender);
+
+  // send logs to screen
+  const stream = new RenderStream(render);
+  (logger as Logger).addStream({
+    level: LogLevel.DEBUG,
+    type: 'raw',
+    stream,
+  });
+
   const input = await container.create<Input, BaseOptions>(INJECT_INPUT_PLAYER);
   const parser = await container.create(YamlParser);
-  const render = await container.create(LineRender);
   const stateCtrl = await container.create(LocalStateController);
 
   // load data files
@@ -57,7 +93,7 @@ export async function main(args: Array<string>) {
   }
 
   const state = await stateCtrl.from(world, {
-    rooms: 10,
+    rooms: PORTAL_DEPTH,
     seed: args[4],
   });
 
@@ -69,6 +105,7 @@ export async function main(args: Array<string>) {
     // wait for input
     const line = await render.read(`turn ${++turnCount} > `);
     if (line === 'quit') {
+      // await stream.flush();
       await render.stop();
       break;
     }
@@ -99,6 +136,8 @@ export async function main(args: Array<string>) {
   logger.info({
     state: saveStr,
   }, 'saved world state');
+
+  // asyncDebug();
 }
 
 main(argv).then(() => {

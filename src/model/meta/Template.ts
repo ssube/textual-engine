@@ -1,5 +1,4 @@
 import { Metadata } from './Metadata';
-import { Modifier } from './Modifier';
 
 export interface TemplateNumber {
   type: 'number';
@@ -38,5 +37,5 @@ export type BaseTemplate<T> = {
 
 export type Template<T> = {
   base: BaseTemplate<T>;
-  mods: Array<Modifier>;
+  // mods: Array<Modifier>;
 };

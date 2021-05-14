@@ -1,3 +1,4 @@
+import { writeFileSync } from 'fs';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
 
@@ -34,6 +35,11 @@ export class LineRender implements Render {
   async show(msg: string): Promise<void> {
     this.reader.write(msg);
     this.reader.write('\n');
+  }
+
+  showSync(msg: string): void {
+    process.stdout.write(msg);
+    process.stdout.write('\n');
   }
 
   async stop() {

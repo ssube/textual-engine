@@ -1,10 +1,11 @@
 import { NotFoundError } from '@apextoaster/js-utils';
-import { BaseOptions } from 'noicejs';
+import { BaseOptions, Constructor, Container } from 'noicejs';
 
 import { Input } from '.';
 import { Actor, ActorType } from '../../model/entity/Actor';
 
-export type InputTypes = Record<ActorType, Input>;
+export type InputCtor = Constructor<Input, BaseOptions>;
+export type InputTypes = Record<ActorType, InputCtor | symbol>;
 
 export interface ActorInputMapperOptions extends BaseOptions {
   inputs: InputTypes;
@@ -12,18 +13,23 @@ export interface ActorInputMapperOptions extends BaseOptions {
 
 export class ActorInputMapper {
   protected actors: Map<string, Input>;
-  protected inputs: InputTypes;
+  protected container: Container;
+  protected types: InputTypes;
 
   constructor(options: ActorInputMapperOptions) {
     this.actors = new Map();
-    this.inputs = options.inputs;
+    this.container = options.container;
+    this.types = options.inputs;
   }
 
-  add(actor: Actor) {
-    this.actors.set(actor.meta.id, this.inputs[actor.actorType]);
+  async add(actor: Actor): Promise<Input> {
+    const inputType = this.types[actor.actorType];
+    const input = await this.container.create<Input, BaseOptions>(inputType);
+    this.actors.set(actor.meta.id, input);
+    return input;
   }
 
-  get(actor: Actor): Input {
+  async get(actor: Actor): Promise<Input> {
     const input = this.actors.get(actor.meta.id);
     if (input) {
       return input;
@@ -38,14 +44,5 @@ export class ActorInputMapper {
       history.set(actor, await input.last());
     }
     return history;
-  }
-
-  protected getInput(type: ActorType): Input {
-    const input = this.inputs[type];
-    if (input) {
-      return input;
-    } else {
-      return this.inputs[ActorType.DEFAULT];
-    }
   }
 }

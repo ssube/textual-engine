@@ -79,7 +79,7 @@ export class LocalStateController implements StateController {
     if (isNil(startRoomTemplate)) {
       throw new NotFoundError('invalid start room');
     }
-    const startRoom = this.createRoom(startRoomTemplate);
+    const startRoom = await this.createRoom(startRoomTemplate);
 
     // add to state
     state.focus.room = startRoom.meta.id;
@@ -91,13 +91,12 @@ export class LocalStateController implements StateController {
     if (isNil(startActorTemplate)) {
       throw new NotFoundError('invalid start actor');
     }
-    const startActor = this.createActor(startActorTemplate);
+    const startActor = await this.createActor(startActorTemplate, ActorType.PLAYER);
     startActor.actorType = ActorType.PLAYER;
 
     // add to state and the start room
     state.focus.actor = startActor.meta.id;
     startRoom.actors.push(startActor);
-    this.input.add(startActor);
 
     return state;
   }
@@ -176,7 +175,7 @@ export class LocalStateController implements StateController {
     }
   }
 
-  protected createActor(template: Template<Actor>): Actor {
+  protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {
     const items = [];
     for (const itemTemplateId of template.base.items) {
       const itemTemplate = mustExist(this.world).templates.items.find((it) => it.base.meta.id.base === itemTemplateId.id);
@@ -184,12 +183,13 @@ export class LocalStateController implements StateController {
         throw new NotFoundError('invalid item in actor');
       }
 
-      items.push(this.createItem(itemTemplate));
+      const item = await this.createItem(itemTemplate);
+      items.push(item);
     }
 
-    return {
+    const actor: Actor = {
       type: 'actor',
-      actorType: ActorType.DEFAULT,
+      actorType,
       items,
       meta: {
         desc: template.base.meta.desc.base,
@@ -201,9 +201,13 @@ export class LocalStateController implements StateController {
       slots: renderStringMap(template.base.slots),
       stats: renderNumberMap(template.base.stats),
     };
+
+    await this.input.add(actor);
+
+    return actor;
   }
 
-  protected createItem(template: Template<Item>): Item {
+  protected async createItem(template: Template<Item>): Promise<Item> {
     return {
       type: 'item',
       meta: {
@@ -218,7 +222,7 @@ export class LocalStateController implements StateController {
     };
   }
 
-  protected createRoom(template: Template<Room>, depth = PORTAL_DEPTH): Room {
+  protected async createRoom(template: Template<Room>, depth = PORTAL_DEPTH): Promise<Room> {
     const world = mustExist(this.world);
 
     const actors = [];
@@ -234,9 +238,8 @@ export class LocalStateController implements StateController {
         throw new NotFoundError('invalid actor in room');
       }
 
-      const actor = this.createActor(actorTemplate);
+      const actor = await this.createActor(actorTemplate);
       actors.push(actor);
-      this.input.add(actor);
     }
 
     const items = [];
@@ -252,7 +255,7 @@ export class LocalStateController implements StateController {
         throw new NotFoundError('invalid item in room');
       }
 
-      const item = this.createItem(itemTemplate);
+      const item = await this.createItem(itemTemplate);
       items.push(item);
     }
 
@@ -266,7 +269,7 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
         template: template.base.meta.id.base,
       },
-      portals: this.populatePortals(template.base.portals, depth),
+      portals: await this.populatePortals(template.base.portals, depth),
       slots: renderStringMap(template.base.slots),
       verbs: renderVerbMap(template.base.verbs),
     };
@@ -299,7 +302,7 @@ export class LocalStateController implements StateController {
     return groups;
   }
 
-  protected populatePortals(portals: Array<BaseTemplate<Portal>>, depth: number): Array<Portal> {
+  protected async populatePortals(portals: Array<BaseTemplate<Portal>>, depth: number): Promise<Array<Portal>> {
     if (depth < 0) {
       return [];
     }
@@ -325,7 +328,7 @@ export class LocalStateController implements StateController {
           throw new NotFoundError('invalid room in portal dest');
         }
 
-        const destRoom = this.createRoom(destTemplate, depth - 1);
+        const destRoom = await this.createRoom(destTemplate, depth - 1);
         mustExist(this.state).rooms.push(destRoom);
 
         results.push({

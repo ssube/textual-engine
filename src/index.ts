@@ -1,20 +1,20 @@
 import { isNil } from '@apextoaster/js-utils';
 import { promises } from 'fs';
-import { Container, LogLevel } from 'noicejs';
+import { BaseOptions, Container, LogLevel } from 'noicejs';
 import { argv, exit } from 'process';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
+import { INJECT_INPUT_PLAYER } from './module';
 import { LocalModule } from './module/LocalModule';
+import { Input } from './service/input';
 import { BehaviorInput } from './service/input/BehaviorInput';
-import { ClassicInput } from './service/input/ClassicInput';
 import { YamlParser } from './service/parser/YamlParser';
 import { LineRender } from './service/render/LineRender';
 import { LocalStateController } from './service/state/LocalStateController';
 import { debugState } from './util/debug';
 
 export async function main(args: Array<string>) {
-  const input = new ClassicInput();
   const logger = BunyanLogger.create({
     level: LogLevel.DEBUG,
     name: 'textual-engine',
@@ -25,9 +25,9 @@ export async function main(args: Array<string>) {
 
   const module = new LocalModule({
     inputs: {
-      [ActorType.DEFAULT]: new BehaviorInput(),
-      [ActorType.PLAYER]: input,
-      [ActorType.REMOTE]: new BehaviorInput(),
+      [ActorType.DEFAULT]: BehaviorInput,
+      [ActorType.PLAYER]: INJECT_INPUT_PLAYER,
+      [ActorType.REMOTE]: BehaviorInput,
     },
     seed: args[4],
   });
@@ -38,6 +38,7 @@ export async function main(args: Array<string>) {
   });
 
   // create DI container and services
+  const input = await container.create<Input, BaseOptions>(INJECT_INPUT_PLAYER);
   const parser = await container.create(YamlParser);
   const render = await container.create(LineRender);
   const stateCtrl = await container.create(LocalStateController);

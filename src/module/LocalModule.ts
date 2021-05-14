@@ -1,9 +1,10 @@
 import { isNil, mustExist } from '@apextoaster/js-utils';
-import { Logger, LogLevel, Module, ModuleOptions, Provides } from 'noicejs';
+import { Module, ModuleOptions, Provides } from 'noicejs';
 
-import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '.';
-import { BunyanLogger } from '../logger/BunyanLogger';
+import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_INPUT_PLAYER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '.';
+import { Input } from '../service/input';
 import { ActorInputMapper, InputTypes } from '../service/input/ActorInputMapper';
+import { ClassicInput } from '../service/input/ClassicInput';
 import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { ScriptController } from '../service/script';
@@ -21,6 +22,7 @@ export class LocalModule extends Module {
 
   protected counter?: Counter;
   protected mapper?: ActorInputMapper;
+  protected playerInput?: Input;
   protected random?: RandomGenerator;
   protected script?: ScriptController;
 
@@ -75,5 +77,14 @@ export class LocalModule extends Module {
     }
 
     return this.script;
+  }
+
+  @Provides(INJECT_INPUT_PLAYER)
+  protected async getPlayerInput() {
+    if (isNil(this.playerInput)) {
+      this.playerInput = await mustExist(this.container).create(ClassicInput);
+    }
+
+    return this.playerInput;
   }
 }

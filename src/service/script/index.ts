@@ -13,6 +13,11 @@ export interface ScriptFocus {
   setActor(id: string): Promise<void>;
 }
 
+export interface ScriptRender {
+  read(prompt: string): Promise<string>;
+  show(msg: string): Promise<void>;
+}
+
 export interface ScriptTransfer {
   moveActor(id: string, source: string, dest: string): Promise<void>;
   moveItem(id: string, source: string, dest: string): Promise<void>;
@@ -36,6 +41,11 @@ export interface ScriptScope {
    * Script-specific logger.
    */
   logger: Logger;
+
+  /**
+   * Render I/O helper.
+   */
+  render: ScriptRender;
 
   /**
    * Current script controller.

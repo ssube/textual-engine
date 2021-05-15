@@ -70,7 +70,7 @@ export async function main(args: Array<string>) {
   // send logs to screen
   const stream = new RenderStream(render);
   (logger as Logger).addStream({
-    level: LogLevel.DEBUG,
+    level: LogLevel.INFO,
     type: 'raw',
     stream,
   });
@@ -124,6 +124,12 @@ export async function main(args: Array<string>) {
         // step world
         const now = Date.now();
         await stateCtrl.step(now - lastNow);
+
+        // show any output
+        const output = await stateCtrl.getBuffer();
+        for (const outputLine of output) {
+          await render.show(outputLine);
+        }
 
         // wait for input
         render.promptSync(`turn ${++turnCount} > `);

@@ -71,6 +71,7 @@ worlds:
             stats: !map {}
             verbs: !map {}
       rooms:
+        # TODO: add moist marsh
         - base:
             meta:
               id:
@@ -101,7 +102,7 @@ worlds:
               name:
                 base: Cave
               desc:
-                base: wet cave
+                base: clammy cave
             actors: []
             items: []
             portals:

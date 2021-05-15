@@ -15,7 +15,7 @@ import { Counter } from '../../util/counter';
 import { findByBaseId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
-import { ScriptController, ScriptFocus, ScriptTransfer, SuppliedScope } from '../script';
+import { ScriptController, ScriptFocus, ScriptRender, ScriptTransfer, SuppliedScope } from '../script';
 
 export interface LocalStateControllerOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
@@ -33,13 +33,16 @@ export class LocalStateController implements StateController {
   protected random: RandomGenerator;
   protected script: ScriptController;
 
+  protected buffer: Array<string>;
   protected focus?: ScriptFocus;
+  protected render?: ScriptRender;
   protected transfer?: ScriptTransfer;
 
   protected state?: State;
   protected world?: World;
 
   constructor(options: LocalStateControllerOptions) {
+    this.buffer = [];
     this.counter = options[INJECT_COUNTER];
     this.input = options[INJECT_INPUT_MAPPER];
     this.logger = options[INJECT_LOGGER].child({
@@ -47,6 +50,10 @@ export class LocalStateController implements StateController {
     });
     this.random = options[INJECT_RANDOM];
     this.script = options[INJECT_SCRIPT];
+  }
+
+  async getBuffer() {
+    return this.buffer;
   }
 
   /**
@@ -93,6 +100,15 @@ export class LocalStateController implements StateController {
       }
     };
 
+    this.render = {
+      read: async (prompt: string) => {
+        throw new Error('method not implemented');
+      },
+      show: async (msg: string) => {
+        this.buffer.push(msg);
+      },
+    }
+
     this.transfer = {
       moveActor: async (id: string, source: string, dest: string) => {
         const targetRoom = state.rooms.find((it) => it.meta.id === dest);
@@ -115,6 +131,7 @@ export class LocalStateController implements StateController {
             source,
           },
           focus: mustExist(this.focus),
+          render: mustExist(this.render),
           transfer: mustExist(this.transfer),
           state,
         });
@@ -185,67 +202,75 @@ export class LocalStateController implements StateController {
    * Step the internal world state, simulating some turns and time passing.
    */
   async step(time: number) {
-    if (isNil(this.focus)) {
-      throw new Error('focus has not been initialized');
-    }
-
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
 
-    if (isNil(this.transfer)) {
-      throw new Error('transfer has not been initialized');
-    }
+    this.buffer = [];
 
+    const seen = new Set();
     const start = Date.now();
 
     const scope: SuppliedScope = {
       data: {
         time,
       },
-      focus: this.focus,
+      focus: mustExist(this.focus),
+      render: mustExist(this.render),
       state: this.state,
-      transfer: this.transfer,
+      transfer: mustExist(this.transfer),
     };
 
     for (const room of this.state.rooms) {
-      await this.script.invoke(room, SLOT_STEP, {
-        ...scope,
-        room,
-      });
-
-      for (const actor of room.actors) {
-        const input = await this.input.get(actor);
-        const [command] = await input.last();
-
-        await this.script.invoke(actor, SLOT_STEP, {
+      if (seen.has(room.meta.id) === false) {
+        seen.add(room.meta.id);
+        await this.script.invoke(room, SLOT_STEP, {
           ...scope,
-          actor,
-          command,
           room,
         });
 
-        for (const item of actor.items) {
-          await this.script.invoke(item, SLOT_STEP, {
-            ...scope,
-            actor,
-            item,
-            room,
-          });
+        for (const actor of room.actors) {
+          if (seen.has(actor.meta.id) === false) {
+            const input = await this.input.get(actor);
+            const [command] = await input.last();
+
+            seen.add(actor.meta.id);
+            await this.script.invoke(actor, SLOT_STEP, {
+              ...scope,
+              actor,
+              command,
+              room,
+            });
+
+            for (const item of actor.items) {
+              if (seen.has(item.meta.id) === false) {
+                seen.add(item.meta.id);
+                await this.script.invoke(item, SLOT_STEP, {
+                  ...scope,
+                  actor,
+                  item,
+                  room,
+                });
+              }
+            }
+          }
+
+          for (const item of room.items) {
+            if (seen.has(item.meta.id) === false) {
+              seen.add(item.meta.id);
+              await this.script.invoke(item, SLOT_STEP, {
+                ...scope,
+                item,
+                room,
+              });
+            }
+          }
         }
       }
 
-      for (const item of room.items) {
-        await this.script.invoke(item, SLOT_STEP, {
-          ...scope,
-          item,
-          room,
-        });
-      }
+      const spent = Date.now() - start;
+      this.logger.debug({ spent, time }, 'finished world state step');
     }
-
-    const spent = Date.now() - start;
-    this.logger.debug({ spent, time }, 'finished world state step');
   }
 
   protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {

@@ -33,4 +33,6 @@ export interface StateController {
    * Step the internal world state, simulating some turns and time passing.
    */
   step(time: number): Promise<void>;
+
+  getBuffer(): Promise<Array<string>>;
 }

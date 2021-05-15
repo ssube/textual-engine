@@ -67,7 +67,9 @@ export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<voi
 }
 
 export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {
-  scope.logger.debug('look command not implemented');
+  if (doesExist(scope.room)) {
+    scope.render.show(`You are in ${scope.room.meta.name}: ${scope.room.meta.desc}`);
+  }
 }
 
 export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<void> {
@@ -84,6 +86,7 @@ export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<vo
   }
 
   // move the actor and focus
+  await scope.render.show(`${this.meta.name} moved to ${targetPortal.name}`);
   await scope.transfer.moveActor(this.meta.id, currentRoom.meta.id, targetPortal.dest);
 
   if (this.actorType === ActorType.PLAYER) {

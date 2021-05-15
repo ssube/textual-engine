@@ -21,8 +21,9 @@ export class SeedRandomGenerator implements RandomGenerator {
     return this.lastId;
   }
 
-  public nextInt(max = BYTE_RANGE) {
-    return Math.abs(this.source.int32()) % max;
+  public nextInt(max = BYTE_RANGE, min = 0) {
+    const range = max - min;
+    return (Math.abs(this.source.int32()) % range) + min;
   }
 
   public reseed(initial: string) {

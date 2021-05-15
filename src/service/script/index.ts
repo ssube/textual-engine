@@ -1,5 +1,6 @@
 import { Logger } from 'noicejs';
 
+import { WorldEntity } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
@@ -23,10 +24,13 @@ export interface ScriptTransfer {
   moveItem(id: string, source: string, dest: string): Promise<void>;
 }
 
-export type ScriptTarget = Room | Item | Actor;
+export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, scope: ScriptScope) => Promise<void>;
 
-export interface ScriptScope {
+/**
+ * The script scope fields that must be supplied by the caller.
+ */
+export interface SuppliedScope {
   /**
    * Assorted data, primitives only.
    */
@@ -38,19 +42,9 @@ export interface ScriptScope {
   focus: ScriptFocus;
 
   /**
-   * Script-specific logger.
-   */
-  logger: Logger;
-
-  /**
    * Render I/O helper.
    */
   render: ScriptRender;
-
-  /**
-   * Current script controller.
-   */
-  script: ScriptController;
 
   /**
    * Entity transfer helper.
@@ -69,7 +63,20 @@ export interface ScriptScope {
   room?: Room;
 }
 
-export type SuppliedScope = Omit<ScriptScope, 'logger' | 'script'>;
+/**
+ * The full script callback scope, including controller-supplied fields.
+ */
+export interface ScriptScope extends SuppliedScope {
+  /**
+   * Script-specific logger.
+   */
+  logger: Logger;
+
+  /**
+   * Current script controller.
+   */
+  script: ScriptController;
+}
 
 export type ScriptTargetFilter = {
   meta?: Partial<Metadata>;

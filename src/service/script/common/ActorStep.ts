@@ -1,7 +1,7 @@
 import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 
 import { ScriptScope, ScriptTarget } from '..';
-import { Actor, ActorType } from '../../../model/entity/Actor';
+import { Actor, ActorType, isActor } from '../../../model/entity/Actor';
 import { SLOT_HIT, SLOT_LOOK, SLOT_MOVE, SLOT_TAKE, SLOT_USE, SLOT_WAIT } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/map';
 
@@ -11,7 +11,7 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
     scope: Object.keys(scope),
   }, 'step script');
 
-  if (this.type !== 'actor') {
+  if (!isActor(this)) {
     throw new InvalidArgumentError('script target must be an actor');
   }
 

@@ -1,5 +1,7 @@
 import { mustFind } from '@apextoaster/js-utils';
-import { BaseEntity, Template, TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/meta/Template';
+
+import { Entity } from '../../model/entity/Base';
+import { Template, TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/meta/Template';
 import { VerbMap, VerbSlot } from '../types';
 
 export function renderString(input: TemplateString) {
@@ -48,6 +50,6 @@ export function renderVerbMap(input: TemplatePrimitive<VerbMap>): VerbMap {
 // TODO: export function renderNumberList(input: Array<TemplateNumber>): Array<number>;
 // TODO: export function renderStringList(input: Array<TemplateString>): Array<string>;
 
-export function findByTemplateId<T extends BaseEntity>(templates: Array<Template<T>>, id: string): Template<T> {
+export function findByTemplateId<T extends Entity>(templates: Array<Template<T>>, id: string): Template<T> {
   return mustFind(templates, (it) => it.base.meta.id.base === id);
 }

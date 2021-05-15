@@ -22,6 +22,7 @@ worlds:
             skills: !map {}
             stats: !map
               health:
+                max: 50
                 min: 30
             slots: !map
               hit:
@@ -41,6 +42,7 @@ worlds:
             skills: !map {}
             stats: !map
               health:
+                max: 20
                 min: 14
             slots: !map
               hit:

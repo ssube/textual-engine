@@ -3,6 +3,7 @@ export const INJECT_LOGGER = Symbol('inject-logger');
 export const INJECT_RANDOM = Symbol('inject-random');
 export const INJECT_RENDER = Symbol('inject-render');
 export const INJECT_SCRIPT = Symbol('inject-script');
+export const INJECT_TEMPLATE = Symbol('inject-template');
 
 export const INJECT_INPUT_DEFAULT = Symbol('inject-input-default');
 export const INJECT_INPUT_MAPPER = Symbol('inject-input-mapper');

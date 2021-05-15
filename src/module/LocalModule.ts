@@ -1,7 +1,15 @@
 import { isNil, mustExist } from '@apextoaster/js-utils';
 import { Module, ModuleOptions, Provides } from 'noicejs';
 
-import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_INPUT_PLAYER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '.';
+import {
+  INJECT_COUNTER,
+  INJECT_INPUT_MAPPER,
+  INJECT_INPUT_PLAYER,
+  INJECT_LOGGER,
+  INJECT_RANDOM,
+  INJECT_SCRIPT,
+  INJECT_TEMPLATE,
+} from '.';
 import { Input } from '../service/input';
 import { ActorInputMapper, InputTypes } from '../service/input/ActorInputMapper';
 import { ClassicInput } from '../service/input/ClassicInput';
@@ -9,6 +17,7 @@ import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { ScriptController } from '../service/script';
 import { LocalScriptController } from '../service/script/LocalScriptController';
+import { PipeTemplate } from '../service/template/PipeTemplate';
 import { Counter } from '../util/counter';
 import { LocalCounter } from '../util/counter/LocalCounter';
 
@@ -33,6 +42,8 @@ export class LocalModule extends Module {
 
   async configure(options: ModuleOptions) {
     await super.configure(options);
+
+    this.bind(INJECT_TEMPLATE).toConstructor(PipeTemplate);
   }
 
   @Provides(INJECT_COUNTER)

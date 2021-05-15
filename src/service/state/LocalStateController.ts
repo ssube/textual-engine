@@ -9,14 +9,22 @@ import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseTemplate, Template } from '../../model/meta/Template';
 import { ReactionConfig, SidebarConfig, State } from '../../model/State';
 import { World } from '../../model/World';
-import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
+import {
+  INJECT_COUNTER,
+  INJECT_INPUT_MAPPER,
+  INJECT_LOGGER,
+  INJECT_RANDOM,
+  INJECT_SCRIPT,
+  INJECT_TEMPLATE,
+} from '../../module';
 import { PORTAL_DEPTH, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { searchState } from '../../util/state';
-import { findByTemplateId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
+import { findByTemplateId } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
 import { ScriptController, ScriptFocus, ScriptRender, ScriptTransfer, SuppliedScope } from '../script';
+import { TemplateService } from '../template';
 
 export interface LocalStateControllerOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
@@ -24,15 +32,17 @@ export interface LocalStateControllerOptions extends BaseOptions {
   [INJECT_LOGGER]: Logger;
   [INJECT_RANDOM]: RandomGenerator;
   [INJECT_SCRIPT]: ScriptController;
+  [INJECT_TEMPLATE]: TemplateService;
 }
 
-@Inject(INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT)
+@Inject(INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, INJECT_TEMPLATE)
 export class LocalStateController implements StateController {
   protected counter: Counter;
   protected input: ActorInputMapper;
   protected logger: Logger;
   protected random: RandomGenerator;
   protected script: ScriptController;
+  protected template: TemplateService;
 
   protected buffer: Array<string>;
   protected focus?: ScriptFocus;
@@ -51,6 +61,7 @@ export class LocalStateController implements StateController {
     });
     this.random = options[INJECT_RANDOM];
     this.script = options[INJECT_SCRIPT];
+    this.template = options[INJECT_TEMPLATE];
   }
 
   async getBuffer() {
@@ -329,9 +340,9 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
         template: template.base.meta.id.base,
       },
-      skills: renderNumberMap(template.base.skills),
-      slots: renderStringMap(template.base.slots),
-      stats: renderNumberMap(template.base.stats),
+      skills: this.template.renderNumberMap(template.base.skills),
+      slots: this.template.renderStringMap(template.base.slots),
+      stats: this.template.renderNumberMap(template.base.stats),
     };
 
     await this.input.add(actor);
@@ -348,9 +359,9 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
         template: template.base.meta.id.base,
       },
-      stats: renderNumberMap(template.base.stats),
-      slots: renderStringMap(template.base.slots),
-      verbs: renderVerbMap(template.base.verbs),
+      stats: this.template.renderNumberMap(template.base.stats),
+      slots: this.template.renderStringMap(template.base.slots),
+      verbs: this.template.renderVerbMap(template.base.verbs),
     };
   }
 
@@ -402,8 +413,8 @@ export class LocalStateController implements StateController {
         template: template.base.meta.id.base,
       },
       portals: [],
-      slots: renderStringMap(template.base.slots),
-      verbs: renderVerbMap(template.base.verbs),
+      slots: this.template.renderStringMap(template.base.slots),
+      verbs: this.template.renderVerbMap(template.base.verbs),
     };
   }
 
@@ -417,16 +428,16 @@ export class LocalStateController implements StateController {
       this.logger.debug({
         portal,
       }, 'grouping portal');
-      const groupName = renderString(portal.sourceGroup);
+      const groupName = this.template.renderString(portal.sourceGroup);
       const group = groups.get(groupName);
 
       if (group) {
-        group.dests.add(renderString(portal.dest));
+        group.dests.add(this.template.renderString(portal.dest));
         group.portals.add(portal);
       } else {
         groups.set(groupName, {
           dests: new Set([
-            renderString(portal.dest),
+            this.template.renderString(portal.dest),
           ]),
           portals: new Set([portal]),
         });
@@ -461,8 +472,8 @@ export class LocalStateController implements StateController {
       mustExist(this.state).rooms.push(destRoom);
 
       for (const portal of group.portals) {
-        const name = renderString(portal.name);
-        const targetGroup = renderString(portal.targetGroup);
+        const name = this.template.renderString(portal.name);
+        const targetGroup = this.template.renderString(portal.targetGroup);
 
         results.push({
           name,

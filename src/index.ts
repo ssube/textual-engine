@@ -15,7 +15,7 @@ import { FileLoader } from './service/loader/FileLoader';
 import { YamlParser } from './service/parser/YamlParser';
 import { LineRender } from './service/render/LineRender';
 import { LocalStateController } from './service/state/LocalStateController';
-import { PORTAL_DEPTH } from './util/constants';
+import { KNOWN_VERBS, PORTAL_DEPTH } from './util/constants';
 import { debugState, graphState } from './util/debug';
 import { RenderStream } from './util/logger/RenderStream';
 
@@ -44,7 +44,12 @@ export async function main(args: Array<string>) {
   const logger = BunyanLogger.create({
     level: LogLevel.DEBUG,
     name: 'textual-engine',
-    stream: process.stderr,
+    streams: [{
+      path: 'out/debug.log',
+    }, {
+      level: LogLevel.ERROR,
+      stream: process.stderr,
+    }],
   });
 
   logger.info({
@@ -71,7 +76,7 @@ export async function main(args: Array<string>) {
   // send logs to screen
   const stream = new RenderStream(render);
   (logger as Logger).addStream({
-    level: LogLevel.DEBUG,
+    level: LogLevel.INFO,
     type: 'raw',
     stream,
   });
@@ -118,7 +123,7 @@ export async function main(args: Array<string>) {
         await graphState(loader, render, state, cmd.target);
         break;
       case 'help':
-        await render.show('help');
+        await render.show(KNOWN_VERBS.join(', '));
         break;
       case 'quit':
         await render.stop();

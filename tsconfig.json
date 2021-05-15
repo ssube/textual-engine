@@ -23,6 +23,7 @@
     "strictNullChecks": true,
     "target": "es2017",
     "types": [
+      "mocha",
       "node"
     ],
     "typeRoots": [

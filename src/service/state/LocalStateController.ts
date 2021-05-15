@@ -138,6 +138,15 @@ export class LocalStateController implements StateController {
       },
       moveItem: async (id: string, source: string, dest: string) => {
         throw new Error('method not implemented');
+
+        // find source entity
+        // find dest entity
+        // find target item
+
+        // ensure source is actor/room
+        // ensure dest is actor/room
+
+        // move target from source to dest
       },
     };
 

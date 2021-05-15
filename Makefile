@@ -1,3 +1,5 @@
+.PHONY: build clean install run push test
+
 build: install
 	./node_modules/.bin/tsc
 
@@ -8,7 +10,10 @@ install:
 	yarn
 
 run: build
-	node --require esm out/index.js data/base.yml test test
+	node --require esm out/src/index.js data/base.yml test test
 
 push:
 	git push github $(shell git rev-parse --abbrev-ref HEAD)
+
+test: build
+	./node_modules/.bin/mocha --require esm --recursive --sort "out/**/Test*.js"

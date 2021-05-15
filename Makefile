@@ -1,5 +1,9 @@
 .PHONY: build clean cover graph install push run test
 
+GIT_ARGS ?=
+GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+RELEASE_ARGS ?= --release-as patch --sign
+
 build: install
 	./node_modules/.bin/tsc
 
@@ -12,11 +16,21 @@ graph:
 install:
 	yarn
 
+push:
+	git push $(GIT_ARGS) github $(GIT_BRANCH)
+	git push $(GIT_ARGS) gitlab $(GIT_BRANCH)
+
+release:
+	if [[ "$(GIT_BRANCH)" != master ]]; \
+	then \
+		echo "Please merge to master before releasing."; \
+		exit 1; \
+	fi
+	./node_modules/.bin/standard-version $(RELEASE_ARGS)
+	GIT_ARGS=--follow-tags $(MAKE) push
+
 run: build
 	node --require esm out/src/index.js data/base.yml test test
-
-push:
-	git push github $(shell git rev-parse --abbrev-ref HEAD)
 
 test: build
 	./node_modules/.bin/mocha \

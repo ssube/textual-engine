@@ -20,7 +20,27 @@ export async function debugState(render: Render, state: State): Promise<void> {
     }
 
     for (const portal of room.portals) {
-      await render.show(`    portal: ${portal.name} -> ${portal.dest}`);
+      await render.show(`    portal: ${portal.name} (${portal.sourceGroup}) -> ${portal.dest} (${portal.targetGroup})`);
     }
   }
+}
+
+export async function graphState(render: Render, state: State): Promise<void> {
+  function sanitize(input: string): string {
+    return input.replace(/[^a-zA-Z0-9_]/g, '_');
+  }
+
+  await render.show('\n\n---\n\n');
+  await render.show('strict graph {');
+
+  for (const room of state.rooms) {
+    for (const portal of room.portals) {
+      await render.show(`  ${sanitize(room.meta.id)} -- ${sanitize(portal.dest)} [label="${portal.sourceGroup} -> ${portal.name} -> ${portal.targetGroup}"];`);
+    }
+  }
+
+  await render.show(`  ${sanitize(state.focus.room)} [fillcolor=turquoise,style=filled]`);
+
+  await render.show('}');
+  await render.show('\n\n---\n\n');
 }

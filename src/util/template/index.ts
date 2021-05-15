@@ -48,6 +48,6 @@ export function renderVerbMap(input: TemplatePrimitive<VerbMap>): VerbMap {
 // TODO: export function renderNumberList(input: Array<TemplateNumber>): Array<number>;
 // TODO: export function renderStringList(input: Array<TemplateString>): Array<string>;
 
-export function findByBaseId<T extends BaseEntity>(templates: Array<Template<T>>, id: string): Template<T> {
+export function findByTemplateId<T extends BaseEntity>(templates: Array<Template<T>>, id: string): Template<T> {
   return mustFind(templates, (it) => it.base.meta.id.base === id);
 }

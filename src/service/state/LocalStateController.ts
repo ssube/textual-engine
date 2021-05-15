@@ -1,4 +1,4 @@
-import { doesExist, isNil, mustCoalesce, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateController } from '.';
@@ -12,7 +12,7 @@ import { World } from '../../model/World';
 import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
 import { PORTAL_DEPTH, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
-import { findByBaseId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
+import { findByTemplateId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
 import { ScriptController, ScriptFocus, ScriptRender, ScriptTransfer, SuppliedScope } from '../script';
@@ -150,11 +150,13 @@ export class LocalStateController implements StateController {
       rooms: world.templates.rooms,
       startRoomId,
     }, 'generating start room');
-    const startRoomTemplate = findByBaseId(world.templates.rooms, startRoomId);
+    const startRoomTemplate = findByTemplateId(world.templates.rooms, startRoomId);
     if (isNil(startRoomTemplate)) {
       throw new NotFoundError('invalid start room');
     }
+
     const startRoom = await this.createRoom(startRoomTemplate);
+    await this.populateRoom(startRoom, PORTAL_DEPTH);
 
     // add to state
     state.focus.room = startRoom.meta.id;
@@ -162,7 +164,7 @@ export class LocalStateController implements StateController {
 
     // pick a starting actor and create it
     const startActorId = world.start.actors[this.random.nextInt(world.start.actors.length)];
-    const startActorTemplate = findByBaseId(world.templates.actors, startActorId);
+    const startActorTemplate = findByTemplateId(world.templates.actors, startActorId);
     if (isNil(startActorTemplate)) {
       throw new NotFoundError('invalid start actor');
     }
@@ -278,7 +280,7 @@ export class LocalStateController implements StateController {
 
     const items = [];
     for (const itemTemplateId of template.base.items) {
-      const itemTemplate = findByBaseId(world.templates.items, itemTemplateId.id);
+      const itemTemplate = findByTemplateId(world.templates.items, itemTemplateId.id);
       if (isNil(itemTemplate)) {
         throw new NotFoundError('invalid item in actor');
       }
@@ -322,12 +324,12 @@ export class LocalStateController implements StateController {
     };
   }
 
-  protected async createRoom(template: Template<Room>, depth = PORTAL_DEPTH): Promise<Room> {
+  protected async createRoom(template: Template<Room>): Promise<Room> {
     const world = mustExist(this.world);
 
     const actors = [];
     for (const actorTemplateId of template.base.actors) {
-      const actorTemplate = findByBaseId(world.templates.actors, actorTemplateId.id);
+      const actorTemplate = findByTemplateId(world.templates.actors, actorTemplateId.id);
       this.logger.debug({
         actors: world.templates.actors,
         actorTemplateId,
@@ -344,7 +346,7 @@ export class LocalStateController implements StateController {
 
     const items = [];
     for (const itemTemplateId of template.base.items) {
-      const itemTemplate = findByBaseId(world.templates.items, itemTemplateId.id);
+      const itemTemplate = findByTemplateId(world.templates.items, itemTemplateId.id);
       this.logger.debug({
         items: world.templates.items,
         itemTemplateId,
@@ -369,7 +371,7 @@ export class LocalStateController implements StateController {
         name: template.base.meta.name.base,
         template: template.base.meta.id.base,
       },
-      portals: await this.populatePortals(template.base.portals, depth),
+      portals: [],
       slots: renderStringMap(template.base.slots),
       verbs: renderVerbMap(template.base.verbs),
     };
@@ -378,66 +380,76 @@ export class LocalStateController implements StateController {
   /**
    * Gather portal destinations from a room by group.
    */
-  protected gatherPortals(template: Template<Room>): PortalGroups {
+  protected gatherPortals(portals: Array<BaseTemplate<Portal>>): PortalGroups {
     const groups: PortalGroups = new Map();
 
-    for (const portal of template.base.portals) {
+    for (const portal of portals) {
       this.logger.debug({
         portal,
       }, 'grouping portal');
-      const groupName = portal.group.base;
+      const groupName = renderString(portal.sourceGroup);
       const group = groups.get(groupName);
 
       if (group) {
-        group.dests.add(portal.dest.base);
-        group.sources.add(portal.name.base);
+        group.dests.add(renderString(portal.dest));
+        group.portals.add(portal);
       } else {
         groups.set(groupName, {
-          dests: new Set([portal.dest.base]),
-          sources: new Set([portal.name.base]),
+          dests: new Set([
+            renderString(portal.dest),
+          ]),
+          portals: new Set([portal]),
         });
       }
     }
+
+    this.logger.debug({ groups: Object.fromEntries(groups.entries()) }, 'grouped portals');
 
     return groups;
   }
 
-  protected async populatePortals(portals: Array<BaseTemplate<Portal>>, depth: number): Promise<Array<Portal>> {
+  protected async populatePortals(portals: Array<BaseTemplate<Portal>>, sourceId: string, depth: number): Promise<Array<Portal>> {
     if (depth < 0) {
       return [];
     }
 
-    // TODO: group first, union dests
-    const groups: Map<string, string> = new Map();
+    const groups = this.gatherPortals(portals);
     const results: Array<Portal> = [];
 
-    for (const portal of portals) {
-      const existing = groups.get(portal.group.base);
+    for (const [sourceGroup, group] of groups) {
+      const world = mustExist(this.world);
+      const destTemplateId = Array.from(group.dests)[0];
+      const destTemplate = findByTemplateId(world.templates.rooms, destTemplateId);
 
-      if (doesExist(existing)) {
-        results.push({
-          dest: existing,
-          group: renderString(portal.group),
-          name: renderString(portal.name),
-        });
-      } else {
-        const world = mustCoalesce(this.world);
-        const destTemplateId = renderString(portal.dest);
-        const destTemplate = findByBaseId(world.templates.rooms, destTemplateId);
+      if (isNil(destTemplate)) {
+        throw new NotFoundError('invalid room in portal dest');
+      }
 
-        if (isNil(destTemplate)) {
-          throw new NotFoundError('invalid room in portal dest');
-        }
+      this.logger.debug({ destTemplateId, group, sourceGroup }, 'linking source group to destination template');
 
-        const destRoom = await this.createRoom(destTemplate, depth - 1);
-        mustExist(this.state).rooms.push(destRoom);
+      const destRoom = await this.createRoom(destTemplate);
+      mustExist(this.state).rooms.push(destRoom);
+
+      for (const portal of group.portals) {
+        const name = renderString(portal.name);
+        const targetGroup = renderString(portal.targetGroup);
 
         results.push({
+          name,
+          sourceGroup,
+          targetGroup,
           dest: destRoom.meta.id,
-          group: renderString(portal.group),
-          name: renderString(portal.name),
+        });
+
+        destRoom.portals.push({
+          name,
+          sourceGroup: targetGroup,
+          targetGroup: sourceGroup,
+          dest: sourceId,
         });
       }
+
+      await this.populateRoom(destRoom, depth - 1);
     }
 
     return results;
@@ -449,15 +461,23 @@ export class LocalStateController implements StateController {
     }
 
     // get template
-    const template = findByBaseId(mustExist(this.world).templates.rooms, room.meta.template);
+    const template = findByTemplateId(mustExist(this.world).templates.rooms, room.meta.template);
+    // TODO: filter out previously-created destination portals
+    const portals = template.base.portals.filter((it) => {
+      this.logger.debug({ it, room }, 'looking for portal matching template in room');
 
-    if (room.portals.length === template.base.portals.length) {
+      return room.portals.some((p) => {
+        return p.name === it.name.base && p.sourceGroup === it.sourceGroup.base;
+      }) === false;
+    });
+
+    if (portals.length === 0) {
       this.logger.debug({ room }, 'portals have already been populated');
       return;
     }
 
     // extend map
-    this.logger.debug(`populating ${template.base.portals.length} portals in room ${room.meta.id}`);
-    room.portals = await this.populatePortals(template.base.portals, depth);
+    this.logger.debug(`populating ${portals.length} new portals of ${template.base.portals.length} in room ${room.meta.id}`);
+    room.portals.push(...await this.populatePortals(portals, room.meta.id, depth));
   }
 }

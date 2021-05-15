@@ -85,10 +85,20 @@ worlds:
               - id: actor-goblin
             items: []
             portals:
-              - group:
+              - sourceGroup:
+                  base: west
+                targetGroup:
+                  base: east
+                name:
+                  base: window
+                dest:
+                  base: room-cave
+              - sourceGroup:
+                  base: east
+                targetGroup:
                   base: west
                 name:
-                  base: west door
+                  base: door
                 dest:
                   base: room-cave
             slots: !map
@@ -106,10 +116,20 @@ worlds:
             actors: []
             items: []
             portals:
-              - group:
+              - sourceGroup:
+                  base: west
+                targetGroup:
                   base: east
                 name:
-                  base: east window
+                  base: door
+                dest:
+                  base: room-cave
+              - sourceGroup:
+                  base: east
+                targetGroup:
+                  base: west
+                name:
+                  base: window
                 dest:
                   base: room-dungeon
             slots: !map

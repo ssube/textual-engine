@@ -82,7 +82,7 @@ export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<vo
     }
 
     for (const portal of scope.room.portals) {
-      scope.render.show(`A ${portal.name} leads to the ${portal.group} (${portal.dest})`)
+      scope.render.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`)
     }
   }
 }

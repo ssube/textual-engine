@@ -9,3 +9,4 @@ export const SLOT_MOVE = 'move';
 export const SLOT_STEP = 'step';
 export const SLOT_TAKE = 'take';
 export const SLOT_USE = 'use';
+export const SLOT_WAIT = 'wait';

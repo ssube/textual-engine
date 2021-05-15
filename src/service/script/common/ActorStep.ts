@@ -2,7 +2,7 @@ import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/
 
 import { ScriptScope, ScriptTarget } from '..';
 import { Actor, ActorType } from '../../../model/entity/Actor';
-import { SLOT_HIT, SLOT_LOOK, SLOT_MOVE, SLOT_TAKE, SLOT_USE } from '../../../util/constants';
+import { SLOT_HIT, SLOT_LOOK, SLOT_MOVE, SLOT_TAKE, SLOT_USE, SLOT_WAIT } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/map';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
@@ -46,6 +46,7 @@ const knownVerbs = new Map([
   [SLOT_MOVE, ActorStepMove],
   [SLOT_TAKE, ActorStepTake],
   [SLOT_USE, ActorStepUse],
+  [SLOT_WAIT, ActorStepWait],
 ]);
 
 export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise<void> {
@@ -115,4 +116,8 @@ export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<vo
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {
   const target = this; // TODO: find actual target
   await scope.script.invoke(target, SLOT_USE, scope);
+}
+
+export async function ActorStepWait(this: Actor, scope: ScriptScope): Promise<void> {
+  scope.logger.debug('actor is skipping a turn');
 }

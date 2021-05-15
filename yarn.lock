@@ -283,6 +283,11 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/node/-/node-15.0.3.tgz#ee09fcaac513576474c327da5818d421b98db88a"
   integrity sha512-/WbxFeBU+0F79z9RdEOXH4CsDga+ibi5M8uEYr91u3CkT/pdWcV8MCook+4wDPnZBexRdwWS+PiVZ2xJviAzcQ==
 
+"@types/parsimmon@^1.10.6":
+  version "1.10.6"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/parsimmon/-/parsimmon-1.10.6.tgz#8fcf95990514d2a7624aa5f630c13bf2427f9cdd"
+  integrity sha512-FwAQwMRbkhx0J6YELkwIpciVzCcgEqXEbIrIn3a2P5d3kGEHQ3wVhlN3YdVepYP+bZzCYO6OjmD4o9TGOZ40rA==
+
 "@types/seedrandom@^3.0.0":
   version "3.0.0"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/seedrandom/-/seedrandom-3.0.0.tgz#13f4d71aa58cf6068a2e75261a4580fb71dc84e6"
@@ -1298,6 +1303,11 @@ package-hash@^4.0.0:
     hasha "^5.0.0"
     lodash.flattendeep "^4.4.0"
     release-zalgo "^1.0.0"
+
+parsimmon@^1.17.0:
+  version "1.17.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/parsimmon/-/parsimmon-1.17.0.tgz#520bfaf5d80677cf74d9d2a586b6a503a29223b5"
+  integrity sha512-gp5yNYs0Lyv5Mp6hj+JMzsHaM4Mel0WuK2iHYKX32ActYAQdsSq+t4nVsqlOpUCiMYdTX1wFISLvugrAl9harg==
 
 path-exists@^4.0.0:
   version "4.0.0"

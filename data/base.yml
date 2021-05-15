@@ -36,7 +36,7 @@ worlds:
               name:
                 base: Goblin
               desc:
-                base: ugly goblin
+                base: (((ugly|fat)|goblin))
             items:
               - id: item-sword
             skills: !map {}

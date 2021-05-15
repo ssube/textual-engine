@@ -73,7 +73,7 @@ export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<vo
 
     for (const actor of scope.room.actors) {
       if (actor !== this) {
-        scope.render.show(`A ${actor.meta.name} is in the room with ${actor.stats.get('health')} health`);
+        scope.render.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room with ${actor.stats.get('health')} health`);
       }
     }
 

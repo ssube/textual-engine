@@ -330,15 +330,16 @@ export class LocalStateController implements StateController {
       items.push(item);
     }
 
+    const id = this.template.renderString(template.base.meta.id);
     const actor: Actor = {
       type: 'actor',
       actorType,
       items,
       meta: {
-        desc: template.base.meta.desc.base,
-        id: `${template.base.meta.id.base}-${this.counter.next('actor')}`,
-        name: template.base.meta.name.base,
-        template: template.base.meta.id.base,
+        desc: this.template.renderString(template.base.meta.desc),
+        id: `${id}-${this.counter.next('actor')}`,
+        name: this.template.renderString(template.base.meta.name),
+        template: template.base.meta.id.base, // should NOT be rendered
       },
       skills: this.template.renderNumberMap(template.base.skills),
       slots: this.template.renderStringMap(template.base.slots),
@@ -354,9 +355,9 @@ export class LocalStateController implements StateController {
     return {
       type: 'item',
       meta: {
-        desc: template.base.meta.desc.base,
+        desc: this.template.renderString(template.base.meta.desc),
         id: `${template.base.meta.id.base}-${this.counter.next('item')}`,
-        name: template.base.meta.name.base,
+        name: this.template.renderString(template.base.meta.name),
         template: template.base.meta.id.base,
       },
       stats: this.template.renderNumberMap(template.base.stats),
@@ -402,14 +403,15 @@ export class LocalStateController implements StateController {
       items.push(item);
     }
 
+    const id = this.template.renderString(template.base.meta.id);
     return {
       type: 'room',
       actors,
       items,
       meta: {
-        desc: template.base.meta.desc.base,
-        id: `${template.base.meta.id.base}-${this.counter.next('room')}`,
-        name: template.base.meta.name.base,
+        desc: this.template.renderString(template.base.meta.desc),
+        id: `${id}-${this.counter.next('room')}`,
+        name: this.template.renderString(template.base.meta.name),
         template: template.base.meta.id.base,
       },
       portals: [],

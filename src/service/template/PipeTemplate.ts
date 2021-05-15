@@ -5,6 +5,7 @@ import { TemplateService } from '.';
 import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/meta/Template';
 import { INJECT_RANDOM } from '../../module';
 import { JoinChain } from '../../util/template/JoinChain';
+import { splitChain } from '../../util/template/SplitChain';
 import { VerbMap, VerbSlot } from '../../util/types';
 import { RandomGenerator } from '../random';
 
@@ -26,7 +27,14 @@ export class PipeTemplate implements TemplateService {
   }
 
   renderString(input: TemplateString): string {
-    return this.joiner.render([input.base]);
+    const chain = splitChain(input.base, {
+      group: {
+        start: '(',
+        end: ')',
+      },
+      split: '|',
+    });
+    return this.joiner.render(chain);
   }
 
   renderNumber(input: TemplateNumber): number {

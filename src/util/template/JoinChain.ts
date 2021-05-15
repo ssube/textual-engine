@@ -1,7 +1,7 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { RandomGenerator } from '../../service/random';
 
-type InputChain = Array<string | InputChain>;
+export type InputChain = Array<string | InputChain>;
 
 interface JoinOptions {
   joiners: Array<string>;
@@ -12,13 +12,13 @@ interface JoinOptions {
  * A string building construct that:
  * 
  * - takes a nested list of input fragments
- * - takes a list of joiners and operators
- * - for each fragment of the input:
+ * - takes a list of joiners and operators (TODO)
+ * - for each fragment of the input chain:
  *   - modulo select a joiner
- *   - modulo select an operator
- *   - select one or more items by operator
- *   - recurse into the fragment
- *   - join items with joiner
+ *   - TODO: modulo select an operator
+ *   - select one or more items using level operator
+ *     - recurse into child chains
+ *   - join items with level joiner
  */
 export class JoinChain {
   protected joiners: Array<string>;

@@ -68,7 +68,21 @@ export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<voi
 
 export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {
   if (doesExist(scope.room)) {
-    scope.render.show(`You are in ${scope.room.meta.name}: ${scope.room.meta.desc}`);
+    scope.render.show(`${this.meta.name} is in ${scope.room.meta.name}: ${scope.room.meta.desc}`);
+
+    for (const actor of scope.room.actors) {
+      if (actor !== this) {
+        scope.render.show(`A ${actor.meta.name} is in the room with ${this.meta.name}`);
+      }
+    }
+
+    for (const item of scope.room.items) {
+      scope.render.show(`A ${item.meta.name} is in lying on the floor`);
+    }
+
+    for (const portal of scope.room.portals) {
+      scope.render.show(`A ${portal.name} leads to the ${portal.group} (${portal.dest})`)
+    }
   }
 }
 

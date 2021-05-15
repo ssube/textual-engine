@@ -5,6 +5,7 @@ import { ScriptController, ScriptFunction, ScriptTarget, ScriptTargetFilter, Sup
 import { Metadata } from '../../model/meta/Metadata';
 import { State } from '../../model/State';
 import { INJECT_LOGGER } from '../../module';
+import { matchMetadata } from '../../util/state';
 import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
@@ -59,10 +60,13 @@ export class LocalScriptController implements ScriptController {
     });
   }
 
+  /**
+   * @todo use searchState to find target entities once it supports room filter
+   */
   async broadcast(state: State, filter: ScriptTargetFilter, slot: string, scope: SuppliedScope): Promise<void> {
     for (const room of state.rooms) {
       if (doesExist(filter.room)) {
-        if (this.matchMeta(room, filter.room) === false) {
+        if (matchMetadata(room, filter.room) === false) {
           // skip rooms that do not match
           continue;
         }
@@ -96,21 +100,7 @@ export class LocalScriptController implements ScriptController {
     let matched = true;
 
     if (doesExist(filter.meta)) {
-      matched = matched && this.matchMeta(target, filter.meta);
-    }
-
-    return matched;
-  }
-
-  matchMeta(target: ScriptTarget, filter: Partial<Metadata>): boolean {
-    let matched = true;
-
-    if (doesExist(filter.id)) {
-      matched = matched && target.meta.id.toLocaleLowerCase().startsWith(filter.id);
-    }
-
-    if (doesExist(filter.name)) {
-      matched = matched && target.meta.name.toLocaleLowerCase().includes(filter.name);
+      matched = matched && matchMetadata(target, filter.meta);
     }
 
     return matched;

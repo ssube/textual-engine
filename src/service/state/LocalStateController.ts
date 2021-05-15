@@ -5,13 +5,14 @@ import { CreateParams, StateController } from '.';
 import { Actor, ActorType } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Portal, PortalGroups } from '../../model/entity/Portal';
-import { Room } from '../../model/entity/Room';
+import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseTemplate, Template } from '../../model/meta/Template';
 import { ReactionConfig, SidebarConfig, State } from '../../model/State';
 import { World } from '../../model/World';
 import { INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
 import { PORTAL_DEPTH, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
+import { searchState } from '../../util/state';
 import { findByTemplateId, renderNumberMap, renderString, renderStringMap, renderVerbMap } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
@@ -85,8 +86,13 @@ export class LocalStateController implements StateController {
         state.focus.actor = id;
       },
       setRoom: async (id: string) => {
-        const room = mustExist(this.state).rooms.find((it) => it.meta.id === id);
-        if (isNil(room)) {
+        const [room] = searchState(state, {
+          meta: {
+            id,
+          },
+          type: ROOM_TYPE,
+        });
+        if (!isRoom(room)) {
           throw new NotFoundError('invalid room for focus, does not exist in state');
         }
 
@@ -111,13 +117,28 @@ export class LocalStateController implements StateController {
 
     this.transfer = {
       moveActor: async (id: string, source: string, dest: string) => {
-        const targetRoom = state.rooms.find((it) => it.meta.id === dest);
-        if (isNil(targetRoom)) {
+        const [targetRoom] = searchState(state, {
+          meta: {
+            id: dest,
+          },
+          type: ROOM_TYPE,
+        });
+        if (!isRoom(targetRoom)) {
           this.logger.warn(`destination room ${dest} does not exist`);
           return;
         }
 
-        const currentRoom = mustExist(state.rooms.find((it) => it.meta.id === source));
+        const [currentRoom] = searchState(state, {
+          meta: {
+            id: source,
+          },
+          type: ROOM_TYPE,
+        });
+        if (!isRoom(currentRoom)) {
+          this.logger.warn(`source room ${source} does not exist`);
+          return;
+        }
+
         const targetActor = mustExist(currentRoom.actors.find((it) => it.meta.id === id));
 
         // move the actor

@@ -1,4 +1,7 @@
 *.swp
+
+.nyc_output/
 .vscode/
+
 node_modules/
 out/

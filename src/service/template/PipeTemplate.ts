@@ -4,6 +4,7 @@ import { BaseOptions, Inject } from 'noicejs';
 import { TemplateService } from '.';
 import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/meta/Template';
 import { INJECT_RANDOM } from '../../module';
+import { JoinChain } from '../../util/template/JoinChain';
 import { VerbMap, VerbSlot } from '../../util/types';
 import { RandomGenerator } from '../random';
 
@@ -13,14 +14,19 @@ export interface PipeTemplateOptions extends BaseOptions {
 
 @Inject(INJECT_RANDOM)
 export class PipeTemplate implements TemplateService {
+  protected readonly joiner: JoinChain;
   protected readonly random: RandomGenerator;
 
   constructor(options: PipeTemplateOptions) {
     this.random = mustExist(options[INJECT_RANDOM]);
+    this.joiner = new JoinChain({
+      joiners: ['-'],
+      random: this.random,
+    });
   }
 
   renderString(input: TemplateString): string {
-    return input.base;
+    return this.joiner.render([input.base]);
   }
 
   renderNumber(input: TemplateNumber): number {

@@ -28,11 +28,11 @@ export class PipeTemplate implements TemplateService {
   }
 
   renderNumberList(input: TemplateNumber[]): number[] {
-    return input.map((it) => it.min);
+    return input.map((it) => this.renderNumber(it));
   }
 
   renderStringList(input: TemplateString[]): string[] {
-    return input.map((it) => it.base);
+    return input.map((it) => this.renderString(it));
   }
 
   renderNumberMap(input: Map<string, TemplateNumber>): Map<string, number> {
@@ -60,8 +60,8 @@ export class PipeTemplate implements TemplateService {
 
     for (const [key, value] of input) {
       const verb: VerbSlot = {
-        slot: value.slot.base,
-        data: {},
+        slot: this.renderString(value.slot),
+        data: {}, // TODO
       };
 
       result.set(key, verb);

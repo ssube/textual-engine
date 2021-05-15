@@ -27,17 +27,19 @@ export async function debugState(render: Render, state: State): Promise<void> {
   }
 }
 
-export async function graphState(loader: Loader, render: Render, state: State): Promise<void> {
+export async function graphState(loader: Loader, render: Render, state: State, path: string): Promise<void> {
   function sanitize(input: string): string {
     return input.replace(/[^a-zA-Z0-9_]/g, '_');
   }
 
-  const lines = [];
+  const lines = [
+    'strict graph {',
+  ];
 
-  lines.push('strict graph {');
+  // add rooms as nodes
+  lines.push(`  ${sanitize(state.focus.room)} [fillcolor=turquoise,style=filled];`);
 
-  lines.push(`  ${sanitize(state.focus.room)} [fillcolor=turquoise,style=filled]`);
-
+  // add edges between rooms
   for (const room of state.rooms) {
     for (const portal of room.portals) {
       lines.push(`  ${sanitize(room.meta.id)} -- ${sanitize(portal.dest)} [label="${portal.sourceGroup} -> ${portal.name} -> ${portal.targetGroup}"];`);
@@ -46,9 +48,7 @@ export async function graphState(loader: Loader, render: Render, state: State): 
 
   lines.push('}');
 
-  const path = join('out', 'debug-graph');
   const data = Buffer.from(lines.join('\n'));
-
   await loader.dump(path, data);
   await render.show(`wrote ${state.rooms.length} node graph to ${path}`);
 }

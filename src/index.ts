@@ -104,12 +104,18 @@ export async function main(args: Array<string>) {
   await render.start(`turn ${turnCount} > `);
 
   for await (const line of render.stream()) {
-    switch (line) {
+    // parse last input
+    const [cmd] = await input.parse(line);
+    logger.debug({
+      cmd,
+    }, 'parsed command');
+
+    switch (cmd.verb) {
       case 'debug':
         await debugState(render, state);
         break;
       case 'graph':
-        await graphState(loader, render, state);
+        await graphState(loader, render, state, cmd.target);
         break;
       case 'help':
         await render.show('help');
@@ -118,12 +124,6 @@ export async function main(args: Array<string>) {
         await render.stop();
         break;
       default: {
-        // parse last input
-        const cmd = await input.parse(line);
-        logger.debug({
-          cmd,
-        }, 'parsed command');
-
         // step world
         const now = Date.now();
         await stateCtrl.step(now - lastNow);

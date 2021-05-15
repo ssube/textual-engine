@@ -6,14 +6,14 @@ import { Template } from './meta/Template';
 
 export interface World {
   /**
-   * World name, description, and other metadata (subrecord common to most entities).
+   * World name, description, and other metadata (common to most entities).
    */
   meta: Metadata;
 
   /**
    * Starting rooms and character selection.
    * 
-   * @todo needs a better name
+   * @todo is there a better name? spawn?
    */
   start: {
     actors: Array<string>;
@@ -25,11 +25,4 @@ export interface World {
     items: Array<Template<Item>>;
     rooms: Array<Template<Room>>;
   }
-
-  /**
-   * Conversations.
-   */
-  dialogue: Array<unknown>;
-
-  scripts: Array<unknown>;
 }

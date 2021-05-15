@@ -1,3 +1,4 @@
+import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { alt, createLanguage, regexp, string } from 'parsimmon';
 
 import { InputChain } from './JoinChain';
@@ -18,11 +19,13 @@ export function splitChain(input: string, options: SplitOptions): InputChain {
   });
 
   const parse = lang.Value.tryParse(input);
-  console.log('parse split', input, parse);
-
   if (typeof parse === 'string') {
     return [parse];
-  } else {
+  }
+
+  if (Array.isArray(parse)) {
     return parse;
   }
+
+  throw new InvalidArgumentError('parse did not return a string or array');
 }

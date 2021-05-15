@@ -11,6 +11,7 @@ import { INJECT_INPUT_PLAYER } from './module';
 import { LocalModule } from './module/LocalModule';
 import { Input } from './service/input';
 import { BehaviorInput } from './service/input/BehaviorInput';
+import { FileLoader } from './service/loader/FileLoader';
 import { YamlParser } from './service/parser/YamlParser';
 import { LineRender } from './service/render/LineRender';
 import { LocalStateController } from './service/state/LocalStateController';
@@ -76,13 +77,12 @@ export async function main(args: Array<string>) {
   });
 
   const input = await container.create<Input, BaseOptions>(INJECT_INPUT_PLAYER);
+  const loader = await container.create(FileLoader);
   const parser = await container.create(YamlParser);
   const stateCtrl = await container.create(LocalStateController);
 
   // load data files
-  const dataStr = await promises.readFile(args[2], {
-    encoding: 'utf-8',
-  });
+  const dataStr = await loader.loadStr(args[2]);
   const data = parser.load(dataStr);
 
   // create state from world
@@ -109,7 +109,7 @@ export async function main(args: Array<string>) {
         await debugState(render, state);
         break;
       case 'graph':
-        await graphState(render, state);
+        await graphState(loader, render, state);
         break;
       case 'help':
         await render.show('help');

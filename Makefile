@@ -1,10 +1,13 @@
-.PHONY: build clean install run push test cover
+.PHONY: build clean cover graph install push run test
 
 build: install
 	./node_modules/.bin/tsc
 
 clean:
 	rm -rf node_modules/ out/
+
+graph:
+	cat out/debug-graph | dot -Tpng -oout/debug-graph.png && sensible-browser out/debug-graph.png
 
 install:
 	yarn

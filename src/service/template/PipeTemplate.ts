@@ -26,7 +26,7 @@ export class PipeTemplate implements TemplateService {
     });
   }
 
-  renderString(input: TemplateString): string {
+  public renderString(input: TemplateString): string {
     const chain = splitChain(input.base, {
       group: {
         start: '(',
@@ -37,19 +37,19 @@ export class PipeTemplate implements TemplateService {
     return this.joiner.render(chain);
   }
 
-  renderNumber(input: TemplateNumber): number {
+  public renderNumber(input: TemplateNumber): number {
     return this.random.nextInt(input.max, input.min);
   }
 
-  renderNumberList(input: TemplateNumber[]): number[] {
+  public renderNumberList(input: Array<TemplateNumber>): Array<number> {
     return input.map((it) => this.renderNumber(it));
   }
 
-  renderStringList(input: TemplateString[]): string[] {
+  public renderStringList(input: Array<TemplateString>): Array<string> {
     return input.map((it) => this.renderString(it));
   }
 
-  renderNumberMap(input: Map<string, TemplateNumber>): Map<string, number> {
+  public renderNumberMap(input: Map<string, TemplateNumber>): Map<string, number> {
     const result = new Map();
 
     for (const [key, value] of input) {
@@ -59,7 +59,7 @@ export class PipeTemplate implements TemplateService {
     return result;
   }
 
-  renderStringMap(input: Map<string, TemplateString>): Map<string, string> {
+  public renderStringMap(input: Map<string, TemplateString>): Map<string, string> {
     const result = new Map();
 
     for (const [key, value] of input) {
@@ -69,7 +69,7 @@ export class PipeTemplate implements TemplateService {
     return result;
   }
 
-  renderVerbMap(input: Map<string, BaseTemplate<VerbSlot>>): VerbMap {
+  public renderVerbMap(input: Map<string, BaseTemplate<VerbSlot>>): VerbMap {
     const result = new Map();
 
     for (const [key, value] of input) {

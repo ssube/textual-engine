@@ -83,7 +83,7 @@ export async function main(args: Array<string>): Promise<number> {
 
   // step state stuff
   await render.start();
-  await render.loop(`start > `);
+  await render.loop('start > ');
   await render.stop();
 
   // save state game

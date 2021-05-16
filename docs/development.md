@@ -55,3 +55,7 @@ TODO: inspector/break
   - do not use `else if`, avoid `else`
     - `else if` should be a map lookup or switch, depending on the number of branches and whether it is dynamic
     - prefer early exit, it works better in async flows
+- iteration
+  - prefer [tacit programming](https://en.wikipedia.org/wiki/Tacit_programming) for predicate loops
+    - `items.map(doesExist)` has all of the same semantic meaning (and less syntactic overhead) as `items.map((it) => doesExist)`
+    - write composable functions with this in mind (not everything needs to be a method)

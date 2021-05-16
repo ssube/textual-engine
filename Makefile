@@ -20,7 +20,7 @@ image:
 	docker build $(DOCKER_ARGS) -f Dockerfile -t $(DOCKER_IMAGE) .
 
 lint: node_modules
-	yarn eslint . --ext .ts,.tsx
+	yarn eslint src/ --ext .ts,.tsx
 
 node_modules:
 	yarn

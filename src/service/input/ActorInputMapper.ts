@@ -22,14 +22,14 @@ export class ActorInputMapper {
     this.types = options.inputs;
   }
 
-  async add(actor: Actor): Promise<Input> {
+  public async add(actor: Actor): Promise<Input> {
     const inputType = this.types[actor.actorType];
     const input = await this.container.create<Input, BaseOptions>(inputType);
     this.actors.set(actor.meta.id, input);
     return input;
   }
 
-  async get(actor: Actor): Promise<Input> {
+  public async get(actor: Actor): Promise<Input> {
     const input = this.actors.get(actor.meta.id);
     if (input) {
       return input;
@@ -38,7 +38,7 @@ export class ActorInputMapper {
     }
   }
 
-  async history(): Promise<Map<string, Array<string>>> {
+  public async history(): Promise<Map<string, Array<string>>> {
     const history = new Map();
     for (const [actor, input] of this.actors) {
       history.set(actor, await input.last());

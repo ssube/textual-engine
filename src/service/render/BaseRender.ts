@@ -41,7 +41,10 @@ export abstract class BaseRender implements Render {
 
   abstract loopStep(output: Array<string>): void;
 
-  async loop(prompt: string): Promise<void> {
+  /**
+   * Loop logic should be relatively similar across render frontends, but can be overridden or hooked at `loopStep`.
+   */
+  public async loop(prompt: string): Promise<void> {
     let turnCount = 0;
     let lastNow = Date.now();
 
@@ -67,9 +70,12 @@ export abstract class BaseRender implements Render {
           await graphState(this.loader, this, state, cmd.target);
           break;
         }
-        case 'help':
-          await this.show(KNOWN_VERBS.join(', '));
+        case 'help': {
+          const help = KNOWN_VERBS.join(', ');
+          await this.show(help);
+          this.loopStep([help]);
           break;
+        }
         case 'quit':
           return; // exit the entire loop
         default: {

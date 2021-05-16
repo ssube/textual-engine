@@ -17,20 +17,21 @@ export class YamlParser implements Parser {
     }).compile(DATA_SCHEMA);
   }
 
-  load(data: string): DataFile {
+  public load(data: string): DataFile {
     const parsed = load(data, {
       schema: this.schema,
     });
 
-    if (!this.validate(parsed)) {
+    if (this.validate(parsed)) {
+      return parsed;
+    } else {
       console.error(this.validate.errors);
       throw new Error('invalid data file');
     }
 
-    return parsed;
   }
-  
-  save(data: DataFile): string {
+
+  public save(data: DataFile): string {
     return dump(data, {
       schema: this.schema,
     });

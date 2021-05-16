@@ -23,7 +23,6 @@ import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { Render } from '../service/render';
 import { InkRender } from '../service/render/InkRender';
-import { LineRender } from '../service/render/LineRender';
 import { ScriptController } from '../service/script';
 import { LocalScriptController } from '../service/script/LocalScriptController';
 import { StateController } from '../service/state';
@@ -55,7 +54,7 @@ export class LocalModule extends Module {
     this.options = options;
   }
 
-  async configure(options: ModuleOptions) {
+  public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
 
     this.bind(INJECT_LOADER).toConstructor(FileLoader);

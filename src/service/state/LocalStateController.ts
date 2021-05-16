@@ -67,7 +67,7 @@ export class LocalStateController implements StateController {
   /**
    * Create a new world state from a world template.
    */
-  async from(world: World, params: CreateParams): Promise<State> {
+  public async from(world: World, params: CreateParams): Promise<State> {
     const state: State = {
       config: {
         reaction: ReactionConfig.REACTION_STAT,
@@ -120,7 +120,7 @@ export class LocalStateController implements StateController {
       show: async (msg: string) => {
         this.buffer.push(msg);
       },
-    }
+    };
 
     this.transfer = {
       moveActor: async (id: string, source: string, dest: string) => {
@@ -153,7 +153,7 @@ export class LocalStateController implements StateController {
           id,
           currentRoom,
           targetRoom,
-        }, `moving actor between rooms`);
+        }, 'moving actor between rooms');
         currentRoom.actors.splice(currentRoom.actors.indexOf(targetActor), 1);
         targetRoom.actors.push(targetActor);
 
@@ -211,7 +211,7 @@ export class LocalStateController implements StateController {
           dest,
           source,
           target,
-        }, `moving item between entities`);
+        }, 'moving item between entities');
         source.items.splice(idx, 1);
         dest.items.push(target);
       },
@@ -257,14 +257,14 @@ export class LocalStateController implements StateController {
   /**
    * Load an existing world state.
    */
-  async load(state: State) {
+  public async load(state: State): Promise<void> {
     this.state = state;
   }
 
   /**
    * Save the current world state.
    */
-  async save(): Promise<State> {
+  public async save(): Promise<State> {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
@@ -279,7 +279,7 @@ export class LocalStateController implements StateController {
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
-  async step(time: number): Promise<Array<string>> {
+  public async step(time: number): Promise<Array<string>> {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
@@ -546,9 +546,9 @@ export class LocalStateController implements StateController {
     const portals = template.base.portals.filter((it) => {
       this.logger.debug({ it, room }, 'looking for portal matching template in room');
 
-      return room.portals.some((p) => {
-        return p.name === it.name.base && p.sourceGroup === it.sourceGroup.base;
-      }) === false;
+      return room.portals.some((p) =>
+        p.name === it.name.base && p.sourceGroup === it.sourceGroup.base
+      ) === false;
     });
 
     if (portals.length === 0) {

@@ -34,11 +34,11 @@ export class InkRender extends BaseRender implements Render {
     this.promptStr = '';
   }
 
-  prompt(prompt: string): void {
+  public prompt(prompt: string): void {
     this.promptStr = prompt;
   }
 
-  read(prompt?: string): Promise<string> {
+  public read(prompt?: string): Promise<string> {
     if (doesExist(prompt)) {
       this.promptStr = prompt;
     }
@@ -48,15 +48,15 @@ export class InkRender extends BaseRender implements Render {
     return pending;
   }
 
-  async show(msg: string): Promise<void> {
+  public async show(msg: string): Promise<void> {
     this.output.push(msg);
   }
 
-  showSync(msg: string): void {
+  public showSync(msg: string): void {
     this.output.push(msg);
   }
 
-  async start(): Promise<void> {
+  public async start(): Promise<void> {
     const root = React.createElement(Frame, {
       onLine: (line: string) => this.onLine(line),
       onQuit: () => this.onQuit(),
@@ -67,11 +67,11 @@ export class InkRender extends BaseRender implements Render {
     this.running = true;
   }
 
-  async stop(): Promise<void> {
+  public async stop(): Promise<void> {
     this.emits.emit('quit');
   }
 
-  loopStep(output: Array<string>) {
+  public loopStep(output: Array<string>): void {
     const state: InkState = {
       input: '',
       prompt: this.promptStr,
@@ -80,13 +80,13 @@ export class InkRender extends BaseRender implements Render {
     this.emits.emit('step', state);
   }
 
-  onLine(line: string): RemoveResult<InkState> {
+  protected onLine(line: string): RemoveResult<InkState> {
     return onceWithRemove(this.emits, 'step', () => {
       this.emits.emit('line', line);
     });
   }
 
-  onQuit(): RemoveResult<void> {
+  protected onQuit(): RemoveResult<void> {
     return onceWithRemove(this.emits, 'quit');
   }
 }

@@ -16,4 +16,4 @@ export const Output = (props: OutputProps) => {
       </Text>;
     })}
   </Text>;
-}
+};

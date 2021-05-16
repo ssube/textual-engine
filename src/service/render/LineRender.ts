@@ -11,11 +11,12 @@ import { BaseRender, BaseRenderOptions } from './BaseRender';
 export class LineRender extends BaseRender implements Render {
   protected reader?: LineInterface;
 
+  // eslint-disable-next-line no-useless-constructor
   constructor(options: BaseRenderOptions) {
     super(options);
   }
 
-  async read(): Promise<string> {
+  public async read(): Promise<string> {
     const reader = mustExist(this.reader);
 
     const result = new Promise<string>((res, rej) => {
@@ -35,23 +36,23 @@ export class LineRender extends BaseRender implements Render {
     return result;
   }
 
-  prompt(prompt: string): void {
+  public prompt(prompt: string): void {
     mustExist(this.reader).setPrompt(prompt);
   }
 
-  async show(msg: string): Promise<void> {
+  public async show(msg: string): Promise<void> {
     const reader = mustExist(this.reader);
 
     reader.write(msg);
     reader.write('\n');
   }
 
-  showSync(msg: string): void {
+  public showSync(msg: string): void {
     process.stdout.write(msg);
     process.stdout.write('\n');
   }
 
-  async start() {
+  public async start(): Promise<void> {
     this.reader = createInterface({
       input: stdin,
       output: stdout,
@@ -61,7 +62,7 @@ export class LineRender extends BaseRender implements Render {
     this.running = true;
   }
 
-  async stop() {
+  public async stop(): Promise<void> {
     this.running = false;
 
     if (doesExist(this.reader)) {
@@ -69,7 +70,7 @@ export class LineRender extends BaseRender implements Render {
     }
   }
 
-  loopStep(output: Array<string>) {
+  public loopStep(output: Array<string>): void {
     // noop
   }
 }

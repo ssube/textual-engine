@@ -1,3 +1,5 @@
+import { NotImplementedError } from '@apextoaster/js-utils';
+
 import { Command, Input } from '.';
 
 const WAIT_CMDS = [{
@@ -11,15 +13,15 @@ const WAIT_CMDS = [{
  * state (room, inventory, etc).
  */
 export class BehaviorInput implements Input {
-  tokenize(input: string): Promise<string[]> {
-    throw new Error("Method not implemented.");
+  public tokenize(input: string): Promise<Array<string>> {
+    throw new NotImplementedError();
   }
 
-  async parse(input: string): Promise<Command[]> {
+  public async parse(input: string): Promise<Array<Command>> {
     return WAIT_CMDS;
   }
 
-  async last(): Promise<Command[]> {
+  public async last(): Promise<Array<Command>> {
     return WAIT_CMDS;
   }
 }

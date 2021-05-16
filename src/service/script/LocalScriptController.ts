@@ -35,7 +35,7 @@ export class LocalScriptController implements ScriptController {
     this.scripts = new Map(BASE_SCRIPTS);
   }
 
-  async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
+  public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
     this.logger.debug(`invoke ${slot} on ${target.meta.id}`);
 
     const scriptName = target.slots.get(slot);
@@ -59,7 +59,7 @@ export class LocalScriptController implements ScriptController {
     });
   }
 
-  async broadcast(filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
+  public async broadcast(filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
     const targets = searchState(scope.state, filter);
 
     for (const target of targets) {

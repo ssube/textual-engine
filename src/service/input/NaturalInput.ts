@@ -1,13 +1,15 @@
-import { Command, Input } from ".";
+import { NotImplementedError } from '@apextoaster/js-utils';
+
+import { Command, Input } from '.';
 
 export class NaturalInput implements Input {
-  last(): Promise<Command[]> {
-    throw new Error("Method not implemented.");
+  public last(): Promise<Array<Command>> {
+    throw new NotImplementedError();
   }
-  tokenize(input: string): Promise<string[]> {
-    throw new Error("Method not implemented.");
+  public tokenize(input: string): Promise<Array<string>> {
+    throw new NotImplementedError();
   }
-  parse(input: string): Promise<Command[]> {
-    throw new Error("Method not implemented.");
+  public parse(input: string): Promise<Array<Command>> {
+    throw new NotImplementedError();
   }
 }

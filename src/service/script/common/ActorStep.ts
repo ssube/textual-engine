@@ -131,7 +131,7 @@ export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<vo
     }
 
     for (const portal of scope.room.portals) {
-      await scope.render.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`)
+      await scope.render.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`);
     }
   }
 }
@@ -179,8 +179,8 @@ export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<vo
 }
 
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {
-  const target = this; // TODO: find actual target
-  await scope.script.invoke(target, SLOT_USE, scope);
+  // TODO: look up real target
+  await scope.script.invoke(this, SLOT_USE, scope);
 }
 
 export async function ActorStepWait(this: Actor, scope: ScriptScope): Promise<void> {

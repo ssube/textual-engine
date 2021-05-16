@@ -20,11 +20,11 @@ export class ClassicInput implements Input {
     this.history = [];
   }
 
-  async tokenize(input: string): Promise<string[]> {
+  public async tokenize(input: string): Promise<Array<string>> {
     return input.split(SPLIT_CHAR);
   }
 
-  async parse(input: string): Promise<Command[]> {
+  public async parse(input: string): Promise<Array<Command>> {
     const rawTokens = await this.tokenize(input);
     const tokens = rawTokens.map((it) => it.toLocaleLowerCase()).filter((it) => REMOVED_WORDS.has(it) === false);
     const [verb, ...targets] = tokens;
@@ -40,7 +40,7 @@ export class ClassicInput implements Input {
     return [cmd];
   }
 
-  async last(): Promise<Command[]> {
+  public async last(): Promise<Array<Command>> {
     return this.history;
   }
 }

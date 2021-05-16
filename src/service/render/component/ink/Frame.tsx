@@ -69,4 +69,4 @@ export const Frame = (props: FrameProps) => {
     <Text color="blueBright">{state.prompt}</Text>
     <Text color="red">{state.input}</Text>
   </Text>;
-}
+};

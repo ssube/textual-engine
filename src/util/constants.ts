@@ -12,8 +12,11 @@ export const META_QUIT = 'quit';
 export const SLOT_ENTER = 'enter';
 export const SLOT_HIT = 'hit';
 export const SLOT_STEP = 'step';
+export const SLOT_USE = 'use';
 
 // common verbs
+export const VERB_DROP = 'drop';
+export const VERB_HIT = 'hit';
 export const VERB_LOOK = 'look';
 export const VERB_MOVE = 'move';
 export const VERB_TAKE = 'take';
@@ -31,6 +34,8 @@ export const KNOWN_VERBS = [
   META_GRAPH,
   META_HELP,
   META_QUIT,
+  VERB_DROP,
+  VERB_HIT,
   VERB_LOOK,
   VERB_MOVE,
   VERB_TAKE,

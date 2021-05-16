@@ -3,7 +3,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateController } from '.';
 import { Actor, ActorType } from '../../model/entity/Actor';
-import { Item, ITEM_TYPE } from '../../model/entity/Item';
+import { isItem, Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups } from '../../model/entity/Portal';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseTemplate, Template } from '../../model/meta/Template';
@@ -172,17 +172,43 @@ export class LocalStateController implements StateController {
           state,
         });
       },
-      moveItem: async (id: string, source: string, dest: string) => {
-        throw new Error('method not implemented');
-
+      moveItem: async (id: string, sourceId: string, destId: string) => {
         // find source entity
-        // find dest entity
-        // find target item
+        const [source] = searchState(state, {
+          meta: {
+            id: sourceId,
+          },
+        });
 
-        // ensure source is actor/room
-        // ensure dest is actor/room
+        // find dest entity
+        const [dest] = searchState(state, {
+          meta: {
+            id: destId,
+          },
+        });
+
+        // find target item
+        const [target] = searchState(state, {
+          meta: {
+            id,
+          },
+          type: ITEM_TYPE,
+        });
+
+        // ensure source and dest are both actor/room (types are greatly narrowed after these guards)
+        if (isItem(source) || isItem(dest) || !isItem(target)) {
+          return;
+        }
 
         // move target from source to dest
+        this.logger.debug({
+          id,
+          dest,
+          source,
+          target,
+        }, `moving item between entities`);
+        source.items.splice(source.items.indexOf(target), 1);
+        dest.items.push(target);
       },
     };
 

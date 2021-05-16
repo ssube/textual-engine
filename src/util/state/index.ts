@@ -1,6 +1,6 @@
 import { doesExist } from '@apextoaster/js-utils';
 
-import { WorldEntityType } from '../../model/entity';
+import { WorldEntity, WorldEntityType } from '../../model/entity';
 import { Entity } from '../../model/entity/Base';
 import { Metadata } from '../../model/meta/Metadata';
 import { State } from '../../model/State';
@@ -11,8 +11,8 @@ export interface SearchParams {
   type: WorldEntityType;
 }
 
-export function searchState(state: State, search: SearchParams): Array<Entity> {
-  const results: Array<Entity> = [];
+export function searchState(state: State, search: Partial<SearchParams>): Array<WorldEntity> {
+  const results: Array<WorldEntity> = [];
 
   for (const room of state.rooms) {
     if (matchEntity(room, search)) {
@@ -41,7 +41,7 @@ export function searchState(state: State, search: SearchParams): Array<Entity> {
   return results;
 }
 
-export function matchEntity(entity: Entity, search: SearchParams): boolean {
+export function matchEntity(entity: Entity, search: Partial<SearchParams>): boolean {
   let matched = true;
 
   if (doesExist(search.type)) {

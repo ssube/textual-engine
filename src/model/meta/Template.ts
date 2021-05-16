@@ -1,3 +1,4 @@
+import { JSONSchemaType } from 'ajv';
 import { Entity } from '../entity/Base';
 import { Metadata } from './Metadata';
 
@@ -7,9 +8,9 @@ export interface TemplateNumber {
   min: number;
 }
 
-export interface TemplateString {
+export interface TemplateString<T extends string = string> {
   type: 'string'
-  base: string;
+  base: T;
 }
 
 export interface TemplateRef {
@@ -35,4 +36,32 @@ export type BaseTemplate<T> = {
 export type Template<T> = {
   base: BaseTemplate<T>;
   // mods: Array<Modifier>;
+};
+
+export const TEMPLATE_STRING_SCHEMA: JSONSchemaType<TemplateString> = {
+  type: 'object',
+  properties: {
+    base: {
+      type: 'string',
+    },
+    type: {
+      type: 'string',
+      default: 'string',
+    },
+  },
+  required: ['base'],
+};
+
+export const TEMPLATE_REF_SCHEMA: JSONSchemaType<TemplateRef> = {
+  type: 'object',
+  properties: {
+    id: {
+      type: 'string',
+    },
+    type: {
+      type: 'string',
+      default: 'id',
+    },
+  },
+  required: ['id'],
 };

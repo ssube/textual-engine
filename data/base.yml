@@ -1,4 +1,4 @@
-saves: [] # template file
+states: [] # template file
 worlds:
   - meta:
       id: test

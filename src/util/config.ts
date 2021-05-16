@@ -16,6 +16,7 @@ export interface ConfigLogger {
     stream: Writable;
   }>;
 }
+
 export interface ConfigLocale {
   /**
     * Turn prompt.
@@ -42,6 +43,39 @@ export interface ConfigLocale {
 export interface ConfigData {
   logger: ConfigLogger;
   locale: ConfigLocale;
+}
+
+/**
+ * Specialized config-loading function.
+ *
+ * This creates its own YAML parser (and schema) and does not use the Loader/Parser service
+ * infrastructure found elsewhere in the code, because it informs their creation.
+ */
+export async function loadConfig(path: string): Promise<ConfigData> {
+  const dataStr = await promises.readFile(path, {
+    encoding: 'utf-8',
+  });
+
+  const schema = createSchema({
+    include: {
+      exists: existsSync,
+      join,
+      read: readFileSync,
+      resolve: (path) => path,
+      schema: DEFAULT_SCHEMA,
+    },
+  });
+  const data = load(dataStr, {
+    schema,
+  });
+
+  const validate = new Ajv().compile(CONFIG_SCHEMA);
+  if (validate(data)) {
+    return data;
+  } else {
+    console.error(validate.errors);
+    throw new Error('invalid config data type');
+  }
 }
 
 export const CONFIG_SCHEMA: JSONSchemaType<ConfigData> = {
@@ -95,36 +129,3 @@ export const CONFIG_SCHEMA: JSONSchemaType<ConfigData> = {
     'logger',
   ],
 };
-
-/**
- * Specialized config-loading function.
- *
- * This creates its own YAML parser (and schema) and does not use the Loader/Parser service
- * infrastructure found elsewhere in the code, because it informs their creation.
- */
-export async function loadConfig(path: string): Promise<ConfigData> {
-  const dataStr = await promises.readFile(path, {
-    encoding: 'utf-8',
-  });
-
-  const schema = createSchema({
-    include: {
-      exists: existsSync,
-      join,
-      read: readFileSync,
-      resolve: (path) => path,
-      schema: DEFAULT_SCHEMA,
-    },
-  });
-  const data = load(dataStr, {
-    schema,
-  });
-
-  const validate = new Ajv().compile(CONFIG_SCHEMA);
-  if (validate(data)) {
-    return data;
-  } else {
-    console.error(validate.errors);
-    throw new Error('invalid config data type');
-  }
-}

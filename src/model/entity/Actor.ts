@@ -1,10 +1,11 @@
 import { SkillMap, SlotMap, StatMap } from '../../util/types';
-import { Metadata } from '../meta/Metadata';
-import { Template } from '../meta/Template';
+import { Metadata, METADATA_SCHEMA } from '../meta/Metadata';
+import { Template, TEMPLATE_REF_SCHEMA } from '../meta/Template';
 import { Entity } from './Base';
 import { Item } from './Item';
 
 import { JSONSchemaType } from 'ajv';
+import { makeConstStringSchema } from '../../util/schema';
 
 export enum ActorType {
   DEFAULT = 'default',
@@ -40,19 +41,10 @@ export const ACTOR_SCHEMA: JSONSchemaType<Template<Actor>> = {
         },
         items: {
           type: 'array',
-          items: {
-            type: 'object',
-            required: [],
-          },
+          items: TEMPLATE_REF_SCHEMA,
         },
-        meta: {
-          type: 'object',
-          required: [],
-        },
-        type: {
-          type: 'object',
-          required: [],
-        },
+        meta: METADATA_SCHEMA,
+        type: makeConstStringSchema(ACTOR_TYPE),
         skills: {
           type: 'object',
           required: [],

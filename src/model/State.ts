@@ -1,3 +1,5 @@
+import { JSONSchemaType } from 'ajv';
+
 import { Room } from './entity/Room';
 
 export enum ReactionConfig {
@@ -29,3 +31,51 @@ export interface State {
   input: Map<string, Array<string>>;
   rooms: Array<Room>;
 }
+
+export const STATE_SCHEMA: JSONSchemaType<State> = {
+  type: 'object',
+  properties: {
+    config: {
+      type: 'object',
+      properties: {
+        reaction: {
+          type: 'string',
+        },
+        seed: {
+          type: 'string',
+        },
+        sidebar: {
+          type: 'string',
+        },
+        world: {
+          type: 'string',
+        },
+      },
+      required: ['reaction', 'seed', 'sidebar', 'world'],
+    },
+    focus: {
+      type: 'object',
+      properties: {
+        actor: {
+          type: 'string',
+        },
+        room: {
+          type: 'string',
+        },
+      },
+      required: ['actor', 'room'],
+    },
+    input: {
+      type: 'object',
+      required: [],
+    },
+    rooms: {
+      type: 'array',
+      items: {
+        type: 'object',
+        required: [],
+      }
+    },
+  },
+  required: ['config', 'focus', 'input', 'rooms'],
+};

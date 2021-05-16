@@ -130,9 +130,7 @@ export async function main(args: Array<string>): Promise<number> {
 
   const saveState = await stateCtrl.save();
   const saveStr = parser.save({
-    saves: [{
-      state: saveState,
-    }],
+    states: [saveState],
     worlds: [],
   });
 

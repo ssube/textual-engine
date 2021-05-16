@@ -33,3 +33,14 @@ TODO: debug/graph
 TODO: inspector/break
 
 ## Patterns
+
+- sort imports
+  - modules
+  - `../`
+  - `./`
+- sort declarations
+  - types
+  - interfaces (types and interfaces may need to be mixed)
+  - classes
+  - functions (avoid defining classes and loose functions in the same file)
+  - constants

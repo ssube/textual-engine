@@ -4,6 +4,7 @@ import { WorldEntity, WorldEntityType } from '../../model/entity';
 import { Entity } from '../../model/entity/Base';
 import { Metadata } from '../../model/meta/Metadata';
 import { State } from '../../model/State';
+import { Immutable } from '../types';
 
 export interface SearchParams {
   meta: Partial<Metadata>;
@@ -11,8 +12,10 @@ export interface SearchParams {
   type: WorldEntityType;
 }
 
-export function searchState(state: State, search: Partial<SearchParams>): Array<WorldEntity> {
-  const results: Array<WorldEntity> = [];
+export function searchState(state: State, search: Partial<SearchParams>): Array<WorldEntity>;
+export function searchState(state: Immutable<State>, search: Partial<SearchParams>): Array<Immutable<WorldEntity>>;
+export function searchState(state: Immutable<State>, search: Partial<SearchParams>): Array<Immutable<WorldEntity>> {
+  const results: Array<Immutable<WorldEntity>> = [];
 
   for (const room of state.rooms) {
     if (doesExist(search.room)) {
@@ -47,7 +50,9 @@ export function searchState(state: State, search: Partial<SearchParams>): Array<
   return results;
 }
 
-export function searchStateString(state: State, value: string): Array<WorldEntity> {
+export function searchStateString(state: State, value: string): Array<WorldEntity>;
+export function searchStateString(state: Immutable<State>, value: string): Array<Immutable<WorldEntity>>;
+export function searchStateString(state: Immutable<State>, value: string): Array<Immutable<WorldEntity>> {
   return [
     ...searchState(state, {
       meta: {
@@ -62,7 +67,7 @@ export function searchStateString(state: State, value: string): Array<WorldEntit
   ];
 }
 
-export function matchEntity(entity: Entity, search: Partial<SearchParams>): boolean {
+export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchParams>): boolean {
   let matched = true;
 
   if (doesExist(search.type)) {
@@ -76,7 +81,7 @@ export function matchEntity(entity: Entity, search: Partial<SearchParams>): bool
   return matched;
 }
 
-export function matchMetadata(entity: Entity, filter: Partial<Metadata>): boolean {
+export function matchMetadata(entity: Immutable<Entity>, filter: Partial<Metadata>): boolean {
   let matched = true;
 
   if (doesExist(filter.id)) {

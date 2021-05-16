@@ -2,6 +2,7 @@ import { InvalidArgumentError } from '@apextoaster/js-utils';
 
 import { ScriptScope, ScriptTarget } from '..';
 import { isRoom } from '../../../model/entity/Room';
+import { SLOT_USE } from '../../../util/constants';
 
 export async function RoomStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
   scope.logger.debug({
@@ -21,5 +22,5 @@ export async function RoomStep(this: ScriptTarget, scope: ScriptScope): Promise<
     room: {
       id: this.meta.id,
     },
-  }, 'use', scope);
+  }, SLOT_USE, scope);
 }

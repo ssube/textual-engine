@@ -1,9 +1,21 @@
 import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 
 import { ScriptScope, ScriptTarget } from '..';
+import { WorldEntity } from '../../../model/entity';
 import { Actor, ActorType, isActor } from '../../../model/entity/Actor';
-import { SLOT_HIT, SLOT_USE, VERB_DROP, VERB_HIT, VERB_LOOK, VERB_MOVE, VERB_TAKE, VERB_USE, VERB_WAIT } from '../../../util/constants';
+import {
+  SLOT_HIT,
+  SLOT_USE,
+  VERB_DROP,
+  VERB_HIT,
+  VERB_LOOK,
+  VERB_MOVE,
+  VERB_TAKE,
+  VERB_USE,
+  VERB_WAIT,
+} from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/map';
+import { searchStateString } from '../../../util/state';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
   scope.logger.debug({
@@ -73,8 +85,24 @@ export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise
 }
 
 export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<void> {
-  const target = this; // TODO: find actual target
-  await scope.script.invoke(target, SLOT_HIT, scope);
+  const cmd = mustExist(scope.command);
+  const [target] = searchStateString(scope.state, cmd.target);
+
+  if (!isActor(target)) {
+    await scope.render.show(`${target} is not an actor`);
+    return;
+  }
+
+  if (this.items.length === 0) {
+    await scope.render.show(`You cannot hit ${target.meta.name}, you are not holding anything!`);
+    return;
+  }
+
+  await scope.script.invoke(target as WorldEntity, SLOT_HIT, {
+    ...scope,
+    actor: target,
+    item: this.items[0],
+  }); // TODO: fix entity cast
 }
 
 export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {

@@ -532,7 +532,6 @@ export class LocalStateController implements StateController {
 
     // get template
     const template = findByTemplateId(mustExist(this.world).templates.rooms, room.meta.template);
-    // TODO: filter out previously-created destination portals
     const portals = template.base.portals.filter((it) => {
       this.logger.debug({ it, room }, 'looking for portal matching template in room');
 

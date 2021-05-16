@@ -5,7 +5,7 @@ import { BYTE_RANGE } from '../../util/constants';
 
 export class SeedRandomGenerator implements RandomGenerator {
   protected lastId: number;
-  protected source: ReturnType<typeof alea>; // TODO: this should be importable, but... that is an error, this works
+  protected source: ReturnType<typeof alea>; // this should be imported above, but... that is an error, this works
 
   constructor() {
     this.lastId = 0;

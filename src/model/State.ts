@@ -13,7 +13,7 @@ export enum SidebarConfig {
 }
 
 /**
- * @todo needs a better name
+ * A saved world state.
  */
 export interface State {
   config: {

@@ -11,10 +11,9 @@ interface JoinOptions {
  * A string building construct that:
  * 
  * - takes a nested list of input fragments
- * - takes a list of joiners and operators (TODO)
+ * - takes a list of joiners
  * - for each fragment of the input chain:
  *   - modulo select a joiner
- *   - TODO: modulo select an operator
  *   - select one or more items using level operator
  *     - recurse into child chains
  *   - join items with level joiner

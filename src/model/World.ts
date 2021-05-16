@@ -14,8 +14,6 @@ export interface World {
 
   /**
    * Starting rooms and character selection.
-   * 
-   * @todo is there a better name? spawn?
    */
   start: {
     actors: Array<string>;

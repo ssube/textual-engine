@@ -43,7 +43,6 @@ export const Foo = (props: FooProps) => {
     <Newline />
     {output}
     <Newline />
-    <Text color="blue">{state.prompt}</Text>
-    <Text color="red">'{state.input}'</Text>
+    <Text color="red">&lt; {state.input}</Text>
   </Text>;
 }

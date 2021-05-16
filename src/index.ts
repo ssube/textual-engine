@@ -5,18 +5,16 @@ import { argv } from 'process';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import { INJECT_INPUT_PLAYER, INJECT_LOADER, INJECT_PARSER, INJECT_RENDER } from './module';
+import { INJECT_INPUT_PLAYER, INJECT_LOADER, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
 import { LocalModule } from './module/LocalModule';
-import { Input } from './service/input';
 import { BehaviorInput } from './service/input/BehaviorInput';
 import { Loader } from './service/loader';
 import { Parser } from './service/parser';
 import { Render } from './service/render';
-import { LocalStateController } from './service/state/LocalStateController';
+import { StateController } from './service/state';
 import { asyncTrack } from './util/async';
 import { loadConfig } from './util/config';
-import { KNOWN_VERBS, PORTAL_DEPTH } from './util/constants';
-import { debugState, graphState } from './util/debug';
+import { PORTAL_DEPTH } from './util/constants';
 import { RenderStream } from './util/logger/RenderStream';
 
 export async function main(args: Array<string>): Promise<number> {
@@ -61,7 +59,7 @@ export async function main(args: Array<string>): Promise<number> {
     stream,
   });
 
-  const input = await container.create<Input, BaseOptions>(INJECT_INPUT_PLAYER);
+  // resource loading services
   const loader = await container.create<Loader, BaseOptions>(INJECT_LOADER);
   const parser = await container.create<Parser, BaseOptions>(INJECT_PARSER);
 
@@ -77,57 +75,18 @@ export async function main(args: Array<string>): Promise<number> {
   }
 
   // create state from world
-  const stateCtrl = await container.create(LocalStateController);
-  const state = await stateCtrl.from(world, {
+  const stateCtrl = await container.create<StateController, BaseOptions>(INJECT_STATE);
+  await stateCtrl.from(world, {
     rooms: PORTAL_DEPTH,
     seed,
   });
 
   // step state stuff
-  let turnCount = 0;
-  let lastNow = Date.now();
+  await render.start();
+  await render.loop(`turn 0 > `);
+  await render.stop();
 
-  await render.start(`turn ${turnCount} > `);
-
-  // while playing:
-  for await (const line of render.stream()) {
-    // parse last input
-    const [cmd] = await input.parse(line);
-    logger.debug({
-      cmd,
-    }, 'parsed command');
-
-    // handle meta commands
-    switch (cmd.verb) {
-      case 'debug':
-        await debugState(render, state);
-        break;
-      case 'graph':
-        await graphState(loader, render, state, cmd.target);
-        break;
-      case 'help':
-        await render.show(KNOWN_VERBS.join(', '));
-        break;
-      case 'quit':
-        await render.stop();
-        break;
-      default: {
-        // step world
-        const now = Date.now();
-        await stateCtrl.step(now - lastNow);
-
-        // show any output
-        const output = await stateCtrl.getBuffer();
-        for (const outputLine of output) {
-          await render.show(outputLine);
-        }
-
-        // wait for input
-        render.prompt(`turn ${++turnCount} > `);
-      }
-    }
-  }
-
+  // save state game
   const saveState = await stateCtrl.save();
   const saveStr = parser.save({
     states: [saveState],

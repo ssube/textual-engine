@@ -24,7 +24,7 @@ export interface Render {
    *
    * This does not get the first line of input, that must still be `read()`.
    */
-  start(prompt: string): Promise<void>;
+  start(): Promise<void>;
 
   /**
    * Shut down the rendering subsystem and unbind from the console.
@@ -32,7 +32,7 @@ export interface Render {
   stop(): Promise<void>;
 
   /**
-   * Get an async iterable of lines (auto-prompt).
+   * Main game loop.
    */
-  stream(): AsyncIterableIterator<string>;
+  loop(prompt: string): Promise<void>;
 }

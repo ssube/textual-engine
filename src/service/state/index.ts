@@ -32,7 +32,7 @@ export interface StateController {
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
-  step(time: number): Promise<void>;
+  step(time: number): Promise<Array<string>>;
 
-  getBuffer(): Promise<Array<string>>;
+  // TODO: get last step output buffer method
 }

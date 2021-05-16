@@ -64,10 +64,6 @@ export class LocalStateController implements StateController {
     this.template = options[INJECT_TEMPLATE];
   }
 
-  async getBuffer() {
-    return this.buffer;
-  }
-
   /**
    * Create a new world state from a world template.
    */
@@ -283,7 +279,7 @@ export class LocalStateController implements StateController {
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
-  async step(time: number) {
+  async step(time: number): Promise<Array<string>> {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
@@ -353,6 +349,8 @@ export class LocalStateController implements StateController {
       const spent = Date.now() - start;
       this.logger.debug({ spent, time }, 'finished world state step');
     }
+
+    return this.buffer;
   }
 
   protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {

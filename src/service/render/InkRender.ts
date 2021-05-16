@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { render, useApp } from 'ink';
+import { render } from 'ink';
 import * as React from 'react';
 
 import { Render } from '.';
@@ -7,9 +7,10 @@ import { Foo } from './component/ink/Foo';
 
 export interface InkState {
   input: string;
-  prompt: string;
   output: Array<string>;
 }
+
+export type InkStateDispatch = (input: string) => Promise<InkState>;
 
 /**
  * Interface with Ink's React tree using an event emitter.
@@ -17,19 +18,22 @@ export interface InkState {
  */
 export class InkRender implements Render {
   protected emits: EventEmitter;
+  protected promptStr: string;
+  protected running: boolean;
   protected state: InkState;
 
   constructor() {
     this.emits = new EventEmitter();
+    this.promptStr = '';
+    this.running = false;
     this.state = {
       input: '',
-      prompt: '> ',
       output: [],
     };
   }
 
   prompt(prompt: string): void {
-    this.state.prompt = prompt;
+    this.promptStr = prompt;
   }
 
   read(prompt?: string): Promise<string> {
@@ -51,36 +55,23 @@ export class InkRender implements Render {
     this.state.output.push(msg);
   }
 
-  async start(prompt: string): Promise<void> {
+  async start(): Promise<void> {
     const root = React.createElement(Foo, {
       ...this.state,
       emits: this.emits,
     });
+
     render(root);
   }
 
-  /**
-   * @todo should this call exit? can it?
-   */
   async stop(): Promise<void> {
-    const { exit } = useApp();
-    exit();
+    // noop
   }
 
-  stream(): AsyncIterableIterator<string> {
-    const iter = {
-      next: async () => {
-        try {
-          const line = await this.read();
-          return { done: false, value: line };
-        } catch (err) {
-          return { done: true, value: err.msg };
-        }
-      },
-      [Symbol.asyncIterator]: () => {
-        return iter;
-      },
-    };
-    return iter;
+  async loop(prompt: string): Promise<void> {
+    while (this.running) {
+      const line = await this.read();
+
+    }
   }
 }

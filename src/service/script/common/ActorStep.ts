@@ -2,7 +2,7 @@ import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/
 
 import { ScriptScope, ScriptTarget } from '..';
 import { Actor, ActorType, isActor } from '../../../model/entity/Actor';
-import { SLOT_HIT, SLOT_LOOK, SLOT_MOVE, SLOT_TAKE, SLOT_USE, SLOT_WAIT } from '../../../util/constants';
+import { SLOT_HIT, VERB_LOOK, VERB_MOVE, VERB_TAKE, VERB_USE, VERB_WAIT } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/map';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
@@ -42,11 +42,11 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
 
 const knownVerbs = new Map([
   [SLOT_HIT, ActorStepHit],
-  [SLOT_LOOK, ActorStepLook],
-  [SLOT_MOVE, ActorStepMove],
-  [SLOT_TAKE, ActorStepTake],
-  [SLOT_USE, ActorStepUse],
-  [SLOT_WAIT, ActorStepWait],
+  [VERB_LOOK, ActorStepLook],
+  [VERB_MOVE, ActorStepMove],
+  [VERB_TAKE, ActorStepTake],
+  [VERB_USE, ActorStepUse],
+  [VERB_WAIT, ActorStepWait],
 ]);
 
 export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise<void> {
@@ -115,7 +115,7 @@ export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<vo
 
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {
   const target = this; // TODO: find actual target
-  await scope.script.invoke(target, SLOT_USE, scope);
+  await scope.script.invoke(target, VERB_USE, scope);
 }
 
 export async function ActorStepWait(this: Actor, scope: ScriptScope): Promise<void> {

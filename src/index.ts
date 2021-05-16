@@ -25,7 +25,7 @@ export async function main(args: Array<string>): Promise<number> {
   asyncHook.enable();
 
   // "parse" args
-  const [_node, _script, configPath, dataPath, worldName, seed] = args; 
+  const [_node, _script, configPath, dataPath, worldName, seed] = args;
 
   // load config and create logger
   const config = await loadConfig(configPath)

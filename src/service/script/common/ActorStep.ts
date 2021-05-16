@@ -3,6 +3,7 @@ import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/
 import { ScriptScope, ScriptTarget } from '..';
 import { WorldEntity } from '../../../model/entity';
 import { Actor, ActorType, isActor } from '../../../model/entity/Actor';
+import { isItem } from '../../../model/entity/Item';
 import {
   SLOT_HIT,
   SLOT_USE,
@@ -63,8 +64,6 @@ const knownVerbs = new Map([
 ]);
 
 export async function ActorStepDrop(this: Actor, scope: ScriptScope): Promise<void> {
-  scope.logger.debug('take command not implemented');
-
   const cmd = mustExist(scope.command);
   const room = mustExist(scope.room);
 
@@ -86,7 +85,14 @@ export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise
 
 export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<void> {
   const cmd = mustExist(scope.command);
-  const [target] = searchStateString(scope.state, cmd.target);
+  const room = mustExist(scope.room);
+
+  const [target] = searchStateString(scope.state, {
+    meta: cmd.target,
+    room: {
+      id: room.meta.id,
+    },
+  });
 
   if (!isActor(target)) {
     await scope.render.show(`${target} is not an actor`);
@@ -100,32 +106,32 @@ export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<voi
 
   await scope.script.invoke(target as WorldEntity, SLOT_HIT, {
     ...scope,
-    actor: target,
+    actor: this,
     item: this.items[0],
   }); // TODO: fix entity cast
 }
 
 export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {
   if (doesExist(scope.room)) {
-    scope.render.show(`${this.meta.name} is in ${scope.room.meta.name}: ${scope.room.meta.desc}`);
+    await scope.render.show(`${this.meta.name} is in ${scope.room.meta.name}: ${scope.room.meta.desc}`);
 
     for (const item of this.items) {
-      scope.render.show(`You are holding a ${item.meta.name} (${item.meta.id})`);
+      await scope.render.show(`You are holding a ${item.meta.name} (${item.meta.id})`);
     }
 
     for (const actor of scope.room.actors) {
       if (actor !== this) {
-        scope.render.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room`);
-        scope.render.show(`${actor.meta.name} has ${actor.stats.get('health')} health`);
+        await scope.render.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room`);
+        await scope.render.show(`${actor.meta.name} has ${actor.stats.get('health')} health`);
       }
     }
 
     for (const item of scope.room.items) {
-      scope.render.show(`A ${item.meta.name} is lying on the floor (${item.meta.id})`);
+      await scope.render.show(`A ${item.meta.name} is lying on the floor (${item.meta.id})`);
     }
 
     for (const portal of scope.room.portals) {
-      scope.render.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`)
+      await scope.render.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`)
     }
   }
 }
@@ -153,12 +159,23 @@ export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<vo
 }
 
 export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<void> {
-  scope.logger.debug('take command not implemented');
-
   const cmd = mustExist(scope.command);
   const room = mustExist(scope.room);
+  scope.logger.debug({ cmd, room }, 'taking item from room');
 
-  await scope.transfer.moveItem(cmd.target, room.meta.id, this.meta.id);
+  const [target] = searchStateString(scope.state, {
+    meta: cmd.target,
+    room: {
+      id: room.meta.id,
+    },
+  });
+
+  if (!isItem(target)) {
+    await scope.render.show(`${target.meta.name} is not an item`);
+    return;
+  }
+
+  await scope.transfer.moveItem(target.meta.id, room.meta.id, this.meta.id);
 }
 
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {

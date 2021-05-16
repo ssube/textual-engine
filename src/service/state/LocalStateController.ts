@@ -173,6 +173,11 @@ export class LocalStateController implements StateController {
         });
       },
       moveItem: async (id: string, sourceId: string, destId: string) => {
+        if (sourceId === destId) {
+          this.logger.debug({ id, sourceId }, 'skipping transfer, source and dest are identical');
+          return;
+        }
+
         // find source entity
         const [source] = searchState(state, {
           meta: {
@@ -188,11 +193,19 @@ export class LocalStateController implements StateController {
         });
 
         // find target item
-        const [target] = searchStateString(state, id);
+        const [target] = searchStateString(state, {
+          meta: id,
+        });
 
         // ensure source and dest are both actor/room (types are greatly narrowed after these guards)
         if (isItem(source) || isItem(dest) || !isItem(target)) {
           this.logger.debug({ dest, source, target }, 'invalid entity type for item transfer');
+          return;
+        }
+
+        const idx = source.items.indexOf(target);
+        if (idx < 0) {
+          this.logger.warn({ source, idx, target }, 'source does not directly contain target entity');
           return;
         }
 
@@ -203,7 +216,7 @@ export class LocalStateController implements StateController {
           source,
           target,
         }, `moving item between entities`);
-        source.items.splice(source.items.indexOf(target), 1);
+        source.items.splice(idx, 1);
         dest.items.push(target);
       },
     };

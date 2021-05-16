@@ -50,18 +50,24 @@ export function searchState(state: Immutable<State>, search: Partial<SearchParam
   return results;
 }
 
-export function searchStateString(state: State, value: string): Array<WorldEntity>;
-export function searchStateString(state: Immutable<State>, value: string): Array<Immutable<WorldEntity>>;
-export function searchStateString(state: Immutable<State>, value: string): Array<Immutable<WorldEntity>> {
+type StringSearch = Omit<Partial<SearchParams>, 'meta'> & {
+  meta: string;
+};
+
+export function searchStateString(state: State, search: StringSearch): Array<WorldEntity>;
+export function searchStateString(state: Immutable<State>, search: StringSearch): Array<Immutable<WorldEntity>>;
+export function searchStateString(state: Immutable<State>, search: StringSearch): Array<Immutable<WorldEntity>> {
   return [
     ...searchState(state, {
+      ...search,
       meta: {
-        id: value,
+        id: search.meta,
       },
     }),
     ...searchState(state, {
+      ...search,
       meta: {
-        name: value,
+        name: search.meta,
       },
     }),
   ];

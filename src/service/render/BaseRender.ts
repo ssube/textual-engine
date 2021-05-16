@@ -7,13 +7,13 @@ import { KNOWN_VERBS } from '../../util/constants';
 import { debugState, graphState } from '../../util/debug';
 import { Input } from '../input';
 import { Loader } from '../loader';
-import { StateController } from '../state';
+import { StateService } from '../state';
 
 export interface BaseRenderOptions extends BaseOptions {
   [INJECT_INPUT_PLAYER]?: Input;
   [INJECT_LOADER]?: Loader;
   [INJECT_LOGGER]?: Logger;
-  [INJECT_STATE]?: StateController;
+  [INJECT_STATE]?: StateService;
 }
 
 @Inject(INJECT_INPUT_PLAYER, INJECT_LOGGER, INJECT_LOADER, INJECT_STATE)
@@ -22,7 +22,7 @@ export abstract class BaseRender implements Render {
   protected input: Input;
   protected loader: Loader;
   protected logger: Logger;
-  protected state: StateController;
+  protected state: StateService;
 
   constructor(options: BaseRenderOptions) {
     this.running = false;

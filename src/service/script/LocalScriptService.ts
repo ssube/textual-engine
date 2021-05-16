@@ -1,7 +1,7 @@
 import { isNil } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { ScriptController, ScriptFunction, ScriptTarget, SuppliedScope } from '.';
+import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
 import { WorldEntity } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
 import { SearchParams, searchState } from '../../util/state';
@@ -19,18 +19,18 @@ const BASE_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['room-step', RoomStep],
 ];
 
-export interface LocalScriptControllerOptions extends BaseOptions {
+export interface LocalScriptServiceOptions extends BaseOptions {
   [INJECT_LOGGER]: Logger;
 }
 
 @Inject(INJECT_LOGGER)
-export class LocalScriptController implements ScriptController {
+export class LocalScriptService implements ScriptService {
   protected logger: Logger;
   protected scripts: Map<string, ScriptFunction>;
 
-  constructor(options: LocalScriptControllerOptions) {
+  constructor(options: LocalScriptServiceOptions) {
     this.logger = options[INJECT_LOGGER].child({
-      kind: LocalScriptController.name,
+      kind: LocalScriptService.name,
     });
     this.scripts = new Map(BASE_SCRIPTS);
   }

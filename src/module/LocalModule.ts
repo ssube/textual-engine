@@ -23,12 +23,12 @@ import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { Render } from '../service/render';
 import { InkRender } from '../service/render/InkRender';
-import { ScriptController } from '../service/script';
-import { LocalScriptController } from '../service/script/LocalScriptController';
-import { StateController } from '../service/state';
-import { LocalStateController } from '../service/state/LocalStateController';
+import { ScriptService } from '../service/script';
+import { LocalScriptService } from '../service/script/LocalScriptService';
+import { StateService } from '../service/state';
+import { LocalStateService } from '../service/state/LocalStateService';
 import { TemplateService } from '../service/template';
-import { PipeTemplate } from '../service/template/PipeTemplate';
+import { ChainTemplateService } from '../service/template/ChainTemplateService';
 import { Counter } from '../util/counter';
 import { LocalCounter } from '../util/counter/LocalCounter';
 
@@ -45,8 +45,8 @@ export class LocalModule extends Module {
   protected playerInput?: Input;
   protected random?: RandomGenerator;
   protected render?: Render;
-  protected script?: ScriptController;
-  protected state?: StateController;
+  protected script?: ScriptService;
+  protected state?: StateService;
   protected template?: TemplateService;
 
   constructor(options: LocalModuleOptions) {
@@ -77,7 +77,7 @@ export class LocalModule extends Module {
   @Provides(INJECT_TEMPLATE)
   protected async getTemplate(): Promise<TemplateService> {
     if (isNil(this.template)) {
-      this.template = await mustExist(this.container).create(PipeTemplate);
+      this.template = await mustExist(this.container).create(ChainTemplateService);
     }
 
     return this.template;
@@ -133,24 +133,24 @@ export class LocalModule extends Module {
   }
 
   /**
-   * Singleton script controller.
+   * Singleton script Service.
    */
   @Provides(INJECT_SCRIPT)
-  protected async getScript(): Promise<ScriptController> {
+  protected async getScript(): Promise<ScriptService> {
     if (isNil(this.script)) {
-      this.script = await mustExist(this.container).create(LocalScriptController);
+      this.script = await mustExist(this.container).create(LocalScriptService);
     }
 
     return this.script;
   }
 
   /**
-   * Singleton state controller.
+   * Singleton state Service.
    */
   @Provides(INJECT_STATE)
-  protected async getState(): Promise<StateController> {
+  protected async getState(): Promise<StateService> {
     if (isNil(this.state)) {
-      this.state = await mustExist(this.container).create(LocalStateController);
+      this.state = await mustExist(this.container).create(LocalStateService);
     }
 
     return this.state;

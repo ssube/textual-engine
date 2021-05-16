@@ -13,7 +13,7 @@ export interface CreateParams {
   seed: string;
 }
 
-export interface StateController {
+export interface StateService {
   /**
    * Create a new world state from a world template.
    */

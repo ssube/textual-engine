@@ -64,7 +64,7 @@ export interface SuppliedScope {
 }
 
 /**
- * The full script callback scope, including controller-supplied fields.
+ * The full script callback scope, including service-supplied fields.
  */
 export interface ScriptScope extends SuppliedScope {
   /**
@@ -73,12 +73,12 @@ export interface ScriptScope extends SuppliedScope {
   logger: Logger;
 
   /**
-   * Current script controller.
+   * Current script service.
    */
-  script: ScriptController;
+  script: ScriptService;
 }
 
-export interface ScriptController {
+export interface ScriptService {
   broadcast(search: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void>;
   invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void>;
 }

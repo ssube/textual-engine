@@ -1,7 +1,7 @@
 import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { CreateParams, StateController } from '.';
+import { CreateParams, StateService } from '.';
 import { Actor, ActorType } from '../../model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups } from '../../model/entity/Portal';
@@ -23,25 +23,25 @@ import { searchState, searchStateString } from '../../util/state';
 import { findByTemplateId } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
-import { ScriptController, ScriptFocus, ScriptRender, ScriptTransfer, SuppliedScope } from '../script';
+import { ScriptFocus, ScriptRender, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
 import { TemplateService } from '../template';
 
-export interface LocalStateControllerOptions extends BaseOptions {
+export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
   [INJECT_INPUT_MAPPER]: ActorInputMapper;
   [INJECT_LOGGER]: Logger;
   [INJECT_RANDOM]: RandomGenerator;
-  [INJECT_SCRIPT]: ScriptController;
+  [INJECT_SCRIPT]: ScriptService;
   [INJECT_TEMPLATE]: TemplateService;
 }
 
 @Inject(INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, INJECT_TEMPLATE)
-export class LocalStateController implements StateController {
+export class LocalStateService implements StateService {
   protected counter: Counter;
   protected input: ActorInputMapper;
   protected logger: Logger;
   protected random: RandomGenerator;
-  protected script: ScriptController;
+  protected script: ScriptService;
   protected template: TemplateService;
 
   protected buffer: Array<string>;
@@ -52,12 +52,12 @@ export class LocalStateController implements StateController {
   protected state?: State;
   protected world?: World;
 
-  constructor(options: LocalStateControllerOptions) {
+  constructor(options: LocalStateServiceOptions) {
     this.buffer = [];
     this.counter = options[INJECT_COUNTER];
     this.input = options[INJECT_INPUT_MAPPER];
     this.logger = options[INJECT_LOGGER].child({
-      kind: LocalStateController.name,
+      kind: LocalStateService.name,
     });
     this.random = options[INJECT_RANDOM];
     this.script = options[INJECT_SCRIPT];

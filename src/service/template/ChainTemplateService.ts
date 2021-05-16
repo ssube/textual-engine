@@ -14,7 +14,7 @@ export interface PipeTemplateOptions extends BaseOptions {
 }
 
 @Inject(INJECT_RANDOM)
-export class PipeTemplate implements TemplateService {
+export class ChainTemplateService implements TemplateService {
   protected readonly joiner: JoinChain;
   protected readonly random: RandomGenerator;
 

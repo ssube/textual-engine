@@ -11,7 +11,7 @@ import { BehaviorInput } from './service/input/BehaviorInput';
 import { Loader } from './service/loader';
 import { Parser } from './service/parser';
 import { Render } from './service/render';
-import { StateController } from './service/state';
+import { StateService } from './service/state';
 import { asyncTrack } from './util/async';
 import { loadConfig } from './util/config';
 import { PORTAL_DEPTH } from './util/constants';
@@ -75,7 +75,7 @@ export async function main(args: Array<string>): Promise<number> {
   }
 
   // create state from world
-  const stateCtrl = await container.create<StateController, BaseOptions>(INJECT_STATE);
+  const stateCtrl = await container.create<StateService, BaseOptions>(INJECT_STATE);
   await stateCtrl.from(world, {
     rooms: PORTAL_DEPTH,
     seed,

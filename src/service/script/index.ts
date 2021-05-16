@@ -79,6 +79,6 @@ export interface ScriptScope extends SuppliedScope {
 }
 
 export interface ScriptController {
-  broadcast(state: Immutable<State>, search: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void>;
+  broadcast(search: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void>;
   invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void>;
 }

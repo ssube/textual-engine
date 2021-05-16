@@ -1,10 +1,10 @@
-import { doesExist, isNil } from '@apextoaster/js-utils';
+import { isNil } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ScriptController, ScriptFunction, ScriptTarget, SuppliedScope } from '.';
-import { State } from '../../model/State';
+import { WorldEntity } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
-import { matchMetadata, SearchParams, searchState } from '../../util/state';
+import { SearchParams, searchState } from '../../util/state';
 import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
@@ -59,11 +59,11 @@ export class LocalScriptController implements ScriptController {
     });
   }
 
-  async broadcast(state: State, filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
-    const targets = searchState(state, filter);
+  async broadcast(filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
+    const targets = searchState(scope.state, filter);
 
     for (const target of targets) {
-      await this.invoke(target, slot, scope);
+      await this.invoke(target as WorldEntity, slot, scope);
     }
   }
 }

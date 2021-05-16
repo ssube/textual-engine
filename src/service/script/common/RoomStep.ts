@@ -15,7 +15,7 @@ export async function RoomStep(this: ScriptTarget, scope: ScriptScope): Promise<
   }
 
   // TODO: remove
-  await scope.script.broadcast(scope.state, {
+  await scope.script.broadcast({
     meta: {
       id: 'actor-goblin',
     },

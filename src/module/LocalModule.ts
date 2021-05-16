@@ -66,7 +66,7 @@ export class LocalModule extends Module {
   protected async getRender(): Promise<Render> {
     if (isNil(this.render)) {
       this.render = await mustExist(this.container).create(InkRender);
-      this.render = await mustExist(this.container).create(LineRender);
+      // this.render = await mustExist(this.container).create(LineRender);
     }
 
     return this.render;

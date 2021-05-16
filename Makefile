@@ -8,7 +8,7 @@ NODE_ARGS ?=
 RELEASE_ARGS ?= --sign
 
 build: node_modules
-	./node_modules/.bin/tsc
+	yarn tsc
 
 clean:
 	rm -rf node_modules/ out/
@@ -19,6 +19,9 @@ graph:
 image:
 	docker build $(DOCKER_ARGS) -f Dockerfile -t $(DOCKER_IMAGE) .
 
+lint: node_modules
+	yarn eslint . --ext .ts,.tsx
+
 node_modules:
 	yarn
 
@@ -26,13 +29,13 @@ push:
 	git push $(GIT_ARGS) github $(GIT_BRANCH)
 	git push $(GIT_ARGS) gitlab $(GIT_BRANCH)
 
-release:
+release: node_modules
 	if [[ "$(GIT_BRANCH)" != master ]]; \
 	then \
 		echo "Please merge to master before releasing."; \
 		exit 1; \
 	fi
-	./node_modules/.bin/standard-version $(RELEASE_ARGS)
+	yarn standard-version $(RELEASE_ARGS)
 	GIT_ARGS=--follow-tags $(MAKE) push
 
 run: build
@@ -44,8 +47,8 @@ run-debug:
 run-image: image
 	docker run --rm -it $(DOCKER_IMAGE):latest data/config.yml data/base.yml test test
 
-test: build
-	./node_modules/.bin/mocha \
+test: build node_modules
+	yarn mocha \
 		--async-only \
 		--check-leaks \
 		--forbid-only \
@@ -55,8 +58,8 @@ test: build
 		--sort \
 		"out/**/Test*.js"
 
-cover:
-	./node_modules/.bin/nyc \
+cover: node_modules
+	yarn nyc \
 		--all \
 		--check-coverage \
 		--exclude "out/coverage/**" \
@@ -64,4 +67,4 @@ cover:
 		--reporter=text-summary \
 		--reporter=html \
 		--report-dir=out/coverage \
-		make test
+		$(MAKE) test

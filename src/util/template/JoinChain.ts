@@ -1,7 +1,6 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
+import { InputChain } from '.';
 import { RandomGenerator } from '../../service/random';
-
-export type InputChain = Array<string | InputChain>;
 
 interface JoinOptions {
   joiners: Array<string>;

@@ -1,7 +1,6 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { alt, createLanguage, regexp, string } from 'parsimmon';
-
-import { InputChain } from './JoinChain';
+import { InputChain } from '.';
 
 export interface SplitOptions {
   group: {
@@ -13,7 +12,7 @@ export interface SplitOptions {
 
 export function splitChain(input: string, options: SplitOptions): InputChain {
   const lang = createLanguage({
-    List: (r) => string('(').then(r.Value.sepBy(string('|'))).skip(string(')')),
+    List: (r) => string(options.group.start).then(r.Value.sepBy(string(options.split))).skip(string(options.group.end)),
     Token: () => regexp(/[-a-zA-Z ]+/),
     Value: (r) => alt(r.List, r.Token),
   });

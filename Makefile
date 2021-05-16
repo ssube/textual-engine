@@ -1,7 +1,10 @@
-.PHONY: build clean cover graph node_modules push run test
+.PHONY: build clean cover graph node_modules push run run-debug run-image test
 
+DOCKER_ARGS ?=
+DOCKER_IMAGE := ssube/textual-engine
 GIT_ARGS ?=
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+NODE_ARGS ?=
 RELEASE_ARGS ?= --sign
 
 build: node_modules
@@ -14,7 +17,7 @@ graph:
 	cat out/debug-graph | dot -Tpng -oout/debug-graph.png && sensible-browser out/debug-graph.png
 
 image:
-	docker build -f Dockerfile .
+	docker build $(DOCKER_ARGS) -f Dockerfile -t $(DOCKER_IMAGE) .
 
 node_modules:
 	yarn
@@ -33,13 +36,13 @@ release:
 	GIT_ARGS=--follow-tags $(MAKE) push
 
 run: build
-	node --require esm out/src/index.js data/config.yml data/base.yml test test
+	node $(NODE_ARGS) --require esm out/src/index.js data/config.yml data/base.yml test test
 
 run-debug:
-	node --inspect-brk --require esm out/src/index.js data/config.yml data/base.yml test test
+	NODE_ARGS=--inspect-brk $(MAKE) run
 
 run-image: image
-	docker run --rm -it textual:latest data/config.yml data/base.yml test test
+	docker run --rm -it $(DOCKER_IMAGE):latest data/config.yml data/base.yml test test
 
 test: build
 	./node_modules/.bin/mocha \

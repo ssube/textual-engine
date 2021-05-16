@@ -35,6 +35,12 @@ release:
 run: build
 	node --require esm out/src/index.js data/config.yml data/base.yml test test
 
+run-debug:
+	node --inspect-brk --require esm out/src/index.js data/config.yml data/base.yml test test
+
+run-image: image
+	docker run --rm -it textual:latest data/config.yml data/base.yml test test
+
 test: build
 	./node_modules/.bin/mocha \
 		--async-only \

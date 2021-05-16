@@ -23,14 +23,22 @@ export const Frame = (props: FrameProps) => {
   const [state, setter] = useState(DEFAULT_STATE);
 
   useEffect(() => {
-    props.onQuit().then(() => {
+    const { pending, remove } = props.onQuit();
+
+    pending.then(() => {
       exit();
     });
+
+    return () => {
+      remove();
+    };
   });
 
   useInput((input, key) => {
     if (key.return) {
-      props.onLine(state.input).then((stepState) => {
+      const { pending, remove } = props.onLine(state.input);
+
+      pending.then((stepState) => {
         const merged = [
           ...state.output, ...stepState.output
         ];
@@ -39,6 +47,8 @@ export const Frame = (props: FrameProps) => {
           output: merged.slice(-HISTORY_SIZE),
         });
       });
+
+      // TODO: when should onLine remove be called?
     } else if (key.backspace || key.delete) {
       setter({
         ...state,

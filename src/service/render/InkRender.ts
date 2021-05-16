@@ -4,6 +4,7 @@ import { render } from 'ink';
 import * as React from 'react';
 
 import { Render } from '.';
+import { onceWithRemove, RemoveResult } from '../../util/event';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 import { Frame } from './component/ink/Frame';
 
@@ -13,8 +14,8 @@ export interface InkState {
   output: Array<string>;
 }
 
-export type InkStateDispatch = (input: string) => Promise<InkState>;
-export type InkQuitDispatch = () => Promise<void>;
+export type InkStateDispatch = (input: string) => RemoveResult<InkState>;
+export type InkQuitDispatch = () => RemoveResult<void>;
 
 /**
  * Interface with Ink's React tree using an event emitter.
@@ -42,20 +43,9 @@ export class InkRender extends BaseRender implements Render {
       this.promptStr = prompt;
     }
 
-    return new Promise((res, rej) => {
-      const error = (err: Error) => {
-        this.emits.removeListener('line', line);
-        rej(err);
-      };
+    const { pending } = onceWithRemove<string>(this.emits, 'line');
 
-      const line = (line: string) => {
-        this.emits.removeListener('error', error);
-        res(line);
-      };
-
-      this.emits.once('error', error);
-      this.emits.once('line', line);
-    });
+    return pending;
   }
 
   async show(msg: string): Promise<void> {
@@ -90,38 +80,13 @@ export class InkRender extends BaseRender implements Render {
     this.emits.emit('step', state);
   }
 
-  onLine(line: string): Promise<InkState> {
-    return new Promise<InkState>((res, rej) => {
-      const error = (err: Error) => {
-        this.emits.removeListener('step', step);
-        rej(err);
-      };
-
-      const step = (state: InkState) => {
-        this.emits.removeListener('error', error);
-        res(state);
-      };
-
-      this.emits.once('error', error);
-      this.emits.once('step', step);
+  onLine(line: string): RemoveResult<InkState> {
+    return onceWithRemove(this.emits, 'step', () => {
       this.emits.emit('line', line);
     });
   }
 
-  onQuit(): Promise<void> {
-    return new Promise<void>((res, rej) => {
-      const error = (err: Error) => {
-        this.emits.removeListener('quit', quit);
-        rej(err);
-      };
-
-      const quit = () => {
-        this.emits.removeListener('error', error);
-        res();
-      };
-
-      this.emits.once('error', error);
-      this.emits.once('quit', quit);
-    });
+  onQuit(): RemoveResult<void> {
+    return onceWithRemove(this.emits, 'quit');
   }
 }

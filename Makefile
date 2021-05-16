@@ -1,10 +1,10 @@
-.PHONY: build clean cover graph install push run test
+.PHONY: build clean cover graph node_modules push run test
 
 GIT_ARGS ?=
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
-RELEASE_ARGS ?= --release-as patch --sign
+RELEASE_ARGS ?= --sign
 
-build: install
+build: node_modules
 	./node_modules/.bin/tsc
 
 clean:
@@ -13,7 +13,10 @@ clean:
 graph:
 	cat out/debug-graph | dot -Tpng -oout/debug-graph.png && sensible-browser out/debug-graph.png
 
-install:
+image:
+	docker build -f Dockerfile .
+
+node_modules:
 	yarn
 
 push:

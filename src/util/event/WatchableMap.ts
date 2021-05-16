@@ -8,8 +8,9 @@ export class WatchableMap extends EventEmitter {
     this.data = new Map();
   }
 
-  set(key: string, value: string) {
+  public set(key: string, value: string): this {
     this.data.set(key, value);
     this.emit(key, value);
+    return this;
   }
 }

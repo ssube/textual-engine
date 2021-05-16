@@ -1,4 +1,6 @@
-import { doesExist, isNil } from "@apextoaster/js-utils";
+import { doesExist, isNil } from '@apextoaster/js-utils';
+
+import { BYTE_RANGE } from './constants';
 
 export function decrementKey<T>(map: Map<T, number>, key: T, step = 1, min = 0): number {
   const last = map.get(key);
@@ -12,7 +14,7 @@ export function decrementKey<T>(map: Map<T, number>, key: T, step = 1, min = 0):
   }
 }
 
-export function incrementKey<T>(map: Map<T, number>, key: T, step = 1, max = 255, base = 0): number {
+export function incrementKey<T>(map: Map<T, number>, key: T, step = 1, max = BYTE_RANGE, base = 0): number {
   const last = map.get(key);
   if (isNil(last)) {
     map.set(key, base);

@@ -1,4 +1,3 @@
-import { join } from 'path';
 import { State } from '../model/State';
 import { Loader } from '../service/loader';
 import { Render } from '../service/render';

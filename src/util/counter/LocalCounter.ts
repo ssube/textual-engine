@@ -11,7 +11,7 @@ export class LocalCounter implements Counter {
     this.groups = new Map();
   }
 
-  next(group: string) {
+  public next(group: string): number {
     const last = this.groups.get(group);
     if (isNil(last)) {
       this.groups.set(group, INITIAL_VALUE);

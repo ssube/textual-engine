@@ -44,3 +44,14 @@ TODO: inspector/break
   - classes
   - functions (avoid defining classes and loose functions in the same file)
   - constants
+- visibility
+  - prefer protected
+  - most methods should be public for testing
+  - private is a smell
+- syntax
+  - do not use unary negation: `if (!foo)`
+    - it is hard to read/easy to miss
+    - prefer type guards and positive assertions, they read better: `if (doesExist(foo))`
+  - do not use `else if`, avoid `else`
+    - `else if` should be a map lookup or switch, depending on the number of branches and whether it is dynamic
+    - prefer early exit, it works better in async flows

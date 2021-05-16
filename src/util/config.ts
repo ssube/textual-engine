@@ -61,7 +61,7 @@ export async function loadConfig(path: string): Promise<ConfigData> {
       exists: existsSync,
       join,
       read: readFileSync,
-      resolve: (path) => path,
+      resolve: (it) => it,
       schema: DEFAULT_SCHEMA,
     },
   });

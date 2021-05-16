@@ -1,10 +1,11 @@
-import { JSONSchemaType } from "ajv";
-import { TemplateString } from "../model/meta/Template";
+import { JSONSchemaType } from 'ajv';
+
+import { TemplateString } from '../model/meta/Template';
 
 /**
  * @todo: make this typesafe for literal string types
  */
-export function makeConstStringSchema<T extends string>(value: T): JSONSchemaType<TemplateString<string>> {
+export function makeConstStringSchema<T extends string>(value: T): JSONSchemaType<TemplateString> {
   return {
     type: 'object',
     properties: {
@@ -23,4 +24,4 @@ export function makeConstStringSchema<T extends string>(value: T): JSONSchemaTyp
       base: value,
     },
   };
-};
+}

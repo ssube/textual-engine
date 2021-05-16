@@ -1,4 +1,5 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
+
 import { InputChain } from '.';
 import { RandomGenerator } from '../../service/random';
 
@@ -9,7 +10,7 @@ interface JoinOptions {
 
 /**
  * A string building construct that:
- * 
+ *
  * - takes a nested list of input fragments
  * - takes a list of joiners
  * - for each fragment of the input chain:
@@ -27,20 +28,20 @@ export class JoinChain {
     this.random = options.random;
   }
 
-  render(chain: InputChain, depth = 0): string {
-    if (!Array.isArray(chain)) {
-      throw new InvalidArgumentError('input chain is not an array');
-    }
-
-    const level = depth % 2;
-    if (level === 0) {
-      return this.renderOr(chain, depth);
+  public render(chain: InputChain, depth = 0): string {
+    if (Array.isArray(chain)) {
+      const level = depth % 2;
+      if (level === 0) {
+        return this.renderOr(chain, depth);
+      } else {
+        return this.renderAnd(chain, depth);
+      }
     } else {
-      return this.renderAnd(chain, depth);
+      throw new InvalidArgumentError('input chain is not an array');
     }
   }
 
-  renderAnd(chain: InputChain, depth: number): string {
+  public renderAnd(chain: InputChain, depth: number): string {
     const joiner = this.joiners[depth % this.joiners.length];
     return chain.map((it) => {
       if (typeof it === 'string') {
@@ -51,7 +52,7 @@ export class JoinChain {
     }).join(joiner);
   }
 
-  renderOr(chain: InputChain, depth: number): string {
+  public renderOr(chain: InputChain, depth: number): string {
     const index = this.random.nextInt(chain.length);
     const item = chain[index];
 

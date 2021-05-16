@@ -12,7 +12,7 @@ import { Portal } from './Portal';
 export const ROOM_TYPE = 'room';
 
 export interface Room {
-  type: typeof ROOM_TYPE,
+  type: typeof ROOM_TYPE;
   meta: Metadata;
   actors: Array<Actor>;
   items: Array<Item>;

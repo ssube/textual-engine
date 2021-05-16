@@ -8,7 +8,7 @@ import { Immutable } from './types';
 
 export interface SearchParams {
   meta: Partial<Metadata>;
-  room: Partial<Metadata>
+  room: Partial<Metadata>;
   type: WorldEntityType;
 }
 
@@ -18,10 +18,8 @@ export function searchState(state: Immutable<State>, search: Partial<SearchParam
   const results: Array<Immutable<WorldEntity>> = [];
 
   for (const room of state.rooms) {
-    if (doesExist(search.room)) {
-      if (matchMetadata(room, search.room) === false) {
-        continue;
-      }
+    if (doesExist(search.room) && matchMetadata(room, search.room) === false) {
+      continue;
     }
 
     if (matchEntity(room, search)) {

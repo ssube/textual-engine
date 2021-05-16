@@ -10,7 +10,7 @@ export const ITEM_TYPE = 'item';
 
 export interface Item {
   type: typeof ITEM_TYPE;
-  meta: Metadata,
+  meta: Metadata;
   slots: SlotMap;
   stats: StatMap;
   verbs: VerbMap;

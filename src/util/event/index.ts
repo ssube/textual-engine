@@ -6,6 +6,9 @@ export interface RemoveResult<T> {
   remove: () => void;
 }
 
+/**
+ * Wait for an event to fire once, then remove listeners. Provides a function to cleanup listeners early.
+ */
 export function onceWithRemove<TValue>(emitter: EventEmitter, event: string, inner?: () => void): RemoveResult<TValue> {
   let error: (err: Error) => void;
   let result: (value: TValue) => void;

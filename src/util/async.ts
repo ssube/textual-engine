@@ -1,6 +1,9 @@
-import { createHook } from "async_hooks";
+import { AsyncHook, createHook } from 'async_hooks';
 
-export function asyncTrack() {
+export function asyncTrack(): {
+  asyncHook: AsyncHook;
+  asyncOps: Map<number, string>;
+} {
   const asyncOps = new Map();
   const asyncHook = createHook({
     init(asyncId, type, triggerAsyncId, resource) {

@@ -9,7 +9,7 @@ export interface TemplateNumber {
 }
 
 export interface TemplateString<T extends string = string> {
-  type: 'string'
+  type: 'string';
   base: T;
 }
 
@@ -33,10 +33,10 @@ export type BaseTemplate<T> = {
   [K in keyof T]: TemplatePrimitive<T[K]>;
 };
 
-export type Template<T> = {
+export interface Template<T> {
   base: BaseTemplate<T>;
   // mods: Array<Modifier>;
-};
+}
 
 export const TEMPLATE_STRING_SCHEMA: JSONSchemaType<TemplateString> = {
   type: 'object',

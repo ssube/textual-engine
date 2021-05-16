@@ -30,7 +30,7 @@ release:
 	GIT_ARGS=--follow-tags $(MAKE) push
 
 run: build
-	node --require esm out/src/index.js data/base.yml test test
+	node --require esm out/src/index.js data/config.yml data/base.yml test test
 
 test: build
 	./node_modules/.bin/mocha \

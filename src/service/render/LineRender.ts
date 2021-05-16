@@ -35,11 +35,8 @@ export class LineRender extends EventEmitter implements Render {
     return result;
   }
 
-  promptSync(prompt: string): void {
-    const reader = mustExist(this.reader);
-
-    reader.setPrompt(prompt);
-    reader.prompt();
+  prompt(prompt: string): void {
+    mustExist(this.reader).setPrompt(prompt);
   }
 
   async show(msg: string): Promise<void> {
@@ -61,7 +58,7 @@ export class LineRender extends EventEmitter implements Render {
       prompt: '> ',
     });
 
-    this.reader.setPrompt(prompt);
+    this.prompt(prompt);
   }
 
   async stop() {

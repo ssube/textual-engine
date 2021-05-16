@@ -1,8 +1,13 @@
 export interface Render {
   /**
+   * Set the default prompt for future reads.
+   */
+  prompt(prompt: string): void;
+
+  /**
    * Wait for a line of input.
    */
-  read(prompt: string): Promise<string>;
+  read(prompt?: string): Promise<string>;
 
   /**
    * Write a message normally.

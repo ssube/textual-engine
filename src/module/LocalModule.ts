@@ -5,16 +5,22 @@ import {
   INJECT_COUNTER,
   INJECT_INPUT_MAPPER,
   INJECT_INPUT_PLAYER,
+  INJECT_LOADER,
   INJECT_LOGGER,
+  INJECT_PARSER,
   INJECT_RANDOM,
+  INJECT_RENDER,
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
 } from '.';
 import { Input } from '../service/input';
 import { ActorInputMapper, InputTypes } from '../service/input/ActorInputMapper';
 import { ClassicInput } from '../service/input/ClassicInput';
+import { FileLoader } from '../service/loader/FileLoader';
+import { YamlParser } from '../service/parser/YamlParser';
 import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
+import { LineRender } from '../service/render/LineRender';
 import { ScriptController } from '../service/script';
 import { LocalScriptController } from '../service/script/LocalScriptController';
 import { PipeTemplate } from '../service/template/PipeTemplate';
@@ -43,6 +49,9 @@ export class LocalModule extends Module {
   async configure(options: ModuleOptions) {
     await super.configure(options);
 
+    this.bind(INJECT_LOADER).toConstructor(FileLoader);
+    this.bind(INJECT_PARSER).toConstructor(YamlParser);
+    this.bind(INJECT_RENDER).toConstructor(LineRender);
     this.bind(INJECT_TEMPLATE).toConstructor(PipeTemplate);
   }
 

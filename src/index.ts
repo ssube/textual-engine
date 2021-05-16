@@ -1,60 +1,59 @@
 import { isNil } from '@apextoaster/js-utils';
 import * as Logger from 'bunyan';
 import { BaseOptions, Container, LogLevel } from 'noicejs';
-import { argv, exit } from 'process';
+import { argv } from 'process';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import { INJECT_INPUT_PLAYER } from './module';
+import { INJECT_INPUT_PLAYER, INJECT_LOADER, INJECT_PARSER, INJECT_RENDER } from './module';
 import { LocalModule } from './module/LocalModule';
 import { Input } from './service/input';
 import { BehaviorInput } from './service/input/BehaviorInput';
-import { FileLoader } from './service/loader/FileLoader';
-import { YamlParser } from './service/parser/YamlParser';
-import { LineRender } from './service/render/LineRender';
+import { Loader } from './service/loader';
+import { Parser } from './service/parser';
+import { Render } from './service/render';
 import { LocalStateController } from './service/state/LocalStateController';
 import { asyncTrack } from './util/async';
+import { loadConfig } from './util/config';
 import { KNOWN_VERBS, PORTAL_DEPTH } from './util/constants';
 import { debugState, graphState } from './util/debug';
 import { RenderStream } from './util/logger/RenderStream';
 
-export async function main(args: Array<string>) {
+export async function main(args: Array<string>): Promise<number> {
+  // set up async tracking
   const { asyncHook, asyncOps } = asyncTrack();
   asyncHook.enable();
 
-  const logger = BunyanLogger.create({
-    level: LogLevel.DEBUG,
-    name: 'textual-engine',
-    streams: [{
-      path: 'out/debug.log',
-    }, {
-      level: LogLevel.ERROR,
-      stream: process.stderr,
-    }],
-  });
+  // "parse" args
+  const [_node, _script, configPath, dataPath, worldName, seed] = args; 
 
+  // load config and create logger
+  const config = await loadConfig(configPath)
+  const logger = BunyanLogger.create(config.logger);
+
+  // print banner
   logger.info({
     args,
   }, 'textual adventure');
 
+  // create DI module
   const module = new LocalModule({
     inputs: {
       [ActorType.DEFAULT]: BehaviorInput,
       [ActorType.PLAYER]: INJECT_INPUT_PLAYER,
       [ActorType.REMOTE]: BehaviorInput,
     },
-    seed: args[4],
+    seed,
   });
 
+  // configure DI container
   const container = Container.from(module);
   await container.configure({
     logger,
   });
 
-  // create DI container and services
-  const render = await container.create(LineRender);
-
   // send logs to screen
+  const render = await container.create<Render, BaseOptions>(INJECT_RENDER);
   const stream = new RenderStream(render);
   (logger as Logger).addStream({
     level: LogLevel.INFO,
@@ -63,32 +62,34 @@ export async function main(args: Array<string>) {
   });
 
   const input = await container.create<Input, BaseOptions>(INJECT_INPUT_PLAYER);
-  const loader = await container.create(FileLoader);
-  const parser = await container.create(YamlParser);
-  const stateCtrl = await container.create(LocalStateController);
+  const loader = await container.create<Loader, BaseOptions>(INJECT_LOADER);
+  const parser = await container.create<Parser, BaseOptions>(INJECT_PARSER);
 
   // load data files
-  const dataStr = await loader.loadStr(args[2]);
+  const dataStr = await loader.loadStr(dataPath);
   const data = parser.load(dataStr);
 
-  // create state from world
-  const world = data.worlds.find((it) => it.meta.id === args[3]);
+  // find world template
+  const world = data.worlds.find((it) => it.meta.id === worldName);
   if (isNil(world)) {
     logger.error('invalid world');
-    exit(1);
+    return 1;
   }
 
+  // create state from world
+  const stateCtrl = await container.create(LocalStateController);
   const state = await stateCtrl.from(world, {
     rooms: PORTAL_DEPTH,
-    seed: args[4],
+    seed,
   });
 
+  // step state stuff
   let turnCount = 0;
   let lastNow = Date.now();
 
-  // while playing:
   await render.start(`turn ${turnCount} > `);
 
+  // while playing:
   for await (const line of render.stream()) {
     // parse last input
     const [cmd] = await input.parse(line);
@@ -96,6 +97,7 @@ export async function main(args: Array<string>) {
       cmd,
     }, 'parsed command');
 
+    // handle meta commands
     switch (cmd.verb) {
       case 'debug':
         await debugState(render, state);
@@ -121,7 +123,7 @@ export async function main(args: Array<string>) {
         }
 
         // wait for input
-        render.promptSync(`turn ${++turnCount} > `);
+        render.prompt(`turn ${++turnCount} > `);
       }
     }
   }
@@ -139,10 +141,14 @@ export async function main(args: Array<string>) {
   }, 'saved world state');
 
   // asyncDebug(asyncOps);
+
+  return 0;
 }
 
-main(argv).then(() => {
-  console.log('done');
+main(argv).then((exitCode: number) => {
+  console.log('main exited %s', exitCode);
+  process.exitCode = exitCode;
 }).catch((err) => {
   console.error('error in main', err);
+  process.exitCode = 1;
 });

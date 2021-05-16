@@ -1,0 +1,9 @@
+logger:
+  level: debug
+  name: textual-engine
+  streams:
+    - level: debug
+      path: out/debug.log
+    - level: error
+      stream: !stream stderr
+locale: {}

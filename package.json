@@ -6,6 +6,7 @@
   "license": "MIT",
   "devDependencies": {
     "@apextoaster/js-utils": "^0.2.1",
+    "@apextoaster/js-yaml-schema": "^0.4.0-4",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/bunyan": "^1.8.6",
     "@types/chai": "^4.2.18",

@@ -1,7 +1,5 @@
 import { isNil } from '@apextoaster/js-utils';
-import { createHook } from 'async_hooks';
 import * as Logger from 'bunyan';
-import { promises } from 'fs';
 import { BaseOptions, Container, LogLevel } from 'noicejs';
 import { argv, exit } from 'process';
 
@@ -15,31 +13,14 @@ import { FileLoader } from './service/loader/FileLoader';
 import { YamlParser } from './service/parser/YamlParser';
 import { LineRender } from './service/render/LineRender';
 import { LocalStateController } from './service/state/LocalStateController';
+import { asyncTrack } from './util/async';
 import { KNOWN_VERBS, PORTAL_DEPTH } from './util/constants';
 import { debugState, graphState } from './util/debug';
 import { RenderStream } from './util/logger/RenderStream';
 
 export async function main(args: Array<string>) {
-  const asyncOps = new Map();
-  const asyncHook = createHook({
-    init(asyncId, type, triggerAsyncId, resource) {
-      asyncOps.set(asyncId, type);
-    },
-    destroy(asyncId) {
-      asyncOps.delete(asyncId);
-    },
-    promiseResolve(asyncId) {
-      asyncOps.delete(asyncId);
-    },
-  });
-
+  const { asyncHook, asyncOps } = asyncTrack();
   asyncHook.enable();
-
-  function asyncDebug() {
-    for (const [key, type] of asyncOps) {
-      console.log(`async: ${key} is ${type}`);
-    }
-  }
 
   const logger = BunyanLogger.create({
     level: LogLevel.DEBUG,
@@ -157,7 +138,7 @@ export async function main(args: Array<string>) {
     state: saveStr,
   }, 'saved world state');
 
-  // asyncDebug();
+  // asyncDebug(asyncOps);
 }
 
 main(argv).then(() => {

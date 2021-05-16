@@ -3,7 +3,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateController } from '.';
 import { Actor, ActorType } from '../../model/entity/Actor';
-import { Item } from '../../model/entity/Item';
+import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups } from '../../model/entity/Portal';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseTemplate, Template } from '../../model/meta/Template';
@@ -153,7 +153,11 @@ export class LocalStateController implements StateController {
         const targetActor = mustExist(currentRoom.actors.find((it) => it.meta.id === id));
 
         // move the actor
-        this.logger.debug(`${id} is moving to from ${currentRoom.meta.name} (${currentRoom.meta.id}) to ${targetRoom.meta.name} (${targetRoom.meta.id})`);
+        this.logger.debug({
+          id,
+          currentRoom,
+          targetRoom,
+        }, `moving actor between rooms`);
         currentRoom.actors.splice(currentRoom.actors.indexOf(targetActor), 1);
         targetRoom.actors.push(targetActor);
 
@@ -352,11 +356,12 @@ export class LocalStateController implements StateController {
   }
 
   protected async createItem(template: Template<Item>): Promise<Item> {
+    const id = this.template.renderString(template.base.meta.id);
     return {
-      type: 'item',
+      type: ITEM_TYPE,
       meta: {
         desc: this.template.renderString(template.base.meta.desc),
-        id: `${template.base.meta.id.base}-${this.counter.next('item')}`,
+        id: `${id}-${this.counter.next(ITEM_TYPE)}`,
         name: this.template.renderString(template.base.meta.name),
         template: template.base.meta.id.base,
       },
@@ -405,12 +410,12 @@ export class LocalStateController implements StateController {
 
     const id = this.template.renderString(template.base.meta.id);
     return {
-      type: 'room',
+      type: ROOM_TYPE,
       actors,
       items,
       meta: {
         desc: this.template.renderString(template.base.meta.desc),
-        id: `${id}-${this.counter.next('room')}`,
+        id: `${id}-${this.counter.next(ROOM_TYPE)}`,
         name: this.template.renderString(template.base.meta.name),
         template: template.base.meta.id.base,
       },

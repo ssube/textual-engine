@@ -4,8 +4,8 @@ import { WorldEntity } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
-import { Metadata } from '../../model/meta/Metadata';
 import { State } from '../../model/State';
+import { SearchParams } from '../../util/state';
 import { Immutable, ScriptData } from '../../util/types';
 import { Command } from '../input';
 
@@ -78,12 +78,7 @@ export interface ScriptScope extends SuppliedScope {
   script: ScriptController;
 }
 
-export type ScriptTargetFilter = {
-  meta?: Partial<Metadata>;
-  room?: Partial<Metadata>;
-};
-
 export interface ScriptController {
-  broadcast(state: Immutable<State>, filter: ScriptTargetFilter, slot: string, scope: SuppliedScope): Promise<void>;
+  broadcast(state: Immutable<State>, search: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void>;
   invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void>;
 }

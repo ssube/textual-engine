@@ -7,7 +7,7 @@ import { State } from '../../model/State';
 
 export interface SearchParams {
   meta: Partial<Metadata>;
-  // TODO: match room: Partial<Metadata>
+  room: Partial<Metadata>
   type: WorldEntityType;
 }
 
@@ -15,6 +15,12 @@ export function searchState(state: State, search: Partial<SearchParams>): Array<
   const results: Array<WorldEntity> = [];
 
   for (const room of state.rooms) {
+    if (doesExist(search.room)) {
+      if (matchMetadata(room, search.room) === false) {
+        continue;
+      }
+    }
+
     if (matchEntity(room, search)) {
       results.push(room);
     }
@@ -39,6 +45,21 @@ export function searchState(state: State, search: Partial<SearchParams>): Array<
   }
 
   return results;
+}
+
+export function searchStateString(state: State, value: string): Array<WorldEntity> {
+  return [
+    ...searchState(state, {
+      meta: {
+        id: value,
+      },
+    }),
+    ...searchState(state, {
+      meta: {
+        name: value,
+      },
+    }),
+  ];
 }
 
 export function matchEntity(entity: Entity, search: Partial<SearchParams>): boolean {

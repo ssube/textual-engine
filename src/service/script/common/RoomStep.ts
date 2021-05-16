@@ -16,7 +16,7 @@ export async function RoomStep(this: ScriptTarget, scope: ScriptScope): Promise<
   // TODO: remove
   await scope.script.broadcast(scope.state, {
     meta: {
-      id: 'bon',
+      id: 'actor-goblin',
     },
     room: {
       id: this.meta.id,

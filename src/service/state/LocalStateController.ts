@@ -19,7 +19,7 @@ import {
 } from '../../module';
 import { PORTAL_DEPTH, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
-import { searchState } from '../../util/state';
+import { searchState, searchStateString } from '../../util/state';
 import { findByTemplateId } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
 import { RandomGenerator } from '../random';
@@ -188,15 +188,11 @@ export class LocalStateController implements StateController {
         });
 
         // find target item
-        const [target] = searchState(state, {
-          meta: {
-            id,
-          },
-          type: ITEM_TYPE,
-        });
+        const [target] = searchStateString(state, id);
 
         // ensure source and dest are both actor/room (types are greatly narrowed after these guards)
         if (isItem(source) || isItem(dest) || !isItem(target)) {
+          this.logger.debug({ dest, source, target }, 'invalid entity type for item transfer');
           return;
         }
 

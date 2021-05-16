@@ -1,11 +1,10 @@
 import { doesExist, isNil } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { ScriptController, ScriptFunction, ScriptTarget, ScriptTargetFilter, SuppliedScope } from '.';
-import { Metadata } from '../../model/meta/Metadata';
+import { ScriptController, ScriptFunction, ScriptTarget, SuppliedScope } from '.';
 import { State } from '../../model/State';
 import { INJECT_LOGGER } from '../../module';
-import { matchMetadata } from '../../util/state';
+import { matchMetadata, SearchParams, searchState } from '../../util/state';
 import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
@@ -60,49 +59,11 @@ export class LocalScriptController implements ScriptController {
     });
   }
 
-  /**
-   * @todo use searchState to find target entities once it supports room filter
-   */
-  async broadcast(state: State, filter: ScriptTargetFilter, slot: string, scope: SuppliedScope): Promise<void> {
-    for (const room of state.rooms) {
-      if (doesExist(filter.room)) {
-        if (matchMetadata(room, filter.room) === false) {
-          // skip rooms that do not match
-          continue;
-        }
-      }
+  async broadcast(state: State, filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
+    const targets = searchState(state, filter);
 
-      if (this.match(room, filter)) {
-        await this.invoke(room, slot, scope);
-      }
-
-      for (const actor of room.actors) {
-        if (this.match(actor, filter)) {
-          await this.invoke(actor, slot, scope);
-        }
-
-        for (const item of actor.items) {
-          if (this.match(item, filter)) {
-            await this.invoke(item, slot, scope);
-          }
-        }
-      }
-
-      for (const item of room.items) {
-        if (this.match(item, filter)) {
-          await this.invoke(item, slot, scope);
-        }
-      }
+    for (const target of targets) {
+      await this.invoke(target, slot, scope);
     }
-  }
-
-  match(target: ScriptTarget, filter: ScriptTargetFilter): boolean {
-    let matched = true;
-
-    if (doesExist(filter.meta)) {
-      matched = matched && matchMetadata(target, filter.meta);
-    }
-
-    return matched;
   }
 }

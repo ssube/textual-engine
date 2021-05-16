@@ -113,7 +113,7 @@ export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<voi
 
 export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {
   if (doesExist(scope.room)) {
-    await scope.render.show(`${this.meta.name} is in ${scope.room.meta.name}: ${scope.room.meta.desc}`);
+    await scope.render.show(`${this.meta.name} is in ${scope.room.meta.name} (${scope.room.meta.id}): ${scope.room.meta.desc}`);
 
     for (const item of this.items) {
       await scope.render.show(`You are holding a ${item.meta.name} (${item.meta.id})`);

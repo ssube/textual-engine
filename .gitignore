@@ -1,4 +1,5 @@
 *.swp
+yarn-error.log
 
 .nyc_output/
 .vscode/

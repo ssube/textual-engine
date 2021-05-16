@@ -1,3 +1,4 @@
+import { doesExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { render } from 'ink';
 import * as React from 'react';
@@ -37,15 +38,23 @@ export class InkRender extends BaseRender implements Render {
   }
 
   read(prompt?: string): Promise<string> {
+    if (doesExist(prompt)) {
+      this.promptStr = prompt;
+    }
+
     return new Promise((res, rej) => {
-      this.emits.once('error', (err: Error) => {
-        this.emits.removeAllListeners('line');
+      const error = (err: Error) => {
+        this.emits.removeListener('line', line);
         rej(err);
-      });
-      this.emits.once('line', (line: string) => {
-        this.emits.removeAllListeners('error');
+      };
+
+      const line = (line: string) => {
+        this.emits.removeListener('error', error);
         res(line);
-      });
+      };
+
+      this.emits.once('error', error);
+      this.emits.once('line', line);
     });
   }
 
@@ -59,27 +68,8 @@ export class InkRender extends BaseRender implements Render {
 
   async start(): Promise<void> {
     const root = React.createElement(Frame, {
-      onLine: (line: string) => {
-        return new Promise<InkState>((res, rej) => {
-          this.emits.once('error', (err: Error) => {
-            rej(err);
-          });
-          this.emits.once('step', (state: InkState) => {
-            res(state);
-          });
-          this.emits.emit('line', line);
-        });
-      },
-      onQuit: () => {
-        return new Promise<void>((res, rej) => {
-          this.emits.once('error', (err: Error) => {
-            rej(err);
-          });
-          this.emits.once('quit', () => {
-            res();
-          });
-        });
-      },
+      onLine: (line: string) => this.onLine(line),
+      onQuit: () => this.onQuit(),
     });
 
     render(root);
@@ -98,5 +88,40 @@ export class InkRender extends BaseRender implements Render {
       output,
     };
     this.emits.emit('step', state);
+  }
+
+  onLine(line: string): Promise<InkState> {
+    return new Promise<InkState>((res, rej) => {
+      const error = (err: Error) => {
+        this.emits.removeListener('step', step);
+        rej(err);
+      };
+
+      const step = (state: InkState) => {
+        this.emits.removeListener('error', error);
+        res(state);
+      };
+
+      this.emits.once('error', error);
+      this.emits.once('step', step);
+      this.emits.emit('line', line);
+    });
+  }
+
+  onQuit(): Promise<void> {
+    return new Promise<void>((res, rej) => {
+      const error = (err: Error) => {
+        this.emits.removeListener('quit', quit);
+        rej(err);
+      };
+
+      const quit = () => {
+        this.emits.removeListener('error', error);
+        res();
+      };
+
+      this.emits.once('error', error);
+      this.emits.once('quit', quit);
+    });
   }
 }

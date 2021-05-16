@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "allowJs": false,
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": true,
     "declaration": true,
     "declarationMap": true,
     "emitDecoratorMetadata": true,

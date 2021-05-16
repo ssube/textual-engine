@@ -20,7 +20,7 @@ import { FileLoader } from '../service/loader/FileLoader';
 import { YamlParser } from '../service/parser/YamlParser';
 import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
-import { LineRender } from '../service/render/LineRender';
+import { InkRender } from '../service/render/InkRender';
 import { ScriptController } from '../service/script';
 import { LocalScriptController } from '../service/script/LocalScriptController';
 import { PipeTemplate } from '../service/template/PipeTemplate';
@@ -51,7 +51,8 @@ export class LocalModule extends Module {
 
     this.bind(INJECT_LOADER).toConstructor(FileLoader);
     this.bind(INJECT_PARSER).toConstructor(YamlParser);
-    this.bind(INJECT_RENDER).toConstructor(LineRender);
+    // this.bind(INJECT_RENDER).toConstructor(LineRender);
+    this.bind(INJECT_RENDER).toConstructor(InkRender);
     this.bind(INJECT_TEMPLATE).toConstructor(PipeTemplate);
   }
 

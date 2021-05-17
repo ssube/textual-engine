@@ -67,14 +67,6 @@ publish-npm:
     - npm publish
 
 # commit status
-climate-pending:
-  stage: status-pre
-  extends:
-    - .build-climate
-
-  script:
-    - cc-test-reporter before-build
-
 climate-success:
   stage: status-post
   extends:

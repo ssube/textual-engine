@@ -1,4 +1,4 @@
-import { isNil, mustExist } from '@apextoaster/js-utils';
+import { mustExist } from '@apextoaster/js-utils';
 import { Logger, Module, ModuleOptions, Provides } from 'noicejs';
 
 import {
@@ -12,33 +12,40 @@ import {
   INJECT_STATE,
   INJECT_TEMPLATE,
 } from '.';
-import { Input } from '../service/input';
-import { ActorInputMapper } from '../service/input/ActorInputMapper';
 import { FileLoader } from '../service/loader/FileLoader';
 import { YamlParser } from '../service/parser/YamlParser';
 import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { Render } from '../service/render';
 import { InkRender } from '../service/render/InkRender';
-import { LineRender } from '../service/render/LineRender';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScriptService';
 import { StateService } from '../service/state';
 import { LocalStateService } from '../service/state/LocalStateService';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
+import { Singleton } from '../util/container';
 import { Counter } from '../util/counter';
 import { LocalCounter } from '../util/counter/LocalCounter';
 
 export class LocalModule extends Module {
-  protected counter?: Counter;
-  protected mapper?: ActorInputMapper;
-  protected playerInput?: Input;
-  protected random?: RandomGenerator;
-  protected render?: Render;
-  protected script?: ScriptService;
-  protected state?: StateService;
-  protected template?: TemplateService;
+  protected counter: Singleton<Counter>;
+  protected random: Singleton<RandomGenerator>;
+  protected render: Singleton<Render>;
+  protected script: Singleton<ScriptService>;
+  protected state: Singleton<StateService>;
+  protected template: Singleton<TemplateService>;
+
+  constructor() {
+    super();
+
+    this.counter = new Singleton();
+    this.random = new Singleton();
+    this.render = new Singleton();
+    this.script = new Singleton();
+    this.state = new Singleton();
+    this.template = new Singleton();
+  }
 
   public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
@@ -49,12 +56,8 @@ export class LocalModule extends Module {
 
   @Provides(INJECT_RENDER)
   protected async getRender(): Promise<Render> {
-    if (isNil(this.render)) {
-      this.render = await mustExist(this.container).create(InkRender);
-      // this.render = await mustExist(this.container).create(LineRender);
-    }
-
-    return this.render;
+    // this.render = await mustExist(this.container).create(LineRender);
+    return this.render.get(() => mustExist(this.container).create(InkRender));
   }
 
   /**
@@ -62,11 +65,7 @@ export class LocalModule extends Module {
    */
   @Provides(INJECT_TEMPLATE)
   protected async getTemplate(): Promise<TemplateService> {
-    if (isNil(this.template)) {
-      this.template = await mustExist(this.container).create(ChainTemplateService);
-    }
-
-    return this.template;
+    return this.template.get(() => mustExist(this.container).create(ChainTemplateService));
   }
 
   /**
@@ -74,11 +73,7 @@ export class LocalModule extends Module {
    */
   @Provides(INJECT_COUNTER)
   protected async getCounter(): Promise<Counter> {
-    if (isNil(this.counter)) {
-      this.counter = await mustExist(this.container).create(LocalCounter);
-    }
-
-    return this.counter;
+    return this.counter.get(() => mustExist(this.container).create(LocalCounter));
   }
 
   /**
@@ -94,11 +89,7 @@ export class LocalModule extends Module {
    */
   @Provides(INJECT_RANDOM)
   protected async getRandom(): Promise<RandomGenerator> {
-    if (isNil(this.random)) {
-      this.random = await mustExist(this.container).create(SeedRandomGenerator);
-    }
-
-    return this.random;
+    return this.random.get(() => mustExist(this.container).create(SeedRandomGenerator));
   }
 
   /**
@@ -106,11 +97,7 @@ export class LocalModule extends Module {
    */
   @Provides(INJECT_SCRIPT)
   protected async getScript(): Promise<ScriptService> {
-    if (isNil(this.script)) {
-      this.script = await mustExist(this.container).create(LocalScriptService);
-    }
-
-    return this.script;
+    return this.script.get(() => mustExist(this.container).create(LocalScriptService));
   }
 
   /**
@@ -118,10 +105,6 @@ export class LocalModule extends Module {
    */
   @Provides(INJECT_STATE)
   protected async getState(): Promise<StateService> {
-    if (isNil(this.state)) {
-      this.state = await mustExist(this.container).create(LocalStateService);
-    }
-
-    return this.state;
+    return this.state.get(() => mustExist(this.container).create(LocalStateService));
   }
 }

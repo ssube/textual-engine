@@ -35,17 +35,6 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
     decrementKey(this.stats, 'health');
   }
 
-  if (doesExist(scope.room)) {
-    await scope.render.show(`${this.meta.name} is in ${scope.room.meta.name} (${scope.room.meta.id})`);
-    if (this.actorType === ActorType.PLAYER) {
-      await scope.render.show(`${this.meta.name} can see: ${scope.room.meta.desc}`);
-
-      for (const item of scope.room.items) {
-        await scope.render.show(`${scope.room.meta.name} contains an ${item.meta.name}`);
-      }
-    }
-  }
-
   if (doesExist(scope.command)) {
     await ActorStepCommand.call(this, scope);
   } else {
@@ -75,7 +64,10 @@ export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise
   const verb = knownVerbs.get(cmd.verb);
 
   if (doesExist(verb)) {
-    await scope.render.show(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
+    if (this.actorType === ActorType.PLAYER) {
+      await scope.render.show(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
+    }
+
     await verb.call(this, scope);
   } else {
     await scope.render.show(`${this.meta.name} does not know how to ${cmd.verb}!`);

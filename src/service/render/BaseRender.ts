@@ -39,7 +39,12 @@ export abstract class BaseRender implements Render {
   abstract start(): Promise<void>;
   abstract stop(): Promise<void>;
 
-  abstract loopStep(output: Array<string>): void;
+  public async showStep(output: Array<string>): Promise<void> {
+    // show any output
+    for (const outputLine of output) {
+      await this.show(outputLine);
+    }
+  }
 
   /**
    * Loop logic should be relatively similar across render frontends, but can be overridden or hooked at `loopStep`.
@@ -63,20 +68,20 @@ export abstract class BaseRender implements Render {
         case 'debug': {
           const state = await this.state.save();
           const output = await debugState(state);
-          this.loopStep(output);
+          await this.showStep(output);
           break;
         }
         case 'graph': {
           const state = await this.state.save();
           const output = await graphState(state);
           await this.loader.saveStr(cmd.target, output.join('\n'));
-          this.loopStep([
+          await this.showStep([
             `wrote ${state.rooms.length} node graph to ${cmd.target}`,
           ]);
           break;
         }
         case 'help': {
-          this.loopStep([
+          await this.showStep([
             KNOWN_VERBS.join(', '),
           ]);
           break;
@@ -94,14 +99,9 @@ export abstract class BaseRender implements Render {
           lastNow = now;
           turnCount = turnCount + 1;
 
-          // show any output
-          for (const outputLine of output) {
-            await this.show(outputLine);
-          }
-
           // wait for input
+          await this.showStep(output);
           this.prompt(`turn ${turnCount} > `);
-          this.loopStep(output);
         }
       }
     }

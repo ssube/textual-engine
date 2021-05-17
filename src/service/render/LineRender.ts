@@ -69,8 +69,4 @@ export class LineRender extends BaseRender implements Render {
       this.reader.close();
     }
   }
-
-  public loopStep(output: Array<string>): void {
-    // noop
-  }
 }

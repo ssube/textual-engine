@@ -71,7 +71,7 @@ export class InkRender extends BaseRender implements Render {
     this.emits.emit('quit');
   }
 
-  public loopStep(output: Array<string>): void {
+  public async showStep(output: Array<string>): Promise<void> {
     const state: InkState = {
       input: '',
       prompt: this.promptStr,

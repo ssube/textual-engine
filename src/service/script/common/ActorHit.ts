@@ -12,12 +12,12 @@ export async function ActorHit(this: ScriptTarget, scope: ScriptScope): Promise<
   const attacker = mustExist(scope.actor);
   const item = mustExist(scope.item);
 
-  await scope.render.show(`${attacker.meta.name} has hit ${this.meta.name} (${this.meta.id}) with a ${item.meta.name}!`);
+  await scope.focus.show(`${attacker.meta.name} has hit ${this.meta.name} (${this.meta.id}) with a ${item.meta.name}!`);
 
   const health = decrementKey(this.stats, 'health');
   if (health > 0) {
-    await scope.render.show(`${this.meta.name} has ${health} health left`);
+    await scope.focus.show(`${this.meta.name} has ${health} health left`);
   } else {
-    await scope.render.show(`${this.meta.name} has died!`);
+    await scope.focus.show(`${this.meta.name} has died!`);
   }
 }

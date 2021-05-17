@@ -65,12 +65,12 @@ export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise
 
   if (doesExist(verb)) {
     if (this.actorType === ActorType.PLAYER) {
-      await scope.render.show(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
+      await scope.focus.show(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
     }
 
     await verb.call(this, scope);
   } else {
-    await scope.render.show(`${this.meta.name} does not know how to ${cmd.verb}!`);
+    await scope.focus.show(`${this.meta.name} does not know how to ${cmd.verb}!`);
     scope.logger.warn('unknown verb');
   }
 }
@@ -87,12 +87,12 @@ export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<voi
   });
 
   if (!isActor(target)) {
-    await scope.render.show(`${target} is not an actor`);
+    await scope.focus.show(`${target} is not an actor`);
     return;
   }
 
   if (this.items.length === 0) {
-    await scope.render.show(`You cannot hit ${target.meta.name}, you are not holding anything!`);
+    await scope.focus.show(`You cannot hit ${target.meta.name}, you are not holding anything!`);
     return;
   }
 
@@ -105,25 +105,25 @@ export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<voi
 
 export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {
   if (doesExist(scope.room)) {
-    await scope.render.show(`${this.meta.name} is in ${scope.room.meta.name} (${scope.room.meta.id}): ${scope.room.meta.desc}`);
+    await scope.focus.show(`${this.meta.name} is in ${scope.room.meta.name} (${scope.room.meta.id}): ${scope.room.meta.desc}`);
 
     for (const item of this.items) {
-      await scope.render.show(`You are holding a ${item.meta.name} (${item.meta.id})`);
+      await scope.focus.show(`You are holding a ${item.meta.name} (${item.meta.id})`);
     }
 
     for (const actor of scope.room.actors) {
       if (actor !== this) {
-        await scope.render.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room`);
-        await scope.render.show(`${actor.meta.name} has ${actor.stats.get('health')} health`);
+        await scope.focus.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room`);
+        await scope.focus.show(`${actor.meta.name} has ${actor.stats.get('health')} health`);
       }
     }
 
     for (const item of scope.room.items) {
-      await scope.render.show(`A ${item.meta.name} is lying on the floor (${item.meta.id})`);
+      await scope.focus.show(`A ${item.meta.name} is lying on the floor (${item.meta.id})`);
     }
 
     for (const portal of scope.room.portals) {
-      await scope.render.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`);
+      await scope.focus.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`);
     }
   }
 }
@@ -142,7 +142,7 @@ export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<vo
   }
 
   // move the actor and focus
-  await scope.render.show(`${this.meta.name} moved to ${targetPortal.name}`);
+  await scope.focus.show(`${this.meta.name} moved to ${targetPortal.name}`);
   await scope.transfer.moveActor(this.meta.id, currentRoom.meta.id, targetPortal.dest);
 
   if (this.actorType === ActorType.PLAYER) {
@@ -163,7 +163,7 @@ export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<vo
   });
 
   if (!isItem(target)) {
-    await scope.render.show(`${target.meta.name} is not an item`);
+    await scope.focus.show(`${target.meta.name} is not an item`);
     return;
   }
 

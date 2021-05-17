@@ -16,42 +16,62 @@ export enum SidebarConfig {
  * A saved world state.
  */
 export interface State {
-  config: {
-    reaction: ReactionConfig;
+  /**
+   * The world template from which this state was created.
+   */
+  world: {
+    /**
+     * The template name.
+     */
+    name: string;
+
+    /**
+     * The random generator's seed.
+     */
     seed: string;
-    sidebar: SidebarConfig;
-    world: string;
   };
 
+  /**
+   * The active room and actor, for filtering output.
+   */
   focus: {
     actor: string;
     room: string;
   };
 
+  /**
+   * @todo remove
+   */
   input: Map<string, Array<string>>;
+
+  /**
+   * The root of the entity tree.
+   */
   rooms: Array<Room>;
+
+  /**
+   * The world progression, the index and time of the last step.
+   */
+  step: {
+    time: number;
+    turn: number;
+  };
 }
 
 export const STATE_SCHEMA: JSONSchemaType<State> = {
   type: 'object',
   properties: {
-    config: {
+    world: {
       type: 'object',
       properties: {
-        reaction: {
+        name: {
           type: 'string',
         },
         seed: {
           type: 'string',
         },
-        sidebar: {
-          type: 'string',
-        },
-        world: {
-          type: 'string',
-        },
       },
-      required: ['reaction', 'seed', 'sidebar', 'world'],
+      required: ['seed', 'name'],
     },
     focus: {
       type: 'object',
@@ -76,6 +96,18 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
         required: [],
       }
     },
+    step: {
+      type: 'object',
+      properties: {
+        time: {
+          type: 'number',
+        },
+        turn: {
+          type: 'number',
+        },
+      },
+      required: ['time', 'turn'],
+    },
   },
-  required: ['config', 'focus', 'input', 'rooms'],
+  required: ['world', 'focus', 'input', 'rooms', 'step'],
 };

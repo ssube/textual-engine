@@ -1,16 +1,14 @@
 import { expect } from 'chai';
 
-import { ReactionConfig, SidebarConfig, State } from '../../src/model/State';
+import { State } from '../../src/model/State';
 import { debugState, graphState } from '../../src/util/debug';
 
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {
     const state: State = {
-      config: {
-        reaction: ReactionConfig.PLAYER_FIRST,
+      world: {
         seed: '',
-        sidebar: SidebarConfig.ALWAYS_OPEN,
-        world: '',
+        name: '',
       },
       focus: {
         actor: '',
@@ -18,6 +16,10 @@ describe('state debug utils', () => {
       },
       input: new Map(),
       rooms: [], // TODO: add some rooms
+      step: {
+        time: 0,
+        turn: 0,
+      },
     };
 
     const lines = await debugState(state);
@@ -30,11 +32,9 @@ describe('state debug utils', () => {
 
   it('should include all rooms in graph output', async () => {
     const state: State = {
-      config: {
-        reaction: ReactionConfig.PLAYER_FIRST,
+      world: {
         seed: '',
-        sidebar: SidebarConfig.ALWAYS_OPEN,
-        world: '',
+        name: '',
       },
       focus: {
         actor: '',
@@ -42,6 +42,10 @@ describe('state debug utils', () => {
       },
       input: new Map(),
       rooms: [], // TODO: add some rooms
+      step: {
+        time: 0,
+        turn: 0,
+      },
     };
 
     const lines = await graphState(state);

@@ -1,34 +1,39 @@
 import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { BaseOptions, Inject, InvalidTargetError, Logger } from 'noicejs';
 
-import { CreateParams, StateService } from '.';
-import { Actor, ActorType } from '../../model/entity/Actor';
+import { CreateParams, StateService, StepParams, StepResult } from '.';
+import { WorldEntity } from '../../model/entity';
+import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups } from '../../model/entity/Portal';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseTemplate, Template } from '../../model/meta/Template';
-import { ReactionConfig, SidebarConfig, State } from '../../model/State';
+import { State } from '../../model/State';
 import { World } from '../../model/World';
 import {
   INJECT_COUNTER,
   INJECT_INPUT_MAPPER,
+  INJECT_LOADER,
   INJECT_LOGGER,
   INJECT_RANDOM,
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
 } from '../../module';
-import { SLOT_ENTER, SLOT_STEP } from '../../util/constants';
+import { KNOWN_VERBS, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
+import { debugState, graphState } from '../../util/debug';
 import { searchState, searchStateString } from '../../util/state';
 import { findByTemplateId } from '../../util/template';
 import { ActorInputMapper } from '../input/ActorInputMapper';
+import { Loader } from '../loader';
 import { RandomGenerator } from '../random';
-import { ScriptFocus, ScriptRender, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
+import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
 import { TemplateService } from '../template';
 
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
   [INJECT_INPUT_MAPPER]: ActorInputMapper;
+  [INJECT_LOADER]: Loader;
   [INJECT_LOGGER]: Logger;
   [INJECT_RANDOM]: RandomGenerator;
   [INJECT_SCRIPT]: ScriptService;
@@ -39,6 +44,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
 export class LocalStateService implements StateService {
   protected counter: Counter;
   protected input: ActorInputMapper;
+  protected loader: Loader;
   protected logger: Logger;
   protected random: RandomGenerator;
   protected script: ScriptService;
@@ -46,7 +52,6 @@ export class LocalStateService implements StateService {
 
   protected buffer: Array<string>;
   protected focus?: ScriptFocus;
-  protected render?: ScriptRender;
   protected transfer?: ScriptTransfer;
 
   protected state?: State;
@@ -56,6 +61,7 @@ export class LocalStateService implements StateService {
     this.buffer = [];
     this.counter = options[INJECT_COUNTER];
     this.input = options[INJECT_INPUT_MAPPER];
+    this.loader = options[INJECT_LOADER];
     this.logger = options[INJECT_LOGGER].child({
       kind: LocalStateService.name,
     });
@@ -69,11 +75,9 @@ export class LocalStateService implements StateService {
    */
   public async from(world: World, params: CreateParams): Promise<State> {
     const state: State = {
-      config: {
-        reaction: ReactionConfig.REACTION_STAT,
-        sidebar: SidebarConfig.NEVER_OPEN,
+      world: {
         seed: params.seed,
-        world: world.meta.name,
+        name: world.meta.name,
       },
       focus: {
         actor: '',
@@ -81,6 +85,10 @@ export class LocalStateService implements StateService {
       },
       input: new Map(),
       rooms: [],
+      step: {
+        time: 0,
+        turn: 0,
+      },
     };
 
     // save state for later
@@ -111,14 +119,8 @@ export class LocalStateService implements StateService {
         } else {
           throw new NotFoundError('invalid room for focus, does not exist in state');
         }
-      }
-    };
-
-    this.render = {
-      read: async (prompt: string) => {
-        throw new Error('method not implemented');
       },
-      show: async (msg: string) => {
+      show: async (msg: string, _source?: WorldEntity) => {
         this.buffer.push(msg);
       },
     };
@@ -165,7 +167,6 @@ export class LocalStateService implements StateService {
             source,
           },
           focus: mustExist(this.focus),
-          render: mustExist(this.render),
           transfer: mustExist(this.transfer),
           state,
         });
@@ -281,7 +282,80 @@ export class LocalStateService implements StateService {
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
-  public async step(time: number): Promise<Array<string>> {
+  public async step(params: StepParams): Promise<StepResult> {
+    const state = mustExist(this.state);
+
+    const [actor] = searchState(state, {
+      type: ACTOR_TYPE,
+      meta: {
+        id: state.focus.actor,
+      },
+    });
+
+    if (!isActor(actor)) {
+      throw new InvalidTargetError('invalid focus actor');
+    }
+
+    const input = await this.input.get(actor);
+    const cmd = await input.parse(params.line);
+
+    // handle meta commands
+    switch (cmd.verb) {
+      case 'debug': {
+        const output = await debugState(state);
+        return {
+          ...params,
+          output,
+          stop: false,
+          turn: state.step.turn,
+        };
+      }
+      case 'graph': {
+        const output = await graphState(state);
+        await this.loader.saveStr(cmd.target, output.join('\n'));
+        return {
+          ...params,
+          output: [
+            `wrote ${state.rooms.length} node graph to ${cmd.target}`,
+          ],
+          stop: false,
+          turn: state.step.turn,
+        };
+      }
+      case 'help': {
+        return {
+          ...params,
+          output: [
+            KNOWN_VERBS.join(', '),
+          ],
+          stop: false,
+          turn: state.step.turn,
+        };
+      }
+      case 'quit':
+        return {
+          ...params,
+          output: [],
+          stop: true,
+          turn: state.step.turn,
+        };
+      default: {
+        // step world
+        const { output, time } = await this.stepState(params.time);
+
+        return {
+          ...params,
+          line: params.line,
+          output,
+          stop: false,
+          time: params.time + time,
+          turn: state.step.turn,
+        };
+      }
+    }
+  }
+
+  public async stepState(time: number) {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
@@ -296,7 +370,6 @@ export class LocalStateService implements StateService {
         time,
       },
       focus: mustExist(this.focus),
-      render: mustExist(this.render),
       state: this.state,
       transfer: mustExist(this.transfer),
     };
@@ -312,7 +385,7 @@ export class LocalStateService implements StateService {
         for (const actor of room.actors) {
           if (seen.has(actor.meta.id) === false) {
             const input = await this.input.get(actor);
-            const [command] = await input.last();
+            const command = await input.last();
 
             seen.add(actor.meta.id);
             await this.script.invoke(actor, SLOT_STEP, {
@@ -347,12 +420,18 @@ export class LocalStateService implements StateService {
           }
         }
       }
-
-      const spent = Date.now() - start;
-      this.logger.debug({ spent, time }, 'finished world state step');
     }
 
-    return this.buffer;
+    const spent = Date.now() - start;
+    this.logger.debug({ spent, time }, 'finished world state step');
+
+    this.state.step.turn += 1;
+    this.state.step.time += spent;
+
+    return {
+      output: this.buffer,
+      time: spent,
+    };
   }
 
   protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {

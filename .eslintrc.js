@@ -30,7 +30,7 @@ module.exports = {
         "default": "generic"
       }
     ],
-    "@typescript-eslint/await-thenable": "error",
+    "@typescript-eslint/await-thenable": "error"?,
     "@typescript-eslint/ban-types": [
       "error",
       {
@@ -99,6 +99,15 @@ module.exports = {
         ],
         "leadingUnderscore": "forbid",
         "selector": "default",
+        "trailingUnderscore": "forbid"
+      },
+      {
+        "format": [
+          "camelCase"
+        ],
+        "leadingUnderscore": "require",
+        "selector": "variable",
+        "modifiers": ["unused"],
         "trailingUnderscore": "forbid"
       },
       {

@@ -26,10 +26,10 @@ export interface Input {
    * Parse an input string into a series of commands, looking
    * for keywords and respecting parts of speech.
    */
-  parse(input: string): Promise<Array<Command>>;
+  parse(input: string): Promise<Command>;
 
   /**
    * Return the last set of parsed commands again.
    */
-  last(): Promise<Array<Command>>;
+  last(): Promise<Command>;
 }

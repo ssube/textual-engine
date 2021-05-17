@@ -2,7 +2,7 @@ import { State } from '../model/State';
 
 export async function debugState(state: State): Promise<Array<string>> {
   const lines = [
-    `state: ${state.config.world}`
+    `state: ${state.world.name}`
   ];
 
   for (const room of state.rooms) {

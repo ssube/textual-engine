@@ -5,6 +5,7 @@ import * as React from 'react';
 
 import { Render } from '.';
 import { onceWithRemove, RemoveResult } from '../../util/event';
+import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 import { Frame } from './component/ink/Frame';
 
@@ -71,11 +72,16 @@ export class InkRender extends BaseRender implements Render {
     this.emits.emit('quit');
   }
 
-  public async showStep(output: Array<string>): Promise<void> {
+  public async showStep(result: StepResult): Promise<void> {
+    // add the turn marker
+    result.output.unshift(`turn ${result.turn} > ${result.line}`);
+
+    await super.showStep(result);
+
     const state: InkState = {
       input: '',
       prompt: this.promptStr,
-      output,
+      output: result.output,
     };
     this.emits.emit('step', state);
   }

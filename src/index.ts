@@ -34,18 +34,13 @@ export async function main(args: Array<string>): Promise<number> {
     args,
   }, 'textual adventure');
 
-  // create DI module
-  const module = new LocalModule({
-    inputs: {
-      [ActorType.DEFAULT]: BehaviorInput,
-      [ActorType.PLAYER]: INJECT_INPUT_PLAYER,
-      [ActorType.REMOTE]: BehaviorInput,
-    },
-    seed,
-  });
+  // create DI modules
+  const modules = [
+    new LocalModule(),
+  ];
 
   // configure DI container
-  const container = Container.from(module);
+  const container = Container.from(...modules);
   await container.configure({
     logger,
   });

@@ -10,17 +10,31 @@ import { Immutable, ScriptData } from '../../util/types';
 import { Command } from '../input';
 
 export interface ScriptFocus {
+  /**
+   * Set the currently-focused room.
+   */
   setRoom(id: string): Promise<void>;
-  setActor(id: string): Promise<void>;
-}
 
-export interface ScriptRender {
-  read(prompt: string): Promise<string>;
-  show(msg: string): Promise<void>;
+  /**
+   * Set the currently-focused actor.
+   */
+  setActor(id: string): Promise<void>;
+
+  /**
+   * Display a message from an entity.
+   */
+  show(msg: string, source?: WorldEntity): Promise<void>;
 }
 
 export interface ScriptTransfer {
+  /**
+   * Move an actor from one room to another.
+   */
   moveActor(id: string, source: string, dest: string): Promise<void>;
+
+  /**
+   * Move an item from one actor or room to another.
+   */
   moveItem(id: string, source: string, dest: string): Promise<void>;
 }
 
@@ -37,14 +51,9 @@ export interface SuppliedScope {
   data: ScriptData;
 
   /**
-   * State focus helper.
+   * State output helper.
    */
   focus: ScriptFocus;
-
-  /**
-   * Render I/O helper.
-   */
-  render: ScriptRender;
 
   /**
    * Entity transfer helper.

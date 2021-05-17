@@ -24,7 +24,7 @@ export class ClassicInput implements Input {
     return input.split(SPLIT_CHAR);
   }
 
-  public async parse(input: string): Promise<Array<Command>> {
+  public async parse(input: string): Promise<Command> {
     const rawTokens = await this.tokenize(input);
     const tokens = rawTokens.map((it) => it.toLocaleLowerCase()).filter((it) => REMOVED_WORDS.has(it) === false);
     const [verb, ...targets] = tokens;
@@ -37,10 +37,10 @@ export class ClassicInput implements Input {
 
     this.history.unshift(cmd);
 
-    return [cmd];
+    return cmd;
   }
 
-  public async last(): Promise<Array<Command>> {
-    return this.history;
+  public async last(): Promise<Command> {
+    return this.history[0];
   }
 }

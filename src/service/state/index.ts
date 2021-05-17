@@ -13,6 +13,38 @@ export interface CreateParams {
   seed: string;
 }
 
+export interface StepParams {
+  line: string;
+  time: number;
+}
+
+export interface StepResult {
+  /**
+   * The input line.
+   */
+  line: string;
+
+  /**
+   * The output from this step, filtered by the focused actor.
+   */
+  output: Array<string>;
+
+  /**
+   * Stop condition (this is an async iterator).
+   */
+  stop: boolean;
+
+  /**
+   * The end time for this step (caller provided a start time and can do deltas).
+   */
+  time: number;
+
+  /**
+   * The index of this step.
+   */
+  turn: number;
+}
+
 export interface StateService {
   /**
    * Create a new world state from a world template.
@@ -32,7 +64,5 @@ export interface StateService {
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
-  step(time: number): Promise<Array<string>>;
-
-  // TODO: get last step output buffer method
+  step(params: StepParams): Promise<StepResult>;
 }

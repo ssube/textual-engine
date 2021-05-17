@@ -14,8 +14,10 @@ import {
   INJECT_STATE,
   INJECT_TEMPLATE,
 } from '.';
+import { ActorType } from '../model/entity/Actor';
 import { Input } from '../service/input';
-import { ActorInputMapper, InputTypes } from '../service/input/ActorInputMapper';
+import { ActorInputMapper } from '../service/input/ActorInputMapper';
+import { BehaviorInput } from '../service/input/BehaviorInput';
 import { ClassicInput } from '../service/input/ClassicInput';
 import { FileLoader } from '../service/loader/FileLoader';
 import { YamlParser } from '../service/parser/YamlParser';
@@ -23,7 +25,6 @@ import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { Render } from '../service/render';
 import { InkRender } from '../service/render/InkRender';
-import { LineRender } from '../service/render/LineRender';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScriptService';
 import { StateService } from '../service/state';
@@ -33,14 +34,7 @@ import { ChainTemplateService } from '../service/template/ChainTemplateService';
 import { Counter } from '../util/counter';
 import { LocalCounter } from '../util/counter/LocalCounter';
 
-export interface LocalModuleOptions {
-  inputs: InputTypes;
-  seed: string;
-}
-
 export class LocalModule extends Module {
-  protected options: LocalModuleOptions;
-
   protected counter?: Counter;
   protected mapper?: ActorInputMapper;
   protected playerInput?: Input;
@@ -49,11 +43,6 @@ export class LocalModule extends Module {
   protected script?: ScriptService;
   protected state?: StateService;
   protected template?: TemplateService;
-
-  constructor(options: LocalModuleOptions) {
-    super();
-    this.options = options;
-  }
 
   public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
@@ -97,22 +86,6 @@ export class LocalModule extends Module {
   }
 
   /**
-   * Actor type input mapper.
-   *
-   * This construct should not exist.
-   */
-  @Provides(INJECT_INPUT_MAPPER)
-  protected async getMapper(): Promise<ActorInputMapper> {
-    if (isNil(this.mapper)) {
-      this.mapper = await mustExist(this.container).create(ActorInputMapper, {
-        inputs: this.options.inputs,
-      });
-    }
-
-    return this.mapper;
-  }
-
-  /**
    * Root logger, call `.child()` to specialize.
    */
   @Provides(INJECT_LOGGER)
@@ -127,7 +100,6 @@ export class LocalModule extends Module {
   protected async getRandom(): Promise<RandomGenerator> {
     if (isNil(this.random)) {
       this.random = await mustExist(this.container).create(SeedRandomGenerator);
-      this.random.reseed(this.options.seed);
     }
 
     return this.random;
@@ -167,5 +139,25 @@ export class LocalModule extends Module {
     }
 
     return this.playerInput;
+  }
+
+  /**
+   * Actor type input mapper.
+   *
+   * This construct should not exist.
+   */
+  @Provides(INJECT_INPUT_MAPPER)
+  protected async getMapper(): Promise<ActorInputMapper> {
+    if (isNil(this.mapper)) {
+      this.mapper = await mustExist(this.container).create(ActorInputMapper, {
+        inputs: {
+          [ActorType.DEFAULT]: BehaviorInput,
+          [ActorType.PLAYER]: ClassicInput,
+          [ActorType.REMOTE]: BehaviorInput,
+        },
+      });
+    }
+
+    return this.mapper;
   }
 }

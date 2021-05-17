@@ -341,21 +341,21 @@ export class LocalStateService implements StateService {
         };
       default: {
         // step world
-        const { output, time } = await this.stepState(params.time);
+        const output = await this.stepState(params.time);
 
         return {
           ...params,
           line: params.line,
           output,
           stop: false,
-          time: params.time + time,
+          time: state.step.time,
           turn: state.step.turn,
         };
       }
     }
   }
 
-  public async stepState(time: number) {
+  public async stepState(time: number): Promise<Array<string>> {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
@@ -428,10 +428,7 @@ export class LocalStateService implements StateService {
     this.state.step.turn += 1;
     this.state.step.time += spent;
 
-    return {
-      output: this.buffer,
-      time: spent,
-    };
+    return this.buffer;
   }
 
   protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {

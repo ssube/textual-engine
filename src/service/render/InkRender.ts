@@ -39,11 +39,7 @@ export class InkRender extends BaseRender implements Render {
     this.promptStr = prompt;
   }
 
-  public read(prompt?: string): Promise<string> {
-    if (doesExist(prompt)) {
-      this.promptStr = prompt;
-    }
-
+  public read(): Promise<string> {
     const { pending } = onceWithRemove<string>(this.emits, 'line');
 
     return pending;

@@ -7,7 +7,7 @@ export interface Render {
   /**
    * Wait for a line of input.
    */
-  read(prompt?: string): Promise<string>;
+  read(): Promise<string>;
 
   /**
    * Write a message normally.

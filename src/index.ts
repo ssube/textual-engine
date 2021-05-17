@@ -4,10 +4,9 @@ import { BaseOptions, Container, LogLevel } from 'noicejs';
 import { argv } from 'process';
 
 import { BunyanLogger } from './logger/BunyanLogger';
-import { ActorType } from './model/entity/Actor';
-import { INJECT_INPUT_PLAYER, INJECT_LOADER, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
+import { INJECT_LOADER, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
+import { InputModule } from './module/InputModule';
 import { LocalModule } from './module/LocalModule';
-import { BehaviorInput } from './service/input/BehaviorInput';
 import { Loader } from './service/loader';
 import { Parser } from './service/parser';
 import { Render } from './service/render';
@@ -36,6 +35,7 @@ export async function main(args: Array<string>): Promise<number> {
 
   // create DI modules
   const modules = [
+    new InputModule(),
     new LocalModule(),
   ];
 

@@ -36,6 +36,8 @@ export abstract class BaseRender implements Render {
     for (const outputLine of result.output) {
       await this.show(outputLine);
     }
+
+    this.prompt(`turn ${result.turn} > `);
   }
 
   /**

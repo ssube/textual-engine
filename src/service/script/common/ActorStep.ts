@@ -36,12 +36,12 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
   }
 
   if (doesExist(scope.room)) {
-    scope.logger.debug(`${this.meta.name} is in ${scope.room.meta.name} (${scope.room.meta.id})`);
+    await scope.render.show(`${this.meta.name} is in ${scope.room.meta.name} (${scope.room.meta.id})`);
     if (this.actorType === ActorType.PLAYER) {
-      scope.logger.debug(`${this.meta.name} can see: ${scope.room.meta.desc}`);
+      await scope.render.show(`${this.meta.name} can see: ${scope.room.meta.desc}`);
 
       for (const item of scope.room.items) {
-        scope.logger.debug(`${scope.room.meta.name} contains an ${item.meta.name}`);
+        await scope.render.show(`${scope.room.meta.name} contains an ${item.meta.name}`);
       }
     }
   }
@@ -72,13 +72,13 @@ export async function ActorStepDrop(this: Actor, scope: ScriptScope): Promise<vo
 
 export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise<void> {
   const cmd = mustExist(scope.command);
-
-  scope.logger.debug(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
-
   const verb = knownVerbs.get(cmd.verb);
+
   if (doesExist(verb)) {
+    await scope.render.show(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
     await verb.call(this, scope);
   } else {
+    await scope.render.show(`${this.meta.name} does not know how to ${cmd.verb}!`);
     scope.logger.warn('unknown verb');
   }
 }

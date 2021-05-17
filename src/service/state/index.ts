@@ -5,7 +5,7 @@ export interface CreateParams {
   /**
    * The number of rooms to pregenerate.
    */
-  rooms: number;
+  depth: number;
 
   /**
    * The PRNG seed to use for this world.

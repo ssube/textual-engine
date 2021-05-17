@@ -1,4 +1,4 @@
-.PHONY: build clean cover graph node_modules push run run-debug run-image test
+.PHONY: build clean cover graph image install push run run-debug run-image test
 
 DOCKER_ARGS ?=
 DOCKER_IMAGE := ssube/textual-engine
@@ -19,11 +19,15 @@ graph:
 image:
 	docker build $(DOCKER_ARGS) -f Dockerfile -t $(DOCKER_IMAGE) .
 
+install:
+	yarn
+
 lint: node_modules
 	yarn eslint src/ --ext .ts,.tsx
 
-node_modules:
-	yarn
+node_modules: install
+
+out: build
 
 push:
 	git push $(GIT_ARGS) github $(GIT_BRANCH)
@@ -47,24 +51,26 @@ run-debug:
 run-image: image
 	docker run --rm -it $(DOCKER_IMAGE):latest data/config.yml data/base.yml test test
 
-test: build node_modules
-	yarn mocha \
-		--async-only \
-		--check-leaks \
-		--forbid-only \
-		--require esm \
-		--require source-map-support \
-		--recursive \
-		--sort \
-		"out/**/Test*.js"
+MOCHA_ARGS := --async-only \
+	--check-leaks \
+	--forbid-only \
+	--require esm \
+	--require source-map-support \
+	--require out/test/setup.js \
+	--recursive \
+	--sort
 
-cover: node_modules
-	yarn nyc \
-		--all \
-		--check-coverage \
-		--exclude "out/coverage/**" \
-		--exclude "test/**" \
-		--reporter=text-summary \
-		--reporter=html \
-		--report-dir=out/coverage \
-		$(MAKE) test
+test: node_modules out
+	yarn mocha $(MOCHA_ARGS) "out/**/Test*.js"
+
+NYC_ARGS := --all \
+	--check-coverage \
+	--exclude ".eslintrc.js" \
+	--exclude "out/coverage/**" \
+	--exclude "test/**" \
+	--reporter=text-summary \
+	--reporter=html \
+	--report-dir=out/coverage
+
+cover: node_modules out
+	yarn nyc $(NYC_ARGS) yarn mocha $(MOCHA_ARGS) "out/**/Test*.js"

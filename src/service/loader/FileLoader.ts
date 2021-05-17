@@ -1,8 +1,15 @@
 import { promises } from 'fs';
+import { BaseOptions } from 'noicejs';
 
 import { Loader } from '.';
 
 export class FileLoader implements Loader {
+  protected fs: typeof promises;
+
+  constructor(options: BaseOptions, fs = promises) {
+    this.fs = fs;
+  }
+
   public async dump(path: string, data: Buffer): Promise<void> {
     await promises.writeFile(path, data);
   }

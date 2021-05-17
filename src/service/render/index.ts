@@ -16,6 +16,8 @@ export interface Render {
 
   /**
    * Write a message without creating any async resources.
+   *
+   * @todo remove
    */
   showSync(msg: string): void;
 

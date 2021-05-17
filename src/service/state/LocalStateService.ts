@@ -17,7 +17,7 @@ import {
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
 } from '../../module';
-import { PORTAL_DEPTH, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
+import { SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { searchState, searchStateString } from '../../util/state';
 import { findByTemplateId } from '../../util/template';
@@ -99,17 +99,18 @@ export class LocalStateService implements StateService {
           },
           type: ROOM_TYPE,
         });
-        if (!isRoom(room)) {
+
+        if (isRoom(room)) {
+          try {
+            await this.populateRoom(room, params.depth);
+          } catch (err) {
+            this.logger.error(err, 'error populating room portals on focus');
+          }
+
+          state.focus.room = id;
+        } else {
           throw new NotFoundError('invalid room for focus, does not exist in state');
         }
-
-        try {
-          await this.populateRoom(room, PORTAL_DEPTH);
-        } catch (err) {
-          this.logger.error(err, 'error populating room portals on focus');
-        }
-
-        state.focus.room = id;
       }
     };
 
@@ -141,6 +142,7 @@ export class LocalStateService implements StateService {
           },
           type: ROOM_TYPE,
         });
+
         if (!isRoom(currentRoom)) {
           this.logger.warn(`source room ${source} does not exist`);
           return;
@@ -232,7 +234,7 @@ export class LocalStateService implements StateService {
     }
 
     const startRoom = await this.createRoom(startRoomTemplate);
-    await this.populateRoom(startRoom, PORTAL_DEPTH);
+    await this.populateRoom(startRoom, params.depth);
 
     // add to state
     state.focus.room = startRoom.meta.id;

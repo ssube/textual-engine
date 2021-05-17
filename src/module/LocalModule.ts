@@ -3,8 +3,6 @@ import { Logger, Module, ModuleOptions, Provides } from 'noicejs';
 
 import {
   INJECT_COUNTER,
-  INJECT_INPUT_MAPPER,
-  INJECT_INPUT_PLAYER,
   INJECT_LOADER,
   INJECT_LOGGER,
   INJECT_PARSER,
@@ -14,17 +12,15 @@ import {
   INJECT_STATE,
   INJECT_TEMPLATE,
 } from '.';
-import { ActorType } from '../model/entity/Actor';
 import { Input } from '../service/input';
 import { ActorInputMapper } from '../service/input/ActorInputMapper';
-import { BehaviorInput } from '../service/input/BehaviorInput';
-import { ClassicInput } from '../service/input/ClassicInput';
 import { FileLoader } from '../service/loader/FileLoader';
 import { YamlParser } from '../service/parser/YamlParser';
 import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { Render } from '../service/render';
 import { InkRender } from '../service/render/InkRender';
+import { LineRender } from '../service/render/LineRender';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScriptService';
 import { StateService } from '../service/state';
@@ -127,37 +123,5 @@ export class LocalModule extends Module {
     }
 
     return this.state;
-  }
-
-  /**
-   * Singleton player input.
-   */
-  @Provides(INJECT_INPUT_PLAYER)
-  protected async getPlayerInput(): Promise<Input> {
-    if (isNil(this.playerInput)) {
-      this.playerInput = await mustExist(this.container).create(ClassicInput);
-    }
-
-    return this.playerInput;
-  }
-
-  /**
-   * Actor type input mapper.
-   *
-   * This construct should not exist.
-   */
-  @Provides(INJECT_INPUT_MAPPER)
-  protected async getMapper(): Promise<ActorInputMapper> {
-    if (isNil(this.mapper)) {
-      this.mapper = await mustExist(this.container).create(ActorInputMapper, {
-        inputs: {
-          [ActorType.DEFAULT]: BehaviorInput,
-          [ActorType.PLAYER]: ClassicInput,
-          [ActorType.REMOTE]: BehaviorInput,
-        },
-      });
-    }
-
-    return this.mapper;
   }
 }

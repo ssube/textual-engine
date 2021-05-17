@@ -40,11 +40,6 @@ export interface State {
   };
 
   /**
-   * @todo remove
-   */
-  input: Map<string, Array<string>>;
-
-  /**
    * The root of the entity tree.
    */
   rooms: Array<Room>;
@@ -85,10 +80,6 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
       },
       required: ['actor', 'room'],
     },
-    input: {
-      type: 'object',
-      required: [],
-    },
     rooms: {
       type: 'array',
       items: {
@@ -109,5 +100,5 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
       required: ['time', 'turn'],
     },
   },
-  required: ['world', 'focus', 'input', 'rooms', 'step'],
+  required: ['world', 'focus',  'rooms', 'step'],
 };

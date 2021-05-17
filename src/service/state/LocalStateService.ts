@@ -1,5 +1,5 @@
 import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, InvalidTargetError, Logger } from 'noicejs';
+import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepParams, StepResult } from '.';
 import { WorldEntity } from '../../model/entity';
@@ -12,19 +12,20 @@ import { State } from '../../model/State';
 import { World } from '../../model/World';
 import {
   INJECT_COUNTER,
-  INJECT_INPUT_MAPPER,
+  INJECT_INPUT_ACTOR,
   INJECT_LOADER,
   INJECT_LOGGER,
   INJECT_RANDOM,
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
 } from '../../module';
+import { ActorInputOptions } from '../../module/InputModule';
 import { KNOWN_VERBS, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
 import { searchState, searchStateString } from '../../util/state';
 import { findByTemplateId } from '../../util/template';
-import { ActorInputMapper } from '../input/ActorInputMapper';
+import { Input } from '../input';
 import { Loader } from '../loader';
 import { RandomGenerator } from '../random';
 import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
@@ -32,7 +33,6 @@ import { TemplateService } from '../template';
 
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
-  [INJECT_INPUT_MAPPER]: ActorInputMapper;
   [INJECT_LOADER]: Loader;
   [INJECT_LOGGER]: Logger;
   [INJECT_RANDOM]: RandomGenerator;
@@ -40,10 +40,20 @@ export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_TEMPLATE]: TemplateService;
 }
 
-@Inject(INJECT_COUNTER, INJECT_INPUT_MAPPER, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, INJECT_TEMPLATE)
+@Inject(
+  INJECT_COUNTER,
+  INJECT_LOADER,
+  INJECT_LOGGER,
+  INJECT_RANDOM,
+  INJECT_SCRIPT,
+  INJECT_TEMPLATE)
 export class LocalStateService implements StateService {
+  /**
+   * @todo remove. only present to get actor input.
+   */
+  protected container: Container;
+
   protected counter: Counter;
-  protected input: ActorInputMapper;
   protected loader: Loader;
   protected logger: Logger;
   protected random: RandomGenerator;
@@ -59,8 +69,8 @@ export class LocalStateService implements StateService {
 
   constructor(options: LocalStateServiceOptions) {
     this.buffer = [];
+    this.container = options.container;
     this.counter = options[INJECT_COUNTER];
-    this.input = options[INJECT_INPUT_MAPPER];
     this.loader = options[INJECT_LOADER];
     this.logger = options[INJECT_LOGGER].child({
       kind: LocalStateService.name,
@@ -83,7 +93,6 @@ export class LocalStateService implements StateService {
         actor: '',
         room: '',
       },
-      input: new Map(),
       rooms: [],
       step: {
         time: 0,
@@ -272,11 +281,7 @@ export class LocalStateService implements StateService {
       throw new Error('state has not been initialized');
     }
 
-    const input = await this.input.history();
-    return {
-      ...this.state,
-      input,
-    };
+    return this.state;
   }
 
   /**
@@ -285,18 +290,20 @@ export class LocalStateService implements StateService {
   public async step(params: StepParams): Promise<StepResult> {
     const state = mustExist(this.state);
 
-    const [actor] = searchState(state, {
-      type: ACTOR_TYPE,
+    const [player] = searchState(state, {
       meta: {
         id: state.focus.actor,
       },
+      room: {
+        id: state.focus.room,
+      },
+      type: ACTOR_TYPE,
     });
-
-    if (!isActor(actor)) {
-      throw new InvalidTargetError('invalid focus actor');
+    if (!isActor(player)) {
+      throw new Error('invalid focus actor');
     }
 
-    const input = await this.input.get(actor);
+    const input = await this.getActorInput(player);
     const cmd = await input.parse(params.line);
 
     // handle meta commands
@@ -355,6 +362,7 @@ export class LocalStateService implements StateService {
     }
   }
 
+
   public async stepState(time: number): Promise<Array<string>> {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
@@ -384,7 +392,8 @@ export class LocalStateService implements StateService {
 
         for (const actor of room.actors) {
           if (seen.has(actor.meta.id) === false) {
-            const input = await this.input.get(actor);
+            // TODO: make this better, somehow
+            const input = await this.getActorInput(actor);
             const command = await input.last();
 
             seen.add(actor.meta.id);
@@ -446,7 +455,7 @@ export class LocalStateService implements StateService {
     }
 
     const id = this.template.renderString(template.base.meta.id);
-    const actor: Actor = {
+    return {
       type: 'actor',
       actorType,
       items,
@@ -460,10 +469,6 @@ export class LocalStateService implements StateService {
       slots: this.template.renderStringMap(template.base.slots),
       stats: this.template.renderNumberMap(template.base.stats),
     };
-
-    await this.input.add(actor);
-
-    return actor;
   }
 
   protected async createItem(template: Template<Item>): Promise<Item> {
@@ -537,9 +542,19 @@ export class LocalStateService implements StateService {
   }
 
   /**
+   * @todo get rid of this in favor of something that does not need a handle to the container
+   */
+  protected getActorInput(actor: Actor): Promise<Input> {
+    return this.container.create<Input, ActorInputOptions>(INJECT_INPUT_ACTOR, {
+      id: actor.meta.id,
+      type: actor.actorType,
+    });
+  }
+
+  /**
    * Gather portal destinations from a room by group.
    */
-  protected gatherPortals(portals: Array<BaseTemplate<Portal>>): PortalGroups {
+  protected groupPortals(portals: Array<BaseTemplate<Portal>>): PortalGroups {
     const groups: PortalGroups = new Map();
 
     for (const portal of portals) {
@@ -572,7 +587,7 @@ export class LocalStateService implements StateService {
       return [];
     }
 
-    const groups = this.gatherPortals(portals);
+    const groups = this.groupPortals(portals);
     const results: Array<Portal> = [];
 
     for (const [sourceGroup, group] of groups) {

@@ -14,7 +14,6 @@ describe('state debug utils', () => {
         actor: '',
         room: '',
       },
-      input: new Map(),
       rooms: [], // TODO: add some rooms
       step: {
         time: 0,
@@ -40,7 +39,6 @@ describe('state debug utils', () => {
         actor: '',
         room: '',
       },
-      input: new Map(),
       rooms: [], // TODO: add some rooms
       step: {
         time: 0,

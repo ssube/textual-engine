@@ -1,22 +1,31 @@
-import { mustExist } from '@apextoaster/js-utils';
-import { Module, ModuleOptions, Provides } from 'noicejs';
+import { doesExist, mustExist } from '@apextoaster/js-utils';
+import { BaseOptions, Module, ModuleOptions, Provides } from 'noicejs';
 
-import { INJECT_INPUT_MAPPER, INJECT_INPUT_PLAYER } from '.';
+import { INJECT_INPUT_ACTOR, INJECT_INPUT_PLAYER } from '.';
 import { ActorType } from '../model/entity/Actor';
 import { Input } from '../service/input';
-import { ActorInputMapper } from '../service/input/ActorInputMapper';
 import { BehaviorInput } from '../service/input/BehaviorInput';
 import { ClassicInput } from '../service/input/ClassicInput';
 import { Singleton } from '../util/container';
 
+export interface ActorInputOptions extends BaseOptions {
+  type: ActorType;
+  id: string;
+}
+
+/**
+ * Provide the input implementations, based on actor type.
+ *
+ * This is not the nicest construct, but keeps everything contained until I can find a better way to link them.
+ */
 export class InputModule extends Module {
-  protected mapper: Singleton<ActorInputMapper>;
+  protected actors: Map<string, Input>;
   protected player: Singleton<Input>;
 
   constructor() {
     super();
 
-    this.mapper = new Singleton();
+    this.actors = new Map();
     this.player = new Singleton();
   }
 
@@ -24,27 +33,32 @@ export class InputModule extends Module {
     await super.configure(options);
   }
 
+  @Provides(INJECT_INPUT_ACTOR)
+  public async getActorInput(options: ActorInputOptions): Promise<Input> {
+    if (options.type === ActorType.PLAYER) {
+      return this.getPlayerInput();
+    } else {
+      return this.getBehaviorInput(options);
+    }
+  }
+
   /**
    * Singleton player input.
    */
   @Provides(INJECT_INPUT_PLAYER)
-  protected async getPlayerInput(): Promise<Input> {
+  public async getPlayerInput(): Promise<Input> {
     return this.player.get(() => mustExist(this.container).create(ClassicInput));
   }
 
-  /**
-   * Actor type input mapper.
-   *
-   * This construct should not exist.
-   */
-  @Provides(INJECT_INPUT_MAPPER)
-  protected async getMapper(): Promise<ActorInputMapper> {
-    return this.mapper.get(() => mustExist(this.container).create(ActorInputMapper, {
-      inputs: {
-        [ActorType.DEFAULT]: BehaviorInput,
-        [ActorType.PLAYER]: ClassicInput,
-        [ActorType.REMOTE]: BehaviorInput,
-      },
-    }));
+  public async getBehaviorInput(options: ActorInputOptions): Promise<Input> {
+    const existing = this.actors.get(options.id);
+    if (doesExist(existing)) {
+      return existing;
+    }
+
+    const input = await options.container.create(BehaviorInput);
+    this.actors.set(options.id, input);
+
+    return input;
   }
 }

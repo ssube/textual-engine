@@ -9,8 +9,12 @@ export const INJECT_SCRIPT = Symbol('inject-script-ctrl');
 export const INJECT_STATE = Symbol('inject-state-ctrl');
 export const INJECT_TEMPLATE = Symbol('inject-template');
 
-// input symbols
-export const INJECT_INPUT_DEFAULT = Symbol('inject-input-default');
-export const INJECT_INPUT_MAPPER = Symbol('inject-input-mapper');
+/**
+ * Get the input for a particular actor.
+ */
+export const INJECT_INPUT_ACTOR = Symbol('inject-input-actor');
+
+/**
+ * Get the input for the player actor (shortcut to input-actor for the focused actor).
+ */
 export const INJECT_INPUT_PLAYER = Symbol('inject-input-player');
-export const INJECT_INPUT_REMOTE = Symbol('inject-input-remote');

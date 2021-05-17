@@ -59,3 +59,9 @@ TODO: inspector/break
   - prefer [tacit programming](https://en.wikipedia.org/wiki/Tacit_programming) for predicate loops
     - `items.map(doesExist)` has all of the same semantic meaning (and less syntactic overhead) as `items.map((it) => doesExist)`
     - write composable functions with this in mind (not everything needs to be a method)
+- models
+  - models should be POJSOs (Array, Map, and Set are still allowed)
+  - significant logic should live in a repository service (like the `StateService` does for game state)
+- build
+  - bundling matters, never ship raw `node_modules` (for both inode counts and output size, tree-shaking)
+  - hot module reloading never works reliably, don't bother

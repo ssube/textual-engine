@@ -1,32 +1,34 @@
 import { State } from '../model/State';
-import { Loader } from '../service/loader';
-import { Render } from '../service/render';
 
-export async function debugState(render: Render, state: State): Promise<void> {
-  await render.show(`state: ${state.config.world}`);
+export async function debugState(state: State): Promise<Array<string>> {
+  const lines = [
+    `state: ${state.config.world}`
+  ];
 
   for (const room of state.rooms) {
-    await render.show(`  room: ${room.meta.name} (${room.meta.id})`);
+    lines.push(`  room: ${room.meta.name} (${room.meta.id})`);
 
     for (const actor of room.actors) {
-      await render.show(`    actor: ${actor.meta.name} (${actor.meta.id}, ${actor.actorType})`);
+      lines.push(`    actor: ${actor.meta.name} (${actor.meta.id}, ${actor.actorType})`);
 
       for (const item of actor.items) {
-        await render.show(`      item: ${item.meta.name} (${item.meta.id})`);
+        lines.push(`      item: ${item.meta.name} (${item.meta.id})`);
       }
     }
 
     for (const item of room.items) {
-      await render.show(`    item: ${item.meta.name} (${item.meta.id})`);
+      lines.push(`    item: ${item.meta.name} (${item.meta.id})`);
     }
 
     for (const portal of room.portals) {
-      await render.show(`    portal: ${portal.name} (${portal.sourceGroup}) -> ${portal.dest} (${portal.targetGroup})`);
+      lines.push(`    portal: ${portal.name} (${portal.sourceGroup}) -> ${portal.dest} (${portal.targetGroup})`);
     }
   }
+
+  return lines;
 }
 
-export async function graphState(loader: Loader, render: Render, state: State, path: string): Promise<void> {
+export async function graphState(state: State): Promise<Array<string>> {
   function sanitize(input: string): string {
     return input.replace(/[^a-zA-Z0-9_]/g, '_');
   }
@@ -47,7 +49,5 @@ export async function graphState(loader: Loader, render: Render, state: State, p
 
   lines.push('}');
 
-  const data = Buffer.from(lines.join('\n'));
-  await loader.dump(path, data);
-  await render.show(`wrote ${state.rooms.length} node graph to ${path}`);
+  return lines;
 }

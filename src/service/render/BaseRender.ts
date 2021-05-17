@@ -62,18 +62,23 @@ export abstract class BaseRender implements Render {
       switch (cmd.verb) {
         case 'debug': {
           const state = await this.state.save();
-          await debugState(this, state);
+          const output = await debugState(state);
+          this.loopStep(output);
           break;
         }
         case 'graph': {
           const state = await this.state.save();
-          await graphState(this.loader, this, state, cmd.target);
+          const output = await graphState(state);
+          await this.loader.saveStr(cmd.target, output.join('\n'));
+          this.loopStep([
+            `wrote ${state.rooms.length} node graph to ${cmd.target}`,
+          ]);
           break;
         }
         case 'help': {
-          const help = KNOWN_VERBS.join(', ');
-          await this.show(help);
-          this.loopStep([help]);
+          this.loopStep([
+            KNOWN_VERBS.join(', '),
+          ]);
           break;
         }
         case 'quit':

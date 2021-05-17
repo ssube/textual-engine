@@ -65,16 +65,21 @@ export async function loadConfig(path: string): Promise<ConfigData> {
       schema: DEFAULT_SCHEMA,
     },
   });
-  const data = load(dataStr, {
-    schema,
-  });
 
-  const validate = new Ajv().compile(CONFIG_SCHEMA);
-  if (validate(data)) {
-    return data;
-  } else {
-    console.error(validate.errors);
-    throw new Error('invalid config data type');
+  try {
+    const data = load(dataStr, {
+      schema,
+    });
+
+    const validate = new Ajv().compile(CONFIG_SCHEMA);
+    if (validate(data)) {
+      return data;
+    } else {
+      console.error(validate.errors);
+      throw new Error('invalid config data type');
+    }
+  } catch (err) {
+    throw err;
   }
 }
 

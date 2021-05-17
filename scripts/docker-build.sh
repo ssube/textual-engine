@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -eu
+
 IMAGE_PUSH="${1:---skip}"
 IMAGE_DEFAULT="${2:---skip}"
 

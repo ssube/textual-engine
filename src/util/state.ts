@@ -1,10 +1,10 @@
 import { doesExist } from '@apextoaster/js-utils';
 
 import { WorldEntity, WorldEntityType } from '../model/entity';
-import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/meta/Metadata';
 import { State } from '../model/State';
-import { Immutable } from './types';
+import { matchEntity, matchMetadata } from './entity';
+import { Immutable, Replace } from './types';
 
 export interface SearchParams {
   meta: Partial<Metadata>;
@@ -12,6 +12,9 @@ export interface SearchParams {
   type: WorldEntityType;
 }
 
+/**
+ * Search state for any matching entities, including actors and their inventories.
+ */
 export function searchState(state: State, search: Partial<SearchParams>): Array<WorldEntity>;
 export function searchState(state: Immutable<State>, search: Partial<SearchParams>): Array<Immutable<WorldEntity>>;
 export function searchState(state: Immutable<State>, search: Partial<SearchParams>): Array<Immutable<WorldEntity>> {
@@ -48,10 +51,14 @@ export function searchState(state: Immutable<State>, search: Partial<SearchParam
   return results;
 }
 
-type StringSearch = Omit<Partial<SearchParams>, 'meta'> & {
-  meta: string;
-};
+/**
+ * Search params where the `meta` filter has been replaced with a string.
+ */
+type StringSearch = Replace<Partial<SearchParams>, 'meta', string>;
 
+/**
+ * Search state for any matching entities, first by ID prefix, then by name contains.
+ */
 export function searchStateString(state: State, search: StringSearch): Array<WorldEntity>;
 export function searchStateString(state: Immutable<State>, search: StringSearch): Array<Immutable<WorldEntity>>;
 export function searchStateString(state: Immutable<State>, search: StringSearch): Array<Immutable<WorldEntity>> {
@@ -69,32 +76,4 @@ export function searchStateString(state: Immutable<State>, search: StringSearch)
       },
     }),
   ];
-}
-
-export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchParams>): boolean {
-  let matched = true;
-
-  if (doesExist(search.type)) {
-    matched = matched && entity.type === search.type;
-  }
-
-  if (doesExist(search.meta)) {
-    matched = matched && matchMetadata(entity, search.meta);
-  }
-
-  return matched;
-}
-
-export function matchMetadata(entity: Immutable<Entity>, filter: Partial<Metadata>): boolean {
-  let matched = true;
-
-  if (doesExist(filter.id)) {
-    matched = matched && entity.meta.id.toLocaleLowerCase().startsWith(filter.id);
-  }
-
-  if (doesExist(filter.name)) {
-    matched = matched && entity.meta.name.toLocaleLowerCase().includes(filter.name);
-  }
-
-  return matched;
 }

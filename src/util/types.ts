@@ -14,6 +14,13 @@ export type Immutable<T> =
 export type KeyList<T> = Array<keyof T>;
 
 /**
+ * Remove some fields and redefine them with another type.
+ */
+export type Replace<T, TKey extends keyof T, TValue> = Omit<T, TKey> & {
+  [K in TKey]: TValue;
+};
+
+/**
  * Map of skill names to their current value.
  */
 export type SkillMap = Map<string, number>;

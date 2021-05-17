@@ -1,7 +1,8 @@
 import Ajv, { ValidateFunction } from 'ajv';
 import { DEFAULT_SCHEMA, dump, load, Schema } from 'js-yaml';
 
-import { DATA_SCHEMA, DataFile, Parser } from '.';
+import { Parser } from '.';
+import { DATA_SCHEMA, DataFile } from '../../model/file/Data';
 import { mapType } from './yaml/MapType';
 
 export class YamlParser implements Parser {

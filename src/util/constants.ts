@@ -6,7 +6,9 @@ export const PORTAL_DEPTH = 4;
 export const META_DEBUG = 'debug';
 export const META_GRAPH = 'graph';
 export const META_HELP = 'help';
+export const META_LOAD = 'load';
 export const META_QUIT = 'quit';
+export const META_SAVE = 'save';
 
 // script slots
 export const SLOT_ENTER = 'enter';
@@ -33,7 +35,9 @@ export const KNOWN_VERBS = [
   META_DEBUG,
   META_GRAPH,
   META_HELP,
+  META_LOAD,
   META_QUIT,
+  META_SAVE,
   VERB_DROP,
   VERB_HIT,
   VERB_LOOK,

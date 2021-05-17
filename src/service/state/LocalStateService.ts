@@ -15,18 +15,20 @@ import {
   INJECT_INPUT_ACTOR,
   INJECT_LOADER,
   INJECT_LOGGER,
+  INJECT_PARSER,
   INJECT_RANDOM,
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
 } from '../../module';
 import { ActorInputOptions } from '../../module/InputModule';
-import { KNOWN_VERBS, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
+import { KNOWN_VERBS, META_DEBUG, META_GRAPH, META_HELP, META_LOAD, META_QUIT, META_SAVE, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
 import { searchState, searchStateString } from '../../util/state';
 import { findByTemplateId } from '../../util/template';
 import { Input } from '../input';
 import { Loader } from '../loader';
+import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
 import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
 import { TemplateService } from '../template';
@@ -35,6 +37,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
   [INJECT_LOADER]: Loader;
   [INJECT_LOGGER]: Logger;
+  [INJECT_PARSER]: Parser;
   [INJECT_RANDOM]: RandomGenerator;
   [INJECT_SCRIPT]: ScriptService;
   [INJECT_TEMPLATE]: TemplateService;
@@ -44,9 +47,11 @@ export interface LocalStateServiceOptions extends BaseOptions {
   INJECT_COUNTER,
   INJECT_LOADER,
   INJECT_LOGGER,
+  INJECT_PARSER,
   INJECT_RANDOM,
   INJECT_SCRIPT,
-  INJECT_TEMPLATE)
+  INJECT_TEMPLATE
+)
 export class LocalStateService implements StateService {
   /**
    * @todo remove. only present to get actor input.
@@ -56,6 +61,7 @@ export class LocalStateService implements StateService {
   protected counter: Counter;
   protected loader: Loader;
   protected logger: Logger;
+  protected parser: Parser;
   protected random: RandomGenerator;
   protected script: ScriptService;
   protected template: TemplateService;
@@ -75,6 +81,7 @@ export class LocalStateService implements StateService {
     this.logger = options[INJECT_LOGGER].child({
       kind: LocalStateService.name,
     });
+    this.parser = options[INJECT_PARSER];
     this.random = options[INJECT_RANDOM];
     this.script = options[INJECT_SCRIPT];
     this.template = options[INJECT_TEMPLATE];
@@ -159,7 +166,11 @@ export class LocalStateService implements StateService {
           return;
         }
 
-        const targetActor = mustExist(currentRoom.actors.find((it) => it.meta.id === id));
+        const targetActor = currentRoom.actors.find((it) => it.meta.id === id);
+        if (isNil(targetActor)) {
+          this.logger.warn({ currentRoom, targetRoom, id }, 'target actor does not exist');
+          return;
+        }
 
         // move the actor
         this.logger.debug({
@@ -308,7 +319,7 @@ export class LocalStateService implements StateService {
 
     // handle meta commands
     switch (cmd.verb) {
-      case 'debug': {
+      case META_DEBUG: {
         const output = await debugState(state);
         return {
           ...params,
@@ -317,7 +328,7 @@ export class LocalStateService implements StateService {
           turn: state.step.turn,
         };
       }
-      case 'graph': {
+      case META_GRAPH: {
         const output = await graphState(state);
         await this.loader.saveStr(cmd.target, output.join('\n'));
         return {
@@ -329,7 +340,7 @@ export class LocalStateService implements StateService {
           turn: state.step.turn,
         };
       }
-      case 'help': {
+      case META_HELP: {
         return {
           ...params,
           output: [
@@ -339,7 +350,39 @@ export class LocalStateService implements StateService {
           turn: state.step.turn,
         };
       }
-      case 'quit':
+      case META_SAVE: {
+        const path = cmd.target;
+        const dataStr = this.parser.save({
+          states: [mustExist(this.state)],
+          worlds: [mustExist(this.world)],
+        });
+        await this.loader.saveStr(path, dataStr);
+
+        return {
+          ...params,
+          output: [`saved world ${state.world.name} state to ${path}`],
+          stop: false,
+          time: state.step.time,
+          turn: state.step.turn,
+        };
+      }
+      case META_LOAD: {
+        const path = cmd.target;
+        const dataStr = await this.loader.loadStr(path);
+        const data = this.parser.load(dataStr);
+
+        this.state = data.states[0];
+        this.world = data.worlds[0];
+
+        return {
+          ...params,
+          output: [`loaded world ${this.state.world.name} state from ${path}`],
+          stop: false,
+          time: this.state.step.time,
+          turn: this.state.step.turn,
+        };
+      }
+      case META_QUIT:
         return {
           ...params,
           output: [],
@@ -348,7 +391,7 @@ export class LocalStateService implements StateService {
         };
       default: {
         // step world
-        const output = await this.stepState(params.time);
+        const output = await this.stepState();
 
         return {
           ...params,
@@ -362,8 +405,7 @@ export class LocalStateService implements StateService {
     }
   }
 
-
-  public async stepState(time: number): Promise<Array<string>> {
+  public async stepState(): Promise<Array<string>> {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
@@ -374,9 +416,7 @@ export class LocalStateService implements StateService {
     const start = Date.now();
 
     const scope: SuppliedScope = {
-      data: {
-        time,
-      },
+      data: {},
       focus: mustExist(this.focus),
       state: this.state,
       transfer: mustExist(this.transfer),
@@ -432,10 +472,9 @@ export class LocalStateService implements StateService {
     }
 
     const spent = Date.now() - start;
-    this.logger.debug({ spent, time }, 'finished world state step');
-
     this.state.step.turn += 1;
     this.state.step.time += spent;
+    this.logger.debug({ spent, step: this.state.step }, 'finished world state step');
 
     return this.buffer;
   }

@@ -8,9 +8,15 @@ export interface TemplateNumber {
   min: number;
 }
 
-export interface TemplateString<T extends string = string> {
+/**
+ * A template string.
+ *
+ * Template string literal types are a strange idea, but needed to make string schemas typesafe, until constant string
+ * fields are removed from templates.
+ */
+export interface TemplateString<TBase extends string = string> {
   type: 'string';
-  base: T;
+  base: TBase;
 }
 
 export interface TemplateRef {
@@ -18,23 +24,23 @@ export interface TemplateRef {
   id: string;
 }
 
-export type TemplatePrimitive<T> =
-  T extends number ? TemplateNumber :                               // number -> range
-  T extends string ? TemplateString :                               // string -> template
-  T extends Metadata ? BaseTemplate<Omit<Metadata, 'template'>> :   // Metadata + template -> Metadata
-  T extends Entity ? TemplateRef :                                  // entity -> id
-  T extends Array<Entity> ? Array<TemplateRef> :                    // Array<entity> -> Array<id>
-  T extends Array<infer V> ? Array<TemplatePrimitive<V>> :          // Array<V> -> Array<Template<V>>
-  T extends Map<infer K, infer V> ? Map<K, TemplatePrimitive<V>> :  // Map<K, V> -> Map<K, Template<V>>
-  T extends object ? BaseTemplate<T> :                              // {[K]: V] -> {[K]: Template<V>}
+export type TemplatePrimitive<TBase> =
+  TBase extends number ? TemplateNumber :                                               // number -> range
+  TBase extends string ? TemplateString :                                               // string -> template
+  TBase extends Metadata ? BaseTemplate<Omit<Metadata, 'template'>> :                   // Metadata + template -> Metadata
+  TBase extends Entity ? TemplateRef :                                                  // entity -> id
+  TBase extends Array<Entity> ? Array<TemplateRef> :                                    // Array<entity> -> Array<id>
+  TBase extends Array<infer TValue> ? Array<TemplatePrimitive<TValue>> :                // Array<TValue> -> Array<Template<TValue>>
+  TBase extends Map<infer TKey, infer TValue> ? Map<TKey, TemplatePrimitive<TValue>> :  // Map<TKey, TValue> -> Map<TKey, Template<TValue>>
+  TBase extends object ? BaseTemplate<TBase> :                                          // {[TKey]: TValue] -> {[TKey]: Template<TValue>}
   never;
 
-export type BaseTemplate<T> = {
-  [K in keyof T]: TemplatePrimitive<T[K]>;
+export type BaseTemplate<TBase> = {
+  [TKey in keyof TBase]: TemplatePrimitive<TBase[TKey]>;
 };
 
-export interface Template<T> {
-  base: BaseTemplate<T>;
+export interface Template<TBase> {
+  base: BaseTemplate<TBase>;
   // mods: Array<Modifier>;
 }
 

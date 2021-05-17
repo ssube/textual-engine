@@ -1,8 +1,8 @@
 import { doesExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 
-export interface RemoveResult<T> {
-  pending: Promise<T>;
+export interface RemoveResult<TValue> {
+  pending: Promise<TValue>;
   remove: () => void;
 }
 
@@ -10,21 +10,21 @@ export interface RemoveResult<T> {
  * Wait for an event to fire once, then remove listeners. Provides a function to cleanup listeners early.
  */
 export function onceWithRemove<TValue>(emitter: EventEmitter, event: string, inner?: () => void): RemoveResult<TValue> {
-  let error: (err: Error) => void;
+  let error: (err?: Error) => void;
   let result: (value: TValue) => void;
 
-  const remove = () => {
-    emitter.removeListener('error', error);
-    emitter.removeListener(event, result);
-  };
+  // to resolve everything correctly, settled must be set before remove, and remove must be called before res/rej
+  let settled = false;
 
   const pending = new Promise<TValue>((res, rej) => {
-    error = (err: Error) => {
+    error = (err?: Error) => {
+      settled = true;
       remove();
       rej(err);
     };
 
     result = (value: TValue) => {
+      settled = true;
       remove();
       res(value);
     };
@@ -36,6 +36,15 @@ export function onceWithRemove<TValue>(emitter: EventEmitter, event: string, inn
       inner();
     }
   });
+
+  const remove = () => {
+    emitter.removeListener('error', error);
+    emitter.removeListener(event, result);
+
+    if (settled === false) {
+      error(/* TODO: throw event aborted error */);
+    }
+  };
 
   return {
     pending,

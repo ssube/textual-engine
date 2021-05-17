@@ -3,20 +3,20 @@
  *
  * From https://github.com/microsoft/TypeScript/issues/13923#issuecomment-653675557
  */
-export type Immutable<T> =
+export type Immutable<TBase> =
   // eslint-disable-next-line @typescript-eslint/ban-types
-  T extends Function | boolean | number | string | null | undefined ? T :
-  T extends Array<infer U> ? ReadonlyArray<Immutable<U>> :
-  T extends Map<infer K, infer V> ? ReadonlyMap<Immutable<K>, Immutable<V>> :
-  T extends Set<infer S> ? ReadonlySet<Immutable<S>> :
-  { readonly [P in keyof T]: Immutable<T[P]> };
+  TBase extends Function | boolean | number | string | null | undefined ? TBase :
+  TBase extends Array<infer TValue> ? ReadonlyArray<Immutable<TValue>> :
+  TBase extends Map<infer TKey, infer TValue> ? ReadonlyMap<Immutable<TKey>, Immutable<TValue>> :
+  TBase extends Set<infer TValue> ? ReadonlySet<Immutable<TValue>> :
+  { readonly [TKey in keyof TBase]: Immutable<TBase[TKey]> };
 
-export type KeyList<T> = Array<keyof T>;
+export type KeyList<TList> = Array<keyof TList>;
 
 /**
  * Remove some fields and redefine them with another type.
  */
-export type Replace<T, TKey extends keyof T, TValue> = Omit<T, TKey> & {
+export type Replace<TBase, TKey extends keyof TBase, TValue> = Omit<TBase, TKey> & {
   [K in TKey]: TValue;
 };
 

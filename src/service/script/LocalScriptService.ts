@@ -11,6 +11,11 @@ import { ItemStep } from './common/ItemStep';
 import { ItemUse } from './common/ItemUse';
 import { RoomStep } from './common/RoomStep';
 
+/**
+ * Builtin scripts.
+ *
+ * @todo load scripts from one or more modules (DI and/or Node)
+ */
 const BASE_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['actor-hit', ActorHit],
   ['actor-step', ActorStep],

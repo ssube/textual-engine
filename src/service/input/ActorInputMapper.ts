@@ -11,6 +11,9 @@ export interface ActorInputMapperOptions extends BaseOptions {
   inputs: InputTypes;
 }
 
+/**
+ * @todo eliminate this construct entirely (this is a inappropriate service locator/provider)
+ */
 export class ActorInputMapper {
   protected actors: Map<string, Input>;
   protected container: Container;

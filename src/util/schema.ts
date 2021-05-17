@@ -5,7 +5,7 @@ import { TemplateString } from '../model/meta/Template';
 /**
  * @todo: make this typesafe for literal string types
  */
-export function makeConstStringSchema<T extends string>(value: T): JSONSchemaType<TemplateString> {
+export function makeConstStringSchema<TValue extends string>(value: TValue): JSONSchemaType<TemplateString> {
   return {
     type: 'object',
     properties: {

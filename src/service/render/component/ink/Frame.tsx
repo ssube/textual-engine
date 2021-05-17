@@ -1,3 +1,4 @@
+import { doesExist } from '@apextoaster/js-utils';
 import { Newline, Text, useApp, useInput } from 'ink';
 import * as React from 'react';
 
@@ -22,12 +23,21 @@ export const Frame = (props: FrameProps) => {
   const { exit } = useApp();
   const [state, setter] = useState(DEFAULT_STATE);
 
+  const pushError = (err?: Error) => {
+    if (doesExist(err)) {
+      setter({
+        ...state,
+        output: [...state.output, err.message].slice(-HISTORY_SIZE),
+      });
+    }
+  };
+
   useEffect(() => {
     const { pending, remove } = props.onQuit();
 
     pending.then(() => {
       exit();
-    });
+    }).catch(pushError);
 
     return () => {
       remove();
@@ -46,10 +56,13 @@ export const Frame = (props: FrameProps) => {
           ...stepState,
           output: merged.slice(-HISTORY_SIZE),
         });
-      });
+      }).catch(pushError);
 
       // TODO: when should onLine remove be called?
-    } else if (key.backspace || key.delete) {
+      return remove;
+    }
+
+    if (key.backspace || key.delete) {
       setter({
         ...state,
         input: state.input.substr(0, state.input.length - 1),
@@ -60,6 +73,8 @@ export const Frame = (props: FrameProps) => {
         input: state.input + input,
       });
     }
+
+    return () => {/* noop */ };
   });
 
   return <Text>

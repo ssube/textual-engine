@@ -88,6 +88,9 @@ export abstract class BaseRender implements Render {
           const now = Date.now();
           const output = await this.state.step(now - lastNow);
 
+          // add the turn marker
+          output.unshift(`turn ${turnCount} > ${line}`);
+
           lastNow = now;
           turnCount = turnCount + 1;
 

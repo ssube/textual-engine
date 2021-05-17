@@ -1,4 +1,4 @@
-.PHONY: build clean cover graph image install push run run-debug run-image test
+.PHONY: build ci clean cover graph image install push run run-debug run-image test
 
 DOCKER_ARGS ?=
 DOCKER_IMAGE := ssube/textual-engine
@@ -9,6 +9,8 @@ RELEASE_ARGS ?= --sign
 
 build: node_modules
 	yarn tsc
+
+ci: build cover
 
 clean:
 	rm -rf node_modules/ out/

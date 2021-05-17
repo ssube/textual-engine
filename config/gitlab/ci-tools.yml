@@ -1,0 +1,62 @@
+.build-base:
+  image: docker.artifacts.apextoaster.com/apextoaster/base:1.4
+  tags:
+    - platform:k8s
+    - runner:shared
+
+.build-aws:
+  extends:
+    - .build-base
+
+.build-curl:
+  extends:
+    - .build-base
+
+.build-climate:
+  image: docker.artifacts.apextoaster.com/apextoaster/code-climate:0.6
+  tags:
+    - platform:k8s
+    - runner:shared
+  allow_failure: false
+  variables:
+    CI_BRANCH: "${CI_COMMIT_REF_NAME}"
+    GIT_BRANCH: "${CI_COMMIT_REF_NAME}"
+    GIT_COMMIT_SHA: "${CI_COMMIT_SHA}"
+
+.build-docker:
+  image: docker.artifacts.apextoaster.com/apextoaster/docker:18.09
+  services:
+    - docker.artifacts.apextoaster.com/apextoaster/docker-dind:18.09
+  tags:
+    - platform:k8s
+    - runner:shared
+  allow_failure: false
+
+  before_script:
+    - mkdir ${HOME}/.docker
+    - echo "${DOCKER_SECRET}" | base64 -d > ${HOME}/.docker/config.json
+  script:
+    - ${CI_PROJECT_DIR}/scripts/docker-build.sh --push
+  after_script:
+    - rm -rfv ${HOME}/.docker
+
+  variables:
+    DOCKER_DRIVER: overlay2
+    DOCKER_HOST: tcp://localhost:2375
+
+.build-node:
+  image: docker.artifacts.apextoaster.com/apextoaster/node:12.22
+  tags:
+    - platform:k8s
+    - runner:shared
+  allow_failure: false
+
+  before_script:
+    - echo "${NPM_SECRET}" | base64 -d > ${HOME}/.npmrc
+
+.build-sonar:
+  image: docker.artifacts.apextoaster.com/apextoaster/sonar-scanner:4.4
+  tags:
+    - platform:k8s
+    - runner:shared
+  allow_failure: false

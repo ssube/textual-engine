@@ -1,0 +1,7 @@
+.deploy-branches:
+  except:
+    - tags
+
+.deploy-tags:
+  only:
+    - tags

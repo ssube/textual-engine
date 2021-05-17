@@ -1,0 +1,126 @@
+include:
+  - local: /config/gitlab/ci-tools.yml
+  - local: /config/gitlab/ci-rules.yml
+
+stages:
+  - status-pre
+  - build
+  - image
+  - publish
+  - status-post
+
+# build jobs
+build-node:
+  stage: build
+  extends:
+    - .build-node
+
+  script:
+    - make ci
+
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths:
+      - out/
+
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}"
+    policy: pull-push
+    paths:
+      - node_modules/
+      - out/api/
+      - out/cache/
+      - out/tmp/
+
+build-image-stretch-branch:
+  stage: image
+  extends: [.build-docker]
+  except:
+    - tags
+  script:
+    - ./scripts/docker-build.sh --push
+  variables:
+    IMAGE_ARCH: stretch
+
+build-image-stretch-tag:
+  stage: image
+  extends:
+    - .build-docker
+  only:
+    - tags
+  script:
+    - ./scripts/docker-build.sh --push
+  variables:
+    IMAGE_ARCH: stretch
+
+# publish jobs
+publish-npm:
+  stage: publish
+  extends:
+    - .build-node
+    - .deploy-tags
+
+  dependencies:
+    - build-node
+  script:
+    - npm publish
+
+# commit status
+climate-pending:
+  stage: status-pre
+  extends:
+    - .build-climate
+
+  script:
+    - cc-test-reporter before-build
+
+climate-success:
+  stage: status-post
+  extends:
+    - .build-climate
+
+  dependencies:
+    - build-node
+  script:
+    - make upload-climate
+
+github-pending:
+  stage: status-pre
+  extends:
+    - .build-curl
+  script:
+    - ./scripts/github-status.sh pending
+
+github-failure:
+  stage: status-post
+  extends:
+    - .build-curl
+  when: on_failure
+  script:
+    - ./scripts/github-status.sh failure
+
+github-success:
+  stage: status-post
+  extends:
+    - .build-curl
+  when: on_success
+  script:
+    - ./scripts/github-status.sh success
+
+sonar-success:
+  stage: status-post
+  extends:
+    - .build-sonar
+
+  when: on_success
+  script:
+    - make node_modules
+    - sonar-scanner
+        -Dsonar.projectKey=ssube_salty-dog
+        -Dsonar.projectVersion=${CI_COMMIT_REF_SLUG}
+        -Dsonar.organization=ssube-github
+        -Dsonar.sources=src/,test/
+        -Dsonar.host.url=https://sonarcloud.io
+        -Dsonar.login=${SONAR_SECRET}
+        -Dsonar.typescript.lcov.reportPaths=out/coverage/lcov.info

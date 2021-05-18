@@ -21,7 +21,7 @@ export class ChainTemplateService implements TemplateService {
   constructor(options: PipeTemplateOptions) {
     this.random = mustExist(options[INJECT_RANDOM]);
     this.joiner = new JoinChain({
-      joiners: ['-'],
+      joiners: [' '],
       random: this.random,
     });
   }

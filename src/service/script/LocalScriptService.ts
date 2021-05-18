@@ -4,7 +4,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
 import { WorldEntity } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
-import { SearchParams, searchState } from '../../util/state';
+import { SearchParams, searchState } from '../../util/state/search';
 import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
@@ -12,11 +12,11 @@ import { ItemUse } from './common/ItemUse';
 import { RoomStep } from './common/RoomStep';
 
 /**
- * Builtin scripts.
+ * Common scripts, built into the engine and always available.
  *
  * @todo load scripts from one or more modules (DI and/or Node)
  */
-const BASE_SCRIPTS: Array<[string, ScriptFunction]> = [
+const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['actor-hit', ActorHit],
   ['actor-step', ActorStep],
   ['item-step', ItemStep],
@@ -37,7 +37,7 @@ export class LocalScriptService implements ScriptService {
     this.logger = options[INJECT_LOGGER].child({
       kind: LocalScriptService.name,
     });
-    this.scripts = new Map(BASE_SCRIPTS);
+    this.scripts = new Map(COMMON_SCRIPTS);
   }
 
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {

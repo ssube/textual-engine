@@ -5,11 +5,13 @@ import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
 import { State } from '../../model/State';
-import { SearchParams } from '../../util/state';
+import { SearchParams } from '../../util/state/search';
 import { Immutable, ScriptData } from '../../util/types';
 import { Command } from '../input';
 
 export interface ScriptFocus {
+  flush(): Array<string>;
+
   /**
    * Set the currently-focused room.
    */
@@ -26,16 +28,35 @@ export interface ScriptFocus {
   show(msg: string, source?: WorldEntity): Promise<void>;
 }
 
+export interface TransferParams {
+  /**
+   * The entity to transfer.
+   */
+  moving: string;
+
+  /**
+   * The source container from which `id` will be transferred.
+   *
+   * @todo can this be optional?
+   */
+  source: string;
+
+  /**
+   * The target container into which `id` will be transferred.
+   */
+  target: string;
+}
+
 export interface ScriptTransfer {
   /**
    * Move an actor from one room to another.
    */
-  moveActor(id: string, source: string, dest: string): Promise<void>;
+  moveActor(transfer: TransferParams, scope: ScriptScope): Promise<void>;
 
   /**
    * Move an item from one actor or room to another.
    */
-  moveItem(id: string, source: string, dest: string): Promise<void>;
+  moveItem(transfer: TransferParams, scope: ScriptScope): Promise<void>;
 }
 
 export type ScriptTarget = WorldEntity;

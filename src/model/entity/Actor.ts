@@ -1,3 +1,4 @@
+import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
 import { makeConstStringSchema } from '../../util/schema';
@@ -25,8 +26,8 @@ export interface Actor {
   stats: StatMap;
 }
 
-export function isActor(entity: Entity): entity is Actor {
-  return entity.type === ACTOR_TYPE;
+export function isActor(entity: Optional<Entity>): entity is Actor {
+  return doesExist(entity) && entity.type === ACTOR_TYPE;
 }
 
 export const ACTOR_SCHEMA: JSONSchemaType<Template<Actor>> = {

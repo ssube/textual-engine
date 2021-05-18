@@ -1,10 +1,10 @@
 import { doesExist } from '@apextoaster/js-utils';
 
-import { WorldEntity, WorldEntityType } from '../model/entity';
-import { Metadata } from '../model/meta/Metadata';
-import { State } from '../model/State';
-import { matchEntity, matchMetadata } from './entity';
-import { Immutable, Replace } from './types';
+import { WorldEntity, WorldEntityType } from '../../model/entity';
+import { Metadata } from '../../model/meta/Metadata';
+import { State } from '../../model/State';
+import { matchEntity, matchMetadata } from '../entity';
+import { Immutable, Replace } from '../types';
 
 export interface SearchParams {
   meta: Partial<Metadata>;

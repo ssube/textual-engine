@@ -16,7 +16,7 @@ import {
   VERB_WAIT,
 } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/map';
-import { searchStateString } from '../../../util/state';
+import { searchStateString } from '../../../util/state/search';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
   scope.logger.debug({
@@ -56,7 +56,11 @@ export async function ActorStepDrop(this: Actor, scope: ScriptScope): Promise<vo
   const cmd = mustExist(scope.command);
   const room = mustExist(scope.room);
 
-  await scope.transfer.moveItem(cmd.target, this.meta.id, room.meta.id);
+  await scope.transfer.moveItem({
+    moving: cmd.target,
+    source: this.meta.id,
+    target: room.meta.id,
+  }, scope);
 }
 
 export async function ActorStepCommand(this: Actor, scope: ScriptScope): Promise<void> {
@@ -114,7 +118,10 @@ export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<vo
     for (const actor of scope.room.actors) {
       if (actor !== this) {
         await scope.focus.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room`);
-        await scope.focus.show(`${actor.meta.name} has ${actor.stats.get('health')} health`);
+        const health = getKey(actor.stats, 'health', 0);
+        if (health <= 0) {
+          await scope.focus.show(`${actor.meta.name} is dead`);
+        }
       }
     }
 
@@ -143,7 +150,11 @@ export async function ActorStepMove(this: Actor, scope: ScriptScope): Promise<vo
 
   // move the actor and focus
   await scope.focus.show(`${this.meta.name} moved to ${targetPortal.name}`);
-  await scope.transfer.moveActor(this.meta.id, currentRoom.meta.id, targetPortal.dest);
+  await scope.transfer.moveActor({
+    moving: this.meta.id,
+    source: currentRoom.meta.id,
+    target: targetPortal.dest
+  }, scope);
 
   if (this.actorType === ActorType.PLAYER) {
     await scope.focus.setRoom(targetPortal.dest);
@@ -167,7 +178,11 @@ export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<vo
     return;
   }
 
-  await scope.transfer.moveItem(target.meta.id, room.meta.id, this.meta.id);
+  await scope.transfer.moveItem({
+    moving: target.meta.id,
+    source: room.meta.id,
+    target: this.meta.id
+  }, scope);
 }
 
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {

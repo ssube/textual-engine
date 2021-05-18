@@ -7,6 +7,7 @@ describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {
     const state: State = {
       world: {
+        depth: 0,
         seed: '',
         name: '',
       },
@@ -32,6 +33,7 @@ describe('state debug utils', () => {
   it('should include all rooms in graph output', async () => {
     const state: State = {
       world: {
+        depth: 0,
         seed: '',
         name: '',
       },

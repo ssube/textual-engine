@@ -24,7 +24,9 @@ import { ActorInputOptions } from '../../module/InputModule';
 import { KNOWN_VERBS, META_DEBUG, META_GRAPH, META_HELP, META_LOAD, META_QUIT, META_SAVE, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
-import { searchState, searchStateString } from '../../util/state';
+import { StateFocusBuffer } from '../../util/state/focus';
+import { searchState, searchStateString } from '../../util/state/search';
+import { StateEntityTransfer } from '../../util/state/transfer';
 import { findByTemplateId } from '../../util/template';
 import { Input } from '../input';
 import { Loader } from '../loader';
@@ -66,7 +68,6 @@ export class LocalStateService implements StateService {
   protected script: ScriptService;
   protected template: TemplateService;
 
-  protected buffer: Array<string>;
   protected focus?: ScriptFocus;
   protected transfer?: ScriptTransfer;
 
@@ -74,7 +75,6 @@ export class LocalStateService implements StateService {
   protected world?: World;
 
   constructor(options: LocalStateServiceOptions) {
-    this.buffer = [];
     this.container = options.container;
     this.counter = options[INJECT_COUNTER];
     this.loader = options[INJECT_LOADER];
@@ -93,7 +93,7 @@ export class LocalStateService implements StateService {
   public async from(world: World, params: CreateParams): Promise<State> {
     const state: State = {
       world: {
-        seed: params.seed,
+        ...params,
         name: world.meta.name,
       },
       focus: {
@@ -112,133 +112,8 @@ export class LocalStateService implements StateService {
     this.world = world;
 
     // register focus
-    this.focus = {
-      setActor: async (id: string) => {
-        state.focus.actor = id;
-      },
-      setRoom: async (id: string) => {
-        const [room] = searchState(state, {
-          meta: {
-            id,
-          },
-          type: ROOM_TYPE,
-        });
-
-        if (isRoom(room)) {
-          try {
-            await this.populateRoom(room, params.depth);
-          } catch (err) {
-            this.logger.error(err, 'error populating room portals on focus');
-          }
-
-          state.focus.room = id;
-        } else {
-          throw new NotFoundError('invalid room for focus, does not exist in state');
-        }
-      },
-      show: async (msg: string, _source?: WorldEntity) => {
-        this.buffer.push(msg);
-      },
-    };
-
-    this.transfer = {
-      moveActor: async (id: string, source: string, dest: string) => {
-        const [targetRoom] = searchState(state, {
-          meta: {
-            id: dest,
-          },
-          type: ROOM_TYPE,
-        });
-        if (!isRoom(targetRoom)) {
-          this.logger.warn(`destination room ${dest} does not exist`);
-          return;
-        }
-
-        const [currentRoom] = searchState(state, {
-          meta: {
-            id: source,
-          },
-          type: ROOM_TYPE,
-        });
-
-        if (!isRoom(currentRoom)) {
-          this.logger.warn(`source room ${source} does not exist`);
-          return;
-        }
-
-        const targetActor = currentRoom.actors.find((it) => it.meta.id === id);
-        if (isNil(targetActor)) {
-          this.logger.warn({ currentRoom, targetRoom, id }, 'target actor does not exist');
-          return;
-        }
-
-        // move the actor
-        this.logger.debug({
-          id,
-          currentRoom,
-          targetRoom,
-        }, 'moving actor between rooms');
-        currentRoom.actors.splice(currentRoom.actors.indexOf(targetActor), 1);
-        targetRoom.actors.push(targetActor);
-
-        await this.script.invoke(targetRoom, SLOT_ENTER, {
-          actor: targetActor,
-          data: {
-            source,
-          },
-          focus: mustExist(this.focus),
-          transfer: mustExist(this.transfer),
-          state,
-        });
-      },
-      moveItem: async (id: string, sourceId: string, destId: string) => {
-        if (sourceId === destId) {
-          this.logger.debug({ id, sourceId }, 'skipping transfer, source and dest are identical');
-          return;
-        }
-
-        // find source entity
-        const [source] = searchState(state, {
-          meta: {
-            id: sourceId,
-          },
-        });
-
-        // find dest entity
-        const [dest] = searchState(state, {
-          meta: {
-            id: destId,
-          },
-        });
-
-        // find target item
-        const [target] = searchStateString(state, {
-          meta: id,
-        });
-
-        // ensure source and dest are both actor/room (types are greatly narrowed after these guards)
-        if (isItem(source) || isItem(dest) || !isItem(target)) {
-          this.logger.debug({ dest, source, target }, 'invalid entity type for item transfer');
-          return;
-        }
-
-        const idx = source.items.indexOf(target);
-        if (idx < 0) {
-          this.logger.warn({ source, idx, target }, 'source does not directly contain target entity');
-          return;
-        }
-
-        // move target from source to dest
-        this.logger.debug({
-          id,
-          dest,
-          source,
-          target,
-        }, 'moving item between entities');
-        source.items.splice(idx, 1);
-        dest.items.push(target);
-      },
-    };
+    this.focus = new StateFocusBuffer(this.state, async () => { /* noop */ }, (room) => this.populateRoom(room, params.depth));
+    this.transfer = new StateEntityTransfer(this.logger, this.state);
 
     // reseed the prng
     this.random.reseed(params.seed);
@@ -255,10 +130,6 @@ export class LocalStateService implements StateService {
     }
 
     const startRoom = await this.createRoom(startRoomTemplate);
-    await this.populateRoom(startRoom, params.depth);
-
-    // add to state
-    state.focus.room = startRoom.meta.id;
     state.rooms.push(startRoom);
 
     // pick a starting actor and create it
@@ -267,12 +138,17 @@ export class LocalStateService implements StateService {
     if (isNil(startActorTemplate)) {
       throw new NotFoundError('invalid start actor');
     }
+
     const startActor = await this.createActor(startActorTemplate, ActorType.PLAYER);
     startActor.actorType = ActorType.PLAYER;
-
-    // add to state and the start room
-    state.focus.actor = startActor.meta.id;
     startRoom.actors.push(startActor);
+
+    // set initial focus
+    await this.focus.setRoom(startRoom.meta.id);
+    await this.focus.setActor(startActor.meta.id);
+
+    // build out the world
+    await this.populateRoom(startRoom, params.depth);
 
     return state;
   }
@@ -410,8 +286,6 @@ export class LocalStateService implements StateService {
       throw new Error('state has not been initialized');
     }
 
-    this.buffer = [];
-
     const seen = new Set();
     const start = Date.now();
 
@@ -475,7 +349,7 @@ export class LocalStateService implements StateService {
     this.state.step.time += spent;
     this.logger.debug({ spent, step: this.state.step }, 'finished world state step');
 
-    return this.buffer;
+    return mustExist(this.focus).flush();
   }
 
   protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {

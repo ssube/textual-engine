@@ -1,3 +1,4 @@
+import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
 import { makeConstStringSchema } from '../../util/schema';
@@ -21,8 +22,8 @@ export interface Room {
   verbs: VerbMap;
 }
 
-export function isRoom(entity: Entity): entity is Room {
-  return entity.type === ROOM_TYPE;
+export function isRoom(entity: Optional<Entity>): entity is Room {
+  return doesExist(entity) && entity.type === ROOM_TYPE;
 }
 
 export const ROOM_SCHEMA: JSONSchemaType<Template<Room>> = {

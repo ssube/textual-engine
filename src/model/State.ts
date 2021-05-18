@@ -21,6 +21,11 @@ export interface State {
    */
   world: {
     /**
+     * The depth to generate rooms and portals when focus changes.
+     */
+    depth: number;
+
+    /**
      * The template name.
      */
     name: string;
@@ -59,6 +64,9 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
     world: {
       type: 'object',
       properties: {
+        depth: {
+          type: 'number',
+        },
         name: {
           type: 'string',
         },
@@ -66,7 +74,7 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
           type: 'string',
         },
       },
-      required: ['seed', 'name'],
+      required: ['depth', 'name', 'seed'],
     },
     focus: {
       type: 'object',

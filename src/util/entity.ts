@@ -2,7 +2,7 @@ import { doesExist } from '@apextoaster/js-utils';
 
 import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/meta/Metadata';
-import { SearchParams } from './state';
+import { SearchParams } from './state/search';
 import { Immutable } from './types';
 
 export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchParams>): boolean {

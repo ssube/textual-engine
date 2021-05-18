@@ -1,12 +1,11 @@
-import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepParams, StepResult } from '.';
-import { WorldEntity } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor';
-import { isItem, Item, ITEM_TYPE } from '../../model/entity/Item';
+import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups } from '../../model/entity/Portal';
-import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
+import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseTemplate, Template } from '../../model/meta/Template';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
@@ -21,11 +20,21 @@ import {
   INJECT_TEMPLATE,
 } from '../../module';
 import { ActorInputOptions } from '../../module/InputModule';
-import { KNOWN_VERBS, META_DEBUG, META_GRAPH, META_HELP, META_LOAD, META_QUIT, META_SAVE, SLOT_ENTER, SLOT_STEP, TEMPLATE_CHANCE } from '../../util/constants';
+import {
+  KNOWN_VERBS,
+  META_DEBUG,
+  META_GRAPH,
+  META_HELP,
+  META_LOAD,
+  META_QUIT,
+  META_SAVE,
+  SLOT_STEP,
+  TEMPLATE_CHANCE,
+} from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
 import { StateFocusBuffer } from '../../util/state/focus';
-import { searchState, searchStateString } from '../../util/state/search';
+import { searchState } from '../../util/state/search';
 import { StateEntityTransfer } from '../../util/state/transfer';
 import { findByTemplateId } from '../../util/template';
 import { Input } from '../input';
@@ -79,7 +88,7 @@ export class LocalStateService implements StateService {
     this.counter = options[INJECT_COUNTER];
     this.loader = options[INJECT_LOADER];
     this.logger = options[INJECT_LOGGER].child({
-      kind: LocalStateService.name,
+      kind: constructorName(this),
     });
     this.parser = options[INJECT_PARSER];
     this.random = options[INJECT_RANDOM];

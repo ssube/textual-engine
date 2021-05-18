@@ -1,4 +1,4 @@
-import { isNil } from '@apextoaster/js-utils';
+import { constructorName, isNil } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
@@ -35,7 +35,7 @@ export class LocalScriptService implements ScriptService {
 
   constructor(options: LocalScriptServiceOptions) {
     this.logger = options[INJECT_LOGGER].child({
-      kind: LocalScriptService.name,
+      kind: constructorName(this),
     });
     this.scripts = new Map(COMMON_SCRIPTS);
   }

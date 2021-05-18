@@ -6,7 +6,7 @@ import { Render } from '.';
 import { onceWithRemove, RemoveResult } from '../../util/event';
 import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
-import { Frame } from './component/ink/Frame';
+import { Frame } from '../../component/ink/Frame';
 
 export type InkStateDispatch = (input: string) => RemoveResult<StepResult>;
 export type InkQuitDispatch = () => RemoveResult<void>;

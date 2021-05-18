@@ -1,9 +1,9 @@
 import { doesExist } from '@apextoaster/js-utils';
 import { Newline, Text, useApp, useInput } from 'ink';
 import * as React from 'react';
-import { StepResult } from '../../../state';
+import { StepResult } from '../../service/state';
 
-import { InkQuitDispatch, InkStateDispatch } from '../../InkRender';
+import { InkQuitDispatch, InkStateDispatch } from '../../service/render/InkRender';
 import { Output } from './Output';
 
 const { useEffect, useState } = React;

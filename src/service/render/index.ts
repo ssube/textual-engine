@@ -15,13 +15,6 @@ export interface Render {
   show(msg: string): Promise<void>;
 
   /**
-   * Write a message without creating any async resources.
-   *
-   * @todo remove
-   */
-  showSync(msg: string): void;
-
-  /**
    * Start the rendering system and bind to the console.
    *
    * This does not get the first line of input, that must still be `read()`.

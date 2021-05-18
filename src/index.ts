@@ -14,7 +14,6 @@ import { StateService } from './service/state';
 import { asyncTrack } from './util/async';
 import { loadConfig } from './util/config';
 import { PORTAL_DEPTH } from './util/constants';
-import { RenderStream } from './util/logger/RenderStream';
 
 export async function main(args: Array<string>): Promise<number> {
   // set up async tracking
@@ -46,13 +45,6 @@ export async function main(args: Array<string>): Promise<number> {
   });
 
   // send logs to screen
-  const render = await container.create<Render, BaseOptions>(INJECT_RENDER);
-  const stream = new RenderStream(render);
-  (logger as Logger).addStream({
-    level: LogLevel.INFO,
-    type: 'raw',
-    stream,
-  });
 
   // resource loading services
   const loader = await container.create<Loader, BaseOptions>(INJECT_LOADER);
@@ -76,21 +68,11 @@ export async function main(args: Array<string>): Promise<number> {
     seed,
   });
 
-  // step state stuff
+  // start renderer
+  const render = await container.create<Render, BaseOptions>(INJECT_RENDER);
   await render.start();
   await render.loop('start > ');
   await render.stop();
-
-  // save state game
-  const saveState = await stateCtrl.save();
-  const saveStr = parser.save({
-    states: [saveState],
-    worlds: [],
-  });
-
-  logger.info({
-    state: saveStr,
-  }, 'saved world state');
 
   // asyncDebug(asyncOps);
 

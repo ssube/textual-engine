@@ -171,7 +171,6 @@ export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<vo
 }
 
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {
-  // TODO: look up real target
   const cmd = mustExist(scope.command);
   const room = mustExist(scope.room);
   const [target] = searchStateString(scope.state, {

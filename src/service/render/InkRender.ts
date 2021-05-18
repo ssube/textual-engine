@@ -1,4 +1,3 @@
-import { doesExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { render } from 'ink';
 import * as React from 'react';
@@ -46,10 +45,6 @@ export class InkRender extends BaseRender implements Render {
   }
 
   public async show(msg: string): Promise<void> {
-    this.output.push(msg);
-  }
-
-  public showSync(msg: string): void {
     this.output.push(msg);
   }
 

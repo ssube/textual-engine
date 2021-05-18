@@ -47,11 +47,6 @@ export class LineRender extends BaseRender implements Render {
     reader.write('\n');
   }
 
-  public showSync(msg: string): void {
-    process.stdout.write(msg);
-    process.stdout.write('\n');
-  }
-
   public async start(): Promise<void> {
     this.reader = createInterface({
       input: stdin,

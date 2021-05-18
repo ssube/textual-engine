@@ -1,6 +1,7 @@
 // numeric
 export const BYTE_RANGE = 255;
 export const PORTAL_DEPTH = 4;
+export const TEMPLATE_CHANCE = 100;
 
 // meta commands
 export const META_DEBUG = 'debug';

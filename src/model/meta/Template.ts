@@ -1,4 +1,6 @@
 import { JSONSchemaType } from 'ajv';
+
+import { TEMPLATE_CHANCE } from '../../util/constants';
 import { Entity } from '../entity/Base';
 import { Metadata } from './Metadata';
 
@@ -24,6 +26,7 @@ export type TemplateMetadata = BaseTemplate<Omit<Metadata, 'id' | 'template'>> &
 
 export interface TemplateRef {
   type: 'id';
+  chance: number;
   id: string;
 }
 
@@ -64,6 +67,10 @@ export const TEMPLATE_STRING_SCHEMA: JSONSchemaType<TemplateString> = {
 export const TEMPLATE_REF_SCHEMA: JSONSchemaType<TemplateRef> = {
   type: 'object',
   properties: {
+    chance: {
+      type: 'number',
+      default: TEMPLATE_CHANCE,
+    },
     id: {
       type: 'string',
     },

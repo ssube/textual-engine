@@ -80,6 +80,7 @@ worlds:
             actors:
               - id: actor-goblin
               - id: actor-goblin
+                chance: 10
             items: []
             portals:
               - sourceGroup:
@@ -109,7 +110,9 @@ worlds:
                 base: Cave
               desc:
                 base: clammy cave
-            actors: []
+            actors:
+              - id: actor-bat
+                chance: 25
             items:
               - id: item-sword
             portals:

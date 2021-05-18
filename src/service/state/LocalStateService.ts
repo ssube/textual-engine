@@ -21,7 +21,7 @@ import {
   INJECT_TEMPLATE,
 } from '../../module';
 import { ActorInputOptions } from '../../module/InputModule';
-import { KNOWN_VERBS, META_DEBUG, META_GRAPH, META_HELP, META_LOAD, META_QUIT, META_SAVE, SLOT_ENTER, SLOT_STEP } from '../../util/constants';
+import { KNOWN_VERBS, META_DEBUG, META_GRAPH, META_HELP, META_LOAD, META_QUIT, META_SAVE, SLOT_ENTER, SLOT_STEP, TEMPLATE_CHANCE } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
 import { StateFocusBuffer } from '../../util/state/focus';
@@ -112,7 +112,7 @@ export class LocalStateService implements StateService {
     this.world = world;
 
     // register focus
-    this.focus = new StateFocusBuffer(this.state, async () => { /* noop */ }, (room) => this.populateRoom(room, params.depth));
+    this.focus = new StateFocusBuffer(this.state, () => Promise.resolve(), (room) => this.populateRoom(room, params.depth));
     this.transfer = new StateEntityTransfer(this.logger, this.state);
 
     // reseed the prng
@@ -356,8 +356,12 @@ export class LocalStateService implements StateService {
     const world = mustExist(this.world);
 
     const items = [];
-    for (const itemTemplateId of template.base.items) {
-      const itemTemplate = findByTemplateId(world.templates.items, itemTemplateId.id);
+    for (const itemTemplateRef of template.base.items) {
+      if (this.random.nextInt(TEMPLATE_CHANCE) > itemTemplateRef.chance) {
+        continue;
+      }
+
+      const itemTemplate = findByTemplateId(world.templates.items, itemTemplateRef.id);
       if (isNil(itemTemplate)) {
         throw new NotFoundError('invalid item in actor');
       }
@@ -401,11 +405,15 @@ export class LocalStateService implements StateService {
     const world = mustExist(this.world);
 
     const actors = [];
-    for (const actorTemplateId of template.base.actors) {
-      const actorTemplate = findByTemplateId(world.templates.actors, actorTemplateId.id);
+    for (const actorTemplateRef of template.base.actors) {
+      if (this.random.nextInt(TEMPLATE_CHANCE) > actorTemplateRef.chance) {
+        continue;
+      }
+
+      const actorTemplate = findByTemplateId(world.templates.actors, actorTemplateRef.id);
       this.logger.debug({
         actors: world.templates.actors,
-        actorTemplateId,
+        actorTemplateId: actorTemplateRef,
         actorTemplate,
       }, 'create actor for room');
 
@@ -418,11 +426,15 @@ export class LocalStateService implements StateService {
     }
 
     const items = [];
-    for (const itemTemplateId of template.base.items) {
-      const itemTemplate = findByTemplateId(world.templates.items, itemTemplateId.id);
+    for (const itemTemplateRef of template.base.items) {
+      if (this.random.nextInt(TEMPLATE_CHANCE) > itemTemplateRef.chance) {
+        continue;
+      }
+
+      const itemTemplate = findByTemplateId(world.templates.items, itemTemplateRef.id);
       this.logger.debug({
         items: world.templates.items,
-        itemTemplateId,
+        itemTemplateId: itemTemplateRef,
         itemTemplate,
       }, 'create item for room');
 

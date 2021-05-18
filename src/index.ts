@@ -1,6 +1,5 @@
 import { isNil } from '@apextoaster/js-utils';
-import * as Logger from 'bunyan';
-import { BaseOptions, Container, LogLevel } from 'noicejs';
+import { BaseOptions, Container } from 'noicejs';
 import { argv } from 'process';
 
 import { BunyanLogger } from './logger/BunyanLogger';
@@ -24,7 +23,7 @@ export async function main(args: Array<string>): Promise<number> {
   const [_node, _script, configPath, dataPath, worldName, seed] = args;
 
   // load config and create logger
-  const config = await loadConfig(configPath)
+  const config = await loadConfig(configPath);
   const logger = BunyanLogger.create(config.logger);
 
   // print banner

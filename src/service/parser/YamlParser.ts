@@ -29,7 +29,6 @@ export class YamlParser implements Parser {
       console.error(this.validate.errors);
       throw new Error('invalid data file');
     }
-
   }
 
   public save(data: DataFile): string {

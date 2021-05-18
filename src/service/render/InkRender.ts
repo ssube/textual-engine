@@ -8,13 +8,7 @@ import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 import { Frame } from './component/ink/Frame';
 
-export interface InkState {
-  input: string;
-  prompt: string;
-  output: Array<string>;
-}
-
-export type InkStateDispatch = (input: string) => RemoveResult<InkState>;
+export type InkStateDispatch = (input: string) => RemoveResult<StepResult>;
 export type InkQuitDispatch = () => RemoveResult<void>;
 
 /**
@@ -69,15 +63,10 @@ export class InkRender extends BaseRender implements Render {
 
     await super.showStep(result);
 
-    const state: InkState = {
-      input: '',
-      prompt: this.promptStr,
-      output: result.output,
-    };
-    this.emits.emit('step', state);
+    this.emits.emit('step', result);
   }
 
-  protected onLine(line: string): RemoveResult<InkState> {
+  protected onLine(line: string): RemoveResult<StepResult> {
     return onceWithRemove(this.emits, 'step', () => {
       this.emits.emit('line', line);
     });

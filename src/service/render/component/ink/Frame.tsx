@@ -1,8 +1,9 @@
 import { doesExist } from '@apextoaster/js-utils';
 import { Newline, Text, useApp, useInput } from 'ink';
 import * as React from 'react';
+import { StepResult } from '../../../state';
 
-import { InkQuitDispatch, InkState, InkStateDispatch } from '../../InkRender';
+import { InkQuitDispatch, InkStateDispatch } from '../../InkRender';
 import { Output } from './Output';
 
 const { useEffect, useState } = React;
@@ -13,19 +14,22 @@ interface FrameProps {
 }
 
 const HISTORY_SIZE = 20;
-const DEFAULT_STATE: InkState = {
-  input: '',
-  prompt: '> ',
+const DEFAULT_STATE: StepResult = {
+  line: '',
   output: [],
+  stop: false,
+  turn: 0,
+  time: 0,
 };
 
 export const Frame = (props: FrameProps) => {
   const { exit } = useApp();
-  const [state, setter] = useState(DEFAULT_STATE);
+  const [state, setState] = useState(DEFAULT_STATE);
+  const [line, setLine] = useState('');
 
   const pushError = (err?: Error) => {
     if (doesExist(err)) {
-      setter({
+      setState({
         ...state,
         output: [...state.output, err.message].slice(-HISTORY_SIZE),
       });
@@ -46,16 +50,18 @@ export const Frame = (props: FrameProps) => {
 
   useInput((input, key) => {
     if (key.return) {
-      const { pending, remove } = props.onLine(state.input);
+      const { pending, remove } = props.onLine(line);
 
       pending.then((stepState) => {
         const merged = [
-          ...state.output, ...stepState.output
+          ...state.output,
+          ...stepState.output
         ];
-        setter({
+        setState({
           ...stepState,
           output: merged.slice(-HISTORY_SIZE),
         });
+        setLine('');
       }).catch(pushError);
 
       // TODO: when should onLine remove be called?
@@ -63,15 +69,9 @@ export const Frame = (props: FrameProps) => {
     }
 
     if (key.backspace || key.delete) {
-      setter({
-        ...state,
-        input: state.input.substr(0, state.input.length - 1),
-      });
+      setLine(line.substr(0, line.length - 1));
     } else {
-      setter({
-        ...state,
-        input: state.input + input,
-      });
+      setLine(line + input);
     }
 
     return () => {/* noop */ };
@@ -81,7 +81,7 @@ export const Frame = (props: FrameProps) => {
     <Newline />
     <Output output={state.output} />
     <Newline />
-    <Text color="blueBright">{state.prompt}</Text>
-    <Text color="red">{state.input}</Text>
+    <Text color="blueBright">turn {state.turn} &gt; </Text>
+    <Text color="red">{line}</Text>
   </Text>;
 };

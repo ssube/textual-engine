@@ -17,20 +17,33 @@ This guide covers the development patterns and workflow, or how to build and tes
 
 ### Building
 
-TODO: install and build
+Code is written in Typescript, built with `make`, and runs in Node 12+.
+
+Run `make build` to compile into `out/`.
 
 ### Testing
 
-TODO: testing and coverage
+Tests are written using Mocha, with Chai assertions and Sinon mocks/stubs/spies.
+
+Run `make test` to run tests (Mocha by itself). Run `make cover` to run tests under `nyc`,
+and collect coverage reports into [`out/coverage/lcov-report/index.html`](../out/coverage/lcov-report/index.html).
 
 ### Running
 
-TODO: run and play
+The engine can be run from `make` or `docker` with the demo data.
+
+Run `make run` to run the game normally. Run `make run-image` to run the latest docker image (may pull the image).
 
 ### Debugging
 
-TODO: debug/graph
-TODO: inspector/break
+The engine has a few builtin debug commands, which can be run from within the game:
+
+- `debug` will print the current world state tree to output
+- `graph [path]` will print the current world state tree to a graphviz file
+
+Run `graph out/debug-graph` in the game, then `make graph` normally to render the world tree.
+
+Run `make debug` to run the engine and wait for a Chrome inspector to be attached.
 
 ## Patterns
 

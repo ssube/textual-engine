@@ -14,7 +14,7 @@ export async function RoomStep(this: ScriptTarget, scope: ScriptScope): Promise<
     throw new InvalidArgumentError('script target must be a room');
   }
 
-  // TODO: remove
+  // TODO: remove, testing broadcast system
   await scope.script.broadcast({
     meta: {
       id: 'actor-goblin',

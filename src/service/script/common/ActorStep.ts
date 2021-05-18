@@ -96,11 +96,11 @@ export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<voi
     return;
   }
 
-  await scope.script.invoke(target as WorldEntity, SLOT_HIT, {
+  await scope.script.invoke(target, SLOT_HIT, {
     ...scope,
     actor: this,
     item: this.items[0],
-  }); // TODO: fix entity cast
+  });
 }
 
 export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {

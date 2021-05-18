@@ -432,7 +432,6 @@ export class LocalStateService implements StateService {
 
         for (const actor of room.actors) {
           if (seen.has(actor.meta.id) === false) {
-            // TODO: make this better, somehow
             const input = await this.getActorInput(actor);
             const command = await input.last();
 

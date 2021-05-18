@@ -75,7 +75,7 @@ export class ChainTemplateService implements TemplateService {
     for (const [key, value] of input) {
       const verb: VerbSlot = {
         slot: this.renderString(value.slot),
-        data: {}, // TODO
+        data: {}, // TODO: render this stuff
       };
 
       result.set(key, verb);

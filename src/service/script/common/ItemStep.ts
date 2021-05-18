@@ -1,13 +1,13 @@
-import { ScriptScope, ScriptTarget } from '..';
+import { ScriptContext, ScriptTarget } from '..';
 import { isItem } from '../../../model/entity/Item';
 
-export async function ItemStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
-  scope.logger.debug({
+export async function ItemStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
+  context.logger.debug({
     meta: this.meta,
-    scope: Object.keys(scope),
+    scope: Object.keys(context),
   }, 'step script');
 
   if (!isItem(this)) {
-    scope.logger.debug(`item has ${this.slots.size} verbs`);
+    context.logger.debug(`item has ${this.slots.size} verbs`);
   }
 }

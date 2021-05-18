@@ -7,12 +7,16 @@ This guide covers the engine architecture and what role each service type plays.
 - [Architecture](#architecture)
   - [Contents](#contents)
   - [Commands](#commands)
-    - [Tokenization](#tokenization)
+    - [Command Tokenization](#command-tokenization)
+      - [Common Commands](#common-commands)
+      - [Meta Commands](#meta-commands)
+      - [Verb Commands](#verb-commands)
   - [Entities](#entities)
     - [Actor Entity](#actor-entity)
     - [Item Entity](#item-entity)
     - [Room Entity](#room-entity)
   - [Modules](#modules)
+    - [Input Module](#input-module)
     - [Local Module](#local-module)
   - [Services](#services)
     - [Input Service](#input-service)
@@ -34,11 +38,46 @@ This guide covers the engine architecture and what role each service type plays.
 
 ## Commands
 
-TODO: explain verb and target
+The player's input lines are parsed into commands for the actor to execute. NPC AI generates input commands directly.
 
-### Tokenization
+### Command Tokenization
 
-TODO: explain classic vs natural
+Commands are built by splitting input on whitespace, removing articles (a, an, the, etc) and other filler words, and
+assuming the verb and target are in the correct order. Some validation is done when invoking commands, but the parsing
+is very simple.
+
+TODO: add NLP tokenization for commands, use parts of speech
+
+#### Common Commands
+
+There are common verbs built into the engine for actions such as:
+
+- `drop` an item
+- `hit` an enemy
+- `look` at an entity
+- `move` to another room
+- `take` an item
+- `wait` the turn
+
+#### Meta Commands
+
+There are some meta commands that are handled by the state service, rather than actor scripts.
+
+- `debug`
+  - print the world state to output
+- `graph`
+  - print the world state to path in graphviz format
+- `help`
+  - list common and meta commands
+- `load`
+  - load the world state from a path
+- `save`
+  - save the world state to a path
+- `quit`
+
+#### Verb Commands
+
+World entities may define their own verbs, which can be invoked normally through input.
 
 ## Entities
 
@@ -58,13 +97,19 @@ TODO: explain rooms
 
 Modules are dependency injection groups, binding a related set of services.
 
+### Input Module
+
+Binds:
+
+- `BehaviorInput` to `Input` for `actorType === DEFAULT`
+- `ClassicInput` to `Input` for `actorType === PLAYER`
+
 ### Local Module
 
 Binds:
 
-- `ClassicInput`
 - `SeedRandom`
-- `LineRender`
+- `InkRender`
 - `LocalScript`
 - `LocalState`
 
@@ -74,8 +119,10 @@ Binds:
 
 The input service handles actor command tokenization.
 
+TODO: rename
+
 The name is a misnomer, left over from when the input service worked with [the render service](#render-service) to
-read player input.
+actually read player input.
 
 ### Loader Service
 
@@ -111,7 +158,7 @@ Uses the Node `readline` module on the CLI.
 
 #### Ink Render Service
 
-TODO: uses https://github.com/vadimdemedes/ink on the CLI
+Uses https://github.com/vadimdemedes/ink on the CLI.
 
 #### React Render Service
 
@@ -119,7 +166,9 @@ TODO: uses https://github.com/facebook/react/ in a browser
 
 ## Scripts
 
-TODO: describe script concepts
+Events in the world are processed by scripts attached to the entity performing the action. Scripts may be
+invoked on a single target entity or broadcast to an entire room, and take a context with field for some (optional)
+primitive data.
 
 ### Script Scope
 

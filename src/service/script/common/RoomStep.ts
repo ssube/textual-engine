@@ -1,13 +1,13 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 
-import { ScriptScope, ScriptTarget } from '..';
+import { ScriptContext, ScriptTarget } from '..';
 import { isRoom } from '../../../model/entity/Room';
 import { SLOT_USE } from '../../../util/constants';
 
-export async function RoomStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
-  scope.logger.debug({
+export async function RoomStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
+  context.logger.debug({
     meta: this.meta,
-    scope: Object.keys(scope),
+    scope: Object.keys(context),
   }, 'step script');
 
   if (!isRoom(this)) {
@@ -15,12 +15,12 @@ export async function RoomStep(this: ScriptTarget, scope: ScriptScope): Promise<
   }
 
   // TODO: remove, testing broadcast system
-  await scope.script.broadcast({
+  await context.script.broadcast({
     meta: {
       id: 'actor-goblin',
     },
     room: {
       id: this.meta.id,
     },
-  }, SLOT_USE, scope);
+  }, SLOT_USE, context);
 }

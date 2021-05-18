@@ -4,7 +4,7 @@ import { isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { State } from '../../model/State';
-import { ScriptScope, TransferParams } from '../../service/script';
+import { ScriptContext, TransferParams } from '../../service/script';
 import { SLOT_ENTER } from '../constants';
 import { searchState, searchStateString } from './search';
 
@@ -17,7 +17,7 @@ export class StateEntityTransfer {
     this.state = state;
   }
 
-  public async moveActor(transfer: TransferParams, scope: ScriptScope): Promise<void> {
+  public async moveActor(transfer: TransferParams, context: ScriptContext): Promise<void> {
     const [targetRoom] = searchState(this.state, {
       meta: {
         id: transfer.target,
@@ -52,18 +52,18 @@ export class StateEntityTransfer {
     currentRoom.actors.splice(currentRoom.actors.indexOf(targetActor), 1);
     targetRoom.actors.push(targetActor);
 
-    await scope.script.invoke(targetRoom, SLOT_ENTER, {
+    await context.script.invoke(targetRoom, SLOT_ENTER, {
       actor: targetActor,
       data: {
         source: transfer.source,
       },
-      focus: scope.focus,
+      focus: context.focus,
       transfer: this,
       state: this.state,
     });
   }
 
-  public async moveItem(transfer: TransferParams, scope: ScriptScope): Promise<void> {
+  public async moveItem(transfer: TransferParams, _context: ScriptContext): Promise<void> {
     if (transfer.source === transfer.target) {
       this.logger.debug(transfer, 'cannot transfer item between the same source and target');
       return;

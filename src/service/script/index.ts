@@ -51,16 +51,16 @@ export interface ScriptTransfer {
   /**
    * Move an actor from one room to another.
    */
-  moveActor(transfer: TransferParams, scope: ScriptScope): Promise<void>;
+  moveActor(transfer: TransferParams, context: ScriptContext): Promise<void>;
 
   /**
    * Move an item from one actor or room to another.
    */
-  moveItem(transfer: TransferParams, scope: ScriptScope): Promise<void>;
+  moveItem(transfer: TransferParams, context: ScriptContext): Promise<void>;
 }
 
 export type ScriptTarget = WorldEntity;
-export type ScriptFunction = (this: ScriptTarget, scope: ScriptScope) => Promise<void>;
+export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
 
 /**
  * The script scope fields that must be supplied by the caller.
@@ -96,7 +96,7 @@ export interface SuppliedScope {
 /**
  * The full script callback scope, including service-supplied fields.
  */
-export interface ScriptScope extends SuppliedScope {
+export interface ScriptContext extends SuppliedScope {
   /**
    * Script-specific logger.
    */

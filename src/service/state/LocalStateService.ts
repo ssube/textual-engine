@@ -493,16 +493,15 @@ export class LocalStateService implements StateService {
       items.push(item);
     }
 
-    const id = this.template.renderString(template.base.meta.id);
     return {
       type: 'actor',
       actorType,
       items,
       meta: {
         desc: this.template.renderString(template.base.meta.desc),
-        id: `${id}-${this.counter.next('actor')}`,
+        id: `${template.base.meta.id}-${this.counter.next('actor')}`,
         name: this.template.renderString(template.base.meta.name),
-        template: template.base.meta.id.base, // should NOT be rendered
+        template: template.base.meta.id, // should NOT be rendered
       },
       skills: this.template.renderNumberMap(template.base.skills),
       slots: this.template.renderStringMap(template.base.slots),
@@ -511,14 +510,13 @@ export class LocalStateService implements StateService {
   }
 
   protected async createItem(template: Template<Item>): Promise<Item> {
-    const id = this.template.renderString(template.base.meta.id);
     return {
       type: ITEM_TYPE,
       meta: {
         desc: this.template.renderString(template.base.meta.desc),
-        id: `${id}-${this.counter.next(ITEM_TYPE)}`,
+        id: `${template.base.meta.id}-${this.counter.next(ITEM_TYPE)}`,
         name: this.template.renderString(template.base.meta.name),
-        template: template.base.meta.id.base,
+        template: template.base.meta.id,
       },
       stats: this.template.renderNumberMap(template.base.stats),
       slots: this.template.renderStringMap(template.base.slots),
@@ -563,16 +561,15 @@ export class LocalStateService implements StateService {
       items.push(item);
     }
 
-    const id = this.template.renderString(template.base.meta.id);
     return {
       type: ROOM_TYPE,
       actors,
       items,
       meta: {
         desc: this.template.renderString(template.base.meta.desc),
-        id: `${id}-${this.counter.next(ROOM_TYPE)}`,
+        id: `${template.base.meta.id}-${this.counter.next(ROOM_TYPE)}`,
         name: this.template.renderString(template.base.meta.name),
-        template: template.base.meta.id.base,
+        template: template.base.meta.id,
       },
       portals: [],
       slots: this.template.renderStringMap(template.base.slots),

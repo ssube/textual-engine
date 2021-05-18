@@ -11,8 +11,7 @@ worlds:
       actors:
         - base:
             meta:
-              id:
-                base: actor-bat
+              id: actor-bat
               name:
                 base: Bat
               desc:
@@ -31,12 +30,11 @@ worlds:
                 base: actor-step
         - base:
             meta:
-              id:
-                base: actor-goblin
+              id: actor-goblin
               name:
                 base: Goblin
               desc:
-                base: (((ugly|fat)|goblin))
+                base: (((slimy|smelly)|goblin))
             items:
               - id: item-sword
             skills: !map {}
@@ -52,8 +50,7 @@ worlds:
       items:
         - base:
             meta:
-              id:
-                base: item-bat-teeth
+              id: item-bat-teeth
               name:
                 base: Bat Teeth
               desc:
@@ -63,8 +60,7 @@ worlds:
             verbs: !map {}
         - base:
             meta:
-              id:
-                base: item-sword
+              id: item-sword
               name:
                 base: Sword
               desc:
@@ -76,8 +72,7 @@ worlds:
         # TODO: add moist marsh
         - base:
             meta:
-              id:
-                base: room-dungeon
+              id: room-dungeon
               name:
                 base: Dungeon
               desc:
@@ -109,8 +104,7 @@ worlds:
             verbs: !map {}
         - base:
             meta:
-              id:
-                base: room-cave
+              id: room-cave
               name:
                 base: Cave
               desc:
@@ -139,6 +133,3 @@ worlds:
               step:
                 base: room-step
             verbs: !map {}
-    # unused
-    dialogue: []
-    scripts: []

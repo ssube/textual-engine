@@ -11,13 +11,16 @@ export interface TemplateNumber {
 /**
  * A template string.
  *
- * Template string literal types are a strange idea, but needed to make string schemas typesafe, until constant string
- * fields are removed from templates.
+ * Template string literal types are a strange idea, but needed to make string schemas and templates fully typesafe.
  */
 export interface TemplateString<TBase extends string = string> {
   type: 'string';
   base: TBase;
 }
+
+export type TemplateMetadata = BaseTemplate<Omit<Metadata, 'id' | 'template'>> & {
+  id: string;
+};
 
 export interface TemplateRef {
   type: 'id';
@@ -27,7 +30,7 @@ export interface TemplateRef {
 export type TemplatePrimitive<TBase> =
   TBase extends number ? TemplateNumber :                                               // number -> range
   TBase extends string ? TemplateString :                                               // string -> template
-  TBase extends Metadata ? BaseTemplate<Omit<Metadata, 'template'>> :                   // Metadata + template -> Metadata
+  TBase extends Metadata ? TemplateMetadata :                                           // Metadata + template -> Metadata
   TBase extends Entity ? TemplateRef :                                                  // entity -> id
   TBase extends Array<Entity> ? Array<TemplateRef> :                                    // Array<entity> -> Array<id>
   TBase extends Array<infer TValue> ? Array<TemplatePrimitive<TValue>> :                // Array<TValue> -> Array<Template<TValue>>

@@ -118,5 +118,5 @@ git-stats: ## print git contributor line counts (approx, for fun)
 		grep -I '^author '; done | sort -f | uniq -ic | sort -n
 
 upload-climate:
-	cc-test-reporter format-coverage -t lcov -o $(TARGET_PATH)/coverage/codeclimate.json -p $(ROOT_PATH) $(TARGET_PATH)/coverage/lcov.info
-	cc-test-reporter upload-coverage --debug -i $(TARGET_PATH)/coverage/codeclimate.json -r "$(shell echo "${CODECLIMATE_SECRET}" | base64 -d)"
+	cc-test-reporter format-coverage -t lcov -o out/coverage/codeclimate.json -p . out/coverage/lcov.info
+	cc-test-reporter upload-coverage --debug -i out/coverage/codeclimate.json -r "$(shell echo "${CODECLIMATE_SECRET}" | base64 -d)"

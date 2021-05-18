@@ -172,7 +172,24 @@ export async function ActorStepTake(this: Actor, scope: ScriptScope): Promise<vo
 
 export async function ActorStepUse(this: Actor, scope: ScriptScope): Promise<void> {
   // TODO: look up real target
-  await scope.script.invoke(this, SLOT_USE, scope);
+  const cmd = mustExist(scope.command);
+  const room = mustExist(scope.room);
+  const [target] = searchStateString(scope.state, {
+    meta: cmd.target,
+    room: {
+      id: room.meta.id,
+    },
+  });
+
+  if (!isItem(target)) {
+    await scope.focus.show(`${target.meta.name} is not a usable item`);
+    return;
+  }
+
+  await scope.script.invoke(target, SLOT_USE, {
+    ...scope,
+    actor: this,
+  });
 }
 
 export async function ActorStepWait(this: Actor, scope: ScriptScope): Promise<void> {

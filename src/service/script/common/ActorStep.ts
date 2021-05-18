@@ -1,7 +1,6 @@
 import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 
 import { ScriptScope, ScriptTarget } from '..';
-import { WorldEntity } from '../../../model/entity';
 import { Actor, ActorType, isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import {
@@ -15,7 +14,7 @@ import {
   VERB_USE,
   VERB_WAIT,
 } from '../../../util/constants';
-import { decrementKey, getKey } from '../../../util/map';
+import { getKey } from '../../../util/map';
 import { searchStateString } from '../../../util/state/search';
 
 export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise<void> {
@@ -26,13 +25,6 @@ export async function ActorStep(this: ScriptTarget, scope: ScriptScope): Promise
 
   if (!isActor(this)) {
     throw new InvalidArgumentError('script target must be an actor');
-  }
-
-  if (getKey(this.stats, 'health') <= 0) {
-    scope.logger.debug(`${this.meta.name} is dead`);
-    return;
-  } else {
-    decrementKey(this.stats, 'health');
   }
 
   if (doesExist(scope.command)) {
@@ -108,6 +100,19 @@ export async function ActorStepHit(this: Actor, scope: ScriptScope): Promise<voi
 }
 
 export async function ActorStepLook(this: Actor, scope: ScriptScope): Promise<void> {
+  const cmd = mustExist(scope.command);
+  if (cmd.target === '') {
+    return ActorStepLookRoom.call(this, scope);
+  } else {
+    return ActorStepLookTarget.call(this, scope);
+  }
+}
+
+export async function ActorStepLookTarget(this: Actor, scope: ScriptScope): Promise<void> {
+  await scope.focus.show('You see nothing.');
+}
+
+export async function ActorStepLookRoom(this: Actor, scope: ScriptScope): Promise<void> {
   if (doesExist(scope.room)) {
     await scope.focus.show(`${this.meta.name} is in ${scope.room.meta.name} (${scope.room.meta.id}): ${scope.room.meta.desc}`);
 

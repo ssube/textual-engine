@@ -61,13 +61,16 @@ export class InkRender extends BaseRender implements Render {
     // add the turn marker
     result.output.unshift(`turn ${result.turn} > ${result.line}`);
 
+    this.logger.debug(result, 'showing step result');
     await super.showStep(result);
 
+    this.logger.debug(result, 'firing step event');
     this.emits.emit('step', result);
   }
 
   protected onLine(line: string): RemoveResult<StepResult> {
     return onceWithRemove(this.emits, 'step', () => {
+      this.logger.debug({ line }, 'firing line event');
       this.emits.emit('line', line);
     });
   }

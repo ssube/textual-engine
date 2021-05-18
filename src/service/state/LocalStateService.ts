@@ -192,6 +192,12 @@ export class LocalStateService implements StateService {
 
     const input = await this.getActorInput(player);
     const cmd = await input.parse(params.line);
+    this.logger.debug({
+      cmd,
+      focus: state.focus,
+      params,
+      player,
+    }, 'parsed player input');
 
     // handle meta commands
     switch (cmd.verb) {
@@ -347,7 +353,11 @@ export class LocalStateService implements StateService {
     const spent = Date.now() - start;
     this.state.step.turn += 1;
     this.state.step.time += spent;
-    this.logger.debug({ spent, step: this.state.step }, 'finished world state step');
+    this.logger.debug({
+      seen: seen.size,
+      spent,
+      step: this.state.step,
+    }, 'finished world state step');
 
     return mustExist(this.focus).flush();
   }

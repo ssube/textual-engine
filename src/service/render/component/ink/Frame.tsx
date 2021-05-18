@@ -24,14 +24,17 @@ const DEFAULT_STATE: StepResult = {
 
 export const Frame = (props: FrameProps) => {
   const { exit } = useApp();
-  const [state, setState] = useState(DEFAULT_STATE);
   const [line, setLine] = useState('');
+  const [state, setState] = useState(DEFAULT_STATE);
 
   const pushError = (err?: Error) => {
     if (doesExist(err)) {
       setState({
         ...state,
-        output: [...state.output, err.message].slice(-HISTORY_SIZE),
+        output: [
+          ...state.output,
+          err.message
+        ].slice(-HISTORY_SIZE),
       });
     }
   };
@@ -53,15 +56,14 @@ export const Frame = (props: FrameProps) => {
       const { pending, remove } = props.onLine(line);
 
       pending.then((stepState) => {
-        const merged = [
-          ...state.output,
-          ...stepState.output
-        ];
+        setLine('');
         setState({
           ...stepState,
-          output: merged.slice(-HISTORY_SIZE),
+          output: [
+            ...state.output,
+            ...stepState.output
+          ].slice(-HISTORY_SIZE),
         });
-        setLine('');
       }).catch(pushError);
 
       // TODO: when should onLine remove be called?

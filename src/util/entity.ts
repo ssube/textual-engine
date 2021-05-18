@@ -23,7 +23,7 @@ export function matchMetadata(entity: Immutable<Entity>, filter: Partial<Metadat
   let matched = true;
 
   if (doesExist(filter.id)) {
-    matched = matched && entity.meta.id.toLocaleLowerCase().startsWith(filter.id);
+    matched = matched && matchID(entity.meta.id.toLocaleLowerCase(), filter.id);
   }
 
   if (doesExist(filter.name)) {
@@ -31,4 +31,15 @@ export function matchMetadata(entity: Immutable<Entity>, filter: Partial<Metadat
   }
 
   return matched;
+}
+
+export function matchID(value: string, filter: string): boolean {
+  const valueParts = value.split('-');
+  const filterParts = filter.split('-');
+
+  if (filterParts.length < valueParts.length) {
+    return false;
+  }
+
+  return valueParts.every((it, idx) => it === filterParts[idx]);
 }

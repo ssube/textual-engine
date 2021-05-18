@@ -114,7 +114,7 @@ export async function ActorStepLookTarget(this: Actor, scope: ScriptScope): Prom
 
 export async function ActorStepLookRoom(this: Actor, scope: ScriptScope): Promise<void> {
   if (doesExist(scope.room)) {
-    await scope.focus.show(`You are a ${this.meta.name}: ${this.meta.desc}`);
+    await scope.focus.show(`You are a ${this.meta.name}: ${this.meta.desc} (${this.meta.id})`);
     await scope.focus.show(`You are in ${scope.room.meta.name} (${scope.room.meta.id}): ${scope.room.meta.desc}`);
 
     for (const item of this.items) {

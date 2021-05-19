@@ -30,8 +30,8 @@ This guide covers the engine architecture and what role each service type plays.
       - [Ink Render Service](#ink-render-service)
       - [React Render Service](#react-render-service)
   - [Scripts](#scripts)
-    - [Script Scope](#script-scope)
-      - [Scope Target (`this`)](#scope-target-this)
+    - [Script Context](#script-context)
+      - [Script Target (`this`)](#script-target-this)
       - [Scope Data](#scope-data)
     - [Slots](#slots)
     - [Verbs](#verbs)
@@ -170,19 +170,25 @@ Events in the world are processed by scripts attached to the entity performing t
 invoked on a single target entity or broadcast to an entire room, and take a context with field for some (optional)
 primitive data.
 
-### Script Scope
+### Script Context
 
-A scope is prepared whenever a script is invoked, with the target (entity upon which the script has
-been invoked), any data that was provided, and various services needed to manipulate the game state.
+A context is prepared whenever a script is invoked, with the target (entity upon which the script has
+been invoked), any data that was provided, and some helpers that provide safe ways to mutate the game state.
 
-#### Scope Target (`this`)
+#### Script Target (`this`)
+
+The entity on which the script is being invoked. Always a world entity.
 
 #### Scope Data
 
+The context contains a data field, suitable for passing in non-nested numbers and strings.
+
+TODO: support custom template data for scripts
+
 ### Slots
 
-Slots are named events, linked to scripts.
+Slots are named events on an entity, linked to (named) scripts.
 
 ### Verbs
 
-Verbs invoke a slot, with some additional data.
+Verbs are custom commands, which invoke a slot with some additional data.

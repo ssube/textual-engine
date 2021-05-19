@@ -3,6 +3,7 @@ import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/
 import { ScriptContext, ScriptTarget } from '..';
 import { Actor, ActorType, isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
+import { isRoom } from '../../../model/entity/Room';
 import {
   SLOT_HIT,
   SLOT_USE,
@@ -121,36 +122,77 @@ export async function ActorStepLook(this: Actor, context: ScriptContext): Promis
 }
 
 export async function ActorStepLookTarget(this: Actor, context: ScriptContext): Promise<void> {
+  const targetName = mustExist(context.command).target;
+  const [target] = searchStateString(context.state, {
+    meta: targetName,
+  });
+
+  if (isRoom(target)) {
+    return ActorStepLookRoom.call(this, {
+      ...context,
+      room: target,
+    });
+  }
+
+  if (isActor(target)) {
+    return ActorStepLookActor.call(this, {
+      ...context,
+      actor: target,
+    });
+  }
+
+  if (isItem(target)) {
+    return ActorStepLookItem.call(this, {
+      ...context,
+      item: target,
+    });
+  }
+
   await context.focus.show('You see nothing.');
 }
 
 export async function ActorStepLookRoom(this: Actor, context: ScriptContext): Promise<void> {
-  if (doesExist(context.room)) {
-    await context.focus.show(`You are a ${this.meta.name}: ${this.meta.desc} (${this.meta.id})`);
-    await context.focus.show(`You are in ${context.room.meta.name} (${context.room.meta.id}): ${context.room.meta.desc}`);
+  const room = mustExist(context.room);
+  await context.focus.show(`You are a ${this.meta.name}: ${this.meta.desc} (${this.meta.id})`);
+  await context.focus.show(`You are in ${room.meta.name} (${room.meta.id}): ${room.meta.desc}`);
 
-    for (const item of this.items) {
-      await context.focus.show(`You are holding a ${item.meta.name} (${item.meta.id})`);
-    }
+  for (const item of this.items) {
+    await context.focus.show(`You are holding a ${item.meta.name}: ${item.meta.desc} (${item.meta.id})`);
+  }
 
-    for (const actor of context.room.actors) {
-      if (actor !== this) {
-        await context.focus.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room`);
-        const health = getKey(actor.stats, 'health', 0);
-        if (health <= 0) {
-          await context.focus.show(`${actor.meta.name} is dead`);
-        }
-      }
-    }
-
-    for (const item of context.room.items) {
-      await context.focus.show(`A ${item.meta.name} is lying on the floor (${item.meta.id})`);
-    }
-
-    for (const portal of context.room.portals) {
-      await context.focus.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`);
+  for (const actor of room.actors) {
+    if (actor !== this) {
+      await ActorStepLookActor.call(this, {
+        ...context,
+        actor,
+      });
     }
   }
+
+  for (const item of room.items) {
+    await ActorStepLookItem.call(this, {
+      ...context,
+      item,
+    });
+  }
+
+  for (const portal of room.portals) {
+    await context.focus.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`);
+  }
+}
+
+export async function ActorStepLookActor(this: Actor, context: ScriptContext): Promise<void> {
+  const actor = mustExist(context.actor);
+  await context.focus.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room`);
+  const health = getKey(actor.stats, 'health', 0);
+  if (health <= 0) {
+    await context.focus.show(`${actor.meta.name} is dead`);
+  }
+}
+
+export async function ActorStepLookItem(this: Actor, context: ScriptContext): Promise<void> {
+  const item = mustExist(context.item);
+  await context.focus.show(`You see a ${item.meta.name}: ${item.meta.desc} (${item.meta.id})`);
 }
 
 export async function ActorStepMove(this: Actor, context: ScriptContext): Promise<void> {

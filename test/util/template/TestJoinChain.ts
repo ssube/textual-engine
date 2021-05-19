@@ -4,7 +4,7 @@ import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { JoinChain } from '../../../src/util/template/JoinChain';
 
 describe('string join chain util', () => {
-  it('should OR the first level', async () => {
+  it('should AND the first level', async () => {
     const chain = new JoinChain({
       joiners: ['-'],
       random: new MathRandomGenerator(),
@@ -13,18 +13,21 @@ describe('string join chain util', () => {
     const data = [
       'a', 'b', 'c',
     ];
-    expect(data).to.include(chain.render(data));
+
+    for (const c of data) {
+      expect(chain.render(data)).to.include(c);
+    }
   });
 
-  it('should AND the second level', async () => {
+  it('should OR the second level', async () => {
     const chain = new JoinChain({
       joiners: ['-'],
       random: new MathRandomGenerator(),
     });
 
-    const data = [[
+    const data = [
       'a', 'b', 'c',
-    ]];
+    ];
     expect(chain.render(data)).to.equal('a-b-c');
   });
 
@@ -34,9 +37,9 @@ describe('string join chain util', () => {
       random: new MathRandomGenerator(),
     });
 
-    const data = [[
+    const data = [
       'a', [['m', 'n']], 'c',
-    ]];
-    expect(chain.render(data)).to.equal('a2m4n2c');
+    ];
+    expect(chain.render(data)).to.equal('a1m3n1c');
   });
 });

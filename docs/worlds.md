@@ -19,7 +19,7 @@ This guide covers the format of a game world and how to make your own.
     - [Template Types](#template-types)
       - [Template Metadata](#template-metadata)
       - [Template Number](#template-number)
-      - [Template Ref](#template-ref)
+      - [Template Reference](#template-reference)
       - [Template String](#template-string)
     - [Actor Templates](#actor-templates)
     - [Item Templates](#item-templates)
@@ -35,8 +35,6 @@ Starting a new game creates a world state from the selected world template.
 Saving and loading the game state write both the state and world template into the save file, so the
 world remains on the same version.
 
-TODO: option to omit world from save for space/versioning
-
 ### Starting Actor & Room
 
 When starting a new game, the world state begins empty. A starting actor and room are selected from
@@ -48,8 +46,6 @@ Each room has some portals, grouped by wall or direction, with a destination roo
 
 When the player enters a new room, including the starting room, the game generates destination rooms
 for each group and creates links in both directions, ensuring the player can backtrack.
-
-TODO: option for one-way portals
 
 ## Format
 
@@ -109,9 +105,12 @@ Each template has metadata, missing the `template` field that exists in entity m
 
 Template numbers define a range `(min, max)` and select a random integer within that.
 
-TODO: allow floats by adding `step` property, which can be < 1
+- `min`: number
+- `max`: number
 
-#### Template Ref
+TODO: document whether min and max are inclusive or exclusive
+
+#### Template Reference
 
 When templates need to include one another, they can refer to the `id` of the other template.
 

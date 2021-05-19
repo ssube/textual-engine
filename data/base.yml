@@ -30,6 +30,8 @@ worlds:
                 max: 50
                 min: 30
             slots: !map
+              get:
+                base: actor-get
               hit:
                 base: actor-hit
               step:
@@ -49,6 +51,8 @@ worlds:
                 max: 20
                 min: 14
             slots: !map
+              get:
+                base: actor-get
               hit:
                 base: actor-hit
               step:

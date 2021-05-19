@@ -5,6 +5,7 @@ import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
 import { WorldEntity } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
 import { SearchParams, searchState } from '../../util/state/search';
+import { ActorGet } from './common/ActorGet';
 import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';
 import { ItemStep } from './common/ItemStep';
@@ -17,6 +18,7 @@ import { RoomStep } from './common/RoomStep';
  * @todo load scripts from one or more modules (DI and/or Node)
  */
 const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
+  ['actor-get', ActorGet],
   ['actor-hit', ActorHit],
   ['actor-step', ActorStep],
   ['item-step', ItemStep],

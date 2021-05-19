@@ -5,7 +5,7 @@ import { isItem } from '../../model/entity/Item';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { State } from '../../model/State';
 import { ScriptContext, TransferParams } from '../../service/script';
-import { SLOT_ENTER } from '../constants';
+import { SLOT_ENTER, SLOT_GET } from '../constants';
 import { searchState, searchStateString } from './search';
 
 export class StateEntityTransfer {
@@ -58,12 +58,12 @@ export class StateEntityTransfer {
         source: transfer.source,
       },
       focus: context.focus,
-      transfer: this,
-      state: this.state,
+      transfer: context.transfer,
+      state: context.state,
     });
   }
 
-  public async moveItem(transfer: TransferParams, _context: ScriptContext): Promise<void> {
+  public async moveItem(transfer: TransferParams, context: ScriptContext): Promise<void> {
     if (transfer.source === transfer.target) {
       this.logger.debug(transfer, 'cannot transfer item between the same source and target');
       return;
@@ -108,5 +108,15 @@ export class StateEntityTransfer {
     }, 'moving item between entities');
     source.items.splice(idx, 1);
     target.items.push(moving);
+
+    await context.script.invoke(target, SLOT_GET, {
+      item: moving,
+      data: {
+        source: transfer.source,
+      },
+      focus: context.focus,
+      transfer: context.transfer,
+      state: context.state,
+    });
   }
 }

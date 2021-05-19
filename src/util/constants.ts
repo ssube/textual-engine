@@ -13,6 +13,7 @@ export const META_SAVE = 'save';
 
 // script slots
 export const SLOT_ENTER = 'enter';
+export const SLOT_GET = 'get';
 export const SLOT_HIT = 'hit';
 export const SLOT_STEP = 'step';
 export const SLOT_USE = 'use';

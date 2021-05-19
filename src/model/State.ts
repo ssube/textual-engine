@@ -1,6 +1,7 @@
 import { JSONSchemaType } from 'ajv';
 
 import { Room } from './entity/Room';
+import { Metadata } from './meta/Metadata';
 
 export enum ReactionConfig {
   PLAYER_FIRST = 'player',
@@ -16,6 +17,8 @@ export enum SidebarConfig {
  * A saved world state.
  */
 export interface State {
+  meta: Metadata;
+
   /**
    * The world template from which this state was created.
    */
@@ -24,11 +27,6 @@ export interface State {
      * The depth to generate rooms and portals when focus changes.
      */
     depth: number;
-
-    /**
-     * The template name.
-     */
-    name: string;
 
     /**
      * The random generator's seed.
@@ -61,21 +59,6 @@ export interface State {
 export const STATE_SCHEMA: JSONSchemaType<State> = {
   type: 'object',
   properties: {
-    world: {
-      type: 'object',
-      properties: {
-        depth: {
-          type: 'number',
-        },
-        name: {
-          type: 'string',
-        },
-        seed: {
-          type: 'string',
-        },
-      },
-      required: ['depth', 'name', 'seed'],
-    },
     focus: {
       type: 'object',
       properties: {
@@ -87,6 +70,24 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
         },
       },
       required: ['actor', 'room'],
+    },
+    meta: {
+      type: 'object',
+      properties: {
+        desc: {
+          type: 'string',
+        },
+        id: {
+          type: 'string',
+        },
+        name: {
+          type: 'string',
+        },
+        template: {
+          type: 'string',
+        },
+      },
+      required: ['desc', 'id', 'name', 'template'],
     },
     rooms: {
       type: 'array',
@@ -107,6 +108,19 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
       },
       required: ['time', 'turn'],
     },
+    world: {
+      type: 'object',
+      properties: {
+        depth: {
+          type: 'number',
+        },
+        seed: {
+          type: 'string',
+        },
+      },
+      required: ['depth', 'seed'],
+    },
+
   },
-  required: ['world', 'focus',  'rooms', 'step'],
+  required: ['focus', 'meta', 'rooms', 'step', 'world'],
 };

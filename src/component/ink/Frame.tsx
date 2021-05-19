@@ -46,9 +46,7 @@ export const Frame = (props: FrameProps) => {
       exit();
     }).catch(pushError);
 
-    return () => {
-      remove();
-    };
+    return remove;
   });
 
   useInput((input, key) => {

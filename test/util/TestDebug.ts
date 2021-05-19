@@ -6,19 +6,24 @@ import { debugState, graphState } from '../../src/util/debug';
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {
     const state: State = {
-      world: {
-        depth: 0,
-        seed: '',
-        name: '',
-      },
       focus: {
         actor: '',
         room: '',
+      },
+      meta: {
+        desc: '',
+        id: '',
+        name: '',
+        template: '',
       },
       rooms: [], // TODO: add some rooms
       step: {
         time: 0,
         turn: 0,
+      },
+      world: {
+        depth: 0,
+        seed: '',
       },
     };
 
@@ -32,19 +37,24 @@ describe('state debug utils', () => {
 
   it('should include all rooms in graph output', async () => {
     const state: State = {
-      world: {
-        depth: 0,
-        seed: '',
-        name: '',
-      },
       focus: {
         actor: '',
         room: '',
+      },
+      meta: {
+        desc: '',
+        id: '',
+        name: '',
+        template: '',
       },
       rooms: [], // TODO: add some rooms
       step: {
         time: 0,
         turn: 0,
+      },
+      world: {
+        depth: 0,
+        seed: '',
       },
     };
 

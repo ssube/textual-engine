@@ -2,11 +2,17 @@ states: [] # template file
 worlds:
   - meta:
       id: test
-      name: test world
-      desc: this is a test adventure
+      name:
+        base: test world
+      desc:
+        base: this is a test adventure
     start:
-      actors: [actor-bat, actor-goblin]
-      rooms: [room-dungeon, room-cave]
+      actors:
+        - id: actor-bat
+        - id: actor-goblin
+      rooms:
+        - id: room-dungeon
+        - id: room-cave
     templates:
       actors:
         - base:

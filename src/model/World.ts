@@ -3,21 +3,21 @@ import { JSONSchemaType } from 'ajv';
 import { Actor, ACTOR_SCHEMA } from './entity/Actor';
 import { Item, ITEM_SCHEMA } from './entity/Item';
 import { Room, ROOM_SCHEMA } from './entity/Room';
-import { Metadata } from './meta/Metadata';
-import { Template } from './meta/Template';
+import { METADATA_SCHEMA } from './meta/Metadata';
+import { Template, TemplateMetadata, TemplateRef, TEMPLATE_REF_SCHEMA } from './meta/Template';
 
 export interface World {
   /**
    * World name, description, and other metadata (common to most entities).
    */
-  meta: Metadata;
+  meta: TemplateMetadata;
 
   /**
    * Starting rooms and character selection.
    */
   start: {
-    actors: Array<string>;
-    rooms: Array<string>;
+    actors: Array<TemplateRef>;
+    rooms: Array<TemplateRef>;
   };
 
   templates: {
@@ -30,24 +30,17 @@ export interface World {
 export const WORLD_SCHEMA: JSONSchemaType<World> = {
   type: 'object',
   properties: {
-    meta: {
-      type: 'object',
-      required: [],
-    },
+    meta: METADATA_SCHEMA,
     start: {
       type: 'object',
       properties: {
         actors: {
           type: 'array',
-          items: {
-            type: 'string',
-          },
+          items: TEMPLATE_REF_SCHEMA,
         },
         rooms: {
           type: 'array',
-          items: {
-            type: 'string',
-          },
+          items: TEMPLATE_REF_SCHEMA,
         }
       },
       required: ['actors', 'rooms'],

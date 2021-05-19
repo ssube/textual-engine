@@ -101,18 +101,23 @@ export class LocalStateService implements StateService {
    */
   public async from(world: World, params: CreateParams): Promise<State> {
     const state: State = {
-      world: {
-        ...params,
-        name: world.meta.name,
-      },
       focus: {
         actor: '',
         room: '',
+      },
+      meta: {
+        desc: this.template.renderString(world.meta.desc),
+        id: `${world.meta.id}-${this.counter.next('world')}`,
+        name: this.template.renderString(world.meta.name),
+        template: world.meta.id,
       },
       rooms: [],
       step: {
         time: 0,
         turn: 0,
+      },
+      world: {
+        ...params,
       },
     };
 
@@ -128,12 +133,12 @@ export class LocalStateService implements StateService {
     this.random.reseed(params.seed);
 
     // pick a starting room and create it
-    const startRoomId = world.start.rooms[this.random.nextInt(world.start.rooms.length)];
+    const startRoomRef = world.start.rooms[this.random.nextInt(world.start.rooms.length)];
     this.logger.debug({
       rooms: world.templates.rooms,
-      startRoomId,
+      startRoomId: startRoomRef,
     }, 'generating start room');
-    const startRoomTemplate = findByTemplateId(world.templates.rooms, startRoomId);
+    const startRoomTemplate = findByTemplateId(world.templates.rooms, startRoomRef.id);
     if (isNil(startRoomTemplate)) {
       throw new NotFoundError('invalid start room');
     }
@@ -142,8 +147,8 @@ export class LocalStateService implements StateService {
     state.rooms.push(startRoom);
 
     // pick a starting actor and create it
-    const startActorId = world.start.actors[this.random.nextInt(world.start.actors.length)];
-    const startActorTemplate = findByTemplateId(world.templates.actors, startActorId);
+    const startActorRef = world.start.actors[this.random.nextInt(world.start.actors.length)];
+    const startActorTemplate = findByTemplateId(world.templates.actors, startActorRef.id);
     if (isNil(startActorTemplate)) {
       throw new NotFoundError('invalid start actor');
     }
@@ -251,7 +256,7 @@ export class LocalStateService implements StateService {
 
         return {
           ...params,
-          output: [`saved world ${state.world.name} state to ${path}`],
+          output: [`saved world ${state.meta.id} state to ${path}`],
           stop: false,
           time: state.step.time,
           turn: state.step.turn,
@@ -267,7 +272,7 @@ export class LocalStateService implements StateService {
 
         return {
           ...params,
-          output: [`loaded world ${this.state.world.name} state from ${path}`],
+          output: [`loaded world ${state.meta.id} state from ${path}`],
           stop: false,
           time: this.state.step.time,
           turn: this.state.step.turn,

@@ -40,7 +40,7 @@ worlds:
               name:
                 base: Goblin
               desc:
-                base: (((slimy|smelly)|goblin))
+                base: ((slimy|smelly)|goblin)
             items:
               - id: item-sword
             skills: !map {}

@@ -32,9 +32,9 @@ export class JoinChain {
     if (Array.isArray(chain)) {
       const level = depth % 2;
       if (level === 0) {
-        return this.renderOr(chain, depth);
-      } else {
         return this.renderAnd(chain, depth);
+      } else {
+        return this.renderOr(chain, depth);
       }
     } else {
       throw new InvalidArgumentError('input chain is not an array');

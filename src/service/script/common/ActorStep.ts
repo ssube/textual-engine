@@ -64,8 +64,20 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
   const cmd = mustExist(context.command);
   const room = mustExist(context.room);
 
+  const [moving] = searchStateString(context.state, {
+    meta: cmd.target,
+    room: {
+      id: room.meta.id,
+    },
+  });
+
+  if (!isItem(moving)) {
+    await context.focus.show(`${moving.meta.name} is not an item`);
+    return;
+  }
+
   await context.transfer.moveItem({
-    moving: cmd.target,
+    moving,
     source: this.meta.id,
     target: room.meta.id,
   }, context);
@@ -157,7 +169,7 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
   // move the actor and focus
   await context.focus.show(`${this.meta.name} moved to ${targetPortal.name}`);
   await context.transfer.moveActor({
-    moving: this.meta.id,
+    moving: this,
     source: currentRoom.meta.id,
     target: targetPortal.dest
   }, context);
@@ -172,20 +184,20 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
   const room = mustExist(context.room);
   context.logger.debug({ cmd, room }, 'taking item from room');
 
-  const [target] = searchStateString(context.state, {
+  const [moving] = searchStateString(context.state, {
     meta: cmd.target,
     room: {
       id: room.meta.id,
     },
   });
 
-  if (!isItem(target)) {
-    await context.focus.show(`${target.meta.name} is not an item`);
+  if (!isItem(moving)) {
+    await context.focus.show(`${moving.meta.name} is not an item`);
     return;
   }
 
   await context.transfer.moveItem({
-    moving: target.meta.id,
+    moving,
     source: room.meta.id,
     target: this.meta.id
   }, context);

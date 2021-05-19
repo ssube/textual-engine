@@ -1,14 +1,14 @@
 import { Logger } from 'noicejs';
 
-import { isActor } from '../../model/entity/Actor';
-import { isItem } from '../../model/entity/Item';
+import { Actor, isActor } from '../../model/entity/Actor';
+import { isItem, Item } from '../../model/entity/Item';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { State } from '../../model/State';
-import { ScriptContext, TransferParams } from '../../service/script';
+import { ScriptContext, ScriptTransfer, TransferParams } from '../../service/script';
 import { SLOT_ENTER, SLOT_GET } from '../constants';
 import { searchState, searchStateString } from './search';
 
-export class StateEntityTransfer {
+export class StateEntityTransfer implements ScriptTransfer {
   protected logger: Logger;
   protected state: State;
 
@@ -17,43 +17,47 @@ export class StateEntityTransfer {
     this.state = state;
   }
 
-  public async moveActor(transfer: TransferParams, context: ScriptContext): Promise<void> {
-    const [targetRoom] = searchState(this.state, {
+  public async moveActor(transfer: TransferParams<Actor>, context: ScriptContext): Promise<void> {
+    if (!isActor(transfer.moving)) {
+      this.logger.warn(transfer, 'moving entity is not an actor');
+      return;
+    }
+
+    const [target] = searchState(this.state, {
       meta: {
         id: transfer.target,
       },
       type: ROOM_TYPE,
     });
-    if (!isRoom(targetRoom)) {
+    if (!isRoom(target)) {
       this.logger.warn(transfer, 'destination room does not exist');
       return;
     }
 
-    const [currentRoom] = searchState(this.state, {
+    const [source] = searchState(this.state, {
       meta: {
         id: transfer.source,
       },
       type: ROOM_TYPE,
     });
-
-    if (!isRoom(currentRoom)) {
+    if (!isRoom(source)) {
       this.logger.warn(transfer, 'source room does not exist');
       return;
     }
 
-    const targetActor = currentRoom.actors.find((it) => it.meta.id === transfer.moving);
-    if (!isActor(targetActor)) {
-      this.logger.warn(transfer, 'target actor does not exist');
+    const idx = source.actors.indexOf(transfer.moving);
+    if (idx < 0) {
+      this.logger.warn({ source, transfer }, 'source does not directly contain moving entity');
       return;
     }
 
     // move the actor
     this.logger.debug(transfer, 'moving actor between rooms');
-    currentRoom.actors.splice(currentRoom.actors.indexOf(targetActor), 1);
-    targetRoom.actors.push(targetActor);
+    source.actors.splice(idx, 1);
+    target.actors.push(transfer.moving);
 
-    await context.script.invoke(targetRoom, SLOT_ENTER, {
-      actor: targetActor,
+    await context.script.invoke(target, SLOT_ENTER, {
+      actor: transfer.moving,
       data: {
         source: transfer.source,
       },
@@ -63,7 +67,12 @@ export class StateEntityTransfer {
     });
   }
 
-  public async moveItem(transfer: TransferParams, context: ScriptContext): Promise<void> {
+  public async moveItem(transfer: TransferParams<Item>, context: ScriptContext): Promise<void> {
+    if (!isItem(transfer.moving)) {
+      this.logger.warn(transfer, 'moving entity is not an item');
+      return;
+    }
+
     if (transfer.source === transfer.target) {
       this.logger.debug(transfer, 'cannot transfer item between the same source and target');
       return;
@@ -83,34 +92,29 @@ export class StateEntityTransfer {
       },
     });
 
-    // find moving item
-    const [moving] = searchStateString(this.state, {
-      meta: transfer.moving,
-    });
-
     // ensure source and dest are both actor/room (types are greatly narrowed after these guards)
-    if (isItem(source) || isItem(target) || !isItem(moving)) {
-      this.logger.warn({ moving, source, target }, 'invalid entity type for item transfer');
+    if (isItem(source) || isItem(target)) {
+      this.logger.warn({ source, target, transfer }, 'invalid source or target entity type');
       return;
     }
 
-    const idx = source.items.indexOf(moving);
+    const idx = source.items.indexOf(transfer.moving);
     if (idx < 0) {
-      this.logger.warn({ moving, source }, 'source does not directly contain moving entity');
+      this.logger.warn({ source, transfer }, 'source does not directly contain moving entity');
       return;
     }
 
     // move target from source to dest
     this.logger.debug({
-      moving,
       source,
       target,
+      transfer,
     }, 'moving item between entities');
     source.items.splice(idx, 1);
-    target.items.push(moving);
+    target.items.push(transfer.moving);
 
     await context.script.invoke(target, SLOT_GET, {
-      item: moving,
+      item: transfer.moving,
       data: {
         source: transfer.source,
       },

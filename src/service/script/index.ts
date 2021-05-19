@@ -28,11 +28,11 @@ export interface ScriptFocus {
   show(msg: string, source?: WorldEntity): Promise<void>;
 }
 
-export interface TransferParams {
+export interface TransferParams<TEntity extends WorldEntity> {
   /**
    * The entity to transfer.
    */
-  moving: string;
+  moving: TEntity;
 
   /**
    * The source container from which `id` will be transferred.
@@ -51,12 +51,12 @@ export interface ScriptTransfer {
   /**
    * Move an actor from one room to another.
    */
-  moveActor(transfer: TransferParams, context: ScriptContext): Promise<void>;
+  moveActor(transfer: TransferParams<Actor>, context: ScriptContext): Promise<void>;
 
   /**
    * Move an item from one actor or room to another.
    */
-  moveItem(transfer: TransferParams, context: ScriptContext): Promise<void>;
+  moveItem(transfer: TransferParams<Item>, context: ScriptContext): Promise<void>;
 }
 
 export type ScriptTarget = WorldEntity;

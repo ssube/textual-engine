@@ -6,11 +6,12 @@ This guide covers the format of a game world and how to make your own.
 
 - [Worlds](#worlds)
   - [Contents](#contents)
+  - [Concepts](#concepts)
+    - [New Game, Save, and Load](#new-game-save-and-load)
+    - [Starting Actor & Room](#starting-actor--room)
+    - [Rooms & Portals](#rooms--portals)
   - [Format](#format)
   - [Metadata](#metadata)
-    - [ID](#id)
-    - [Name](#name)
-    - [Description](#description)
   - [Start](#start)
     - [Start Actors](#start-actors)
     - [Start Rooms](#start-rooms)
@@ -23,29 +24,57 @@ This guide covers the format of a game world and how to make your own.
     - [Actor Templates](#actor-templates)
     - [Item Templates](#item-templates)
     - [Room Templates](#room-templates)
+      - [Room Portal Templates](#room-portal-templates)
+
+## Concepts
+
+### New Game, Save, and Load
+
+Starting a new game creates a world state from the selected world template.
+
+Saving and loading the game state write both the state and world template into the save file, so the
+world remains on the same version.
+
+TODO: option to omit world from save for space/versioning
+
+### Starting Actor & Room
+
+When starting a new game, the world state begins empty. A starting actor and room are selected from
+the lists in the world template, then added to the world.
+
+### Rooms & Portals
+
+Each room has some portals, grouped by wall or direction, with a destination room template.
+
+When the player enters a new room, including the starting room, the game generates destination rooms
+for each group and creates links in both directions, ensuring the player can backtrack.
+
+TODO: option for one-way portals
 
 ## Format
 
-Worlds are part of a normal data files, which has twin root fields: `states` and `worlds`.
+Worlds are part of a normal data files, which has twin root fields:
 
-For world templates, the `states` key should be empty: `states: []`. While unused, invalid data here will
-cause schema errors, so avoid storing data there.
+```yaml
+states: []
+worlds:
+  - meta:
+      id: test-world
+```
+
+When authoring worlds, the `states` key should be an empty list: `states: []`.
+While unused, invalid data here will cause schema errors.
+
+For the typical `YamlParser`, the world should be in a YAML file, using the UTF-8 encoding.
 
 ## Metadata
 
 Worlds have template metadata, with a literal `id` and template strings for the rest.
 
-### ID
-
-This world's ID. Will be used in save games to refer back to the templates later.
-
-### Name
-
-Display name, template string.
-
-### Description
-
-Longer description, template string.
+- `id`: string, not templated
+  - used in the saved state to refer back to the template world
+- `name`: template string, display name
+- `desc`: template string, long description
 
 ## Start
 
@@ -72,9 +101,9 @@ created from a template string, and a number like `stats` from a template number
 
 Each template has metadata, missing the `template` field that exists in entity metadata.
 
-- `id`: literal ID, not templated
+- `id`: string, not templated
 - `name`: template string, display name
-- `desc`: template strong, long description
+- `desc`: template string, long description
 
 #### Template Number
 
@@ -92,13 +121,89 @@ always be created. The chance for each template is rolled individually, creating
 #### Template String
 
 Template strings use a series of nested lists, alternating between AND and OR operators, to produce the final
-string. The outermost list starts with the OR operator. Items are joined with spaces.
+string. The outermost list starts with the AND operator. Items are joined with spaces.
 
-For example, the template `(((gross|slimy)|goblin))` becomes `[[[gross OR slimy] AND goblin]]`, which will resolve
-to `gross goblin` or `slimy goblin`.
+For example, the template `((gross|slimy)|goblin)` becomes `[[gross OR slimy] AND goblin]`, which will resolve
+to one of `gross goblin` or `slimy goblin`.
 
 ### Actor Templates
 
+Actor templates have metadata and slots, act as a container for items (inventory), and store some numeric data (skills
+and stats).
+
+- `meta`: template metadata
+- `items`: list of item template refs
+- `skills`: a `[string, number]` map of actor skills (swords, bows, etc)
+- `slots`: a `[string, string]` map of event scripts
+- `stats`: a `[string, number]` map of actor statistics (health, stamina, etc)
+
 ### Item Templates
 
+Item templates have metadata and slots, have custom verbs, and store some numeric data (skills and stats).
+
+- `meta`: template metadata
+- `slots`: a `[string, string]` map of event scripts
+- `stats`: a `[string, number]` map of item statistics (health, damage, etc)
+- `verbs`: a map, unused
+
 ### Room Templates
+
+Room templates have metadata and slots, have custom verbs, and act as a container for actors, items, and portals.
+
+- `meta`: template metadata
+- `actors`: list of actor template refs
+- `items`: list of item template refs
+- `portals`: list of portal templates
+- `slots`: a `[string, string]` map of event scripts
+- `verbs`: a map, unused
+
+#### Room Portal Templates
+
+Rooms are linked together through portals.
+
+Portals have source and target groups, and the engine attempts to link them by name, within the appropriate groups.
+
+Two portals in the same room and source group will be linked to the same destination room, and portals of the same
+names, within the designated target group. If a matching portal cannot be found, one may be added to the room.
+
+For example, with two rooms `room-0` and `room-1`, where each room has two portals, named `door` and `window`:
+
+```yaml
+rooms:
+  - meta:
+      id: room-0
+    portals:
+      - name: door
+        dest: room-1
+        sourceGroup: north
+        targetGroup: south
+      - name: window
+        dest: room-1
+        sourceGroup: north
+        targetGroup: south
+  - meta:
+      id: room-1
+    portals:
+      - name: door
+        dest: room-0
+        sourceGroup: south
+        targetGroup: north
+      - name: window
+        dest: room-0
+        sourceGroup: south
+        targetGroup: north
+```
+
+Note the `dest` changes to the other room, and the `sourceGroup` and `targetGroup` are reversed.
+
+This will produce a pair of rooms with two bidirectional links, like:
+
+```none
++----------+          +----------+
+|          |   door   |          |
+|          +<-------->+          |
+|  room-0  |          |  room-1  |
+|          +<-------->+          |
+|          |  window  |          |
++----------+          +----------+
+```

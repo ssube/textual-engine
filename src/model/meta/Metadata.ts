@@ -9,8 +9,6 @@ export interface Metadata {
   template: string;
 }
 
-export type BareMetadata = Omit<Metadata, 'template'>;
-
 export const METADATA_SCHEMA: JSONSchemaType<TemplateMetadata> = {
   type: 'object',
   properties: {

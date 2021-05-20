@@ -58,9 +58,9 @@ export class StateEntityTransfer implements ScriptTransfer {
 
     await context.script.invoke(target, SLOT_ENTER, {
       actor: transfer.moving,
-      data: {
-        source: transfer.source,
-      },
+      data: new Map([
+        ['source', transfer.source],
+      ]),
       focus: context.focus,
       transfer: context.transfer,
       state: context.state,
@@ -115,9 +115,9 @@ export class StateEntityTransfer implements ScriptTransfer {
 
     await context.script.invoke(target, SLOT_GET, {
       item: transfer.moving,
-      data: {
-        source: transfer.source,
-      },
+      data: new Map([
+        ['source', transfer.source],
+      ]),
       focus: context.focus,
       transfer: context.transfer,
       state: context.state,

@@ -78,3 +78,8 @@ Run `make debug` to run the engine and wait for a Chrome inspector to be attache
 - build
   - bundling matters, never ship raw `node_modules` (for both inode counts and output size, tree-shaking)
   - hot module reloading never works reliably, don't bother
+- collections
+  - prefer `Map` over `Record` when keys are dynamic or iteration is needed
+- operators
+  - use `===`: `==` too often requires an accompanying typeguard, and types should already be predictable, so
+    coercion should not occur

@@ -32,7 +32,7 @@ export type SlotMap = Map<string, string>;
  */
 export type StatMap = Map<string, number>;
 
-export type ScriptData = Record<string, number | string>;
+export type ScriptData = Map<string, number | string>;
 
 export interface VerbSlot {
   slot: string;

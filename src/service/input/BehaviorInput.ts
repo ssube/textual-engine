@@ -3,6 +3,7 @@ import { NotImplementedError } from '@apextoaster/js-utils';
 import { Command, Input } from '.';
 
 const WAIT_CMD: Command = {
+  index: 0,
   input: 'wait turn',
   verb: 'wait',
   target: 'turn',

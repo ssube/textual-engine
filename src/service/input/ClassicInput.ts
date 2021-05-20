@@ -30,10 +30,20 @@ export class ClassicInput implements Input {
     const [verb, ...targets] = tokens;
 
     const cmd: Command = {
+      index: 0,
       input,
       verb,
-      target: targets.join(SPLIT_CHAR),
+      target: '',
     };
+
+    // 2+ segments and the last one is all digits
+    const last = targets[targets.length - 1];
+    if (targets.length > 1 && /^[0-9]+$/.test(last)) {
+      targets.pop();
+      cmd.index = parseInt(last, 10);
+    }
+
+    cmd.target = targets.join(SPLIT_CHAR);
 
     this.history.unshift(cmd);
 

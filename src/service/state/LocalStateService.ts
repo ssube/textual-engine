@@ -310,7 +310,7 @@ export class LocalStateService implements StateService {
     const start = Date.now();
 
     const scope: SuppliedScope = {
-      data: {},
+      data: new Map(),
       focus: mustExist(this.focus),
       state: this.state,
       transfer: mustExist(this.transfer),

@@ -1,6 +1,7 @@
 import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
+import { Replace } from '../../util/types';
 import { Entity } from '../entity/Base';
 import { Metadata } from './Metadata';
 
@@ -20,9 +21,7 @@ export interface TemplateString<TBase extends string = string> {
   base: TBase;
 }
 
-export type TemplateMetadata = BaseTemplate<Omit<Metadata, 'id' | 'template'>> & {
-  id: string;
-};
+export type TemplateMetadata = Replace<BaseTemplate<Omit<Metadata, 'template'>>, 'id', string>;
 
 export interface TemplateRef {
   type: 'id';

@@ -1,9 +1,22 @@
-import { doesExist } from '@apextoaster/js-utils';
+import { doesExist, Optional } from '@apextoaster/js-utils';
 
 import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/meta/Metadata';
 import { SearchMatchers, SearchParams } from './state/search';
 import { Immutable } from './types';
+
+export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<Entity>>, index: number, guard: (it: Optional<Entity>) => it is TEntity): Optional<TEntity> {
+  if (entities.length <= index) {
+    return undefined;
+  }
+
+  const entity = entities[index];
+  if (guard(entity)) {
+    return entity;
+  }
+
+  return undefined;
+}
 
 export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): boolean {
   let matched = true;

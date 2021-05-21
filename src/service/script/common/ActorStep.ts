@@ -15,7 +15,7 @@ import {
   VERB_USE,
   VERB_WAIT,
 } from '../../../util/constants';
-import { FUZZY_MATCHERS } from '../../../util/entity';
+import { FUZZY_MATCHERS, indexEntity } from '../../../util/entity';
 import { getKey } from '../../../util/map';
 import { searchState } from '../../../util/state/search';
 
@@ -27,6 +27,14 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext): Pro
 
   if (!isActor(this)) {
     throw new InvalidArgumentError('script target must be an actor');
+  }
+
+  const health = getKey(this.stats, 'health', 0);
+  if (health <= 0) {
+    if (this.actorType === ActorType.PLAYER) {
+      await context.focus.show(`${this.meta.name} is dead`);
+    }
+    return;
   }
 
   if (doesExist(context.command)) {
@@ -66,7 +74,7 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
   const cmd = mustExist(context.command);
   const room = mustExist(context.room);
 
-  const [moving] = searchState(context.state, {
+  const results = searchState(context.state, {
     meta: {
       name: cmd.target,
     },
@@ -75,8 +83,9 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
     },
   }, FUZZY_MATCHERS);
 
-  if (!isItem(moving)) {
-    await context.focus.show(`${moving.meta.name} is not an item`);
+  const moving = indexEntity(results, cmd.index, isItem);
+  if (isNil(moving)) {
+    await context.focus.show(`${cmd.target} is not an item`);
     return;
   }
 
@@ -91,7 +100,7 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
   const cmd = mustExist(context.command);
   const room = mustExist(context.room);
 
-  const [target] = searchState(context.state, {
+  const results = searchState(context.state, {
     meta: {
       name: cmd.target,
     },
@@ -99,9 +108,10 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
       id: room.meta.id,
     },
   }, FUZZY_MATCHERS);
+  const target = indexEntity(results, cmd.index, isActor);
 
-  if (!isActor(target)) {
-    await context.focus.show(`${target} is not an actor`);
+  if (isNil(target)) {
+    await context.focus.show(`${cmd.target} is not an actor`);
     return;
   }
 
@@ -128,11 +138,13 @@ export async function ActorStepLook(this: Actor, context: ScriptContext): Promis
 
 export async function ActorStepLookTarget(this: Actor, context: ScriptContext): Promise<void> {
   const targetName = mustExist(context.command).target;
-  const [target] = searchState(context.state, {
+  const results = searchState(context.state, {
     meta: {
       name: targetName,
     }
   }, FUZZY_MATCHERS);
+
+  const target = results[mustExist(context.command).index];
 
   if (isRoom(target)) {
     return ActorStepLookRoom.call(this, {
@@ -233,7 +245,7 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
   const room = mustExist(context.room);
   context.logger.debug({ cmd, room }, 'taking item from room');
 
-  const [moving] = searchState(context.state, {
+  const results = searchState(context.state, {
     meta: {
       name: cmd.target,
     },
@@ -242,8 +254,10 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
     },
   }, FUZZY_MATCHERS);
 
-  if (!isItem(moving)) {
-    await context.focus.show(`${moving.meta.name} is not an item`);
+  const moving = indexEntity(results, cmd.index, isItem);
+
+  if (isNil(moving)) {
+    await context.focus.show(`${cmd.target} is not an item`);
     return;
   }
 
@@ -257,7 +271,7 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
 export async function ActorStepUse(this: Actor, context: ScriptContext): Promise<void> {
   const cmd = mustExist(context.command);
   const room = mustExist(context.room);
-  const [target] = searchState(context.state, {
+  const results = searchState(context.state, {
     meta: {
       name: cmd.target,
     },
@@ -265,9 +279,10 @@ export async function ActorStepUse(this: Actor, context: ScriptContext): Promise
       id: room.meta.id,
     },
   }, FUZZY_MATCHERS);
+  const target = indexEntity(results, cmd.index, isItem);
 
-  if (!isItem(target)) {
-    await context.focus.show(`${target.meta.name} is not a usable item`);
+  if (isNil(target)) {
+    await context.focus.show(`${cmd.target} is not a usable item`);
     return;
   }
 

@@ -10,15 +10,10 @@ import { Loader } from './service/loader';
 import { Parser } from './service/parser';
 import { Render } from './service/render';
 import { StateService } from './service/state';
-import { asyncTrack } from './util/async';
 import { loadConfig } from './util/config';
 import { PORTAL_DEPTH } from './util/constants';
 
 export async function main(args: Array<string>): Promise<number> {
-  // set up async tracking
-  const { asyncHook, asyncOps } = asyncTrack();
-  asyncHook.enable();
-
   // "parse" args
   const [_node, _script, configPath, dataPath, worldName, seed] = args;
 
@@ -70,10 +65,8 @@ export async function main(args: Array<string>): Promise<number> {
   // start renderer
   const render = await container.create<Render, BaseOptions>(INJECT_RENDER);
   await render.start();
-  await render.loop('start > ');
+  await render.loop('start > '); // TODO: state.loop
   await render.stop();
-
-  // asyncDebug(asyncOps);
 
   return 0;
 }

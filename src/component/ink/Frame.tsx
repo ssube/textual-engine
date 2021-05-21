@@ -5,6 +5,7 @@ import { StepResult } from '../../service/state';
 
 import { InkQuitDispatch, InkStateDispatch } from '../../service/render/InkRender';
 import { Output } from './Output';
+import { AbortEventError } from '../../util/event';
 
 const { useEffect, useState } = React;
 
@@ -14,7 +15,7 @@ interface FrameProps {
 }
 
 const HISTORY_SIZE = 20;
-const DEFAULT_STATE: StepResult = {
+const INITIAL_STEP: StepResult = {
   line: '',
   output: [],
   stop: false,
@@ -25,10 +26,10 @@ const DEFAULT_STATE: StepResult = {
 export const Frame = (props: FrameProps) => {
   const { exit } = useApp();
   const [line, setLine] = useState('');
-  const [state, setState] = useState(DEFAULT_STATE);
+  const [state, setState] = useState(INITIAL_STEP);
 
   const pushError = (err?: Error) => {
-    if (doesExist(err)) {
+    if (doesExist(err) && (err instanceof AbortEventError) === false) {
       setState({
         ...state,
         output: [
@@ -74,7 +75,7 @@ export const Frame = (props: FrameProps) => {
       setLine(line + input);
     }
 
-    return () => {/* noop */ };
+    return () => { /* noop */ };
   });
 
   return <Text>

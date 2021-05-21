@@ -97,14 +97,6 @@ module.exports = {
         "format": [
           "camelCase"
         ],
-        "leadingUnderscore": "forbid",
-        "selector": "default",
-        "trailingUnderscore": "forbid"
-      },
-      {
-        "format": [
-          "camelCase"
-        ],
         "leadingUnderscore": "require",
         "selector": "variable",
         "modifiers": ["unused"],
@@ -146,13 +138,20 @@ module.exports = {
       },
       {
         "format": [
-          "PascalCase",
           "UPPER_CASE"
         ],
         "leadingUnderscore": "forbid",
         "selector": "enumMember",
         "trailingUnderscore": "forbid"
-      }
+      },
+      {
+        "format": [
+          "camelCase"
+        ],
+        "leadingUnderscore": "forbid",
+        "selector": "default",
+        "trailingUnderscore": "forbid"
+      },
     ],
     "@typescript-eslint/no-empty-function": "error",
     "@typescript-eslint/no-empty-interface": "error",

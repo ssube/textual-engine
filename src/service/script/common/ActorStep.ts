@@ -15,8 +15,9 @@ import {
   VERB_USE,
   VERB_WAIT,
 } from '../../../util/constants';
+import { FUZZY_MATCHERS } from '../../../util/entity';
 import { getKey } from '../../../util/map';
-import { searchStateString } from '../../../util/state/search';
+import { searchState } from '../../../util/state/search';
 
 export async function ActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({
@@ -65,12 +66,14 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
   const cmd = mustExist(context.command);
   const room = mustExist(context.room);
 
-  const [moving] = searchStateString(context.state, {
-    meta: cmd.target,
+  const [moving] = searchState(context.state, {
+    meta: {
+      name: cmd.target,
+    },
     room: {
       id: room.meta.id,
     },
-  });
+  }, FUZZY_MATCHERS);
 
   if (!isItem(moving)) {
     await context.focus.show(`${moving.meta.name} is not an item`);
@@ -88,12 +91,14 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
   const cmd = mustExist(context.command);
   const room = mustExist(context.room);
 
-  const [target] = searchStateString(context.state, {
-    meta: cmd.target,
+  const [target] = searchState(context.state, {
+    meta: {
+      name: cmd.target,
+    },
     room: {
       id: room.meta.id,
     },
-  });
+  }, FUZZY_MATCHERS);
 
   if (!isActor(target)) {
     await context.focus.show(`${target} is not an actor`);
@@ -123,9 +128,11 @@ export async function ActorStepLook(this: Actor, context: ScriptContext): Promis
 
 export async function ActorStepLookTarget(this: Actor, context: ScriptContext): Promise<void> {
   const targetName = mustExist(context.command).target;
-  const [target] = searchStateString(context.state, {
-    meta: targetName,
-  });
+  const [target] = searchState(context.state, {
+    meta: {
+      name: targetName,
+    }
+  }, FUZZY_MATCHERS);
 
   if (isRoom(target)) {
     return ActorStepLookRoom.call(this, {
@@ -226,12 +233,14 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
   const room = mustExist(context.room);
   context.logger.debug({ cmd, room }, 'taking item from room');
 
-  const [moving] = searchStateString(context.state, {
-    meta: cmd.target,
+  const [moving] = searchState(context.state, {
+    meta: {
+      name: cmd.target,
+    },
     room: {
       id: room.meta.id,
     },
-  });
+  }, FUZZY_MATCHERS);
 
   if (!isItem(moving)) {
     await context.focus.show(`${moving.meta.name} is not an item`);
@@ -248,12 +257,14 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
 export async function ActorStepUse(this: Actor, context: ScriptContext): Promise<void> {
   const cmd = mustExist(context.command);
   const room = mustExist(context.room);
-  const [target] = searchStateString(context.state, {
-    meta: cmd.target,
+  const [target] = searchState(context.state, {
+    meta: {
+      name: cmd.target,
+    },
     room: {
       id: room.meta.id,
     },
-  });
+  }, FUZZY_MATCHERS);
 
   if (!isItem(target)) {
     await context.focus.show(`${target.meta.name} is not a usable item`);

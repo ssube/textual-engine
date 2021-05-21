@@ -2,6 +2,7 @@ import { createSchema } from '@apextoaster/js-yaml-schema';
 import Ajv from 'ajv';
 import { existsSync, promises, readFileSync } from 'fs';
 import { DEFAULT_SCHEMA, load } from 'js-yaml';
+import { BaseError } from 'noicejs';
 import { join } from 'path';
 
 import { CONFIG_SCHEMA, ConfigData } from '../model/file/Config';
@@ -27,15 +28,21 @@ export async function loadConfig(path: string): Promise<ConfigData> {
     },
   });
 
-  const data = load(dataStr, {
-    schema,
-  });
+  try {
+    const data = load(dataStr, {
+      schema,
+    });
 
-  const validate = new Ajv().compile(CONFIG_SCHEMA);
-  if (validate(data)) {
-    return data;
-  } else {
-    console.error(validate.errors);
-    throw new Error('invalid config data');
+    const validate = new Ajv().compile(CONFIG_SCHEMA);
+    if (validate(data)) {
+      return data;
+    } else {
+      console.error(validate.errors);
+      throw new ConfigError('invalid config data');
+    }
+  } catch (err) {
+    throw new ConfigError('could not load config file', err);
   }
 }
+
+export class ConfigError extends BaseError { /* noop */ }

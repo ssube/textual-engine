@@ -6,7 +6,8 @@ import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor'
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { BaseTemplate, Template } from '../../model/meta/Template';
+import { Metadata } from '../../model/meta/Metadata';
+import { BaseTemplate, Template, TemplateMetadata } from '../../model/meta/Template';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
 import {
@@ -105,12 +106,7 @@ export class LocalStateService implements StateService {
         actor: '',
         room: '',
       },
-      meta: {
-        desc: this.template.renderString(world.meta.desc),
-        id: `${world.meta.id}-${this.counter.next('world')}`,
-        name: this.template.renderString(world.meta.name),
-        template: world.meta.id,
-      },
+      meta: await this.createMetadata(world.meta, 'world'),
       rooms: [],
       step: {
         time: 0,
@@ -398,12 +394,7 @@ export class LocalStateService implements StateService {
       type: 'actor',
       actorType,
       items,
-      meta: {
-        desc: this.template.renderString(template.base.meta.desc),
-        id: `${template.base.meta.id}-${this.counter.next('actor')}`,
-        name: this.template.renderString(template.base.meta.name),
-        template: template.base.meta.id, // should NOT be rendered
-      },
+      meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
       skills: this.template.renderNumberMap(template.base.skills),
       slots: this.template.renderStringMap(template.base.slots),
       stats: this.template.renderNumberMap(template.base.stats),
@@ -413,12 +404,7 @@ export class LocalStateService implements StateService {
   protected async createItem(template: Template<Item>): Promise<Item> {
     return {
       type: ITEM_TYPE,
-      meta: {
-        desc: this.template.renderString(template.base.meta.desc),
-        id: `${template.base.meta.id}-${this.counter.next(ITEM_TYPE)}`,
-        name: this.template.renderString(template.base.meta.name),
-        template: template.base.meta.id,
-      },
+      meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
       stats: this.template.renderNumberMap(template.base.stats),
       slots: this.template.renderStringMap(template.base.slots),
       verbs: this.template.renderVerbMap(template.base.verbs),
@@ -474,15 +460,19 @@ export class LocalStateService implements StateService {
       type: ROOM_TYPE,
       actors,
       items,
-      meta: {
-        desc: this.template.renderString(template.base.meta.desc),
-        id: `${template.base.meta.id}-${this.counter.next(ROOM_TYPE)}`,
-        name: this.template.renderString(template.base.meta.name),
-        template: template.base.meta.id,
-      },
+      meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
       portals: [],
       slots: this.template.renderStringMap(template.base.slots),
       verbs: this.template.renderVerbMap(template.base.verbs),
+    };
+  }
+
+  protected async createMetadata(template: TemplateMetadata, type: string): Promise<Metadata> {
+    return {
+      desc: this.template.renderString(template.desc),
+      id: `${template.id}-${this.counter.next(type)}`,
+      name: this.template.renderString(template.name),
+      template: template.id,
     };
   }
 

@@ -1,10 +1,16 @@
 import { doesExist } from '@apextoaster/js-utils';
 
 import { WorldEntity, WorldEntityType } from '../../model/entity';
+import { Entity } from '../../model/entity/Base';
 import { Metadata } from '../../model/meta/Metadata';
 import { State } from '../../model/State';
-import { matchEntity, matchMetadata } from '../entity';
-import { Immutable, Replace } from '../types';
+import { DEFAULT_MATCHERS } from '../entity';
+import { Immutable } from '../types';
+
+export interface SearchMatchers {
+  entity: (entity: Immutable<Entity>, search: Partial<SearchParams>, matchers?: SearchMatchers) => boolean;
+  metadata: (entity: Immutable<Entity>, search: Partial<Metadata>) => boolean;
+}
 
 export interface SearchParams {
   meta: Partial<Metadata>;
@@ -15,65 +21,38 @@ export interface SearchParams {
 /**
  * Search state for any matching entities, including actors and their inventories.
  */
-export function searchState(state: State, search: Partial<SearchParams>): Array<WorldEntity>;
-export function searchState(state: Immutable<State>, search: Partial<SearchParams>): Array<Immutable<WorldEntity>>;
-export function searchState(state: Immutable<State>, search: Partial<SearchParams>): Array<Immutable<WorldEntity>> {
+export function searchState(state: State, search: Partial<SearchParams>, matchers?: SearchMatchers): Array<WorldEntity>;
+export function searchState(state: Immutable<State>, search: Partial<SearchParams>, matchers?: SearchMatchers): Array<Immutable<WorldEntity>>;
+export function searchState(state: Immutable<State>, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Immutable<WorldEntity>> {
   const results: Array<Immutable<WorldEntity>> = [];
 
   for (const room of state.rooms) {
-    if (doesExist(search.room) && matchMetadata(room, search.room) === false) {
+    if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
       continue;
     }
 
-    if (matchEntity(room, search)) {
+    if (matchers.entity(room, search, matchers)) {
       results.push(room);
     }
 
     for (const actor of room.actors) {
-      if (matchEntity(actor, search)) {
+      if (matchers.entity(actor, search, matchers)) {
         results.push(actor);
       }
 
       for (const item of actor.items) {
-        if (matchEntity(item, search)) {
+        if (matchers.entity(item, search, matchers)) {
           results.push(item);
         }
       }
     }
 
     for (const item of room.items) {
-      if (matchEntity(item, search)) {
+      if (matchers.entity(item, search, matchers)) {
         results.push(item);
       }
     }
   }
 
   return results;
-}
-
-/**
- * Search params where the `meta` filter has been replaced with a string.
- */
-type StringSearch = Replace<Partial<SearchParams>, 'meta', string>;
-
-/**
- * Search state for any matching entities, first by ID prefix, then by name contains.
- */
-export function searchStateString(state: State, search: StringSearch): Array<WorldEntity>;
-export function searchStateString(state: Immutable<State>, search: StringSearch): Array<Immutable<WorldEntity>>;
-export function searchStateString(state: Immutable<State>, search: StringSearch): Array<Immutable<WorldEntity>> {
-  return [
-    ...searchState(state, {
-      ...search,
-      meta: {
-        id: search.meta,
-      },
-    }),
-    ...searchState(state, {
-      ...search,
-      meta: {
-        name: search.meta,
-      },
-    }),
-  ];
 }

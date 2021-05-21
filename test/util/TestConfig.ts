@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { loadConfig } from '../../src/util/config';
+import { ConfigError, loadConfig } from '../../src/util/config';
 
 describe('config utils', () => {
   /**
@@ -14,8 +14,8 @@ describe('config utils', () => {
   });
 
   // TODO: the js-yaml error escape the assertion and causes this test to fail, not sure why
-  xit('should throw when loading data files', async () => {
-    return expect(loadConfig('data/base.yml')).to.eventually.throw();
+  it('should throw when loading data files', async () => {
+    return expect(loadConfig('data/base.yml')).to.eventually.be.rejectedWith(ConfigError);
   });
 });
 

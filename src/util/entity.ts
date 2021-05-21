@@ -2,10 +2,10 @@ import { doesExist } from '@apextoaster/js-utils';
 
 import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/meta/Metadata';
-import { SearchParams } from './state/search';
+import { SearchMatchers, SearchParams } from './state/search';
 import { Immutable } from './types';
 
-export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchParams>): boolean {
+export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): boolean {
   let matched = true;
 
   if (doesExist(search.type)) {
@@ -13,7 +13,7 @@ export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchPar
   }
 
   if (doesExist(search.meta)) {
-    matched = matched && matchMetadata(entity, search.meta);
+    matched = matched && matchers.metadata(entity, search.meta);
   }
 
   return matched;
@@ -23,7 +23,7 @@ export function matchMetadata(entity: Immutable<Entity>, filter: Partial<Metadat
   let matched = true;
 
   if (doesExist(filter.id)) {
-    matched = matched && matchID(entity.meta.id.toLocaleLowerCase(), filter.id);
+    matched = matched && matchIdSegments(entity.meta.id.toLocaleLowerCase(), filter.id);
   }
 
   if (doesExist(filter.name)) {
@@ -33,7 +33,26 @@ export function matchMetadata(entity: Immutable<Entity>, filter: Partial<Metadat
   return matched;
 }
 
-export function matchID(value: string, filter: string): boolean {
+export function matchMetadataFuzzy(entity: Immutable<Entity>, filter: Partial<Metadata>): boolean {
+  let matched = true;
+
+  const id = entity.meta.id.toLocaleLowerCase();
+
+  if (doesExist(filter.id)) {
+    matched = matched && matchIdSegments(id, filter.id);
+  }
+
+  if (doesExist(filter.name)) {
+    matched = matched && (
+      id.includes(filter.name) ||
+      entity.meta.name.toLocaleLowerCase().includes(filter.name)
+    );
+  }
+
+  return matched;
+}
+
+export function matchIdSegments(value: string, filter: string): boolean {
   const valueParts = value.split('-');
   const filterParts = filter.split('-');
 
@@ -43,3 +62,13 @@ export function matchID(value: string, filter: string): boolean {
 
   return valueParts.every((it, idx) => it === filterParts[idx]);
 }
+
+export const DEFAULT_MATCHERS: SearchMatchers = {
+  entity: matchEntity,
+  metadata: matchMetadata,
+};
+
+export const FUZZY_MATCHERS: SearchMatchers = {
+  entity: matchEntity,
+  metadata: matchMetadataFuzzy,
+};

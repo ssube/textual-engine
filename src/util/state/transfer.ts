@@ -6,7 +6,7 @@ import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { State } from '../../model/State';
 import { ScriptContext, ScriptTransfer, TransferParams } from '../../service/script';
 import { SLOT_ENTER, SLOT_GET } from '../constants';
-import { searchState, searchStateString } from './search';
+import { searchState } from './search';
 
 export class StateEntityTransfer implements ScriptTransfer {
   protected logger: Logger;

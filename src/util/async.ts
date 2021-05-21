@@ -6,7 +6,7 @@ export function asyncTrack(): {
 } {
   const asyncOps = new Map();
   const asyncHook = createHook({
-    init(asyncId, type, triggerAsyncId, resource) {
+    init(asyncId, type, _triggerAsyncId, _resource) {
       asyncOps.set(asyncId, type);
     },
     destroy(asyncId) {
@@ -25,6 +25,7 @@ export function asyncTrack(): {
 
 export function asyncDebug(asyncOps: Map<number, string>): void {
   for (const [key, type] of asyncOps) {
+    // eslint-disable-next-line no-console
     console.log(`async: ${key} is ${type}`);
   }
 }

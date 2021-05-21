@@ -1,5 +1,6 @@
 import { doesExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
+import { BaseError } from 'noicejs';
 
 export interface RemoveResult<TValue> {
   pending: Promise<TValue>;
@@ -42,7 +43,7 @@ export function onceWithRemove<TValue>(emitter: EventEmitter, event: string, inn
     emitter.removeListener(event, result);
 
     if (settled === false) {
-      error(/* TODO: throw event aborted error */);
+      error(new AbortEventError(`unsettled listeners removed for ${event}`));
     }
   };
 
@@ -51,3 +52,5 @@ export function onceWithRemove<TValue>(emitter: EventEmitter, event: string, inn
     remove,
   };
 }
+
+export class AbortEventError extends BaseError { /* noop */ }

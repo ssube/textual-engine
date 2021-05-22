@@ -51,6 +51,8 @@ export class InkRender extends BaseRender implements RenderService {
   }
 
   public async start(): Promise<void> {
+    this.logger.debug('starting Ink render');
+
     this.ink = render(this.createRoot());
     this.prompt(`turn ${this.step.turn}`);
 
@@ -60,6 +62,7 @@ export class InkRender extends BaseRender implements RenderService {
   }
 
   public async stop(): Promise<void> {
+    this.logger.debug('stopping Ink render');
     mustExist(this.ink).unmount();
 
     // TODO: remove event handlers from state

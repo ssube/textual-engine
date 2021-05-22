@@ -1,9 +1,7 @@
-import { doesExist } from '@apextoaster/js-utils';
 import { Newline, Text, useInput } from 'ink';
 import * as React from 'react';
 
 import { StepResult } from '../../service/state';
-import { AbortEventError } from '../../util/event';
 import { Output } from './Output';
 
 const { useState } = React;
@@ -19,16 +17,6 @@ const HISTORY_SIZE = 20;
 
 export const Frame = (props: FrameProps) => {
   const [line, setLine] = useState('');
-  const [output, setOutput] = useState(props.output);
-
-  const pushError = (err?: Error) => {
-    if (doesExist(err) && (err instanceof AbortEventError) === false) {
-      setOutput([
-        ...output,
-        err.message
-      ].slice(-HISTORY_SIZE));
-    }
-  };
 
   useInput((input, key) => {
     if (key.return) {
@@ -46,7 +34,7 @@ export const Frame = (props: FrameProps) => {
 
   return <Text>
     <Newline />
-    <Output output={output.slice(-HISTORY_SIZE)} />
+    <Output output={props.output.slice(-HISTORY_SIZE)} />
     <Newline />
     <Text color="blueBright">turn {props.step.turn} &gt; </Text>
     <Text color="red">{line}</Text>

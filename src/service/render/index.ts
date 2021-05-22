@@ -1,4 +1,4 @@
-export interface Render {
+export interface RenderService {
   /**
    * Set the default prompt for future reads.
    */

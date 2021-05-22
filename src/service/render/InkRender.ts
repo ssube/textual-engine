@@ -2,7 +2,7 @@ import { EventEmitter } from 'events';
 import { render } from 'ink';
 import * as React from 'react';
 
-import { Render } from '.';
+import { RenderService } from '.';
 import { onceWithRemove, RemoveResult } from '../../util/event';
 import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
@@ -15,7 +15,7 @@ export type InkQuitDispatch = () => RemoveResult<void>;
  * Interface with Ink's React tree using an event emitter.
  * Is that the right way to do it? Who knows? Not me. :D
  */
-export class InkRender extends BaseRender implements Render {
+export class InkRender extends BaseRender implements RenderService {
   protected emits: EventEmitter;
   protected output: Array<string>;
   protected promptStr: string;

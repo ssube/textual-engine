@@ -1,25 +1,29 @@
 import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { Render } from '.';
-import { INJECT_INPUT_PLAYER, INJECT_LOADER, INJECT_LOGGER, INJECT_STATE } from '../../module';
+import { RenderService } from '.';
+import { INJECT_INPUT_PLAYER, INJECT_LOADER, INJECT_LOCALE, INJECT_LOGGER, INJECT_STATE } from '../../module';
 import { Input } from '../input';
+import { LocaleService } from '../locale';
 import { StateService, StepResult } from '../state';
 
 export interface BaseRenderOptions extends BaseOptions {
   [INJECT_INPUT_PLAYER]?: Input;
+  [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
   [INJECT_STATE]?: StateService;
 }
 
-@Inject(INJECT_INPUT_PLAYER, INJECT_LOGGER, INJECT_LOADER, INJECT_STATE)
-export abstract class BaseRender implements Render {
+@Inject(INJECT_INPUT_PLAYER, INJECT_LOCALE, INJECT_LOGGER, INJECT_LOADER, INJECT_STATE)
+export abstract class BaseRender implements RenderService {
   protected running: boolean;
+  protected locale: LocaleService;
   protected logger: Logger;
   protected state: StateService;
 
   constructor(options: BaseRenderOptions) {
     this.running = false;
+    this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
@@ -38,7 +42,9 @@ export abstract class BaseRender implements Render {
       await this.show(outputLine);
     }
 
-    this.prompt(`turn ${result.turn} > `);
+    this.prompt(this.locale.getKey('config:turn-prompt', {
+      turn: result.turn,
+    }));
   }
 
   /**

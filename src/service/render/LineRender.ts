@@ -3,12 +3,12 @@ import { Inject } from 'noicejs';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
 
-import { Render } from '.';
+import { RenderService } from '.';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 
 @Inject(/* all from base */)
-export class LineRender extends BaseRender implements Render {
+export class LineRender extends BaseRender implements RenderService {
   protected reader?: LineInterface;
 
   // eslint-disable-next-line no-useless-constructor

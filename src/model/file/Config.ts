@@ -2,6 +2,8 @@ import { JSONSchemaType } from 'ajv';
 import { LogLevel } from 'noicejs';
 import { Writable } from 'stream';
 
+import { LocaleBundle, LOCALE_SCHEMA } from './Locale';
+
 export interface ConfigLogger {
   level: LogLevel;
   name: string;
@@ -13,35 +15,12 @@ export interface ConfigLogger {
   }>;
 }
 
-export interface ConfigLocale {
-  /**
-    * Turn prompt.
-    */
-  prompt: string;
-
-  verbs: { // known verbs
-    common: {
-      look: string;
-      move: string;
-      take: string;
-      use: string;
-      wait: string;
-    };
-    meta: {
-      debug: string;
-      graph: string;
-      help: string;
-      quit: string;
-    };
-  };
-}
-
-export interface ConfigData {
+export interface ConfigFile {
   logger: ConfigLogger;
-  locale: ConfigLocale;
+  locale: LocaleBundle;
 }
 
-export const CONFIG_SCHEMA: JSONSchemaType<ConfigData> = {
+export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
   type: 'object',
   properties: {
     logger: {
@@ -82,10 +61,7 @@ export const CONFIG_SCHEMA: JSONSchemaType<ConfigData> = {
       ],
       additionalProperties: true,
     },
-    locale: {
-      type: 'object',
-      required: [],
-    },
+    locale: LOCALE_SCHEMA,
   },
   required: [
     'locale',

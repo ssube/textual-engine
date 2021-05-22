@@ -1,6 +1,9 @@
 states: [] # template file
 worlds:
-  - meta:
+  - locale:
+      languages:
+        en-US: {}
+    meta:
       id: test
       name:
         base: test world

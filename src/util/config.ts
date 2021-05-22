@@ -5,7 +5,7 @@ import { DEFAULT_SCHEMA, load } from 'js-yaml';
 import { BaseError } from 'noicejs';
 import { join } from 'path';
 
-import { CONFIG_SCHEMA, ConfigData } from '../model/file/Config';
+import { CONFIG_SCHEMA, ConfigFile } from '../model/file/Config';
 
 /**
  * Specialized config-loading function.
@@ -13,7 +13,7 @@ import { CONFIG_SCHEMA, ConfigData } from '../model/file/Config';
  * This creates its own YAML parser (and schema) and does not use the Loader/Parser service
  * infrastructure found elsewhere in the code, because it informs their creation.
  */
-export async function loadConfig(path: string): Promise<ConfigData> {
+export async function loadConfig(path: string): Promise<ConfigFile> {
   const dataStr = await promises.readFile(path, {
     encoding: 'utf-8',
   });

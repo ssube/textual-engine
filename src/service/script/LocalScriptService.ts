@@ -43,11 +43,11 @@ export class LocalScriptService implements ScriptService {
   }
 
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
-    this.logger.debug(`invoke ${slot} on ${target.meta.id}`);
+    this.logger.debug({ slot, target }, 'invoke slot on target');
 
     const scriptName = target.slots.get(slot);
     if (isNil(scriptName)) {
-      this.logger.debug({ slot }, 'target does not have a script defined for slot');
+      this.logger.debug({ slot, target }, 'target does not have a script defined for slot');
       return;
     }
 

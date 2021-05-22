@@ -3,6 +3,7 @@ import { InvalidTargetError } from 'noicejs';
 import { WorldEntity } from '../../model/entity';
 import { Actor, ACTOR_TYPE, isActor } from '../../model/entity/Actor';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
+import { LocaleContext } from '../../model/file/Locale';
 import { State } from '../../model/State';
 import { searchState } from './search';
 
@@ -58,8 +59,8 @@ export class StateFocusBuffer {
     }
   }
 
-  public async show(msg: string, _source?: WorldEntity): Promise<void> {
-    this.buffer.push(msg);
+  public async show(msg: string, _context?: LocaleContext, _source?: WorldEntity): Promise<void> {
+    this.buffer.push(msg); // TODO: translate before sending to render?
   }
 
   public flush(): Array<string> {

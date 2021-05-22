@@ -585,7 +585,10 @@ export class LocalStateService implements StateService {
     }
 
     // extend map
-    this.logger.debug(`populating ${portals.length} new portals of ${template.base.portals.length} in room ${room.meta.id}`);
+    this.logger.debug({
+      portals,
+      room,
+    }, `populating ${portals.length} new portals of ${template.base.portals.length} in room ${room.meta.id}`);
     room.portals.push(...await this.populatePortals(portals, room.meta.id, depth));
   }
 }

@@ -1,3 +1,4 @@
+import { InvalidTargetError } from 'noicejs';
 import { ScriptContext, ScriptTarget } from '..';
 import { isItem } from '../../../model/entity/Item';
 
@@ -8,6 +9,6 @@ export async function ItemStep(this: ScriptTarget, context: ScriptContext): Prom
   }, 'step script');
 
   if (!isItem(this)) {
-    context.logger.debug(`item has ${this.slots.size} verbs`);
+    throw new InvalidTargetError('target must be an item');
   }
 }

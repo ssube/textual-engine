@@ -6,4 +6,7 @@ logger:
       path: out/debug.log
     - level: error
       stream: !stream stderr
-locale: {}
+locale:
+  languages:
+    en:
+      turn-prompt: 'turn {{turn}} >'

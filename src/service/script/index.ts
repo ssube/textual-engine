@@ -4,6 +4,7 @@ import { WorldEntity } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
+import { LocaleContext } from '../../model/file/Locale';
 import { State } from '../../model/State';
 import { SearchParams } from '../../util/state/search';
 import { Immutable, ScriptData } from '../../util/types';
@@ -25,7 +26,7 @@ export interface ScriptFocus {
   /**
    * Display a message from an entity.
    */
-  show(msg: string, source?: WorldEntity): Promise<void>;
+  show(msg: string, context?: LocaleContext, source?: WorldEntity): Promise<void>;
 }
 
 export interface TransferParams<TEntity extends WorldEntity> {
@@ -36,8 +37,6 @@ export interface TransferParams<TEntity extends WorldEntity> {
 
   /**
    * The source container from which `id` will be transferred.
-   *
-   * @todo can this be optional?
    */
   source: string;
 

@@ -40,7 +40,7 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext): Pro
   if (doesExist(context.command)) {
     await ActorStepCommand.call(this, context);
   } else {
-    context.logger.debug(`${this.meta.name} has nothing to do`);
+    context.logger.debug({ target: this }, 'actor has nothing to do');
   }
 }
 
@@ -293,5 +293,5 @@ export async function ActorStepUse(this: Actor, context: ScriptContext): Promise
 }
 
 export async function ActorStepWait(this: Actor, context: ScriptContext): Promise<void> {
-  context.logger.debug('actor is skipping a turn');
+  context.logger.debug({ target: this }, 'actor is skipping a turn');
 }

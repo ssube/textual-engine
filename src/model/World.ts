@@ -3,10 +3,13 @@ import { JSONSchemaType } from 'ajv';
 import { Actor, ACTOR_SCHEMA } from './entity/Actor';
 import { Item, ITEM_SCHEMA } from './entity/Item';
 import { Room, ROOM_SCHEMA } from './entity/Room';
+import { LocaleBundle, LOCALE_SCHEMA } from './file/Locale';
 import { METADATA_SCHEMA } from './meta/Metadata';
-import { Template, TemplateMetadata, TemplateRef, TEMPLATE_REF_SCHEMA } from './meta/Template';
+import { Template, TEMPLATE_REF_SCHEMA, TemplateMetadata, TemplateRef } from './meta/Template';
 
 export interface World {
+  locale: LocaleBundle;
+
   /**
    * World name, description, and other metadata (common to most entities).
    */
@@ -30,6 +33,7 @@ export interface World {
 export const WORLD_SCHEMA: JSONSchemaType<World> = {
   type: 'object',
   properties: {
+    locale: LOCALE_SCHEMA,
     meta: METADATA_SCHEMA,
     start: {
       type: 'object',

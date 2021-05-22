@@ -12,12 +12,16 @@ import { BaseRender, BaseRenderOptions } from './BaseRender';
 @Inject(/* all from base */)
 export class LineRender extends BaseRender implements RenderService {
   protected reader?: LineInterface;
+
+  // next-line flags
+  protected padPrompt: boolean;
   protected skipLine: boolean;
 
   // eslint-disable-next-line no-useless-constructor
   constructor(options: BaseRenderOptions) {
     super(options);
 
+    this.padPrompt = false;
     this.skipLine = false;
   }
 
@@ -52,6 +56,8 @@ export class LineRender extends BaseRender implements RenderService {
         return;
       }
 
+      this.padPrompt = false;
+
       this.logger.debug({ line }, 'read line');
       this.state.emit('line', line);
     });
@@ -81,6 +87,11 @@ export class LineRender extends BaseRender implements RenderService {
 
     this.logger.debug({ lines }, 'handling output event from state');
 
+    if (this.padPrompt) {
+      // a prompt was being shown, move to a newline before output
+      this.showSync('');
+    }
+
     for (const line of lines) {
       this.showSync(line);
     }
@@ -103,6 +114,8 @@ export class LineRender extends BaseRender implements RenderService {
   }
 
   protected showPrompt(): void {
+    this.padPrompt = true;
+
     const reader = mustExist(this.reader);
     reader.setPrompt(`turn ${this.step.turn} > `);
     reader.prompt();

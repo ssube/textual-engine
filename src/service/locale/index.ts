@@ -6,5 +6,5 @@ export interface LocaleService {
   addBundle(name: string, bundle: LocaleBundle): void;
   deleteBundle(name: string): void;
 
-  getKey(key: string, context: LocaleContext): string;
+  translate(key: string, context?: LocaleContext): string;
 }

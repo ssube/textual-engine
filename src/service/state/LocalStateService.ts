@@ -2,7 +2,7 @@ import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/j
 import { EventEmitter } from 'events';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
-import { CreateParams, StateService, StepParams, StepResult } from '.';
+import { CreateParams, StateService, StepResult } from '.';
 import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups } from '../../model/entity/Portal';
@@ -15,6 +15,7 @@ import {
   INJECT_COUNTER,
   INJECT_INPUT_ACTOR,
   INJECT_LOADER,
+  INJECT_LOCALE,
   INJECT_LOGGER,
   INJECT_PARSER,
   INJECT_RANDOM,
@@ -22,6 +23,7 @@ import {
   INJECT_TEMPLATE,
 } from '../../module';
 import { ActorInputOptions } from '../../module/InputModule';
+import { randomItem } from '../../util/array';
 import {
   KNOWN_VERBS,
   META_DEBUG,
@@ -36,12 +38,13 @@ import {
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
 import { onceWithRemove } from '../../util/event';
-import { StateFocusBuffer } from '../../util/state/focus';
+import { StateFocusResolver } from '../../util/state/focus';
 import { searchState } from '../../util/state/search';
 import { StateEntityTransfer } from '../../util/state/transfer';
 import { findByTemplateId } from '../../util/template';
 import { Input } from '../input';
 import { Loader } from '../loader';
+import { LocaleService } from '../locale';
 import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
 import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
@@ -50,6 +53,7 @@ import { TemplateService } from '../template';
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
   [INJECT_LOADER]: Loader;
+  [INJECT_LOCALE]: LocaleService;
   [INJECT_LOGGER]: Logger;
   [INJECT_PARSER]: Parser;
   [INJECT_RANDOM]: RandomGenerator;
@@ -60,6 +64,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
 @Inject(
   INJECT_COUNTER,
   INJECT_LOADER,
+  INJECT_LOCALE,
   INJECT_LOGGER,
   INJECT_PARSER,
   INJECT_RANDOM,
@@ -74,6 +79,7 @@ export class LocalStateService extends EventEmitter implements StateService {
 
   protected counter: Counter;
   protected loader: Loader;
+  protected locale: LocaleService;
   protected logger: Logger;
   protected parser: Parser;
   protected random: RandomGenerator;
@@ -92,6 +98,7 @@ export class LocalStateService extends EventEmitter implements StateService {
     this.container = options.container;
     this.counter = options[INJECT_COUNTER];
     this.loader = options[INJECT_LOADER];
+    this.locale = options[INJECT_LOCALE];
     this.logger = options[INJECT_LOGGER].child({
       kind: constructorName(this),
     });
@@ -126,14 +133,25 @@ export class LocalStateService extends EventEmitter implements StateService {
     this.world = world;
 
     // register focus
-    this.focus = new StateFocusBuffer(this.state, () => Promise.resolve(), (room) => this.populateRoom(room, params.depth));
+    this.focus = new StateFocusResolver(this.state, {
+      onActor: () => Promise.resolve(),
+      onRoom: (room) => this.populateRoom(room, params.depth),
+      onShow: async (line, context) => {
+        const out = this.locale.translate(line, context);
+        this.logger.debug({ line, out }, 'translated output');
+        this.onOutput(out);
+      },
+    });
     this.transfer = new StateEntityTransfer(this.logger, this.state);
 
     // reseed the prng
     this.random.reseed(params.seed);
 
+    // load the world locale
+    this.locale.addBundle('world', world.locale);
+
     // pick a starting room and create it
-    const startRoomRef = world.start.rooms[this.random.nextInt(world.start.rooms.length)];
+    const startRoomRef = randomItem(world.start.rooms, this.random);
     this.logger.debug({
       rooms: world.templates.rooms,
       startRoomId: startRoomRef,
@@ -147,7 +165,7 @@ export class LocalStateService extends EventEmitter implements StateService {
     state.rooms.push(startRoom);
 
     // pick a starting actor and create it
-    const startActorRef = world.start.actors[this.random.nextInt(world.start.actors.length)];
+    const startActorRef = randomItem(world.start.actors, this.random);
     const startActorTemplate = findByTemplateId(world.templates.actors, startActorRef.id);
     if (isNil(startActorTemplate)) {
       throw new NotFoundError('invalid start actor');
@@ -262,9 +280,6 @@ export class LocalStateService extends EventEmitter implements StateService {
       default: {
         // step world
         const result = await this.step();
-        const output = mustExist(this.focus).flush();
-
-        this.emit('output', output);
         this.emit('step', result);
       }
     }
@@ -525,10 +540,11 @@ export class LocalStateService extends EventEmitter implements StateService {
 
     const groups = this.groupPortals(portals);
     const results: Array<Portal> = [];
+    const world = mustExist(this.world);
 
     for (const [sourceGroup, group] of groups) {
-      const world = mustExist(this.world);
-      const destTemplateId = Array.from(group.dests)[0];
+      const potentialDests = Array.from(group.dests);
+      const destTemplateId = randomItem(potentialDests, this.random);
       const destTemplate = findByTemplateId(world.templates.rooms, destTemplateId);
 
       if (isNil(destTemplate)) {

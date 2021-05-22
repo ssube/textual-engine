@@ -11,8 +11,6 @@ import { Immutable, ScriptData } from '../../util/types';
 import { Command } from '../input';
 
 export interface ScriptFocus {
-  flush(): Array<string>;
-
   /**
    * Set the currently-focused room.
    */
@@ -26,7 +24,7 @@ export interface ScriptFocus {
   /**
    * Display a message from an entity.
    */
-  show(msg: string, context?: LocaleContext, source?: WorldEntity): Promise<void>;
+  show(msg: string, context?: LocaleContext): Promise<void>;
 }
 
 export interface TransferParams<TEntity extends WorldEntity> {

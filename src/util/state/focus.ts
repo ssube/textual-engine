@@ -5,24 +5,35 @@ import { Actor, ACTOR_TYPE, isActor } from '../../model/entity/Actor';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { LocaleContext } from '../../model/file/Locale';
 import { State } from '../../model/State';
+import { ScriptFocus } from '../../service/script';
 import { searchState } from './search';
 
-export type RoomFocusChange = (room: Room) => Promise<void>;
-export type ActorFocusChange = (actor: Actor) => Promise<void>;
+export type FocusChangeRoom = (room: Room) => Promise<void>;
+export type FocusChangeActor = (actor: Actor) => Promise<void>;
+export type FocusShow = (line: string, context?: LocaleContext) => Promise<void>;
 
-export class StateFocusBuffer {
-  protected buffer: Array<string>;
+interface FocusEvents {
+  onActor: FocusChangeActor;
+  onRoom: FocusChangeRoom;
+  onShow: FocusShow;
+}
+
+/**
+ * Manages the `focus` field within world state, along with filtering output based on the current focus.
+ */
+export class StateFocusResolver implements ScriptFocus {
   protected state: State;
 
-  protected onActor: ActorFocusChange;
-  protected onRoom: RoomFocusChange;
+  protected onActor: FocusChangeActor;
+  protected onRoom: FocusChangeRoom;
+  protected onShow: FocusShow;
 
-  constructor(state: State, onActor: ActorFocusChange, onRoom: RoomFocusChange) {
-    this.buffer = [];
+  constructor(state: State, events: FocusEvents) {
     this.state = state;
 
-    this.onActor = onActor;
-    this.onRoom = onRoom;
+    this.onActor = events.onActor;
+    this.onRoom = events.onRoom;
+    this.onShow = events.onShow;
   }
 
   public async setActor(id: string): Promise<void> {
@@ -59,13 +70,10 @@ export class StateFocusBuffer {
     }
   }
 
-  public async show(msg: string, _context?: LocaleContext, _source?: WorldEntity): Promise<void> {
-    this.buffer.push(msg); // TODO: translate before sending to render?
-  }
-
-  public flush(): Array<string> {
-    const result = this.buffer;
-    this.buffer = [];
-    return result;
+  /**
+   * @todo filter output to the room/actor with focus
+   */
+  public async show(msg: string, context?: LocaleContext, source?: WorldEntity): Promise<void> {
+    await this.onShow(msg, context);
   }
 }

@@ -44,7 +44,7 @@ export class NextLocaleService implements LocaleService {
     }
   }
 
-  public getKey(key: string, scope?: LocaleContext): string {
+  public translate(key: string, scope?: LocaleContext): string {
     return this.getInstance().t(key, scope);
   }
 

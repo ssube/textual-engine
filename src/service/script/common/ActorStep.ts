@@ -111,12 +111,12 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
   const target = indexEntity(results, cmd.index, isActor);
 
   if (isNil(target)) {
-    await context.focus.show(`${cmd.target} is not an actor`);
+    await context.focus.show('actor.step.hit.type', { cmd });
     return;
   }
 
   if (this.items.length === 0) {
-    await context.focus.show(`You cannot hit ${target.meta.name}, you are not holding anything!`);
+    await context.focus.show('actor.step.hit.item', { target });
     return;
   }
 
@@ -167,16 +167,16 @@ export async function ActorStepLookTarget(this: Actor, context: ScriptContext): 
     });
   }
 
-  await context.focus.show('You see nothing.');
+  await context.focus.show('actor.step.look.none');
 }
 
 export async function ActorStepLookRoom(this: Actor, context: ScriptContext): Promise<void> {
   const room = mustExist(context.room);
-  await context.focus.show(`You are a ${this.meta.name}: ${this.meta.desc} (${this.meta.id})`);
-  await context.focus.show(`You are in ${room.meta.name} (${room.meta.id}): ${room.meta.desc}`);
+  await context.focus.show('actor.step.look.room.you', { actor: this });
+  await context.focus.show('actor.step.look.room.seen', { room });
 
   for (const item of this.items) {
-    await context.focus.show(`You are holding a ${item.meta.name}: ${item.meta.desc} (${item.meta.id})`);
+    await context.focus.show('actor.step.look.room.inventory', { item });
   }
 
   for (const actor of room.actors) {
@@ -196,22 +196,22 @@ export async function ActorStepLookRoom(this: Actor, context: ScriptContext): Pr
   }
 
   for (const portal of room.portals) {
-    await context.focus.show(`A ${portal.name} leads to the ${portal.sourceGroup} (${portal.dest})`);
+    await context.focus.show('actor.step.look.room.portal', { portal });
   }
 }
 
 export async function ActorStepLookActor(this: Actor, context: ScriptContext): Promise<void> {
   const actor = mustExist(context.actor);
-  await context.focus.show(`A ${actor.meta.name} (${actor.meta.desc}, ${actor.meta.id}) is in the room`);
+  await context.focus.show('actor.step.look.actor.seen', { actor });
   const health = getKey(actor.stats, 'health', 0);
   if (health <= 0) {
-    await context.focus.show(`${actor.meta.name} is dead`);
+    await context.focus.show('actor.step.look.actor.dead', { actor });
   }
 }
 
 export async function ActorStepLookItem(this: Actor, context: ScriptContext): Promise<void> {
   const item = mustExist(context.item);
-  await context.focus.show(`You see a ${item.meta.name}: ${item.meta.desc} (${item.meta.id})`);
+  await context.focus.show('actor.step.look.item.seen', { item });
 }
 
 export async function ActorStepMove(this: Actor, context: ScriptContext): Promise<void> {

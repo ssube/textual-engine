@@ -2,7 +2,28 @@ states: [] # template file
 worlds:
   - locale:
       languages:
-        en-US: {}
+        en:
+          actor.step.look.none: |-
+            You see nothing.
+          actor.step.look.room.you: |-
+            You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+          actor.step.look.room.seen: |-
+            You are in {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
+          actor.step.look.room.inventory: |-
+            You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.desc}}).
+          actor.step.look.room.portal: |-
+            A {{portal.name}} leads to the {{portal.sourceGroup}} ({{portal.dest}}).
+          actor.step.look.actor.seen: |-
+            A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+          actor.step.look.actor.dead: |-
+            The {{actor.meta.name}} is dead!
+          actor.step.look.item.seen: |-
+            You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+          actor.step.hit.type: |-
+            {{cmd.target}} is not an actor!
+          actor.step.hit.item: |-
+            You cannot hit {{target.meta.name}}, you are not holding anything!
+
     meta:
       id: test
       name:
@@ -128,6 +149,7 @@ worlds:
                 chance: 25
             items:
               - id: item-sword
+                chance: 50
             portals:
               - sourceGroup:
                   base: west

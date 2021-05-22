@@ -1,42 +1,34 @@
-import { doesExist, mustExist } from '@apextoaster/js-utils';
+import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { Inject } from 'noicejs';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
 
 import { RenderService } from '.';
+import { META_QUIT } from '../../util/constants';
+import { onceWithRemove } from '../../util/event';
+import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 @Inject(/* all from base */)
 export class LineRender extends BaseRender implements RenderService {
   protected reader?: LineInterface;
+  protected skipLine: boolean;
 
   // eslint-disable-next-line no-useless-constructor
   constructor(options: BaseRenderOptions) {
     super(options);
+
+    this.skipLine = false;
   }
 
   public async read(): Promise<string> {
     const reader = mustExist(this.reader);
 
-    const result = new Promise<string>((res, rej) => {
-      reader.once('error', (err?: Error) => {
-        rej(err);
-      });
-
-      reader.once('line', (line: string) => {
-        reader.removeAllListeners();
-        res(line);
-      });
-
-      reader.once('SIGINT', () => {
-        reader.removeAllListeners();
-        res('quit');
-      });
-    });
+    const { pending } = onceWithRemove<string>(reader, 'line');
 
     reader.prompt();
 
-    return result;
+    return pending;
   }
 
   public prompt(prompt: string): void {
@@ -44,6 +36,8 @@ export class LineRender extends BaseRender implements RenderService {
   }
 
   public async show(msg: string): Promise<void> {
+    this.skipLine = true;
+
     const reader = mustExist(this.reader);
 
     reader.write(msg);
@@ -57,14 +51,53 @@ export class LineRender extends BaseRender implements RenderService {
       prompt: '> ',
     });
 
-    this.running = true;
+    this.reader.on('line', (line) => {
+      if (this.skipLine) {
+        this.skipLine = false;
+        return;
+      }
+
+      this.logger.debug({ line }, 'read line');
+      this.state.emit('line', line);
+    });
+
+    this.reader.on('SIGINT', () => {
+      this.logger.debug('sending interrupt as quit command');
+      this.state.emit('line', META_QUIT);
+    });
+
+    this.state.on('output', (output) => this.onOutput(output));
+    this.state.on('step', (step) => this.onStep(step));
+
+    this.reader.setPrompt(`turn ${this.step.turn} > `);
+    this.reader.prompt();
   }
 
   public async stop(): Promise<void> {
-    this.running = false;
+    mustExist(this.reader).close();
+  }
 
-    if (doesExist(this.reader)) {
-      this.reader.close();
+  /**
+   * Handler for output line events received from state service.
+   */
+  public onOutput(lines: Array<string>): void {
+    if (!Array.isArray(lines)) {
+      throw new InvalidArgumentError('please batch output');
     }
+
+    this.logger.debug({ lines }, 'handling output event from state');
+
+    for (const line of lines) {
+      this.show(line); // TODO: ensure line has been shown before sending next
+    }
+  }
+
+  public onStep(result: StepResult): void {
+    this.logger.debug(result, 'handling step event from state');
+    this.step = result;
+
+    const reader = mustExist(this.reader);
+    reader.setPrompt(`turn ${this.step.turn} > `);
+    reader.prompt();
   }
 }

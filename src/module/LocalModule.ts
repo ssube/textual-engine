@@ -21,6 +21,7 @@ import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { RenderService } from '../service/render';
 import { InkRender } from '../service/render/InkRender';
+import { LineRender } from '../service/render/LineRender';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScriptService';
 import { StateService } from '../service/state';
@@ -40,16 +41,21 @@ export class LocalModule extends Module {
   protected state: Singleton<StateService>;
   protected template: Singleton<TemplateService>;
 
-  constructor() {
+  constructor(render = false) {
     super();
 
     this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));
     this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
     this.random = new Singleton(() => mustExist(this.container).create(SeedRandomGenerator));
-    this.render = new Singleton(() => mustExist(this.container).create(InkRender));
     this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
     this.state = new Singleton(() => mustExist(this.container).create(LocalStateService));
     this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
+
+    if (render) {
+      this.render = new Singleton(() => mustExist(this.container).create(InkRender));
+    } else {
+      this.render = new Singleton(() => mustExist(this.container).create(LineRender));
+    }
   }
 
   public async configure(options: ModuleOptions): Promise<void> {

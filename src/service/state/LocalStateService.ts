@@ -188,9 +188,20 @@ export class LocalStateService extends EventEmitter implements StateService {
   public async loop(): Promise<void> {
     const { pending } = onceWithRemove<void>(this, 'quit');
 
-    this.on('line', (line) => this.onLine(line));
+    this.on('line', (line) => {
+      this.onLine(line).catch((err) => {
+        this.logger.error(err, 'error during line handler');
+      });
+    });
 
     return pending;
+  }
+
+  /**
+   * Handler for a line of input from the focus helper.
+   */
+  public onOutput(line: string): void {
+    this.emit('output', [line]);
   }
 
   /**
@@ -223,49 +234,28 @@ export class LocalStateService extends EventEmitter implements StateService {
 
     // handle meta commands
     switch (cmd.verb) {
-      case META_DEBUG: {
-        const output = await debugState(state);
-        this.emit('output', output);
+      case META_DEBUG:
+        this.emit('output', debugState(state));
         break;
-      }
       case META_GRAPH: {
-        const output = await graphState(state);
+        const output = graphState(state);
         await this.loader.saveStr(cmd.target, output.join('\n'));
         this.emit('output', [
           `wrote ${state.rooms.length} node graph to ${cmd.target}`,
         ]);
         break;
       }
-      case META_HELP: {
+      case META_HELP:
         this.emit('output', [
           KNOWN_VERBS.join(', '),
         ]);
         break;
-      }
-      case META_SAVE: {
-        const path = cmd.target;
-        const dataStr = this.parser.save({
-          states: [mustExist(this.state)],
-          worlds: [mustExist(this.world)],
-        });
-        await this.loader.saveStr(path, dataStr);
-
-        this.emit('output', [`saved world ${state.meta.id} state to ${path}`]);
+      case META_SAVE:
+        await this.doSave(cmd.target);
         break;
-      }
-      case META_LOAD: {
-        const path = cmd.target;
-        const dataStr = await this.loader.loadStr(path);
-        const data = this.parser.load(dataStr);
-
-        this.state = data.states[0];
-        this.world = data.worlds[0];
-
-        this.emit('output', [
-          `loaded world ${state.meta.id} state from ${path}`,
-        ]);
+      case META_LOAD:
+        await this.doLoad(cmd.target, cmd.index);
         break;
-      }
       case META_QUIT:
         this.emit('quit');
         break;
@@ -278,6 +268,31 @@ export class LocalStateService extends EventEmitter implements StateService {
         this.emit('step', result);
       }
     }
+  }
+
+  public async doLoad(path: string, index: number): Promise<void> {
+    const dataStr = await this.loader.loadStr(path);
+    const data = this.parser.load(dataStr);
+
+    this.state = data.states[index];
+    this.world = data.worlds[index]; // TODO: look up world based on state meta template
+
+    this.emit('output', [
+      `loaded world ${this.state.meta.id} state from ${path}`,
+    ]);
+  }
+
+  public async doSave(path: string): Promise<void> {
+    const state = mustExist(this.state);
+    const world = mustExist(this.world);
+
+    const dataStr = this.parser.save({
+      states: [state],
+      worlds: [world],
+    });
+    await this.loader.saveStr(path, dataStr);
+
+    this.emit('output', [`saved world ${state.meta.id} state to ${path}`]);
   }
 
   public async step(): Promise<StepResult> {

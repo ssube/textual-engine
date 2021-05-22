@@ -9,6 +9,12 @@ import { onceWithRemove } from '../../util/event';
 import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
+export interface InkState {
+  input: string;
+  prompt: string;
+  output: Array<string>;
+}
+
 /**
  * Interface with Ink's React tree using an event emitter.
  */
@@ -55,6 +61,8 @@ export class InkRender extends BaseRender implements RenderService {
 
   public async stop(): Promise<void> {
     mustExist(this.ink).unmount();
+
+    // TODO: remove event handlers from state
   }
 
   /**
@@ -70,7 +78,7 @@ export class InkRender extends BaseRender implements RenderService {
     this.output.push(`${this.promptStr} > ${this.inputStr}`);
 
     // forward event to state
-    this.state.emit('line', line);
+    this.state.emit('line', line); // TODO: directly firing this is not ideal, but makes DI unidirectional
   }
 
   /**
@@ -109,8 +117,6 @@ export class InkRender extends BaseRender implements RenderService {
   public onQuit(): void {
     this.logger.debug('handling quit event from state');
     this.output.push('game over');
-
-    // TODO: stop things
   }
 
   protected createRoot(): React.ReactElement {

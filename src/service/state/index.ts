@@ -1,4 +1,5 @@
-import * as EventEmitter from 'events';
+import { EventEmitter } from 'events';
+
 import { State } from '../../model/State';
 import { World } from '../../model/World';
 

@@ -1,5 +1,4 @@
 import { mustExist } from '@apextoaster/js-utils';
-import { EventEmitter } from 'events';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '.';
@@ -21,7 +20,6 @@ export abstract class BaseRender implements RenderService {
   protected state: StateService;
 
   // state
-  protected running: boolean;
   protected step: StepResult;
 
   constructor(options: BaseRenderOptions) {
@@ -29,7 +27,6 @@ export abstract class BaseRender implements RenderService {
     this.logger = mustExist(options[INJECT_LOGGER]);
     this.state = mustExist(options[INJECT_STATE]);
 
-    this.running = false;
     this.step = {
       stop: false,
       turn: 0,

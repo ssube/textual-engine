@@ -1,6 +1,6 @@
 import { State } from '../model/State';
 
-export async function debugState(state: State): Promise<Array<string>> {
+export function debugState(state: State): Array<string> {
   const lines = [
     `state: ${state.meta.id}`
   ];
@@ -28,7 +28,7 @@ export async function debugState(state: State): Promise<Array<string>> {
   return lines;
 }
 
-export async function graphState(state: State): Promise<Array<string>> {
+export function graphState(state: State): Array<string> {
   function sanitize(input: string): string {
     return input.replace(/[^a-zA-Z0-9_]/g, '_');
   }

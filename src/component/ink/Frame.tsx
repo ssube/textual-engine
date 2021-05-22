@@ -46,7 +46,7 @@ export const Frame = (props: FrameProps) => {
 
   return <Text>
     <Newline />
-    <Output output={output} />
+    <Output output={output.slice(-HISTORY_SIZE)} />
     <Newline />
     <Text color="blueBright">turn {props.step.turn} &gt; </Text>
     <Text color="red">{line}</Text>

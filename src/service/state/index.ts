@@ -16,16 +16,10 @@ export interface CreateParams {
 }
 
 export interface StepParams {
-  line: string;
   time: number;
 }
 
 export interface StepResult {
-  /**
-   * Stop condition (this is an async iterator).
-   */
-  stop: boolean;
-
   /**
    * The end time for this step (caller provided a start time and can do deltas).
    */

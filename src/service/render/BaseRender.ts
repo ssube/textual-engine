@@ -28,7 +28,6 @@ export abstract class BaseRender implements RenderService {
     this.state = mustExist(options[INJECT_STATE]);
 
     this.step = {
-      stop: false,
       turn: 0,
       time: 0,
     };

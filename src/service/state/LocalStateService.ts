@@ -368,7 +368,6 @@ export class LocalStateService extends EventEmitter implements StateService {
     }, 'finished world state step');
 
     return {
-      stop: false,
       time: this.state.step.time,
       turn: this.state.step.turn,
     };

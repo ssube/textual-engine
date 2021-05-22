@@ -41,7 +41,7 @@ export class LocalModule extends Module {
   protected state: Singleton<StateService>;
   protected template: Singleton<TemplateService>;
 
-  constructor(render = false) {
+  constructor(render = true) {
     super();
 
     this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));

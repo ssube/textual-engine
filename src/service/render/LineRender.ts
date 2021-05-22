@@ -43,7 +43,7 @@ export class LineRender extends BaseRender implements RenderService {
     this.reader = createInterface({
       input: stdin,
       output: stdout,
-      prompt: '> ',
+      prompt: '',
     });
 
     this.reader.on('line', (line) => {
@@ -64,8 +64,7 @@ export class LineRender extends BaseRender implements RenderService {
     this.state.on('output', (output) => this.onOutput(output));
     this.state.on('step', (step) => this.onStep(step));
 
-    this.reader.setPrompt(`turn ${this.step.turn} > `);
-    this.reader.prompt();
+    this.showPrompt();
   }
 
   public async stop(): Promise<void> {
@@ -85,15 +84,14 @@ export class LineRender extends BaseRender implements RenderService {
     for (const line of lines) {
       this.showSync(line);
     }
+
+    this.showPrompt();
   }
 
   public onStep(result: StepResult): void {
     this.logger.debug(result, 'handling step event from state');
     this.step = result;
-
-    const reader = mustExist(this.reader);
-    reader.setPrompt(`turn ${this.step.turn} > `);
-    reader.prompt();
+    this.showPrompt();
   }
 
   protected showSync(msg: string): void {
@@ -102,5 +100,11 @@ export class LineRender extends BaseRender implements RenderService {
     const reader = mustExist(this.reader);
     reader.write(msg);
     reader.write('\n');
+  }
+
+  protected showPrompt(): void {
+    const reader = mustExist(this.reader);
+    reader.setPrompt(`turn ${this.step.turn} > `);
+    reader.prompt();
   }
 }

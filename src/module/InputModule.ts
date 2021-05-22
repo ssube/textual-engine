@@ -26,7 +26,7 @@ export class InputModule extends Module {
     super();
 
     this.actors = new Map();
-    this.player = new Singleton();
+    this.player = new Singleton(() => mustExist(this.container).create(ClassicInput));
   }
 
   public async configure(options: ModuleOptions): Promise<void> {
@@ -47,7 +47,7 @@ export class InputModule extends Module {
    */
   @Provides(INJECT_INPUT_PLAYER)
   public async getPlayerInput(): Promise<Input> {
-    return this.player.get(() => mustExist(this.container).create(ClassicInput));
+    return this.player.get();
   }
 
   public async getBehaviorInput(options: ActorInputOptions): Promise<Input> {

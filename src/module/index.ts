@@ -1,6 +1,7 @@
 // service symbols
 export const INJECT_COUNTER = Symbol('inject-counter');
 export const INJECT_LOADER = Symbol('inject-loader');
+export const INJECT_LOCALE = Symbol('inject-locale');
 export const INJECT_LOGGER = Symbol('inject-logger');
 export const INJECT_PARSER = Symbol('inject-parser');
 export const INJECT_RANDOM = Symbol('inject-random');

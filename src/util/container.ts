@@ -1,15 +1,19 @@
 import { isNil } from '@apextoaster/js-utils';
 
+export type SingletonConstructor<TValue> = () => Promise<TValue>;
+
 export class Singleton<TValue> {
+  protected ctor: SingletonConstructor<TValue>;
   protected value?: TValue;
 
-  constructor(value?: TValue) {
+  constructor(ctor: SingletonConstructor<TValue>, value?: TValue) {
+    this.ctor = ctor;
     this.value = value;
   }
 
-  public async get(ctor: () => Promise<TValue>): Promise<TValue> {
+  public async get(): Promise<TValue> {
     if (isNil(this.value)) {
-      this.value = await ctor();
+      this.value = await this.ctor();
     }
     return this.value;
   }

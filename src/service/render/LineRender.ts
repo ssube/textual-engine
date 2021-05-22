@@ -36,12 +36,7 @@ export class LineRender extends BaseRender implements RenderService {
   }
 
   public async show(msg: string): Promise<void> {
-    this.skipLine = true;
-
-    const reader = mustExist(this.reader);
-
-    reader.write(msg);
-    reader.write('\n');
+    this.showSync(msg);
   }
 
   public async start(): Promise<void> {
@@ -88,7 +83,7 @@ export class LineRender extends BaseRender implements RenderService {
     this.logger.debug({ lines }, 'handling output event from state');
 
     for (const line of lines) {
-      this.show(line); // TODO: ensure line has been shown before sending next
+      this.showSync(line);
     }
   }
 
@@ -99,5 +94,13 @@ export class LineRender extends BaseRender implements RenderService {
     const reader = mustExist(this.reader);
     reader.setPrompt(`turn ${this.step.turn} > `);
     reader.prompt();
+  }
+
+  protected showSync(msg: string): void {
+    this.skipLine = true;
+
+    const reader = mustExist(this.reader);
+    reader.write(msg);
+    reader.write('\n');
   }
 }

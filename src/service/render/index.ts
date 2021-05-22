@@ -5,29 +5,24 @@ export interface RenderService {
   prompt(prompt: string): void;
 
   /**
-   * Wait for a line of input.
+   * Wait for the next line of input.
    */
   read(): Promise<string>;
 
   /**
-   * Write a message normally.
+   * Buffer and show a line of output.
    */
   show(msg: string): Promise<void>;
 
   /**
-   * Start the rendering system and bind to the console.
+   * Start the rendering system and start accepting input.
    *
    * This does not get the first line of input, that must still be `read()`.
    */
   start(): Promise<void>;
 
   /**
-   * Shut down the rendering subsystem and unbind from the console.
+   * Shut down the rendering subsystem and release resources, unmount elements, and stop accepting input.
    */
   stop(): Promise<void>;
-
-  /**
-   * Main game loop.
-   */
-  loop(prompt: string): Promise<void>;
 }

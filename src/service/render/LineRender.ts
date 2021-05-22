@@ -6,7 +6,6 @@ import { createInterface, Interface as LineInterface } from 'readline';
 import { RenderService } from '.';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
-
 @Inject(/* all from base */)
 export class LineRender extends BaseRender implements RenderService {
   protected reader?: LineInterface;
@@ -20,14 +19,18 @@ export class LineRender extends BaseRender implements RenderService {
     const reader = mustExist(this.reader);
 
     const result = new Promise<string>((res, rej) => {
-      reader.once('SIGINT', () => {
-        reader.removeAllListeners();
-        res('quit');
+      reader.once('error', (err?: Error) => {
+        rej(err);
       });
 
       reader.once('line', (line: string) => {
         reader.removeAllListeners();
         res(line);
+      });
+
+      reader.once('SIGINT', () => {
+        reader.removeAllListeners();
+        res('quit');
       });
     });
 

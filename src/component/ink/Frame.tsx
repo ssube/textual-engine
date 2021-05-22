@@ -1,72 +1,40 @@
 import { doesExist } from '@apextoaster/js-utils';
-import { Newline, Text, useApp, useInput } from 'ink';
+import { Newline, Text, useInput } from 'ink';
 import * as React from 'react';
+
 import { StepResult } from '../../service/state';
-
-import { InkQuitDispatch, InkStateDispatch } from '../../service/render/InkRender';
-import { Output } from './Output';
 import { AbortEventError } from '../../util/event';
+import { Output } from './Output';
 
-const { useEffect, useState } = React;
+const { useState } = React;
 
 interface FrameProps {
-  onLine: InkStateDispatch;
-  onQuit: InkQuitDispatch;
+  onLine: (line: string) => void;
+  prompt: string;
+  output: Array<string>;
+  step: StepResult;
 }
 
 const HISTORY_SIZE = 20;
-const INITIAL_STEP: StepResult = {
-  line: '',
-  output: [],
-  stop: false,
-  turn: 0,
-  time: 0,
-};
 
 export const Frame = (props: FrameProps) => {
-  const { exit } = useApp();
   const [line, setLine] = useState('');
-  const [state, setState] = useState(INITIAL_STEP);
+  const [output, setOutput] = useState(props.output);
 
   const pushError = (err?: Error) => {
     if (doesExist(err) && (err instanceof AbortEventError) === false) {
-      setState({
-        ...state,
-        output: [
-          ...state.output,
-          err.message
-        ].slice(-HISTORY_SIZE),
-      });
+      setOutput([
+        ...output,
+        err.message
+      ].slice(-HISTORY_SIZE));
     }
   };
 
-  useEffect(() => {
-    const { pending, remove } = props.onQuit();
-
-    pending.then(() => {
-      exit();
-    }).catch(pushError);
-
-    return remove;
-  });
-
   useInput((input, key) => {
     if (key.return) {
-      const { pending, remove } = props.onLine(line);
-
-      pending.then((stepState) => {
-        setLine('');
-        setState({
-          ...stepState,
-          output: [
-            ...state.output,
-            ...stepState.output
-          ].slice(-HISTORY_SIZE),
-        });
-      }).catch(pushError);
-
-      // TODO: when should onLine remove be called?
-      return remove;
+      setLine('');
+      props.onLine(line);
+      return;
     }
 
     if (key.backspace || key.delete) {
@@ -74,15 +42,13 @@ export const Frame = (props: FrameProps) => {
     } else {
       setLine(line + input);
     }
-
-    return () => { /* noop */ };
   });
 
   return <Text>
     <Newline />
-    <Output output={state.output} />
+    <Output output={output} />
     <Newline />
-    <Text color="blueBright">turn {state.turn} &gt; </Text>
+    <Text color="blueBright">turn {props.step.turn} &gt; </Text>
     <Text color="red">{line}</Text>
   </Text>;
 };

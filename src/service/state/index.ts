@@ -1,3 +1,4 @@
+import * as EventEmitter from 'events';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
 
@@ -20,16 +21,6 @@ export interface StepParams {
 
 export interface StepResult {
   /**
-   * The input line.
-   */
-  line: string;
-
-  /**
-   * The output from this step, filtered by the focused actor.
-   */
-  output: Array<string>;
-
-  /**
    * Stop condition (this is an async iterator).
    */
   stop: boolean;
@@ -45,7 +36,7 @@ export interface StepResult {
   turn: number;
 }
 
-export interface StateService {
+export interface StateService extends EventEmitter {
   /**
    * Create a new world state from a world template.
    */
@@ -60,6 +51,13 @@ export interface StateService {
    * Save the current world state.
    */
   save(): Promise<State>;
+
+  /**
+   * Begin the game loop, continuing until a quit command is received.
+   *
+   * @todo should this return the final state/step?
+   */
+  loop(): Promise<void>;
 
   /**
    * Step the internal world state, simulating some turns and time passing.

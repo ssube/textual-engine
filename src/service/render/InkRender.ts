@@ -1,31 +1,33 @@
-import { EventEmitter } from 'events';
-import { render } from 'ink';
+import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { Instance as InkInstance, render } from 'ink';
+import { Inject } from 'noicejs';
 import * as React from 'react';
 
 import { RenderService } from '.';
-import { onceWithRemove, RemoveResult } from '../../util/event';
+import { Frame } from '../../component/ink/Frame';
+import { onceWithRemove } from '../../util/event';
 import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
-import { Frame } from '../../component/ink/Frame';
-
-export type InkStateDispatch = (input: string) => RemoveResult<StepResult>;
-export type InkQuitDispatch = () => RemoveResult<void>;
 
 /**
  * Interface with Ink's React tree using an event emitter.
- * Is that the right way to do it? Who knows? Not me. :D
  */
+@Inject(/* from base */)
 export class InkRender extends BaseRender implements RenderService {
-  protected emits: EventEmitter;
-  protected output: Array<string>;
+  protected inputStr: string;
   protected promptStr: string;
+
+  protected output: Array<string>;
+
+  protected ink?: InkInstance;
 
   constructor(options: BaseRenderOptions) {
     super(options);
 
-    this.emits = new EventEmitter();
-    this.output = [];
+    this.inputStr = '';
     this.promptStr = '';
+
+    this.output = [];
   }
 
   public prompt(prompt: string): void {
@@ -33,7 +35,7 @@ export class InkRender extends BaseRender implements RenderService {
   }
 
   public read(): Promise<string> {
-    const { pending } = onceWithRemove<string>(this.emits, 'line');
+    const { pending } = onceWithRemove<string>(this.state, 'output');
 
     return pending;
   }
@@ -43,39 +45,80 @@ export class InkRender extends BaseRender implements RenderService {
   }
 
   public async start(): Promise<void> {
-    const root = React.createElement(Frame, {
-      onLine: (line: string) => this.onLine(line),
-      onQuit: () => this.onQuit(),
-    });
+    this.ink = render(this.createRoot());
+    this.prompt(`turn ${this.step.turn}`);
 
-    render(root);
-
-    this.running = true;
+    this.state.on('output', (output) => this.onOutput(output));
+    this.state.on('quit', () => this.onQuit());
+    this.state.on('step', (step) => this.onStep(step));
   }
 
   public async stop(): Promise<void> {
-    this.emits.emit('quit');
+    mustExist(this.ink).unmount();
   }
 
-  public async showStep(result: StepResult): Promise<void> {
-    // add the turn marker
-    result.output.unshift(`turn ${result.turn} > ${result.line}`);
+  /**
+   * Handler for lines received from the React tree.
+   */
+  public nextLine(line: string): void {
+    this.logger.debug({ line }, 'handling line event from React');
 
-    this.logger.debug(result, 'showing step result');
-    await super.showStep(result);
+    // update inner state
+    this.inputStr = line;
 
-    this.logger.debug(result, 'firing step event');
-    this.emits.emit('step', result);
+    // append to buffer
+    this.output.push(`${this.promptStr} > ${this.inputStr}`);
+
+    // forward event to state
+    this.state.emit('line', line);
   }
 
-  protected onLine(line: string): RemoveResult<StepResult> {
-    return onceWithRemove(this.emits, 'step', () => {
-      this.logger.debug({ line }, 'firing line event');
-      this.emits.emit('line', line);
+  /**
+   * Handler for output line events received from state service.
+   */
+  public onOutput(lines: Array<string>): void {
+    if (!Array.isArray(lines)) {
+      throw new InvalidArgumentError('please batch output');
+    }
+
+    this.logger.debug({ lines }, 'handling output event from state');
+    this.output.push(...lines);
+
+    if (doesExist(this.ink)) {
+      this.ink.rerender(this.createRoot());
+    }
+  }
+
+  /**
+   * Handler for step events received from state service.
+   */
+  public onStep(result: StepResult): void {
+    this.logger.debug(result, 'handling step event from state');
+    this.step = result;
+
+    this.prompt(`turn ${this.step.turn}`);
+
+    if (doesExist(this.ink)) {
+      this.ink.rerender(this.createRoot());
+    }
+  }
+
+  /**
+   * Handler for quit events received from state service.
+   */
+  public onQuit(): void {
+    this.logger.debug('handling quit event from state');
+    this.output.push('game over');
+
+    // TODO: stop things
+  }
+
+  protected createRoot(): React.ReactElement {
+    return React.createElement(Frame, {
+      onLine: (line: string) => this.nextLine(line),
+      prompt: this.promptStr,
+      output: this.output,
+      step: this.step,
     });
-  }
-
-  protected onQuit(): RemoveResult<void> {
-    return onceWithRemove(this.emits, 'quit');
   }
 }

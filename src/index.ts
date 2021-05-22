@@ -60,8 +60,8 @@ export async function main(args: Array<string>): Promise<number> {
   }
 
   // create state from world
-  const stateCtrl = await container.create<StateService, BaseOptions>(INJECT_STATE);
-  await stateCtrl.from(world, {
+  const state = await container.create<StateService, BaseOptions>(INJECT_STATE);
+  await state.from(world, {
     depth: PORTAL_DEPTH,
     seed,
   });
@@ -69,7 +69,7 @@ export async function main(args: Array<string>): Promise<number> {
   // start renderer
   const render = await container.create<RenderService, BaseOptions>(INJECT_RENDER);
   await render.start();
-  await render.loop('start > '); // TODO: state.loop
+  await state.loop();
   await render.stop();
 
   return 0;

@@ -1,4 +1,5 @@
 import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { EventEmitter } from 'events';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepParams, StepResult } from '.';
@@ -34,6 +35,7 @@ import {
 } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
+import { onceWithRemove } from '../../util/event';
 import { StateFocusBuffer } from '../../util/state/focus';
 import { searchState } from '../../util/state/search';
 import { StateEntityTransfer } from '../../util/state/transfer';
@@ -64,7 +66,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
   INJECT_SCRIPT,
   INJECT_TEMPLATE
 )
-export class LocalStateService implements StateService {
+export class LocalStateService extends EventEmitter implements StateService {
   /**
    * @todo remove. only present to get actor input.
    */
@@ -85,6 +87,8 @@ export class LocalStateService implements StateService {
   protected world?: World;
 
   constructor(options: LocalStateServiceOptions) {
+    super();
+
     this.container = options.container;
     this.counter = options[INJECT_COUNTER];
     this.loader = options[INJECT_LOADER];
@@ -181,10 +185,18 @@ export class LocalStateService implements StateService {
     return this.state;
   }
 
+  public async loop(): Promise<void> {
+    const { pending } = onceWithRemove<void>(this, 'quit');
+
+    this.on('line', (line) => this.onLine(line));
+
+    return pending;
+  }
+
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
-  public async step(params: StepParams): Promise<StepResult> {
+  public async onLine(line: string): Promise<void> {
     const state = mustExist(this.state);
 
     const [player] = searchState(state, {
@@ -201,46 +213,34 @@ export class LocalStateService implements StateService {
     }
 
     const input = await this.getActorInput(player);
-    const cmd = await input.parse(params.line);
+    const cmd = await input.parse(line);
     this.logger.debug({
       cmd,
       focus: state.focus,
-      params,
+      line,
       player,
-    }, 'parsed player input');
+    }, 'parsed line of player input');
 
     // handle meta commands
     switch (cmd.verb) {
       case META_DEBUG: {
         const output = await debugState(state);
-        return {
-          ...params,
-          output,
-          stop: false,
-          turn: state.step.turn,
-        };
+        this.emit('output', output);
+        break;
       }
       case META_GRAPH: {
         const output = await graphState(state);
         await this.loader.saveStr(cmd.target, output.join('\n'));
-        return {
-          ...params,
-          output: [
-            `wrote ${state.rooms.length} node graph to ${cmd.target}`,
-          ],
-          stop: false,
-          turn: state.step.turn,
-        };
+        this.emit('output', [
+          `wrote ${state.rooms.length} node graph to ${cmd.target}`,
+        ]);
+        break;
       }
       case META_HELP: {
-        return {
-          ...params,
-          output: [
-            KNOWN_VERBS.join(', '),
-          ],
-          stop: false,
-          turn: state.step.turn,
-        };
+        this.emit('output', [
+          KNOWN_VERBS.join(', '),
+        ]);
+        break;
       }
       case META_SAVE: {
         const path = cmd.target;
@@ -250,13 +250,8 @@ export class LocalStateService implements StateService {
         });
         await this.loader.saveStr(path, dataStr);
 
-        return {
-          ...params,
-          output: [`saved world ${state.meta.id} state to ${path}`],
-          stop: false,
-          time: state.step.time,
-          turn: state.step.turn,
-        };
+        this.emit('output', [`saved world ${state.meta.id} state to ${path}`]);
+        break;
       }
       case META_LOAD: {
         const path = cmd.target;
@@ -266,38 +261,26 @@ export class LocalStateService implements StateService {
         this.state = data.states[0];
         this.world = data.worlds[0];
 
-        return {
-          ...params,
-          output: [`loaded world ${state.meta.id} state from ${path}`],
-          stop: false,
-          time: this.state.step.time,
-          turn: this.state.step.turn,
-        };
+        this.emit('output', [
+          `loaded world ${state.meta.id} state from ${path}`,
+        ]);
+        break;
       }
       case META_QUIT:
-        return {
-          ...params,
-          output: [],
-          stop: true,
-          turn: state.step.turn,
-        };
+        this.emit('quit');
+        break;
       default: {
         // step world
-        const output = await this.stepState();
+        const result = await this.step();
+        const output = mustExist(this.focus).flush();
 
-        return {
-          ...params,
-          line: params.line,
-          output,
-          stop: false,
-          time: state.step.time,
-          turn: state.step.turn,
-        };
+        this.emit('output', output);
+        this.emit('step', result);
       }
     }
   }
 
-  public async stepState(): Promise<Array<string>> {
+  public async step(): Promise<StepResult> {
     if (isNil(this.state)) {
       throw new Error('state has not been initialized');
     }
@@ -369,7 +352,11 @@ export class LocalStateService implements StateService {
       step: this.state.step,
     }, 'finished world state step');
 
-    return mustExist(this.focus).flush();
+    return {
+      stop: false,
+      time: this.state.step.time,
+      turn: this.state.step.turn,
+    };
   }
 
   protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {

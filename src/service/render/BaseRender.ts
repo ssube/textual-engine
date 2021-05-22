@@ -1,77 +1,45 @@
-import { constructorName, mustExist } from '@apextoaster/js-utils';
+import { mustExist } from '@apextoaster/js-utils';
+import { EventEmitter } from 'events';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '.';
-import { INJECT_INPUT_PLAYER, INJECT_LOADER, INJECT_LOCALE, INJECT_LOGGER, INJECT_STATE } from '../../module';
-import { Input } from '../input';
+import { INJECT_LOCALE, INJECT_LOGGER, INJECT_STATE } from '../../module';
 import { LocaleService } from '../locale';
 import { StateService, StepResult } from '../state';
 
 export interface BaseRenderOptions extends BaseOptions {
-  [INJECT_INPUT_PLAYER]?: Input;
   [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
   [INJECT_STATE]?: StateService;
 }
 
-@Inject(INJECT_INPUT_PLAYER, INJECT_LOCALE, INJECT_LOGGER, INJECT_LOADER, INJECT_STATE)
+@Inject(INJECT_LOCALE, INJECT_LOGGER, INJECT_STATE)
 export abstract class BaseRender implements RenderService {
-  protected running: boolean;
-  protected locale: LocaleService;
+  // services
   protected logger: Logger;
+  protected locale: LocaleService;
   protected state: StateService;
 
+  // state
+  protected running: boolean;
+  protected step: StepResult;
+
   constructor(options: BaseRenderOptions) {
-    this.running = false;
     this.locale = mustExist(options[INJECT_LOCALE]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = mustExist(options[INJECT_LOGGER]);
     this.state = mustExist(options[INJECT_STATE]);
+
+    this.running = false;
+    this.step = {
+      stop: false,
+      turn: 0,
+      time: 0,
+    };
   }
 
   abstract prompt(prompt: string): void;
-  abstract read(prompt?: string): Promise<string>;
-  abstract show(msg: string): Promise<void>;
+  abstract read(): Promise<string>;
+  abstract show(line: string): Promise<void>;
   abstract start(): Promise<void>;
   abstract stop(): Promise<void>;
-
-  public async showStep(result: StepResult): Promise<void> {
-    // show any output
-    for (const outputLine of result.output) {
-      await this.show(outputLine);
-    }
-
-    this.prompt(this.locale.getKey('config:turn-prompt', {
-      turn: result.turn,
-    }));
-  }
-
-  /**
-   * Loop logic should be relatively similar across render frontends, but can be overridden or hooked at `loopStep`.
-   */
-  public async loop(prompt: string): Promise<void> {
-    let time = Date.now();
-
-    this.prompt(prompt);
-
-    while (this.running) {
-      // get and parse a line
-      const line = await this.read();
-      this.logger.debug({
-        line,
-      }, 'read line, starting step');
-
-      // step the state
-      const result = await this.state.step({
-        line,
-        time,
-      });
-
-      await this.showStep(result);
-
-      time = result.time;
-      this.running = result.stop === false;
-    }
-  }
 }

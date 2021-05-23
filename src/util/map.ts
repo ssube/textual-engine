@@ -14,15 +14,15 @@ export function decrementKey<TKey>(map: Map<TKey, number>, key: TKey, step = 1, 
   }
 }
 
-export function incrementKey<TKey>(map: Map<TKey, number>, key: TKey, step = 1, max = BYTE_RANGE, min = 0): number {
+export function incrementKey<TKey>(map: Map<TKey, number>, key: TKey, step = 1, max = BYTE_RANGE): number {
   const last = map.get(key);
   if (doesExist(last)) {
     const next = Math.min(max, last + step);
     map.set(key, next);
     return next;
   } else {
-    map.set(key, min);
-    return min;
+    map.set(key, step);
+    return step;
   }
 }
 

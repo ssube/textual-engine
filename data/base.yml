@@ -71,7 +71,7 @@ worlds:
               root:
                 close: '}'
                 open: 'strict graph {'
-              summary: 'wrote {{size}} node graph to {{cmd.target}}'
+              summary: 'wrote {{size}} node graph to {{-path}}'
             tree:
               actor: '    actor: {{actor.meta.name}} ({{actor.meta.id}}, {{actor.actorType}})'
               item: '    item: {{item.meta.name}} ({{item.meta.id}})'

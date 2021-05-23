@@ -4,11 +4,6 @@ import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
 import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor';
-import { Item, ITEM_TYPE } from '../../model/entity/Item';
-import { Portal, PortalGroups } from '../../model/entity/Portal';
-import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { Metadata } from '../../model/meta/Metadata';
-import { BaseTemplate, Template, TemplateMetadata } from '../../model/meta/Template';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
 import {
@@ -33,14 +28,14 @@ import {
   META_QUIT,
   META_SAVE,
   SLOT_STEP,
-  TEMPLATE_CHANCE,
 } from '../../util/constants';
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
 import { onceWithRemove } from '../../util/event';
-import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { searchState } from '../../util/state';
+import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
+import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { findByTemplateId } from '../../util/template';
 import { Input } from '../input';
 import { Loader } from '../loader';
@@ -49,7 +44,6 @@ import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
 import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
 import { TemplateService } from '../template';
-import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
@@ -186,6 +180,10 @@ export class LocalStateService extends EventEmitter implements StateService {
     await focus.setRoom(startRoom.meta.id);
     await focus.setActor(startActor.meta.id);
 
+    // cache verbs
+    const input = await this.getActorInput(startActor);
+    input.translate(KNOWN_VERBS);
+
     return state;
   }
 
@@ -246,8 +244,6 @@ export class LocalStateService extends EventEmitter implements StateService {
     }
 
     const input = await this.getActorInput(player);
-    input.translate(KNOWN_VERBS); // TODO: do once
-
     const cmd = await input.parse(line);
 
     this.logger.debug({
@@ -262,17 +258,9 @@ export class LocalStateService extends EventEmitter implements StateService {
       case META_DEBUG:
         this.emit('output', debugState(state));
         break;
-      case META_GRAPH: {
-        const output = graphState(state);
-        await this.loader.saveStr(cmd.target, output.join('\n'));
-        this.emit('output', [
-          this.locale.translate('debug.graph', {
-            cmd,
-            size: state.rooms.length,
-          }),
-        ]);
+      case META_GRAPH:
+        await this.doGraph(cmd.target);
         break;
-      }
       case META_HELP:
         this.emit('output', [
           KNOWN_VERBS.join(', '),
@@ -293,6 +281,18 @@ export class LocalStateService extends EventEmitter implements StateService {
         this.emit('step', result);
       }
     }
+  }
+
+  public async doGraph(path: string): Promise<void> {
+    const state = await this.save();
+    const output = graphState(state);
+    await this.loader.saveStr(path, output.join('\n'));
+    this.emit('output', [
+      this.locale.translate('debug.graph.summary', {
+        path,
+        size: state.rooms.length,
+      }),
+    ]);
   }
 
   public async doLoad(path: string, index: number): Promise<void> {

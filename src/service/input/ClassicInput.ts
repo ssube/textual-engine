@@ -1,9 +1,9 @@
 import { getOrDefault, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject } from 'noicejs';
+
 import { Command, Input } from '.';
 import { INJECT_LOCALE } from '../../module';
 import { LocaleService } from '../locale';
-import { LocalScriptService } from '../script/LocalScriptService';
 
 const REMOVED_WORDS = new Set([
   'a',
@@ -69,7 +69,7 @@ export class ClassicInput implements Input {
     return this.history[0];
   }
 
-  public translate(verbs: Array<string>) {
+  public translate(verbs: Array<string>): void {
     this.verbs.clear();
 
     for (const verb of verbs) {

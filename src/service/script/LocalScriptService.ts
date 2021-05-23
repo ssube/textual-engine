@@ -14,8 +14,6 @@ import { RoomStep } from './common/RoomStep';
 
 /**
  * Common scripts, built into the engine and always available.
- *
- * @todo load scripts from one or more modules (DI and/or Node)
  */
 const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['actor-get', ActorGet],

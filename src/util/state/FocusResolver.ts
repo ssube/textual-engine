@@ -80,7 +80,7 @@ export class StateFocusResolver implements ScriptFocus {
   /**
    * @todo filter output to the room/actor with focus
    */
-  public async show(msg: string, context?: LocaleContext, source?: WorldEntity): Promise<void> {
+  public async show(msg: string, context?: LocaleContext, _source?: WorldEntity): Promise<void> {
     await this.onShow(msg, context);
   }
 }

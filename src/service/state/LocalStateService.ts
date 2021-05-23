@@ -128,38 +128,26 @@ export class LocalStateService extends EventEmitter implements StateService {
       },
     };
 
+    // load the world locale
+    this.locale.deleteBundle('world');
+    this.locale.addBundle('world', world.locale);
+
     // save state for later
     this.state = state;
     this.world = world;
-
-    // register focus
-    this.focus = new StateFocusResolver(this.state, {
-      onActor: () => Promise.resolve(),
-      onRoom: (room) => this.populateRoom(room, params.depth),
-      onShow: async (line, context) => {
-        const out = this.locale.translate(line, context);
-        this.logger.debug({ line, out }, 'translated output');
-        this.onOutput(out);
-      },
-    });
-    this.transfer = new StateEntityTransfer(this.logger, this.state);
-
-    // reseed the prng
-    this.random.reseed(params.seed);
-
-    // load the world locale
-    this.locale.addBundle('world', world.locale);
+    this.createHelpers();
 
     // pick a starting room and create it
     const startRoomRef = randomItem(world.start.rooms, this.random);
-    this.logger.debug({
-      rooms: world.templates.rooms,
-      startRoomId: startRoomRef,
-    }, 'generating start room');
     const startRoomTemplate = findByTemplateId(world.templates.rooms, startRoomRef.id);
     if (isNil(startRoomTemplate)) {
       throw new NotFoundError('invalid start room');
     }
+
+    this.logger.debug({
+      startRoomRef,
+      startRoomTemplate,
+    }, 'creating start room');
 
     const startRoom = await this.createRoom(startRoomTemplate);
     state.rooms.push(startRoom);
@@ -171,13 +159,19 @@ export class LocalStateService extends EventEmitter implements StateService {
       throw new NotFoundError('invalid start actor');
     }
 
+    this.logger.debug({
+      startActorRef,
+      startActorTemplate,
+    }, 'creating start actor');
+
     const startActor = await this.createActor(startActorTemplate, ActorType.PLAYER);
     startActor.actorType = ActorType.PLAYER;
     startRoom.actors.push(startActor);
 
     // set initial focus
-    await this.focus.setRoom(startRoom.meta.id);
-    await this.focus.setActor(startActor.meta.id);
+    const focus = mustExist(this.focus);
+    await focus.setRoom(startRoom.meta.id);
+    await focus.setActor(startActor.meta.id);
 
     // build out the world
     await this.populateRoom(startRoom, params.depth);
@@ -192,17 +186,6 @@ export class LocalStateService extends EventEmitter implements StateService {
     this.state = state;
   }
 
-  /**
-   * Save the current world state.
-   */
-  public async save(): Promise<State> {
-    if (isNil(this.state)) {
-      throw new Error('state has not been initialized');
-    }
-
-    return this.state;
-  }
-
   public async loop(): Promise<void> {
     const { pending } = onceWithRemove<void>(this, 'quit');
 
@@ -213,6 +196,17 @@ export class LocalStateService extends EventEmitter implements StateService {
     });
 
     return pending;
+  }
+
+  /**
+   * Save the current world state.
+   */
+  public async save(): Promise<State> {
+    if (isNil(this.state)) {
+      throw new Error('state has not been initialized');
+    }
+
+    return this.state;
   }
 
   /**
@@ -295,11 +289,14 @@ export class LocalStateService extends EventEmitter implements StateService {
     const dataStr = await this.loader.loadStr(path);
     const data = this.parser.load(dataStr);
 
-    this.state = data.states[index];
-    this.world = data.worlds[index]; // TODO: look up world based on state meta template
+    const state = data.states[index];
+    this.state = state;
+    this.world = data.worlds.find((it) => it.meta.id === state.meta.template);
+
+    this.createHelpers();
 
     this.emit('output', [
-      `loaded world ${this.state.meta.id} state from ${path}`,
+      `loaded world ${state.meta.id} state from ${path}`,
     ]);
   }
 
@@ -613,5 +610,24 @@ export class LocalStateService extends EventEmitter implements StateService {
       room,
     }, `populating ${portals.length} new portals of ${template.base.portals.length} in room ${room.meta.id}`);
     room.portals.push(...await this.populatePortals(portals, room.meta.id, depth));
+  }
+
+  protected createHelpers(): void {
+    const state = mustExist(this.state);
+
+    // register focus
+    this.focus = new StateFocusResolver(state, {
+      onActor: () => Promise.resolve(),
+      onRoom: (room) => this.populateRoom(room, state.world.depth),
+      onShow: async (line, context) => { // TODO: move to method
+        const out = this.locale.translate(line, context);
+        this.logger.debug({ line, out }, 'translated output');
+        this.onOutput(out);
+      },
+    });
+    this.transfer = new StateEntityTransfer(this.logger, state);
+
+    // reseed the prng
+    this.random.reseed(state.world.seed); // TODO: fast-forward to last state
   }
 }

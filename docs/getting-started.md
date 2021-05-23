@@ -6,20 +6,21 @@ This guide covers a little bit of everything in light detail.
 
 - [Getting Started](#getting-started)
   - [Contents](#contents)
-  - [?](#)
-  - [Game World](#game-world)
-    - [World Templates](#world-templates)
-    - [World State](#world-state)
+  - [Playing](#playing)
+  - [Creating](#creating)
+  - [Developing](#developing)
 
-## ?
+## Playing
 
 Run `make run` and start typing.
 
 - `help`: shows common verbs
 - `quit`: leave the game
 
-## Game World
+## Creating
 
-### World Templates
+To create worlds, please [see the worlds guide](./worlds.md).
 
-### World State
+## Developing
+
+To develop the engine, please [see the development guide](./development.md).

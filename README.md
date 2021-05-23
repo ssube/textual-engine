@@ -12,10 +12,13 @@ See [the getting started docs](docs/getting-started.md) for more info.
   - persistent rooms
   - procedural expansion
   - wandering monsters
+  - verbs in certain rooms and from items
 - engine:
-  - event broadcast
   - entity scripts
-  - thorough localization
+  - event broadcast
+  - localization of both input and output
+  - multiple rendering adapters (readline, [Ink](https://github.com/vadimdemedes/ink))
+  - save and load world state
 
 ## Contents
 

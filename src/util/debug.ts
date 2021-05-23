@@ -47,7 +47,7 @@ export function graphState(state: State): Array<string> {
       const segments = [
         `  ${sanitize(room.meta.id)} -> ${sanitize(portal.dest)}`,
         '[',
-        `label="${portal.sourceGroup} -> ${portal.name} -> ${portal.targetGroup}"`,
+        `label="${portal.sourceGroup} ${portal.name}"`,
       ];
 
       /* if (portal.link === PortalLinkage.BOTH) {

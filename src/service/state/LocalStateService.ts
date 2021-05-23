@@ -402,7 +402,7 @@ export class LocalStateService extends EventEmitter implements StateService {
   }
 
   /**
-   * @todo get rid of this in favor of something that does not need a handle to the container
+   * @todo get rid of this in favor of something that does not call DI during state steps
    */
   protected getActorInput(actor: Actor): Promise<Input> {
     return this.container.create<Input, ActorInputOptions>(INJECT_INPUT_ACTOR, {

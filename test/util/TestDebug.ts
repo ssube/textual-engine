@@ -31,7 +31,7 @@ describe('state debug utils', () => {
       },
     };
 
-    const lines = await debugState(state);
+    const lines = debugState(state);
     expect(lines).to.include('state: ');
 
     for (const room of state.rooms) {
@@ -66,7 +66,7 @@ describe('state debug utils', () => {
       },
     };
 
-    const lines = await graphState(state);
+    const lines = graphState(state);
     expect(lines).to.include('strict digraph {');
 
     for (const room of state.rooms) {

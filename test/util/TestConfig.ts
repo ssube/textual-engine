@@ -13,9 +13,8 @@ describe('config utils', () => {
     expect(data.logger.name).to.equal('textual-engine');
   });
 
-  // TODO: the js-yaml error escape the assertion and causes this test to fail, not sure why
-  it('should throw when loading data files', async () => {
-    return expect(loadConfig('data/base.yml')).to.eventually.be.rejectedWith(ConfigError);
-  });
+  it('should throw when loading data files', async () =>
+    expect(loadConfig('data/base.yml')).to.eventually.be.rejectedWith(ConfigError)
+  );
 });
 

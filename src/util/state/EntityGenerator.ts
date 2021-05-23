@@ -3,7 +3,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
-import { Portal, PortalGroups } from '../../model/entity/Portal';
+import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { Metadata } from '../../model/meta/Metadata';
 import { BaseTemplate, Template, TemplateMetadata } from '../../model/meta/Template';
@@ -237,22 +237,27 @@ export class StateEntityGenerator {
       rooms.push(destRoom);
 
       for (const portal of group.portals) {
+        const link = this.template.renderString(portal.link) as PortalLinkage;
         const name = this.template.renderString(portal.name);
         const targetGroup = this.template.renderString(portal.targetGroup);
 
         portals.push({
+          dest: destRoom.meta.id,
+          link,
           name,
           sourceGroup,
           targetGroup,
-          dest: destRoom.meta.id,
         });
 
-        destRoom.portals.push({
-          name,
-          sourceGroup: targetGroup,
-          targetGroup: sourceGroup,
-          dest: sourceId,
-        });
+        if (link === PortalLinkage.BOTH) {
+          destRoom.portals.push({
+            dest: sourceId,
+            link,
+            name,
+            sourceGroup: targetGroup,
+            targetGroup: sourceGroup,
+          });
+        }
       }
 
       const further = await this.populateRoom(destRoom, depth - 1);

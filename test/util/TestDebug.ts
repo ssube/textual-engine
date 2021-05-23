@@ -59,7 +59,7 @@ describe('state debug utils', () => {
     };
 
     const lines = await graphState(state);
-    expect(lines).to.include('strict graph {');
+    expect(lines).to.include('strict digraph {');
 
     for (const room of state.rooms) {
       expect(lines).to.include(room.meta.name);

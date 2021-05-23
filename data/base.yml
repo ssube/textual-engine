@@ -278,6 +278,8 @@ worlds:
                   base: door
                 dest:
                   base: room-cave
+                link:
+                  base: forward
               - sourceGroup:
                   base: east
                 targetGroup:

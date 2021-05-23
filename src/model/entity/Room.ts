@@ -8,7 +8,7 @@ import { Template, TEMPLATE_REF_SCHEMA } from '../meta/Template';
 import { Actor } from './Actor';
 import { Entity } from './Base';
 import { Item } from './Item';
-import { Portal } from './Portal';
+import { Portal, PORTAL_SCHEMA } from './Portal';
 
 export const ROOM_TYPE = 'room' as const;
 
@@ -44,10 +44,7 @@ export const ROOM_SCHEMA: JSONSchemaType<Template<Room>> = {
         },
         portals: {
           type: 'array',
-          items: {
-            type: 'object',
-            required: [],
-          },
+          items: PORTAL_SCHEMA,
         },
         slots: {
           type: 'object',

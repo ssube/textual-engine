@@ -1,3 +1,4 @@
+import { PortalLinkage } from '../model/entity/Portal';
 import { State } from '../model/State';
 
 export function debugState(state: State): Array<string> {
@@ -34,7 +35,7 @@ export function graphState(state: State): Array<string> {
   }
 
   const lines = [
-    'strict graph {',
+    'strict digraph {',
   ];
 
   // add rooms as nodes
@@ -43,7 +44,18 @@ export function graphState(state: State): Array<string> {
   // add edges between rooms
   for (const room of state.rooms) {
     for (const portal of room.portals) {
-      lines.push(`  ${sanitize(room.meta.id)} -- ${sanitize(portal.dest)} [label="${portal.sourceGroup} -> ${portal.name} -> ${portal.targetGroup}"];`);
+      const segments = [
+        `  ${sanitize(room.meta.id)} -> ${sanitize(portal.dest)}`,
+        '[',
+        `label="${portal.sourceGroup} -> ${portal.name} -> ${portal.targetGroup}"`,
+      ];
+
+      /* if (portal.link === PortalLinkage.BOTH) {
+        segments.push('dir=none');
+      } */
+
+      segments.push('];');
+      lines.push(segments.join(' '));
     }
   }
 

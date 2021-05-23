@@ -257,6 +257,7 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
   const room = mustExist(context.room);
   context.logger.debug({ cmd, room }, 'taking item from room');
 
+  const valid = new Set(room.items.map((it) => it.meta.id));
   const results = searchState(context.state, {
     meta: {
       name: cmd.target,
@@ -264,7 +265,17 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
     room: {
       id: room.meta.id,
     },
-  }, FUZZY_MATCHERS);
+  }, {
+    ...FUZZY_MATCHERS,
+    entity: (entity, search) => {
+      // exclude own and other's inventory items
+      if (valid.has(entity.meta.id)) {
+        return FUZZY_MATCHERS.entity(entity, search);
+      } else {
+        return false;
+      }
+    },
+  });
 
   const moving = indexEntity(results, cmd.index, isItem);
 

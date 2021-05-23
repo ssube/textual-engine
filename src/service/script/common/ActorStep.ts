@@ -228,10 +228,17 @@ export async function ActorStepLookItem(this: Actor, context: ScriptContext): Pr
 
 export async function ActorStepMove(this: Actor, context: ScriptContext): Promise<void> {
   // find the new room
-  const currentRoom = mustExist(context.room);
-  const targetName = mustExist(context.command).target;
+  const cmd = mustExist(context.command);
+  const targetName = cmd.target;
 
-  const targetPortal = currentRoom.portals.find((it) => it.name === targetName);
+  const currentRoom = mustExist(context.room);
+  const results = currentRoom.portals.filter((it) => {
+    const group = it.sourceGroup.toLocaleLowerCase();
+    const name = it.name.toLocaleLowerCase();
+    // portals in the same group usually lead to the same place, but name and group can both be ambiguous
+    return (name === targetName || group === targetName || `${group} ${name}` === targetName);
+  });
+  const targetPortal = results[cmd.index];
   if (isNil(targetPortal)) {
     context.logger.warn({
       portals: currentRoom.portals,

@@ -1,4 +1,5 @@
-import { InvalidTargetError } from 'noicejs';
+import { InvalidArgumentError } from '@apextoaster/js-utils';
+
 import { ScriptContext, ScriptTarget } from '..';
 import { isItem } from '../../../model/entity/Item';
 
@@ -9,6 +10,6 @@ export async function ItemStep(this: ScriptTarget, context: ScriptContext): Prom
   }, 'step script');
 
   if (!isItem(this)) {
-    throw new InvalidTargetError('target must be an item');
+    throw new InvalidArgumentError('target must be an item');
   }
 }

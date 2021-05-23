@@ -1,5 +1,5 @@
-import { mustExist } from '@apextoaster/js-utils';
-import { BaseOptions, InvalidTargetError } from 'noicejs';
+import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { BaseOptions } from 'noicejs';
 
 import { searchState } from '.';
 import { WorldEntity } from '../../model/entity';
@@ -56,7 +56,7 @@ export class StateFocusResolver implements ScriptFocus {
 
       await this.onActor(actor);
     } else {
-      throw new InvalidTargetError('unable to find actor ID in state');
+      throw new InvalidArgumentError('unable to find actor ID in state');
     }
   }
 
@@ -73,7 +73,7 @@ export class StateFocusResolver implements ScriptFocus {
 
       await this.onRoom(room);
     } else {
-      throw new InvalidTargetError('unable to find room ID in state');
+      throw new InvalidArgumentError('unable to find room ID in state');
     }
   }
 

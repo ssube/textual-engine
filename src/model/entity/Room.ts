@@ -10,7 +10,7 @@ import { Entity } from './Base';
 import { Item } from './Item';
 import { Portal } from './Portal';
 
-export const ROOM_TYPE = 'room';
+export const ROOM_TYPE = 'room' as const;
 
 export interface Room {
   type: typeof ROOM_TYPE;
@@ -59,6 +59,14 @@ export const ROOM_SCHEMA: JSONSchemaType<Template<Room>> = {
         },
       },
       required: ['actors', 'items', 'meta', 'portals', 'slots', 'type', 'verbs'],
+    },
+    mods: {
+      type: 'array',
+      default: [],
+      items: {
+        type: 'object',
+        required: [],
+      },
     },
   },
   required: ['base'],

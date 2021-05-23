@@ -14,7 +14,7 @@ export enum ActorType {
   REMOTE = 'remote',
 }
 
-export const ACTOR_TYPE = 'actor';
+export const ACTOR_TYPE = 'actor' as const;
 
 export interface Actor {
   type: typeof ACTOR_TYPE;
@@ -60,6 +60,14 @@ export const ACTOR_SCHEMA: JSONSchemaType<Template<Actor>> = {
         },
       },
       required: ['items', 'meta', 'type', 'skills', 'stats', 'slots'],
+    },
+    mods: {
+      type: 'array',
+      default: [],
+      items: {
+        type: 'object',
+        required: [],
+      },
     },
   },
   required: ['base'],

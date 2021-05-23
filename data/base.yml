@@ -138,6 +138,17 @@ worlds:
                 base: actor-hit
               step:
                 base: actor-step
+          mods:
+            - meta:
+                desc:
+                  prefix: sword
+                name:
+                  prefix: Sword
+              items:
+                - id: item-sword
+              skills: !map {}
+              stats: !map {}
+              slots: !map {}
         - base:
             meta:
               id: actor-goblin

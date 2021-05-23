@@ -4,6 +4,7 @@ import { TEMPLATE_CHANCE } from '../../util/constants';
 import { Replace } from '../../util/types';
 import { Entity } from '../entity/Base';
 import { Metadata } from './Metadata';
+import { Modifier } from './Modifier';
 
 export interface TemplateNumber {
   type: 'number';
@@ -47,7 +48,7 @@ export type BaseTemplate<TBase> = {
 
 export interface Template<TBase> {
   base: BaseTemplate<TBase>;
-  // mods: Array<Modifier>;
+  mods: Array<Modifier<TBase>>;
 }
 
 export const TEMPLATE_NUMBER_SCHEMA: JSONSchemaType<TemplateNumber> = {

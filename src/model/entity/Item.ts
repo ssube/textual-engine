@@ -7,7 +7,7 @@ import { Metadata, METADATA_SCHEMA } from '../meta/Metadata';
 import { Template } from '../meta/Template';
 import { Entity } from './Base';
 
-export const ITEM_TYPE = 'item';
+export const ITEM_TYPE = 'item' as const;
 
 export interface Item {
   type: typeof ITEM_TYPE;
@@ -43,6 +43,14 @@ export const ITEM_SCHEMA: JSONSchemaType<Template<Item>> = {
         },
       },
       required: ['meta', 'slots', 'stats', 'type', 'verbs'],
+    },
+    mods: {
+      type: 'array',
+      default: [],
+      items: {
+        type: 'object',
+        required: [],
+      },
     },
   },
   required: ['base'],

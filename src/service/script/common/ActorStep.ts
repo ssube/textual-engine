@@ -119,6 +119,11 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
     return;
   }
 
+  if (this === target) {
+    await context.focus.show('actor.step.hit.self', { cmd });
+    return;
+  }
+
   if (this.items.length === 0) {
     await context.focus.show('actor.step.hit.item', { target });
     return;

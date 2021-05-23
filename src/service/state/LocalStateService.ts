@@ -1,4 +1,4 @@
-import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { constructorName, InvalidArgumentError, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
@@ -240,7 +240,7 @@ export class LocalStateService extends EventEmitter implements StateService {
       type: ACTOR_TYPE,
     });
     if (!isActor(player)) {
-      throw new Error('invalid focus actor');
+      throw new InvalidArgumentError('invalid focus actor');
     }
 
     const input = await this.getActorInput(player);

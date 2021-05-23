@@ -34,10 +34,12 @@ worlds:
                   seen: |-
                     You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
               hit:
-                type: |-
-                  {{cmd.target}} is not an actor!
                 item: |-
                   You cannot hit {{target.meta.name}}, you are not holding anything!
+                self: |-
+                  You cannot hit yourself!
+                type: |-
+                  {{cmd.target}} is not an actor!
               drop:
                 type: |-
                   {{cmd.target}} is not an item!

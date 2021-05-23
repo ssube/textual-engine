@@ -48,6 +48,14 @@ export interface State {
   rooms: Array<Room>;
 
   /**
+   * The starting room and actor, for respawning.
+   */
+  start: {
+    actor: string;
+    room: string;
+  };
+
+  /**
    * The world progression, the index and time of the last step.
    */
   step: {
@@ -95,6 +103,18 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
         type: 'object',
         required: [],
       }
+    },
+    start: {
+      type: 'object',
+      properties: {
+        actor: {
+          type: 'string',
+        },
+        room: {
+          type: 'string',
+        },
+      },
+      required: ['actor', 'room'],
     },
     step: {
       type: 'object',

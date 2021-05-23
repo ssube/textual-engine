@@ -120,6 +120,10 @@ export class LocalStateService extends EventEmitter implements StateService {
         template: '',
       },
       rooms: [],
+      start: {
+        actor: '',
+        room: '',
+      },
       step: {
         time: 0,
         turn: 0,
@@ -179,6 +183,10 @@ export class LocalStateService extends EventEmitter implements StateService {
     const focus = mustExist(this.focus);
     await focus.setRoom(startRoom.meta.id);
     await focus.setActor(startActor.meta.id);
+
+    // record starting location
+    state.start.room = startRoom.meta.id;
+    state.start.actor = startActor.meta.id;
 
     // cache verbs
     const input = await this.getActorInput(startActor);

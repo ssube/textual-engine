@@ -17,6 +17,10 @@ describe('state debug utils', () => {
         template: '',
       },
       rooms: [], // TODO: add some rooms
+      start: {
+        actor: '',
+        room: '',
+      },
       step: {
         time: 0,
         turn: 0,
@@ -48,6 +52,10 @@ describe('state debug utils', () => {
         template: '',
       },
       rooms: [], // TODO: add some rooms
+      start: {
+        actor: '',
+        room: '',
+      },
       step: {
         time: 0,
         turn: 0,

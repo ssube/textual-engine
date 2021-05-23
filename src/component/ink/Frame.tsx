@@ -1,4 +1,5 @@
-import { Newline, Text, useInput } from 'ink';
+import { Box, Newline, Text } from 'ink';
+import TextInput from 'ink-text-input';
 import * as React from 'react';
 
 import { StepResult } from '../../service/state';
@@ -18,25 +19,23 @@ const HISTORY_SIZE = 20;
 export const Frame = (props: FrameProps) => {
   const [line, setLine] = useState('');
 
-  useInput((input, key) => {
-    if (key.return) {
-      setLine('');
-      props.onLine(line);
-      return;
-    }
-
-    if (key.backspace || key.delete) {
-      setLine(line.substr(0, line.length - 1));
-    } else {
-      setLine(line + input);
-    }
-  });
-
-  return <Text>
-    <Newline />
-    <Output output={props.output.slice(-HISTORY_SIZE)} />
-    <Newline />
-    <Text color="blueBright">turn {props.step.turn} &gt; </Text>
-    <Text color="red">{line}</Text>
-  </Text>;
+  return <Box flexDirection="column">
+    <Box>
+      <Output output={props.output.slice(-HISTORY_SIZE)} />
+      <Newline />
+    </Box>
+    <Box>
+      <Box marginRight={1}>
+        <Text color="blueBright">turn {props.step.turn} &gt;</Text>
+      </Box>
+      <TextInput
+        onChange={setLine}
+        onSubmit={() => {
+          setLine('');
+          props.onLine(line);
+        }}
+        value={line}
+      />
+    </Box>
+  </Box>;
 };

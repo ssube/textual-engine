@@ -242,7 +242,10 @@ export class LocalStateService extends EventEmitter implements StateService {
     }
 
     const input = await this.getActorInput(player);
+    input.translate(KNOWN_VERBS); // TODO: do once
+
     const cmd = await input.parse(line);
+
     this.logger.debug({
       cmd,
       focus: state.focus,

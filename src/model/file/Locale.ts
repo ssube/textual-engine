@@ -8,13 +8,13 @@ export type LocaleContext = Record<string, number | string | WorldEntity | Porta
 export type LocaleLanguage = Record<string, Record<string, string>>;
 
 export interface LocaleBundle {
-  languages: LocaleLanguage;
+  bundles: LocaleLanguage;
 }
 
 export const LOCALE_SCHEMA: JSONSchemaType<LocaleBundle> = {
   type: 'object',
   properties: {
-    languages: {
+    bundles: {
       type: 'object',
       required: [],
       additionalProperties: true,
@@ -26,5 +26,5 @@ export const LOCALE_SCHEMA: JSONSchemaType<LocaleBundle> = {
       },
     },
   },
-  required: ['languages'],
+  required: ['bundles'],
 };

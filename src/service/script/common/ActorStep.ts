@@ -60,7 +60,11 @@ export async function ActorStepCommand(this: Actor, context: ScriptContext): Pro
 
   if (doesExist(verb)) {
     if (this.actorType === ActorType.PLAYER) {
-      await context.focus.show('actor.step.cmd.player', { actor: this, cmd });
+      if (cmd.target.length > 0) {
+        await context.focus.show('actor.step.cmd.player.target', { actor: this, cmd });
+      } else {
+        await context.focus.show('actor.step.cmd.player.verb', { actor: this, cmd });
+      }
     }
 
     await verb.call(this, context);

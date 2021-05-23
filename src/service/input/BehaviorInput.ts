@@ -1,11 +1,12 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 
 import { Command, Input } from '.';
+import { VERB_WAIT } from '../../util/constants';
 
 const WAIT_CMD: Command = {
   index: 0,
-  input: 'wait turn',
-  verb: 'wait',
+  input: `${VERB_WAIT} turn`,
+  verb: VERB_WAIT,
   target: 'turn',
 };
 
@@ -15,6 +16,10 @@ const WAIT_CMD: Command = {
  */
 export class BehaviorInput implements Input {
   public tokenize(input: string): Promise<Array<string>> {
+    throw new NotImplementedError();
+  }
+
+  public translate(verbs: Array<string>): void {
     throw new NotImplementedError();
   }
 

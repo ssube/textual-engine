@@ -21,6 +21,8 @@ export interface Command {
 }
 
 export interface Input {
+  translate(verbs: Array<string>): void;
+
   /**
    * Split an input string into a series of tokens, without
    * fully parsing their intent.

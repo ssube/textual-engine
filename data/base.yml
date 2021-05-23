@@ -1,7 +1,7 @@
 states: [] # template file
 worlds:
   - locale:
-      languages:
+      bundles:
         en:
           actor:
             get:
@@ -44,8 +44,12 @@ worlds:
               cmd:
                 dead: |-
                   {{actor.meta.name}} is dead!
-                player: |-
-                  {{actor.meta.name}} will {{cmd.verb}} the {{cmd.target}}.
+                player:
+                  verb: |-
+                    {{actor.meta.name}} will $t({{cmd.verb}}) the next turn.
+                  target: |-
+                    {{actor.meta.name}} will $t({{cmd.verb}}) the {{cmd.target}}.
+
                 unknown: |-
                   {{actor.meta.name}} does not know how to {{cmd.verb}}!
               move:
@@ -79,6 +83,22 @@ worlds:
             use:
               any: |-
                 {{item.meta.name}} has been used by {{actor.meta.name}}!
+          verbs:
+            common:
+              drop: drop
+              hit: hit
+              look: look
+              move: move
+              take: take
+              use: use
+              wait: wait
+            meta:
+              debug: debug
+              graph: graph
+              help: help
+              load: load
+              quit: quit
+              save: save
 
     meta:
       id: test

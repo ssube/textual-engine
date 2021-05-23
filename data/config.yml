@@ -7,6 +7,6 @@ logger:
     - level: error
       stream: !stream stderr
 locale:
-  languages:
+  bundles:
     en:
       turn-prompt: 'turn {{turn}} >'

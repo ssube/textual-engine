@@ -12,4 +12,7 @@ export class NaturalInput implements Input {
   public parse(input: string): Promise<Command> {
     throw new NotImplementedError();
   }
+  public translate(verbs: Array<string>): void {
+    throw new NotImplementedError();
+  }
 }

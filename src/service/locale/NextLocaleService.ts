@@ -25,8 +25,8 @@ export class NextLocaleService implements LocaleService {
 
   public addBundle(name: string, bundle: LocaleBundle): void {
     const langs = new Set<string>();
-    for (const lng of Object.keys(bundle.languages)) {
-      const data = bundle.languages[lng];
+    for (const lng of Object.keys(bundle.bundles)) {
+      const data = bundle.bundles[lng];
       this.getInstance().addResourceBundle(lng, name, data);
       langs.add(lng);
     }

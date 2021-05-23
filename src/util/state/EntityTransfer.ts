@@ -1,20 +1,30 @@
-import { Logger } from 'noicejs';
+import { constructorName, mustExist } from '@apextoaster/js-utils';
+import { BaseOptions, Inject, Logger } from 'noicejs';
 
+import { searchState } from '.';
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem, Item } from '../../model/entity/Item';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { State } from '../../model/State';
+import { INJECT_LOGGER } from '../../module';
 import { ScriptContext, ScriptTransfer, TransferParams } from '../../service/script';
 import { SLOT_ENTER, SLOT_GET } from '../constants';
-import { searchState } from './search';
 
+interface EntityTransferOptions extends BaseOptions {
+  [INJECT_LOGGER]?: Logger;
+  state?: State;
+}
+
+@Inject(INJECT_LOGGER)
 export class StateEntityTransfer implements ScriptTransfer {
   protected logger: Logger;
   protected state: State;
 
-  constructor(logger: Logger, state: State) {
-    this.logger = logger;
-    this.state = state;
+  constructor(options: EntityTransferOptions) {
+    this.logger = mustExist(options[INJECT_LOGGER]).child({
+      kind: constructorName(this),
+    });
+    this.state = mustExist(options.state);
   }
 
   public async moveActor(transfer: TransferParams<Actor>, context: ScriptContext): Promise<void> {

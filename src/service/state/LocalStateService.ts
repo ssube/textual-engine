@@ -38,9 +38,9 @@ import {
 import { Counter } from '../../util/counter';
 import { debugState, graphState } from '../../util/debug';
 import { onceWithRemove } from '../../util/event';
-import { StateFocusResolver } from '../../util/state/focus';
-import { searchState } from '../../util/state/search';
-import { StateEntityTransfer } from '../../util/state/transfer';
+import { StateFocusResolver } from '../../util/state/FocusResolver';
+import { searchState } from '../../util/state';
+import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { findByTemplateId } from '../../util/template';
 import { Input } from '../input';
 import { Loader } from '../loader';
@@ -49,6 +49,7 @@ import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
 import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
 import { TemplateService } from '../template';
+import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
@@ -87,6 +88,7 @@ export class LocalStateService extends EventEmitter implements StateService {
   protected template: TemplateService;
 
   protected focus?: ScriptFocus;
+  protected generator?: StateEntityGenerator;
   protected transfer?: ScriptTransfer;
 
   protected state?: State;
@@ -117,7 +119,12 @@ export class LocalStateService extends EventEmitter implements StateService {
         actor: '',
         room: '',
       },
-      meta: await this.createMetadata(world.meta, 'world'),
+      meta: {
+        desc: '',
+        id: '',
+        name: '',
+        template: '',
+      },
       rooms: [],
       step: {
         time: 0,
@@ -135,7 +142,13 @@ export class LocalStateService extends EventEmitter implements StateService {
     // save state for later
     this.state = state;
     this.world = world;
-    this.createHelpers();
+
+    // prep helpers
+    await this.createHelpers();
+
+    // assign metadata
+    const generator = mustExist(this.generator);
+    state.meta = await generator.createMetadata(world.meta, 'world');
 
     // pick a starting room and create it
     const startRoomRef = randomItem(world.start.rooms, this.random);
@@ -149,7 +162,7 @@ export class LocalStateService extends EventEmitter implements StateService {
       startRoomTemplate,
     }, 'creating start room');
 
-    const startRoom = await this.createRoom(startRoomTemplate);
+    const startRoom = await generator.createRoom(startRoomTemplate);
     state.rooms.push(startRoom);
 
     // pick a starting actor and create it
@@ -164,7 +177,7 @@ export class LocalStateService extends EventEmitter implements StateService {
       startActorTemplate,
     }, 'creating start actor');
 
-    const startActor = await this.createActor(startActorTemplate, ActorType.PLAYER);
+    const startActor = await generator.createActor(startActorTemplate, ActorType.PLAYER);
     startActor.actorType = ActorType.PLAYER;
     startRoom.actors.push(startActor);
 
@@ -172,9 +185,6 @@ export class LocalStateService extends EventEmitter implements StateService {
     const focus = mustExist(this.focus);
     await focus.setRoom(startRoom.meta.id);
     await focus.setActor(startActor.meta.id);
-
-    // build out the world
-    await this.populateRoom(startRoom, params.depth);
 
     return state;
   }
@@ -293,7 +303,7 @@ export class LocalStateService extends EventEmitter implements StateService {
     this.state = state;
     this.world = data.worlds.find((it) => it.meta.id === state.meta.template);
 
-    this.createHelpers();
+    await this.createHelpers();
 
     this.emit('output', [
       `loaded world ${state.meta.id} state from ${path}`,
@@ -391,110 +401,6 @@ export class LocalStateService extends EventEmitter implements StateService {
     };
   }
 
-  protected async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {
-    const world = mustExist(this.world);
-
-    const items = [];
-    for (const itemTemplateRef of template.base.items) {
-      if (this.random.nextInt(TEMPLATE_CHANCE) > itemTemplateRef.chance) {
-        continue;
-      }
-
-      const itemTemplate = findByTemplateId(world.templates.items, itemTemplateRef.id);
-      if (isNil(itemTemplate)) {
-        throw new NotFoundError('invalid item in actor');
-      }
-
-      const item = await this.createItem(itemTemplate);
-      items.push(item);
-    }
-
-    return {
-      type: 'actor',
-      actorType,
-      items,
-      meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
-      skills: this.template.renderNumberMap(template.base.skills),
-      slots: this.template.renderStringMap(template.base.slots),
-      stats: this.template.renderNumberMap(template.base.stats),
-    };
-  }
-
-  protected async createItem(template: Template<Item>): Promise<Item> {
-    return {
-      type: ITEM_TYPE,
-      meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
-      stats: this.template.renderNumberMap(template.base.stats),
-      slots: this.template.renderStringMap(template.base.slots),
-      verbs: this.template.renderVerbMap(template.base.verbs),
-    };
-  }
-
-  protected async createRoom(template: Template<Room>): Promise<Room> {
-    const world = mustExist(this.world);
-
-    const actors = [];
-    for (const actorTemplateRef of template.base.actors) {
-      if (this.random.nextInt(TEMPLATE_CHANCE) > actorTemplateRef.chance) {
-        continue;
-      }
-
-      const actorTemplate = findByTemplateId(world.templates.actors, actorTemplateRef.id);
-      this.logger.debug({
-        actors: world.templates.actors,
-        actorTemplateId: actorTemplateRef,
-        actorTemplate,
-      }, 'create actor for room');
-
-      if (isNil(actorTemplate)) {
-        throw new NotFoundError('invalid actor in room');
-      }
-
-      const actor = await this.createActor(actorTemplate);
-      actors.push(actor);
-    }
-
-    const items = [];
-    for (const itemTemplateRef of template.base.items) {
-      if (this.random.nextInt(TEMPLATE_CHANCE) > itemTemplateRef.chance) {
-        continue;
-      }
-
-      const itemTemplate = findByTemplateId(world.templates.items, itemTemplateRef.id);
-      this.logger.debug({
-        items: world.templates.items,
-        itemTemplateId: itemTemplateRef,
-        itemTemplate,
-      }, 'create item for room');
-
-      if (isNil(itemTemplate)) {
-        throw new NotFoundError('invalid item in room');
-      }
-
-      const item = await this.createItem(itemTemplate);
-      items.push(item);
-    }
-
-    return {
-      type: ROOM_TYPE,
-      actors,
-      items,
-      meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
-      portals: [],
-      slots: this.template.renderStringMap(template.base.slots),
-      verbs: this.template.renderVerbMap(template.base.verbs),
-    };
-  }
-
-  protected async createMetadata(template: TemplateMetadata, type: string): Promise<Metadata> {
-    return {
-      desc: this.template.renderString(template.desc),
-      id: `${template.id}-${this.counter.next(type)}`,
-      name: this.template.renderString(template.name),
-      template: template.id,
-    };
-  }
-
   /**
    * @todo get rid of this in favor of something that does not need a handle to the container
    */
@@ -505,127 +411,33 @@ export class LocalStateService extends EventEmitter implements StateService {
     });
   }
 
-  /**
-   * Gather portal destinations from a room by group.
-   */
-  protected groupPortals(portals: Array<BaseTemplate<Portal>>): PortalGroups {
-    const groups: PortalGroups = new Map();
-
-    for (const portal of portals) {
-      this.logger.debug({
-        portal,
-      }, 'grouping portal');
-      const groupName = this.template.renderString(portal.sourceGroup);
-      const group = groups.get(groupName);
-
-      if (group) {
-        group.dests.add(this.template.renderString(portal.dest));
-        group.portals.add(portal);
-      } else {
-        groups.set(groupName, {
-          dests: new Set([
-            this.template.renderString(portal.dest),
-          ]),
-          portals: new Set([portal]),
-        });
-      }
-    }
-
-    this.logger.debug({ groups: Object.fromEntries(groups.entries()) }, 'grouped portals');
-
-    return groups;
-  }
-
-  protected async populatePortals(portals: Array<BaseTemplate<Portal>>, sourceId: string, depth: number): Promise<Array<Portal>> {
-    if (depth < 0) {
-      return [];
-    }
-
-    const groups = this.groupPortals(portals);
-    const results: Array<Portal> = [];
+  protected async createHelpers(): Promise<void> {
+    const state = mustExist(this.state);
     const world = mustExist(this.world);
 
-    for (const [sourceGroup, group] of groups) {
-      const potentialDests = Array.from(group.dests);
-      const destTemplateId = randomItem(potentialDests, this.random);
-      const destTemplate = findByTemplateId(world.templates.rooms, destTemplateId);
-
-      if (isNil(destTemplate)) {
-        throw new NotFoundError('invalid room in portal dest');
-      }
-
-      this.logger.debug({ destTemplateId, group, sourceGroup }, 'linking source group to destination template');
-
-      const destRoom = await this.createRoom(destTemplate);
-      mustExist(this.state).rooms.push(destRoom);
-
-      for (const portal of group.portals) {
-        const name = this.template.renderString(portal.name);
-        const targetGroup = this.template.renderString(portal.targetGroup);
-
-        results.push({
-          name,
-          sourceGroup,
-          targetGroup,
-          dest: destRoom.meta.id,
-        });
-
-        destRoom.portals.push({
-          name,
-          sourceGroup: targetGroup,
-          targetGroup: sourceGroup,
-          dest: sourceId,
-        });
-      }
-
-      await this.populateRoom(destRoom, depth - 1);
-    }
-
-    return results;
-  }
-
-  protected async populateRoom(room: Room, depth: number): Promise<void> {
-    if (depth < 0) {
-      return;
-    }
-
-    // get template
-    const template = findByTemplateId(mustExist(this.world).templates.rooms, room.meta.template);
-    const portals = template.base.portals.filter((it) => {
-      this.logger.debug({ it, room }, 'looking for portal matching template in room');
-
-      return room.portals.some((p) =>
-        p.name === it.name.base && p.sourceGroup === it.sourceGroup.base
-      ) === false;
-    });
-
-    if (portals.length === 0) {
-      this.logger.debug({ room }, 'portals have already been populated');
-      return;
-    }
-
-    // extend map
-    this.logger.debug({
-      portals,
-      room,
-    }, `populating ${portals.length} new portals of ${template.base.portals.length} in room ${room.meta.id}`);
-    room.portals.push(...await this.populatePortals(portals, room.meta.id, depth));
-  }
-
-  protected createHelpers(): void {
-    const state = mustExist(this.state);
-
     // register focus
-    this.focus = new StateFocusResolver(state, {
-      onActor: () => Promise.resolve(),
-      onRoom: (room) => this.populateRoom(room, state.world.depth),
-      onShow: async (line, context) => { // TODO: move to method
-        const out = this.locale.translate(line, context);
-        this.logger.debug({ line, out }, 'translated output');
-        this.onOutput(out);
+    this.focus = await this.container.create(StateFocusResolver, {
+      events: {
+        onActor: () => Promise.resolve(),
+        onRoom: async (room) => {
+          const rooms = await mustExist(this.generator).populateRoom(room, state.world.depth);
+          state.rooms.push(...rooms);
+        },
+        onShow: async (line, context) => { // TODO: move to method
+          const out = this.locale.translate(line, context);
+          this.logger.debug({ line, out }, 'translated output');
+          this.onOutput(out);
+        },
       },
+      state,
     });
-    this.transfer = new StateEntityTransfer(this.logger, state);
+
+    this.generator = await this.container.create(StateEntityGenerator, {
+      world,
+    });
+    this.transfer = await this.container.create(StateEntityTransfer, {
+      state,
+    });
 
     // reseed the prng
     this.random.reseed(state.world.seed); // TODO: fast-forward to last state

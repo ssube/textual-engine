@@ -2,7 +2,7 @@ import { doesExist, Optional } from '@apextoaster/js-utils';
 
 import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/meta/Metadata';
-import { SearchMatchers, SearchParams } from './state/search';
+import { SearchMatchers, SearchParams } from './state';
 import { Immutable } from './types';
 
 export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<Entity>>, index: number, guard: (it: Optional<Entity>) => it is TEntity): Optional<TEntity> {

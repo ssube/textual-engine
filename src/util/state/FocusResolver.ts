@@ -1,12 +1,13 @@
-import { InvalidTargetError } from 'noicejs';
+import { mustExist } from '@apextoaster/js-utils';
+import { BaseOptions, InvalidTargetError } from 'noicejs';
 
+import { searchState } from '.';
 import { WorldEntity } from '../../model/entity';
 import { Actor, ACTOR_TYPE, isActor } from '../../model/entity/Actor';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { LocaleContext } from '../../model/file/Locale';
 import { State } from '../../model/State';
 import { ScriptFocus } from '../../service/script';
-import { searchState } from './search';
 
 export type FocusChangeRoom = (room: Room) => Promise<void>;
 export type FocusChangeActor = (actor: Actor) => Promise<void>;
@@ -16,6 +17,11 @@ interface FocusEvents {
   onActor: FocusChangeActor;
   onRoom: FocusChangeRoom;
   onShow: FocusShow;
+}
+
+interface StateFocusResolverOptions extends BaseOptions {
+  events?: FocusEvents;
+  state?: State;
 }
 
 /**
@@ -28,9 +34,10 @@ export class StateFocusResolver implements ScriptFocus {
   protected onRoom: FocusChangeRoom;
   protected onShow: FocusShow;
 
-  constructor(state: State, events: FocusEvents) {
-    this.state = state;
+  constructor(options: StateFocusResolverOptions) {
+    this.state = mustExist(options.state);
 
+    const events = mustExist(options.events);
     this.onActor = events.onActor;
     this.onRoom = events.onRoom;
     this.onShow = events.onShow;

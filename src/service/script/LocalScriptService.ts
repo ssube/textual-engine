@@ -4,7 +4,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
 import { WorldEntity } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
-import { SearchParams, searchState } from '../../util/state/search';
+import { SearchParams, searchState } from '../../util/state';
 import { ActorGet } from './common/ActorGet';
 import { ActorHit } from './common/ActorHit';
 import { ActorStep } from './common/ActorStep';

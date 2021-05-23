@@ -17,7 +17,7 @@ import {
 } from '../../../util/constants';
 import { FUZZY_MATCHERS, indexEntity } from '../../../util/entity';
 import { getKey } from '../../../util/map';
-import { searchState } from '../../../util/state/search';
+import { searchState } from '../../../util/state';
 
 export async function ActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({

@@ -6,7 +6,7 @@ import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
 import { LocaleContext } from '../../model/file/Locale';
 import { State } from '../../model/State';
-import { SearchParams } from '../../util/state/search';
+import { SearchParams } from '../../util/state';
 import { Immutable, ScriptData } from '../../util/types';
 import { Command } from '../input';
 

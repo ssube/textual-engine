@@ -234,6 +234,36 @@ worlds:
                 name:
                   base: door
                 dest:
+                  base: ((room-cave|room-marsh))
+              - sourceGroup:
+                  base: east
+                targetGroup:
+                  base: west
+                name:
+                  base: window
+                dest:
+                  base: room-dungeon
+            slots: !map
+              step:
+                base: room-step
+            verbs: !map {}
+        - base:
+            meta:
+              id: room-marsh
+              name:
+                base: Marsh
+              desc:
+                base: moist marsh
+            actors: []
+            items: []
+            portals:
+              - sourceGroup:
+                  base: west
+                targetGroup:
+                  base: east
+                name:
+                  base: door
+                dest:
                   base: room-cave
               - sourceGroup:
                   base: east

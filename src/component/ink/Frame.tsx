@@ -22,9 +22,8 @@ export const Frame = (props: FrameProps) => {
   return <Box flexDirection="column">
     <Box>
       <Output output={props.output.slice(-HISTORY_SIZE)} />
-      <Newline />
     </Box>
-    <Box>
+    <Box height={1}>
       <Box marginRight={1}>
         <Text color="blueBright">turn {props.step.turn} &gt;</Text>
       </Box>

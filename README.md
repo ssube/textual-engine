@@ -8,12 +8,14 @@ See [the getting started docs](docs/getting-started.md) for more info.
 
 - text
 - adventure
-- world:
+- worlds:
   - persistent rooms
+  - procedural expansion
   - wandering monsters
 - engine:
   - event broadcast
   - entity scripts
+  - thorough localization
 
 ## Contents
 

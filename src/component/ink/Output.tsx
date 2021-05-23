@@ -11,7 +11,7 @@ export const Output = (props: OutputProps) => {
     <Newline />
     {props.output.map((line, idx) => {
       return <Text key={idx}>
-        <Text color="green">- {line}</Text>
+        <Text color="green">{line}</Text>
         <Newline />
       </Text>;
     })}

@@ -3,7 +3,7 @@
 DOCKER_ARGS ?=
 DOCKER_IMAGE := ssube/textual-engine
 GIT_ARGS ?=
-GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
+GIT_HEAD_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
 NODE_ARGS ?=
 RELEASE_ARGS ?= --sign
 
@@ -34,12 +34,12 @@ node_modules: install
 out: build
 
 push: ## push to both github and gitlab
-	git push $(GIT_ARGS) github $(GIT_BRANCH)
-	git push $(GIT_ARGS) gitlab $(GIT_BRANCH)
+	git push $(GIT_ARGS) github $(GIT_HEAD_BRANCH)
+	git push $(GIT_ARGS) gitlab $(GIT_HEAD_BRANCH)
 
 release: ## tag and push a release
 release: node_modules
-	if [[ "$(GIT_BRANCH)" != master ]]; \
+	if [[ "$(GIT_HEAD_BRANCH)" != master ]]; \
 	then \
 		echo "Please merge to master before releasing."; \
 		exit 1; \

@@ -13,6 +13,7 @@ export interface SearchMatchers {
 }
 
 export interface SearchParams {
+  actor: Partial<Metadata>;
   meta: Partial<Metadata>;
   room: Partial<Metadata>;
   type: WorldEntityType;
@@ -36,6 +37,10 @@ export function searchState(state: Immutable<State>, search: Partial<SearchParam
     }
 
     for (const actor of room.actors) {
+      if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
+        continue;
+      }
+
       if (matchers.entity(actor, search, matchers)) {
         results.push(actor);
       }

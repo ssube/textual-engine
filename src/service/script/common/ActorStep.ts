@@ -79,6 +79,9 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
   const room = mustExist(context.room);
 
   const results = searchState(context.state, {
+    actor: {
+      id: this.meta.id,
+    },
     meta: {
       name: cmd.target,
     },

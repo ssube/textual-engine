@@ -44,7 +44,8 @@ export class ChainTemplateService implements TemplateService {
 
     if (input.step < 1) {
       const range = input.max - input.min;
-      return (this.random.nextFloat() % range) + input.min;
+      const next = this.random.nextFloat() % range;
+      return (Math.floor(next / input.step) * input.step) + input.min;
     } else {
       return this.random.nextInt(input.max, input.min);
     }
@@ -78,13 +79,27 @@ export class ChainTemplateService implements TemplateService {
     return result;
   }
 
+  public renderPrimitiveMap(input: Map<string, TemplateNumber | TemplateString>): Map<string, number | string> {
+    const result = new Map();
+
+    for (const [key, value] of input) {
+      if (value.type === 'number') {
+        result.set(key, this.renderNumber(value));
+      } else {
+        result.set(key, this.renderString(value));
+      }
+    }
+
+    return result;
+  }
+
   public renderVerbMap(input: Map<string, BaseTemplate<VerbSlot>>): VerbMap {
     const result = new Map();
 
     for (const [key, value] of input) {
       const verb: VerbSlot = {
         slot: this.renderString(value.slot),
-        data: new Map(), // TODO: render this stuff
+        data: this.renderPrimitiveMap(value.data),
       };
 
       result.set(key, verb);

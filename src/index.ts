@@ -11,20 +11,21 @@ import { LocaleService } from './service/locale';
 import { Parser } from './service/parser';
 import { RenderService } from './service/render';
 import { StateService } from './service/state';
+import { parseArgs } from './util/args';
 import { loadConfig } from './util/config';
 import { PORTAL_DEPTH } from './util/constants';
 
 export async function main(args: Array<string>): Promise<number> {
-  // "parse" args
-  const [_node, _script, configPath, dataPath, worldName, seed] = args;
+  // parse args
+  const arg = parseArgs(args);
 
   // load config and create logger
-  const config = await loadConfig(configPath);
+  const config = await loadConfig(arg.config);
   const logger = BunyanLogger.create(config.logger);
 
   // print banner
   logger.info({
-    args,
+    arg,
   }, 'textual adventure');
 
   // create DI modules
@@ -49,13 +50,22 @@ export async function main(args: Array<string>): Promise<number> {
   const loader = await container.create<Loader, BaseOptions>(INJECT_LOADER);
   const parser = await container.create<Parser, BaseOptions>(INJECT_PARSER);
 
-  const dataStr = await loader.loadStr(dataPath);
-  const data = parser.load(dataStr);
+  const worlds = [];
+  for (const path of arg.data) {
+    const dataStr = await loader.loadStr(path);
+    const data = parser.load(dataStr);
+    worlds.push(...data.worlds);
+  }
+
+  logger.info({
+    paths: arg.data,
+    worlds: worlds.map((it) => it.meta.id),
+  }, 'loaded worlds from data files');
 
   // find world template
-  const world = data.worlds.find((it) => it.meta.id === worldName);
+  const world = worlds.find((it) => it.meta.id === arg.world);
   if (isNil(world)) {
-    logger.error({ worldName }, 'invalid world name');
+    logger.error({ world: arg.world }, 'invalid world name');
     return 1;
   }
 
@@ -63,7 +73,7 @@ export async function main(args: Array<string>): Promise<number> {
   const state = await container.create<StateService, BaseOptions>(INJECT_STATE);
   await state.from(world, {
     depth: PORTAL_DEPTH,
-    seed,
+    seed: arg.seed,
   });
 
   // start renderer

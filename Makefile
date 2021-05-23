@@ -47,16 +47,21 @@ release: node_modules
 	yarn standard-version $(RELEASE_ARGS)
 	GIT_ARGS=--follow-tags $(MAKE) push
 
+RUN_ARGS ?= --config data/config.yml \
+	--data data/base.yml \
+	--seed test \
+	--world test
+
 run: ## run app with demo data
 run: build
-	node $(NODE_ARGS) --require esm out/src/index.js data/config.yml data/base.yml test test
+	node $(NODE_ARGS) --require esm out/src/index.js $(RUN_ARGS)
 
 run-debug: ## run app and wait for debugger
 	NODE_ARGS=--inspect-brk $(MAKE) run
 
 run-image: ## run app from docker image
 run-image: image
-	docker run --rm -it $(DOCKER_IMAGE):latest data/config.yml data/base.yml test test
+	docker run --rm -it $(DOCKER_IMAGE):latest $(RUN_ARGS)
 
 MOCHA_ARGS := --async-only \
 	--check-leaks \

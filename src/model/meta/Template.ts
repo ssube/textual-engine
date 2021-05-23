@@ -9,6 +9,7 @@ export interface TemplateNumber {
   type: 'number';
   max: number;
   min: number;
+  step: number;
 }
 
 /**
@@ -48,6 +49,27 @@ export interface Template<TBase> {
   base: BaseTemplate<TBase>;
   // mods: Array<Modifier>;
 }
+
+export const TEMPLATE_NUMBER_SCHEMA: JSONSchemaType<TemplateNumber> = {
+  type: 'object',
+  properties: {
+    max: {
+      type: 'number',
+    },
+    min: {
+      type: 'number',
+    },
+    step: {
+      type: 'number',
+      default: 1,
+    },
+    type: {
+      type: 'string',
+      default: 'number',
+    },
+  },
+  required: ['max', 'min'],
+};
 
 export const TEMPLATE_STRING_SCHEMA: JSONSchemaType<TemplateString> = {
   type: 'object',

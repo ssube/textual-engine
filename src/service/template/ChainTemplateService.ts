@@ -1,4 +1,4 @@
-import { mustExist } from '@apextoaster/js-utils';
+import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject } from 'noicejs';
 
 import { TemplateService } from '.';
@@ -38,7 +38,16 @@ export class ChainTemplateService implements TemplateService {
   }
 
   public renderNumber(input: TemplateNumber): number {
-    return this.random.nextInt(input.max, input.min);
+    if (input.step < 0) {
+      throw new InvalidArgumentError('template step must be greater than 0');
+    }
+
+    if (input.step < 1) {
+      const range = input.max - input.min;
+      return (this.random.nextFloat() % range) + input.min;
+    } else {
+      return this.random.nextInt(input.max, input.min);
+    }
   }
 
   public renderNumberList(input: Array<TemplateNumber>): Array<number> {

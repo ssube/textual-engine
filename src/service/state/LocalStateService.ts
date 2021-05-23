@@ -259,7 +259,10 @@ export class LocalStateService extends EventEmitter implements StateService {
         const output = graphState(state);
         await this.loader.saveStr(cmd.target, output.join('\n'));
         this.emit('output', [
-          `wrote ${state.rooms.length} node graph to ${cmd.target}`,
+          this.locale.translate('debug.graph', {
+            cmd,
+            size: state.rooms.length,
+          }),
         ]);
         break;
       }

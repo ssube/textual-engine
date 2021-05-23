@@ -12,12 +12,16 @@ export async function ActorHit(this: ScriptTarget, context: ScriptContext): Prom
   const attacker = mustExist(context.actor);
   const item = mustExist(context.item);
 
-  await context.focus.show(`${attacker.meta.name} has hit ${this.meta.name} (${this.meta.id}) with a ${item.meta.name}!`);
+  await context.focus.show('actor.hit.hit', {
+    actor: this,
+    attacker,
+    item,
+  });
 
   const health = decrementKey(this.stats, 'health');
   if (health > 0) {
-    await context.focus.show(`${this.meta.name} has ${health} health left`);
+    await context.focus.show('actor.hit.health', { actor: this, health });
   } else {
-    await context.focus.show(`${this.meta.name} has died!`);
+    await context.focus.show('actor.hit.dead', { actor: this });
   }
 }

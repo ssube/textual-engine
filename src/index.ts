@@ -55,7 +55,7 @@ export async function main(args: Array<string>): Promise<number> {
   // find world template
   const world = data.worlds.find((it) => it.meta.id === worldName);
   if (isNil(world)) {
-    logger.error('invalid world');
+    logger.error({ worldName }, 'invalid world name');
     return 1;
   }
 

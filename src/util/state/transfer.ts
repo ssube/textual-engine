@@ -69,12 +69,12 @@ export class StateEntityTransfer implements ScriptTransfer {
 
   public async moveItem(transfer: TransferParams<Item>, context: ScriptContext): Promise<void> {
     if (!isItem(transfer.moving)) {
-      this.logger.warn(transfer, 'moving entity is not an item');
+      this.logger.warn({ transfer }, 'moving entity is not an item');
       return;
     }
 
     if (transfer.source === transfer.target) {
-      this.logger.debug(transfer, 'cannot transfer item between the same source and target');
+      this.logger.debug({ transfer }, 'cannot transfer item between the same source and target');
       return;
     }
 

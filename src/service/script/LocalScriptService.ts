@@ -53,7 +53,7 @@ export class LocalScriptService implements ScriptService {
 
     const script = this.scripts.get(scriptName);
     if (isNil(script)) {
-      this.logger.error(`unknown script ${scriptName}`);
+      this.logger.error({ scriptName }, 'unknown script name');
       return;
     }
 

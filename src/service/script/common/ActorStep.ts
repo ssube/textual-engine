@@ -32,7 +32,7 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext): Pro
   const health = getKey(this.stats, 'health', 0);
   if (health <= 0) {
     if (this.actorType === ActorType.PLAYER) {
-      await context.focus.show(`${this.meta.name} is dead`);
+      await context.focus.show('actor.step.cmd.dead', { actor: this });
     }
     return;
   }
@@ -60,13 +60,13 @@ export async function ActorStepCommand(this: Actor, context: ScriptContext): Pro
 
   if (doesExist(verb)) {
     if (this.actorType === ActorType.PLAYER) {
-      await context.focus.show(`${this.meta.name} will ${cmd.verb} the ${cmd.target}`);
+      await context.focus.show('actor.step.cmd.player', { actor: this, cmd });
     }
 
     await verb.call(this, context);
   } else {
-    await context.focus.show(`${this.meta.name} does not know how to ${cmd.verb}!`);
-    context.logger.warn('unknown verb');
+    await context.focus.show('actor.step.cmd.unknown', { actor: this, cmd });
+    context.logger.warn({ cmd }, 'unknown verb');
   }
 }
 
@@ -85,7 +85,7 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
 
   const moving = indexEntity(results, cmd.index, isItem);
   if (isNil(moving)) {
-    await context.focus.show(`${cmd.target} is not an item`);
+    await context.focus.show('actor.step.drop.type', { cmd });
     return;
   }
 
@@ -228,7 +228,7 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
   }
 
   // move the actor and focus
-  await context.focus.show(`${this.meta.name} moved to ${targetPortal.name}`);
+  await context.focus.show('actor.step.move.portal', { actor: this, portal: targetPortal });
   await context.transfer.moveActor({
     moving: this,
     source: currentRoom.meta.id,
@@ -257,7 +257,7 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
   const moving = indexEntity(results, cmd.index, isItem);
 
   if (isNil(moving)) {
-    await context.focus.show(`${cmd.target} is not an item`);
+    await context.focus.show('actor.step.take.type', { cmd });
     return;
   }
 
@@ -281,8 +281,8 @@ export async function ActorStepUse(this: Actor, context: ScriptContext): Promise
   }, FUZZY_MATCHERS);
   const target = indexEntity(results, cmd.index, isItem);
 
-  if (isNil(target)) {
-    await context.focus.show(`${cmd.target} is not a usable item`);
+  if (!isItem(target)) {
+    await context.focus.show('actor.step.use.type', { cmd });
     return;
   }
 

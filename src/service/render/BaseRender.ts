@@ -1,4 +1,4 @@
-import { mustExist } from '@apextoaster/js-utils';
+import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '.';
@@ -24,7 +24,9 @@ export abstract class BaseRender implements RenderService {
 
   constructor(options: BaseRenderOptions) {
     this.locale = mustExist(options[INJECT_LOCALE]);
-    this.logger = mustExist(options[INJECT_LOGGER]);
+    this.logger = mustExist(options[INJECT_LOGGER]).child({
+      kind: constructorName(this),
+    });
     this.state = mustExist(options[INJECT_STATE]);
 
     this.step = {

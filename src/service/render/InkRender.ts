@@ -81,7 +81,7 @@ export class InkRender extends BaseRender implements RenderService {
     this.output.push(`${this.promptStr} > ${this.inputStr}`);
 
     // forward event to state
-    this.state.emit('line', line); // TODO: directly firing this is not ideal, but makes DI unidirectional
+    this.state.emit('line', line);
   }
 
   /**

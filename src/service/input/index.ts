@@ -21,7 +21,7 @@ export interface Command {
 }
 
 export interface Input {
-  translate(verbs: Array<string>): void;
+  translate(verbs: ReadonlyArray<string>): Promise<void>;
 
   /**
    * Split an input string into a series of tokens, without

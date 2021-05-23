@@ -3,7 +3,7 @@ import { Container } from 'noicejs';
 
 import { FileLoader } from '../../../src/service/loader/FileLoader';
 
-describe('file logger', () => {
+describe('file loader', () => {
   it('should read from paths', async () => {
     const loader = new FileLoader({
       container: Container.from(),

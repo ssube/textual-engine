@@ -3,16 +3,16 @@ import { NotImplementedError } from '@apextoaster/js-utils';
 import { Command, Input } from '.';
 
 export class NaturalInput implements Input {
-  public last(): Promise<Command> {
+  public async last(): Promise<Command> {
     throw new NotImplementedError();
   }
-  public tokenize(input: string): Promise<Array<string>> {
+  public async tokenize(input: string): Promise<Array<string>> {
     throw new NotImplementedError();
   }
-  public parse(input: string): Promise<Command> {
+  public async parse(input: string): Promise<Command> {
     throw new NotImplementedError();
   }
-  public translate(verbs: Array<string>): void {
+  public async translate(verbs: Array<string>): Promise<void> {
     throw new NotImplementedError();
   }
 }

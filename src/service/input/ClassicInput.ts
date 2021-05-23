@@ -69,12 +69,12 @@ export class ClassicInput implements Input {
     return this.history[0];
   }
 
-  public translate(verbs: Array<string>): void {
+  public async translate(verbs: ReadonlyArray<string>): Promise<void> {
     this.verbs.clear();
 
     for (const verb of verbs) {
       const translated = this.locale.translate(verb);
-      this.verbs.set(translated, `${verb}`); // trick i18next into translating them back
+      this.verbs.set(translated, verb); // trick i18next into translating them back
     }
   }
 }

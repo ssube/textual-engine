@@ -15,11 +15,11 @@ const WAIT_CMD: Command = {
  * state (room, inventory, etc).
  */
 export class BehaviorInput implements Input {
-  public tokenize(input: string): Promise<Array<string>> {
+  public async tokenize(input: string): Promise<Array<string>> {
     throw new NotImplementedError();
   }
 
-  public translate(verbs: Array<string>): void {
+  public async translate(verbs: Array<string>): Promise<void> {
     throw new NotImplementedError();
   }
 

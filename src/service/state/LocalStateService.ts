@@ -182,7 +182,7 @@ export class LocalStateService extends EventEmitter implements StateService {
 
     // cache verbs
     const input = await this.getActorInput(startActor);
-    input.translate(KNOWN_VERBS);
+    await input.translate(KNOWN_VERBS);
 
     return state;
   }
@@ -435,6 +435,7 @@ export class LocalStateService extends EventEmitter implements StateService {
     this.generator = await this.container.create(StateEntityGenerator, {
       world,
     });
+
     this.transfer = await this.container.create(StateEntityTransfer, {
       state,
     });

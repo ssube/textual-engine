@@ -31,7 +31,6 @@ export const VERB_WAIT = 'verbs.common.wait';
  * Common verbs and meta commands.
  *
  * Should include all `META_*` and `VERB_*` constants from this file.
- * Should really be replaced with config data.
  */
 export const KNOWN_VERBS = [
   META_DEBUG,
@@ -47,4 +46,4 @@ export const KNOWN_VERBS = [
   VERB_TAKE,
   VERB_USE,
   VERB_WAIT,
-];
+] as const;

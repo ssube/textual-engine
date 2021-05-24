@@ -55,6 +55,8 @@ worlds:
                 unknown: |-
                   {{actor.meta.name}} does not know how to {{cmd.verb}}!
               move:
+                missing: |-
+                  {{cmd.target}} is not a portal!
                 portal: |-
                   {{actor.meta.name}} moved through the {{portal.sourceGroup}} {{portal.name}}.
               take:

@@ -144,12 +144,11 @@ export async function ActorStepLook(this: Actor, context: ScriptContext): Promis
   if (cmd.target === '') {
     return ActorStepLookRoom.call(this, context);
   } else {
-    return ActorStepLookTarget.call(this, context);
+    return ActorStepLookTarget.call(this, context, cmd.target);
   }
 }
 
-export async function ActorStepLookTarget(this: Actor, context: ScriptContext): Promise<void> {
-  const targetName = mustExist(context.command).target;
+export async function ActorStepLookTarget(this: Actor, context: ScriptContext, targetName: string): Promise<void> {
   const results = searchState(context.state, {
     meta: {
       name: targetName,
@@ -239,10 +238,9 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
     return (name === targetName || group === targetName || `${group} ${name}` === targetName);
   });
   const targetPortal = results[cmd.index];
+
   if (isNil(targetPortal)) {
-    context.logger.warn({
-      portals: currentRoom.portals,
-    }, `portal ${targetName} not found`);
+    await context.focus.show('actor.step.move.missing', { cmd });
     return;
   }
 
@@ -256,6 +254,7 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
 
   if (this.actorType === ActorType.PLAYER) {
     await context.focus.setRoom(targetPortal.dest);
+    await ActorStepLookTarget.call(this, context, targetPortal.dest);
   }
 }
 

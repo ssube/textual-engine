@@ -1,5 +1,5 @@
 <html>
-  <script type="text/yaml" id="data-world" src="../data/base.yml">
+  <script type="text/yaml" id="data-world">
 states: [] # template file
 worlds:
   - locale:
@@ -295,7 +295,7 @@ worlds:
                 base: room-step
             verbs: !map {}
   </script>
-  <script type="text/yaml" id="data-config" src="../data/config.yml">
+  <script type="text/yaml" id="data-config">
 logger:
   level: debug
   name: textual-engine
@@ -304,6 +304,6 @@ locale:
     en: {}
   </script>
   <div id="app"></div>
-  <script src="../out/bundle/browser.js">
+  <script src="./bundle/browser.js">
   </script>
 </html>

@@ -13,6 +13,7 @@ build: node_modules
 
 bundle: build
 	node config/esbuild/browser.mjs
+	cp -rv src/index.html out/
 
 ci: build cover
 

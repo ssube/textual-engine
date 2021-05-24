@@ -1,4 +1,4 @@
-import { Box, Newline, Text } from 'ink';
+import { Box, Text } from 'ink';
 import TextInput from 'ink-text-input';
 import * as React from 'react';
 

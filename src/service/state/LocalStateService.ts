@@ -270,9 +270,7 @@ export class LocalStateService extends EventEmitter implements StateService {
         await this.doGraph(cmd.target);
         break;
       case META_HELP:
-        this.emit('output', [
-          KNOWN_VERBS.join(', '),
-        ]);
+        await this.doHelp();
         break;
       case META_SAVE:
         await this.doSave(cmd.target);
@@ -289,6 +287,12 @@ export class LocalStateService extends EventEmitter implements StateService {
         this.emit('step', result);
       }
     }
+  }
+
+  public async doHelp(): Promise<void> {
+    this.emit('output', [
+      KNOWN_VERBS.map((it) => this.locale.translate(it)).join(', '),
+    ]);
   }
 
   public async doGraph(path: string): Promise<void> {

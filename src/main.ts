@@ -3,6 +3,7 @@ import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
+import { BrowserModule } from './module/BrowserModule';
 import { InputModule } from './module/InputModule';
 import { LocalModule } from './module/LocalModule';
 import { NodeModule } from './module/NodeModule';
@@ -16,10 +17,10 @@ import { loadConfig } from './util/config/file';
 import { PORTAL_DEPTH } from './util/constants';
 
 const DI_MODULES = new Map<string, new () => Module>([
+  ['browser', BrowserModule],
   ['input', InputModule],
   ['local', LocalModule],
   ['node', NodeModule],
-  // ['browser', undefined],
 ]);
 
 export async function main(args: Array<string>): Promise<number> {

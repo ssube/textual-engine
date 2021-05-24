@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 
-import { ConfigError, loadConfig } from '../../src/util/config';
+import { ConfigError } from '../../src/util/config';
+import { loadConfig } from '../../src/util/config/file';
 
 describe('config utils', () => {
   /**

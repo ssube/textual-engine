@@ -11,6 +11,9 @@ build: ## build the app
 build: node_modules
 	yarn tsc
 
+bundle: build
+	node config/esbuild/browser.mjs
+
 ci: build cover
 
 clean:

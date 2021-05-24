@@ -22,6 +22,8 @@
     "yargs-parser": "^20.2.7"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.1.0",
+    "@esbuild-plugins/node-modules-polyfill": "^0.1.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
     "@types/bunyan": "^1.8.6",
     "@types/chai": "^4.2.18",
@@ -38,6 +40,9 @@
     "@typescript-eslint/parser": "^4.23.0",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
+    "esbuild": "^0.12.1",
+    "esbuild-plugin-alias": "^0.1.2",
+    "esbuild-plugin-ignore": "^1.1.0",
     "eslint": "^7.26.0",
     "eslint-plugin-chai": "^0.0.1",
     "eslint-plugin-chai-expect": "^2.2.0",

@@ -1,0 +1,308 @@
+<html>
+  <script type="text/yaml" id="data-world" src="../data/base.yml">
+states: [] # template file
+worlds:
+  - locale:
+      bundles:
+        en:
+          actor:
+            get:
+              player: |-
+                You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+            hit:
+              dead: '{{actor.meta.name}} has died!'
+              health: '{{actor.meta.name}} has {{health}} health left.'
+              hit: |-
+                {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
+            step:
+              look:
+                none: |-
+                  You see nothing.
+                room:
+                  you: |-
+                    You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+                  seen: |-
+                    You are in {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
+                  inventory: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.desc}}).
+                  portal: |-
+                    A {{portal.name}} leads to the {{portal.sourceGroup}} ({{portal.dest}}).
+                actor:
+                  seen: |-
+                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+                  dead: |-
+                    The {{actor.meta.name}} is dead!
+                item:
+                  seen: |-
+                    You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+              hit:
+                item: |-
+                  You cannot hit {{target.meta.name}}, you are not holding anything!
+                self: |-
+                  You cannot hit yourself!
+                type: |-
+                  {{cmd.target}} is not an actor!
+              drop:
+                type: |-
+                  {{cmd.target}} is not an item!
+              cmd:
+                dead: |-
+                  {{actor.meta.name}} is dead!
+                player:
+                  verb: |-
+                    {{actor.meta.name}} will $t({{cmd.verb}}) the next turn.
+                  target: |-
+                    {{actor.meta.name}} will $t({{cmd.verb}}) the {{cmd.target}}.
+
+                unknown: |-
+                  {{actor.meta.name}} does not know how to {{cmd.verb}}!
+              move:
+                portal: |-
+                  {{actor.meta.name}} moved through the {{portal.sourceGroup}} {{portal.name}}.
+              take:
+                type: |-
+                  {{cmd.target}} is not an item!
+              use:
+                type: |-
+                  {{cmd.target}} is not a usable item!
+          debug:
+            graph:
+              focus:
+                room: '  {{room}} [fillcolor=turquoise,style=filled];'
+              node:
+                room: '  {{room}}'
+                portal: '  {{room.meta.id}} -- {{portal.dest}} [label="{{portal.sourceGroup}} -> {{portal.name}} -> {{portal.targetGroup}}"];'
+              root:
+                close: '}'
+                open: 'strict graph {'
+              summary: 'wrote {{size}} node graph to {{-path}}'
+            tree:
+              actor: '    actor: {{actor.meta.name}} ({{actor.meta.id}}, {{actor.actorType}})'
+              item: '    item: {{item.meta.name}} ({{item.meta.id}})'
+              portal:
+                both: '    portal: {{portal.name}} ({{portal.sourceGroup}} <-> {{portal.dest}} ({{portal.targetGroup}})'
+              root: 'state {{state.meta.id}}'
+              room: '  room: {{room.meta.name}} ({{room.meta.id}})'
+          item:
+            use:
+              any: |-
+                {{item.meta.name}} has been used by {{actor.meta.name}}!
+          verbs:
+            common:
+              drop: drop
+              hit: hit
+              look: look
+              move: move
+              take: take
+              use: use
+              wait: wait
+            meta:
+              debug: debug
+              graph: graph
+              help: help
+              load: load
+              quit: quit
+              save: save
+
+    meta:
+      id: test
+      name:
+        base: test world
+      desc:
+        base: this is a test adventure
+    start:
+      actors:
+        - id: actor-bat
+        - id: actor-goblin
+      rooms:
+        - id: room-dungeon
+        - id: room-cave
+    templates:
+      actors:
+        - base:
+            meta:
+              id: actor-bat
+              name:
+                base: Bat
+              desc:
+                base: flying bat
+            items:
+              - id: item-bat-teeth
+            skills: !map {}
+            stats: !map
+              health:
+                max: 50
+                min: 30
+            slots: !map
+              get:
+                base: actor-get
+              hit:
+                base: actor-hit
+              step:
+                base: actor-step
+          mods:
+            - meta:
+                desc:
+                  prefix: sword
+                name:
+                  prefix: Sword
+              items:
+                - id: item-sword
+              skills: !map {}
+              stats: !map {}
+              slots: !map {}
+        - base:
+            meta:
+              id: actor-goblin
+              name:
+                base: Goblin
+              desc:
+                base: ((slimy|smelly)|goblin)
+            items:
+              - id: item-sword
+            skills: !map {}
+            stats: !map
+              health:
+                max: 20
+                min: 14
+            slots: !map
+              get:
+                base: actor-get
+              hit:
+                base: actor-hit
+              step:
+                base: actor-step
+      items:
+        - base:
+            meta:
+              id: item-bat-teeth
+              name:
+                base: Bat Teeth
+              desc:
+                base: sharp bat teeth
+            slots: !map {}
+            stats: !map {}
+            verbs: !map {}
+        - base:
+            meta:
+              id: item-sword
+              name:
+                base: Sword
+              desc:
+                base: short sword
+            slots: !map {}
+            stats: !map {}
+            verbs: !map {}
+      rooms:
+        # TODO: add moist marsh
+        - base:
+            meta:
+              id: room-dungeon
+              name:
+                base: Dungeon
+              desc:
+                base: damp dungeon
+            actors:
+              - id: actor-goblin
+              - id: actor-goblin
+                chance: 10
+            items: []
+            portals:
+              - sourceGroup:
+                  base: west
+                targetGroup:
+                  base: east
+                name:
+                  base: window
+                dest:
+                  base: room-cave
+              - sourceGroup:
+                  base: east
+                targetGroup:
+                  base: west
+                name:
+                  base: door
+                dest:
+                  base: room-cave
+            slots: !map
+              step:
+                base: room-step
+            verbs: !map {}
+        - base:
+            meta:
+              id: room-cave
+              name:
+                base: Cave
+              desc:
+                base: clammy cave
+            actors:
+              - id: actor-bat
+                chance: 25
+            items:
+              - id: item-sword
+                chance: 50
+            portals:
+              - sourceGroup:
+                  base: west
+                targetGroup:
+                  base: east
+                name:
+                  base: door
+                dest:
+                  base: ((room-cave|room-marsh))
+              - sourceGroup:
+                  base: east
+                targetGroup:
+                  base: west
+                name:
+                  base: window
+                dest:
+                  base: room-dungeon
+            slots: !map
+              step:
+                base: room-step
+            verbs: !map {}
+        - base:
+            meta:
+              id: room-marsh
+              name:
+                base: Marsh
+              desc:
+                base: moist marsh
+            actors: []
+            items: []
+            portals:
+              - sourceGroup:
+                  base: west
+                targetGroup:
+                  base: east
+                name:
+                  base: door
+                dest:
+                  base: room-cave
+                link:
+                  base: forward
+              - sourceGroup:
+                  base: east
+                targetGroup:
+                  base: west
+                name:
+                  base: window
+                dest:
+                  base: room-dungeon
+            slots: !map
+              step:
+                base: room-step
+            verbs: !map {}
+  </script>
+  <script type="text/yaml" id="data-config" src="../data/config.yml">
+logger:
+  level: debug
+  name: textual-engine
+locale:
+  bundles:
+    en: {}
+  </script>
+  <script src="../out/bundle/browser.js">
+  </script>
+</html>

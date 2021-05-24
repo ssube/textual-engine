@@ -2,10 +2,10 @@ import { createSchema } from '@apextoaster/js-yaml-schema';
 import Ajv from 'ajv';
 import { existsSync, promises, readFileSync } from 'fs';
 import { DEFAULT_SCHEMA, load } from 'js-yaml';
-import { BaseError } from 'noicejs';
 import { join } from 'path';
 
-import { CONFIG_SCHEMA, ConfigFile } from '../model/file/Config';
+import { ConfigError } from '.';
+import { CONFIG_SCHEMA, ConfigFile } from '../../model/file/Config';
 
 /**
  * Specialized config-loading function.
@@ -44,5 +44,3 @@ export async function loadConfig(path: string): Promise<ConfigFile> {
     throw new ConfigError('could not load config file', err);
   }
 }
-
-export class ConfigError extends BaseError { /* noop */ }

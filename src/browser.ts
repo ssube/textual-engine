@@ -1,4 +1,4 @@
-import { isNil } from '@apextoaster/js-utils';
+import { isNil, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Container } from 'noicejs';
 import { argv } from 'process';
 
@@ -47,13 +47,13 @@ export async function main(args: Array<string>): Promise<number> {
   locale.addBundle('common', config.locale);
 
   // load data files
-  const loader = await container.create<Loader, BaseOptions>(INJECT_LOADER);
   const parser = await container.create<Parser, BaseOptions>(INJECT_PARSER);
 
   const worlds = [];
   for (const path of arg.data) {
-    const dataStr = await loader.loadStr(path);
-    const data = parser.load(dataStr);
+    const elem = mustExist(document.getElementById(path));
+    const text = mustExist(elem.textContent);
+    const data = parser.load(text);
     worlds.push(...data.worlds);
   }
 
@@ -85,10 +85,17 @@ export async function main(args: Array<string>): Promise<number> {
   return 0;
 }
 
-main(argv).then((exitCode: number) => {
-  console.log('main exited %s', exitCode);
-  process.exitCode = exitCode;
+main([
+  '--config',
+  'data-config',
+  '--data',
+  'data-world',
+  '--seed',
+  'test',
+  '--world',
+  'test',
+]).then((exitCode) => {
+  console.log('main exited with status', exitCode);
 }).catch((err) => {
-  console.error('error in main', err);
-  process.exitCode = 1;
+  console.error('main exited with uncaught error', err);
 });

@@ -13,7 +13,7 @@ export function parseArgs(args: Array<string>): ParsedArgs {
       data: ['d'],
     },
     array: ['data'],
-    envPrefix: 'TEXTUAL_',
+    // envPrefix: 'TEXTUAL_',
     string: ['config', 'seed', 'world'],
   });
 

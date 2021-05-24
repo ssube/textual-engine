@@ -10,6 +10,7 @@
     "importHelpers": true,
     "jsx": "react",
     "lib": [
+      "dom",
       "es2019"
     ],
     "module": "es6",

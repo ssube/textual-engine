@@ -1,4 +1,5 @@
 import { doesExist, Optional } from '@apextoaster/js-utils';
+import { WorldEntity, WorldEntityFromType, WorldEntityType } from '../model/entity';
 
 import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/meta/Metadata';
@@ -18,7 +19,11 @@ export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<En
   return undefined;
 }
 
-export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): boolean {
+export function matchEntity<TType extends WorldEntityType, TEntity extends WorldEntityFromType<TType> = WorldEntityFromType<TType>>(
+  entity: Immutable<TEntity>,
+  search: Partial<SearchParams<TType>>,
+  matchers = DEFAULT_MATCHERS
+): entity is Immutable<TEntity> {
   let matched = true;
 
   if (doesExist(search.type)) {
@@ -76,12 +81,19 @@ export function matchIdSegments(value: string, filter: string): boolean {
   return valueParts.every((it, idx) => it === filterParts[idx]);
 }
 
-export const DEFAULT_MATCHERS: SearchMatchers = {
+export const DEFAULT_MATCHERS = {
   entity: matchEntity,
   metadata: matchMetadata,
 };
 
-export const FUZZY_MATCHERS: SearchMatchers = {
+export const FUZZY_MATCHERS = {
   entity: matchEntity,
   metadata: matchMetadataFuzzy,
 };
+
+export function createMatcher<TEntity extends WorldEntity>(fuzzy = false): SearchMatchers<TEntity> {
+  return {
+    entity: matchEntity,
+    metadata: matchMetadata,
+  };
+}

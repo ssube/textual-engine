@@ -3,25 +3,19 @@ import { Logger, Module, ModuleOptions, Provides } from 'noicejs';
 
 import {
   INJECT_COUNTER,
-  INJECT_LOADER,
   INJECT_LOCALE,
   INJECT_LOGGER,
   INJECT_PARSER,
   INJECT_RANDOM,
-  INJECT_RENDER,
   INJECT_SCRIPT,
   INJECT_STATE,
   INJECT_TEMPLATE,
 } from '.';
-import { FileLoader } from '../service/loader/FileLoader';
 import { LocaleService } from '../service/locale';
 import { NextLocaleService } from '../service/locale/NextLocaleService';
 import { YamlParser } from '../service/parser/YamlParser';
 import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
-import { RenderService } from '../service/render';
-import { InkRender } from '../service/render/InkRender';
-import { LineRender } from '../service/render/LineRender';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScriptService';
 import { StateService } from '../service/state';
@@ -36,12 +30,11 @@ export class LocalModule extends Module {
   protected counter: Singleton<Counter>;
   protected locale: Singleton<LocaleService>;
   protected random: Singleton<RandomGenerator>;
-  protected render: Singleton<RenderService>;
   protected script: Singleton<ScriptService>;
   protected state: Singleton<StateService>;
   protected template: Singleton<TemplateService>;
 
-  constructor(render = true) {
+  constructor() {
     super();
 
     this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));
@@ -50,18 +43,11 @@ export class LocalModule extends Module {
     this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
     this.state = new Singleton(() => mustExist(this.container).create(LocalStateService));
     this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
-
-    if (render) {
-      this.render = new Singleton(() => mustExist(this.container).create(InkRender));
-    } else {
-      this.render = new Singleton(() => mustExist(this.container).create(LineRender));
-    }
   }
 
   public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
 
-    this.bind(INJECT_LOADER).toConstructor(FileLoader);
     this.bind(INJECT_PARSER).toConstructor(YamlParser);
   }
 
@@ -92,11 +78,6 @@ export class LocalModule extends Module {
   @Provides(INJECT_RANDOM)
   protected async getRandom(): Promise<RandomGenerator> {
     return this.random.get();
-  }
-
-  @Provides(INJECT_RENDER)
-  protected async getRender(): Promise<RenderService> {
-    return this.render.get();
   }
 
   /**

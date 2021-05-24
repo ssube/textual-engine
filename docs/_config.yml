@@ -1,3 +1,4 @@
+includes_dir: ../data
 plugins:
   - jekyll-remote-theme
 remote_theme: daviddarnes/alembic@main

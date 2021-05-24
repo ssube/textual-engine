@@ -1,5 +1,5 @@
 <script type="text/yaml" id="data-world">
-{% include base.yml %}
+{% include data/base.yml %}
 </script>
 <script type="text/yaml" id="data-config">
 logger:

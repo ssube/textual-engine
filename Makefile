@@ -83,6 +83,8 @@ test: node_modules out
 NYC_ARGS := --all \
 	--check-coverage \
 	--exclude ".eslintrc.js" \
+	--exclude "config/**" \
+	--exclude "docs/**" \
 	--exclude "out/coverage/**" \
 	--exclude "test/**" \
 	--reporter=text-summary \

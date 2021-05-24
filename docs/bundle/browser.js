@@ -48252,12 +48252,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (cmd.target === "") {
       return ActorStepLookRoom.call(this, context);
     } else {
-      return ActorStepLookTarget.call(this, context);
+      return ActorStepLookTarget.call(this, context, cmd.target);
     }
   }
   __name(ActorStepLook, "ActorStepLook");
-  async function ActorStepLookTarget(context) {
-    const targetName = mustExist(context.command).target;
+  async function ActorStepLookTarget(context, targetName) {
     const results = searchState(context.state, {
       meta: {
         name: targetName
@@ -48321,9 +48320,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     });
     const targetPortal = results[cmd.index];
     if (isNil(targetPortal)) {
-      context.logger.warn({
-        portals: currentRoom.portals
-      }, `portal ${targetName} not found`);
+      await context.focus.show("actor.step.move.missing", { cmd });
       return;
     }
     await context.focus.show("actor.step.move.portal", { actor: this, portal: targetPortal });
@@ -48334,6 +48331,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }, context);
     if (this.actorType === ActorType.PLAYER) {
       await context.focus.setRoom(targetPortal.dest);
+      await ActorStepLookTarget.call(this, context, targetPortal.dest);
     }
   }
   __name(ActorStepMove, "ActorStepMove");

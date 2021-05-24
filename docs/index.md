@@ -2,7 +2,12 @@
 {% include base.yml %}
 </script>
 <script type="text/yaml" id="data-config">
-{% include config.yml %}
+logger:
+  level: info
+  name: textual-engine
+locale:
+  bundles:
+    en: {}
 </script>
 <div id="app"></div>
 <script src="./bundle/browser.js">

@@ -27,7 +27,9 @@ export const Frame = (props: FrameProps) => {
     setLine('');
   }
 
-  return <div>
+  return <div style={{
+    fontFamily: 'monospace',
+  }}>
     <Output output={props.output.slice(-HISTORY_SIZE)} />
     <div>
       <form onSubmit={handleSubmit}>

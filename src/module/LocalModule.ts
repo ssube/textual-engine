@@ -12,19 +12,19 @@ import {
   INJECT_TEMPLATE,
 } from '.';
 import { LocaleService } from '../service/locale';
-import { NextLocaleService } from '../service/locale/NextLocaleService';
+import { NextLocaleService } from '../service/locale/NextLocale';
 import { YamlParser } from '../service/parser/YamlParser';
 import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { ScriptService } from '../service/script';
-import { LocalScriptService } from '../service/script/LocalScriptService';
+import { LocalScriptService } from '../service/script/LocalScript';
 import { StateService } from '../service/state';
-import { LocalStateService } from '../service/state/LocalStateService';
+import { LocalStateService } from '../service/state/TurnState';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
 import { Singleton } from '../util/container';
-import { Counter } from '../util/counter';
-import { LocalCounter } from '../util/counter/LocalCounter';
+import { Counter } from '../service/counter';
+import { LocalCounter } from '../service/counter/LocalCounter';
 
 export class LocalModule extends Module {
   protected counter: Singleton<Counter>;

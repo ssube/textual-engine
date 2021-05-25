@@ -4,7 +4,7 @@ import { WorldEntity, WorldEntityType } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
 import { Room } from '../../model/entity/Room';
-import { Metadata } from '../../model/meta/Metadata';
+import { Metadata } from '../../model/Metadata';
 import { State } from '../../model/State';
 import { DEFAULT_MATCHERS } from '../entity';
 import { Immutable } from '../types';

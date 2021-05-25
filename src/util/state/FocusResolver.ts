@@ -5,8 +5,8 @@ import { searchState } from '.';
 import { WorldEntity } from '../../model/entity';
 import { Actor, ACTOR_TYPE, isActor } from '../../model/entity/Actor';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
-import { LocaleContext } from '../../model/file/Locale';
 import { State } from '../../model/State';
+import { LocaleContext } from '../../service/locale';
 import { ScriptFocus } from '../../service/script';
 
 export type FocusChangeRoom = (room: Room) => Promise<void>;

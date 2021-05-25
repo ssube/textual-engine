@@ -1,8 +1,8 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import i18next, { i18n } from 'i18next';
 
-import { LocaleService } from '.';
-import { LocaleBundle, LocaleContext } from '../../model/file/Locale';
+import { LocaleContext, LocaleService } from '.';
+import { LocaleBundle } from '../../model/file/Locale';
 
 export class NextLocaleService implements LocaleService {
   protected i18next?: i18n;

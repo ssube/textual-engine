@@ -82,7 +82,7 @@ export async function main(args: Array<string>): Promise<number> {
 
   // create state from world
   const state = await container.create<StateService, BaseOptions>(INJECT_STATE);
-  await state.from(world, {
+  await state.create(world, {
     depth: PORTAL_DEPTH,
     seed: arg.seed,
   });

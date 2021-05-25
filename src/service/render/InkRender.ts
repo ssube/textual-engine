@@ -6,6 +6,7 @@ import * as React from 'react';
 import { RenderService } from '.';
 import { Frame } from '../../component/ink/Frame';
 import { onceWithRemove } from '../../util/event';
+import { OutputEvent, RoomEvent } from '../actor';
 import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
@@ -41,7 +42,7 @@ export class InkRender extends BaseRender implements RenderService {
   }
 
   public read(): Promise<string> {
-    const { pending } = onceWithRemove<string>(this.state, 'output');
+    const { pending } = onceWithRemove<string>(this.player, 'output');
 
     return pending;
   }
@@ -53,12 +54,12 @@ export class InkRender extends BaseRender implements RenderService {
   public async start(): Promise<void> {
     this.logger.debug('starting Ink render');
 
-    this.ink = render(this.createRoot());
+    this.renderRoot();
     this.prompt(`turn ${this.step.turn}`);
 
-    this.state.on('output', (output) => this.onOutput(output));
-    this.state.on('quit', () => this.onQuit());
-    this.state.on('step', (step) => this.onStep(step));
+    this.player.on('output', (output) => this.onOutput(output));
+    this.player.on('quit', () => this.onQuit());
+    this.player.on('room', (room) => this.onRoom(room));
   }
 
   public async stop(): Promise<void> {
@@ -81,37 +82,36 @@ export class InkRender extends BaseRender implements RenderService {
     this.output.push(`${this.promptStr} > ${this.inputStr}`);
 
     // forward event to state
-    this.state.emit('line', line);
+    this.player.emit('input', {
+      lines: [line],
+    });
   }
 
   /**
    * Handler for output line events received from state service.
    */
-  public onOutput(lines: Array<string>): void {
-    if (!Array.isArray(lines)) {
+  public onOutput(event: OutputEvent): void {
+    this.logger.debug({ event }, 'handling output event from state');
+
+    if (!Array.isArray(event.lines)) {
       throw new InvalidArgumentError('please batch output');
     }
 
-    this.logger.debug({ lines }, 'handling output event from state');
-    this.output.push(...lines);
+    this.output.push(...event.lines);
+    this.step = event.step;
 
-    if (doesExist(this.ink)) {
-      this.ink.rerender(this.createRoot());
-    }
+    this.renderRoot();
   }
 
   /**
    * Handler for step events received from state service.
    */
-  public onStep(result: StepResult): void {
-    this.logger.debug(result, 'handling step event from state');
-    this.step = result;
+  public onRoom(event: RoomEvent): void {
+    this.logger.debug({ event }, 'handling room event from state');
 
     this.prompt(`turn ${this.step.turn}`);
 
-    if (doesExist(this.ink)) {
-      this.ink.rerender(this.createRoot());
-    }
+    this.renderRoot();
   }
 
   /**
@@ -122,12 +122,18 @@ export class InkRender extends BaseRender implements RenderService {
     this.output.push('game over');
   }
 
-  protected createRoot(): React.ReactElement {
-    return React.createElement(Frame, {
+  protected renderRoot(): void {
+    const elem = React.createElement(Frame, {
       onLine: (line: string) => this.nextLine(line),
       prompt: this.promptStr,
       output: this.output,
       step: this.step,
     });
+
+    if (doesExist(this.ink)) {
+      this.ink.rerender(elem);
+    } else {
+      this.ink = render(elem);
+    }
   }
 }

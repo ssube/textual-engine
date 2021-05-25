@@ -4,7 +4,7 @@ import { Actor, ACTOR_SCHEMA } from './entity/Actor';
 import { Item, ITEM_SCHEMA } from './entity/Item';
 import { Room, ROOM_SCHEMA } from './entity/Room';
 import { LocaleBundle, LOCALE_SCHEMA } from './file/Locale';
-import { METADATA_SCHEMA } from './meta/Metadata';
+import { METADATA_SCHEMA } from './Metadata';
 import { Template, TEMPLATE_REF_SCHEMA, TemplateMetadata, TemplateRef } from './meta/Template';
 
 export interface World {

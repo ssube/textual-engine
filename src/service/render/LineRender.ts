@@ -6,7 +6,7 @@ import { createInterface, Interface as LineInterface } from 'readline';
 import { RenderService } from '.';
 import { META_QUIT } from '../../util/constants';
 import { onceWithRemove } from '../../util/event';
-import { StepResult } from '../state';
+import { OutputEvent, RoomEvent } from '../actor';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 @Inject(/* all from base */)
@@ -59,16 +59,20 @@ export class LineRender extends BaseRender implements RenderService {
       this.padPrompt = false;
 
       this.logger.debug({ line }, 'read line');
-      this.state.emit('line', line);
+      this.player.emit('input', {
+        lines: [line],
+      });
     });
 
     this.reader.on('SIGINT', () => {
       this.logger.debug('sending interrupt as quit command');
-      this.state.emit('line', META_QUIT);
+      this.player.emit('input', {
+        lines: [META_QUIT],
+      });
     });
 
-    this.state.on('output', (output) => this.onOutput(output));
-    this.state.on('step', (step) => this.onStep(step));
+    this.player.on('output', (output) => this.onOutput(output));
+    this.player.on('room', (room) => this.onRoom(room));
 
     this.showPrompt();
   }
@@ -80,28 +84,29 @@ export class LineRender extends BaseRender implements RenderService {
   /**
    * Handler for output line events received from state service.
    */
-  public onOutput(lines: Array<string>): void {
-    if (!Array.isArray(lines)) {
+  public onOutput(event: OutputEvent): void {
+    this.logger.debug({ event }, 'handling output event from state');
+
+    if (!Array.isArray(event.lines)) {
       throw new InvalidArgumentError('please batch output');
     }
 
-    this.logger.debug({ lines }, 'handling output event from state');
+    this.step = event.step;
 
     if (this.padPrompt) {
       // a prompt was being shown, move to a newline before output
       this.showSync('');
     }
 
-    for (const line of lines) {
+    for (const line of event.lines) {
       this.showSync(line);
     }
 
     this.showPrompt();
   }
 
-  public onStep(result: StepResult): void {
-    this.logger.debug(result, 'handling step event from state');
-    this.step = result;
+  public onRoom(event: RoomEvent): void {
+    this.logger.debug({ event }, 'handling step event from state');
     this.showPrompt();
   }
 

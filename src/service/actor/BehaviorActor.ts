@@ -1,6 +1,9 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
+import { EventEmitter } from 'events';
+import { BaseOptions } from 'noicejs';
 
-import { Command, Input } from '.';
+import { ActorService } from '.';
+import { Command } from '../../model/Command';
 import { VERB_WAIT } from '../../util/constants';
 
 const WAIT_CMD: Command = {
@@ -14,20 +17,17 @@ const WAIT_CMD: Command = {
  * Behavioral input generates commands based on the actor's current
  * state (room, inventory, etc).
  */
-export class BehaviorInput implements Input {
-  public async tokenize(input: string): Promise<Array<string>> {
-    throw new NotImplementedError();
+export class BehaviorActorService extends EventEmitter implements ActorService {
+  constructor(options: BaseOptions) {
+    super();
   }
 
   public async translate(verbs: Array<string>): Promise<void> {
     throw new NotImplementedError();
   }
 
-  public async parse(input: string): Promise<Command> {
-    return WAIT_CMD;
-  }
-
   public async last(): Promise<Command> {
     return WAIT_CMD;
   }
 }
+

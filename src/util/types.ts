@@ -1,3 +1,5 @@
+export type EventHandler<TEvent> = (event: TEvent) => void;
+
 /**
  * Deep readonly type.
  *

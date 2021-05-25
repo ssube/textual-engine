@@ -1,9 +1,9 @@
 import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptContext, ScriptTarget } from '..';
-import { Actor, ActorType, isActor } from '../../../model/entity/Actor';
-import { isItem } from '../../../model/entity/Item';
-import { isRoom } from '../../../model/entity/Room';
+import { ScriptContext, ScriptTarget } from '../../service/script';
+import { Actor, ActorType, isActor } from '../../model/entity/Actor';
+import { isItem } from '../../model/entity/Item';
+import { isRoom } from '../../model/entity/Room';
 import {
   SLOT_HIT,
   SLOT_USE,
@@ -14,10 +14,10 @@ import {
   VERB_TAKE,
   VERB_USE,
   VERB_WAIT,
-} from '../../../util/constants';
-import { FUZZY_MATCHERS, indexEntity } from '../../../util/entity';
-import { getKey } from '../../../util/map';
-import { searchState } from '../../../util/state';
+} from '../../util/constants';
+import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
+import { getKey } from '../../util/map';
+import { searchState } from '../../util/state';
 
 export async function ActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({

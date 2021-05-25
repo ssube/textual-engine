@@ -3,7 +3,7 @@ import { JSONSchemaType } from 'ajv';
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { Replace } from '../../util/types';
 import { Entity } from '../entity/Base';
-import { Metadata } from './Metadata';
+import { Metadata } from '../Metadata';
 import { Modifier } from './Modifier';
 
 export interface TemplateNumber {

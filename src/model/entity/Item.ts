@@ -3,7 +3,7 @@ import { JSONSchemaType } from 'ajv';
 
 import { makeConstStringSchema } from '../../util/schema';
 import { SlotMap, StatMap, VerbMap } from '../../util/types';
-import { Metadata, METADATA_SCHEMA } from '../meta/Metadata';
+import { Metadata, METADATA_SCHEMA } from '../Metadata';
 import { Template } from '../meta/Template';
 import { Entity } from './Base';
 

@@ -1,16 +1,17 @@
-import { constructorName, InvalidArgumentError, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
-import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor';
+import { Command } from '../../model/Command';
+import { Actor, ActorType } from '../../model/entity/Actor';
+import { Room } from '../../model/entity/Room';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
 import {
+  INJECT_ACTOR,
   INJECT_COUNTER,
-  INJECT_INPUT_ACTOR,
   INJECT_LOADER,
-  INJECT_LOCALE,
   INJECT_LOGGER,
   INJECT_PARSER,
   INJECT_RANDOM,
@@ -19,27 +20,16 @@ import {
 } from '../../module';
 import { ActorInputOptions } from '../../module/InputModule';
 import { randomItem } from '../../util/array';
-import {
-  KNOWN_VERBS,
-  META_DEBUG,
-  META_GRAPH,
-  META_HELP,
-  META_LOAD,
-  META_QUIT,
-  META_SAVE,
-  SLOT_STEP,
-} from '../../util/constants';
-import { Counter } from '../../util/counter';
-import { debugState, graphState } from '../../util/debug';
+import { META_LOAD, META_QUIT, META_SAVE, SLOT_STEP } from '../../util/constants';
 import { onceWithRemove } from '../../util/event';
-import { searchState } from '../../util/state';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { findByTemplateId } from '../../util/template';
-import { Input } from '../input';
+import { ActorService, CommandEvent } from '../actor';
+import { Counter } from '../counter';
 import { Loader } from '../loader';
-import { LocaleService } from '../locale';
+import { LocaleContext } from '../locale';
 import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
 import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
@@ -48,7 +38,6 @@ import { TemplateService } from '../template';
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_COUNTER]: Counter;
   [INJECT_LOADER]: Loader;
-  [INJECT_LOCALE]: LocaleService;
   [INJECT_LOGGER]: Logger;
   [INJECT_PARSER]: Parser;
   [INJECT_RANDOM]: RandomGenerator;
@@ -59,7 +48,6 @@ export interface LocalStateServiceOptions extends BaseOptions {
 @Inject(
   INJECT_COUNTER,
   INJECT_LOADER,
-  INJECT_LOCALE,
   INJECT_LOGGER,
   INJECT_PARSER,
   INJECT_RANDOM,
@@ -74,7 +62,6 @@ export class LocalStateService extends EventEmitter implements StateService {
 
   protected counter: Counter;
   protected loader: Loader;
-  protected locale: LocaleService;
   protected logger: Logger;
   protected parser: Parser;
   protected random: RandomGenerator;
@@ -94,7 +81,6 @@ export class LocalStateService extends EventEmitter implements StateService {
     this.container = options.container;
     this.counter = options[INJECT_COUNTER];
     this.loader = options[INJECT_LOADER];
-    this.locale = options[INJECT_LOCALE];
     this.logger = options[INJECT_LOGGER].child({
       kind: constructorName(this),
     });
@@ -107,7 +93,7 @@ export class LocalStateService extends EventEmitter implements StateService {
   /**
    * Create a new world state from a world template.
    */
-  public async from(world: World, params: CreateParams): Promise<State> {
+  public async create(world: World, params: CreateParams): Promise<State> {
     const state: State = {
       focus: {
         actor: '',
@@ -188,10 +174,6 @@ export class LocalStateService extends EventEmitter implements StateService {
     state.start.room = startRoom.meta.id;
     state.start.actor = startActor.meta.id;
 
-    // cache verbs
-    const input = await this.getActorInput(startActor);
-    await input.translate(KNOWN_VERBS);
-
     return state;
   }
 
@@ -205,8 +187,8 @@ export class LocalStateService extends EventEmitter implements StateService {
   public async loop(): Promise<void> {
     const { pending } = onceWithRemove<void>(this, 'quit');
 
-    this.on('line', (line) => {
-      this.onLine(line).catch((err) => {
+    this.on('command', (command) => {
+      this.onCommand(command).catch((err) => {
         this.logger.error(err, 'error during line handler');
       });
     });
@@ -228,50 +210,23 @@ export class LocalStateService extends EventEmitter implements StateService {
   /**
    * Handler for a line of input from the focus helper.
    */
-  public onOutput(line: string): void {
+  public onOutput(line: string, context?: LocaleContext): void {
     this.emit('output', [line]);
   }
 
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
-  public async onLine(line: string): Promise<void> {
+  public async onCommand(cmd: Command): Promise<void> {
     const state = mustExist(this.state);
-
-    const [player] = searchState(state, {
-      meta: {
-        id: state.focus.actor,
-      },
-      room: {
-        id: state.focus.room,
-      },
-      type: ACTOR_TYPE,
-    });
-    if (!isActor(player)) {
-      throw new InvalidArgumentError('invalid focus actor');
-    }
-
-    const input = await this.getActorInput(player);
-    const cmd = await input.parse(line);
 
     this.logger.debug({
       cmd,
       focus: state.focus,
-      line,
-      player,
     }, 'parsed line of player input');
 
     // handle meta commands
     switch (cmd.verb) {
-      case META_DEBUG:
-        this.emit('output', debugState(state));
-        break;
-      case META_GRAPH:
-        await this.doGraph(cmd.target);
-        break;
-      case META_HELP:
-        await this.doHelp();
-        break;
       case META_SAVE:
         await this.doSave(cmd.target);
         break;
@@ -287,24 +242,6 @@ export class LocalStateService extends EventEmitter implements StateService {
         this.emit('step', result);
       }
     }
-  }
-
-  public async doHelp(): Promise<void> {
-    this.emit('output', [
-      KNOWN_VERBS.map((it) => this.locale.translate(it)).join(', '),
-    ]);
-  }
-
-  public async doGraph(path: string): Promise<void> {
-    const state = await this.save();
-    const output = graphState(state);
-    await this.loader.saveStr(path, output.join('\n'));
-    this.emit('output', [
-      this.locale.translate('debug.graph.summary', {
-        path,
-        size: state.rooms.length,
-      }),
-    ]);
   }
 
   public async doLoad(path: string, index: number): Promise<void> {
@@ -360,10 +297,10 @@ export class LocalStateService extends EventEmitter implements StateService {
 
         for (const actor of room.actors) {
           if (seen.has(actor.meta.id) === false) {
-            const input = await this.getActorInput(actor);
-            const command = await input.last();
-
             seen.add(actor.meta.id);
+
+            const command = await this.getActorCommand(actor, room);
+
             await this.script.invoke(actor, SLOT_STEP, {
               ...scope,
               actor,
@@ -416,11 +353,20 @@ export class LocalStateService extends EventEmitter implements StateService {
   /**
    * @todo get rid of this in favor of something that does not call DI during state steps
    */
-  protected getActorInput(actor: Actor): Promise<Input> {
-    return this.container.create<Input, ActorInputOptions>(INJECT_INPUT_ACTOR, {
+  protected async getActorCommand(actor: Actor, room: Room): Promise<Command> {
+    const actorProxy = await this.container.create<ActorService, ActorInputOptions>(INJECT_ACTOR, {
       id: actor.meta.id,
       type: actor.actorType,
     });
+
+    const { pending } = onceWithRemove<CommandEvent>(actorProxy, 'command');
+    actorProxy.emit('room', {
+      room,
+    });
+
+    const event = await pending;
+
+    return event.command;
   }
 
   protected async createHelpers(): Promise<void> {
@@ -436,9 +382,7 @@ export class LocalStateService extends EventEmitter implements StateService {
           state.rooms.push(...rooms);
         },
         onShow: async (line, context) => { // TODO: move to method
-          const out = this.locale.translate(line, context);
-          this.logger.debug({ line, out }, 'translated output');
-          this.onOutput(out);
+          this.onOutput(line, context);
         },
       },
       state,

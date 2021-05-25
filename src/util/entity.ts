@@ -1,7 +1,7 @@
 import { doesExist, Optional } from '@apextoaster/js-utils';
 
 import { Entity } from '../model/entity/Base';
-import { Metadata } from '../model/meta/Metadata';
+import { Metadata } from '../model/Metadata';
 import { SearchMatchers, SearchParams } from './state';
 import { Immutable } from './types';
 

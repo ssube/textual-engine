@@ -1,7 +1,8 @@
 import { getOrDefault, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject } from 'noicejs';
 
-import { Command, Input } from '.';
+import { TokenizerService } from '.';
+import { Command } from '../../model/Command';
 import { INJECT_LOCALE } from '../../module';
 import { LocaleService } from '../locale';
 
@@ -18,28 +19,28 @@ const REMOVED_WORDS = new Set([
 
 const SPLIT_CHAR = ' ';
 
-interface ClassicInputOptions extends BaseOptions {
+interface WordTokenizerOptions extends BaseOptions {
   [INJECT_LOCALE]?: LocaleService;
 }
 
 @Inject(INJECT_LOCALE)
-export class ClassicInput implements Input {
+export class WordTokenizer implements TokenizerService {
   protected history: Array<Command>;
   protected locale: LocaleService;
   protected verbs: Map<string, string>;
 
-  constructor(options: ClassicInputOptions) {
+  constructor(options: WordTokenizerOptions) {
     this.history = [];
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.verbs = new Map();
   }
 
-  public async tokenize(input: string): Promise<Array<string>> {
+  public async split(input: string): Promise<Array<string>> {
     return input.split(SPLIT_CHAR);
   }
 
-  public async parse(input: string): Promise<Command> {
-    const rawTokens = await this.tokenize(input);
+  public async parse(input: string): Promise<Array<Command>> {
+    const rawTokens = await this.split(input);
     const tokens = rawTokens.map((it) => it.toLocaleLowerCase()).filter((it) => REMOVED_WORDS.has(it) === false);
     const [rawVerb, ...targets] = tokens;
 
@@ -62,11 +63,7 @@ export class ClassicInput implements Input {
 
     this.history.unshift(cmd);
 
-    return cmd;
-  }
-
-  public async last(): Promise<Command> {
-    return this.history[0];
+    return [cmd];
   }
 
   public async translate(verbs: ReadonlyArray<string>): Promise<void> {

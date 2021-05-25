@@ -6,6 +6,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { RenderService } from '.';
 import { Frame } from '../../component/react/Frame';
 import { onceWithRemove } from '../../util/event';
+import { OutputEvent, RoomEvent } from '../actor';
 import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
@@ -39,7 +40,7 @@ export class ReactRender extends BaseRender implements RenderService {
   }
 
   public read(): Promise<string> {
-    const { pending } = onceWithRemove<string>(this.state, 'output');
+    const { pending } = onceWithRemove<string>(this.player, 'output');
 
     return pending;
   }
@@ -54,9 +55,9 @@ export class ReactRender extends BaseRender implements RenderService {
     this.renderRoot();
     this.prompt(`turn ${this.step.turn}`);
 
-    this.state.on('output', (output) => this.onOutput(output));
-    this.state.on('quit', () => this.onQuit());
-    this.state.on('step', (step) => this.onStep(step));
+    this.player.on('output', (output) => this.onOutput(output));
+    this.player.on('quit', () => this.onQuit());
+    this.player.on('room', (room) => this.onRoom(room));
   }
 
   public async stop(): Promise<void> {
@@ -81,19 +82,22 @@ export class ReactRender extends BaseRender implements RenderService {
     this.output.push(`${this.promptStr} > ${this.inputStr}`);
 
     // forward event to state
-    this.state.emit('line', line);
+    this.player.emit('input', {
+      lines: [line],
+    });
   }
 
   /**
    * Handler for output line events received from state service.
    */
-  public onOutput(lines: Array<string>): void {
-    if (!Array.isArray(lines)) {
+  public onOutput(event: OutputEvent): void {
+    if (!Array.isArray(event.lines)) {
       throw new InvalidArgumentError('please batch output');
     }
 
-    this.logger.debug({ lines }, 'handling output event from state');
-    this.output.push(...lines);
+    this.logger.debug({ event }, 'handling output event from state');
+    this.output.push(...event.lines);
+    this.step = {...event.step};
 
     this.renderRoot();
   }
@@ -101,9 +105,8 @@ export class ReactRender extends BaseRender implements RenderService {
   /**
    * Handler for step events received from state service.
    */
-  public onStep(result: StepResult): void {
-    this.logger.debug(result, 'handling step event from state');
-    this.step = result;
+  public onRoom(result: RoomEvent): void {
+    this.logger.debug(result, 'handling room event from state');
 
     this.prompt(`turn ${this.step.turn}`);
 

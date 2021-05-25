@@ -1,4 +1,9 @@
-import { LocaleBundle, LocaleContext } from '../../model/file/Locale';
+import { Command } from '../../model/Command';
+import { WorldEntity } from '../../model/entity';
+import { Portal } from '../../model/entity/Portal';
+import { LocaleBundle } from '../../model/file/Locale';
+
+export type LocaleContext = Record<string, number | string | WorldEntity | Portal | Command>;
 
 export interface LocaleService {
   start(): Promise<void>;

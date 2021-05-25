@@ -9,13 +9,14 @@ export const INJECT_RENDER = Symbol('inject-render');
 export const INJECT_SCRIPT = Symbol('inject-script-ctrl');
 export const INJECT_STATE = Symbol('inject-state-ctrl');
 export const INJECT_TEMPLATE = Symbol('inject-template');
+export const INJECT_TOKENIZER = Symbol('inject-tokenizer');
 
 /**
  * Get the input for a particular actor.
  */
-export const INJECT_INPUT_ACTOR = Symbol('inject-input-actor');
+export const INJECT_ACTOR = Symbol('inject-actor');
 
 /**
  * Get the input for the player actor (shortcut to input-actor for the focused actor).
  */
-export const INJECT_INPUT_PLAYER = Symbol('inject-input-player');
+export const INJECT_ACTOR_PLAYER = Symbol('inject-actor-player');

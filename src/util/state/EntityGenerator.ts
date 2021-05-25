@@ -5,7 +5,7 @@ import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { Metadata } from '../../model/meta/Metadata';
+import { Metadata } from '../../model/Metadata';
 import { BaseTemplate, Template, TemplateMetadata } from '../../model/meta/Template';
 import { World } from '../../model/World';
 import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE } from '../../module';
@@ -13,7 +13,7 @@ import { RandomGenerator } from '../../service/random';
 import { TemplateService } from '../../service/template';
 import { randomItem } from '../array';
 import { TEMPLATE_CHANCE } from '../constants';
-import { Counter } from '../counter';
+import { Counter } from '../../service/counter';
 import { findByTemplateId } from '../template';
 
 export interface EntityGeneratorOptions extends BaseOptions {

@@ -1,14 +1,14 @@
 import { Logger } from 'noicejs';
 
+import { Command } from '../../model/Command';
 import { WorldEntity } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
-import { LocaleContext } from '../../model/file/Locale';
 import { State } from '../../model/State';
+import { LocaleContext } from '../../service/locale';
 import { SearchParams } from '../../util/state';
 import { Immutable, ScriptData } from '../../util/types';
-import { Command } from '../input';
 
 export interface ScriptFocus {
   /**

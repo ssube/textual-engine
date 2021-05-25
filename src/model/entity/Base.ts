@@ -1,4 +1,4 @@
-import { Metadata } from '../meta/Metadata';
+import { Metadata } from '../Metadata';
 
 export interface Entity {
   meta: Metadata;

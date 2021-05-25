@@ -2,6 +2,8 @@ import { EventEmitter } from 'events';
 
 import { State } from '../../model/State';
 import { World } from '../../model/World';
+import { EventHandler } from '../../util/types';
+import { CommandEvent, OutputEvent, RoomEvent } from '../actor';
 
 export interface CreateParams {
   /**
@@ -35,7 +37,7 @@ export interface StateService extends EventEmitter {
   /**
    * Create a new world state from a world template.
    */
-  from(world: World, params: CreateParams): Promise<State>;
+  create(world: World, params: CreateParams): Promise<State>;
 
   /**
    * Load an existing world state.
@@ -58,4 +60,10 @@ export interface StateService extends EventEmitter {
    * Step the internal world state, simulating some turns and time passing.
    */
   step(params: StepParams): Promise<StepResult>;
+
+  emit(name: 'command', event: CommandEvent): boolean;
+
+  on(name: 'output', event: EventHandler<OutputEvent>): this;
+  on(name: 'quit', event: EventHandler<void>): this;
+  on(name: 'room', event: EventHandler<RoomEvent>): this;
 }

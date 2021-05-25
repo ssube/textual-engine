@@ -5,12 +5,12 @@ import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
 import { WorldEntity } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
 import { SearchParams, searchState } from '../../util/state';
-import { ActorGet } from './common/ActorGet';
-import { ActorHit } from './common/ActorHit';
-import { ActorStep } from './common/ActorStep';
-import { ItemStep } from './common/ItemStep';
-import { ItemUse } from './common/ItemUse';
-import { RoomStep } from './common/RoomStep';
+import { ActorGet } from '../../script/common/ActorGet';
+import { ActorHit } from '../../script/common/ActorHit';
+import { ActorStep } from '../../script/common/ActorStep';
+import { ItemStep } from '../../script/common/ItemStep';
+import { ItemUse } from '../../script/common/ItemUse';
+import { RoomStep } from '../../script/common/RoomStep';
 
 /**
  * Common scripts, built into the engine and always available.

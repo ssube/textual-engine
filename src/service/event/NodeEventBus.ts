@@ -23,8 +23,10 @@ export class NodeEventBus extends EventEmitter implements EventBus {
 
   public emit(name: string, ...args: Array<unknown>): boolean {
     this.logger.debug({
-      eventArgs: args,
-      eventName: name,
+      event: {
+        args,
+        name,
+      },
     }, 'bus proxying event');
 
     return super.emit(name, ...args);

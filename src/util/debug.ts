@@ -1,4 +1,3 @@
-import { PortalLinkage } from '../model/entity/Portal';
 import { State } from '../model/State';
 
 export function debugState(state: State): Array<string> {

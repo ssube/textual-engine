@@ -3,14 +3,6 @@ export const BYTE_RANGE = 255;
 export const PORTAL_DEPTH = 4;
 export const TEMPLATE_CHANCE = 100;
 
-// meta commands
-export const META_DEBUG = 'verbs.meta.debug';
-export const META_GRAPH = 'verbs.meta.graph';
-export const META_HELP = 'verbs.meta.help';
-export const META_LOAD = 'verbs.meta.load';
-export const META_QUIT = 'verbs.meta.quit';
-export const META_SAVE = 'verbs.meta.save';
-
 // script slots
 export const SLOT_ENTER = 'enter';
 export const SLOT_GET = 'get';
@@ -27,12 +19,20 @@ export const VERB_TAKE = 'verbs.common.take';
 export const VERB_USE = 'verbs.common.use';
 export const VERB_WAIT = 'verbs.common.wait';
 
+// meta commands
+export const META_DEBUG = 'verbs.meta.debug';
+export const META_GRAPH = 'verbs.meta.graph';
+export const META_HELP = 'verbs.meta.help';
+export const META_LOAD = 'verbs.meta.load';
+export const META_QUIT = 'verbs.meta.quit';
+export const META_SAVE = 'verbs.meta.save';
+
 /**
  * Common verbs and meta commands.
  *
  * Should include all `META_*` and `VERB_*` constants from this file.
  */
-export const KNOWN_VERBS = [
+export const COMMON_VERBS = [
   META_DEBUG,
   META_GRAPH,
   META_HELP,

@@ -1,4 +1,4 @@
-import { getOrDefault, mustExist } from '@apextoaster/js-utils';
+import { getOrDefault, hasItems, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject } from 'noicejs';
 
 import { TokenizerService } from '.';
@@ -34,14 +34,16 @@ export class WordTokenizer implements TokenizerService {
   }
 
   public async split(input: string): Promise<Array<string>> {
-    return input.split(SPLIT_CHAR);
+    return trim(input)
+      .toLocaleLowerCase()
+      .split(SPLIT_CHAR)
+      .map(trim)
+      .filter((it) => it.length > 0)
+      .filter((it) => REMOVED_WORDS.has(it) === false);
   }
 
   public async parse(input: string): Promise<Array<Command>> {
-    const rawTokens = await this.split(input);
-    const tokens = rawTokens.map((it) => it.toLocaleLowerCase()).filter((it) => REMOVED_WORDS.has(it) === false);
-    const [rawVerb, ...targets] = tokens;
-
+    const [rawVerb, ...targets] = await this.split(input);
     const verb = getOrDefault(this.verbs, rawVerb, rawVerb); // get the translation or return the raw verb
     const cmd: Command = {
       index: 0,
@@ -70,4 +72,10 @@ export class WordTokenizer implements TokenizerService {
       this.verbs.set(translated, verb); // trick i18next into translating them back
     }
   }
+}
+
+export function trim(str: string): string {
+  return str
+    .replace(/^\s+/, '')
+    .replace(/\s+$/, '');
 }

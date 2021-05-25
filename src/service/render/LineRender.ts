@@ -6,7 +6,7 @@ import { createInterface, Interface as LineInterface } from 'readline';
 import { RenderService } from '.';
 import { META_QUIT } from '../../util/constants';
 import { onceWithRemove } from '../../util/event';
-import { OutputEvent, RoomEvent } from '../event';
+import { LineEvent, RoomEvent } from '../event';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 @Inject(/* all from base */)
@@ -84,14 +84,12 @@ export class LineRender extends BaseRender implements RenderService {
   /**
    * Handler for output line events received from state service.
    */
-  public onOutput(event: OutputEvent): void {
+  public onOutput(event: LineEvent): void {
     this.logger.debug({ event }, 'handling output event from state');
 
     if (!Array.isArray(event.lines)) {
       throw new InvalidArgumentError('please batch output');
     }
-
-    this.step = event.step;
 
     if (this.padPrompt) {
       // a prompt was being shown, move to a newline before output

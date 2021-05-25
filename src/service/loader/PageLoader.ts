@@ -9,6 +9,7 @@ export class PageLoader implements Loader {
   }
 
   public async dump(path: string, data: Buffer): Promise<void> {
+    // eslint-disable-next-line no-console
     console.log(path, data);
   }
 

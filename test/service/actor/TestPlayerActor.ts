@@ -1,11 +1,12 @@
 import { expect } from 'chai';
 import { BaseOptions, Container, NullLogger } from 'noicejs';
 
-import { INJECT_EVENT } from '../../../src/module';
+import { INJECT_ACTOR_PLAYER, INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
 import { ActorModule } from '../../../src/module/ActorModule';
 import { LocalModule } from '../../../src/module/LocalModule';
 import { PlayerActorService } from '../../../src/service/actor/PlayerActor';
 import { CommandEvent, EventBus } from '../../../src/service/event';
+import { LocaleService } from '../../../src/service/locale';
 import { onceWithRemove } from '../../../src/util/event';
 
 describe('player actor', () => {
@@ -16,7 +17,11 @@ describe('player actor', () => {
     });
 
     const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    const actor = await container.create(PlayerActorService);
+
+    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+    await locale.start();
+
+    const actor = await container.create<PlayerActorService, BaseOptions>(INJECT_ACTOR_PLAYER);
     await actor.start();
 
     const index = 13;

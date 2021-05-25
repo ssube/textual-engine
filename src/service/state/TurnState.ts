@@ -21,7 +21,7 @@ import {
 } from '../../module';
 import { ActorInputOptions } from '../../module/ActorModule';
 import { randomItem } from '../../util/array';
-import { KNOWN_VERBS, META_LOAD, META_QUIT, META_SAVE, SLOT_STEP } from '../../util/constants';
+import { COMMON_VERBS, META_DEBUG, META_GRAPH, META_HELP, META_LOAD, META_QUIT, META_SAVE, SLOT_STEP } from '../../util/constants';
 import { debugState, graphState } from '../../util/debug';
 import { onceWithRemove } from '../../util/event';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
@@ -129,10 +129,6 @@ export class LocalStateService implements StateService {
       },
     };
 
-    // TODO: load the world locale
-    // this.locale.deleteBundle('world');
-    // this.locale.addBundle('world', world.locale);
-
     // save state for later
     this.state = state;
     this.world = world;
@@ -197,7 +193,11 @@ export class LocalStateService implements StateService {
   public async loop(): Promise<void> {
     const { pending } = onceWithRemove<void>(this.event, 'quit');
 
-    await this.player.start(); // TODO: never start another service
+    // load the world locale
+    this.event.emit('locale-bundle', {
+      name: 'world',
+      bundle: mustExist(this.world).locale,
+    });
 
     this.event.on('actor-command', (event) => {
       this.onCommand(event.command).catch((err) => {
@@ -224,7 +224,10 @@ export class LocalStateService implements StateService {
    */
   public onOutput(line: string, context?: LocaleContext): void {
     this.event.emit('state-output', {
-      lines: [line],
+      lines: [{
+        key: line,
+        context,
+      }],
       step: mustExist(this.state).step,
     });
   }
@@ -242,11 +245,20 @@ export class LocalStateService implements StateService {
 
     // handle meta commands
     switch (cmd.verb) {
-      case META_SAVE:
-        await this.doSave(cmd.target);
+      case META_DEBUG:
+        await this.doDebug();
+        break;
+      case META_GRAPH:
+        await this.doGraph(cmd.target);
+        break;
+      case META_HELP:
+        await this.doHelp();
         break;
       case META_LOAD:
         await this.doLoad(cmd.target, cmd.index);
+        break;
+      case META_SAVE:
+        await this.doSave(cmd.target);
         break;
       case META_QUIT:
         this.event.emit('quit');
@@ -254,7 +266,7 @@ export class LocalStateService implements StateService {
       default: {
         // step world
         const result = await this.step();
-        this.event.emit('step', result);
+        this.event.emit('state-step', result);
       }
     }
   }
@@ -263,15 +275,17 @@ export class LocalStateService implements StateService {
     const state = await this.save();
     const lines = debugState(state);
     this.event.emit('state-output', {
-      lines,
+      lines: lines.map((it) => ({ key: it })),
       step: state.step,
     });
   }
 
   public async doHelp(): Promise<void> {
-    const verbs = KNOWN_VERBS.join(', ');
+    const verbs = COMMON_VERBS.join(', ');
     this.event.emit('state-output', {
-      lines: [verbs],
+      lines: [{
+        key: verbs,
+      }],
       step: mustExist(this.state).step,
     });
   }
@@ -283,14 +297,15 @@ export class LocalStateService implements StateService {
     await this.loader.saveStr(path, lines.join('\n'));
 
     this.event.emit('state-output', {
-      lines: ['debug.graph.summary'],
-      step: state.step,
-    });
-
-        /*{
+      lines: [{
+        context: {
           path,
           size: state.rooms.length,
-        }*/
+        },
+        key: 'debug.graph.summary',
+      }],
+      step: state.step,
+    });
   }
 
   public async doLoad(path: string, index: number): Promise<void> {
@@ -304,9 +319,9 @@ export class LocalStateService implements StateService {
     await this.createHelpers();
 
     this.event.emit('state-output', {
-      lines: [
-        `loaded world ${state.meta.id} state from ${path}`,
-      ],
+      lines: [{
+        key: `loaded world ${state.meta.id} state from ${path}`,
+      }],
       step: state.step,
     });
   }
@@ -322,7 +337,9 @@ export class LocalStateService implements StateService {
     await this.loader.saveStr(path, dataStr);
 
     this.event.emit('state-output', {
-      lines: [`saved world ${state.meta.id} state to ${path}`],
+      lines: [{
+        key: `saved world ${state.meta.id} state to ${path}`,
+      }],
       step: state.step,
     });
   }
@@ -430,11 +447,11 @@ export class LocalStateService implements StateService {
     this.focus = await this.container.create(StateFocusResolver, {
       events: {
         onActor: () => Promise.resolve(),
-        onRoom: async (room) => {
+        onRoom: async (room) => { // TODO: move to method
           const rooms = await mustExist(this.generator).populateRoom(room, state.world.depth);
           state.rooms.push(...rooms);
         },
-        onShow: async (line, context) => { // TODO: move to method
+        onShow: async (line, context) => {
           this.onOutput(line, context);
         },
       },

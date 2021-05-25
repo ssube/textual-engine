@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { Container } from 'noicejs';
+import { Container, NullLogger } from 'noicejs';
 
 import { LocalModule } from '../../../src/module/LocalModule';
 import { WordTokenizer } from '../../../src/service/tokenizer/WordTokenizer';
@@ -7,7 +7,9 @@ import { WordTokenizer } from '../../../src/service/tokenizer/WordTokenizer';
 describe('word tokenizer', () => {
   it('should parse token lines', async () => {
     const container = Container.from(new LocalModule());
-    await container.configure();
+    await container.configure({
+      logger: NullLogger.global,
+    });
 
     const token = await container.create(WordTokenizer);
 
@@ -21,7 +23,9 @@ describe('word tokenizer', () => {
 
   it('should parse a final numeric segment as the command index', async () => {
     const container = Container.from(new LocalModule());
-    await container.configure();
+    await container.configure({
+      logger: NullLogger.global,
+    });
 
     const token = await container.create(WordTokenizer);
 

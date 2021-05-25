@@ -1,11 +1,11 @@
-import { constructorName, mustExist, NotImplementedError } from '@apextoaster/js-utils';
+import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
-import { KNOWN_VERBS } from '../../util/constants';
-import { EventBus, InputEvent, OutputEvent } from '../event';
+import { COMMON_VERBS } from '../../util/constants';
+import { EventBus, LineEvent, OutputEvent } from '../event';
 import { LocaleService } from '../locale';
 import { TokenizerService } from '../tokenizer';
 
@@ -44,28 +44,25 @@ export class PlayerActorService implements ActorService {
     this.event.on('render-output', (event) => this.doInput(event));
     this.event.on('state-output', (event) => this.doOutput(event));
 
-    await this.locale.start();
-    await this.tokenizer.translate(KNOWN_VERBS);
+    await this.tokenizer.translate(COMMON_VERBS);
   }
 
   public async stop() {
     /* noop */
   }
 
-  public async translate(verbs: Array<string>): Promise<void> {
-    throw new NotImplementedError();
-  }
-
   public async last(): Promise<Command> {
     return this.history[this.history.length - 1];
   }
 
-  public async doInput(event: InputEvent): Promise<void> {
+  public async doInput(event: LineEvent): Promise<void> {
     this.logger.debug({ event }, 'tokenizing input');
 
     for (const line of event.lines) {
       const commands = await this.tokenizer.parse(line);
       this.history.push(...commands);
+
+      this.logger.debug({ event, commands }, 'translated event');
 
       for (const command of commands) {
         this.event.emit('actor-command', {
@@ -78,10 +75,9 @@ export class PlayerActorService implements ActorService {
   public async doOutput(event: OutputEvent): Promise<void> {
     this.logger.debug({ event }, 'translating output');
 
-    const lines = event.lines.map((it) => this.locale.translate(it));
+    const lines = event.lines.map((it) => this.locale.translate(it.key, it.context));
     this.event.emit('actor-output', {
       lines,
-      step: event.step,
     });
   }
 }

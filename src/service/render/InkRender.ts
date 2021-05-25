@@ -6,7 +6,8 @@ import * as React from 'react';
 import { RenderService } from '.';
 import { Frame } from '../../component/ink/Frame';
 import { onceWithRemove } from '../../util/event';
-import { OutputEvent, RoomEvent } from '../event';
+import { LineEvent, OutputEvent, RoomEvent } from '../event';
+import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 export interface InkState {
@@ -44,7 +45,7 @@ export class InkRender extends BaseRender implements RenderService {
     const { pending } = onceWithRemove<OutputEvent>(this.event, 'output');
     const event = await pending;
 
-    return event.lines[0];
+    return event.lines[0].key;
   }
 
   public async show(msg: string): Promise<void> {
@@ -59,6 +60,7 @@ export class InkRender extends BaseRender implements RenderService {
 
     this.event.on('actor-output', (output) => this.onOutput(output));
     this.event.on('state-room', (room) => this.onRoom(room));
+    this.event.on('state-step', (step) => this.onStep(step));
     this.event.on('quit', () => this.onQuit());
   }
 
@@ -90,7 +92,7 @@ export class InkRender extends BaseRender implements RenderService {
   /**
    * Handler for output line events received from state service.
    */
-  public onOutput(event: OutputEvent): void {
+  public onOutput(event: LineEvent): void {
     this.logger.debug({ event }, 'handling output event from state');
 
     if (!Array.isArray(event.lines)) {
@@ -98,9 +100,8 @@ export class InkRender extends BaseRender implements RenderService {
     }
 
     this.output.push(...event.lines);
-    this.step = event.step;
 
-    this.renderRoot();
+    // this.renderRoot();
   }
 
   /**
@@ -110,7 +111,13 @@ export class InkRender extends BaseRender implements RenderService {
     this.logger.debug({ event }, 'handling room event from state');
 
     this.prompt(`turn ${this.step.turn}`);
+    this.renderRoot();
+  }
 
+  public onStep(event: StepResult): void {
+    this.logger.debug({ event }, 'handling step event from state');
+
+    this.step = event;
     this.renderRoot();
   }
 

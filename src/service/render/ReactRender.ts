@@ -6,7 +6,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { RenderService } from '.';
 import { Frame } from '../../component/react/Frame';
 import { onceWithRemove } from '../../util/event';
-import { OutputEvent, RoomEvent } from '../event';
+import { LineEvent, OutputEvent, RoomEvent } from '../event';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 export interface InkState {
@@ -42,7 +42,7 @@ export class ReactRender extends BaseRender implements RenderService {
     const { pending } = onceWithRemove<OutputEvent>(this.event, 'actor-output');
     const event = await pending;
 
-    return event.lines[0];
+    return event.lines[0].key;
   }
 
   public async show(msg: string): Promise<void> {
@@ -90,14 +90,13 @@ export class ReactRender extends BaseRender implements RenderService {
   /**
    * Handler for output line events received from state service.
    */
-  public onOutput(event: OutputEvent): void {
+  public onOutput(event: LineEvent): void {
     if (!Array.isArray(event.lines)) {
       throw new InvalidArgumentError('please batch output');
     }
 
     this.logger.debug({ event }, 'handling output event from state');
     this.output.push(...event.lines);
-    this.step = {...event.step};
 
     this.renderRoot();
   }

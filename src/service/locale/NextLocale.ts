@@ -1,14 +1,26 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import i18next, { i18n } from 'i18next';
+import { BaseOptions, Inject } from 'noicejs';
 
 import { LocaleContext, LocaleService } from '.';
 import { LocaleBundle } from '../../model/file/Locale';
+import { INJECT_EVENT } from '../../module';
+import { EventBus } from '../event';
 
+interface NextLocaleOptions extends BaseOptions {
+  [INJECT_EVENT]?: EventBus;
+}
+
+@Inject(INJECT_EVENT)
 export class NextLocaleService implements LocaleService {
+  protected event: EventBus;
+
   protected i18next?: i18n;
   protected bundleLangs: Map<string, Set<string>>;
 
-  constructor() {
+  constructor(options: NextLocaleOptions) {
+    this.event = mustExist(options[INJECT_EVENT]);
+
     this.bundleLangs = new Map();
   }
 
@@ -21,6 +33,11 @@ export class NextLocaleService implements LocaleService {
     await inst.init();
 
     this.i18next = inst;
+
+    this.event.on('locale-bundle', (event) => {
+      this.deleteBundle(event.name);
+      this.addBundle(event.name, event.bundle);
+    });
   }
 
   public addBundle(name: string, bundle: LocaleBundle): void {

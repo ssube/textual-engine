@@ -47,8 +47,6 @@ export interface StateService {
 
   /**
    * Begin the game loop, continuing until a quit command is received.
-   *
-   * @todo should this return the final state/step?
    */
   loop(): Promise<void>;
 

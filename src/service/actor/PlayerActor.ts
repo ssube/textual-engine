@@ -1,22 +1,16 @@
 import { constructorName, mustExist, NotImplementedError } from '@apextoaster/js-utils';
-import { EventEmitter } from 'events';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { ActorService, InputEvent } from '.';
+import { ActorService } from '.';
 import { Command } from '../../model/Command';
-import { INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
-import { VERB_WAIT } from '../../util/constants';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
+import { KNOWN_VERBS } from '../../util/constants';
+import { EventBus, InputEvent, OutputEvent } from '../event';
 import { LocaleService } from '../locale';
 import { TokenizerService } from '../tokenizer';
 
-const WAIT_CMD: Command = {
-  index: 0,
-  input: `${VERB_WAIT} turn`,
-  verb: VERB_WAIT,
-  target: 'turn',
-};
-
 export interface PlayerActorOptions extends BaseOptions {
+  [INJECT_EVENT]?: EventBus;
   [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
   [INJECT_TOKENIZER]?: TokenizerService;
@@ -26,31 +20,32 @@ export interface PlayerActorOptions extends BaseOptions {
  * Behavioral input generates commands based on the actor's current
  * state (room, inventory, etc).
  */
-@Inject(INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER)
-export class PlayerActorService extends EventEmitter implements ActorService {
-  protected history: Array<Command>;
+@Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER)
+export class PlayerActorService implements ActorService {
+  protected event: EventBus;
   protected locale: LocaleService;
   protected logger: Logger;
   protected tokenizer: TokenizerService;
 
-  constructor(options: PlayerActorOptions) {
-    super();
+  protected history: Array<Command>;
 
+  constructor(options: PlayerActorOptions) {
     this.history = [];
+
+    this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(PlayerActorService),
+      kind: constructorName(this),
     });
     this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
   }
 
   public async start() {
-    this.on('input', (event: InputEvent) => this.doInput(event));
-    this.on('room', async () => {
-      this.emit('command', {
-        command: await this.last(),
-      });
-    });
+    this.event.on('render-output', (event) => this.doInput(event));
+    this.event.on('state-output', (event) => this.doOutput(event));
+
+    await this.locale.start();
+    await this.tokenizer.translate(KNOWN_VERBS);
   }
 
   public async stop() {
@@ -73,10 +68,20 @@ export class PlayerActorService extends EventEmitter implements ActorService {
       this.history.push(...commands);
 
       for (const command of commands) {
-        this.emit('command', {
+        this.event.emit('actor-command', {
           command,
         });
       }
     }
+  }
+
+  public async doOutput(event: OutputEvent): Promise<void> {
+    this.logger.debug({ event }, 'translating output');
+
+    const lines = event.lines.map((it) => this.locale.translate(it));
+    this.event.emit('actor-output', {
+      lines,
+      step: event.step,
+    });
   }
 }

@@ -1,5 +1,4 @@
 import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
-import { EventEmitter } from 'events';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
@@ -12,6 +11,7 @@ import {
   INJECT_ACTOR,
   INJECT_ACTOR_PLAYER,
   INJECT_COUNTER,
+  INJECT_EVENT,
   INJECT_LOADER,
   INJECT_LOGGER,
   INJECT_PARSER,
@@ -28,8 +28,9 @@ import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { findByTemplateId } from '../../util/template';
-import { ActorService, CommandEvent } from '../actor';
+import { ActorService } from '../actor';
 import { Counter } from '../counter';
+import { EventBus } from '../event';
 import { Loader } from '../loader';
 import { LocaleContext } from '../locale';
 import { Parser } from '../parser';
@@ -40,6 +41,7 @@ import { TemplateService } from '../template';
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_ACTOR_PLAYER]?: ActorService;
   [INJECT_COUNTER]: Counter;
+  [INJECT_EVENT]: EventBus;
   [INJECT_LOADER]: Loader;
   [INJECT_LOGGER]: Logger;
   [INJECT_PARSER]: Parser;
@@ -51,6 +53,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
 @Inject(
   INJECT_ACTOR_PLAYER,
   INJECT_COUNTER,
+  INJECT_EVENT,
   INJECT_LOADER,
   INJECT_LOGGER,
   INJECT_PARSER,
@@ -58,13 +61,14 @@ export interface LocalStateServiceOptions extends BaseOptions {
   INJECT_SCRIPT,
   INJECT_TEMPLATE
 )
-export class LocalStateService extends EventEmitter implements StateService {
+export class LocalStateService implements StateService {
   /**
    * @todo remove. only present to get actor input.
    */
   protected container: Container;
 
   protected counter: Counter;
+  protected event: EventBus;
   protected loader: Loader;
   protected logger: Logger;
   protected parser: Parser;
@@ -81,14 +85,14 @@ export class LocalStateService extends EventEmitter implements StateService {
   protected world?: World;
 
   constructor(options: LocalStateServiceOptions) {
-    super();
-
     this.container = options.container;
-    this.counter = options[INJECT_COUNTER];
-    this.loader = options[INJECT_LOADER];
     this.logger = options[INJECT_LOGGER].child({
       kind: constructorName(this),
     });
+
+    this.counter = options[INJECT_COUNTER];
+    this.event = options[INJECT_EVENT];
+    this.loader = options[INJECT_LOADER];
     this.parser = options[INJECT_PARSER];
     this.player = mustExist(options[INJECT_ACTOR_PLAYER]);
     this.random = options[INJECT_RANDOM];
@@ -191,9 +195,11 @@ export class LocalStateService extends EventEmitter implements StateService {
   }
 
   public async loop(): Promise<void> {
-    const { pending } = onceWithRemove<void>(this, 'quit');
+    const { pending } = onceWithRemove<void>(this.event, 'quit');
 
-    this.player.on('command', (event) => {
+    await this.player.start(); // TODO: never start another service
+
+    this.event.on('actor-command', (event) => {
       this.onCommand(event.command).catch((err) => {
         this.logger.error(err, 'error during line handler');
       });
@@ -217,7 +223,7 @@ export class LocalStateService extends EventEmitter implements StateService {
    * Handler for a line of input from the focus helper.
    */
   public onOutput(line: string, context?: LocaleContext): void {
-    this.player.emit('output', {
+    this.event.emit('state-output', {
       lines: [line],
       step: mustExist(this.state).step,
     });
@@ -243,12 +249,12 @@ export class LocalStateService extends EventEmitter implements StateService {
         await this.doLoad(cmd.target, cmd.index);
         break;
       case META_QUIT:
-        this.emit('quit');
+        this.event.emit('quit');
         break;
       default: {
         // step world
         const result = await this.step();
-        this.emit('step', result);
+        this.event.emit('step', result);
       }
     }
   }
@@ -256,15 +262,17 @@ export class LocalStateService extends EventEmitter implements StateService {
   public async doDebug(): Promise<void> {
     const state = await this.save();
     const lines = debugState(state);
-    this.emit('output', {
+    this.event.emit('state-output', {
       lines,
+      step: state.step,
     });
   }
 
   public async doHelp(): Promise<void> {
     const verbs = KNOWN_VERBS.join(', ');
-    this.emit('output', {
+    this.event.emit('state-output', {
       lines: [verbs],
+      step: mustExist(this.state).step,
     });
   }
 
@@ -274,8 +282,9 @@ export class LocalStateService extends EventEmitter implements StateService {
 
     await this.loader.saveStr(path, lines.join('\n'));
 
-    this.emit('output', {
+    this.event.emit('state-output', {
       lines: ['debug.graph.summary'],
+      step: state.step,
     });
 
         /*{
@@ -294,9 +303,12 @@ export class LocalStateService extends EventEmitter implements StateService {
 
     await this.createHelpers();
 
-    this.emit('output', [
-      `loaded world ${state.meta.id} state from ${path}`,
-    ]);
+    this.event.emit('state-output', {
+      lines: [
+        `loaded world ${state.meta.id} state from ${path}`,
+      ],
+      step: state.step,
+    });
   }
 
   public async doSave(path: string): Promise<void> {
@@ -309,7 +321,10 @@ export class LocalStateService extends EventEmitter implements StateService {
     });
     await this.loader.saveStr(path, dataStr);
 
-    this.emit('output', [`saved world ${state.meta.id} state to ${path}`]);
+    this.event.emit('state-output', {
+      lines: [`saved world ${state.meta.id} state to ${path}`],
+      step: state.step,
+    });
   }
 
   public async step(): Promise<StepResult> {
@@ -405,16 +420,6 @@ export class LocalStateService extends EventEmitter implements StateService {
     });
 
     return actorProxy.last();
-
-    // TODO: make this stuff work without being janky
-    const { pending } = onceWithRemove<CommandEvent>(actorProxy, 'command');
-    actorProxy.emit('room', {
-      room,
-    });
-
-    const event = await pending;
-
-    return event.command;
   }
 
   protected async createHelpers(): Promise<void> {

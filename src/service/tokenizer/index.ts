@@ -12,4 +12,6 @@ export interface TokenizerService {
    * for keywords and respecting parts of speech.
    */
   parse(input: string): Promise<Array<Command>>;
+
+  translate(verbs: ReadonlyArray<string>): Promise<void>;
 }

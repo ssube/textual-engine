@@ -25,12 +25,10 @@ interface WordTokenizerOptions extends BaseOptions {
 
 @Inject(INJECT_LOCALE)
 export class WordTokenizer implements TokenizerService {
-  protected history: Array<Command>;
   protected locale: LocaleService;
   protected verbs: Map<string, string>;
 
   constructor(options: WordTokenizerOptions) {
-    this.history = [];
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.verbs = new Map();
   }
@@ -60,8 +58,6 @@ export class WordTokenizer implements TokenizerService {
     }
 
     cmd.target = targets.join(SPLIT_CHAR);
-
-    this.history.unshift(cmd);
 
     return [cmd];
   }

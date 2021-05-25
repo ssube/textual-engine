@@ -6,7 +6,7 @@ import { createInterface, Interface as LineInterface } from 'readline';
 import { RenderService } from '.';
 import { META_QUIT } from '../../util/constants';
 import { onceWithRemove } from '../../util/event';
-import { OutputEvent, RoomEvent } from '../actor';
+import { OutputEvent, RoomEvent } from '../event';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 @Inject(/* all from base */)
@@ -59,20 +59,20 @@ export class LineRender extends BaseRender implements RenderService {
       this.padPrompt = false;
 
       this.logger.debug({ line }, 'read line');
-      this.player.emit('input', {
+      this.event.emit('render-output', {
         lines: [line],
       });
     });
 
     this.reader.on('SIGINT', () => {
       this.logger.debug('sending interrupt as quit command');
-      this.player.emit('input', {
+      this.event.emit('render-output', {
         lines: [META_QUIT],
       });
     });
 
-    this.player.on('output', (output) => this.onOutput(output));
-    this.player.on('room', (room) => this.onRoom(room));
+    this.event.on('actor-output', (output) => this.onOutput(output));
+    this.event.on('state-room', (room) => this.onRoom(room));
 
     this.showPrompt();
   }

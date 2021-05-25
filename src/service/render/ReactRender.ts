@@ -6,8 +6,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { RenderService } from '.';
 import { Frame } from '../../component/react/Frame';
 import { onceWithRemove } from '../../util/event';
-import { OutputEvent, RoomEvent } from '../actor';
-import { StepResult } from '../state';
+import { OutputEvent, RoomEvent } from '../event';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 export interface InkState {
@@ -40,7 +39,7 @@ export class ReactRender extends BaseRender implements RenderService {
   }
 
   public async read(): Promise<string> {
-    const { pending } = onceWithRemove<OutputEvent>(this.player, 'output');
+    const { pending } = onceWithRemove<OutputEvent>(this.event, 'actor-output');
     const event = await pending;
 
     return event.lines[0];
@@ -56,9 +55,9 @@ export class ReactRender extends BaseRender implements RenderService {
     this.renderRoot();
     this.prompt(`turn ${this.step.turn}`);
 
-    this.player.on('output', (output) => this.onOutput(output));
-    this.player.on('quit', () => this.onQuit());
-    this.player.on('room', (room) => this.onRoom(room));
+    this.event.on('actor-output', (output) => this.onOutput(output));
+    this.event.on('state-room', (room) => this.onRoom(room));
+    this.event.on('quit', () => this.onQuit());
   }
 
   public async stop(): Promise<void> {
@@ -83,7 +82,7 @@ export class ReactRender extends BaseRender implements RenderService {
     this.output.push(`${this.promptStr} > ${this.inputStr}`);
 
     // forward event to state
-    this.player.emit('input', {
+    this.event.emit('render-output', {
       lines: [line],
     });
   }

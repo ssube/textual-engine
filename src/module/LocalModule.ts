@@ -3,6 +3,7 @@ import { Logger, Module, ModuleOptions, Provides } from 'noicejs';
 
 import {
   INJECT_COUNTER,
+  INJECT_EVENT,
   INJECT_LOCALE,
   INJECT_LOGGER,
   INJECT_PARSER,
@@ -11,6 +12,10 @@ import {
   INJECT_STATE,
   INJECT_TEMPLATE,
 } from '.';
+import { Counter } from '../service/counter';
+import { LocalCounter } from '../service/counter/LocalCounter';
+import { EventBus } from '../service/event';
+import { NodeEventBus } from '../service/event/NodeEventBus';
 import { LocaleService } from '../service/locale';
 import { NextLocaleService } from '../service/locale/NextLocale';
 import { YamlParser } from '../service/parser/YamlParser';
@@ -23,11 +28,10 @@ import { LocalStateService } from '../service/state/TurnState';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
 import { Singleton } from '../util/container';
-import { Counter } from '../service/counter';
-import { LocalCounter } from '../service/counter/LocalCounter';
 
 export class LocalModule extends Module {
   protected counter: Singleton<Counter>;
+  protected event: Singleton<EventBus>;
   protected locale: Singleton<LocaleService>;
   protected random: Singleton<RandomGenerator>;
   protected script: Singleton<ScriptService>;
@@ -38,6 +42,7 @@ export class LocalModule extends Module {
     super();
 
     this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));
+    this.event = new Singleton(() => mustExist(this.container).create(NodeEventBus));
     this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
     this.random = new Singleton(() => mustExist(this.container).create(SeedRandomGenerator));
     this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
@@ -48,6 +53,7 @@ export class LocalModule extends Module {
   public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
 
+    this.bind(INJECT_EVENT).toFactory(() => this.event.get());
     this.bind(INJECT_PARSER).toConstructor(YamlParser);
   }
 

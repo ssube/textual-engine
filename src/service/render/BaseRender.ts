@@ -2,33 +2,33 @@ import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '.';
-import { INJECT_ACTOR_PLAYER, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
-import { ActorService } from '../actor';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
+import { EventBus } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
 
 export interface BaseRenderOptions extends BaseOptions {
-  [INJECT_ACTOR_PLAYER]?: ActorService;
+  [INJECT_EVENT]?: EventBus;
   [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
 }
 
-@Inject(INJECT_ACTOR_PLAYER, INJECT_LOCALE, INJECT_LOGGER)
+@Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export abstract class BaseRender implements RenderService {
   // services
+  protected event: EventBus;
   protected logger: Logger;
   protected locale: LocaleService;
-  protected player: ActorService;
 
   // state
   protected step: StepResult;
 
   constructor(options: BaseRenderOptions) {
+    this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
-    this.player = mustExist(options[INJECT_ACTOR_PLAYER]);
 
     this.step = {
       turn: 0,

@@ -1,5 +1,4 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
-import { EventEmitter } from 'events';
 import { BaseOptions } from 'noicejs';
 
 import { ActorService } from '.';
@@ -17,9 +16,9 @@ const WAIT_CMD: Command = {
  * Behavioral input generates commands based on the actor's current
  * state (room, inventory, etc).
  */
-export class BehaviorActorService extends EventEmitter implements ActorService {
+export class BehaviorActorService implements ActorService {
   constructor(options: BaseOptions) {
-    super();
+    /* noop */
   }
 
   public async start() {

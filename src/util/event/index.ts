@@ -2,12 +2,8 @@ import { doesExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { BaseError } from 'noicejs';
 
-import { ErrorHandler, EventHandler } from '../types';
-
-export interface RemoveResult<TValue> {
-  pending: Promise<TValue>;
-  remove: () => void;
-}
+export type EventHandler<TEvent> = (event: TEvent) => void;
+export type ErrorHandler = (err?: Error) => void;
 
 export interface TypedEmitter<TName extends string, TValue> extends EventEmitter {
   on(name: 'error', handler: ErrorHandler): this;
@@ -18,6 +14,11 @@ export interface TypedEmitter<TName extends string, TValue> extends EventEmitter
 
   removeListener(name: 'error', handler: ErrorHandler): this;
   removeListener(name: TName, handler: EventHandler<TValue>): this;
+}
+
+export interface RemoveResult<TValue> {
+  pending: Promise<TValue>;
+  remove: () => void;
 }
 
 /**

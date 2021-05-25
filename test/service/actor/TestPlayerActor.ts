@@ -1,28 +1,33 @@
 import { expect } from 'chai';
-import { Container } from 'noicejs';
+import { Container, NullLogger } from 'noicejs';
 
+import { ActorModule } from '../../../src/module/ActorModule';
 import { LocalModule } from '../../../src/module/LocalModule';
+import { CommandEvent } from '../../../src/service/actor';
 import { PlayerActorService } from '../../../src/service/actor/PlayerActor';
 import { onceWithRemove } from '../../../src/util/event';
 
 describe('player actor', () => {
-  it('should save the last parsed command', async () => {
-    const container = Container.from(new LocalModule());
-    await container.configure();
+  it('should ', async () => {
+    const container = Container.from(new LocalModule(), new ActorModule());
+    await container.configure({
+      logger: NullLogger.global,
+    });
 
     const actor = await container.create(PlayerActorService);
+    await actor.start();
 
     const index = 13;
     const line = `foo bar ${index}`;
 
-    const { pending } = onceWithRemove(actor, 'command');
+    const { pending } = onceWithRemove<CommandEvent>(actor, 'command');
 
     actor.emit('input', {
       lines: [line],
     });
 
-    const cmd = await pending;
-    return expect(actor.last()).to.eventually.deep.equal(cmd);
+    const event = await pending;
+    return expect(actor.last()).to.eventually.deep.equal(event.command);
   });
 
   xit('should translate and cache verbs');

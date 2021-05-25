@@ -1,4 +1,5 @@
 export type EventHandler<TEvent> = (event: TEvent) => void;
+export type ErrorHandler = (err?: Error) => void;
 
 /**
  * Deep readonly type.

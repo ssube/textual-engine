@@ -4,7 +4,7 @@ import { BaseOptions, Container, Module } from 'noicejs';
 import { BunyanLogger } from './logger/BunyanLogger';
 import { INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
 import { BrowserModule } from './module/BrowserModule';
-import { InputModule } from './module/InputModule';
+import { ActorModule } from './module/ActorModule';
 import { LocalModule } from './module/LocalModule';
 import { NodeModule } from './module/NodeModule';
 import { Loader } from './service/loader';
@@ -18,7 +18,7 @@ import { PORTAL_DEPTH } from './util/constants';
 
 const DI_MODULES = new Map<string, new () => Module>([
   ['browser', BrowserModule],
-  ['input', InputModule],
+  ['input', ActorModule],
   ['local', LocalModule],
   ['node', NodeModule],
 ]);

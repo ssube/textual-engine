@@ -1,12 +1,11 @@
-import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
+import { constructorName, mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
-import { BaseOptions } from 'noicejs';
+import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { ActorService, InputEvent, OutputEvent, RoomEvent } from '.';
+import { ActorService, InputEvent } from '.';
 import { Command } from '../../model/Command';
-import { INJECT_LOCALE, INJECT_TOKENIZER } from '../../module';
-import { KNOWN_VERBS, VERB_WAIT } from '../../util/constants';
-import { debugState, graphState } from '../../util/debug';
+import { INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
+import { VERB_WAIT } from '../../util/constants';
 import { LocaleService } from '../locale';
 import { TokenizerService } from '../tokenizer';
 
@@ -19,6 +18,7 @@ const WAIT_CMD: Command = {
 
 export interface PlayerActorOptions extends BaseOptions {
   [INJECT_LOCALE]?: LocaleService;
+  [INJECT_LOGGER]?: Logger;
   [INJECT_TOKENIZER]?: TokenizerService;
 }
 
@@ -26,15 +26,35 @@ export interface PlayerActorOptions extends BaseOptions {
  * Behavioral input generates commands based on the actor's current
  * state (room, inventory, etc).
  */
+@Inject(INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER)
 export class PlayerActorService extends EventEmitter implements ActorService {
+  protected history: Array<Command>;
   protected locale: LocaleService;
+  protected logger: Logger;
   protected tokenizer: TokenizerService;
 
   constructor(options: PlayerActorOptions) {
     super();
 
+    this.history = [];
     this.locale = mustExist(options[INJECT_LOCALE]);
+    this.logger = mustExist(options[INJECT_LOGGER]).child({
+      kind: constructorName(PlayerActorService),
+    });
     this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
+  }
+
+  public async start() {
+    this.on('input', (event: InputEvent) => this.doInput(event));
+    this.on('room', async () => {
+      this.emit('command', {
+        command: await this.last(),
+      });
+    });
+  }
+
+  public async stop() {
+    /* noop */
   }
 
   public async translate(verbs: Array<string>): Promise<void> {
@@ -42,36 +62,21 @@ export class PlayerActorService extends EventEmitter implements ActorService {
   }
 
   public async last(): Promise<Command> {
-    return WAIT_CMD;
+    return this.history[this.history.length - 1];
   }
 
-  public async doDebug(): Promise<void> {
-    const lines = debugState(state);
-    this.emit('output', {
-      lines,
-    });
-  }
+  public async doInput(event: InputEvent): Promise<void> {
+    this.logger.debug({ event }, 'tokenizing input');
 
-  public async doHelp(): Promise<void> {
-    const verbs = KNOWN_VERBS.map((it) => this.locale.translate(it)).join(', ');
-    this.emit('output', {
-      lines: [verbs],
-    });
-  }
+    for (const line of event.lines) {
+      const commands = await this.tokenizer.parse(line);
+      this.history.push(...commands);
 
-  public async doGraph(path: string): Promise<void> {
-    const state = await this.save();
-    const lines = graphState(state);
-
-    await this.loader.saveStr(path, lines.join('\n'));
-
-    this.emit('output', {
-      lines: [
-        this.locale.translate('debug.graph.summary', {
-          path,
-          size: state.rooms.length,
-        }),
-      ]
-    });
+      for (const command of commands) {
+        this.emit('command', {
+          command,
+        });
+      }
+    }
   }
 }

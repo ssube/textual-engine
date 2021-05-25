@@ -2,15 +2,31 @@ import { doesExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { BaseError } from 'noicejs';
 
+import { ErrorHandler, EventHandler } from '../types';
+
 export interface RemoveResult<TValue> {
   pending: Promise<TValue>;
   remove: () => void;
 }
 
+export interface TypedEmitter<TName extends string, TValue> extends EventEmitter {
+  on(name: 'error', handler: ErrorHandler): this;
+  on(name: TName, handler: EventHandler<TValue>): this;
+
+  once(name: 'error', handler: ErrorHandler): this;
+  once(name: TName, handler: EventHandler<TValue>): this;
+
+  removeListener(name: 'error', handler: ErrorHandler): this;
+  removeListener(name: TName, handler: EventHandler<TValue>): this;
+}
+
 /**
  * Wait for an event to fire once, then remove listeners. Provides a function to cleanup listeners early.
  */
-export function onceWithRemove<TValue>(emitter: EventEmitter, event: string, inner?: () => void): RemoveResult<TValue> {
+export function onceWithRemove<
+  TValue,
+  TName extends string = string
+>(emitter: TypedEmitter<TName, TValue>, event: TName, inner?: () => void): RemoveResult<TValue> {
   let error: (err?: Error) => void;
   let result: (value: TValue) => void;
 

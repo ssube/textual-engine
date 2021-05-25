@@ -9,3 +9,8 @@ export interface ServiceOptions extends BaseOptions {
   [INJECT_LOGGER]?: Logger;
   [INJECT_STATE]?: StateService;
 }
+
+export interface Service {
+  start(): Promise<void>;
+  stop(): Promise<void>;
+}

@@ -39,10 +39,11 @@ export class ReactRender extends BaseRender implements RenderService {
     this.promptStr = prompt;
   }
 
-  public read(): Promise<string> {
-    const { pending } = onceWithRemove<string>(this.player, 'output');
+  public async read(): Promise<string> {
+    const { pending } = onceWithRemove<OutputEvent>(this.player, 'output');
+    const event = await pending;
 
-    return pending;
+    return event.lines[0];
   }
 
   public async show(msg: string): Promise<void> {

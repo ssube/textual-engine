@@ -7,7 +7,6 @@ import { RenderService } from '.';
 import { Frame } from '../../component/ink/Frame';
 import { onceWithRemove } from '../../util/event';
 import { OutputEvent, RoomEvent } from '../actor';
-import { StepResult } from '../state';
 import { BaseRender, BaseRenderOptions } from './BaseRender';
 
 export interface InkState {
@@ -41,10 +40,11 @@ export class InkRender extends BaseRender implements RenderService {
     this.promptStr = prompt;
   }
 
-  public read(): Promise<string> {
-    const { pending } = onceWithRemove<string>(this.player, 'output');
+  public async read(): Promise<string> {
+    const { pending } = onceWithRemove<OutputEvent>(this.player, 'output');
+    const event = await pending;
 
-    return pending;
+    return event.lines[0];
   }
 
   public async show(msg: string): Promise<void> {
@@ -60,6 +60,8 @@ export class InkRender extends BaseRender implements RenderService {
     this.player.on('output', (output) => this.onOutput(output));
     this.player.on('quit', () => this.onQuit());
     this.player.on('room', (room) => this.onRoom(room));
+
+    await this.player.start(); // TODO: services absolutely should never start/stop one another
   }
 
   public async stop(): Promise<void> {

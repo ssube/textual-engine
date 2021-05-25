@@ -10,6 +10,7 @@ import { State } from '../../model/State';
 import { World } from '../../model/World';
 import {
   INJECT_ACTOR,
+  INJECT_ACTOR_PLAYER,
   INJECT_COUNTER,
   INJECT_LOADER,
   INJECT_LOGGER,
@@ -18,9 +19,10 @@ import {
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
 } from '../../module';
-import { ActorInputOptions } from '../../module/InputModule';
+import { ActorInputOptions } from '../../module/ActorModule';
 import { randomItem } from '../../util/array';
-import { META_LOAD, META_QUIT, META_SAVE, SLOT_STEP } from '../../util/constants';
+import { KNOWN_VERBS, META_LOAD, META_QUIT, META_SAVE, SLOT_STEP } from '../../util/constants';
+import { debugState, graphState } from '../../util/debug';
 import { onceWithRemove } from '../../util/event';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
@@ -36,6 +38,7 @@ import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../sc
 import { TemplateService } from '../template';
 
 export interface LocalStateServiceOptions extends BaseOptions {
+  [INJECT_ACTOR_PLAYER]?: ActorService;
   [INJECT_COUNTER]: Counter;
   [INJECT_LOADER]: Loader;
   [INJECT_LOGGER]: Logger;
@@ -46,6 +49,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
 }
 
 @Inject(
+  INJECT_ACTOR_PLAYER,
   INJECT_COUNTER,
   INJECT_LOADER,
   INJECT_LOGGER,
@@ -64,6 +68,7 @@ export class LocalStateService extends EventEmitter implements StateService {
   protected loader: Loader;
   protected logger: Logger;
   protected parser: Parser;
+  protected player: ActorService;
   protected random: RandomGenerator;
   protected script: ScriptService;
   protected template: TemplateService;
@@ -85,6 +90,7 @@ export class LocalStateService extends EventEmitter implements StateService {
       kind: constructorName(this),
     });
     this.parser = options[INJECT_PARSER];
+    this.player = mustExist(options[INJECT_ACTOR_PLAYER]);
     this.random = options[INJECT_RANDOM];
     this.script = options[INJECT_SCRIPT];
     this.template = options[INJECT_TEMPLATE];
@@ -119,9 +125,9 @@ export class LocalStateService extends EventEmitter implements StateService {
       },
     };
 
-    // load the world locale
-    this.locale.deleteBundle('world');
-    this.locale.addBundle('world', world.locale);
+    // TODO: load the world locale
+    // this.locale.deleteBundle('world');
+    // this.locale.addBundle('world', world.locale);
 
     // save state for later
     this.state = state;
@@ -187,8 +193,8 @@ export class LocalStateService extends EventEmitter implements StateService {
   public async loop(): Promise<void> {
     const { pending } = onceWithRemove<void>(this, 'quit');
 
-    this.on('command', (command) => {
-      this.onCommand(command).catch((err) => {
+    this.player.on('command', (event) => {
+      this.onCommand(event.command).catch((err) => {
         this.logger.error(err, 'error during line handler');
       });
     });
@@ -211,7 +217,10 @@ export class LocalStateService extends EventEmitter implements StateService {
    * Handler for a line of input from the focus helper.
    */
   public onOutput(line: string, context?: LocaleContext): void {
-    this.emit('output', [line]);
+    this.player.emit('output', {
+      lines: [line],
+      step: mustExist(this.state).step,
+    });
   }
 
   /**
@@ -242,6 +251,37 @@ export class LocalStateService extends EventEmitter implements StateService {
         this.emit('step', result);
       }
     }
+  }
+
+  public async doDebug(): Promise<void> {
+    const state = await this.save();
+    const lines = debugState(state);
+    this.emit('output', {
+      lines,
+    });
+  }
+
+  public async doHelp(): Promise<void> {
+    const verbs = KNOWN_VERBS.join(', ');
+    this.emit('output', {
+      lines: [verbs],
+    });
+  }
+
+  public async doGraph(path: string): Promise<void> {
+    const state = await this.save();
+    const lines = graphState(state);
+
+    await this.loader.saveStr(path, lines.join('\n'));
+
+    this.emit('output', {
+      lines: ['debug.graph.summary'],
+    });
+
+        /*{
+          path,
+          size: state.rooms.length,
+        }*/
   }
 
   public async doLoad(path: string, index: number): Promise<void> {
@@ -354,11 +394,19 @@ export class LocalStateService extends EventEmitter implements StateService {
    * @todo get rid of this in favor of something that does not call DI during state steps
    */
   protected async getActorCommand(actor: Actor, room: Room): Promise<Command> {
+    this.logger.debug({ actor }, 'getting actor command');
+    if (actor.actorType === ActorType.PLAYER) {
+      return this.player.last();
+    }
+
     const actorProxy = await this.container.create<ActorService, ActorInputOptions>(INJECT_ACTOR, {
       id: actor.meta.id,
       type: actor.actorType,
     });
 
+    return actorProxy.last();
+
+    // TODO: make this stuff work without being janky
     const { pending } = onceWithRemove<CommandEvent>(actorProxy, 'command');
     actorProxy.emit('room', {
       room,

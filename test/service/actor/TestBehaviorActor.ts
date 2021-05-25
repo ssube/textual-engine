@@ -15,7 +15,7 @@ describe('behavior actor', () => {
 
     expect(await actor.last()).to.deep.equal({
       index: 0,
-      actor: `${VERB_WAIT} turn`,
+      input: `${VERB_WAIT} turn`,
       target: 'turn',
       verb: VERB_WAIT,
     });

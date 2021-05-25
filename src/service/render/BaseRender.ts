@@ -2,7 +2,7 @@ import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '.';
-import { INJECT_ACTOR_PLAYER, INJECT_LOCALE, INJECT_LOGGER, INJECT_STATE } from '../../module';
+import { INJECT_ACTOR_PLAYER, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
 import { ActorService } from '../actor';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
@@ -13,7 +13,7 @@ export interface BaseRenderOptions extends BaseOptions {
   [INJECT_LOGGER]?: Logger;
 }
 
-@Inject(INJECT_LOCALE, INJECT_LOGGER, INJECT_STATE)
+@Inject(INJECT_ACTOR_PLAYER, INJECT_LOCALE, INJECT_LOGGER)
 export abstract class BaseRender implements RenderService {
   // services
   protected logger: Logger;

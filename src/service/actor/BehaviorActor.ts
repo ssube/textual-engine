@@ -22,6 +22,14 @@ export class BehaviorActorService extends EventEmitter implements ActorService {
     super();
   }
 
+  public async start() {
+    /* noop */
+  }
+
+  public async stop() {
+    /* noop */
+  }
+
   public async translate(verbs: Array<string>): Promise<void> {
     throw new NotImplementedError();
   }

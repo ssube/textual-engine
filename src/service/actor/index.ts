@@ -1,9 +1,10 @@
 import { EventEmitter } from 'events';
 
+import { Service } from '..';
 import { Command } from '../../model/Command';
 import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
-import { EventHandler } from '../../util/types';
+import { ErrorHandler, EventHandler } from '../../util/types';
 import { StepResult } from '../state';
 
 export interface InputEvent {
@@ -24,7 +25,9 @@ export interface CommandEvent {
   command: Command;
 }
 
-export interface ActorService extends EventEmitter {
+export interface ActorService extends EventEmitter, Service {
+  last(): Promise<Command>;
+
   /**
    * @todo remove, do in start
    */
@@ -35,6 +38,7 @@ export interface ActorService extends EventEmitter {
   emit(name: 'output', event: OutputEvent): boolean;
 
   on(name: 'command', handler: EventHandler<CommandEvent>): this;
+  on(name: 'error', handler: ErrorHandler): this;
   on(name: 'output', handler: EventHandler<OutputEvent>): this;
   on(name: 'quit', handler: EventHandler<void>): this;
   on(name: 'room', handler: EventHandler<RoomEvent>): this;

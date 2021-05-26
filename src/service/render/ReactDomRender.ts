@@ -26,6 +26,7 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
 
     this.event.on('actor-output', (output) => this.onOutput(output));
     this.event.on('state-room', (room) => this.onRoom(room));
+    this.event.on('state-step', (step) => this.onStep(step));
     this.event.on('quit', () => this.onQuit());
   }
 

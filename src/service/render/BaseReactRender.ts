@@ -99,6 +99,7 @@ export abstract class BaseReactRender implements RenderService {
     this.logger.debug({ event }, 'handling step event from state');
 
     this.step = event;
+    this.prompt(`turn ${this.step.turn}`);
     this.renderRoot();
   }
 }

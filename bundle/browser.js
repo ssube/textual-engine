@@ -1863,7 +1863,7 @@
       init_virtual_process_polyfill();
       init_buffer();
       "use strict";
-      var BaseError3 = class extends Error {
+      var BaseError5 = class extends Error {
         constructor(message, ...nested) {
           super(message);
           this.message = message;
@@ -1883,26 +1883,26 @@
           return this.nested.length;
         }
       };
-      __name(BaseError3, "BaseError");
-      var ContainerBoundError = class extends BaseError3 {
+      __name(BaseError5, "BaseError");
+      var ContainerBoundError = class extends BaseError5 {
         constructor(msg = "container is already bound", ...nested) {
           super(msg, ...nested);
         }
       };
       __name(ContainerBoundError, "ContainerBoundError");
-      var ContainerNotBoundError = class extends BaseError3 {
+      var ContainerNotBoundError = class extends BaseError5 {
         constructor(msg = "container is not bound", ...nested) {
           super(msg, ...nested);
         }
       };
       __name(ContainerNotBoundError, "ContainerNotBoundError");
-      var InvalidProviderError = class extends BaseError3 {
+      var InvalidProviderError = class extends BaseError5 {
         constructor(msg = "invalid provider type", ...nested) {
           super(msg, ...nested);
         }
       };
       __name(InvalidProviderError, "InvalidProviderError");
-      var MissingValueError = class extends BaseError3 {
+      var MissingValueError = class extends BaseError5 {
         constructor(msg = "required value is null or undefined", ...nested) {
           super(msg, ...nested);
         }
@@ -1938,13 +1938,13 @@
         });
       }
       __name(resolveDepends, "resolveDepends");
-      var InvalidTargetError = class extends BaseError3 {
+      var InvalidTargetError = class extends BaseError5 {
         constructor(msg = "invalid decorator target", ...nested) {
           super(msg, ...nested);
         }
       };
       __name(InvalidTargetError, "InvalidTargetError");
-      var DescriptorNotFoundError = class extends BaseError3 {
+      var DescriptorNotFoundError = class extends BaseError5 {
         constructor(msg = "property descriptor not found", ...nested) {
           super(msg, ...nested);
         }
@@ -1989,7 +1989,7 @@
         return [];
       }
       __name(getInject, "getInject");
-      function Inject9(...needs) {
+      function Inject13(...needs) {
         return (target, key, providedDesc) => {
           if (isNil3(key)) {
             const prev = getInject(target);
@@ -2006,7 +2006,7 @@
           }
         };
       }
-      __name(Inject9, "Inject");
+      __name(Inject13, "Inject");
       var NullLogger = class {
         child() {
           return NullLogger.global;
@@ -2031,7 +2031,7 @@
         }
       }
       __name(getProvides, "getProvides");
-      function Provides5(...provides) {
+      function Provides4(...provides) {
         return (target, key, providedDesc) => {
           const desc = resolveDescriptor(target, key, providedDesc);
           const prev = getProvides(target);
@@ -2039,7 +2039,7 @@
           Reflect.set(desc.value, providesSymbol, prev.concat(next));
         };
       }
-      __name(Provides5, "Provides");
+      __name(Provides4, "Provides");
       (function(ProviderType) {
         ProviderType[ProviderType["None"] = 0] = "None";
         ProviderType[ProviderType["Constructor"] = 1] = "Constructor";
@@ -2365,13 +2365,13 @@
         }
       };
       __name(WinstonLogger, "WinstonLogger");
-      exports.BaseError = BaseError3;
+      exports.BaseError = BaseError5;
       exports.ConsoleLogger = ConsoleLogger;
       exports.Container = Container2;
       exports.ContainerBoundError = ContainerBoundError;
       exports.ContainerNotBoundError = ContainerNotBoundError;
       exports.DescriptorNotFoundError = DescriptorNotFoundError;
-      exports.Inject = Inject9;
+      exports.Inject = Inject13;
       exports.InvalidProviderError = InvalidProviderError;
       exports.InvalidTargetError = InvalidTargetError;
       exports.LoggerNotFoundError = LoggerNotFoundError;
@@ -2379,7 +2379,7 @@
       exports.MissingValueError = MissingValueError;
       exports.Module = Module5;
       exports.NullLogger = NullLogger;
-      exports.Provides = Provides5;
+      exports.Provides = Provides4;
       exports.WinstonLogger = WinstonLogger;
       exports.constructWithContainer = constructWithContainer;
       exports.contractName = contractName;
@@ -9366,7 +9366,7 @@
   function relative(from3, to) {
     from3 = resolve(from3).substr(1);
     to = resolve(to).substr(1);
-    function trim(arr) {
+    function trim2(arr) {
       var start = 0;
       for (; start < arr.length; start++) {
         if (arr[start] !== "")
@@ -9381,9 +9381,9 @@
         return [];
       return arr.slice(start, end - start + 1);
     }
-    __name(trim, "trim");
-    var fromParts = trim(from3.split("/"));
-    var toParts = trim(to.split("/"));
+    __name(trim2, "trim");
+    var fromParts = trim2(from3.split("/"));
+    var toParts = trim2(to.split("/"));
     var length = Math.min(fromParts.length, toParts.length);
     var samePartsLength = length;
     for (var i = 0; i < length; i++) {
@@ -41211,7 +41211,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(createCommonjsModule, "createCommonjsModule");
   var main = createCommonjsModule(function(module, exports) {
-    class BaseError3 extends Error {
+    class BaseError5 extends Error {
       constructor(message, ...nested) {
         super(message);
         this.message = message;
@@ -41231,26 +41231,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         return this.nested.length;
       }
     }
-    __name(BaseError3, "BaseError");
-    class ContainerBoundError extends BaseError3 {
+    __name(BaseError5, "BaseError");
+    class ContainerBoundError extends BaseError5 {
       constructor(msg = "container is already bound", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(ContainerBoundError, "ContainerBoundError");
-    class ContainerNotBoundError extends BaseError3 {
+    class ContainerNotBoundError extends BaseError5 {
       constructor(msg = "container is not bound", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(ContainerNotBoundError, "ContainerNotBoundError");
-    class InvalidProviderError extends BaseError3 {
+    class InvalidProviderError extends BaseError5 {
       constructor(msg = "invalid provider type", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(InvalidProviderError, "InvalidProviderError");
-    class MissingValueError extends BaseError3 {
+    class MissingValueError extends BaseError5 {
       constructor(msg = "required value is null or undefined", ...nested) {
         super(msg, ...nested);
       }
@@ -41286,13 +41286,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
     }
     __name(resolveDepends, "resolveDepends");
-    class InvalidTargetError extends BaseError3 {
+    class InvalidTargetError extends BaseError5 {
       constructor(msg = "invalid decorator target", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(InvalidTargetError, "InvalidTargetError");
-    class DescriptorNotFoundError extends BaseError3 {
+    class DescriptorNotFoundError extends BaseError5 {
       constructor(msg = "property descriptor not found", ...nested) {
         super(msg, ...nested);
       }
@@ -41337,7 +41337,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return [];
     }
     __name(getInject, "getInject");
-    function Inject9(...needs) {
+    function Inject13(...needs) {
       return (target, key, providedDesc) => {
         if (isNil3(key)) {
           const prev = getInject(target);
@@ -41354,7 +41354,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
       };
     }
-    __name(Inject9, "Inject");
+    __name(Inject13, "Inject");
     class NullLogger {
       child() {
         return NullLogger.global;
@@ -41379,7 +41379,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(getProvides, "getProvides");
-    function Provides5(...provides) {
+    function Provides4(...provides) {
       return (target, key, providedDesc) => {
         const desc = resolveDescriptor(target, key, providedDesc);
         const prev = getProvides(target);
@@ -41387,7 +41387,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         Reflect.set(desc.value, providesSymbol, prev.concat(next));
       };
     }
-    __name(Provides5, "Provides");
+    __name(Provides4, "Provides");
     (function(ProviderType) {
       ProviderType[ProviderType["None"] = 0] = "None";
       ProviderType[ProviderType["Constructor"] = 1] = "Constructor";
@@ -41713,13 +41713,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(MapModule, "MapModule");
-    exports.BaseError = BaseError3;
+    exports.BaseError = BaseError5;
     exports.ConsoleLogger = ConsoleLogger;
     exports.Container = Container2;
     exports.ContainerBoundError = ContainerBoundError;
     exports.ContainerNotBoundError = ContainerNotBoundError;
     exports.DescriptorNotFoundError = DescriptorNotFoundError;
-    exports.Inject = Inject9;
+    exports.Inject = Inject13;
     exports.InvalidProviderError = InvalidProviderError;
     exports.InvalidTargetError = InvalidTargetError;
     exports.LoggerNotFoundError = LoggerNotFoundError;
@@ -41727,7 +41727,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     exports.MissingValueError = MissingValueError;
     exports.Module = Module5;
     exports.NullLogger = NullLogger;
-    exports.Provides = Provides5;
+    exports.Provides = Provides4;
     exports.WinstonLogger = WinstonLogger;
     exports.constructWithContainer = constructWithContainer;
     exports.contractName = contractName;
@@ -41837,7 +41837,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   __name(constructorName, "constructorName");
 
   // out/src/main.js
-  var import_noicejs15 = __toModule(require_main());
+  var import_noicejs21 = __toModule(require_main());
 
   // out/src/logger/BunyanLogger.js
   init_virtual_process_polyfill();
@@ -41854,6 +41854,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   var INJECT_COUNTER = Symbol("inject-counter");
+  var INJECT_EVENT = Symbol("inject-event-bus");
   var INJECT_LOADER = Symbol("inject-loader");
   var INJECT_LOCALE = Symbol("inject-locale");
   var INJECT_LOGGER = Symbol("inject-logger");
@@ -41863,291 +41864,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var INJECT_SCRIPT = Symbol("inject-script-ctrl");
   var INJECT_STATE = Symbol("inject-state-ctrl");
   var INJECT_TEMPLATE = Symbol("inject-template");
-  var INJECT_INPUT_ACTOR = Symbol("inject-input-actor");
-  var INJECT_INPUT_PLAYER = Symbol("inject-input-player");
+  var INJECT_TOKENIZER = Symbol("inject-tokenizer");
+  var INJECT_ACTOR = Symbol("inject-actor");
+  var INJECT_ACTOR_PLAYER = Symbol("inject-actor-player");
 
-  // out/src/module/BrowserModule.js
+  // out/src/module/ActorModule.js
   init_virtual_process_polyfill();
   init_buffer();
-
-  // node_modules/tslib/modules/index.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_tslib = __toModule(require_tslib());
-  var {
-    __extends,
-    __assign,
-    __rest,
-    __decorate,
-    __param,
-    __metadata,
-    __awaiter,
-    __generator,
-    __exportStar,
-    __createBinding,
-    __values,
-    __read,
-    __spread,
-    __spreadArrays,
-    __spreadArray,
-    __await,
-    __asyncGenerator,
-    __asyncDelegator,
-    __asyncValues,
-    __makeTemplateObject,
-    __importStar,
-    __importDefault,
-    __classPrivateFieldGet,
-    __classPrivateFieldSet
-  } = import_tslib.default;
-
-  // out/src/module/BrowserModule.js
   var import_noicejs4 = __toModule(require_main());
-
-  // out/src/service/loader/PageLoader.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var PageLoader = class {
-    constructor(options) {
-    }
-    async dump(path, data) {
-      console.log(path, data);
-    }
-    async load(path) {
-      const elem = mustExist(document.getElementById(path));
-      const text = mustExist(elem.textContent);
-      return Buffer2.from(text);
-    }
-    async save(path, data) {
-      throw new NotImplementedError();
-    }
-    async loadStr(path) {
-      const elem = mustExist(document.getElementById(path));
-      return mustExist(elem.textContent);
-    }
-    async saveStr(path, data) {
-      throw new NotImplementedError();
-    }
-  };
-  __name(PageLoader, "PageLoader");
-
-  // out/src/service/render/ReactRender.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs3 = __toModule(require_main());
-  var React3 = __toModule(require_react());
-  var import_react_dom = __toModule(require_react_dom());
-
-  // out/src/component/react/Frame.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var React2 = __toModule(require_react());
-
-  // out/src/component/react/Output.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var React = __toModule(require_react());
-  var Output = /* @__PURE__ */ __name((props) => {
-    return React.createElement("div", null, React.createElement("div", null, "Output: ", props.output.length, " lines"), props.output.map((line, idx) => React.createElement("div", { key: idx }, line)));
-  }, "Output");
-
-  // out/src/component/react/Frame.js
-  var { useState } = React2;
-  var HISTORY_SIZE = 20;
-  var Frame = /* @__PURE__ */ __name((props) => {
-    const [line, setLine] = useState("");
-    function handleChange(event) {
-      setLine(event.target.value);
-    }
-    __name(handleChange, "handleChange");
-    function handleSubmit(event) {
-      event.preventDefault();
-      props.onLine(line);
-      setLine("");
-    }
-    __name(handleSubmit, "handleSubmit");
-    return React2.createElement("div", { style: {
-      fontFamily: "monospace"
-    } }, React2.createElement(Output, { output: props.output.slice(-HISTORY_SIZE) }), React2.createElement("div", null, React2.createElement("form", { onSubmit: handleSubmit }, React2.createElement("label", null, "turn ", props.step.turn, " >", React2.createElement("input", { type: "text", value: line, onChange: handleChange })), React2.createElement("input", { type: "submit", value: "Go" }))));
-  }, "Frame");
-
-  // out/src/util/event/index.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs = __toModule(require_main());
-  function onceWithRemove(emitter, event, inner) {
-    let error2;
-    let result;
-    let settled = false;
-    const pending = new Promise((res, rej) => {
-      error2 = /* @__PURE__ */ __name((err) => {
-        settled = true;
-        remove2();
-        rej(err);
-      }, "error");
-      result = /* @__PURE__ */ __name((value) => {
-        settled = true;
-        remove2();
-        res(value);
-      }, "result");
-      emitter.once("error", error2);
-      emitter.once(event, result);
-      if (doesExist(inner)) {
-        inner();
-      }
-    });
-    const remove2 = /* @__PURE__ */ __name(() => {
-      emitter.removeListener("error", error2);
-      emitter.removeListener(event, result);
-      if (settled === false) {
-        error2(new AbortEventError(`unsettled listeners removed for ${event}`));
-      }
-    }, "remove");
-    return {
-      pending,
-      remove: remove2
-    };
-  }
-  __name(onceWithRemove, "onceWithRemove");
-  var AbortEventError = class extends import_noicejs.BaseError {
-  };
-  __name(AbortEventError, "AbortEventError");
-
-  // out/src/service/render/BaseRender.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs2 = __toModule(require_main());
-  var BaseRender = /* @__PURE__ */ __name(class BaseRender2 {
-    constructor(options) {
-      this.locale = mustExist(options[INJECT_LOCALE]);
-      this.logger = mustExist(options[INJECT_LOGGER]).child({
-        kind: constructorName(this)
-      });
-      this.state = mustExist(options[INJECT_STATE]);
-      this.step = {
-        turn: 0,
-        time: 0
-      };
-    }
-  }, "BaseRender");
-  BaseRender = __decorate([
-    (0, import_noicejs2.Inject)(INJECT_LOCALE, INJECT_LOGGER, INJECT_STATE),
-    __metadata("design:paramtypes", [Object])
-  ], BaseRender);
-
-  // out/src/service/render/ReactRender.js
-  var ReactRender = /* @__PURE__ */ __name(class ReactRender2 extends BaseRender {
-    constructor(options) {
-      super(options);
-      this.inputStr = "";
-      this.promptStr = "";
-      this.output = [];
-    }
-    prompt(prompt) {
-      this.promptStr = prompt;
-    }
-    read() {
-      const { pending } = onceWithRemove(this.state, "output");
-      return pending;
-    }
-    async show(msg) {
-      this.output.push(msg);
-    }
-    async start() {
-      this.logger.debug("starting React render");
-      this.renderRoot();
-      this.prompt(`turn ${this.step.turn}`);
-      this.state.on("output", (output2) => this.onOutput(output2));
-      this.state.on("quit", () => this.onQuit());
-      this.state.on("step", (step) => this.onStep(step));
-    }
-    async stop() {
-      this.logger.debug("stopping React render");
-      const elem = mustExist(document.getElementById("app"));
-      (0, import_react_dom.unmountComponentAtNode)(elem);
-    }
-    nextLine(line) {
-      this.logger.debug({ line }, "handling line event from React");
-      this.inputStr = line;
-      this.output.push(`${this.promptStr} > ${this.inputStr}`);
-      this.state.emit("line", line);
-    }
-    onOutput(lines) {
-      if (!Array.isArray(lines)) {
-        throw new InvalidArgumentError("please batch output");
-      }
-      this.logger.debug({ lines }, "handling output event from state");
-      this.output.push(...lines);
-      this.renderRoot();
-    }
-    onStep(result) {
-      this.logger.debug(result, "handling step event from state");
-      this.step = result;
-      this.prompt(`turn ${this.step.turn}`);
-      this.renderRoot();
-    }
-    onQuit() {
-      this.logger.debug("handling quit event from state");
-      this.output.push("game over");
-    }
-    renderRoot() {
-      const elem = React3.createElement(Frame, {
-        onLine: (line) => this.nextLine(line),
-        prompt: this.promptStr,
-        output: this.output,
-        step: this.step
-      });
-      (0, import_react_dom.render)([elem], document.getElementById("app"));
-    }
-  }, "ReactRender");
-  ReactRender = __decorate([
-    (0, import_noicejs3.Inject)(),
-    __metadata("design:paramtypes", [Object])
-  ], ReactRender);
-
-  // out/src/util/container.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var Singleton = class {
-    constructor(ctor, value) {
-      this.ctor = ctor;
-      this.value = value;
-    }
-    async get() {
-      if (isNil(this.value)) {
-        this.value = await this.ctor();
-      }
-      return this.value;
-    }
-  };
-  __name(Singleton, "Singleton");
-
-  // out/src/module/BrowserModule.js
-  var BrowserModule = class extends import_noicejs4.Module {
-    constructor() {
-      super();
-      this.render = new Singleton(() => mustExist(this.container).create(ReactRender));
-    }
-    async configure(options) {
-      await super.configure(options);
-      this.bind(INJECT_LOADER).toConstructor(PageLoader);
-    }
-    async getRender() {
-      return this.render.get();
-    }
-  };
-  __name(BrowserModule, "BrowserModule");
-  __decorate([
-    (0, import_noicejs4.Provides)(INJECT_RENDER),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-  ], BrowserModule.prototype, "getRender", null);
-
-  // out/src/module/InputModule.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs6 = __toModule(require_main());
 
   // out/src/model/entity/Actor.js
   init_virtual_process_polyfill();
@@ -42178,7 +41902,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(makeConstStringSchema, "makeConstStringSchema");
 
-  // out/src/model/meta/Metadata.js
+  // out/src/model/Metadata.js
   init_virtual_process_polyfill();
   init_buffer();
 
@@ -42192,12 +41916,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var BYTE_RANGE = 255;
   var PORTAL_DEPTH = 4;
   var TEMPLATE_CHANCE = 100;
-  var META_DEBUG = "verbs.meta.debug";
-  var META_GRAPH = "verbs.meta.graph";
-  var META_HELP = "verbs.meta.help";
-  var META_LOAD = "verbs.meta.load";
-  var META_QUIT = "verbs.meta.quit";
-  var META_SAVE = "verbs.meta.save";
   var SLOT_ENTER = "enter";
   var SLOT_GET = "get";
   var SLOT_HIT = "hit";
@@ -42210,7 +41928,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var VERB_TAKE = "verbs.common.take";
   var VERB_USE = "verbs.common.use";
   var VERB_WAIT = "verbs.common.wait";
-  var KNOWN_VERBS = [
+  var META_DEBUG = "verbs.meta.debug";
+  var META_GRAPH = "verbs.meta.graph";
+  var META_HELP = "verbs.meta.help";
+  var META_LOAD = "verbs.meta.load";
+  var META_QUIT = "verbs.meta.quit";
+  var META_SAVE = "verbs.meta.save";
+  var COMMON_VERBS = [
     META_DEBUG,
     META_GRAPH,
     META_HELP,
@@ -42258,7 +41982,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     required: ["id"]
   };
 
-  // out/src/model/meta/Metadata.js
+  // out/src/model/Metadata.js
   var METADATA_SCHEMA = {
     type: "object",
     properties: {
@@ -42327,35 +42051,164 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     additionalProperties: false
   };
 
-  // out/src/service/input/BehaviorInput.js
+  // out/src/service/actor/BehaviorActor.js
   init_virtual_process_polyfill();
   init_buffer();
+
+  // node_modules/tslib/modules/index.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_tslib = __toModule(require_tslib());
+  var {
+    __extends,
+    __assign,
+    __rest,
+    __decorate,
+    __param,
+    __metadata,
+    __awaiter,
+    __generator,
+    __exportStar,
+    __createBinding,
+    __values,
+    __read,
+    __spread,
+    __spreadArrays,
+    __spreadArray,
+    __await,
+    __asyncGenerator,
+    __asyncDelegator,
+    __asyncValues,
+    __makeTemplateObject,
+    __importStar,
+    __importDefault,
+    __classPrivateFieldGet,
+    __classPrivateFieldSet
+  } = import_tslib.default;
+
+  // out/src/service/actor/BehaviorActor.js
+  var import_noicejs = __toModule(require_main());
   var WAIT_CMD = {
     index: 0,
     input: `${VERB_WAIT} turn`,
     verb: VERB_WAIT,
     target: "turn"
   };
-  var BehaviorInput = class {
-    async tokenize(input) {
-      throw new NotImplementedError();
+  var BehaviorActorService = /* @__PURE__ */ __name(class BehaviorActorService2 {
+    constructor(options) {
+      this.actor = mustExist(options.actor);
+      this.event = mustExist(options[INJECT_EVENT]);
+      this.logger = mustExist(options[INJECT_LOGGER]).child({
+        kind: constructorName(this)
+      });
+      this.random = mustExist(options[INJECT_RANDOM]);
+      this.next = WAIT_CMD;
     }
-    async translate(verbs) {
-      throw new NotImplementedError();
+    async start() {
+      this.event.on("state-room", (event) => {
+        if (this.actor === event.actor.meta.id) {
+          this.onRoom(event);
+        }
+      });
     }
-    async parse(input) {
-      return WAIT_CMD;
+    async stop() {
     }
     async last() {
-      return WAIT_CMD;
+      return this.next;
     }
-  };
-  __name(BehaviorInput, "BehaviorInput");
+    onRoom(event) {
+      const behavior = this.random.nextFloat();
+      this.logger.debug({ event, which: behavior }, "received room event from state");
+      const player = event.room.actors.find((it) => it.actorType === ActorType.PLAYER);
+      if (doesExist(player)) {
+        this.logger.debug({ event, player }, "attacking visible player");
+        this.next = {
+          index: 0,
+          input: `${VERB_HIT} ${player.meta.id}`,
+          verb: VERB_HIT,
+          target: player.meta.id
+        };
+        return;
+      }
+      if (behavior < 0.25 && event.room.portals.length > 0) {
+        const portalIndex = this.random.nextInt(event.room.portals.length);
+        const portal = event.room.portals[portalIndex];
+        this.logger.debug({
+          event,
+          portal,
+          portalCount: event.room.portals.length,
+          portalIndex
+        }, "moving through random portal");
+        this.next = {
+          index: 0,
+          input: `${VERB_MOVE} ${portal.sourceGroup} ${portal.name}`,
+          verb: VERB_MOVE,
+          target: `${portal.sourceGroup} ${portal.name}`
+        };
+        return;
+      }
+      this.next = WAIT_CMD;
+    }
+  }, "BehaviorActorService");
+  BehaviorActorService = __decorate([
+    (0, import_noicejs.Inject)(INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM),
+    __metadata("design:paramtypes", [Object])
+  ], BehaviorActorService);
 
-  // out/src/service/input/ClassicInput.js
+  // out/src/service/actor/PlayerActor.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs5 = __toModule(require_main());
+  var import_noicejs2 = __toModule(require_main());
+  var PlayerActorService = /* @__PURE__ */ __name(class PlayerActorService2 {
+    constructor(options) {
+      this.history = [];
+      this.event = mustExist(options[INJECT_EVENT]);
+      this.locale = mustExist(options[INJECT_LOCALE]);
+      this.logger = mustExist(options[INJECT_LOGGER]).child({
+        kind: constructorName(this)
+      });
+      this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
+    }
+    async start() {
+      this.event.on("render-output", (event) => this.onInput(event));
+      this.event.on("state-output", (event) => this.onOutput(event));
+      await this.tokenizer.translate(COMMON_VERBS);
+    }
+    async stop() {
+    }
+    async last() {
+      return this.history[this.history.length - 1];
+    }
+    async onInput(event) {
+      this.logger.debug({ event }, "tokenizing input");
+      for (const line of event.lines) {
+        const commands = await this.tokenizer.parse(line);
+        this.history.push(...commands);
+        this.logger.debug({ event, commands }, "translated event");
+        for (const command of commands) {
+          this.event.emit("actor-command", {
+            command
+          });
+        }
+      }
+    }
+    async onOutput(event) {
+      this.logger.debug({ event }, "translating output");
+      const lines = event.lines.map((it) => this.locale.translate(it.key, it.context));
+      this.event.emit("actor-output", {
+        lines
+      });
+    }
+  }, "PlayerActorService");
+  PlayerActorService = __decorate([
+    (0, import_noicejs2.Inject)(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER),
+    __metadata("design:paramtypes", [Object])
+  ], PlayerActorService);
+
+  // out/src/service/tokenizer/WordTokenizer.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs3 = __toModule(require_main());
   var REMOVED_WORDS = new Set([
     "a",
     "an",
@@ -42367,19 +42220,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     "towards"
   ]);
   var SPLIT_CHAR = " ";
-  var ClassicInput = /* @__PURE__ */ __name(class ClassicInput2 {
+  var WordTokenizer = /* @__PURE__ */ __name(class WordTokenizer2 {
     constructor(options) {
-      this.history = [];
       this.locale = mustExist(options[INJECT_LOCALE]);
       this.verbs = new Map();
     }
-    async tokenize(input) {
-      return input.split(SPLIT_CHAR);
+    async split(input) {
+      return trim(input).toLocaleLowerCase().split(SPLIT_CHAR).map(trim).filter((it) => it.length > 0).filter((it) => REMOVED_WORDS.has(it) === false);
     }
     async parse(input) {
-      const rawTokens = await this.tokenize(input);
-      const tokens = rawTokens.map((it) => it.toLocaleLowerCase()).filter((it) => REMOVED_WORDS.has(it) === false);
-      const [rawVerb, ...targets] = tokens;
+      const [rawVerb, ...targets] = await this.split(input);
       const verb = getOrDefault(this.verbs, rawVerb, rawVerb);
       const cmd = {
         index: 0,
@@ -42393,11 +42243,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         cmd.index = parseInt(last, 10);
       }
       cmd.target = targets.join(SPLIT_CHAR);
-      this.history.unshift(cmd);
-      return cmd;
-    }
-    async last() {
-      return this.history[0];
+      return [cmd];
     }
     async translate(verbs) {
       this.verbs.clear();
@@ -42406,62 +42252,365 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         this.verbs.set(translated, verb);
       }
     }
-  }, "ClassicInput");
-  ClassicInput = __decorate([
-    (0, import_noicejs5.Inject)(INJECT_LOCALE),
+  }, "WordTokenizer");
+  WordTokenizer = __decorate([
+    (0, import_noicejs3.Inject)(INJECT_LOCALE),
     __metadata("design:paramtypes", [Object])
-  ], ClassicInput);
+  ], WordTokenizer);
+  function trim(str2) {
+    return str2.replace(/^\s+/, "").replace(/\s+$/, "");
+  }
+  __name(trim, "trim");
 
-  // out/src/module/InputModule.js
-  var InputModule = class extends import_noicejs6.Module {
+  // out/src/util/container.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var Singleton = class {
+    constructor(ctor, value) {
+      this.ctor = ctor;
+      this.value = value;
+    }
+    async get() {
+      if (isNil(this.value)) {
+        this.value = await this.ctor();
+      }
+      return this.value;
+    }
+  };
+  __name(Singleton, "Singleton");
+
+  // out/src/module/ActorModule.js
+  var ActorModule = class extends import_noicejs4.Module {
     constructor() {
       super();
       this.actors = new Map();
-      this.player = new Singleton(() => mustExist(this.container).create(ClassicInput));
+      this.locator = {
+        clear: () => this.actors.clear(),
+        get: (options) => this.getActorInput(options)
+      };
+      this.player = new Singleton(() => mustExist(this.container).create(PlayerActorService));
+      this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
     }
     async configure(options) {
       await super.configure(options);
+      this.bind(INJECT_ACTOR).toInstance(this.locator);
+      this.bind(INJECT_ACTOR_PLAYER).toFactory(() => this.player.get());
+      this.bind(INJECT_TOKENIZER).toFactory(() => this.tokenizer.get());
     }
     async getActorInput(options) {
       if (options.type === ActorType.PLAYER) {
-        return this.getPlayerInput();
+        return this.player.get();
       } else {
-        return this.getBehaviorInput(options);
+        return this.getBehaviorActor(options);
       }
     }
-    async getPlayerInput() {
-      return this.player.get();
-    }
-    async getBehaviorInput(options) {
+    async getBehaviorActor(options) {
       const existing = this.actors.get(options.id);
       if (doesExist(existing)) {
         return existing;
       }
-      const input = await options.container.create(BehaviorInput);
-      this.actors.set(options.id, input);
-      return input;
+      const actor = await mustExist(this.container).create(BehaviorActorService, {
+        actor: options.id
+      });
+      this.actors.set(options.id, actor);
+      await actor.start();
+      return actor;
     }
   };
-  __name(InputModule, "InputModule");
+  __name(ActorModule, "ActorModule");
+
+  // out/src/module/BrowserModule.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs8 = __toModule(require_main());
+
+  // out/src/service/loader/PageLoader.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var PageLoader = class {
+    constructor(options) {
+    }
+    async dump(path, data) {
+      console.log(path, data);
+    }
+    async load(path) {
+      const elem = mustExist(document.getElementById(path));
+      const text = mustExist(elem.textContent);
+      return Buffer2.from(text);
+    }
+    async save(path, data) {
+      throw new NotImplementedError();
+    }
+    async loadStr(path) {
+      const elem = mustExist(document.getElementById(path));
+      return mustExist(elem.textContent);
+    }
+    async saveStr(path, data) {
+      throw new NotImplementedError();
+    }
+  };
+  __name(PageLoader, "PageLoader");
+
+  // out/src/service/render/ReactDomRender.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs7 = __toModule(require_main());
+  var React3 = __toModule(require_react());
+  var import_react_dom = __toModule(require_react_dom());
+
+  // out/src/component/react/Frame.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var React2 = __toModule(require_react());
+
+  // out/src/component/react/Output.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var React = __toModule(require_react());
+  var Output = /* @__PURE__ */ __name((props) => {
+    return React.createElement("div", null, React.createElement("div", null, "Output: ", props.output.length, " lines"), props.output.map((line, idx) => React.createElement("div", { key: idx }, line)));
+  }, "Output");
+
+  // out/src/component/react/Frame.js
+  var { useState } = React2;
+  var HISTORY_SIZE = 20;
+  var Frame = /* @__PURE__ */ __name((props) => {
+    const [line, setLine] = useState("");
+    function handleChange(event) {
+      setLine(event.target.value);
+    }
+    __name(handleChange, "handleChange");
+    function handleSubmit(event) {
+      event.preventDefault();
+      props.onLine(line);
+      setLine("");
+    }
+    __name(handleSubmit, "handleSubmit");
+    return React2.createElement("div", { style: {
+      fontFamily: "monospace"
+    } }, React2.createElement(Output, { output: props.output.slice(-HISTORY_SIZE) }), React2.createElement("div", null, React2.createElement("form", { onSubmit: handleSubmit }, React2.createElement("label", null, "turn ", props.step.turn, " >", React2.createElement("input", { type: "text", value: line, onChange: handleChange })), React2.createElement("input", { type: "submit", value: "Go" }))));
+  }, "Frame");
+
+  // out/src/service/render/BaseReactRender.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs6 = __toModule(require_main());
+
+  // out/src/util/event/index.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // out/src/error/AbortEventError.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs5 = __toModule(require_main());
+  var AbortEventError = class extends import_noicejs5.BaseError {
+  };
+  __name(AbortEventError, "AbortEventError");
+
+  // out/src/util/event/index.js
+  function onceWithRemove(emitter, event, inner) {
+    let error2;
+    let result;
+    let settled = false;
+    const pending = new Promise((res, rej) => {
+      error2 = /* @__PURE__ */ __name((err) => {
+        settled = true;
+        remove2();
+        rej(err);
+      }, "error");
+      result = /* @__PURE__ */ __name((value) => {
+        settled = true;
+        remove2();
+        res(value);
+      }, "result");
+      emitter.once("error", error2);
+      emitter.once(event, result);
+      if (doesExist(inner)) {
+        inner();
+      }
+    });
+    const remove2 = /* @__PURE__ */ __name(() => {
+      emitter.removeListener("error", error2);
+      emitter.removeListener(event, result);
+      if (settled === false) {
+        error2(new AbortEventError(`unsettled listeners removed for ${event}`));
+      }
+    }, "remove");
+    return {
+      pending,
+      remove: remove2
+    };
+  }
+  __name(onceWithRemove, "onceWithRemove");
+
+  // out/src/service/render/BaseReactRender.js
+  var BaseReactRender = /* @__PURE__ */ __name(class BaseReactRender2 {
+    constructor(options) {
+      this.event = mustExist(options[INJECT_EVENT]);
+      this.locale = mustExist(options[INJECT_LOCALE]);
+      this.logger = mustExist(options[INJECT_LOGGER]).child({
+        kind: constructorName(this)
+      });
+      this.inputStr = "";
+      this.promptStr = "";
+      this.output = [];
+      this.step = {
+        turn: 0,
+        time: 0
+      };
+    }
+    prompt(prompt) {
+      this.promptStr = prompt;
+    }
+    async read() {
+      const { pending } = onceWithRemove(this.event, "actor-output");
+      const event = await pending;
+      return event.lines[0].key;
+    }
+    async show(msg) {
+      this.output.push(msg);
+    }
+    onOutput(event) {
+      this.logger.debug({ event }, "handling output event from state");
+      if (!Array.isArray(event.lines)) {
+        throw new InvalidArgumentError("please batch output");
+      }
+      this.output.push(...event.lines);
+    }
+    onQuit() {
+      this.logger.debug("handling quit event from state");
+      this.output.push("game over");
+    }
+    onRoom(result) {
+      this.logger.debug(result, "handling room event from state");
+      this.prompt(`turn ${this.step.turn}`);
+      this.renderRoot();
+    }
+    onStep(event) {
+      this.logger.debug({ event }, "handling step event from state");
+      this.step = event;
+      this.renderRoot();
+    }
+  }, "BaseReactRender");
+  BaseReactRender = __decorate([
+    (0, import_noicejs6.Inject)(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER),
+    __metadata("design:paramtypes", [Object])
+  ], BaseReactRender);
+
+  // out/src/service/render/ReactDomRender.js
+  var ReactDomRender = /* @__PURE__ */ __name(class ReactDomRender2 extends BaseReactRender {
+    async start() {
+      this.logger.debug("starting React render");
+      this.renderRoot();
+      this.prompt(`turn ${this.step.turn}`);
+      this.event.on("actor-output", (output2) => this.onOutput(output2));
+      this.event.on("state-room", (room) => this.onRoom(room));
+      this.event.on("quit", () => this.onQuit());
+    }
+    async stop() {
+      this.logger.debug("stopping React render");
+      const elem = mustExist(document.getElementById("app"));
+      (0, import_react_dom.unmountComponentAtNode)(elem);
+    }
+    nextLine(line) {
+      this.logger.debug({ line }, "handling line event from React");
+      this.inputStr = line;
+      this.output.push(`${this.promptStr} > ${this.inputStr}`);
+      this.event.emit("render-output", {
+        lines: [line]
+      });
+    }
+    renderRoot() {
+      const elem = React3.createElement(Frame, {
+        onLine: (line) => this.nextLine(line),
+        prompt: this.promptStr,
+        output: this.output,
+        step: this.step
+      });
+      (0, import_react_dom.render)([elem], document.getElementById("app"));
+    }
+  }, "ReactDomRender");
+  ReactDomRender = __decorate([
+    (0, import_noicejs7.Inject)()
+  ], ReactDomRender);
+
+  // out/src/module/BrowserModule.js
+  var BrowserModule = class extends import_noicejs8.Module {
+    constructor() {
+      super();
+      this.render = new Singleton(() => mustExist(this.container).create(ReactDomRender));
+    }
+    async configure(options) {
+      await super.configure(options);
+      this.bind(INJECT_LOADER).toConstructor(PageLoader);
+    }
+    async getRender() {
+      return this.render.get();
+    }
+  };
+  __name(BrowserModule, "BrowserModule");
   __decorate([
-    (0, import_noicejs6.Provides)(INJECT_INPUT_ACTOR),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-  ], InputModule.prototype, "getActorInput", null);
-  __decorate([
-    (0, import_noicejs6.Provides)(INJECT_INPUT_PLAYER),
+    (0, import_noicejs8.Provides)(INJECT_RENDER),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-  ], InputModule.prototype, "getPlayerInput", null);
+  ], BrowserModule.prototype, "getRender", null);
 
   // out/src/module/LocalModule.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs12 = __toModule(require_main());
+  var import_noicejs18 = __toModule(require_main());
 
-  // out/src/service/locale/NextLocaleService.js
+  // out/src/service/counter/LocalCounter.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var INITIAL_VALUE = 0;
+  var LocalCounter = class {
+    constructor() {
+      this.groups = new Map();
+    }
+    next(group) {
+      const last = this.groups.get(group);
+      if (isNil(last)) {
+        this.groups.set(group, INITIAL_VALUE);
+        return INITIAL_VALUE;
+      } else {
+        this.groups.set(group, last + 1);
+        return last + 1;
+      }
+    }
+  };
+  __name(LocalCounter, "LocalCounter");
+
+  // out/src/service/event/NodeEventBus.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  init_events();
+  var import_noicejs9 = __toModule(require_main());
+  var NodeEventBus = /* @__PURE__ */ __name(class NodeEventBus2 extends EventEmitter {
+    constructor(options) {
+      super();
+      this.logger = mustExist(options[INJECT_LOGGER]).child({
+        kind: constructorName(this)
+      });
+    }
+    emit(name, ...args) {
+      this.logger.debug({
+        event: {
+          args,
+          name
+        }
+      }, "bus proxying event");
+      return super.emit(name, ...args);
+    }
+  }, "NodeEventBus");
+  NodeEventBus = __decorate([
+    (0, import_noicejs9.Inject)(INJECT_LOGGER),
+    __metadata("design:paramtypes", [Object])
+  ], NodeEventBus);
+
+  // out/src/service/locale/NextLocale.js
   init_virtual_process_polyfill();
   init_buffer();
 
@@ -44826,9 +44975,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var i18next = new I18n();
   var i18next_default = i18next;
 
-  // out/src/service/locale/NextLocaleService.js
-  var NextLocaleService = class {
-    constructor() {
+  // out/src/service/locale/NextLocale.js
+  var import_noicejs10 = __toModule(require_main());
+  var NextLocaleService = /* @__PURE__ */ __name(class NextLocaleService2 {
+    constructor(options) {
+      this.event = mustExist(options[INJECT_EVENT]);
+      this.logger = mustExist(options[INJECT_LOGGER]).child({
+        kind: constructorName(this)
+      });
       this.bundleLangs = new Map();
     }
     async start() {
@@ -44839,6 +44993,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
       await inst.init();
       this.i18next = inst;
+      this.event.on("locale-bundle", (event) => {
+        this.deleteBundle(event.name);
+        this.addBundle(event.name, event.bundle);
+      });
     }
     addBundle(name, bundle) {
       const langs = new Set();
@@ -44847,6 +45005,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         this.getInstance().addResourceBundle(lng, name, data);
         langs.add(lng);
       }
+      this.logger.debug({
+        bundleName: name,
+        langs
+      }, "added locale bundle");
       this.bundleLangs.set(name, langs);
     }
     deleteBundle(name) {
@@ -44864,8 +45026,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     getInstance() {
       return mustExist(this.i18next);
     }
-  };
-  __name(NextLocaleService, "NextLocaleService");
+  }, "NextLocaleService");
+  NextLocaleService = __decorate([
+    (0, import_noicejs10.Inject)(INJECT_EVENT, INJECT_LOGGER),
+    __metadata("design:paramtypes", [Object])
+  ], NextLocaleService);
 
   // out/src/service/parser/YamlParser.js
   init_virtual_process_polyfill();
@@ -47602,6 +47767,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var safeLoadAll = renamed("safeLoadAll", "loadAll");
   var safeDump = renamed("safeDump", "dump");
 
+  // out/src/error/DataError.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs11 = __toModule(require_main());
+  var DataLoadError = class extends import_noicejs11.BaseError {
+  };
+  __name(DataLoadError, "DataLoadError");
+
   // out/src/model/file/Data.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -47933,7 +48106,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         return parsed;
       } else {
         console.error(this.validate.errors);
-        throw new Error("invalid data file");
+        throw new DataLoadError("invalid data file");
       }
     }
     save(data) {
@@ -47970,10 +48143,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   __name(SeedRandomGenerator, "SeedRandomGenerator");
 
-  // out/src/service/script/LocalScriptService.js
+  // out/src/service/script/LocalScript.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs7 = __toModule(require_main());
+  var import_noicejs12 = __toModule(require_main());
 
   // out/src/util/state/index.js
   init_virtual_process_polyfill();
@@ -48078,7 +48251,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(searchState, "searchState");
 
-  // out/src/service/script/common/ActorGet.js
+  // out/src/script/common/ActorGet.js
   init_virtual_process_polyfill();
   init_buffer();
   async function ActorGet(context) {
@@ -48092,7 +48265,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorGet, "ActorGet");
 
-  // out/src/service/script/common/ActorHit.js
+  // out/src/script/common/ActorHit.js
   init_virtual_process_polyfill();
   init_buffer();
 
@@ -48121,7 +48294,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(getKey, "getKey");
 
-  // out/src/service/script/common/ActorHit.js
+  // out/src/script/common/ActorHit.js
   async function ActorHit(context) {
     if (!isActor(this)) {
       throw new InvalidArgumentError("invalid entity type");
@@ -48142,7 +48315,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorHit, "ActorHit");
 
-  // out/src/service/script/common/ActorStep.js
+  // out/src/script/common/ActorStep.js
   init_virtual_process_polyfill();
   init_buffer();
   async function ActorStep(context) {
@@ -48390,7 +48563,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepWait, "ActorStepWait");
 
-  // out/src/service/script/common/ItemStep.js
+  // out/src/script/common/ItemStep.js
   init_virtual_process_polyfill();
   init_buffer();
   async function ItemStep(context) {
@@ -48404,7 +48577,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ItemStep, "ItemStep");
 
-  // out/src/service/script/common/ItemUse.js
+  // out/src/script/common/ItemUse.js
   init_virtual_process_polyfill();
   init_buffer();
   async function ItemUse(context) {
@@ -48413,7 +48586,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ItemUse, "ItemUse");
 
-  // out/src/service/script/common/RoomStep.js
+  // out/src/script/common/RoomStep.js
   init_virtual_process_polyfill();
   init_buffer();
   async function RoomStep(context) {
@@ -48435,7 +48608,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(RoomStep, "RoomStep");
 
-  // out/src/service/script/LocalScriptService.js
+  // out/src/service/script/LocalScript.js
   var COMMON_SCRIPTS = [
     ["actor-get", ActorGet],
     ["actor-hit", ActorHit],
@@ -48475,15 +48648,22 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "LocalScriptService");
   LocalScriptService = __decorate([
-    (0, import_noicejs7.Inject)(INJECT_LOGGER),
+    (0, import_noicejs12.Inject)(INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], LocalScriptService);
 
-  // out/src/service/state/LocalStateService.js
+  // out/src/service/state/TurnState.js
   init_virtual_process_polyfill();
   init_buffer();
-  init_events();
-  var import_noicejs10 = __toModule(require_main());
+  var import_noicejs16 = __toModule(require_main());
+
+  // out/src/error/NotInitializedError.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs13 = __toModule(require_main());
+  var NotInitializedError = class extends import_noicejs13.BaseError {
+  };
+  __name(NotInitializedError, "NotInitializedError");
 
   // out/src/util/array.js
   init_virtual_process_polyfill();
@@ -48546,7 +48726,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/state/EntityGenerator.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs8 = __toModule(require_main());
+  var import_noicejs14 = __toModule(require_main());
 
   // out/src/util/template/index.js
   init_virtual_process_polyfill();
@@ -48747,14 +48927,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "StateEntityGenerator");
   StateEntityGenerator = __decorate([
-    (0, import_noicejs8.Inject)(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE),
+    (0, import_noicejs14.Inject)(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE),
     __metadata("design:paramtypes", [Object])
   ], StateEntityGenerator);
 
   // out/src/util/state/EntityTransfer.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs9 = __toModule(require_main());
+  var import_noicejs15 = __toModule(require_main());
   var StateEntityTransfer = /* @__PURE__ */ __name(class StateEntityTransfer2 {
     constructor(options) {
       this.logger = mustExist(options[INJECT_LOGGER]).child({
@@ -48852,7 +49032,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "StateEntityTransfer");
   StateEntityTransfer = __decorate([
-    (0, import_noicejs9.Inject)(INJECT_LOGGER),
+    (0, import_noicejs15.Inject)(INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], StateEntityTransfer);
 
@@ -48901,23 +49081,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   __name(StateFocusResolver, "StateFocusResolver");
 
-  // out/src/service/state/LocalStateService.js
-  var LocalStateService = /* @__PURE__ */ __name(class LocalStateService2 extends EventEmitter {
+  // out/src/service/state/TurnState.js
+  var LocalStateService = /* @__PURE__ */ __name(class LocalStateService2 {
     constructor(options) {
-      super();
       this.container = options.container;
-      this.counter = options[INJECT_COUNTER];
-      this.loader = options[INJECT_LOADER];
-      this.locale = options[INJECT_LOCALE];
       this.logger = options[INJECT_LOGGER].child({
         kind: constructorName(this)
       });
+      this.actor = options[INJECT_ACTOR];
+      this.counter = options[INJECT_COUNTER];
+      this.event = options[INJECT_EVENT];
+      this.loader = options[INJECT_LOADER];
       this.parser = options[INJECT_PARSER];
       this.random = options[INJECT_RANDOM];
       this.script = options[INJECT_SCRIPT];
       this.template = options[INJECT_TEMPLATE];
     }
-    async from(world, params) {
+    async create(world, params) {
       const state = {
         focus: {
           actor: "",
@@ -48940,8 +49120,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         },
         world: Object.assign({}, params)
       };
-      this.locale.deleteBundle("world");
-      this.locale.addBundle("world", world.locale);
       this.state = state;
       this.world = world;
       await this.createHelpers();
@@ -48975,17 +49153,19 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       await focus.setActor(startActor.meta.id);
       state.start.room = startRoom.meta.id;
       state.start.actor = startActor.meta.id;
-      const input = await this.getActorInput(startActor);
-      await input.translate(KNOWN_VERBS);
       return state;
     }
     async load(state) {
       this.state = state;
     }
     async loop() {
-      const { pending } = onceWithRemove(this, "quit");
-      this.on("line", (line) => {
-        this.onLine(line).catch((err) => {
+      const { pending } = onceWithRemove(this.event, "quit");
+      this.event.emit("locale-bundle", {
+        name: "world",
+        bundle: mustExist(this.world).locale
+      });
+      this.event.on("actor-command", (event) => {
+        this.onCommand(event.command).catch((err) => {
           this.logger.error(err, "error during line handler");
         });
       });
@@ -48993,38 +49173,28 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async save() {
       if (isNil(this.state)) {
-        throw new Error("state has not been initialized");
+        throw new NotInitializedError("state has not been initialized");
       }
       return this.state;
     }
-    onOutput(line) {
-      this.emit("output", [line]);
-    }
-    async onLine(line) {
-      const state = mustExist(this.state);
-      const [player] = searchState(state, {
-        meta: {
-          id: state.focus.actor
-        },
-        room: {
-          id: state.focus.room
-        },
-        type: ACTOR_TYPE
+    onOutput(line, context) {
+      this.event.emit("state-output", {
+        lines: [{
+          key: line,
+          context
+        }],
+        step: mustExist(this.state).step
       });
-      if (!isActor(player)) {
-        throw new InvalidArgumentError("invalid focus actor");
-      }
-      const input = await this.getActorInput(player);
-      const cmd = await input.parse(line);
+    }
+    async onCommand(cmd) {
+      const state = mustExist(this.state);
       this.logger.debug({
         cmd,
-        focus: state.focus,
-        line,
-        player
+        focus: state.focus
       }, "parsed line of player input");
       switch (cmd.verb) {
         case META_DEBUG:
-          this.emit("output", debugState(state));
+          await this.doDebug();
           break;
         case META_GRAPH:
           await this.doGraph(cmd.target);
@@ -49032,36 +49202,52 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         case META_HELP:
           await this.doHelp();
           break;
-        case META_SAVE:
-          await this.doSave(cmd.target);
-          break;
         case META_LOAD:
           await this.doLoad(cmd.target, cmd.index);
           break;
+        case META_SAVE:
+          await this.doSave(cmd.target);
+          break;
         case META_QUIT:
-          this.emit("quit");
+          this.event.emit("quit");
           break;
         default: {
           const result = await this.step();
-          this.emit("step", result);
+          this.event.emit("state-step", result);
         }
       }
     }
+    async doDebug() {
+      const state = await this.save();
+      const lines = debugState(state);
+      this.event.emit("state-output", {
+        lines: lines.map((it) => ({ key: it })),
+        step: state.step
+      });
+    }
     async doHelp() {
-      this.emit("output", [
-        KNOWN_VERBS.map((it) => this.locale.translate(it)).join(", ")
-      ]);
+      const verbs = COMMON_VERBS.join(", ");
+      this.event.emit("state-output", {
+        lines: [{
+          key: verbs
+        }],
+        step: mustExist(this.state).step
+      });
     }
     async doGraph(path) {
       const state = await this.save();
-      const output2 = graphState(state);
-      await this.loader.saveStr(path, output2.join("\n"));
-      this.emit("output", [
-        this.locale.translate("debug.graph.summary", {
-          path,
-          size: state.rooms.length
-        })
-      ]);
+      const lines = graphState(state);
+      await this.loader.saveStr(path, lines.join("\n"));
+      this.event.emit("state-output", {
+        lines: [{
+          context: {
+            path,
+            size: state.rooms.length
+          },
+          key: "debug.graph.summary"
+        }],
+        step: state.step
+      });
     }
     async doLoad(path, index) {
       const dataStr = await this.loader.loadStr(path);
@@ -49070,9 +49256,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.state = state;
       this.world = data.worlds.find((it) => it.meta.id === state.meta.template);
       await this.createHelpers();
-      this.emit("output", [
-        `loaded world ${state.meta.id} state from ${path}`
-      ]);
+      this.event.emit("state-output", {
+        lines: [{
+          key: `loaded world ${state.meta.id} state from ${path}`
+        }],
+        step: state.step
+      });
     }
     async doSave(path) {
       const state = mustExist(this.state);
@@ -49082,11 +49271,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         worlds: [world]
       });
       await this.loader.saveStr(path, dataStr);
-      this.emit("output", [`saved world ${state.meta.id} state to ${path}`]);
+      this.event.emit("state-output", {
+        lines: [{
+          key: `saved world ${state.meta.id} state to ${path}`
+        }],
+        step: state.step
+      });
     }
     async step() {
       if (isNil(this.state)) {
-        throw new Error("state has not been initialized");
+        throw new NotInitializedError("state has not been initialized");
       }
       const seen = new Set();
       const start = Date.now();
@@ -49102,9 +49296,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           await this.script.invoke(room, SLOT_STEP, Object.assign(Object.assign({}, scope), { room }));
           for (const actor of room.actors) {
             if (seen.has(actor.meta.id) === false) {
-              const input = await this.getActorInput(actor);
-              const command = await input.last();
               seen.add(actor.meta.id);
+              const command = await this.getActorCommand(actor, room);
               await this.script.invoke(actor, SLOT_STEP, Object.assign(Object.assign({}, scope), {
                 actor,
                 command,
@@ -49146,11 +49339,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         turn: this.state.step.turn
       };
     }
-    getActorInput(actor) {
-      return this.container.create(INJECT_INPUT_ACTOR, {
+    async getActorCommand(actor, room) {
+      this.logger.debug({ actor }, "getting actor command");
+      this.event.emit("state-room", {
+        actor,
+        room
+      });
+      const actorProxy = await this.actor.get({
         id: actor.meta.id,
         type: actor.actorType
       });
+      return actorProxy.last();
     }
     async createHelpers() {
       const state = mustExist(this.state);
@@ -49163,9 +49362,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             state.rooms.push(...rooms);
           },
           onShow: async (line, context) => {
-            const out = this.locale.translate(line, context);
-            this.logger.debug({ line, out }, "translated output");
-            this.onOutput(out);
+            this.onOutput(line, context);
           }
         },
         state
@@ -49180,14 +49377,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "LocalStateService");
   LocalStateService = __decorate([
-    (0, import_noicejs10.Inject)(INJECT_COUNTER, INJECT_LOADER, INJECT_LOCALE, INJECT_LOGGER, INJECT_PARSER, INJECT_RANDOM, INJECT_SCRIPT, INJECT_TEMPLATE),
+    (0, import_noicejs16.Inject)(INJECT_ACTOR, INJECT_COUNTER, INJECT_EVENT, INJECT_LOADER, INJECT_LOGGER, INJECT_PARSER, INJECT_RANDOM, INJECT_SCRIPT, INJECT_TEMPLATE),
     __metadata("design:paramtypes", [Object])
   ], LocalStateService);
 
   // out/src/service/template/ChainTemplateService.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs11 = __toModule(require_main());
+  var import_noicejs17 = __toModule(require_main());
 
   // out/src/util/template/JoinChain.js
   init_virtual_process_polyfill();
@@ -49327,36 +49524,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "ChainTemplateService");
   ChainTemplateService = __decorate([
-    (0, import_noicejs11.Inject)(INJECT_RANDOM),
+    (0, import_noicejs17.Inject)(INJECT_RANDOM),
     __metadata("design:paramtypes", [Object])
   ], ChainTemplateService);
 
-  // out/src/util/counter/LocalCounter.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var INITIAL_VALUE = 0;
-  var LocalCounter = class {
-    constructor() {
-      this.groups = new Map();
-    }
-    next(group) {
-      const last = this.groups.get(group);
-      if (isNil(last)) {
-        this.groups.set(group, INITIAL_VALUE);
-        return INITIAL_VALUE;
-      } else {
-        this.groups.set(group, last + 1);
-        return last + 1;
-      }
-    }
-  };
-  __name(LocalCounter, "LocalCounter");
-
   // out/src/module/LocalModule.js
-  var LocalModule = class extends import_noicejs12.Module {
+  var LocalModule = class extends import_noicejs18.Module {
     constructor() {
       super();
       this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));
+      this.event = new Singleton(() => mustExist(this.container).create(NodeEventBus));
       this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
       this.random = new Singleton(() => mustExist(this.container).create(SeedRandomGenerator));
       this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
@@ -49365,6 +49542,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async configure(options) {
       await super.configure(options);
+      this.bind(INJECT_EVENT).toFactory(() => this.event.get());
       this.bind(INJECT_PARSER).toConstructor(YamlParser);
     }
     async getCounter() {
@@ -49391,43 +49569,43 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   __name(LocalModule, "LocalModule");
   __decorate([
-    (0, import_noicejs12.Provides)(INJECT_COUNTER),
+    (0, import_noicejs18.Provides)(INJECT_COUNTER),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], LocalModule.prototype, "getCounter", null);
   __decorate([
-    (0, import_noicejs12.Provides)(INJECT_LOCALE),
+    (0, import_noicejs18.Provides)(INJECT_LOCALE),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], LocalModule.prototype, "getLocale", null);
   __decorate([
-    (0, import_noicejs12.Provides)(INJECT_LOGGER),
+    (0, import_noicejs18.Provides)(INJECT_LOGGER),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], LocalModule.prototype, "getLogger", null);
   __decorate([
-    (0, import_noicejs12.Provides)(INJECT_RANDOM),
+    (0, import_noicejs18.Provides)(INJECT_RANDOM),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], LocalModule.prototype, "getRandom", null);
   __decorate([
-    (0, import_noicejs12.Provides)(INJECT_SCRIPT),
+    (0, import_noicejs18.Provides)(INJECT_SCRIPT),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], LocalModule.prototype, "getScript", null);
   __decorate([
-    (0, import_noicejs12.Provides)(INJECT_STATE),
+    (0, import_noicejs18.Provides)(INJECT_STATE),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], LocalModule.prototype, "getState", null);
   __decorate([
-    (0, import_noicejs12.Provides)(INJECT_TEMPLATE),
+    (0, import_noicejs18.Provides)(INJECT_TEMPLATE),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -49436,7 +49614,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/module/NodeModule.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs13 = __toModule(require_main());
+  var import_noicejs19 = __toModule(require_main());
 
   // ignore:../service/loader/FileLoader
   init_virtual_process_polyfill();
@@ -49451,7 +49629,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_buffer();
 
   // out/src/module/NodeModule.js
-  var NodeModule = class extends import_noicejs13.Module {
+  var NodeModule = class extends import_noicejs19.Module {
     constructor() {
       super();
       if (true) {
@@ -49470,7 +49648,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   __name(NodeModule, "NodeModule");
   __decorate([
-    (0, import_noicejs13.Provides)(INJECT_RENDER),
+    (0, import_noicejs19.Provides)(INJECT_RENDER),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -50488,8 +50666,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       },
       array: ["data", "module"],
       default: {
+        depth: PORTAL_DEPTH,
         module: ["local", "input", "node"]
       },
+      number: ["depth"],
       string: ["config", "seed", "world"]
     });
     return argv3;
@@ -50512,7 +50692,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(createCommonjsModule$1, "createCommonjsModule$1");
   var main2 = createCommonjsModule$1(function(module, exports) {
-    class BaseError3 extends Error {
+    class BaseError5 extends Error {
       constructor(message, ...nested) {
         super(message);
         this.message = message;
@@ -50532,26 +50712,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         return this.nested.length;
       }
     }
-    __name(BaseError3, "BaseError");
-    class ContainerBoundError extends BaseError3 {
+    __name(BaseError5, "BaseError");
+    class ContainerBoundError extends BaseError5 {
       constructor(msg = "container is already bound", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(ContainerBoundError, "ContainerBoundError");
-    class ContainerNotBoundError extends BaseError3 {
+    class ContainerNotBoundError extends BaseError5 {
       constructor(msg = "container is not bound", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(ContainerNotBoundError, "ContainerNotBoundError");
-    class InvalidProviderError extends BaseError3 {
+    class InvalidProviderError extends BaseError5 {
       constructor(msg = "invalid provider type", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(InvalidProviderError, "InvalidProviderError");
-    class MissingValueError extends BaseError3 {
+    class MissingValueError extends BaseError5 {
       constructor(msg = "required value is null or undefined", ...nested) {
         super(msg, ...nested);
       }
@@ -50587,13 +50767,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
     }
     __name(resolveDepends, "resolveDepends");
-    class InvalidTargetError extends BaseError3 {
+    class InvalidTargetError extends BaseError5 {
       constructor(msg = "invalid decorator target", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(InvalidTargetError, "InvalidTargetError");
-    class DescriptorNotFoundError extends BaseError3 {
+    class DescriptorNotFoundError extends BaseError5 {
       constructor(msg = "property descriptor not found", ...nested) {
         super(msg, ...nested);
       }
@@ -50638,7 +50818,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return [];
     }
     __name(getInject, "getInject");
-    function Inject9(...needs) {
+    function Inject13(...needs) {
       return (target, key, providedDesc) => {
         if (isNil3(key)) {
           const prev = getInject(target);
@@ -50655,7 +50835,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
       };
     }
-    __name(Inject9, "Inject");
+    __name(Inject13, "Inject");
     class NullLogger {
       child() {
         return NullLogger.global;
@@ -50680,7 +50860,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(getProvides, "getProvides");
-    function Provides5(...provides) {
+    function Provides4(...provides) {
       return (target, key, providedDesc) => {
         const desc = resolveDescriptor(target, key, providedDesc);
         const prev = getProvides(target);
@@ -50688,7 +50868,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         Reflect.set(desc.value, providesSymbol, prev.concat(next));
       };
     }
-    __name(Provides5, "Provides");
+    __name(Provides4, "Provides");
     (function(ProviderType) {
       ProviderType[ProviderType["None"] = 0] = "None";
       ProviderType[ProviderType["Constructor"] = 1] = "Constructor";
@@ -51014,13 +51194,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(MapModule, "MapModule");
-    exports.BaseError = BaseError3;
+    exports.BaseError = BaseError5;
     exports.ConsoleLogger = ConsoleLogger;
     exports.Container = Container2;
     exports.ContainerBoundError = ContainerBoundError;
     exports.ContainerNotBoundError = ContainerNotBoundError;
     exports.DescriptorNotFoundError = DescriptorNotFoundError;
-    exports.Inject = Inject9;
+    exports.Inject = Inject13;
     exports.InvalidProviderError = InvalidProviderError;
     exports.InvalidTargetError = InvalidTargetError;
     exports.LoggerNotFoundError = LoggerNotFoundError;
@@ -51028,7 +51208,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     exports.MissingValueError = MissingValueError;
     exports.Module = Module5;
     exports.NullLogger = NullLogger;
-    exports.Provides = Provides5;
+    exports.Provides = Provides4;
     exports.WinstonLogger = WinstonLogger;
     exports.constructWithContainer = constructWithContainer;
     exports.contractName = contractName;
@@ -51216,11 +51396,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/config/page.js
   var import_ajv2 = __toModule(require_ajv());
 
-  // out/src/util/config/index.js
+  // out/src/error/ConfigError.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs14 = __toModule(require_main());
-  var ConfigError = class extends import_noicejs14.BaseError {
+  var import_noicejs20 = __toModule(require_main());
+  var ConfigError = class extends import_noicejs20.BaseError {
   };
   __name(ConfigError, "ConfigError");
 
@@ -51309,7 +51489,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/main.js
   var DI_MODULES = new Map([
     ["browser", BrowserModule],
-    ["input", InputModule],
+    ["input", ActorModule],
     ["local", LocalModule],
     ["node", NodeModule]
   ]);
@@ -51327,13 +51507,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       return new ctor();
     });
-    const container = import_noicejs15.Container.from(...modules);
+    const container = import_noicejs21.Container.from(...modules);
     await container.configure({
       logger
     });
     const locale = await container.create(INJECT_LOCALE);
     await locale.start();
     locale.addBundle("common", config3.locale);
+    const player = await container.create(INJECT_ACTOR_PLAYER);
+    await player.start();
     const loader2 = await container.create(INJECT_LOADER);
     const parser2 = await container.create(INJECT_PARSER);
     const worlds = [];
@@ -51352,8 +51534,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return 1;
     }
     const state = await container.create(INJECT_STATE);
-    await state.from(world, {
-      depth: PORTAL_DEPTH,
+    await state.create(world, {
+      depth: arg.depth,
       seed: arg.seed
     });
     const render2 = await container.create(INJECT_RENDER);

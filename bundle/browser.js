@@ -42490,6 +42490,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     onStep(event) {
       this.logger.debug({ event }, "handling step event from state");
       this.step = event;
+      this.prompt(`turn ${this.step.turn}`);
       this.renderRoot();
     }
   }, "BaseReactRender");
@@ -42506,6 +42507,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.prompt(`turn ${this.step.turn}`);
       this.event.on("actor-output", (output2) => this.onOutput(output2));
       this.event.on("state-room", (room) => this.onRoom(room));
+      this.event.on("state-step", (step) => this.onStep(step));
       this.event.on("quit", () => this.onQuit());
     }
     async stop() {

@@ -65,8 +65,13 @@ export class ActorModule extends Module {
       return existing;
     }
 
-    const actor = await mustExist(this.container).create(BehaviorActorService);
+    const actor = await mustExist(this.container).create(BehaviorActorService, {
+      actor: options.id,
+    });
+
     this.actors.set(options.id, actor);
+
+    await actor.start();
 
     return actor;
   }

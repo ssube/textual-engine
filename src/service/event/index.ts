@@ -1,6 +1,7 @@
 import { EventEmitter } from 'events';
 
 import { Command } from '../../model/Command';
+import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { LocaleBundle } from '../../model/file/Locale';
 import { ErrorHandler, EventHandler } from '../../util/event';
@@ -15,6 +16,7 @@ export interface LineEvent {
 }
 
 export interface RoomEvent {
+  actor: Actor;
   room: Room;
 }
 

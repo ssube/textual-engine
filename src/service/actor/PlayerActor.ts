@@ -41,8 +41,8 @@ export class PlayerActorService implements ActorService {
   }
 
   public async start() {
-    this.event.on('render-output', (event) => this.doInput(event));
-    this.event.on('state-output', (event) => this.doOutput(event));
+    this.event.on('render-output', (event) => this.onInput(event));
+    this.event.on('state-output', (event) => this.onOutput(event));
 
     await this.tokenizer.translate(COMMON_VERBS);
   }
@@ -55,7 +55,7 @@ export class PlayerActorService implements ActorService {
     return this.history[this.history.length - 1];
   }
 
-  public async doInput(event: LineEvent): Promise<void> {
+  public async onInput(event: LineEvent): Promise<void> {
     this.logger.debug({ event }, 'tokenizing input');
 
     for (const line of event.lines) {
@@ -72,7 +72,7 @@ export class PlayerActorService implements ActorService {
     }
   }
 
-  public async doOutput(event: OutputEvent): Promise<void> {
+  public async onOutput(event: OutputEvent): Promise<void> {
     this.logger.debug({ event }, 'translating output');
 
     const lines = event.lines.map((it) => this.locale.translate(it.key, it.context));

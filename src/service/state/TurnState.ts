@@ -429,6 +429,11 @@ export class LocalStateService implements StateService {
   protected async getActorCommand(actor: Actor, room: Room): Promise<Command> {
     this.logger.debug({ actor }, 'getting actor command');
 
+    this.event.emit('state-room', {
+      actor,
+      room,
+    });
+
     const actorProxy = await this.actor.get({
       id: actor.meta.id,
       type: actor.actorType,

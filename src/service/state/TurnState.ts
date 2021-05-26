@@ -2,6 +2,7 @@ import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/j
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
+import { NotInitializedError } from '../../error/NotInitializedError';
 import { Command } from '../../model/Command';
 import { Actor, ActorType } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
@@ -9,7 +10,6 @@ import { State } from '../../model/State';
 import { World } from '../../model/World';
 import {
   INJECT_ACTOR,
-  INJECT_ACTOR_PLAYER,
   INJECT_COUNTER,
   INJECT_EVENT,
   INJECT_LOADER,
@@ -19,16 +19,24 @@ import {
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
 } from '../../module';
-import { ActorInputOptions } from '../../module/ActorModule';
+import { ActorLocator } from '../../module/ActorModule';
 import { randomItem } from '../../util/array';
-import { COMMON_VERBS, META_DEBUG, META_GRAPH, META_HELP, META_LOAD, META_QUIT, META_SAVE, SLOT_STEP } from '../../util/constants';
+import {
+  COMMON_VERBS,
+  META_DEBUG,
+  META_GRAPH,
+  META_HELP,
+  META_LOAD,
+  META_QUIT,
+  META_SAVE,
+  SLOT_STEP,
+} from '../../util/constants';
 import { debugState, graphState } from '../../util/debug';
 import { onceWithRemove } from '../../util/event';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { findByTemplateId } from '../../util/template';
-import { ActorService } from '../actor';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
 import { Loader } from '../loader';
@@ -39,7 +47,7 @@ import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../sc
 import { TemplateService } from '../template';
 
 export interface LocalStateServiceOptions extends BaseOptions {
-  [INJECT_ACTOR_PLAYER]?: ActorService;
+  [INJECT_ACTOR]: ActorLocator;
   [INJECT_COUNTER]: Counter;
   [INJECT_EVENT]: EventBus;
   [INJECT_LOADER]: Loader;
@@ -51,7 +59,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
 }
 
 @Inject(
-  INJECT_ACTOR_PLAYER,
+  INJECT_ACTOR,
   INJECT_COUNTER,
   INJECT_EVENT,
   INJECT_LOADER,
@@ -62,17 +70,13 @@ export interface LocalStateServiceOptions extends BaseOptions {
   INJECT_TEMPLATE
 )
 export class LocalStateService implements StateService {
-  /**
-   * @todo remove. only present to get actor input.
-   */
+  protected actor: ActorLocator;
   protected container: Container;
-
   protected counter: Counter;
   protected event: EventBus;
   protected loader: Loader;
   protected logger: Logger;
   protected parser: Parser;
-  protected player: ActorService;
   protected random: RandomGenerator;
   protected script: ScriptService;
   protected template: TemplateService;
@@ -90,11 +94,11 @@ export class LocalStateService implements StateService {
       kind: constructorName(this),
     });
 
+    this.actor = options[INJECT_ACTOR];
     this.counter = options[INJECT_COUNTER];
     this.event = options[INJECT_EVENT];
     this.loader = options[INJECT_LOADER];
     this.parser = options[INJECT_PARSER];
-    this.player = mustExist(options[INJECT_ACTOR_PLAYER]);
     this.random = options[INJECT_RANDOM];
     this.script = options[INJECT_SCRIPT];
     this.template = options[INJECT_TEMPLATE];
@@ -213,7 +217,7 @@ export class LocalStateService implements StateService {
    */
   public async save(): Promise<State> {
     if (isNil(this.state)) {
-      throw new Error('state has not been initialized');
+      throw new NotInitializedError('state has not been initialized');
     }
 
     return this.state;
@@ -346,7 +350,7 @@ export class LocalStateService implements StateService {
 
   public async step(): Promise<StepResult> {
     if (isNil(this.state)) {
-      throw new Error('state has not been initialized');
+      throw new NotInitializedError('state has not been initialized');
     }
 
     const seen = new Set();
@@ -422,16 +426,10 @@ export class LocalStateService implements StateService {
     };
   }
 
-  /**
-   * @todo get rid of this in favor of something that does not call DI during state steps
-   */
   protected async getActorCommand(actor: Actor, room: Room): Promise<Command> {
     this.logger.debug({ actor }, 'getting actor command');
-    if (actor.actorType === ActorType.PLAYER) {
-      return this.player.last();
-    }
 
-    const actorProxy = await this.container.create<ActorService, ActorInputOptions>(INJECT_ACTOR, {
+    const actorProxy = await this.actor.get({
       id: actor.meta.id,
       type: actor.actorType,
     });

@@ -2,6 +2,7 @@ import Ajv, { ValidateFunction } from 'ajv';
 import { DEFAULT_SCHEMA, dump, load, Schema } from 'js-yaml';
 
 import { Parser } from '.';
+import { DataLoadError } from '../../error/DataError';
 import { DATA_SCHEMA, DataFile } from '../../model/file/Data';
 import { mapType } from './yaml/MapType';
 
@@ -27,7 +28,7 @@ export class YamlParser implements Parser {
       return parsed;
     } else {
       console.error(this.validate.errors);
-      throw new Error('invalid data file');
+      throw new DataLoadError('invalid data file');
     }
   }
 

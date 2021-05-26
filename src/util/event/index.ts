@@ -1,6 +1,7 @@
 import { doesExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
-import { BaseError } from 'noicejs';
+
+import { AbortEventError } from '../../error/AbortEventError';
 
 export type EventHandler<TEvent> = (event: TEvent) => void;
 export type ErrorHandler = (err?: Error) => void;
@@ -69,5 +70,3 @@ export function onceWithRemove<
     remove,
   };
 }
-
-export class AbortEventError extends BaseError { /* noop */ }

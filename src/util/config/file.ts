@@ -4,7 +4,7 @@ import { existsSync, promises, readFileSync } from 'fs';
 import { DEFAULT_SCHEMA, load } from 'js-yaml';
 import { join } from 'path';
 
-import { ConfigError } from '.';
+import { ConfigError } from '../../error/ConfigError';
 import { CONFIG_SCHEMA, ConfigFile } from '../../model/file/Config';
 
 /**

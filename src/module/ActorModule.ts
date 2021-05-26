@@ -1,7 +1,7 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { Module, ModuleOptions } from 'noicejs';
 
-import { INJECT_ACTOR, INJECT_ACTOR_PLAYER, INJECT_TOKENIZER } from '.';
+import { INJECT_ACTOR, INJECT_TOKENIZER } from '.';
 import { ActorType } from '../model/entity/Actor';
 import { ActorService } from '../service/actor';
 import { BehaviorActorService } from '../service/actor/BehaviorActor';
@@ -29,6 +29,7 @@ export class ActorModule extends Module {
   protected actors: Map<string, ActorService>;
   protected locator: ActorLocator;
   protected player: Singleton<ActorService>;
+  protected playerStarted: boolean;
   protected tokenizer: Singleton<TokenizerService>;
 
   constructor() {
@@ -41,13 +42,13 @@ export class ActorModule extends Module {
     };
     this.player = new Singleton(() => mustExist(this.container).create(PlayerActorService));
     this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
+    this.playerStarted = false;
   }
 
   public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
 
     this.bind(INJECT_ACTOR).toInstance(this.locator);
-    this.bind(INJECT_ACTOR_PLAYER).toFactory(() => this.player.get());
     this.bind(INJECT_TOKENIZER).toFactory(() => this.tokenizer.get());
   }
 

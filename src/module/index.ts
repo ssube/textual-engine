@@ -16,8 +16,3 @@ export const INJECT_TOKENIZER = Symbol('inject-tokenizer');
  * Get the input for a particular actor.
  */
 export const INJECT_ACTOR = Symbol('inject-actor');
-
-/**
- * Get the input for the player actor (shortcut to input-actor for the focused actor).
- */
-export const INJECT_ACTOR_PLAYER = Symbol('inject-actor-player');

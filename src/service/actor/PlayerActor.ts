@@ -25,6 +25,7 @@ export class PlayerActorService implements ActorService {
   protected event: EventBus;
   protected locale: LocaleService;
   protected logger: Logger;
+  protected started: boolean;
   protected tokenizer: TokenizerService;
 
   protected history: Array<Command>;
@@ -37,14 +38,21 @@ export class PlayerActorService implements ActorService {
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
+    this.started = false;
     this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
   }
 
   public async start() {
+    if (this.started) {
+      return;
+    }
+
     this.event.on('render-output', (event) => this.onInput(event));
     this.event.on('state-output', (event) => this.onOutput(event));
 
     await this.tokenizer.translate(COMMON_VERBS);
+
+    this.started = true;
   }
 
   public async stop() {

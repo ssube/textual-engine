@@ -2,12 +2,12 @@ import { InvalidArgumentError, isNil } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
-import { INJECT_ACTOR_PLAYER, INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
-import { ActorModule } from './module/ActorModule';
+import { ActorType } from './model/entity/Actor';
+import { INJECT_ACTOR, INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
+import { ActorLocator, ActorModule } from './module/ActorModule';
 import { BrowserModule } from './module/BrowserModule';
 import { LocalModule } from './module/LocalModule';
 import { NodeModule } from './module/NodeModule';
-import { ActorService } from './service/actor';
 import { Loader } from './service/loader';
 import { LocaleService } from './service/locale';
 import { Parser } from './service/parser';
@@ -57,8 +57,14 @@ export async function main(args: Array<string>): Promise<number> {
 
   locale.addBundle('common', config.locale);
 
-  const player = await container.create<ActorService, BaseOptions>(INJECT_ACTOR_PLAYER);
-  await player.start();
+  // start player actor
+  // TODO: this does not belong here
+  const locator = await container.create<ActorLocator, BaseOptions>(INJECT_ACTOR);
+  const actor = await locator.get({
+    id: '', // does not matter, very smelly
+    type: ActorType.PLAYER,
+  });
+  await actor.start();
 
   // load data files
   const loader = await container.create<Loader, BaseOptions>(INJECT_LOADER);

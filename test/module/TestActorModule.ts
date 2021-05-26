@@ -2,11 +2,11 @@ import { expect } from 'chai';
 import { BaseOptions, Container, NullLogger } from 'noicejs';
 
 import { ActorType } from '../../src/model/entity/Actor';
-import { INJECT_ACTOR_PLAYER } from '../../src/module';
-import { ActorModule } from '../../src/module/ActorModule';
+import { INJECT_ACTOR, INJECT_LOCALE } from '../../src/module';
+import { ActorLocator, ActorModule } from '../../src/module/ActorModule';
 import { LocalModule } from '../../src/module/LocalModule';
-import { ActorService } from '../../src/service/actor';
 import { PlayerActorService } from '../../src/service/actor/PlayerActor';
+import { NextLocaleService } from '../../src/service/locale/NextLocale';
 
 describe('actor module', () => {
   it('should provide a player actor service for player actors', async () => {
@@ -15,7 +15,11 @@ describe('actor module', () => {
       logger: NullLogger.global,
     });
 
-    const actor = await container.create<ActorService, BaseOptions>(INJECT_ACTOR_PLAYER, {
+    const locale = await container.create<NextLocaleService, BaseOptions>(INJECT_LOCALE);
+    await locale.start();
+
+    const locator = await container.create<ActorLocator, BaseOptions>(INJECT_ACTOR);
+    const actor = await locator.get({
       id: 'foo',
       type: ActorType.PLAYER,
     });
@@ -29,12 +33,14 @@ describe('actor module', () => {
       logger: NullLogger.global,
     });
 
-    const actor = await container.create(INJECT_ACTOR_PLAYER, {
+    const locator = await container.create<ActorLocator, BaseOptions>(INJECT_ACTOR);
+
+    const actor = await locator.get({
       id: 'foo',
       type: ActorType.DEFAULT,
     });
 
-    const next = await container.create(INJECT_ACTOR_PLAYER, {
+    const next = await locator.get({
       id: 'foo',
       type: ActorType.DEFAULT,
     });

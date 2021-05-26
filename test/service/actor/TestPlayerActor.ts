@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import { BaseOptions, Container, NullLogger } from 'noicejs';
 
-import { INJECT_ACTOR_PLAYER, INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
-import { ActorModule } from '../../../src/module/ActorModule';
+import { ActorType } from '../../../src/model/entity/Actor';
+import { INJECT_ACTOR, INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
+import { ActorLocator, ActorModule } from '../../../src/module/ActorModule';
 import { LocalModule } from '../../../src/module/LocalModule';
-import { PlayerActorService } from '../../../src/service/actor/PlayerActor';
 import { CommandEvent, EventBus } from '../../../src/service/event';
 import { LocaleService } from '../../../src/service/locale';
 import { onceWithRemove } from '../../../src/util/event';
@@ -21,7 +21,11 @@ describe('player actor', () => {
     const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
     await locale.start();
 
-    const actor = await container.create<PlayerActorService, BaseOptions>(INJECT_ACTOR_PLAYER);
+    const locator = await container.create<ActorLocator, BaseOptions>(INJECT_ACTOR);
+    const actor = await locator.get({
+      id: 'foo',
+      type: ActorType.PLAYER,
+    });
     await actor.start();
 
     const index = 13;

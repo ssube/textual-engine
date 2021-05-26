@@ -47,7 +47,7 @@ worlds:
                   {{cmd.target}} is not an item!
               cmd:
                 dead: |-
-                  {{actor.meta.name}} is dead!
+                  You are dead!
                 player:
                   verb: |-
                     {{actor.meta.name}} will $t({{cmd.verb}}) the next turn.
@@ -89,22 +89,6 @@ worlds:
             use:
               any: |-
                 {{item.meta.name}} has been used by {{actor.meta.name}}!
-          verbs:
-            common:
-              drop: drop
-              hit: hit
-              look: look
-              move: move
-              take: take
-              use: use
-              wait: wait
-            meta:
-              debug: debug
-              graph: graph
-              help: help
-              load: load
-              quit: quit
-              save: save
 
     meta:
       id: test
@@ -196,7 +180,6 @@ worlds:
             stats: !map {}
             verbs: !map {}
       rooms:
-        # TODO: add moist marsh
         - base:
             meta:
               id: room-dungeon
@@ -217,7 +200,7 @@ worlds:
                 name:
                   base: window
                 dest:
-                  base: room-cave
+                  base: ((room-cave|room-cave|room-marsh))
               - sourceGroup:
                   base: east
                 targetGroup:
@@ -225,7 +208,7 @@ worlds:
                 name:
                   base: door
                 dest:
-                  base: room-cave
+                  base: ((room-cave|room-cave|room-marsh))
             slots: !map
               step:
                 base: room-step
@@ -259,7 +242,7 @@ worlds:
                 name:
                   base: window
                 dest:
-                  base: room-dungeon
+                  base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
             slots: !map
               step:
                 base: room-step
@@ -304,7 +287,23 @@ logger:
   name: textual-engine
 locale:
   bundles:
-    en: {}
+    en:
+      verbs:
+        common:
+          drop: drop
+          hit: hit
+          look: look
+          move: move
+          take: take
+          use: use
+          wait: wait
+        meta:
+          debug: debug
+          graph: graph
+          help: help
+          load: load
+          quit: quit
+          save: save
 </script>
 <div id="app"></div>
 <script src="./bundle/browser.js">

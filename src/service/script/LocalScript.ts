@@ -33,11 +33,11 @@ export class LocalScriptService implements ScriptService {
   protected logger: Logger;
   protected scripts: Map<string, ScriptFunction>;
 
-  constructor(options: LocalScriptServiceOptions) {
+  constructor(options: LocalScriptServiceOptions, scripts = COMMON_SCRIPTS) {
     this.logger = options[INJECT_LOGGER].child({
       kind: constructorName(this),
     });
-    this.scripts = new Map(COMMON_SCRIPTS);
+    this.scripts = new Map(scripts);
   }
 
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {

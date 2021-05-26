@@ -7,12 +7,6 @@ import { RenderService } from '.';
 import { Frame } from '../../component/ink/Frame';
 import { BaseReactRender } from './BaseReactRender';
 
-export interface InkState {
-  input: string;
-  prompt: string;
-  output: Array<string>;
-}
-
 /**
  * Interface with Ink's React tree using an event emitter.
  */

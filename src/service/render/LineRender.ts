@@ -1,25 +1,42 @@
-import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
-import { Inject } from 'noicejs';
+import { constructorName, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { Inject, Logger } from 'noicejs';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
 
 import { RenderService } from '.';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
 import { META_QUIT } from '../../util/constants';
 import { onceWithRemove } from '../../util/event';
-import { LineEvent, RoomEvent } from '../event';
-import { BaseRender, BaseRenderOptions } from './BaseRender';
+import { EventBus, LineEvent, RoomEvent } from '../event';
+import { LocaleService } from '../locale';
+import { StepResult } from '../state';
+import { BaseRenderOptions } from './BaseReactRender';
 
 @Inject(/* all from base */)
-export class LineRender extends BaseRender implements RenderService {
-  protected reader?: LineInterface;
+export class LineRender implements RenderService {
+  // services
+  protected event: EventBus;
+  protected logger: Logger;
+  protected locale: LocaleService;
+  protected step: StepResult;
 
   // next-line flags
   protected padPrompt: boolean;
   protected skipLine: boolean;
 
-  // eslint-disable-next-line no-useless-constructor
+  protected reader?: LineInterface;
+
   constructor(options: BaseRenderOptions) {
-    super(options);
+    this.event = mustExist(options[INJECT_EVENT]);
+    this.locale = mustExist(options[INJECT_LOCALE]);
+    this.logger = mustExist(options[INJECT_LOGGER]).child({
+      kind: constructorName(this),
+    });
+
+    this.step = {
+      turn: 0,
+      time: 0,
+    };
 
     this.padPrompt = false;
     this.skipLine = false;
@@ -105,6 +122,7 @@ export class LineRender extends BaseRender implements RenderService {
 
   public onRoom(event: RoomEvent): void {
     this.logger.debug({ event }, 'handling step event from state');
+
     this.showPrompt();
   }
 

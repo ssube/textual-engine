@@ -4,7 +4,7 @@ import { Module, ModuleOptions, Provides } from 'noicejs';
 import { INJECT_LOADER, INJECT_RENDER } from '.';
 import { PageLoader } from '../service/loader/PageLoader';
 import { RenderService } from '../service/render';
-import { ReactRender } from '../service/render/ReactRender';
+import { ReactDomRender } from '../service/render/ReactDomRender';
 import { Singleton } from '../util/container';
 
 export class BrowserModule extends Module {
@@ -13,7 +13,7 @@ export class BrowserModule extends Module {
   constructor() {
     super();
 
-    this.render = new Singleton(() => mustExist(this.container).create(ReactRender));
+    this.render = new Singleton(() => mustExist(this.container).create(ReactDomRender));
   }
 
   public async configure(options: ModuleOptions): Promise<void> {

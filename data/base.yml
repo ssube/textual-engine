@@ -45,7 +45,7 @@ worlds:
                   {{cmd.target}} is not an item!
               cmd:
                 dead: |-
-                  {{actor.meta.name}} is dead!
+                  You are dead!
                 player:
                   verb: |-
                     {{actor.meta.name}} will $t({{cmd.verb}}) the next turn.

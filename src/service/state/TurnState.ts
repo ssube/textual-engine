@@ -287,11 +287,11 @@ export class LocalStateService implements StateService {
   }
 
   public async doHelp(): Promise<void> {
-    const lines = COMMON_VERBS.map((key) => ({
-      key,
-    }));
+    const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(', ');
     this.event.emit('state-output', {
-      lines,
+      lines: [{
+        key: verbs,
+      }],
       step: mustExist(this.state).step,
     });
   }

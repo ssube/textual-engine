@@ -5,15 +5,15 @@ import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
+import { BaseTemplate, Template, TemplateMetadata, TemplateRef } from '../../model/meta/Template';
 import { Metadata } from '../../model/Metadata';
-import { BaseTemplate, Template, TemplateMetadata } from '../../model/meta/Template';
 import { World } from '../../model/World';
 import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE } from '../../module';
+import { Counter } from '../../service/counter';
 import { RandomGenerator } from '../../service/random';
 import { TemplateService } from '../../service/template';
 import { randomItem } from '../array';
 import { TEMPLATE_CHANCE } from '../constants';
-import { Counter } from '../../service/counter';
 import { findByTemplateId } from '../template';
 
 export interface EntityGeneratorOptions extends BaseOptions {
@@ -45,22 +45,8 @@ export class StateEntityGenerator {
   }
 
   public async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {
-    const items = [];
-    for (const itemTemplateRef of template.base.items) {
-      if (this.random.nextInt(TEMPLATE_CHANCE) > itemTemplateRef.chance) {
-        continue;
-      }
-
-      const itemTemplate = findByTemplateId(this.world.templates.items, itemTemplateRef.id);
-      if (isNil(itemTemplate)) {
-        throw new NotFoundError('invalid item in actor');
-      }
-
-      const item = await this.createItem(itemTemplate);
-      items.push(item);
-    }
-
-    return {
+    const items = await this.createItemList(template.base.items);
+    const actor: Actor = {
       type: 'actor',
       actorType,
       items,
@@ -69,62 +55,80 @@ export class StateEntityGenerator {
       slots: this.template.renderStringMap(template.base.slots),
       stats: this.template.renderNumberMap(template.base.stats),
     };
+
+    // this.modifier.modifyActor(actor, template.mods, this);
+
+    return actor;
+  }
+
+  public async createActorList(templates: Array<TemplateRef>): Promise<Array<Actor>> {
+    const actors = [];
+
+    for (const templateRef of templates) {
+      if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
+        continue;
+      }
+
+      const template = findByTemplateId(this.world.templates.actors, templateRef.id);
+      this.logger.debug({
+        template,
+        templateRef,
+      }, 'create actor for list');
+
+      if (isNil(template)) {
+        throw new NotFoundError('invalid item in room');
+      }
+
+      const item = await this.createActor(template);
+      actors.push(item);
+    }
+
+    return actors;
   }
 
   public async createItem(template: Template<Item>): Promise<Item> {
-    return {
+    const item: Item = {
       type: ITEM_TYPE,
       meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
       stats: this.template.renderNumberMap(template.base.stats),
       slots: this.template.renderStringMap(template.base.slots),
       verbs: this.template.renderVerbMap(template.base.verbs),
     };
+
+    // this.modifier.modifyItem(item, template.mods, this);
+
+    return item;
   }
 
-  public async createRoom(template: Template<Room>): Promise<Room> {
-    const actors = [];
-    for (const actorTemplateRef of template.base.actors) {
-      if (this.random.nextInt(TEMPLATE_CHANCE) > actorTemplateRef.chance) {
-        continue;
-      }
-
-      const actorTemplate = findByTemplateId(this.world.templates.actors, actorTemplateRef.id);
-      this.logger.debug({
-        actors: this.world.templates.actors,
-        actorTemplateId: actorTemplateRef,
-        actorTemplate,
-      }, 'create actor for room');
-
-      if (isNil(actorTemplate)) {
-        throw new NotFoundError('invalid actor in room');
-      }
-
-      const actor = await this.createActor(actorTemplate);
-      actors.push(actor);
-    }
-
+  public async createItemList(templates: Array<TemplateRef>): Promise<Array<Item>> {
     const items = [];
-    for (const itemTemplateRef of template.base.items) {
-      if (this.random.nextInt(TEMPLATE_CHANCE) > itemTemplateRef.chance) {
+
+    for (const templateRef of templates) {
+      if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
         continue;
       }
 
-      const itemTemplate = findByTemplateId(this.world.templates.items, itemTemplateRef.id);
+      const template = findByTemplateId(this.world.templates.items, templateRef.id);
       this.logger.debug({
-        items: this.world.templates.items,
-        itemTemplateId: itemTemplateRef,
-        itemTemplate,
-      }, 'create item for room');
+        template,
+        templateRef,
+      }, 'create item for list');
 
-      if (isNil(itemTemplate)) {
+      if (isNil(template)) {
         throw new NotFoundError('invalid item in room');
       }
 
-      const item = await this.createItem(itemTemplate);
+      const item = await this.createItem(template);
       items.push(item);
     }
 
-    return {
+    return items;
+  }
+
+  public async createRoom(template: Template<Room>): Promise<Room> {
+    const actors = await this.createActorList(template.base.actors);
+    const items = await this.createItemList(template.base.items);
+    const room: Room = {
       type: ROOM_TYPE,
       actors,
       items,
@@ -133,6 +137,10 @@ export class StateEntityGenerator {
       slots: this.template.renderStringMap(template.base.slots),
       verbs: this.template.renderVerbMap(template.base.verbs),
     };
+
+    // this.modifier.modifyRoom(room, template.mods, this);
+
+    return room;
   }
 
   public async createMetadata(template: TemplateMetadata, type: string): Promise<Metadata> {
@@ -173,6 +181,7 @@ export class StateEntityGenerator {
     const {portals, rooms} = await this.populatePortals(templatePortals, room.meta.id, depth);
     room.portals.push(...portals);
 
+    // TODO: populate rooms here to avoid large-world stack overflows, first with direct recursion, then tail recursion
     return rooms;
   }
 

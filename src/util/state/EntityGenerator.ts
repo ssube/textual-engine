@@ -5,6 +5,7 @@ import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
+import { Modifier, ModifierNumber, ModifierString } from '../../model/meta/Modifier';
 import { BaseTemplate, Template, TemplateMetadata, TemplateRef } from '../../model/meta/Template';
 import { Metadata } from '../../model/Metadata';
 import { World } from '../../model/World';
@@ -56,7 +57,7 @@ export class StateEntityGenerator {
       stats: this.template.renderNumberMap(template.base.stats),
     };
 
-    // this.modifier.modifyActor(actor, template.mods, this);
+    await this.modifyActor(actor, template.mods);
 
     return actor;
   }
@@ -95,7 +96,7 @@ export class StateEntityGenerator {
       verbs: this.template.renderVerbMap(template.base.verbs),
     };
 
-    // this.modifier.modifyItem(item, template.mods, this);
+    await this.modifyItem(item, template.mods);
 
     return item;
   }
@@ -138,7 +139,7 @@ export class StateEntityGenerator {
       verbs: this.template.renderVerbMap(template.base.verbs),
     };
 
-    // this.modifier.modifyRoom(room, template.mods, this);
+    await this.modifyRoom(room, template.mods);
 
     return room;
   }
@@ -150,6 +151,87 @@ export class StateEntityGenerator {
       name: this.template.renderString(template.name),
       template: template.id,
     };
+  }
+
+  // TODO: move these back to entity modifier
+  public modifyNumber(base: number, mod: ModifierNumber): number {
+    return base + mod.offset;
+  }
+
+  public modifyString(base: string, mod: ModifierString): string {
+    return [mod.prefix, base, mod.suffix].join(' ');
+  }
+
+  /**
+   * Select some modifiers and mutate the given actor.
+   */
+  public async modifyActor(target: Actor, available: Array<Modifier<Actor>>): Promise<void> {
+    const selected = this.selectModifiers(available);
+
+    for (const mod of selected) {
+      // TODO: apply each field
+      target.meta.desc = this.modifyString(target.meta.desc, mod.meta.desc);
+      target.meta.name = this.modifyString(target.meta.name, mod.meta.name);
+
+      const items = await this.createItemList(mod.items);
+      target.items.push(...items);
+    }
+  }
+
+  /**
+   * Select some modifiers and mutate the given item.
+   */
+  public async modifyItem(target: Item, available: Array<Modifier<Item>>): Promise<void> {
+    const selected = this.selectModifiers(available);
+
+    for (const mod of selected) {
+      // TODO: apply each field
+      target.meta.desc = this.modifyString(target.meta.desc, mod.meta.desc);
+      target.meta.name = this.modifyString(target.meta.name, mod.meta.name);
+    }
+  }
+
+  /**
+   * Select some modifiers and mutate the given room.
+   */
+  public async modifyRoom(target: Room, available: Array<Modifier<Room>>): Promise<void> {
+    const selected = this.selectModifiers(available);
+
+    for (const mod of selected) {
+      // TODO: apply each field
+      target.meta.desc = this.modifyString(target.meta.desc, mod.meta.desc);
+      target.meta.name = this.modifyString(target.meta.name, mod.meta.name);
+
+      const actors = await this.createActorList(mod.actors);
+      target.actors.push(...actors);
+
+      const items = await this.createItemList(mod.items);
+      target.items.push(...items);
+    }
+  }
+
+  public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<Modifier<TBase>> {
+    const excluded = new Set<string>();
+    const selected = [];
+
+    for (const mod of mods) {
+      if (excluded.has(mod.id)) {
+        continue;
+      }
+
+      const roll = this.random.nextInt(TEMPLATE_CHANCE);
+      if (roll > mod.chance) {
+        continue;
+      }
+
+      selected.push(mod);
+
+      for (const e of mod.excludes) {
+        excluded.add(e);
+      }
+    }
+
+    return selected;
   }
 
   public async populateRoom(room: Room, depth: number): Promise<Array<Room>> {
@@ -278,4 +360,5 @@ export class StateEntityGenerator {
       rooms,
     };
   }
+
 }

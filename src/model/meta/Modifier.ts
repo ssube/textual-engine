@@ -1,4 +1,6 @@
+import { Entity } from '../entity/Base';
 import { Metadata } from '../Metadata';
+import { TemplateRef } from './Template';
 
 export interface ModifierString {
   prefix: string;
@@ -13,6 +15,7 @@ export type ModifierPrimitive<TBase> =
   TBase extends number ? ModifierNumber :
   TBase extends string ? ModifierString :
   TBase extends Metadata ? BaseModifier<Omit<Metadata, 'id' | 'template'>> :
+  TBase extends Array<Entity> ? Array<TemplateRef> :
   TBase extends Array<infer TValue> ? Array<ModifierPrimitive<TValue>> :
   TBase extends Map<infer TKey, infer TValue> ? Map<TKey, ModifierPrimitive<TValue>> :
   TBase extends object ? BaseModifier<TBase> :
@@ -32,4 +35,6 @@ export type Modifier<TEntity> = BaseModifier<TEntity> & {
    * Other modifiers that cannot appear with this one.
    */
   excludes: Array<string>;
+
+  id: string;
 };

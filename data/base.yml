@@ -125,13 +125,15 @@ worlds:
               step:
                 base: actor-step
           mods:
-            - meta:
+            - chance: 50
+              excludes: []
+              id: vampire
+              meta:
                 desc:
-                  prefix: sword
+                  prefix: vampire
                 name:
-                  prefix: Sword
-              items:
-                - id: item-sword
+                  prefix: Vampire
+              items: []
               skills: !map {}
               stats: !map {}
               slots: !map {}
@@ -156,6 +158,20 @@ worlds:
                 base: actor-hit
               step:
                 base: actor-step
+          mods:
+            - chance: 50
+              excludes: []
+              id: sword
+              meta:
+                desc:
+                  prefix: sword
+                name:
+                  prefix: Sword
+              items:
+                - id: item-sword
+              skills: !map {}
+              stats: !map {}
+              slots: !map {}
       items:
         - base:
             meta:

@@ -8,7 +8,7 @@ import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { State } from '../../../src/model/State';
 import { LocalModule } from '../../../src/module/LocalModule';
-import { StateFocusResolver } from '../../../src/util/state/FocusResolver';
+import { ShowMessageVolume, StateFocusResolver } from '../../../src/util/state/FocusResolver';
 
 const TEST_STATE: State = {
   focus: {
@@ -225,7 +225,125 @@ describe('state focus utils', () => {
       expect(showSpy).to.have.callCount(1);
     });
 
-    xit('should filter messages to the current room');
-    xit('should filter messages to the current actor');
+    it('should always show messages to the current world', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const showSpy = spy();
+      const focus = await container.create(StateFocusResolver, {
+        events: {
+          onActor: spy(),
+          onRoom: spy(),
+          onShow: showSpy,
+        },
+        state: {
+          ...TEST_STATE,
+          focus: {
+            ...TEST_STATE.focus,
+          },
+        },
+      });
+
+      await focus.show('foo', {}, {
+        source: TEST_STATE.rooms[0].actors[0],
+        volume: ShowMessageVolume.WORLD,
+      });
+
+      expect(showSpy).to.have.callCount(1);
+    });
+
+    it('should show room messages from the current room', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const showSpy = spy();
+      const focus = await container.create(StateFocusResolver, {
+        events: {
+          onActor: spy(),
+          onRoom: spy(),
+          onShow: showSpy,
+        },
+        state: {
+          ...TEST_STATE,
+          focus: {
+            actor: 'foo',
+            room: TEST_STATE.rooms[1].meta.id,
+          },
+        },
+      });
+
+      await focus.show('foo', {}, {
+        source: TEST_STATE.rooms[0].actors[0],
+        volume: ShowMessageVolume.ROOM,
+      });
+
+      expect(showSpy).to.have.callCount(0);
+    });
+
+    it('should filter room messages from other rooms', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const showSpy = spy();
+      const focus = await container.create(StateFocusResolver, {
+        events: {
+          onActor: spy(),
+          onRoom: spy(),
+          onShow: showSpy,
+        },
+        state: {
+          ...TEST_STATE,
+          focus: {
+            actor: 'foo',
+            room: TEST_STATE.rooms[1].meta.id,
+          },
+        },
+      });
+
+      await focus.show('foo', {}, {
+        source: TEST_STATE.rooms[1],
+        volume: ShowMessageVolume.ROOM,
+      });
+
+      expect(showSpy).to.have.callCount(1);
+    });
+
+    it('should show self messages from the current actor', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const showSpy = spy();
+      const focus = await container.create(StateFocusResolver, {
+        events: {
+          onActor: spy(),
+          onRoom: spy(),
+          onShow: showSpy,
+        },
+        state: {
+          ...TEST_STATE,
+          focus: {
+            actor: TEST_STATE.rooms[0].actors[0].meta.id,
+            room: 'foo',
+          },
+        },
+      });
+
+      await focus.show('foo', {}, {
+        source: TEST_STATE.rooms[0].actors[0],
+        volume: ShowMessageVolume.SELF,
+      });
+
+      expect(showSpy).to.have.callCount(1);
+    });
+
+    xit('should filter self messages from other actors');
   });
 });

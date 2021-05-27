@@ -1,9 +1,10 @@
-import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions } from 'noicejs';
 
-import { searchState } from '.';
+import { findRoom, searchState } from '.';
 import { WorldEntity } from '../../model/entity';
 import { Actor, ACTOR_TYPE, isActor } from '../../model/entity/Actor';
+import { ITEM_TYPE } from '../../model/entity/Item';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { State } from '../../model/State';
 import { LocaleContext } from '../../service/locale';
@@ -22,6 +23,17 @@ interface FocusEvents {
 interface StateFocusResolverOptions extends BaseOptions {
   events?: FocusEvents;
   state?: State;
+}
+
+export enum ShowMessageVolume {
+  SELF = 'self', // narrowest scope
+  ROOM = 'room',
+  WORLD = 'world',
+}
+
+interface ShowSource {
+  source: WorldEntity;
+  volume: ShowMessageVolume;
 }
 
 /**
@@ -77,10 +89,33 @@ export class StateFocusResolver implements ScriptFocus {
     }
   }
 
-  /**
-   * @todo filter output to the room/actor with focus
-   */
-  public async show(msg: string, context?: LocaleContext, _source?: WorldEntity): Promise<void> {
+  public async show(msg: string, context?: LocaleContext, source?: ShowSource): Promise<void> {
+    if (doesExist(source) && this.showCheck(source) === false) {
+      return;
+    }
+
     await this.onShow(msg, context);
+  }
+
+  public showCheck(source: ShowSource): boolean {
+    if (source.volume === ShowMessageVolume.SELF) {
+      return source.source.meta.id === this.state.focus.actor; // currently focused actor
+    }
+
+    if (source.volume === ShowMessageVolume.ROOM) {
+      if (source.source.type === ROOM_TYPE) {
+        return source.source.meta.id === this.state.focus.room;
+      } else {
+        const rooms = findRoom(this.state, {
+          meta: {
+            id: source.source.meta.id,
+          }
+        });
+
+        return doesExist(rooms.find((it) => it.meta.id === this.state.focus.room));
+      }
+    }
+
+    return true;
   }
 }

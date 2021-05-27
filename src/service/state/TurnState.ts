@@ -209,6 +209,8 @@ export class LocalStateService implements StateService {
       });
     });
 
+    await this.doHelp();
+
     return pending;
   }
 

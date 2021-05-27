@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Container } from 'noicejs';
 
-import { NodeFileLoader } from '../../../src/service/loader/NodeFileLoader';
+import { NodeFileLoader } from '../../../src/service/loader/node/FileLoader';
 
 describe('file loader', () => {
   it('should read from paths', async () => {

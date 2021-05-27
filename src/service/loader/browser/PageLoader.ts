@@ -1,9 +1,9 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { BaseOptions } from 'noicejs';
 
-import { Loader } from '.';
+import { Loader } from '..';
 
-export class PageLoader implements Loader {
+export class BrowserPageLoader implements Loader {
   protected dom: Document;
 
   constructor(options: BaseOptions, dom = document) {
@@ -21,7 +21,6 @@ export class PageLoader implements Loader {
   }
 
   public async save(path: string, data: Buffer): Promise<void> {
-    // save to local storage
     throw new NotImplementedError();
   }
 
@@ -34,7 +33,6 @@ export class PageLoader implements Loader {
   }
 
   public async saveStr(path: string, data: string): Promise<void> {
-    // save
     throw new NotImplementedError();
   }
 }

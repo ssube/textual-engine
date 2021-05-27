@@ -1,19 +1,17 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
-import { promises } from 'fs';
-import fetch from 'node-fetch';
 import { BaseOptions } from 'noicejs';
 
-import { Loader } from '.';
+import { Loader } from '..';
 
-export class NodeFetchLoader implements Loader {
+export class BrowserFetchLoader implements Loader {
   protected fetch: typeof fetch;
 
-  constructor(options: BaseOptions, f = fetch) {
+  constructor(options: BaseOptions, f = window.fetch) {
     this.fetch = fetch;
   }
 
   public async dump(path: string, data: Buffer): Promise<void> {
-    await promises.writeFile(path, data);
+    console.log(path, data);
   }
 
   public async load(path: string): Promise<Buffer> {
@@ -26,7 +24,7 @@ export class NodeFetchLoader implements Loader {
   }
 
   public async loadStr(path: string): Promise<string> {
-    const res = await this.fetch(path);
+    const res = await this.fetch.call(window, path);
     // add this method frame to the stack
     // eslint-disable-next-line sonarjs/prefer-immediate-return
     const data = await res.text();

@@ -25,7 +25,7 @@ build({
         }),
         NodeModulesPolyfillPlugin(),
         IgnorePlugin([{
-            resourceRegExp: /(ink|mv)/,
+            resourceRegExp: /(dtrace-provider|ink|mv|node-fetch)/,
             contextRegExp: /node_modules/,
         }, {
             resourceRegExp: /components\/ink/,
@@ -34,7 +34,7 @@ build({
             resourceRegExp: /render\/(Ink|Line)Render/,
             contextRegExp: /./,
         }, {
-            resourceRegExp: /loader\/(File)Loader/,
+            resourceRegExp: /loader\/node\//,
             contextRegExp: /./,
         }, {
             resourceRegExp: /index/,

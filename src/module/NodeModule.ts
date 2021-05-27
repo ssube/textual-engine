@@ -2,8 +2,8 @@ import { mustExist } from '@apextoaster/js-utils';
 import { Module, ModuleOptions, Provides } from 'noicejs';
 
 import { INJECT_LOADER, INJECT_RENDER } from '.';
-import { NodeFetchLoader } from '../service/loader/NodeFetchLoader';
-import { NodeFileLoader } from '../service/loader/NodeFileLoader';
+import { NodeFetchLoader } from '../service/loader/node/FetchLoader';
+import { NodeFileLoader } from '../service/loader/node/FileLoader';
 import { RenderService } from '../service/render';
 import { InkRender } from '../service/render/InkRender';
 import { LineRender } from '../service/render/LineRender';

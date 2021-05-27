@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { Container } from 'noicejs';
 import { spy, stub } from 'sinon';
 
-import { PageLoader } from '../../../src/service/loader/PageLoader';
+import { BrowserPageLoader } from '../../../src/service/loader/browser/PageLoader';
 
 describe('page loader', () => {
   it('should load strings from element contents', async () => {
@@ -20,7 +20,7 @@ describe('page loader', () => {
       getElementById: stub().returns(elem),
     };
 
-    const loader = await container.create(PageLoader, {}, dom);
+    const loader = await container.create(BrowserPageLoader, {}, dom);
 
     await expect(loader.loadStr('README.md')).to.eventually.include('foo');
     expect(dom.getElementById, 'element spy').to.have.callCount(1).and.been.calledWith('README.md');
@@ -43,7 +43,7 @@ describe('page loader', () => {
       getElementById: stub().returns(elem),
     };
 
-    const loader = await container.create(PageLoader, {}, dom);
+    const loader = await container.create(BrowserPageLoader, {}, dom);
     const buffer = await loader.load('README.md');
 
     expect(buffer.length).to.equal(content.length);
@@ -60,7 +60,7 @@ describe('page loader', () => {
 
     const consoleSpy = spy(console, 'log');
 
-    const loader = await container.create(PageLoader, {}, dom);
+    const loader = await container.create(BrowserPageLoader, {}, dom);
     await loader.dump('README.md', Buffer.from('foo'));
 
     // assert what?

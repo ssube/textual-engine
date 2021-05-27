@@ -2,7 +2,8 @@ import { mustExist } from '@apextoaster/js-utils';
 import { Module, ModuleOptions, Provides } from 'noicejs';
 
 import { INJECT_LOADER, INJECT_RENDER } from '.';
-import { PageLoader } from '../service/loader/PageLoader';
+import { BrowserFetchLoader } from '../service/loader/browser/FetchLoader';
+import { BrowserPageLoader } from '../service/loader/browser/PageLoader';
 import { RenderService } from '../service/render';
 import { ReactDomRender } from '../service/render/ReactDomRender';
 import { Singleton } from '../util/container';
@@ -19,7 +20,11 @@ export class BrowserModule extends Module {
   public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
 
-    this.bind(INJECT_LOADER).toConstructor(PageLoader);
+    if (true) {
+      this.bind(INJECT_LOADER).toConstructor(BrowserFetchLoader);
+    } else {
+      this.bind(INJECT_LOADER).toConstructor(BrowserPageLoader);
+    }
   }
 
   @Provides(INJECT_RENDER)

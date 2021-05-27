@@ -1,13 +1,15 @@
+import { NotImplementedError } from '@apextoaster/js-utils';
 import { promises } from 'fs';
+import fetch from 'node-fetch';
 import { BaseOptions } from 'noicejs';
 
-import { Loader } from '.';
+import { Loader } from '..';
 
-export class NodeFileLoader implements Loader {
-  protected fs: typeof promises;
+export class NodeFetchLoader implements Loader {
+  protected fetch: typeof fetch;
 
-  constructor(options: BaseOptions, fs = promises) {
-    this.fs = fs;
+  constructor(options: BaseOptions, f = fetch) {
+    this.fetch = fetch;
   }
 
   public async dump(path: string, data: Buffer): Promise<void> {
@@ -15,26 +17,23 @@ export class NodeFileLoader implements Loader {
   }
 
   public async load(path: string): Promise<Buffer> {
-    // add this method frame to the stack
-    // eslint-disable-next-line sonarjs/prefer-immediate-return
-    const data = await promises.readFile(path);
-    return data;
+    const text = await this.loadStr(path);
+    return Buffer.from(text);
   }
 
   public async save(path: string, data: Buffer): Promise<void> {
-    await promises.writeFile(path, data);
+    throw new NotImplementedError();
   }
 
   public async loadStr(path: string): Promise<string> {
+    const res = await this.fetch(path);
     // add this method frame to the stack
     // eslint-disable-next-line sonarjs/prefer-immediate-return
-    const data = await promises.readFile(path, {
-      encoding: 'utf-8',
-    });
+    const data = await res.text();
     return data;
   }
 
   public async saveStr(path: string, data: string): Promise<void> {
-    await promises.writeFile(path, data);
+    throw new NotImplementedError();
   }
 }

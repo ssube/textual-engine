@@ -4,7 +4,7 @@ main([
   '--config',
   'data-config',
   '--data',
-  'data-world',
+  'https://raw.githubusercontent.com/ssube/textual-engine/master/data/base.yml',
   '--module',
   'local',
   '--module',

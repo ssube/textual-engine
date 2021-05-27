@@ -1,8 +1,8 @@
 # Textual Engine
 
-This is a text adventure engine.
+This is a text adventure engine for the CLI and browsers.
 
-See [the getting started docs](docs/getting-started.md) for more info.
+See [the demo on Github Pages](https://ssube.github.io/textual-engine/) or [the getting started docs](docs/getting-started.md) for more info.
 
 ## Features
 
@@ -10,15 +10,19 @@ See [the getting started docs](docs/getting-started.md) for more info.
 - adventure
 - worlds:
   - persistent rooms
-  - procedural expansion
+  - procedural world growth
+  - save and load world state
   - wandering monsters
-  - verbs in certain rooms and from items
 - engine:
   - entity scripts
   - event broadcast
-  - localization of both input and output
-  - multiple rendering adapters (readline, [Ink](https://github.com/vadimdemedes/ink))
-  - save and load world state
+  - localization of both input and output (with [i18next](https://github.com/i18next/i18next))
+  - multiple data sources (fetch and file in Node CLI, fetch and page element in browser)
+  - multiple rendering engines ([readline](https://nodejs.org/api/readline.html), [Ink](https://github.com/vadimdemedes/ink), and [React](https://github.com/facebook/react/))
+- planned:
+  - custom verbs from items or rooms
+  - natural language processing for input
+  - world editor for React browser UI
 
 ## Contents
 
@@ -26,7 +30,7 @@ See [the getting started docs](docs/getting-started.md) for more info.
   - [Features](#features)
   - [Contents](#contents)
   - [Building](#building)
-  - [Running](#running)
+  - [Playing](#playing)
   - [Docs](#docs)
   - [License](#license)
 
@@ -38,11 +42,23 @@ Some `make` targets are provided:
 - `make test`: build and run `mocha` tests
 - `make cover`: run `make test` with `nyc` code coverage
 
-## Running
+## Playing
 
-Some `make` targets are provided:
+[A recent version of the game is available on Github Pages](https://ssube.github.io/textual-engine/).
 
-- `make run`: run with test world
+If you have a copy of this repository checked out, the `make run` target will build and launch the game on the CLI,
+using the Ink rendering engine and demo world.
+
+If you prefer to run a Docker image, the latest build is published as `ssube/textual-engine:master-stretch`, and can
+be run with:
+
+```shell
+> docker run --rm -it ssube/textual-engine:master-stretch \
+  --config data/config.yml \
+  --data data/base.yml \
+  --seed test \
+  --world test
+```
 
 ## Docs
 

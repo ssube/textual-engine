@@ -67,7 +67,6 @@ run-graph: build
 	node $(NODE_ARGS) --require esm out/src/index.js $(RUN_ARGS) --depth 13
 	$(MAKE) graph
 
-
 run-image: ## run app from docker image
 run-image: image
 	docker run --rm -it $(DOCKER_IMAGE):latest $(RUN_ARGS)

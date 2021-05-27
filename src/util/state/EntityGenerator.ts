@@ -5,7 +5,7 @@ import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { Modifier, ModifierNumber, ModifierString } from '../../model/meta/Modifier';
+import { Modifier, ModifierMetadata, ModifierNumber, ModifierString } from '../../model/meta/Modifier';
 import { BaseTemplate, Template, TemplateMetadata, TemplateRef } from '../../model/meta/Template';
 import { Metadata } from '../../model/Metadata';
 import { World } from '../../model/World';
@@ -170,8 +170,7 @@ export class StateEntityGenerator {
 
     for (const mod of selected) {
       // TODO: apply each field
-      target.meta.desc = this.modifyString(target.meta.desc, mod.meta.desc);
-      target.meta.name = this.modifyString(target.meta.name, mod.meta.name);
+      await this.modifyMetadata(target.meta, mod.meta);
 
       const items = await this.createItemList(mod.items);
       target.items.push(...items);
@@ -186,8 +185,7 @@ export class StateEntityGenerator {
 
     for (const mod of selected) {
       // TODO: apply each field
-      target.meta.desc = this.modifyString(target.meta.desc, mod.meta.desc);
-      target.meta.name = this.modifyString(target.meta.name, mod.meta.name);
+      await this.modifyMetadata(target.meta, mod.meta);
     }
   }
 
@@ -199,8 +197,7 @@ export class StateEntityGenerator {
 
     for (const mod of selected) {
       // TODO: apply each field
-      target.meta.desc = this.modifyString(target.meta.desc, mod.meta.desc);
-      target.meta.name = this.modifyString(target.meta.name, mod.meta.name);
+      await this.modifyMetadata(target.meta, mod.meta);
 
       const actors = await this.createActorList(mod.actors);
       target.actors.push(...actors);
@@ -208,6 +205,11 @@ export class StateEntityGenerator {
       const items = await this.createItemList(mod.items);
       target.items.push(...items);
     }
+  }
+
+  public async modifyMetadata(target: Metadata, mod: ModifierMetadata): Promise<void> {
+    target.desc = this.modifyString(target.desc, mod.desc);
+    target.name = this.modifyString(target.name, mod.name);
   }
 
   public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<Modifier<TBase>> {

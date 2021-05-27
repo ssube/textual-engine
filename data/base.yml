@@ -146,6 +146,7 @@ worlds:
                 base: ((slimy|smelly)|goblin)
             items:
               - id: item-sword
+                chance: 20
             skills: !map {}
             stats: !map
               health:

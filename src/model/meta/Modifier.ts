@@ -11,10 +11,12 @@ export interface ModifierNumber {
   offset: number;
 }
 
+export type ModifierMetadata = BaseModifier<Omit<Metadata, 'id' | 'template'>>;
+
 export type ModifierPrimitive<TBase> =
   TBase extends number ? ModifierNumber :
   TBase extends string ? ModifierString :
-  TBase extends Metadata ? BaseModifier<Omit<Metadata, 'id' | 'template'>> :
+  TBase extends Metadata ? ModifierMetadata :
   TBase extends Array<Entity> ? Array<TemplateRef> :
   TBase extends Array<infer TValue> ? Array<ModifierPrimitive<TValue>> :
   TBase extends Map<infer TKey, infer TValue> ? Map<TKey, ModifierPrimitive<TValue>> :

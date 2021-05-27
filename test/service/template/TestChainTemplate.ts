@@ -1,13 +1,12 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { TemplateNumber, TemplateString } from '../../../src/model/meta/Template';
 
+import { TemplateNumber, TemplateString } from '../../../src/model/meta/Template';
 import { LocalModule } from '../../../src/module/LocalModule';
 import { ChainTemplateService } from '../../../src/service/template/ChainTemplateService';
 
 const DEFAULT_NUMBER: TemplateNumber = {
-
   min: 0,
   max: 10,
   step: 1,
@@ -20,6 +19,163 @@ const DEFAULT_STRING: TemplateString = {
 };
 
 describe('chain template service', () => {
+  describe('modify number', () => {
+    it('should increment the value', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const template = await container.create(ChainTemplateService);
+      expect(template.modifyNumber(0, {
+        offset: 5,
+      })).to.equal(5);
+    });
+
+    it('should increment the value with negative modifiers', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const template = await container.create(ChainTemplateService);
+      expect(template.modifyNumber(0, {
+        offset: -5,
+      })).to.equal(-5);
+    });
+  });
+
+  describe('modify string', () => {
+    xit('should prepend the prefix', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const template = await container.create(ChainTemplateService);
+      expect(template.modifyString('foo', {
+        prefix: 'bar',
+        suffix: '',
+      })).to.equal('bar foo');
+    });
+
+    it('should append the suffix', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const template = await container.create(ChainTemplateService);
+      expect(template.modifyString('foo', {
+        prefix: '',
+        suffix: 'bar',
+      })).to.equal('foo bar');
+    });
+  });
+
+  describe('modify number lists', () => { });
+  describe('modify string lists', () => { });
+
+  describe('modify number maps', () => {
+    it('should modify keys that exist in the modifier', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const template = await container.create(ChainTemplateService);
+      const result = template.modifyNumberMap(new Map([
+        ['foo', 1],
+        ['bar', 3],
+      ]), new Map([
+        ['foo', {
+          offset: 1,
+        }],
+        ['bar', {
+          offset: -1,
+        }],
+      ]));
+
+      expect(result.size, 'result size').to.equal(2); // input size, no added keys
+      expect(result.get('foo'), 'result foo value').to.equal(2);
+      expect(result.get('bar'), 'result bar value').to.equal(2);
+    });
+
+    it('should not modify keys that do not exist in the modifier', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const template = await container.create(ChainTemplateService);
+      const result = template.modifyNumberMap(new Map([
+        ['foo', 1],
+        ['bar', 3],
+      ]), new Map([
+        ['bin', {
+          offset: 1,
+        }],
+        ['bun', {
+          offset: -1,
+        }],
+      ]));
+
+      expect(result.size, 'result size').to.equal(2); // input size, no added keys
+    });
+  });
+
+  describe('modify string maps', () => {
+    it('should modify keys that exist in the modifier', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const template = await container.create(ChainTemplateService);
+      const result = template.modifyStringMap(new Map([
+        ['foo', 'hello'],
+        ['bar', 'world'],
+      ]), new Map([
+        ['foo', {
+          prefix: 'fin',
+          suffix: 'fan',
+        }],
+        ['bar', {
+          prefix: 'bin',
+          suffix: 'ban',
+        }],
+      ]));
+
+      expect(result.size, 'result size').to.equal(2); // input size, no added keys
+      expect(result.get('foo'), 'result foo value').to.equal('fin hello fan');
+      expect(result.get('bar'), 'result bar value').to.equal('bin world ban');
+    });
+
+    it('should not modify keys that do not exist in the modifier', async () => {
+      const container = Container.from(new LocalModule());
+      await container.configure({
+        logger: NullLogger.global,
+      });
+
+      const template = await container.create(ChainTemplateService);
+      const result = template.modifyStringMap(new Map([
+        ['foo', 'hello'],
+        ['bar', 'world'],
+      ]), new Map([
+        ['bin', {
+          prefix: 'fix',
+          suffix: 'fix',
+        }],
+        ['bun', {
+          prefix: 'fox',
+          suffix: 'fox',
+        }],
+      ]));
+
+      expect(result.size, 'result size').to.equal(2); // input size, no added keys
+    });
+  });
+
   describe('render template number', () => {
     it('should render numbers', async () => {
       const container = Container.from(new LocalModule());

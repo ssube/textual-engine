@@ -5,7 +5,7 @@ import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { Modifier, ModifierMetadata, ModifierNumber, ModifierString } from '../../model/meta/Modifier';
+import { Modifier, ModifierMetadata } from '../../model/meta/Modifier';
 import { BaseTemplate, Template, TemplateMetadata, TemplateRef } from '../../model/meta/Template';
 import { Metadata } from '../../model/Metadata';
 import { World } from '../../model/World';
@@ -45,6 +45,7 @@ export class StateEntityGenerator {
     this.world = mustExist(options.world);
   }
 
+  // take ID and look up template?
   public async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {
     const items = await this.createItemList(template.base.items);
     const actor: Actor = {
@@ -153,15 +154,6 @@ export class StateEntityGenerator {
     };
   }
 
-  // TODO: move these back to entity modifier
-  public modifyNumber(base: number, mod: ModifierNumber): number {
-    return base + mod.offset;
-  }
-
-  public modifyString(base: string, mod: ModifierString): string {
-    return [mod.prefix, base, mod.suffix].join(' ');
-  }
-
   /**
    * Select some modifiers and mutate the given actor.
    */
@@ -169,8 +161,13 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      // TODO: apply each field
       await this.modifyMetadata(target.meta, mod.meta);
+      // target.actorType cannot be modified
+
+      target.skills = this.template.modifyNumberMap(target.skills, mod.skills);
+      target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+      target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+      // TODO: target.verbs
 
       const items = await this.createItemList(mod.items);
       target.items.push(...items);
@@ -184,8 +181,11 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      // TODO: apply each field
       await this.modifyMetadata(target.meta, mod.meta);
+
+      target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+      target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+      // TODO: target.verbs
     }
   }
 
@@ -196,8 +196,11 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      // TODO: apply each field
       await this.modifyMetadata(target.meta, mod.meta);
+
+      // TODO: target.portals
+      target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+      // TODO: target.verbs
 
       const actors = await this.createActorList(mod.actors);
       target.actors.push(...actors);
@@ -208,8 +211,8 @@ export class StateEntityGenerator {
   }
 
   public async modifyMetadata(target: Metadata, mod: ModifierMetadata): Promise<void> {
-    target.desc = this.modifyString(target.desc, mod.desc);
-    target.name = this.modifyString(target.name, mod.name);
+    target.desc = this.template.modifyString(target.desc, mod.desc);
+    target.name = this.template.modifyString(target.name, mod.name);
   }
 
   public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<Modifier<TBase>> {

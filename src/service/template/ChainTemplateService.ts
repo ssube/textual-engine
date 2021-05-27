@@ -1,9 +1,11 @@
-import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject } from 'noicejs';
 
 import { TemplateService } from '.';
+import { ModifierNumber, ModifierString } from '../../model/meta/Modifier';
 import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/meta/Template';
 import { INJECT_RANDOM } from '../../module';
+import { hasText } from '../../util/string';
 import { JoinChain } from '../../util/template/JoinChain';
 import { splitChain } from '../../util/template/SplitChain';
 import { VerbMap, VerbSlot } from '../../util/types';
@@ -24,6 +26,48 @@ export class ChainTemplateService implements TemplateService {
       joiners: [' '],
       random: this.random,
     });
+  }
+
+  public modifyNumber(base: number, mod: ModifierNumber): number {
+    return base + mod.offset;
+  }
+
+  public modifyString(base: string, mod: ModifierString): string {
+    return [mod.prefix, base, mod.suffix].filter(hasText).join(' ');
+  }
+
+  public modifyNumberList(base: Array<number>, mod: Array<ModifierNumber>): Array<number> {
+    return base.map((it, idx) => this.modifyNumber(it, mod[idx]));
+  }
+
+  public modifyStringList(base: Array<string>, mod: Array<ModifierString>): Array<string> {
+    return base.map((it, idx) => this.modifyString(it, mod[idx]));
+  }
+
+  public modifyNumberMap(base: Map<string, number>, mod: Map<string, ModifierNumber>): Map<string, number> {
+    const result = new Map();
+    for (const [key, value] of base.entries()) {
+      const modValue = mod.get(key);
+      if (doesExist(modValue)) {
+        result.set(key, this.modifyNumber(value, modValue));
+      } else {
+        result.set(key, value);
+      }
+    }
+    return result;
+  }
+
+  public modifyStringMap(base: Map<string, string>, mod: Map<string, ModifierString>): Map<string, string> {
+    const result = new Map();
+    for (const [key, value] of base.entries()) {
+      const modValue = mod.get(key);
+      if (doesExist(modValue)) {
+        result.set(key, this.modifyString(value, modValue));
+      } else {
+        result.set(key, value);
+      }
+    }
+    return result;
   }
 
   public renderString(input: TemplateString): string {

@@ -41,30 +41,30 @@ worlds:
                 self: |-
                   You cannot hit yourself!
                 type: |-
-                  {{cmd.target}} is not an actor!
+                  {{command.target}} is not an actor!
               drop:
                 type: |-
-                  {{cmd.target}} is not an item!
-              cmd:
+                  {{command.target}} is not an item!
+              command:
                 dead: |-
                   {{actor.meta.name}} is dead!
                 player:
                   verb: |-
-                    {{actor.meta.name}} will $t({{cmd.verb}}) the next turn.
+                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
                   target: |-
-                    {{actor.meta.name}} will $t({{cmd.verb}}) the {{cmd.target}}.
+                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.target}}.
 
                 unknown: |-
-                  {{actor.meta.name}} does not know how to {{cmd.verb}}!
+                  {{actor.meta.name}} does not know how to {{command.verb}}!
               move:
                 portal: |-
                   {{actor.meta.name}} moved through the {{portal.sourceGroup}} {{portal.name}}.
               take:
                 type: |-
-                  {{cmd.target}} is not an item!
+                  {{command.target}} is not an item!
               use:
                 type: |-
-                  {{cmd.target}} is not a usable item!
+                  {{command.target}} is not a usable item!
           debug:
             graph:
               focus:

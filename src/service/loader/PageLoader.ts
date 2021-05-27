@@ -4,8 +4,10 @@ import { BaseOptions } from 'noicejs';
 import { Loader } from '.';
 
 export class PageLoader implements Loader {
-  constructor(options: BaseOptions) {
-    /* noop */
+  protected dom: Document;
+
+  constructor(options: BaseOptions, dom = document) {
+    this.dom = dom;
   }
 
   public async dump(path: string, data: Buffer): Promise<void> {
@@ -14,10 +16,7 @@ export class PageLoader implements Loader {
   }
 
   public async load(path: string): Promise<Buffer> {
-    // load from page or local storage
-    const elem = mustExist(document.getElementById(path));
-    const text = mustExist(elem.textContent);
-
+    const text = await this.loadStr(path);
     return Buffer.from(text);
   }
 
@@ -27,8 +26,11 @@ export class PageLoader implements Loader {
   }
 
   public async loadStr(path: string): Promise<string> {
-    const elem = mustExist(document.getElementById(path));
-    return mustExist(elem.textContent);
+    // load from page or local storage
+    const elem = mustExist(this.dom.getElementById(path));
+    const text = mustExist(elem.textContent);
+
+    return text;
   }
 
   public async saveStr(path: string, data: string): Promise<void> {

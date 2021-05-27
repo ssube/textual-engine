@@ -91,6 +91,7 @@ NYC_ARGS := --all \
 	--exclude "bundle/**" \
 	--exclude "config/**" \
 	--exclude "docs/**" \
+	--exclude "out/bundle/**" \
 	--exclude "out/coverage/**" \
 	--exclude "test/**" \
 	--reporter=text-summary \

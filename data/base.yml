@@ -241,7 +241,8 @@ worlds:
                   prefix: Shiny
               slots: !map {}
               stats: !map
-                damage: 5
+                damage:
+                  offset: 5
               verbs: !map {}
       rooms:
         - base:

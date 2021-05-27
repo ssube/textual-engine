@@ -19,7 +19,7 @@ import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
 import { getKey } from '../../util/map';
 import { searchState } from '../../util/state';
 
-export async function ActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
+export async function ActorStep(this: ScriptTarget, context: ScriptContext, verbs = ACTOR_VERB_SCRIPTS): Promise<void> {
   context.logger.debug({
     meta: this.meta,
     scope: Object.keys(context),
@@ -32,19 +32,37 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext): Pro
   const health = getKey(this.stats, 'health', 0);
   if (health <= 0) {
     if (this.actorType === ActorType.PLAYER) {
-      await context.focus.show('actor.step.cmd.dead', { actor: this });
+      await context.focus.show('actor.step.command.dead', { actor: this });
     }
     return;
   }
 
-  if (doesExist(context.command)) {
-    await ActorStepCommand.call(this, context);
-  } else {
+  if (isNil(context.command)) {
     context.logger.debug({ target: this }, 'actor has nothing to do');
+    return;
   }
+
+  const { command } = context;
+  const verb = verbs.get(command.verb);
+
+  if (isNil(verb)) {
+    await context.focus.show('actor.step.command.unknown', { actor: this, command });
+    context.logger.warn({ command }, 'unknown verb');
+    return;
+  }
+
+  if (this.actorType === ActorType.PLAYER) {
+    if (command.target.length > 0) {
+      await context.focus.show('actor.step.command.player.target', { actor: this, command });
+    } else {
+      await context.focus.show('actor.step.command.player.verb', { actor: this, command });
+    }
+  }
+
+  await verb.call(this, context);
 }
 
-const knownVerbs = new Map([
+const ACTOR_VERB_SCRIPTS = new Map([
   [VERB_DROP, ActorStepDrop],
   [VERB_HIT, ActorStepHit],
   [VERB_LOOK, ActorStepLook],
@@ -54,28 +72,8 @@ const knownVerbs = new Map([
   [VERB_WAIT, ActorStepWait],
 ]);
 
-export async function ActorStepCommand(this: Actor, context: ScriptContext): Promise<void> {
-  const cmd = mustExist(context.command);
-  const verb = knownVerbs.get(cmd.verb);
-
-  if (doesExist(verb)) {
-    if (this.actorType === ActorType.PLAYER) {
-      if (cmd.target.length > 0) {
-        await context.focus.show('actor.step.cmd.player.target', { actor: this, cmd });
-      } else {
-        await context.focus.show('actor.step.cmd.player.verb', { actor: this, cmd });
-      }
-    }
-
-    await verb.call(this, context);
-  } else {
-    await context.focus.show('actor.step.cmd.unknown', { actor: this, cmd });
-    context.logger.warn({ cmd }, 'unknown verb');
-  }
-}
-
 export async function ActorStepDrop(this: Actor, context: ScriptContext): Promise<void> {
-  const cmd = mustExist(context.command);
+  const command = mustExist(context.command);
   const room = mustExist(context.room);
 
   const results = searchState(context.state, {
@@ -83,16 +81,16 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
       id: this.meta.id,
     },
     meta: {
-      name: cmd.target,
+      name: command.target,
     },
     room: {
       id: room.meta.id,
     },
   }, FUZZY_MATCHERS);
 
-  const moving = indexEntity(results, cmd.index, isItem);
+  const moving = indexEntity(results, command.index, isItem);
   if (isNil(moving)) {
-    await context.focus.show('actor.step.drop.type', { cmd });
+    await context.focus.show('actor.step.drop.type', { command });
     return;
   }
 
@@ -104,26 +102,26 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
 }
 
 export async function ActorStepHit(this: Actor, context: ScriptContext): Promise<void> {
-  const cmd = mustExist(context.command);
+  const command = mustExist(context.command);
   const room = mustExist(context.room);
 
   const results = searchState(context.state, {
     meta: {
-      name: cmd.target,
+      name: command.target,
     },
     room: {
       id: room.meta.id,
     },
   }, FUZZY_MATCHERS);
-  const target = indexEntity(results, cmd.index, isActor);
+  const target = indexEntity(results, command.index, isActor);
 
   if (isNil(target)) {
-    await context.focus.show('actor.step.hit.type', { cmd });
+    await context.focus.show('actor.step.hit.type', { command });
     return;
   }
 
   if (this === target) {
-    await context.focus.show('actor.step.hit.self', { cmd });
+    await context.focus.show('actor.step.hit.self', { command });
     return;
   }
 
@@ -140,11 +138,11 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
 }
 
 export async function ActorStepLook(this: Actor, context: ScriptContext): Promise<void> {
-  const cmd = mustExist(context.command);
-  if (cmd.target === '') {
+  const command = mustExist(context.command);
+  if (command.target === '') {
     return ActorStepLookRoom.call(this, context);
   } else {
-    return ActorStepLookTarget.call(this, context, cmd.target);
+    return ActorStepLookTarget.call(this, context, command.target);
   }
 }
 
@@ -227,8 +225,8 @@ export async function ActorStepLookItem(this: Actor, context: ScriptContext): Pr
 
 export async function ActorStepMove(this: Actor, context: ScriptContext): Promise<void> {
   // find the new room
-  const cmd = mustExist(context.command);
-  const targetName = cmd.target;
+  const command = mustExist(context.command);
+  const targetName = command.target;
 
   const currentRoom = mustExist(context.room);
   const results = currentRoom.portals.filter((it) => {
@@ -237,10 +235,10 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
     // portals in the same group usually lead to the same place, but name and group can both be ambiguous
     return (name === targetName || group === targetName || `${group} ${name}` === targetName);
   });
-  const targetPortal = results[cmd.index];
+  const targetPortal = results[command.index];
 
   if (isNil(targetPortal)) {
-    await context.focus.show('actor.step.move.missing', { cmd });
+    await context.focus.show('actor.step.move.missing', { command });
     return;
   }
 
@@ -259,14 +257,14 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
 }
 
 export async function ActorStepTake(this: Actor, context: ScriptContext): Promise<void> {
-  const cmd = mustExist(context.command);
+  const command = mustExist(context.command);
   const room = mustExist(context.room);
-  context.logger.debug({ cmd, room }, 'taking item from room');
+  context.logger.debug({ command, room }, 'taking item from room');
 
   const valid = new Set(room.items.map((it) => it.meta.id));
   const results = searchState(context.state, {
     meta: {
-      name: cmd.target,
+      name: command.target,
     },
     room: {
       id: room.meta.id,
@@ -283,10 +281,10 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
     },
   });
 
-  const moving = indexEntity(results, cmd.index, isItem);
+  const moving = indexEntity(results, command.index, isItem);
 
   if (isNil(moving)) {
-    await context.focus.show('actor.step.take.type', { cmd });
+    await context.focus.show('actor.step.take.type', { command });
     return;
   }
 
@@ -298,20 +296,20 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
 }
 
 export async function ActorStepUse(this: Actor, context: ScriptContext): Promise<void> {
-  const cmd = mustExist(context.command);
+  const command = mustExist(context.command);
   const room = mustExist(context.room);
   const results = searchState(context.state, {
     meta: {
-      name: cmd.target,
+      name: command.target,
     },
     room: {
       id: room.meta.id,
     },
   }, FUZZY_MATCHERS);
-  const target = indexEntity(results, cmd.index, isItem);
+  const target = indexEntity(results, command.index, isItem);
 
   if (!isItem(target)) {
-    await context.focus.show('actor.step.use.type', { cmd });
+    await context.focus.show('actor.step.use.type', { command });
     return;
   }
 

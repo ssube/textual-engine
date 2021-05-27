@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import { Container } from 'noicejs';
 
-import { FileLoader } from '../../../src/service/loader/FileLoader';
+import { NodeFileLoader } from '../../../src/service/loader/NodeFileLoader';
 
 describe('file loader', () => {
   it('should read from paths', async () => {
     const container = Container.from();
     await container.configure();
 
-    const loader = await container.create(FileLoader);
+    const loader = await container.create(NodeFileLoader);
     return expect(loader.loadStr('README.md')).to.eventually.include('Textual Engine');
   });
 
@@ -17,7 +17,7 @@ describe('file loader', () => {
     const container = Container.from();
     await container.configure();
 
-    const loader = await container.create(FileLoader);
+    const loader = await container.create(NodeFileLoader);
     const path = 'out/test.md';
     await loader.saveStr(path, 'foo');
 
@@ -29,7 +29,7 @@ describe('file loader', () => {
     const container = Container.from();
     await container.configure();
 
-    const loader = await container.create(FileLoader);
+    const loader = await container.create(NodeFileLoader);
     const data = Buffer.from('foo\0');
     const path = 'out/test.bin';
     await loader.save(path, data);

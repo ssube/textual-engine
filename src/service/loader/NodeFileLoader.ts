@@ -3,7 +3,7 @@ import { BaseOptions } from 'noicejs';
 
 import { Loader } from '.';
 
-export class FileLoader implements Loader {
+export class NodeFileLoader implements Loader {
   protected fs: typeof promises;
 
   constructor(options: BaseOptions, fs = promises) {

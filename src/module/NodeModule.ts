@@ -2,7 +2,8 @@ import { mustExist } from '@apextoaster/js-utils';
 import { Module, ModuleOptions, Provides } from 'noicejs';
 
 import { INJECT_LOADER, INJECT_RENDER } from '.';
-import { FileLoader } from '../service/loader/FileLoader';
+import { NodeFetchLoader } from '../service/loader/NodeFetchLoader';
+import { NodeFileLoader } from '../service/loader/NodeFileLoader';
 import { RenderService } from '../service/render';
 import { InkRender } from '../service/render/InkRender';
 import { LineRender } from '../service/render/LineRender';
@@ -24,7 +25,11 @@ export class NodeModule extends Module {
   public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
 
-    this.bind(INJECT_LOADER).toConstructor(FileLoader);
+    if (true) {
+      this.bind(INJECT_LOADER).toConstructor(NodeFileLoader);
+    } else {
+      this.bind(INJECT_LOADER).toConstructor(NodeFetchLoader);
+    }
   }
 
   @Provides(INJECT_RENDER)

@@ -7,15 +7,10 @@
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
   var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-  var __require = (x) => {
-    if (typeof require !== "undefined")
-      return require(x);
-    throw new Error('Dynamic require of "' + x + '" is not supported');
-  };
   var __esm = (fn, res) => function __init() {
     return fn && (res = (0, fn[Object.keys(fn)[0]])(fn = 0)), res;
   };
-  var __commonJS = (cb, mod) => function __require2() {
+  var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
   var __export = (target, all) => {
@@ -2567,54 +2562,11 @@
     }
   });
 
-  // node_modules/dtrace-provider/dtrace-provider.js
+  // ignore:dtrace-provider
   var require_dtrace_provider = __commonJS({
-    "node_modules/dtrace-provider/dtrace-provider.js"(exports) {
+    "ignore:dtrace-provider"() {
       init_virtual_process_polyfill();
       init_buffer();
-      var DTraceProvider;
-      function DTraceProviderStub() {
-      }
-      __name(DTraceProviderStub, "DTraceProviderStub");
-      DTraceProviderStub.prototype.addProbe = function(name) {
-        var p = { "fire": function() {
-        } };
-        this[name] = p;
-        return p;
-      };
-      DTraceProviderStub.prototype.enable = function() {
-      };
-      DTraceProviderStub.prototype.fire = function() {
-      };
-      DTraceProviderStub.prototype.disable = function() {
-      };
-      var builds = ["Release", "default", "Debug"];
-      var err = null;
-      for (var i = 0; i < builds.length; i++) {
-        try {
-          binding3 = __require("./src/build/" + builds[i] + "/DTraceProviderBindings");
-          DTraceProvider = binding3.DTraceProvider;
-          break;
-        } catch (e) {
-          if (err === null) {
-            err = e;
-          }
-        }
-      }
-      var binding3;
-      if (!DTraceProvider) {
-        if (process.env.NODE_DTRACE_PROVIDER_REQUIRE === "hard") {
-          throw err;
-        } else {
-          DTraceProvider = DTraceProviderStub;
-        }
-      }
-      exports.DTraceProvider = DTraceProvider;
-      exports.createDTraceProvider = function(name, module2) {
-        if (arguments.length == 2)
-          return new exports.DTraceProvider(name, module2);
-        return new exports.DTraceProvider(name);
-      };
     }
   });
 
@@ -41850,29 +41802,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   __name(BunyanLogger, "BunyanLogger");
 
-  // out/src/module/index.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var INJECT_COUNTER = Symbol("inject-counter");
-  var INJECT_EVENT = Symbol("inject-event-bus");
-  var INJECT_LOADER = Symbol("inject-loader");
-  var INJECT_LOCALE = Symbol("inject-locale");
-  var INJECT_LOGGER = Symbol("inject-logger");
-  var INJECT_PARSER = Symbol("inject-parser");
-  var INJECT_RANDOM = Symbol("inject-random");
-  var INJECT_RENDER = Symbol("inject-render");
-  var INJECT_SCRIPT = Symbol("inject-script-ctrl");
-  var INJECT_STATE = Symbol("inject-state-ctrl");
-  var INJECT_TEMPLATE = Symbol("inject-template");
-  var INJECT_TOKENIZER = Symbol("inject-tokenizer");
-  var INJECT_ACTOR = Symbol("inject-actor");
-  var INJECT_ACTOR_PLAYER = Symbol("inject-actor-player");
-
-  // out/src/module/ActorModule.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs4 = __toModule(require_main());
-
   // out/src/model/entity/Actor.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -41934,6 +41863,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var META_LOAD = "verbs.meta.load";
   var META_QUIT = "verbs.meta.quit";
   var META_SAVE = "verbs.meta.save";
+  var STAT_HEALTH = "health";
+  var STAT_DAMAGE = "damage";
   var COMMON_VERBS = [
     META_DEBUG,
     META_GRAPH,
@@ -42051,6 +41982,28 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     additionalProperties: false
   };
 
+  // out/src/module/index.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var INJECT_COUNTER = Symbol("inject-counter");
+  var INJECT_EVENT = Symbol("inject-event-bus");
+  var INJECT_LOADER = Symbol("inject-loader");
+  var INJECT_LOCALE = Symbol("inject-locale");
+  var INJECT_LOGGER = Symbol("inject-logger");
+  var INJECT_PARSER = Symbol("inject-parser");
+  var INJECT_RANDOM = Symbol("inject-random");
+  var INJECT_RENDER = Symbol("inject-render");
+  var INJECT_SCRIPT = Symbol("inject-script-ctrl");
+  var INJECT_STATE = Symbol("inject-state-ctrl");
+  var INJECT_TEMPLATE = Symbol("inject-template");
+  var INJECT_TOKENIZER = Symbol("inject-tokenizer");
+  var INJECT_ACTOR = Symbol("inject-actor");
+
+  // out/src/module/ActorModule.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs4 = __toModule(require_main());
+
   // out/src/service/actor/BehaviorActor.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -42167,12 +42120,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
       });
+      this.started = false;
       this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
     }
     async start() {
+      if (this.started) {
+        return;
+      }
       this.event.on("render-output", (event) => this.onInput(event));
       this.event.on("state-output", (event) => this.onOutput(event));
       await this.tokenizer.translate(COMMON_VERBS);
+      this.started = true;
     }
     async stop() {
     }
@@ -42290,11 +42248,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       };
       this.player = new Singleton(() => mustExist(this.container).create(PlayerActorService));
       this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
+      this.playerStarted = false;
     }
     async configure(options) {
       await super.configure(options);
       this.bind(INJECT_ACTOR).toInstance(this.locator);
-      this.bind(INJECT_ACTOR_PLAYER).toFactory(() => this.player.get());
       this.bind(INJECT_TOKENIZER).toFactory(() => this.tokenizer.get());
     }
     async getActorInput(options) {
@@ -42324,32 +42282,37 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_buffer();
   var import_noicejs8 = __toModule(require_main());
 
-  // out/src/service/loader/PageLoader.js
+  // out/src/service/loader/browser/FetchLoader.js
   init_virtual_process_polyfill();
   init_buffer();
-  var PageLoader = class {
-    constructor(options) {
+  var BrowserFetchLoader = class {
+    constructor(options, f = window.fetch) {
+      this.fetch = fetch;
     }
     async dump(path, data) {
       console.log(path, data);
     }
     async load(path) {
-      const elem = mustExist(document.getElementById(path));
-      const text = mustExist(elem.textContent);
+      const text = await this.loadStr(path);
       return Buffer2.from(text);
     }
     async save(path, data) {
       throw new NotImplementedError();
     }
     async loadStr(path) {
-      const elem = mustExist(document.getElementById(path));
-      return mustExist(elem.textContent);
+      const res = await this.fetch.call(window, path);
+      const data = await res.text();
+      return data;
     }
     async saveStr(path, data) {
       throw new NotImplementedError();
     }
   };
-  __name(PageLoader, "PageLoader");
+  __name(BrowserFetchLoader, "BrowserFetchLoader");
+
+  // out/src/service/loader/browser/PageLoader.js
+  init_virtual_process_polyfill();
+  init_buffer();
 
   // out/src/service/render/ReactDomRender.js
   init_virtual_process_polyfill();
@@ -42444,6 +42407,28 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(onceWithRemove, "onceWithRemove");
 
+  // out/src/util/event/Debounce.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function debounce(interval, inner) {
+    let fired = false;
+    let timeout;
+    return /* @__PURE__ */ __name(function bouncer() {
+      if (fired === true) {
+        return;
+      }
+      if (isNil(timeout)) {
+        timeout = setTimeout(() => {
+          fired = false;
+          timeout = void 0;
+        }, interval);
+      }
+      fired = true;
+      return inner();
+    }, "bouncer");
+  }
+  __name(debounce, "debounce");
+
   // out/src/service/render/BaseReactRender.js
   var BaseReactRender = /* @__PURE__ */ __name(class BaseReactRender2 {
     constructor(options) {
@@ -42452,6 +42437,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
       });
+      this.derender = debounce(100, () => this.renderRoot());
       this.inputStr = "";
       this.promptStr = "";
       this.output = [];
@@ -42477,6 +42463,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         throw new InvalidArgumentError("please batch output");
       }
       this.output.push(...event.lines);
+      this.renderRoot();
     }
     onQuit() {
       this.logger.debug("handling quit event from state");
@@ -42545,7 +42532,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async configure(options) {
       await super.configure(options);
-      this.bind(INJECT_LOADER).toConstructor(PageLoader);
+      if (true) {
+        this.bind(INJECT_LOADER).toConstructor(BrowserFetchLoader);
+      } else {
+        this.bind(INJECT_LOADER).toConstructor(BrowserPageLoader);
+      }
     }
     async getRender() {
       return this.render.get();
@@ -48125,15 +48116,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var import_seedrandom = __toModule(require_seedrandom2());
   var SeedRandomGenerator = class {
     constructor() {
-      this.lastId = 0;
       this.source = (0, import_seedrandom.alea)();
     }
     nextFloat() {
       return this.source.double();
-    }
-    nextId() {
-      this.lastId += 1;
-      return this.lastId;
     }
     nextInt(max = BYTE_RANGE, min = 0) {
       const range = max - min;
@@ -48252,6 +48238,29 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return results;
   }
   __name(searchState, "searchState");
+  function findRoom(state, search, matchers = DEFAULT_MATCHERS) {
+    const results = new Set();
+    for (const room of state.rooms) {
+      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
+        continue;
+      }
+      for (const actor of room.actors) {
+        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
+          continue;
+        }
+        if (matchers.entity(actor, search, matchers)) {
+          results.add(room);
+        }
+      }
+      for (const item of room.items) {
+        if (matchers.entity(item, search, matchers)) {
+          results.add(room);
+        }
+      }
+    }
+    return Array.from(results);
+  }
+  __name(findRoom, "findRoom");
 
   // out/src/script/common/ActorGet.js
   init_virtual_process_polyfill();
@@ -48308,7 +48317,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       attacker,
       item
     });
-    const health = decrementKey(this.stats, "health");
+    const maxDamage = getKey(item.stats, STAT_DAMAGE, 1) + getKey(attacker.stats, STAT_DAMAGE, 0);
+    const damage = context.random.nextInt(maxDamage);
+    const health = decrementKey(this.stats, STAT_HEALTH, damage);
     if (health > 0) {
       await context.focus.show("actor.hit.health", { actor: this, health });
     } else {
@@ -48320,7 +48331,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/script/common/ActorStep.js
   init_virtual_process_polyfill();
   init_buffer();
-  async function ActorStep(context) {
+  async function ActorStep(context, verbs = ACTOR_VERB_SCRIPTS) {
     context.logger.debug({
       meta: this.meta,
       scope: Object.keys(context)
@@ -48328,21 +48339,35 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (!isActor(this)) {
       throw new InvalidArgumentError("script target must be an actor");
     }
-    const health = getKey(this.stats, "health", 0);
+    const health = getKey(this.stats, STAT_HEALTH, 0);
     if (health <= 0) {
       if (this.actorType === ActorType.PLAYER) {
-        await context.focus.show("actor.step.cmd.dead", { actor: this });
+        await context.focus.show("actor.step.command.dead", { actor: this });
       }
       return;
     }
-    if (doesExist(context.command)) {
-      await ActorStepCommand.call(this, context);
-    } else {
+    if (isNil(context.command)) {
       context.logger.debug({ target: this }, "actor has nothing to do");
+      return;
     }
+    const { command } = context;
+    const verb = verbs.get(command.verb);
+    if (isNil(verb)) {
+      await context.focus.show("actor.step.command.unknown", { actor: this, command });
+      context.logger.warn({ command }, "unknown verb");
+      return;
+    }
+    if (this.actorType === ActorType.PLAYER) {
+      if (command.target.length > 0) {
+        await context.focus.show("actor.step.command.player.target", { actor: this, command });
+      } else {
+        await context.focus.show("actor.step.command.player.verb", { actor: this, command });
+      }
+    }
+    await verb.call(this, context);
   }
   __name(ActorStep, "ActorStep");
-  var knownVerbs = new Map([
+  var ACTOR_VERB_SCRIPTS = new Map([
     [VERB_DROP, ActorStepDrop],
     [VERB_HIT, ActorStepHit],
     [VERB_LOOK, ActorStepLook],
@@ -48351,41 +48376,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     [VERB_USE, ActorStepUse],
     [VERB_WAIT, ActorStepWait]
   ]);
-  async function ActorStepCommand(context) {
-    const cmd = mustExist(context.command);
-    const verb = knownVerbs.get(cmd.verb);
-    if (doesExist(verb)) {
-      if (this.actorType === ActorType.PLAYER) {
-        if (cmd.target.length > 0) {
-          await context.focus.show("actor.step.cmd.player.target", { actor: this, cmd });
-        } else {
-          await context.focus.show("actor.step.cmd.player.verb", { actor: this, cmd });
-        }
-      }
-      await verb.call(this, context);
-    } else {
-      await context.focus.show("actor.step.cmd.unknown", { actor: this, cmd });
-      context.logger.warn({ cmd }, "unknown verb");
-    }
-  }
-  __name(ActorStepCommand, "ActorStepCommand");
   async function ActorStepDrop(context) {
-    const cmd = mustExist(context.command);
+    const command = mustExist(context.command);
     const room = mustExist(context.room);
     const results = searchState(context.state, {
       actor: {
         id: this.meta.id
       },
       meta: {
-        name: cmd.target
+        name: command.target
       },
       room: {
         id: room.meta.id
       }
     }, FUZZY_MATCHERS);
-    const moving = indexEntity(results, cmd.index, isItem);
+    const moving = indexEntity(results, command.index, isItem);
     if (isNil(moving)) {
-      await context.focus.show("actor.step.drop.type", { cmd });
+      await context.focus.show("actor.step.drop.type", { command });
       return;
     }
     await context.transfer.moveItem({
@@ -48396,23 +48403,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepDrop, "ActorStepDrop");
   async function ActorStepHit(context) {
-    const cmd = mustExist(context.command);
+    const command = mustExist(context.command);
     const room = mustExist(context.room);
     const results = searchState(context.state, {
       meta: {
-        name: cmd.target
+        name: command.target
       },
       room: {
         id: room.meta.id
       }
     }, FUZZY_MATCHERS);
-    const target = indexEntity(results, cmd.index, isActor);
+    const target = indexEntity(results, command.index, isActor);
     if (isNil(target)) {
-      await context.focus.show("actor.step.hit.type", { cmd });
+      await context.focus.show("actor.step.hit.type", { command });
       return;
     }
     if (this === target) {
-      await context.focus.show("actor.step.hit.self", { cmd });
+      await context.focus.show("actor.step.hit.self", { command });
       return;
     }
     if (this.items.length === 0) {
@@ -48423,11 +48430,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepHit, "ActorStepHit");
   async function ActorStepLook(context) {
-    const cmd = mustExist(context.command);
-    if (cmd.target === "") {
+    const command = mustExist(context.command);
+    if (command.target === "") {
       return ActorStepLookRoom.call(this, context);
     } else {
-      return ActorStepLookTarget.call(this, context, cmd.target);
+      return ActorStepLookTarget.call(this, context, command.target);
     }
   }
   __name(ActorStepLook, "ActorStepLook");
@@ -48473,7 +48480,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   async function ActorStepLookActor(context) {
     const actor = mustExist(context.actor);
     await context.focus.show("actor.step.look.actor.seen", { actor });
-    const health = getKey(actor.stats, "health", 0);
+    const health = getKey(actor.stats, STAT_HEALTH, 0);
     if (health <= 0) {
       await context.focus.show("actor.step.look.actor.dead", { actor });
     }
@@ -48485,17 +48492,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepLookItem, "ActorStepLookItem");
   async function ActorStepMove(context) {
-    const cmd = mustExist(context.command);
-    const targetName = cmd.target;
+    const command = mustExist(context.command);
+    const targetName = command.target;
     const currentRoom = mustExist(context.room);
     const results = currentRoom.portals.filter((it) => {
       const group = it.sourceGroup.toLocaleLowerCase();
       const name = it.name.toLocaleLowerCase();
       return name === targetName || group === targetName || `${group} ${name}` === targetName;
     });
-    const targetPortal = results[cmd.index];
+    const targetPortal = results[command.index];
     if (isNil(targetPortal)) {
-      await context.focus.show("actor.step.move.missing", { cmd });
+      await context.focus.show("actor.step.move.missing", { command });
       return;
     }
     await context.focus.show("actor.step.move.portal", { actor: this, portal: targetPortal });
@@ -48511,13 +48518,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepMove, "ActorStepMove");
   async function ActorStepTake(context) {
-    const cmd = mustExist(context.command);
+    const command = mustExist(context.command);
     const room = mustExist(context.room);
-    context.logger.debug({ cmd, room }, "taking item from room");
+    context.logger.debug({ command, room }, "taking item from room");
     const valid = new Set(room.items.map((it) => it.meta.id));
     const results = searchState(context.state, {
       meta: {
-        name: cmd.target
+        name: command.target
       },
       room: {
         id: room.meta.id
@@ -48529,9 +48536,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         return false;
       }
     } }));
-    const moving = indexEntity(results, cmd.index, isItem);
+    const moving = indexEntity(results, command.index, isItem);
     if (isNil(moving)) {
-      await context.focus.show("actor.step.take.type", { cmd });
+      await context.focus.show("actor.step.take.type", { command });
       return;
     }
     await context.transfer.moveItem({
@@ -48542,19 +48549,19 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepTake, "ActorStepTake");
   async function ActorStepUse(context) {
-    const cmd = mustExist(context.command);
+    const command = mustExist(context.command);
     const room = mustExist(context.room);
     const results = searchState(context.state, {
       meta: {
-        name: cmd.target
+        name: command.target
       },
       room: {
         id: room.meta.id
       }
     }, FUZZY_MATCHERS);
-    const target = indexEntity(results, cmd.index, isItem);
+    const target = indexEntity(results, command.index, isItem);
     if (!isItem(target)) {
-      await context.focus.show("actor.step.use.type", { cmd });
+      await context.focus.show("actor.step.use.type", { command });
       return;
     }
     await context.script.invoke(target, SLOT_USE, Object.assign(Object.assign({}, context), { actor: this }));
@@ -48620,11 +48627,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     ["room-step", RoomStep]
   ];
   var LocalScriptService = /* @__PURE__ */ __name(class LocalScriptService2 {
-    constructor(options) {
+    constructor(options, scripts = COMMON_SCRIPTS) {
       this.logger = options[INJECT_LOGGER].child({
         kind: constructorName(this)
       });
-      this.scripts = new Map(COMMON_SCRIPTS);
+      this.scripts = new Map(scripts);
     }
     async invoke(target, slot, scope) {
       this.logger.debug({ slot, target }, "invoke slot on target");
@@ -48651,7 +48658,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }, "LocalScriptService");
   LocalScriptService = __decorate([
     (0, import_noicejs12.Inject)(INJECT_LOGGER),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [Object, Object])
   ], LocalScriptService);
 
   // out/src/service/state/TurnState.js
@@ -48750,19 +48757,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.world = mustExist(options.world);
     }
     async createActor(template, actorType = ActorType.DEFAULT) {
-      const items = [];
-      for (const itemTemplateRef of template.base.items) {
-        if (this.random.nextInt(TEMPLATE_CHANCE) > itemTemplateRef.chance) {
-          continue;
-        }
-        const itemTemplate = findByTemplateId(this.world.templates.items, itemTemplateRef.id);
-        if (isNil(itemTemplate)) {
-          throw new NotFoundError("invalid item in actor");
-        }
-        const item = await this.createItem(itemTemplate);
-        items.push(item);
-      }
-      return {
+      const items = await this.createItemList(template.base.items);
+      const actor = {
         type: "actor",
         actorType,
         items,
@@ -48771,52 +48767,62 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         slots: this.template.renderStringMap(template.base.slots),
         stats: this.template.renderNumberMap(template.base.stats)
       };
+      await this.modifyActor(actor, template.mods);
+      return actor;
+    }
+    async createActorList(templates) {
+      const actors = [];
+      for (const templateRef of templates) {
+        if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
+          continue;
+        }
+        const template = findByTemplateId(this.world.templates.actors, templateRef.id);
+        this.logger.debug({
+          template,
+          templateRef
+        }, "create actor for list");
+        if (isNil(template)) {
+          throw new NotFoundError("invalid item in room");
+        }
+        const item = await this.createActor(template);
+        actors.push(item);
+      }
+      return actors;
     }
     async createItem(template) {
-      return {
+      const item = {
         type: ITEM_TYPE,
         meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
         stats: this.template.renderNumberMap(template.base.stats),
         slots: this.template.renderStringMap(template.base.slots),
         verbs: this.template.renderVerbMap(template.base.verbs)
       };
+      await this.modifyItem(item, template.mods);
+      return item;
     }
-    async createRoom(template) {
-      const actors = [];
-      for (const actorTemplateRef of template.base.actors) {
-        if (this.random.nextInt(TEMPLATE_CHANCE) > actorTemplateRef.chance) {
-          continue;
-        }
-        const actorTemplate = findByTemplateId(this.world.templates.actors, actorTemplateRef.id);
-        this.logger.debug({
-          actors: this.world.templates.actors,
-          actorTemplateId: actorTemplateRef,
-          actorTemplate
-        }, "create actor for room");
-        if (isNil(actorTemplate)) {
-          throw new NotFoundError("invalid actor in room");
-        }
-        const actor = await this.createActor(actorTemplate);
-        actors.push(actor);
-      }
+    async createItemList(templates) {
       const items = [];
-      for (const itemTemplateRef of template.base.items) {
-        if (this.random.nextInt(TEMPLATE_CHANCE) > itemTemplateRef.chance) {
+      for (const templateRef of templates) {
+        if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
           continue;
         }
-        const itemTemplate = findByTemplateId(this.world.templates.items, itemTemplateRef.id);
+        const template = findByTemplateId(this.world.templates.items, templateRef.id);
         this.logger.debug({
-          items: this.world.templates.items,
-          itemTemplateId: itemTemplateRef,
-          itemTemplate
-        }, "create item for room");
-        if (isNil(itemTemplate)) {
+          template,
+          templateRef
+        }, "create item for list");
+        if (isNil(template)) {
           throw new NotFoundError("invalid item in room");
         }
-        const item = await this.createItem(itemTemplate);
+        const item = await this.createItem(template);
         items.push(item);
       }
-      return {
+      return items;
+    }
+    async createRoom(template) {
+      const actors = await this.createActorList(template.base.actors);
+      const items = await this.createItemList(template.base.items);
+      const room = {
         type: ROOM_TYPE,
         actors,
         items,
@@ -48825,6 +48831,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         slots: this.template.renderStringMap(template.base.slots),
         verbs: this.template.renderVerbMap(template.base.verbs)
       };
+      await this.modifyRoom(room, template.mods);
+      return room;
     }
     async createMetadata(template, type3) {
       return {
@@ -48833,6 +48841,58 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         name: this.template.renderString(template.name),
         template: template.id
       };
+    }
+    async modifyActor(target, available) {
+      const selected = this.selectModifiers(available);
+      for (const mod of selected) {
+        await this.modifyMetadata(target.meta, mod.meta);
+        target.skills = this.template.modifyNumberMap(target.skills, mod.skills);
+        target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+        target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+        const items = await this.createItemList(mod.items);
+        target.items.push(...items);
+      }
+    }
+    async modifyItem(target, available) {
+      const selected = this.selectModifiers(available);
+      for (const mod of selected) {
+        await this.modifyMetadata(target.meta, mod.meta);
+        target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+        target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+      }
+    }
+    async modifyRoom(target, available) {
+      const selected = this.selectModifiers(available);
+      for (const mod of selected) {
+        await this.modifyMetadata(target.meta, mod.meta);
+        target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+        const actors = await this.createActorList(mod.actors);
+        target.actors.push(...actors);
+        const items = await this.createItemList(mod.items);
+        target.items.push(...items);
+      }
+    }
+    async modifyMetadata(target, mod) {
+      target.desc = this.template.modifyString(target.desc, mod.desc);
+      target.name = this.template.modifyString(target.name, mod.name);
+    }
+    selectModifiers(mods) {
+      const excluded = new Set();
+      const selected = [];
+      for (const mod of mods) {
+        if (excluded.has(mod.id)) {
+          continue;
+        }
+        const roll = this.random.nextInt(TEMPLATE_CHANCE);
+        if (roll > mod.chance) {
+          continue;
+        }
+        selected.push(mod);
+        for (const e of mod.excludes) {
+          excluded.add(e);
+        }
+      }
+      return selected;
     }
     async populateRoom(room, depth) {
       if (depth < 0) {
@@ -48983,6 +49043,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           ["source", transfer.source]
         ]),
         focus: context.focus,
+        random: context.random,
         transfer: context.transfer,
         state: context.state
       });
@@ -49028,6 +49089,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           ["source", transfer.source]
         ]),
         focus: context.focus,
+        random: context.random,
         transfer: context.transfer,
         state: context.state
       });
@@ -49041,6 +49103,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/state/FocusResolver.js
   init_virtual_process_polyfill();
   init_buffer();
+  var ShowMessageVolume;
+  (function(ShowMessageVolume2) {
+    ShowMessageVolume2["SELF"] = "self";
+    ShowMessageVolume2["ROOM"] = "room";
+    ShowMessageVolume2["WORLD"] = "world";
+  })(ShowMessageVolume || (ShowMessageVolume = {}));
   var StateFocusResolver = class {
     constructor(options) {
       this.state = mustExist(options.state);
@@ -49077,8 +49145,29 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         throw new InvalidArgumentError("unable to find room ID in state");
       }
     }
-    async show(msg, context, _source) {
+    async show(msg, context, source) {
+      if (doesExist(source) && this.showCheck(source) === false) {
+        return;
+      }
       await this.onShow(msg, context);
+    }
+    showCheck(source) {
+      if (source.volume === ShowMessageVolume.SELF) {
+        return source.source.meta.id === this.state.focus.actor;
+      }
+      if (source.volume === ShowMessageVolume.ROOM) {
+        if (source.source.type === ROOM_TYPE) {
+          return source.source.meta.id === this.state.focus.room;
+        } else {
+          const rooms = findRoom(this.state, {
+            meta: {
+              id: source.source.meta.id
+            }
+          });
+          return doesExist(rooms.find((it) => it.meta.id === this.state.focus.room));
+        }
+      }
+      return true;
     }
   };
   __name(StateFocusResolver, "StateFocusResolver");
@@ -49171,6 +49260,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           this.logger.error(err, "error during line handler");
         });
       });
+      await this.doHelp();
       return pending;
     }
     async save() {
@@ -49228,7 +49318,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
     }
     async doHelp() {
-      const verbs = COMMON_VERBS.join(", ");
+      const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(", ");
       this.event.emit("state-output", {
         lines: [{
           key: verbs
@@ -49289,6 +49379,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       const scope = {
         data: new Map(),
         focus: mustExist(this.focus),
+        random: this.random,
         state: this.state,
         transfer: mustExist(this.transfer)
       };
@@ -49388,6 +49479,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_buffer();
   var import_noicejs17 = __toModule(require_main());
 
+  // out/src/util/string.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function hasText(str2) {
+    return doesExist(str2) && str2.length > 0 && /^\s*$/.test(str2) === false;
+  }
+  __name(hasText, "hasText");
+
   // out/src/util/template/JoinChain.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -49459,6 +49558,42 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         joiners: [" "],
         random: this.random
       });
+    }
+    modifyNumber(base, mod) {
+      return base + mod.offset;
+    }
+    modifyString(base, mod) {
+      return [mod.prefix, base, mod.suffix].filter(hasText).join(" ");
+    }
+    modifyNumberList(base, mod) {
+      return base.map((it, idx) => this.modifyNumber(it, mod[idx]));
+    }
+    modifyStringList(base, mod) {
+      return base.map((it, idx) => this.modifyString(it, mod[idx]));
+    }
+    modifyNumberMap(base, mod) {
+      const result = new Map();
+      for (const [key, value] of base.entries()) {
+        const modValue = mod.get(key);
+        if (doesExist(modValue)) {
+          result.set(key, this.modifyNumber(value, modValue));
+        } else {
+          result.set(key, value);
+        }
+      }
+      return result;
+    }
+    modifyStringMap(base, mod) {
+      const result = new Map();
+      for (const [key, value] of base.entries()) {
+        const modValue = mod.get(key);
+        if (doesExist(modValue)) {
+          result.set(key, this.modifyString(value, modValue));
+        } else {
+          result.set(key, value);
+        }
+      }
+      return result;
     }
     renderString(input) {
       const chain = splitChain(input.base, {
@@ -49618,7 +49753,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_buffer();
   var import_noicejs19 = __toModule(require_main());
 
-  // ignore:../service/loader/FileLoader
+  // ignore:../service/loader/node/FetchLoader
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // ignore:../service/loader/node/FileLoader
   init_virtual_process_polyfill();
   init_buffer();
 
@@ -49642,7 +49781,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async configure(options) {
       await super.configure(options);
-      this.bind(INJECT_LOADER).toConstructor(void 0);
+      if (true) {
+        this.bind(INJECT_LOADER).toConstructor(void 0);
+      } else {
+        this.bind(INJECT_LOADER).toConstructor(void 0);
+      }
     }
     async getRender() {
       return this.render.get();
@@ -51516,8 +51659,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const locale = await container.create(INJECT_LOCALE);
     await locale.start();
     locale.addBundle("common", config3.locale);
-    const player = await container.create(INJECT_ACTOR_PLAYER);
-    await player.start();
+    const locator = await container.create(INJECT_ACTOR);
+    const actor = await locator.get({
+      id: "",
+      type: ActorType.PLAYER
+    });
+    await actor.start();
     const loader2 = await container.create(INJECT_LOADER);
     const parser2 = await container.create(INJECT_PARSER);
     const worlds = [];
@@ -51553,7 +51700,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     "--config",
     "data-config",
     "--data",
-    "data-world",
+    "https://raw.githubusercontent.com/ssube/textual-engine/master/data/base.yml",
     "--module",
     "local",
     "--module",

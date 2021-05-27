@@ -27,6 +27,10 @@ export const META_LOAD = 'verbs.meta.load';
 export const META_QUIT = 'verbs.meta.quit';
 export const META_SAVE = 'verbs.meta.save';
 
+// common stats
+export const STAT_HEALTH = 'health';
+export const STAT_DAMAGE = 'damage';
+
 /**
  * Common verbs and meta commands.
  *

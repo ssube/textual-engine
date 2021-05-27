@@ -182,7 +182,10 @@ worlds:
               desc:
                 base: sharp bat teeth
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              damage:
+                min: 1
+                max: 2
             verbs: !map {}
         - base:
             meta:
@@ -192,7 +195,10 @@ worlds:
               desc:
                 base: short sword
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              damage:
+                min: 5
+                max: 10
             verbs: !map {}
           mods:
             - chance: 25
@@ -206,7 +212,8 @@ worlds:
                   prefix: Cracked
               slots: !map {}
               stats: !map
-                damage: -5
+                damage:
+                  offset: -2
               verbs: !map {}
             - chance: 25
               excludes:
@@ -219,7 +226,8 @@ worlds:
                   prefix: Rusty
               slots: !map {}
               stats: !map
-                damage: -5
+                damage:
+                  offset: -3
               verbs: !map {}
             - chance: 25
               excludes:
@@ -233,7 +241,7 @@ worlds:
                   prefix: Shiny
               slots: !map {}
               stats: !map
-                damage: +10
+                damage: 5
               verbs: !map {}
       rooms:
         - base:

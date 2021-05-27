@@ -1,12 +1,13 @@
-import { doesExist, InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
+import { InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptContext, ScriptTarget } from '../../service/script';
 import { Actor, ActorType, isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { isRoom } from '../../model/entity/Room';
+import { ScriptContext, ScriptTarget } from '../../service/script';
 import {
   SLOT_HIT,
   SLOT_USE,
+  STAT_HEALTH,
   VERB_DROP,
   VERB_HIT,
   VERB_LOOK,
@@ -29,7 +30,7 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext, verb
     throw new InvalidArgumentError('script target must be an actor');
   }
 
-  const health = getKey(this.stats, 'health', 0);
+  const health = getKey(this.stats, STAT_HEALTH, 0);
   if (health <= 0) {
     if (this.actorType === ActorType.PLAYER) {
       await context.focus.show('actor.step.command.dead', { actor: this });
@@ -212,7 +213,7 @@ export async function ActorStepLookRoom(this: Actor, context: ScriptContext): Pr
 export async function ActorStepLookActor(this: Actor, context: ScriptContext): Promise<void> {
   const actor = mustExist(context.actor);
   await context.focus.show('actor.step.look.actor.seen', { actor });
-  const health = getKey(actor.stats, 'health', 0);
+  const health = getKey(actor.stats, STAT_HEALTH, 0);
   if (health <= 0) {
     await context.focus.show('actor.step.look.actor.dead', { actor });
   }

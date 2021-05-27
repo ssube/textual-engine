@@ -5,6 +5,7 @@ import { spy } from 'sinon';
 import { Item } from '../../../src/model/entity/Item';
 import { State } from '../../../src/model/State';
 import { LocalModule } from '../../../src/module/LocalModule';
+import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
 import { StateFocusResolver } from '../../../src/util/state/FocusResolver';
@@ -66,6 +67,7 @@ describe('local script service', () => {
         },
         state: TEST_STATE,
       }),
+      random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
       transfer: await container.create(StateEntityTransfer, {
         state: TEST_STATE,
@@ -105,6 +107,7 @@ describe('local script service', () => {
         },
         state: TEST_STATE,
       }),
+      random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
       transfer: await container.create(StateEntityTransfer, {
         state: TEST_STATE,
@@ -147,6 +150,7 @@ describe('local script service', () => {
         },
         state: TEST_STATE,
       }),
+      random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
       transfer: await container.create(StateEntityTransfer, {
         state: TEST_STATE,

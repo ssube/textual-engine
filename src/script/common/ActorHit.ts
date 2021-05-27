@@ -1,8 +1,9 @@
 import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptContext, ScriptTarget } from '../../service/script';
 import { isActor } from '../../model/entity/Actor';
-import { decrementKey } from '../../util/map';
+import { ScriptContext, ScriptTarget } from '../../service/script';
+import { STAT_DAMAGE, STAT_HEALTH } from '../../util/constants';
+import { decrementKey, getKey } from '../../util/map';
 
 export async function ActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -18,7 +19,10 @@ export async function ActorHit(this: ScriptTarget, context: ScriptContext): Prom
     item,
   });
 
-  const health = decrementKey(this.stats, 'health');
+  const maxDamage = getKey(item.stats, STAT_DAMAGE, 1) + getKey(attacker.stats, STAT_DAMAGE, 0);
+  const damage = context.random.nextInt(maxDamage);
+
+  const health = decrementKey(this.stats, STAT_HEALTH, damage);
   if (health > 0) {
     await context.focus.show('actor.hit.health', { actor: this, health });
   } else {

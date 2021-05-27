@@ -9,6 +9,7 @@ import { State } from '../../model/State';
 import { LocaleContext } from '../../service/locale';
 import { SearchParams } from '../../util/state';
 import { Immutable, ScriptData } from '../../util/types';
+import { RandomGenerator } from '../random';
 
 export interface ScriptFocus {
   /**
@@ -73,15 +74,17 @@ export interface SuppliedScope {
    */
   focus: ScriptFocus;
 
-  /**
-   * Entity transfer helper.
-   */
-  transfer: ScriptTransfer;
+  random: RandomGenerator;
 
   /**
    * Immutable reference to state for broadcast, lookups, etc.
    */
   state: Immutable<State>;
+
+  /**
+   * Entity transfer helper.
+   */
+  transfer: ScriptTransfer;
 
   // optional fields
   actor?: Actor;

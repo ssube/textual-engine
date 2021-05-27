@@ -361,6 +361,7 @@ export class LocalStateService implements StateService {
     const scope: SuppliedScope = {
       data: new Map(),
       focus: mustExist(this.focus),
+      random: this.random,
       state: this.state,
       transfer: mustExist(this.transfer),
     };

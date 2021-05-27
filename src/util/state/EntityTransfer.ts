@@ -72,6 +72,7 @@ export class StateEntityTransfer implements ScriptTransfer {
         ['source', transfer.source],
       ]),
       focus: context.focus,
+      random: context.random,
       transfer: context.transfer,
       state: context.state,
     });
@@ -129,6 +130,7 @@ export class StateEntityTransfer implements ScriptTransfer {
         ['source', transfer.source],
       ]),
       focus: context.focus,
+      random: context.random,
       transfer: context.transfer,
       state: context.state,
     });

@@ -8,8 +8,9 @@ import { Room } from '../../../src/model/entity/Room';
 import { State } from '../../../src/model/State';
 import { LocalModule } from '../../../src/module/LocalModule';
 import { ActorStep, ActorStepLookTarget } from '../../../src/script/common/ActorStep';
+import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
-import { VERB_LOOK, VERB_WAIT } from '../../../src/util/constants';
+import { STAT_HEALTH, VERB_LOOK, VERB_WAIT } from '../../../src/util/constants';
 import { testFocus, testTransfer } from '../helper';
 
 const TEST_ACTOR: Actor = {
@@ -35,7 +36,7 @@ const TEST_ACTOR: Actor = {
   skills: new Map(),
   slots: new Map(),
   stats: new Map([
-    ['health', 10],
+    [STAT_HEALTH, 10],
   ]),
   type: ACTOR_TYPE,
 };
@@ -65,6 +66,7 @@ describe('actor step scripts', () => {
         data: new Map(),
         focus,
         logger: NullLogger.global,
+        random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
         state: {} as State,
         transfer,
@@ -91,7 +93,7 @@ describe('actor step scripts', () => {
         ...TEST_ACTOR,
         actorType: ActorType.PLAYER,
         stats: new Map([
-          ['health', 0],
+          [STAT_HEALTH, 0],
         ]),
       }, {
         command: {
@@ -103,6 +105,7 @@ describe('actor step scripts', () => {
         data: new Map(),
         focus,
         logger: NullLogger.global,
+        random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
         state: {} as State,
         transfer,
@@ -135,6 +138,7 @@ describe('actor step scripts', () => {
         data: new Map(),
         focus,
         logger: NullLogger.global,
+        random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
         state: {} as State,
         transfer,
@@ -168,6 +172,7 @@ describe('actor step scripts', () => {
         data: new Map(),
         focus,
         logger: NullLogger.global,
+        random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
         state: {
           rooms: [] as Array<Room>,

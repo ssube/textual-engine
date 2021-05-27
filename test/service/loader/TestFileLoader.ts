@@ -9,7 +9,7 @@ describe('file loader', () => {
     await container.configure();
 
     const loader = await container.create(FileLoader);
-    await expect(loader.loadStr('README.md')).to.eventually.include('Textual Engine');
+    return expect(loader.loadStr('README.md')).to.eventually.include('Textual Engine');
   });
 
   // TODO: use a mock filesystem
@@ -21,7 +21,7 @@ describe('file loader', () => {
     const path = 'out/test.md';
     await loader.saveStr(path, 'foo');
 
-    await expect(loader.loadStr(path)).to.eventually.include('foo');
+    return expect(loader.loadStr(path)).to.eventually.include('foo');
   });
 
   // TODO: use a mock filesystem
@@ -34,7 +34,7 @@ describe('file loader', () => {
     const path = 'out/test.bin';
     await loader.save(path, data);
 
-    await expect(loader.load(path)).to.eventually.deep.equal(data);
+    return expect(loader.load(path)).to.eventually.deep.equal(data);
   });
 });
 

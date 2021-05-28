@@ -4,7 +4,7 @@ This is a text adventure engine for the CLI and browsers.
 
 See [the demo on Github Pages](https://ssube.github.io/textual-engine/) or [the getting started docs](docs/getting-started.md) for more info.
 
-![snippet of wandering goblins and attacking bats](docs/readme-snippet.png)
+[![snippet of wandering goblins and attacking bats](docs/readme-snippet.png)](https://ssube.github.io/textual-engine/)
 
 ## Features
 

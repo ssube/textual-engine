@@ -1,5 +1,8 @@
 import { State } from '../model/State';
 
+/**
+ * @todo return key/context pairs
+ */
 export function debugState(state: State): Array<string> {
   const lines = [
     `state: ${state.meta.id}`
@@ -28,6 +31,9 @@ export function debugState(state: State): Array<string> {
   return lines;
 }
 
+/**
+ * @todo return key/context pairs
+ */
 export function graphState(state: State): Array<string> {
   function sanitize(input: string): string {
     return input.replace(/[^a-zA-Z0-9_]/g, '_');
@@ -48,10 +54,6 @@ export function graphState(state: State): Array<string> {
         '[',
         `label="${portal.sourceGroup} ${portal.name}"`,
       ];
-
-      /* if (portal.link === PortalLinkage.BOTH) {
-        segments.push('dir=none');
-      } */
 
       segments.push('];');
       lines.push(segments.join(' '));

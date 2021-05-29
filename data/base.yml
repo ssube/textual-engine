@@ -182,12 +182,12 @@ worlds:
               name:
                 base: Bat Teeth
               desc:
-                base: sharp bat teeth
+                base: bat teeth
             slots: !map {}
             stats: !map
               damage:
-                min: 1
-                max: 2
+                min: 2
+                max: 5
             verbs: !map {}
         - base:
             meta:

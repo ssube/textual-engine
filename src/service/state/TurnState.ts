@@ -22,6 +22,9 @@ import { ActorLocator } from '../../module/ActorModule';
 import { randomItem } from '../../util/array';
 import {
   COMMON_VERBS,
+  EVENT_ACTOR_COMMAND,
+  EVENT_LOADER_WORLD,
+  EVENT_STATE_OUTPUT,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -38,8 +41,8 @@ import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { findByTemplateId } from '../../util/template';
 import { Counter } from '../counter';
-import { EventBus } from '../event';
-import { LoaderService } from '../loader';
+import { CommandEvent, EventBus } from '../event';
+import { LoaderService, LoaderWorldEvent } from '../loader';
 import { LocaleContext } from '../locale';
 import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
@@ -77,12 +80,12 @@ export class LocalStateService implements StateService {
   protected random: RandomGenerator;
   protected script: ScriptService;
 
+  protected worlds: Array<World>;
+
+  protected state?: State;
   protected focus?: StateFocusResolver;
   protected generator?: StateEntityGenerator;
   protected transfer?: StateEntityTransfer;
-
-  protected state?: State;
-  protected worlds: Array<World>;
 
   constructor(options: LocalStateServiceOptions) {
     this.container = options.container;
@@ -195,21 +198,21 @@ export class LocalStateService implements StateService {
   public async start(): Promise<void> {
     await this.createHelpers();
 
-    this.event.on('loader-world', (event) => {
-      this.logger.debug({ event }, 'registering loaded world');
-      this.worlds.push(event.world);
-    });
+    this.event.on(EVENT_LOADER_WORLD, (event: LoaderWorldEvent) => {
+      this.onWorld(event.world).catch((err) => {
+        this.logger.error(err, 'error during world handler');
+      });
+    }, this);
 
-    this.event.on('actor-command', (event) => {
+    this.event.on(EVENT_ACTOR_COMMAND, (event: CommandEvent) => {
       this.onCommand(event.command).catch((err) => {
         this.logger.error(err, 'error during line handler');
       });
-    });
+    }, this);
   }
 
   public async stop(): Promise<void> {
-    const { pending } = onceWithRemove(this.event, 'quit');
-    return pending;
+    this.event.removeGroup(this);
   }
 
   /**
@@ -227,13 +230,18 @@ export class LocalStateService implements StateService {
    * Handler for a line of input from the focus helper.
    */
   public async onOutput(line: string, context?: LocaleContext): Promise<void> {
-    this.event.emit('state-output', {
+    this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
         key: line,
         context,
       }],
       step: mustExist(this.state).step,
     });
+  }
+
+  public async onWorld(world: World): Promise<void> {
+    this.logger.debug({ world: world.meta.id }, 'registering loaded world');
+    this.worlds.push(world);
   }
 
   /**
@@ -288,7 +296,7 @@ export class LocalStateService implements StateService {
   public async doDebug(): Promise<void> {
     const state = await this.save();
     const lines = debugState(state);
-    this.event.emit('state-output', {
+    this.event.emit(EVENT_STATE_OUTPUT, {
       lines: lines.map((it) => ({ key: it })),
       step: state.step,
     });
@@ -296,11 +304,10 @@ export class LocalStateService implements StateService {
 
   public async doHelp(): Promise<void> {
     const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(', ');
-    this.event.emit('state-output', {
+    this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
         key: verbs,
       }],
-      // TODO: remove step from output?
       step: {
         time: 0,
         turn: 0,
@@ -314,7 +321,7 @@ export class LocalStateService implements StateService {
 
     await this.loader.saveStr(path, lines.join('\n'));
 
-    this.event.emit('state-output', {
+    this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
         context: {
           path,
@@ -334,7 +341,7 @@ export class LocalStateService implements StateService {
     this.state = state;
     await this.createHelpers();
 
-    this.event.emit('state-output', {
+    this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
         key: `loaded world ${state.meta.id} state from ${path}`,
       }],
@@ -356,7 +363,7 @@ export class LocalStateService implements StateService {
     });
     await this.loader.saveStr(path, dataStr);
 
-    this.event.emit('state-output', {
+    this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
         key: `saved world ${state.meta.id} state to ${path}`,
       }],

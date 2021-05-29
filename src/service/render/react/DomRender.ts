@@ -15,7 +15,7 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
   public async start(): Promise<void> {
     this.logger.debug('starting React render');
 
-    await super.start();
+    return super.start();
   }
 
   public async stop(): Promise<void> {
@@ -24,7 +24,7 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
     const elem = mustExist(document.getElementById('app'));
     unmountComponentAtNode(elem);
 
-    // TODO: remove event handlers from state
+    return super.stop();
   }
 
   /**

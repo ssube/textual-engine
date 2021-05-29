@@ -4,7 +4,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
-import { COMMON_VERBS } from '../../util/constants';
+import { COMMON_VERBS, EVENT_ACTOR_COMMAND, EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_OUTPUT } from '../../util/constants';
 import { EventBus, LineEvent, OutputEvent } from '../event';
 import { LocaleService } from '../locale';
 import { TokenizerService } from '../tokenizer';
@@ -47,8 +47,8 @@ export class PlayerActorService implements ActorService {
       return;
     }
 
-    this.event.on('render-output', (event) => this.onInput(event));
-    this.event.on('state-output', (event) => this.onOutput(event));
+    this.event.on(EVENT_RENDER_OUTPUT, (event) => this.onInput(event), this);
+    this.event.on(EVENT_STATE_OUTPUT, (event) => this.onOutput(event), this);
 
     await this.tokenizer.translate(COMMON_VERBS);
 
@@ -56,7 +56,7 @@ export class PlayerActorService implements ActorService {
   }
 
   public async stop() {
-    /* noop */
+    this.event.removeGroup(this);
   }
 
   public async last(): Promise<Command> {
@@ -73,7 +73,7 @@ export class PlayerActorService implements ActorService {
       this.logger.debug({ event, commands }, 'translated event');
 
       for (const command of commands) {
-        this.event.emit('actor-command', {
+        this.event.emit(EVENT_ACTOR_COMMAND, {
           command,
         });
       }
@@ -84,7 +84,7 @@ export class PlayerActorService implements ActorService {
     this.logger.debug({ event }, 'translating output');
 
     const lines = event.lines.map((it) => this.locale.translate(it.key, it.context));
-    this.event.emit('actor-output', {
+    this.event.emit(EVENT_ACTOR_OUTPUT, {
       lines,
     });
   }

@@ -17,14 +17,14 @@ export class InkRender extends BaseReactRender implements RenderService {
   public async start(): Promise<void> {
     this.logger.debug('starting Ink render');
 
-    await super.start();
+    return super.start();
   }
 
   public async stop(): Promise<void> {
     this.logger.debug('stopping Ink render');
     mustExist(this.ink).unmount();
 
-    // TODO: remove event handlers from state
+    return super.stop();
   }
 
   /**

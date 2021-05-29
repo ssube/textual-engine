@@ -52,13 +52,16 @@ export abstract class BaseReactRender implements RenderService {
     this.renderRoot();
     this.prompt(`turn ${this.step.turn}`);
 
-    this.event.on('actor-output', (output) => this.onOutput(output));
-    this.event.on('state-room', (room) => this.onRoom(room));
-    this.event.on('state-step', (step) => this.onStep(step));
-    this.event.on('quit', () => this.onQuit());
+    this.event.on('actor-output', (output) => this.onOutput(output), this);
+    this.event.on('state-room', (room) => this.onRoom(room), this);
+    this.event.on('state-step', (step) => this.onStep(step), this);
+    this.event.on('quit', () => this.onQuit(), this);
   }
 
-  public abstract stop(): Promise<void>;
+  public async stop(): Promise<void> {
+    this.event.removeGroup(this);
+  }
+
   protected abstract renderRoot(): void;
 
   public prompt(prompt: string): void {

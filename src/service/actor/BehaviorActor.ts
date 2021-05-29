@@ -5,7 +5,7 @@ import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { ActorType } from '../../model/entity/Actor';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM } from '../../module';
-import { VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
+import { EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
 import { EventBus, RoomEvent } from '../event';
 import { RandomGenerator } from '../random';
 
@@ -47,7 +47,7 @@ export class BehaviorActorService implements ActorService {
   }
 
   public async start() {
-    this.event.on('state-room', (event) => {
+    this.event.on(EVENT_STATE_ROOM, (event) => {
       if (this.actor === event.actor.meta.id) {
         this.onRoom(event);
       }

@@ -3,6 +3,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { LoaderService } from '.';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER } from '../../module';
+import { EVENT_LOADER_CONFIG, EVENT_LOADER_PATH, EVENT_LOADER_STATE, EVENT_LOADER_WORLD } from '../../util/constants';
 import { EventBus } from '../event';
 import { Parser } from '../parser';
 
@@ -25,15 +26,15 @@ export abstract class BaseLoader implements LoaderService {
   }
 
   public async start(): Promise<void> {
-    this.events.on('loader-path', (event) => {
+    this.events.on(EVENT_LOADER_PATH, (event) => {
       this.onPath(event.path).catch((err) => {
         this.logger.error(err, 'error during path');
       });
-    });
+    }, this);
   }
 
   public async stop(): Promise<void> {
-    // TODO: remove events
+    this.events.removeGroup(this);
   }
 
   public async onPath(path: string): Promise<void> {
@@ -41,7 +42,7 @@ export abstract class BaseLoader implements LoaderService {
     const data = this.parser.load(dataStr);
 
     if (doesExist(data.config)) {
-      this.events.emit('loader-config', {
+      this.events.emit(EVENT_LOADER_CONFIG, {
         config: data.config,
       });
 
@@ -49,13 +50,13 @@ export abstract class BaseLoader implements LoaderService {
     }
 
     for (const world of data.worlds) {
-      this.events.emit('loader-world', {
+      this.events.emit(EVENT_LOADER_WORLD, {
         world,
       });
     }
 
     if (doesExist(data.state)) {
-      this.events.emit('loader-state', {
+      this.events.emit(EVENT_LOADER_STATE, {
         state: data.state,
       });
     }

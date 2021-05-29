@@ -89,19 +89,21 @@ export interface EventBus extends EventEmitter {
   emit(name: 'state-output', event: OutputEvent): boolean;
 
   // global events
-  on(name: 'error', handler: ErrorHandler): this;
-  on(name: 'quit', event: EventHandler<void>): this;
+  on(name: 'error', handler: ErrorHandler, group?: any): this;
+  on(name: 'quit', event: EventHandler<void>, group?: any): this;
 
   // service events
-  on(name: 'actor-command', handler: EventHandler<CommandEvent>): this;
-  on(name: 'actor-output', handler: EventHandler<LineEvent>): this;
-  on(name: 'locale-bundle', handler: EventHandler<LocaleEvent>): this;
-  on(name: 'loader-path', handler: EventHandler<LoaderPathEvent>): this;
-  on(name: 'loader-config', handler: EventHandler<LoaderConfigEvent>): this;
-  on(name: 'loader-state', handler: EventHandler<LoaderStateEvent>): this;
-  on(name: 'loader-world', handler: EventHandler<LoaderWorldEvent>): this;
-  on(name: 'render-output', handler: EventHandler<LineEvent>): this;
-  on(name: 'state-room', handler: EventHandler<RoomEvent>): this;
-  on(name: 'state-step', handler: EventHandler<StepResult>): this;
-  on(name: 'state-output', handler: EventHandler<OutputEvent>): this;
+  on(name: 'actor-command', handler: EventHandler<CommandEvent>, group?: any): this;
+  on(name: 'actor-output', handler: EventHandler<LineEvent>, group?: any): this;
+  on(name: 'locale-bundle', handler: EventHandler<LocaleEvent>, group?: any): this;
+  on(name: 'loader-path', handler: EventHandler<LoaderPathEvent>, group?: any): this;
+  on(name: 'loader-config', handler: EventHandler<LoaderConfigEvent>, group?: any): this;
+  on(name: 'loader-state', handler: EventHandler<LoaderStateEvent>, group?: any): this;
+  on(name: 'loader-world', handler: EventHandler<LoaderWorldEvent>, group?: any): this;
+  on(name: 'render-output', handler: EventHandler<LineEvent>, group?: any): this;
+  on(name: 'state-room', handler: EventHandler<RoomEvent>, group?: any): this;
+  on(name: 'state-step', handler: EventHandler<StepResult>, group?: any): this;
+  on(name: 'state-output', handler: EventHandler<OutputEvent>, group?: any): this;
+
+  removeGroup(group: any): void;
 }

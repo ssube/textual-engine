@@ -6,6 +6,7 @@ import { LocaleContext, LocaleService } from '.';
 import { ConfigFile } from '../../model/file/Config';
 import { LocaleBundle } from '../../model/file/Locale';
 import { INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER } from '../../module';
+import { EVENT_LOCALE_BUNDLE } from '../../util/constants';
 import { EventBus } from '../event';
 
 interface NextLocaleOptions extends BaseOptions {
@@ -43,10 +44,14 @@ export class NextLocaleService implements LocaleService {
 
     this.i18next = inst;
 
-    this.event.on('locale-bundle', (event) => {
+    this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
       this.deleteBundle(event.name);
       this.addBundle(event.name, event.bundle);
-    });
+    }, this);
+  }
+
+  public async stop(): Promise<void> {
+    this.event.removeGroup(this);
   }
 
   public addBundle(name: string, bundle: LocaleBundle): void {

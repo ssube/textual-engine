@@ -5,7 +5,7 @@ import { createInterface, Interface as LineInterface } from 'readline';
 
 import { RenderService } from '.';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
-import { META_QUIT } from '../../util/constants';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, META_QUIT } from '../../util/constants';
 import { onceWithRemove } from '../../util/event';
 import { EventBus, LineEvent, RoomEvent } from '../event';
 import { LocaleService } from '../locale';
@@ -76,20 +76,20 @@ export class LineRender implements RenderService {
       this.padPrompt = false;
 
       this.logger.debug({ line }, 'read line');
-      this.event.emit('render-output', {
+      this.event.emit(EVENT_RENDER_OUTPUT, {
         lines: [line],
       });
     });
 
     this.reader.on('SIGINT', () => {
       this.logger.debug('sending interrupt as quit command');
-      this.event.emit('render-output', {
+      this.event.emit(EVENT_RENDER_OUTPUT, {
         lines: [META_QUIT],
       });
     });
 
-    this.event.on('actor-output', (output) => this.onOutput(output));
-    this.event.on('state-room', (room) => this.onRoom(room));
+    this.event.on(EVENT_ACTOR_OUTPUT, (output) => this.onOutput(output));
+    this.event.on(EVENT_STATE_ROOM, (room) => this.onRoom(room));
 
     this.showPrompt();
   }

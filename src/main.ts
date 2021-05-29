@@ -22,8 +22,9 @@ import { LocaleService } from './service/locale';
 import { RenderService } from './service/render';
 import { StateService } from './service/state';
 import { parseArgs } from './util/args';
-import { asyncDebug, asyncTrack } from './util/async';
+import { asyncTrack, eventDebug } from './util/async';
 import { loadConfig } from './util/config/file';
+import { EVENT_ACTOR_OUTPUT, EVENT_LOADER_PATH, EVENT_NAMES, EVENT_RENDER_OUTPUT } from './util/constants';
 import { onceWithRemove } from './util/event';
 
 const DI_MODULES = new Map<string, new () => Module>([
@@ -100,28 +101,37 @@ export async function main(args: Array<string>): Promise<number> {
 
   const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
   for (const path of arg.data) {
-    events.emit('loader-path', {
+    events.emit(EVENT_LOADER_PATH, {
       path,
     });
   }
 
   for (const input of arg.input) {
-    events.emit('render-output', {
+    events.emit(EVENT_RENDER_OUTPUT, {
       lines: [
         input,
       ],
     });
 
     // await output before next command
-    const { pending } = onceWithRemove(events, 'actor-output');
+    const { pending } = onceWithRemove(events, EVENT_ACTOR_OUTPUT);
     await pending;
   }
+
+  const { pending } = onceWithRemove(events, 'quit');
+  await pending;
 
   await state.stop();
   await render.stop();
   await loader.stop();
+  await actor.stop();
+  await locale.stop();
 
   // asyncDebug(asyncOps);
+  // eventDebug(events);
+
+  // TODO: clean up within each service
+  events.removeAllListeners();
 
   return 0;
 }

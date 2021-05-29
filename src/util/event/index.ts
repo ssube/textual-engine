@@ -1,12 +1,11 @@
 import { doesExist } from '@apextoaster/js-utils';
-import { EventEmitter } from 'events';
 
 import { AbortEventError } from '../../error/AbortEventError';
 
 export type EventHandler<TEvent> = (event: TEvent) => void;
 export type ErrorHandler = (err?: Error) => void;
 
-export interface TypedEmitter<TName extends string, TValue> extends EventEmitter {
+export interface TypedEmitter<TName extends string, TValue> {
   on(name: 'error', handler: ErrorHandler): this;
   on(name: TName, handler: EventHandler<TValue>): this;
 

@@ -3,6 +3,39 @@ export const BYTE_RANGE = 255;
 export const PORTAL_DEPTH = 4;
 export const TEMPLATE_CHANCE = 100;
 
+// common events
+export const EVENT_COMMON_ERROR = 'error';
+export const EVENT_COMMON_QUIT = 'quit';
+
+// service events
+export const EVENT_ACTOR_COMMAND = 'actor-command';
+export const EVENT_ACTOR_OUTPUT = 'actor-output';
+export const EVENT_LOCALE_BUNDLE = 'locale-bundle';
+export const EVENT_LOADER_CONFIG = 'loader-config';
+export const EVENT_LOADER_PATH = 'loader-path';
+export const EVENT_LOADER_STATE = 'loader-state';
+export const EVENT_LOADER_WORLD = 'loader-world';
+export const EVENT_RENDER_OUTPUT = 'render-output';
+export const EVENT_STATE_OUTPUT = 'state-output';
+export const EVENT_STATE_ROOM = 'state-room';
+export const EVENT_STATE_STEP = 'state-step';
+
+export const EVENT_NAMES = [
+  EVENT_ACTOR_COMMAND,
+  EVENT_ACTOR_OUTPUT,
+  EVENT_COMMON_ERROR,
+  EVENT_COMMON_QUIT,
+  EVENT_LOADER_CONFIG,
+  EVENT_LOADER_PATH,
+  EVENT_LOADER_STATE,
+  EVENT_LOADER_WORLD,
+  EVENT_LOCALE_BUNDLE,
+  EVENT_RENDER_OUTPUT,
+  EVENT_STATE_OUTPUT,
+  EVENT_STATE_ROOM,
+  EVENT_STATE_STEP,
+] as const;
+
 // script slots
 export const SLOT_ENTER = 'enter';
 export const SLOT_GET = 'get';

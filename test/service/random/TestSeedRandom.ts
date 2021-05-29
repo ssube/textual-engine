@@ -40,4 +40,16 @@ describe('seed random generator', () => {
 
     expect(first).to.deep.equal(next);
   });
+
+  it('should return constant integer values when next min equals max', async () => {
+    const container = Container.from();
+    await container.configure();
+
+    const random = await container.create(SeedRandomGenerator);
+
+    for (let i = 0; i < 1_000; ++i) {
+      const value = random.nextInt();
+      expect(random.nextInt(value, value)).to.equal(value);
+    }
+  });
 });

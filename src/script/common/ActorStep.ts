@@ -3,7 +3,7 @@ import { InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 import { Actor, ActorType, isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { isRoom } from '../../model/entity/Room';
-import { ScriptContext, ScriptTarget } from '../../service/script';
+import { ScriptContext, ScriptTarget, ShowMessageVolume } from '../../service/script';
 import {
   SLOT_HIT,
   SLOT_USE,
@@ -117,17 +117,26 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
   const target = indexEntity(results, command.index, isActor);
 
   if (isNil(target)) {
-    await context.focus.show('actor.step.hit.type', { command });
+    await context.focus.show('actor.step.hit.type', { command }, {
+      source: this,
+      volume: ShowMessageVolume.SELF,
+    });
     return;
   }
 
   if (this === target) {
-    await context.focus.show('actor.step.hit.self', { command });
+    await context.focus.show('actor.step.hit.self', { command }, {
+      source: this,
+      volume: ShowMessageVolume.SELF,
+    });
     return;
   }
 
   if (this.items.length === 0) {
-    await context.focus.show('actor.step.hit.item', { target });
+    await context.focus.show('actor.step.hit.item', { target }, {
+      source: this,
+      volume: ShowMessageVolume.SELF,
+    });
     return;
   }
 
@@ -244,7 +253,13 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
   }
 
   // move the actor and focus
-  await context.focus.show('actor.step.move.portal', { actor: this, portal: targetPortal });
+  await context.focus.show('actor.step.move.portal', {
+    actor: this,
+    portal: targetPortal,
+  }, {
+    source: this,
+    volume: ShowMessageVolume.SELF,
+  });
   await context.transfer.moveActor({
     moving: this,
     source: currentRoom.meta.id,

@@ -11,6 +11,17 @@ import { SearchParams } from '../../util/state';
 import { Immutable, ScriptData } from '../../util/types';
 import { RandomGenerator } from '../random';
 
+export enum ShowMessageVolume {
+  SELF = 'self', // narrowest scope
+  ROOM = 'room',
+  WORLD = 'world',
+}
+
+export interface ShowSource {
+  source: WorldEntity;
+  volume: ShowMessageVolume;
+}
+
 export interface ScriptFocus {
   /**
    * Set the currently-focused room.
@@ -25,7 +36,7 @@ export interface ScriptFocus {
   /**
    * Display a message from an entity.
    */
-  show(msg: string, context?: LocaleContext): Promise<void>;
+  show(msg: string, context?: LocaleContext, source?: ShowSource): Promise<void>;
 }
 
 export interface TransferParams<TEntity extends WorldEntity> {

@@ -7,13 +7,11 @@ import { ActorLocator, ActorModule } from '../../src/module/ActorModule';
 import { LocalModule } from '../../src/module/LocalModule';
 import { PlayerActorService } from '../../src/service/actor/PlayerActor';
 import { NextLocaleService } from '../../src/service/locale/NextLocale';
+import { getTestContainer } from '../helper';
 
 describe('actor module', () => {
   it('should provide a player actor service for player actors', async () => {
-    const container = Container.from(new LocalModule(), new ActorModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
+    const container = await getTestContainer(new LocalModule(), new ActorModule());
 
     const locale = await container.create<NextLocaleService, BaseOptions>(INJECT_LOCALE);
     await locale.start();

@@ -15,7 +15,12 @@ export class SeedRandomGenerator implements RandomGenerator {
   }
 
   public nextInt(max = BYTE_RANGE, min = 0): number {
-    const range = max - min;
+    const range = Math.floor(max) - Math.floor(min);
+
+    if (range < 1) {
+      return max;
+    }
+
     return (Math.abs(this.source.int32()) % range) + min;
   }
 

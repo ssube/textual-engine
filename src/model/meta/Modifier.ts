@@ -1,21 +1,13 @@
+import { JSONSchemaType } from 'ajv';
 import { Entity } from '../entity/Base';
 import { Metadata } from '../Metadata';
-import { TemplateRef } from './Template';
+import { BaseTemplate, TemplateNumber, TemplateRef, TemplateString, TEMPLATE_STRING_SCHEMA } from './Template';
 
-export interface ModifierString {
-  prefix: string;
-  suffix: string;
-}
-
-export interface ModifierNumber {
-  offset: number;
-}
-
-export type ModifierMetadata = BaseModifier<Omit<Metadata, 'id' | 'template'>>;
+export type ModifierMetadata = BaseTemplate<Omit<Metadata, 'id' | 'template'>>;
 
 export type ModifierPrimitive<TBase> =
-  TBase extends number ? ModifierNumber :
-  TBase extends string ? ModifierString :
+  TBase extends number ? TemplateNumber :
+  TBase extends string ? TemplateString :
   TBase extends Metadata ? ModifierMetadata :
   TBase extends Array<Entity> ? Array<TemplateRef> :
   TBase extends Array<infer TValue> ? Array<ModifierPrimitive<TValue>> :
@@ -27,7 +19,9 @@ export type BaseModifier<TBase> = {
   [TKey in keyof TBase]: ModifierPrimitive<TBase[TKey]>;
 };
 
-export type Modifier<TEntity> = BaseModifier<TEntity> & {
+export interface Modifier<TEntity> {
+  base: BaseModifier<TEntity>;
+
   /**
    * Chance of this modifier appearing.
    */
@@ -39,4 +33,13 @@ export type Modifier<TEntity> = BaseModifier<TEntity> & {
   excludes: Array<string>;
 
   id: string;
+}
+
+export const MODIFIER_METADATA_SCHEMA: JSONSchemaType<ModifierMetadata> = {
+  type: 'object',
+  properties: {
+    desc: TEMPLATE_STRING_SCHEMA,
+    name: TEMPLATE_STRING_SCHEMA,
+  },
+  required: ['desc', 'name'],
 };

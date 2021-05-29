@@ -1,11 +1,11 @@
 import { JSONSchemaType } from 'ajv';
 
-import { Actor, ACTOR_SCHEMA } from './entity/Actor';
+import { Actor, ACTOR_TEMPLATE_SCHEMA } from './entity/Actor';
 import { Item, ITEM_SCHEMA } from './entity/Item';
 import { Room, ROOM_SCHEMA } from './entity/Room';
-import { LocaleBundle, LOCALE_SCHEMA } from './file/Locale';
-import { METADATA_SCHEMA } from './Metadata';
+import { LOCALE_SCHEMA, LocaleBundle } from './file/Locale';
 import { Template, TEMPLATE_REF_SCHEMA, TemplateMetadata, TemplateRef } from './meta/Template';
+import { METADATA_SCHEMA } from './Metadata';
 
 export interface World {
   locale: LocaleBundle;
@@ -54,7 +54,7 @@ export const WORLD_SCHEMA: JSONSchemaType<World> = {
       properties: {
         actors: {
           type: 'array',
-          items: ACTOR_SCHEMA,
+          items: ACTOR_TEMPLATE_SCHEMA,
         },
         items: {
           type: 'array',

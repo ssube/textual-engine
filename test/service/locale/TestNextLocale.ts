@@ -1,17 +1,13 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { Container, NullLogger } from 'noicejs';
 
 import { LocalModule } from '../../../src/module/LocalModule';
 import { NextLocaleService } from '../../../src/service/locale/NextLocale';
+import { getTestContainer } from '../../helper';
 
 describe('next locale service', () => {
   it('should have an i18next instance after being started', async () => {
-    const container = Container.from(new LocalModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
-
+    const container = await getTestContainer(new LocalModule());
     const locale = await container.create(NextLocaleService);
 
     expect(() => locale.getInstance()).to.throw(NotFoundError);
@@ -22,11 +18,7 @@ describe('next locale service', () => {
   });
 
   it('should prefer the world bundle', async () => {
-    const container = Container.from(new LocalModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
-
+    const container = await getTestContainer(new LocalModule());
     const locale = await container.create(NextLocaleService);
     await locale.start();
 
@@ -49,11 +41,7 @@ describe('next locale service', () => {
   });
 
   it('should translate keys with context', async () => {
-    const container = Container.from(new LocalModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
-
+    const container = await getTestContainer(new LocalModule());
     const locale = await container.create(NextLocaleService);
     await locale.start();
 

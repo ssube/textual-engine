@@ -59,6 +59,7 @@ export const TEMPLATE_NUMBER_SCHEMA: JSONSchemaType<TemplateNumber> = {
     },
     min: {
       type: 'number',
+      default: 0,
     },
     step: {
       type: 'number',
@@ -69,7 +70,7 @@ export const TEMPLATE_NUMBER_SCHEMA: JSONSchemaType<TemplateNumber> = {
       default: 'number',
     },
   },
-  required: ['max', 'min'],
+  required: ['max'],
 };
 
 export const TEMPLATE_STRING_SCHEMA: JSONSchemaType<TemplateString> = {

@@ -8,7 +8,8 @@ import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { State } from '../../../src/model/State';
 import { LocalModule } from '../../../src/module/LocalModule';
-import { ShowMessageVolume, StateFocusResolver } from '../../../src/util/state/FocusResolver';
+import { ShowMessageVolume } from '../../../src/service/script';
+import { StateFocusResolver } from '../../../src/util/state/FocusResolver';
 
 const TEST_STATE: State = {
   focus: {

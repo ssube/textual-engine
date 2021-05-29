@@ -1,14 +1,13 @@
-import { ModifierNumber, ModifierString } from '../../model/meta/Modifier';
 import { TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/meta/Template';
 import { VerbMap } from '../../util/types';
 
 export interface TemplateService {
-  modifyNumber(base: number, mod: ModifierNumber): number;
-  modifyString(base: string, mod: ModifierString): string;
-  modifyNumberList(base: Array<number>, mod: Array<ModifierNumber>): Array<number>;
-  modifyStringList(base: Array<string>, mod: Array<ModifierString>): Array<string>;
-  modifyNumberMap(base: Map<string, number>, mod: Map<string, ModifierNumber>): Map<string, number>;
-  modifyStringMap(base: Map<string, string>, mod: Map<string, ModifierString>): Map<string, string>;
+  modifyNumber(base: number, mod: TemplateNumber): number;
+  modifyString(base: string, mod: TemplateString): string;
+  modifyNumberList(base: Array<number>, mod: Array<TemplateNumber>): Array<number>;
+  modifyStringList(base: Array<string>, mod: Array<TemplateString>): Array<string>;
+  modifyNumberMap(base: Map<string, number>, mod: Map<string, TemplateNumber>): Map<string, number>;
+  modifyStringMap(base: Map<string, string>, mod: Map<string, TemplateString>): Map<string, string>;
 
   renderString(input: TemplateString): string;
   renderNumber(input: TemplateNumber): number;

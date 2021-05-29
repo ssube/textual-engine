@@ -1,4 +1,5 @@
 // service symbols
+export const INJECT_CONFIG = Symbol('inject-config');
 export const INJECT_COUNTER = Symbol('inject-counter');
 export const INJECT_EVENT = Symbol('inject-event-bus');
 export const INJECT_LOADER = Symbol('inject-loader');

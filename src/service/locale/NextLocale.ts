@@ -3,17 +3,20 @@ import i18next, { i18n } from 'i18next';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { LocaleContext, LocaleService } from '.';
+import { ConfigFile } from '../../model/file/Config';
 import { LocaleBundle } from '../../model/file/Locale';
-import { INJECT_EVENT, INJECT_LOGGER } from '../../module';
+import { INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER } from '../../module';
 import { EventBus } from '../event';
 
 interface NextLocaleOptions extends BaseOptions {
+  [INJECT_CONFIG]?: ConfigFile;
   [INJECT_EVENT]?: EventBus;
   [INJECT_LOGGER]?: Logger;
 }
 
-@Inject(INJECT_EVENT, INJECT_LOGGER)
+@Inject(INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER)
 export class NextLocaleService implements LocaleService {
+  protected config: ConfigFile['locale'];
   protected event: EventBus;
   protected logger: Logger;
 
@@ -21,6 +24,7 @@ export class NextLocaleService implements LocaleService {
   protected bundleLangs: Map<string, Set<string>>;
 
   constructor(options: NextLocaleOptions) {
+    this.config = mustExist(options[INJECT_CONFIG]).locale;
     this.event = mustExist(options[INJECT_EVENT]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
@@ -33,7 +37,7 @@ export class NextLocaleService implements LocaleService {
     const inst = i18next.createInstance({
       defaultNS: 'world',
       fallbackNS: ['common'],
-      lng: 'en',
+      lng: this.config.current,
     });
     await inst.init();
 

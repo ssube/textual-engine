@@ -69,11 +69,11 @@ export function matchIdSegments(value: string, filter: string): boolean {
   const valueParts = value.split('-');
   const filterParts = filter.split('-');
 
-  if (filterParts.length < valueParts.length) {
+  if (valueParts.length < filterParts.length) {
     return false;
   }
 
-  return valueParts.every((it, idx) => it === filterParts[idx]);
+  return filterParts.every((it, idx) => it === valueParts[idx]);
 }
 
 export const DEFAULT_MATCHERS: SearchMatchers = {

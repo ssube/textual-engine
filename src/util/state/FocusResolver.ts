@@ -2,13 +2,11 @@ import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-util
 import { BaseOptions } from 'noicejs';
 
 import { findRoom, searchState } from '.';
-import { WorldEntity } from '../../model/entity';
 import { Actor, ACTOR_TYPE, isActor } from '../../model/entity/Actor';
-import { ITEM_TYPE } from '../../model/entity/Item';
 import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { State } from '../../model/State';
 import { LocaleContext } from '../../service/locale';
-import { ScriptFocus } from '../../service/script';
+import { ScriptFocus, ShowMessageVolume, ShowSource } from '../../service/script';
 
 export type FocusChangeRoom = (room: Room) => Promise<void>;
 export type FocusChangeActor = (actor: Actor) => Promise<void>;
@@ -23,17 +21,6 @@ interface FocusEvents {
 interface StateFocusResolverOptions extends BaseOptions {
   events?: FocusEvents;
   state?: State;
-}
-
-export enum ShowMessageVolume {
-  SELF = 'self', // narrowest scope
-  ROOM = 'room',
-  WORLD = 'world',
-}
-
-interface ShowSource {
-  source: WorldEntity;
-  volume: ShowMessageVolume;
 }
 
 /**

@@ -2,10 +2,8 @@ import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-util
 import { BaseOptions, Inject } from 'noicejs';
 
 import { TemplateService } from '.';
-import { ModifierNumber, ModifierString } from '../../model/meta/Modifier';
 import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/meta/Template';
 import { INJECT_RANDOM } from '../../module';
-import { hasText } from '../../util/string';
 import { JoinChain } from '../../util/template/JoinChain';
 import { splitChain } from '../../util/template/SplitChain';
 import { VerbMap, VerbSlot } from '../../util/types';
@@ -28,23 +26,25 @@ export class ChainTemplateService implements TemplateService {
     });
   }
 
-  public modifyNumber(base: number, mod: ModifierNumber): number {
-    return base + mod.offset;
+  public modifyNumber(base: number, mod: TemplateNumber): number {
+    const offset = this.random.nextInt(mod.max, mod.min);
+    return base + offset;
   }
 
-  public modifyString(base: string, mod: ModifierString): string {
-    return [mod.prefix, base, mod.suffix].filter(hasText).join(' ');
+  public modifyString(base: string, mod: TemplateString): string {
+    // TODO: use i18next
+    return mod.base.replace(/{{base}}/g, base);
   }
 
-  public modifyNumberList(base: Array<number>, mod: Array<ModifierNumber>): Array<number> {
+  public modifyNumberList(base: Array<number>, mod: Array<TemplateNumber>): Array<number> {
     return base.map((it, idx) => this.modifyNumber(it, mod[idx]));
   }
 
-  public modifyStringList(base: Array<string>, mod: Array<ModifierString>): Array<string> {
+  public modifyStringList(base: Array<string>, mod: Array<TemplateString>): Array<string> {
     return base.map((it, idx) => this.modifyString(it, mod[idx]));
   }
 
-  public modifyNumberMap(base: Map<string, number>, mod: Map<string, ModifierNumber>): Map<string, number> {
+  public modifyNumberMap(base: Map<string, number>, mod: Map<string, TemplateNumber>): Map<string, number> {
     const result = new Map();
     for (const [key, value] of base.entries()) {
       const modValue = mod.get(key);
@@ -57,7 +57,7 @@ export class ChainTemplateService implements TemplateService {
     return result;
   }
 
-  public modifyStringMap(base: Map<string, string>, mod: Map<string, ModifierString>): Map<string, string> {
+  public modifyStringMap(base: Map<string, string>, mod: Map<string, TemplateString>): Map<string, string> {
     const result = new Map();
     for (const [key, value] of base.entries()) {
       const modValue = mod.get(key);

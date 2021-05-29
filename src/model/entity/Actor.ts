@@ -7,6 +7,8 @@ import { Metadata, METADATA_SCHEMA } from '../Metadata';
 import { Template, TEMPLATE_REF_SCHEMA } from '../meta/Template';
 import { Entity } from './Base';
 import { Item } from './Item';
+import { Modifier, MODIFIER_METADATA_SCHEMA } from '../meta/Modifier';
+import { TEMPLATE_CHANCE } from '../../util/constants';
 
 export enum ActorType {
   DEFAULT = 'default',
@@ -30,7 +32,34 @@ export function isActor(entity: Optional<Entity>): entity is Actor {
   return doesExist(entity) && entity.type === ACTOR_TYPE;
 }
 
-export const ACTOR_SCHEMA: JSONSchemaType<Template<Actor>> = {
+export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
+  type: 'object',
+  properties: {
+    base: {
+      type: 'object',
+      /* properties: {
+        meta: MODIFIER_METADATA_SCHEMA,
+      }, */
+      required: ['meta'],
+    },
+    chance: {
+      type: 'number',
+      default: TEMPLATE_CHANCE,
+    },
+    excludes: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
+    id: {
+      type: 'string',
+    },
+  },
+  required: [],
+};
+
+export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
   type: 'object',
   properties: {
     base: {
@@ -64,10 +93,7 @@ export const ACTOR_SCHEMA: JSONSchemaType<Template<Actor>> = {
     mods: {
       type: 'array',
       default: [],
-      items: {
-        type: 'object',
-        required: [],
-      },
+      items: ACTOR_MODIFIER_SCHEMA,
     },
   },
   required: ['base'],

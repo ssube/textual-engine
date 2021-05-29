@@ -205,8 +205,6 @@ export class LocalStateService implements StateService {
         this.logger.error(err, 'error during line handler');
       });
     });
-
-    return this.doHelp();
   }
 
   public async stop(): Promise<void> {

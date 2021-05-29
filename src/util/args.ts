@@ -5,25 +5,25 @@ import { PORTAL_DEPTH } from './constants';
 export interface ParsedArgs {
   config: string;
   data: Array<string>;
-  depth: number;
+  input: Array<string>;
   module: Array<string>;
-  seed: string;
-  world: string;
 }
 
 export function parseArgs(args: Array<string>): ParsedArgs {
   const argv = parser(args, {
     alias: {
+      config: ['c'],
       data: ['d'],
+      input: ['i'],
+      module: ['m'],
     },
-    array: ['data', 'module'],
+    array: ['data', 'input', 'module'],
     default: {
       depth: PORTAL_DEPTH,
       module: ['local', 'input', 'node'],
     },
     // envPrefix: 'TEXTUAL_',
-    number: ['depth'],
-    string: ['config', 'seed', 'world'],
+    string: ['config'],
   });
 
   return (argv as unknown) as ParsedArgs;

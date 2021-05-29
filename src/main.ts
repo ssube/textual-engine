@@ -93,6 +93,16 @@ export async function main(args: Array<string>): Promise<number> {
     });
   }
 
+  for (const input of arg.input) {
+    events.emit('render-output', {
+      lines: [
+        input,
+      ],
+    });
+
+    // await step
+  }
+
   await state.stop();
   await render.stop();
   await loader.stop();

@@ -9,6 +9,7 @@ import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
 import { StateFocusResolver } from '../../../src/util/state/FocusResolver';
+import { getStubEvents } from '../../helper';
 
 const TEST_STATE: State = {
   focus: {
@@ -61,11 +62,7 @@ describe('local script service', () => {
     await script.invoke(target, 'foo', {
       data: new Map(),
       focus: await container.create(StateFocusResolver, {
-        events: {
-          onActor: async () => { },
-          onRoom: async () => { },
-          onShow: async () => { },
-        },
+        events: getStubEvents(),
         state: TEST_STATE,
       }),
       random: await container.create(MathRandomGenerator),
@@ -99,11 +96,7 @@ describe('local script service', () => {
     await script.invoke(target, 'foo', {
       data: new Map(),
       focus: await container.create(StateFocusResolver, {
-        events: {
-          onActor: async () => { },
-          onRoom: async () => { },
-          onShow: async () => { },
-        },
+        events: getStubEvents(),
         state: TEST_STATE,
       }),
       random: await container.create(MathRandomGenerator),
@@ -140,11 +133,7 @@ describe('local script service', () => {
     await script.invoke(target, 'foo', {
       data: new Map(),
       focus: await container.create(StateFocusResolver, {
-        events: {
-          onActor: async () => { },
-          onRoom: async () => { },
-          onShow: async () => { },
-        },
+        events: getStubEvents(),
         state: TEST_STATE,
       }),
       random: await container.create(MathRandomGenerator),

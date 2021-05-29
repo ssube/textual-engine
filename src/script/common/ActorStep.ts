@@ -35,6 +35,7 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext, verb
   if (health <= 0) {
     if (this.actorType === ActorType.PLAYER) {
       await context.focus.show('actor.step.command.dead', { actor: this });
+      await context.focus.quit();
     }
     return;
   }

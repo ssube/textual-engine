@@ -5,7 +5,7 @@ import { INJECT_LOADER, INJECT_RENDER } from '.';
 import { BrowserFetchLoader } from '../service/loader/browser/FetchLoader';
 import { BrowserPageLoader } from '../service/loader/browser/PageLoader';
 import { RenderService } from '../service/render';
-import { ReactDomRender } from '../service/render/ReactDomRender';
+import { ReactDomRender } from '../service/render/react/DomRender';
 import { Singleton } from '../util/container';
 
 export class BrowserModule extends Module {

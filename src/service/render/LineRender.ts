@@ -10,7 +10,7 @@ import { onceWithRemove } from '../../util/event';
 import { EventBus, LineEvent, RoomEvent } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
-import { BaseRenderOptions } from './BaseReactRender';
+import { BaseRenderOptions } from './react/BaseRender';
 
 @Inject(/* all from base */)
 export class LineRender implements RenderService {

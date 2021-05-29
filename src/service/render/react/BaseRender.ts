@@ -1,13 +1,13 @@
 import { constructorName, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { RenderService } from '.';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
-import { onceWithRemove } from '../../util/event';
-import { debounce } from '../../util/event/Debounce';
-import { EventBus, LineEvent, OutputEvent, RoomEvent } from '../event';
-import { LocaleService } from '../locale';
-import { StepResult } from '../state';
+import { RenderService } from '..';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
+import { onceWithRemove } from '../../../util/event';
+import { debounce } from '../../../util/event/Debounce';
+import { EventBus, LineEvent, OutputEvent, RoomEvent } from '../../event';
+import { LocaleService } from '../../locale';
+import { StepResult } from '../../state';
 
 export interface BaseRenderOptions extends BaseOptions {
   [INJECT_EVENT]?: EventBus;
@@ -48,7 +48,16 @@ export abstract class BaseReactRender implements RenderService {
     };
   }
 
-  public abstract start(): Promise<void>;
+  public async start(): Promise<void> {
+    this.renderRoot();
+    this.prompt(`turn ${this.step.turn}`);
+
+    this.event.on('actor-output', (output) => this.onOutput(output));
+    this.event.on('state-room', (room) => this.onRoom(room));
+    this.event.on('state-step', (step) => this.onStep(step));
+    this.event.on('quit', () => this.onQuit());
+  }
+
   public abstract stop(): Promise<void>;
   protected abstract renderRoot(): void;
 
@@ -87,6 +96,7 @@ export abstract class BaseReactRender implements RenderService {
   public onQuit(): void {
     this.logger.debug('handling quit event from state');
     this.output.push('game over');
+    this.renderRoot();
   }
 
   /**

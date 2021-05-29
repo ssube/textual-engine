@@ -22,10 +22,17 @@ export interface RoomEvent {
 }
 
 export interface OutputEvent {
+  /**
+   * The lines of output.
+   */
   lines: Array<{
     context?: LocaleContext;
     key: string;
   }>;
+
+  /**
+   * The state step from which this output was emitted.
+   */
   step: StepResult;
 }
 

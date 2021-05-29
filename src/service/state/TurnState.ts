@@ -261,11 +261,11 @@ export class LocalStateService implements StateService {
       case META_LOAD:
         await this.doLoad(cmd.target, cmd.index);
         break;
+      case META_QUIT:
+        await this.doQuit();
+        break;
       case META_SAVE:
         await this.doSave(cmd.target);
-        break;
-      case META_QUIT:
-        this.event.emit('quit');
         break;
       default: {
         // step world
@@ -340,6 +340,10 @@ export class LocalStateService implements StateService {
       }],
       step: state.step,
     });
+  }
+
+  public async doQuit(): Promise<void> {
+    this.event.emit('quit');
   }
 
   public async doSave(path: string): Promise<void> {
@@ -460,8 +464,9 @@ export class LocalStateService implements StateService {
     this.focus = await this.container.create(StateFocusResolver, {
       events: {
         onActor: () => Promise.resolve(),
-        onRoom: async (room) => this.onRoom(room),
-        onShow: async (line, context) => this.onOutput(line, context),
+        onQuit: () => this.doQuit(),
+        onRoom: (room) => this.onRoom(room),
+        onShow: (line, context) => this.onOutput(line, context),
       },
     });
 

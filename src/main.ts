@@ -3,7 +3,15 @@ import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import { INJECT_ACTOR, INJECT_CONFIG, INJECT_EVENT, INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
+import {
+  INJECT_ACTOR,
+  INJECT_CONFIG,
+  INJECT_EVENT,
+  INJECT_LOADER,
+  INJECT_LOCALE,
+  INJECT_RENDER,
+  INJECT_STATE,
+} from './module';
 import { ActorLocator, ActorModule } from './module/ActorModule';
 import { BrowserModule } from './module/BrowserModule';
 import { LocalModule } from './module/LocalModule';
@@ -11,11 +19,12 @@ import { NodeModule } from './module/NodeModule';
 import { EventBus } from './service/event';
 import { LoaderService } from './service/loader';
 import { LocaleService } from './service/locale';
-import { Parser } from './service/parser';
 import { RenderService } from './service/render';
 import { StateService } from './service/state';
 import { parseArgs } from './util/args';
+import { asyncDebug, asyncTrack } from './util/async';
 import { loadConfig } from './util/config/file';
+import { onceWithRemove } from './util/event';
 
 const DI_MODULES = new Map<string, new () => Module>([
   ['browser', BrowserModule],
@@ -25,6 +34,9 @@ const DI_MODULES = new Map<string, new () => Module>([
 ]);
 
 export async function main(args: Array<string>): Promise<number> {
+  const { asyncHook, asyncOps } = asyncTrack();
+  asyncHook.enable();
+
   // parse args
   const arg = parseArgs(args);
 
@@ -100,12 +112,16 @@ export async function main(args: Array<string>): Promise<number> {
       ],
     });
 
-    // await step
+    // await output before next command
+    const { pending } = onceWithRemove(events, 'actor-output');
+    await pending;
   }
 
   await state.stop();
   await render.stop();
   await loader.stop();
+
+  // asyncDebug(asyncOps);
 
   return 0;
 }

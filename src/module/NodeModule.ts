@@ -5,7 +5,7 @@ import { INJECT_LOADER, INJECT_RENDER } from '.';
 import { NodeFetchLoader } from '../service/loader/node/FetchLoader';
 import { NodeFileLoader } from '../service/loader/node/FileLoader';
 import { RenderService } from '../service/render';
-import { InkRender } from '../service/render/InkRender';
+import { InkRender } from '../service/render/react/InkRender';
 import { LineRender } from '../service/render/LineRender';
 import { Singleton } from '../util/container';
 

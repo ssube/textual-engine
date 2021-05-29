@@ -1,7 +1,6 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { spy } from 'sinon';
 
 import { ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../src/model/entity/Item';
@@ -9,6 +8,7 @@ import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { State } from '../../../src/model/State';
 import { LocalModule } from '../../../src/module/LocalModule';
 import { ShowMessageVolume, StateFocusResolver } from '../../../src/util/state/FocusResolver';
+import { getStubEvents } from '../../helper';
 
 const TEST_STATE: State = {
   focus: {
@@ -106,13 +106,9 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const actorSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: actorSpy,
-          onRoom: spy(),
-          onShow: spy(),
-        },
+        events,
       });
 
       const state = {
@@ -126,7 +122,7 @@ describe('state focus utils', () => {
       await focus.setActor('bun');
 
       expect(state.focus.actor).to.equal('bun');
-      expect(actorSpy).to.have.callCount(1);
+      expect(events.onActor).to.have.callCount(1);
     });
 
     it('should throw when the actor is missing', async () => {
@@ -135,18 +131,14 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const actorSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: actorSpy,
-          onRoom: spy(),
-          onShow: spy(),
-        },
+        events,
       });
       focus.setState(TEST_STATE);
 
       await expect(focus.setActor('none')).to.eventually.be.rejectedWith(InvalidArgumentError);
-      expect(actorSpy).to.have.callCount(0);
+      expect(events.onActor).to.have.callCount(0);
     });
   });
 
@@ -157,13 +149,9 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const roomSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: spy(),
-          onRoom: roomSpy,
-          onShow: spy(),
-        },
+        events,
       });
 
       const state = {
@@ -177,7 +165,7 @@ describe('state focus utils', () => {
       await focus.setRoom('foo');
 
       expect(state.focus.room).to.equal('foo');
-      expect(roomSpy).to.have.callCount(1);
+      expect(events.onRoom).to.have.callCount(1);
     });
 
     it('should throw when the room is missing', async () => {
@@ -186,18 +174,14 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const roomSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: spy(),
-          onRoom: roomSpy,
-          onShow: spy(),
-        },
+        events,
       });
       focus.setState(TEST_STATE);
 
       await expect(focus.setRoom('none')).to.eventually.be.rejectedWith(InvalidArgumentError);
-      expect(roomSpy).to.have.callCount(0);
+      expect(events.onRoom).to.have.callCount(0);
     });
   });
 
@@ -208,13 +192,9 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const showSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: spy(),
-          onRoom: spy(),
-          onShow: showSpy,
-        },
+        events,
       });
       focus.setState({
         ...TEST_STATE,
@@ -225,7 +205,7 @@ describe('state focus utils', () => {
 
       await focus.show('foo', {});
 
-      expect(showSpy).to.have.callCount(1);
+      expect(events.onShow).to.have.callCount(1);
     });
 
     it('should always show messages to the current world', async () => {
@@ -234,13 +214,9 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const showSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: spy(),
-          onRoom: spy(),
-          onShow: showSpy,
-        },
+        events,
       });
       focus.setState({
         ...TEST_STATE,
@@ -254,7 +230,7 @@ describe('state focus utils', () => {
         volume: ShowMessageVolume.WORLD,
       });
 
-      expect(showSpy).to.have.callCount(1);
+      expect(events.onShow).to.have.callCount(1);
     });
 
     it('should show room messages from the current room', async () => {
@@ -263,13 +239,9 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const showSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: spy(),
-          onRoom: spy(),
-          onShow: showSpy,
-        },
+        events,
       });
       focus.setState({
         ...TEST_STATE,
@@ -284,7 +256,7 @@ describe('state focus utils', () => {
         volume: ShowMessageVolume.ROOM,
       });
 
-      expect(showSpy).to.have.callCount(0);
+      expect(events.onShow).to.have.callCount(0);
     });
 
     it('should filter room messages from other rooms', async () => {
@@ -293,13 +265,9 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const showSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: spy(),
-          onRoom: spy(),
-          onShow: showSpy,
-        },
+        events,
       });
       focus.setState({
         ...TEST_STATE,
@@ -314,7 +282,7 @@ describe('state focus utils', () => {
         volume: ShowMessageVolume.ROOM,
       });
 
-      expect(showSpy).to.have.callCount(1);
+      expect(events.onShow).to.have.callCount(1);
     });
 
     it('should show self messages from the current actor', async () => {
@@ -323,13 +291,9 @@ describe('state focus utils', () => {
         logger: NullLogger.global,
       });
 
-      const showSpy = spy();
+      const events = getStubEvents();
       const focus = await container.create(StateFocusResolver, {
-        events: {
-          onActor: spy(),
-          onRoom: spy(),
-          onShow: showSpy,
-        },
+        events,
       });
       focus.setState({
         ...TEST_STATE,
@@ -344,7 +308,7 @@ describe('state focus utils', () => {
         volume: ShowMessageVolume.SELF,
       });
 
-      expect(showSpy).to.have.callCount(1);
+      expect(events.onShow).to.have.callCount(1);
     });
 
     xit('should filter self messages from other actors');

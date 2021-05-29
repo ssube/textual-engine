@@ -10,10 +10,12 @@ import { LocaleContext } from '../../service/locale';
 
 export type FocusChangeRoom = (room: Room) => Promise<void>;
 export type FocusChangeActor = (actor: Actor) => Promise<void>;
+export type FocusQuit = () => Promise<void>;
 export type FocusShow = (line: string, context?: LocaleContext) => Promise<void>;
 
-interface FocusEvents {
+export interface FocusEvents {
   onActor: FocusChangeActor;
+  onQuit: FocusQuit;
   onRoom: FocusChangeRoom;
   onShow: FocusShow;
 }
@@ -39,6 +41,7 @@ interface StateFocusResolverOptions extends BaseOptions {
  */
 export class StateFocusResolver {
   protected onActor: FocusChangeActor;
+  protected onQuit: FocusQuit;
   protected onRoom: FocusChangeRoom;
   protected onShow: FocusShow;
 
@@ -47,6 +50,7 @@ export class StateFocusResolver {
   constructor(options: StateFocusResolverOptions) {
     const events = mustExist(options.events);
     this.onActor = events.onActor;
+    this.onQuit = events.onQuit;
     this.onRoom = events.onRoom;
     this.onShow = events.onShow;
   }
@@ -95,6 +99,10 @@ export class StateFocusResolver {
     } else {
       throw new InvalidArgumentError('unable to find room ID in state');
     }
+  }
+
+  public async quit(): Promise<void> {
+    await this.onQuit();
   }
 
   /**

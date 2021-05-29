@@ -1,7 +1,9 @@
 import { Container, LogLevel, Module, NullLogger } from 'noicejs';
+import { stub } from 'sinon';
 
 import { ConfigFile } from '../src/model/file/Config';
 import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
+import { FocusEvents } from '../src/util/state/FocusResolver';
 
 export function getTestLogger() {
   // TODO: return console/bunyan logger if TEST_LOGGER=that
@@ -35,4 +37,13 @@ export async function getTestContainer(...modules: Array<Module>): Promise<Conta
   });
 
   return container;
+}
+
+export function getStubEvents(): FocusEvents {
+  return {
+    onActor: stub(),
+    onQuit: stub(),
+    onRoom: stub(),
+    onShow: stub(),
+  };
 }

@@ -3,9 +3,9 @@ import { Inject } from 'noicejs';
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 
-import { RenderService } from '.';
-import { Frame } from '../../component/react/Frame';
-import { BaseReactRender } from './BaseReactRender';
+import { RenderService } from '..';
+import { Frame } from '../../../component/react/Frame';
+import { BaseReactRender } from './BaseRender';
 
 /**
  * Interface with React tree using an event emitter.
@@ -15,13 +15,7 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
   public async start(): Promise<void> {
     this.logger.debug('starting React render');
 
-    this.renderRoot();
-    this.prompt(`turn ${this.step.turn}`);
-
-    this.event.on('actor-output', (output) => this.onOutput(output));
-    this.event.on('state-room', (room) => this.onRoom(room));
-    this.event.on('state-step', (step) => this.onStep(step));
-    this.event.on('quit', () => this.onQuit());
+    await super.start();
   }
 
   public async stop(): Promise<void> {

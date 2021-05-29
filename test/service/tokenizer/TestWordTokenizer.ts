@@ -1,16 +1,12 @@
 import { expect } from 'chai';
-import { Container, NullLogger } from 'noicejs';
 
 import { LocalModule } from '../../../src/module/LocalModule';
 import { WordTokenizer } from '../../../src/service/tokenizer/WordTokenizer';
+import { getTestContainer } from '../../helper';
 
 describe('word tokenizer', () => {
   it('should parse token lines', async () => {
-    const container = Container.from(new LocalModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
-
+    const container = await getTestContainer(new LocalModule());
     const token = await container.create(WordTokenizer);
 
     return expect(token.parse('foo')).to.eventually.deep.equal([{
@@ -22,11 +18,7 @@ describe('word tokenizer', () => {
   });
 
   it('should parse a final numeric segment as the command index', async () => {
-    const container = Container.from(new LocalModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
-
+    const container = await getTestContainer(new LocalModule());
     const token = await container.create(WordTokenizer);
 
     const index = 13;

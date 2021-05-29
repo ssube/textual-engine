@@ -3,7 +3,7 @@ import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import { INJECT_ACTOR, INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
+import { INJECT_ACTOR, INJECT_CONFIG, INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
 import { ActorLocator, ActorModule } from './module/ActorModule';
 import { BrowserModule } from './module/BrowserModule';
 import { LocalModule } from './module/LocalModule';
@@ -44,6 +44,9 @@ export async function main(args: Array<string>): Promise<number> {
     }
     return new ctor();
   });
+
+  // TODO: bind to base module, once such a thing exists
+  modules[0].bind(INJECT_CONFIG).toInstance(config);
 
   // configure DI container
   const container = Container.from(...modules);

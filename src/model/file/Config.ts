@@ -17,7 +17,9 @@ export interface ConfigLogger {
 
 export interface ConfigFile {
   logger: ConfigLogger;
-  locale: LocaleBundle;
+  locale: LocaleBundle & {
+    current: string;
+  };
 }
 
 export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
@@ -61,7 +63,17 @@ export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
       ],
       additionalProperties: true,
     },
-    locale: LOCALE_SCHEMA,
+    locale: {
+      type: 'object',
+      properties: {
+        ...LOCALE_SCHEMA.properties,
+        current: {
+          type: 'string',
+          default: 'en',
+        },
+      },
+      required: ['bundles'],
+    },
   },
   required: [
     'locale',

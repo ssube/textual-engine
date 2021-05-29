@@ -26,3 +26,4 @@ locale:
           load: load
           quit: quit
           save: save
+  current: en

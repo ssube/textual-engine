@@ -20,6 +20,7 @@ export const VERB_USE = 'verbs.common.use';
 export const VERB_WAIT = 'verbs.common.wait';
 
 // meta commands
+export const META_CREATE = 'verbs.meta.create';
 export const META_DEBUG = 'verbs.meta.debug';
 export const META_GRAPH = 'verbs.meta.graph';
 export const META_HELP = 'verbs.meta.help';
@@ -37,6 +38,7 @@ export const STAT_DAMAGE = 'damage';
  * Should include all `META_*` and `VERB_*` constants from this file.
  */
 export const COMMON_VERBS = [
+  META_CREATE,
   META_DEBUG,
   META_GRAPH,
   META_HELP,

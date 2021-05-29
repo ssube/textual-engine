@@ -22,8 +22,6 @@ export interface EntityGeneratorOptions extends BaseOptions {
   [INJECT_LOGGER]?: Logger;
   [INJECT_RANDOM]?: RandomGenerator;
   [INJECT_TEMPLATE]?: TemplateService;
-
-  world?: World;
 }
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
@@ -33,7 +31,7 @@ export class StateEntityGenerator {
   protected random: RandomGenerator;
   protected template: TemplateService;
 
-  protected world: World;
+  protected world?: World;
 
   constructor(options: EntityGeneratorOptions) {
     this.counter = mustExist(options[INJECT_COUNTER]);
@@ -42,7 +40,14 @@ export class StateEntityGenerator {
     });
     this.random = mustExist(options[INJECT_RANDOM]);
     this.template = mustExist(options[INJECT_TEMPLATE]);
-    this.world = mustExist(options.world);
+  }
+
+  public getWorld(): World {
+    return mustExist(this.world);
+  }
+
+  public setWorld(world: World): void {
+    this.world = world;
   }
 
   // take ID and look up template?
@@ -64,6 +69,7 @@ export class StateEntityGenerator {
   }
 
   public async createActorList(templates: Array<TemplateRef>): Promise<Array<Actor>> {
+    const world = this.getWorld();
     const actors = [];
 
     for (const templateRef of templates) {
@@ -71,7 +77,7 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByTemplateId(this.world.templates.actors, templateRef.id);
+      const template = findByTemplateId(world.templates.actors, templateRef.id);
       this.logger.debug({
         template,
         templateRef,
@@ -103,6 +109,7 @@ export class StateEntityGenerator {
   }
 
   public async createItemList(templates: Array<TemplateRef>): Promise<Array<Item>> {
+    const world = this.getWorld();
     const items = [];
 
     for (const templateRef of templates) {
@@ -110,7 +117,7 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByTemplateId(this.world.templates.items, templateRef.id);
+      const template = findByTemplateId(world.templates.items, templateRef.id);
       this.logger.debug({
         template,
         templateRef,
@@ -244,8 +251,10 @@ export class StateEntityGenerator {
       return [];
     }
 
+    const world = this.getWorld();
+
     // get template
-    const templateRoom = findByTemplateId(mustExist(this.world).templates.rooms, room.meta.template);
+    const templateRoom = findByTemplateId(world.templates.rooms, room.meta.template);
     const templatePortals = templateRoom.base.portals.filter((it) => {
       this.logger.debug({ it, room }, 'looking for portal matching template in room');
 
@@ -314,6 +323,7 @@ export class StateEntityGenerator {
       };
     }
 
+    const world = this.getWorld();
     const groups = this.groupPortals(templates);
     const portals: Array<Portal> = [];
     const rooms: Array<Room> = [];
@@ -321,7 +331,7 @@ export class StateEntityGenerator {
     for (const [sourceGroup, group] of groups) {
       const potentialDests = Array.from(group.dests);
       const destTemplateId = randomItem(potentialDests, this.random);
-      const destTemplate = findByTemplateId(this.world.templates.rooms, destTemplateId);
+      const destTemplate = findByTemplateId(world.templates.rooms, destTemplateId);
 
       if (isNil(destTemplate)) {
         throw new NotFoundError('invalid room in portal dest');

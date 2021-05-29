@@ -27,6 +27,7 @@ describe('state debug utils', () => {
       },
       world: {
         depth: 0,
+        id: '',
         seed: '',
       },
     };
@@ -62,6 +63,7 @@ describe('state debug utils', () => {
       },
       world: {
         depth: 0,
+        id: '',
         seed: '',
       },
     };

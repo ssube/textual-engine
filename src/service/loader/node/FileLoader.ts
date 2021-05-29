@@ -1,12 +1,14 @@
 import { promises } from 'fs';
-import { BaseOptions } from 'noicejs';
 
-import { Loader } from '..';
+import { LoaderService } from '..';
+import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
 
-export class NodeFileLoader implements Loader {
+export class NodeFileLoader extends BaseLoader implements LoaderService {
   protected fs: typeof promises;
 
-  constructor(options: BaseOptions, fs = promises) {
+  constructor(options: BaseLoaderOptions, fs = promises) {
+    super(options);
+
     this.fs = fs;
   }
 

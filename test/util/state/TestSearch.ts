@@ -89,6 +89,7 @@ const TEST_STATE: State = {
   },
   world: {
     depth: 0,
+    id: '',
     seed: '',
   },
 };

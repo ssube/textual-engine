@@ -3,7 +3,7 @@ import { InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 import { Actor, ActorType, isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { isRoom } from '../../model/entity/Room';
-import { ScriptContext, ScriptTarget, ShowMessageVolume } from '../../service/script';
+import { ScriptContext, ScriptTarget } from '../../service/script';
 import {
   SLOT_HIT,
   SLOT_USE,
@@ -19,6 +19,7 @@ import {
 import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
 import { getKey } from '../../util/map';
 import { searchState } from '../../util/state';
+import { ShowMessageVolume } from '../../util/state/FocusResolver';
 
 export async function ActorStep(this: ScriptTarget, context: ScriptContext, verbs = ACTOR_VERB_SCRIPTS): Promise<void> {
   context.logger.debug({

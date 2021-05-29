@@ -5,6 +5,7 @@ import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { LocaleBundle } from '../../model/file/Locale';
 import { ErrorHandler, EventHandler } from '../../util/event';
+import { LoaderConfigEvent, LoaderPathEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader';
 import { LocaleContext } from '../locale';
 import { StepResult } from '../state';
 
@@ -55,6 +56,14 @@ export interface EventBus extends EventEmitter {
 
   emit(name: 'locale-bundle', event: LocaleEvent): boolean;
 
+  emit(name: 'loader-path', event: LoaderPathEvent): boolean;
+
+  emit(name: 'loader-config', event: LoaderConfigEvent): boolean;
+
+  emit(name: 'loader-state', event: LoaderStateEvent): boolean;
+
+  emit(name: 'loader-world', event: LoaderWorldEvent): boolean;
+
   /**
    * Unparsed input coming from render service.
    */
@@ -80,6 +89,10 @@ export interface EventBus extends EventEmitter {
   on(name: 'actor-command', handler: EventHandler<CommandEvent>): this;
   on(name: 'actor-output', handler: EventHandler<LineEvent>): this;
   on(name: 'locale-bundle', handler: EventHandler<LocaleEvent>): this;
+  on(name: 'loader-path', handler: EventHandler<LoaderPathEvent>): this;
+  on(name: 'loader-config', handler: EventHandler<LoaderConfigEvent>): this;
+  on(name: 'loader-state', handler: EventHandler<LoaderStateEvent>): this;
+  on(name: 'loader-world', handler: EventHandler<LoaderWorldEvent>): this;
   on(name: 'render-output', handler: EventHandler<LineEvent>): this;
   on(name: 'state-room', handler: EventHandler<RoomEvent>): this;
   on(name: 'state-step', handler: EventHandler<StepResult>): this;

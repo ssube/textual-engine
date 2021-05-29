@@ -32,6 +32,7 @@ const TEST_STATE: State = {
   },
   world: {
     depth: 0,
+    id: '',
     seed: '',
   },
 };
@@ -69,9 +70,7 @@ describe('local script service', () => {
       }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
-      transfer: await container.create(StateEntityTransfer, {
-        state: TEST_STATE,
-      }),
+      transfer: await container.create(StateEntityTransfer),
     });
   });
 
@@ -109,9 +108,7 @@ describe('local script service', () => {
       }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
-      transfer: await container.create(StateEntityTransfer, {
-        state: TEST_STATE,
-      }),
+      transfer: await container.create(StateEntityTransfer),
     });
   });
 
@@ -152,9 +149,7 @@ describe('local script service', () => {
       }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
-      transfer: await container.create(StateEntityTransfer, {
-        state: TEST_STATE,
-      }),
+      transfer: await container.create(StateEntityTransfer),
     });
 
     expect(scriptSpy).to.have.callCount(1);

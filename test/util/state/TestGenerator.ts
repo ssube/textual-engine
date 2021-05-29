@@ -131,9 +131,9 @@ describe('state entity generator', () => {
         logger: NullLogger.global,
       });
 
-      const generator = await container.create(StateEntityGenerator, {
-        world: TEST_WORLD,
-      });
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
       const actor = await generator.createActor(TEST_WORLD.templates.actors[0]);
 
       expect(isActor(actor)).to.equal(true);
@@ -148,9 +148,9 @@ describe('state entity generator', () => {
         logger: NullLogger.global,
       });
 
-      const generator = await container.create(StateEntityGenerator, {
-        world: TEST_WORLD,
-      });
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
       const item = await generator.createItem(TEST_WORLD.templates.items[0]);
 
       expect(isItem(item)).to.equal(true);
@@ -165,9 +165,9 @@ describe('state entity generator', () => {
         logger: NullLogger.global,
       });
 
-      const generator = await container.create(StateEntityGenerator, {
-        world: TEST_WORLD,
-      });
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
       const room = await generator.createRoom(TEST_WORLD.templates.rooms[0]);
 
       expect(isRoom(room)).to.equal(true);

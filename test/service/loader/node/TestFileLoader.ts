@@ -1,12 +1,12 @@
 import { expect } from 'chai';
-import { Container } from 'noicejs';
+import { LocalModule } from '../../../../src/module/LocalModule';
 
-import { NodeFileLoader } from '../../../src/service/loader/node/FileLoader';
+import { NodeFileLoader } from '../../../../src/service/loader/node/FileLoader';
+import { getTestContainer } from '../../../helper';
 
 describe('file loader', () => {
   it('should read from paths', async () => {
-    const container = Container.from();
-    await container.configure();
+    const container = await getTestContainer(new LocalModule());
 
     const loader = await container.create(NodeFileLoader);
     return expect(loader.loadStr('README.md')).to.eventually.include('Textual Engine');
@@ -14,8 +14,7 @@ describe('file loader', () => {
 
   // TODO: use a mock filesystem
   it('should write to paths', async () => {
-    const container = Container.from();
-    await container.configure();
+    const container = await getTestContainer(new LocalModule());
 
     const loader = await container.create(NodeFileLoader);
     const path = 'out/test.md';
@@ -26,8 +25,7 @@ describe('file loader', () => {
 
   // TODO: use a mock filesystem
   it('should round-trip binary data', async () => {
-    const container = Container.from();
-    await container.configure();
+    const container = await getTestContainer(new LocalModule());
 
     const loader = await container.create(NodeFileLoader);
     const data = Buffer.from('foo\0');

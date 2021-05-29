@@ -3,12 +3,13 @@ import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import { INJECT_ACTOR, INJECT_CONFIG, INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
+import { INJECT_ACTOR, INJECT_CONFIG, INJECT_EVENT, INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
 import { ActorLocator, ActorModule } from './module/ActorModule';
 import { BrowserModule } from './module/BrowserModule';
 import { LocalModule } from './module/LocalModule';
 import { NodeModule } from './module/NodeModule';
-import { Loader } from './service/loader';
+import { EventBus } from './service/event';
+import { LoaderService } from './service/loader';
 import { LocaleService } from './service/locale';
 import { Parser } from './service/parser';
 import { RenderService } from './service/render';
@@ -70,40 +71,31 @@ export async function main(args: Array<string>): Promise<number> {
   await actor.start();
 
   // load data files
-  const loader = await container.create<Loader, BaseOptions>(INJECT_LOADER);
-  const parser = await container.create<Parser, BaseOptions>(INJECT_PARSER);
-
-  const worlds = [];
-  for (const path of arg.data) {
-    const dataStr = await loader.loadStr(path);
-    const data = parser.load(dataStr);
-    worlds.push(...data.worlds);
-  }
-
-  logger.info({
-    paths: arg.data,
-    worlds: worlds.map((it) => it.meta.id),
-  }, 'loaded worlds from data files');
-
-  // find world template
-  const world = worlds.find((it) => it.meta.id === arg.world);
-  if (isNil(world)) {
-    logger.error({ world: arg.world }, 'invalid world name');
-    return 1;
-  }
-
-  // create state from world
-  const state = await container.create<StateService, BaseOptions>(INJECT_STATE);
-  await state.create(world, {
-    depth: arg.depth,
-    seed: arg.seed,
-  });
+  const loader = await container.create<LoaderService, BaseOptions>(INJECT_LOADER);
+  await loader.start();
 
   // start renderer
   const render = await container.create<RenderService, BaseOptions>(INJECT_RENDER);
   await render.start();
-  await state.loop();
+
+  // create state from world
+  const state = await container.create<StateService, BaseOptions>(INJECT_STATE);
+  await state.start();
+
+  logger.info({
+    paths: arg.data,
+  }, 'loading worlds from data files');
+
+  const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+  for (const path of arg.data) {
+    events.emit('loader-path', {
+      path,
+    });
+  }
+
+  await state.stop();
   await render.stop();
+  await loader.stop();
 
   return 0;
 }

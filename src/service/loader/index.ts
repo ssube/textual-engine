@@ -1,4 +1,9 @@
-export interface Loader {
+import { Service } from '..';
+import { ConfigFile } from '../../model/file/Config';
+import { State } from '../../model/State';
+import { World } from '../../model/World';
+
+export interface LoaderService extends Service {
   /**
    * Write a debug payload to a local path.
    *
@@ -25,4 +30,20 @@ export interface Loader {
    * Save a resource from a UTF-8 string.
    */
   saveStr(path: string, data: string): Promise<void>;
+}
+
+export interface LoaderPathEvent {
+  path: string;
+}
+
+export interface LoaderConfigEvent {
+  config: ConfigFile;
+}
+
+export interface LoaderStateEvent {
+  state: State;
+}
+
+export interface LoaderWorldEvent {
+  world: World;
 }

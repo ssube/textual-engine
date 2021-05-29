@@ -2,38 +2,63 @@ import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { searchState } from '.';
+import { WorldEntity } from '../../model/entity';
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem, Item } from '../../model/entity/Item';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { State } from '../../model/State';
 import { INJECT_LOGGER } from '../../module';
-import { ScriptContext, ScriptTransfer, TransferParams } from '../../service/script';
+import { ScriptContext } from '../../service/script';
 import { SLOT_ENTER, SLOT_GET } from '../constants';
+
+export interface TransferParams<TEntity extends WorldEntity> {
+  /**
+   * The entity to transfer.
+   */
+  moving: TEntity;
+
+  /**
+   * The source container from which `id` will be transferred.
+   */
+  source: string;
+
+  /**
+   * The target container into which `id` will be transferred.
+   */
+  target: string;
+}
 
 interface EntityTransferOptions extends BaseOptions {
   [INJECT_LOGGER]?: Logger;
-  state?: State;
 }
 
 @Inject(INJECT_LOGGER)
-export class StateEntityTransfer implements ScriptTransfer {
+export class StateEntityTransfer {
   protected logger: Logger;
-  protected state: State;
+  protected state?: State;
 
   constructor(options: EntityTransferOptions) {
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
-    this.state = mustExist(options.state);
   }
 
+  public setState(state: State): void {
+    this.state = state;
+  }
+
+  /**
+   * Move an actor from one room to another.
+   */
   public async moveActor(transfer: TransferParams<Actor>, context: ScriptContext): Promise<void> {
+    const state = mustExist(this.state);
+
     if (!isActor(transfer.moving)) {
       this.logger.warn(transfer, 'moving entity is not an actor');
       return;
     }
 
-    const [target] = searchState(this.state, {
+    const [target] = searchState(state, {
       meta: {
         id: transfer.target,
       },
@@ -44,7 +69,7 @@ export class StateEntityTransfer implements ScriptTransfer {
       return;
     }
 
-    const [source] = searchState(this.state, {
+    const [source] = searchState(state, {
       meta: {
         id: transfer.source,
       },
@@ -78,7 +103,12 @@ export class StateEntityTransfer implements ScriptTransfer {
     });
   }
 
+  /**
+   * Move an item from one actor or room to another.
+   */
   public async moveItem(transfer: TransferParams<Item>, context: ScriptContext): Promise<void> {
+    const state = mustExist(this.state);
+
     if (!isItem(transfer.moving)) {
       this.logger.warn({ transfer }, 'moving entity is not an item');
       return;
@@ -90,14 +120,14 @@ export class StateEntityTransfer implements ScriptTransfer {
     }
 
     // find source entity
-    const [source] = searchState(this.state, {
+    const [source] = searchState(state, {
       meta: {
         id: transfer.source,
       },
     });
 
     // find target entity
-    const [target] = searchState(this.state, {
+    const [target] = searchState(state, {
       meta: {
         id: transfer.target,
       },

@@ -28,6 +28,8 @@ export interface State {
      */
     depth: number;
 
+    id: string;
+
     /**
      * The random generator's seed.
      */
@@ -134,11 +136,14 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
         depth: {
           type: 'number',
         },
+        id: {
+          type: 'string',
+        },
         seed: {
           type: 'string',
         },
       },
-      required: ['depth', 'seed'],
+      required: ['depth', 'id', 'seed'],
     },
 
   },

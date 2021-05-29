@@ -1,11 +1,12 @@
 import { State } from '../../model/State';
-import { World } from '../../model/World';
 
 export interface CreateParams {
   /**
    * The number of rooms to pregenerate.
    */
   depth: number;
+
+  id: string;
 
   /**
    * The PRNG seed to use for this world.
@@ -33,7 +34,7 @@ export interface StateService {
   /**
    * Create a new world state from a world template.
    */
-  create(world: World, params: CreateParams): Promise<State>;
+  create(params: CreateParams): Promise<void>;
 
   /**
    * Load an existing world state.
@@ -48,7 +49,9 @@ export interface StateService {
   /**
    * Begin the game loop, continuing until a quit command is received.
    */
-  loop(): Promise<void>;
+  start(): Promise<void>;
+
+  stop(): Promise<void>;
 
   /**
    * Step the internal world state, simulating some turns and time passing.

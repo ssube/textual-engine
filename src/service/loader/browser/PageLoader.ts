@@ -1,12 +1,13 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
-import { BaseOptions } from 'noicejs';
 
-import { Loader } from '..';
+import { LoaderService } from '..';
+import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
 
-export class BrowserPageLoader implements Loader {
+export class BrowserPageLoader extends BaseLoader implements LoaderService {
   protected dom: Document;
 
-  constructor(options: BaseOptions, dom = document) {
+  constructor(options: BaseLoaderOptions, dom = document) {
+    super(options);
     this.dom = dom;
   }
 

@@ -1,4 +1,4 @@
-import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { constructorName, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
@@ -22,6 +22,7 @@ import { ActorLocator } from '../../module/ActorModule';
 import { randomItem } from '../../util/array';
 import {
   COMMON_VERBS,
+  META_CREATE,
   META_DEBUG,
   META_GRAPH,
   META_HELP,
@@ -38,17 +39,17 @@ import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { findByTemplateId } from '../../util/template';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
-import { Loader } from '../loader';
+import { LoaderService } from '../loader';
 import { LocaleContext } from '../locale';
 import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
-import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
+import { ScriptService, SuppliedScope } from '../script';
 
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_ACTOR]: ActorLocator;
   [INJECT_COUNTER]: Counter;
   [INJECT_EVENT]: EventBus;
-  [INJECT_LOADER]: Loader;
+  [INJECT_LOADER]: LoaderService;
   [INJECT_LOGGER]: Logger;
   [INJECT_PARSER]: Parser;
   [INJECT_RANDOM]: RandomGenerator;
@@ -70,18 +71,18 @@ export class LocalStateService implements StateService {
   protected container: Container;
   protected counter: Counter;
   protected event: EventBus;
-  protected loader: Loader;
+  protected loader: LoaderService;
   protected logger: Logger;
   protected parser: Parser;
   protected random: RandomGenerator;
   protected script: ScriptService;
 
-  protected focus?: ScriptFocus;
+  protected focus?: StateFocusResolver;
   protected generator?: StateEntityGenerator;
-  protected transfer?: ScriptTransfer;
+  protected transfer?: StateEntityTransfer;
 
   protected state?: State;
-  protected world?: World;
+  protected worlds: Array<World>;
 
   constructor(options: LocalStateServiceOptions) {
     this.container = options.container;
@@ -96,23 +97,27 @@ export class LocalStateService implements StateService {
     this.parser = options[INJECT_PARSER];
     this.random = options[INJECT_RANDOM];
     this.script = options[INJECT_SCRIPT];
+
+    this.worlds = [];
   }
 
   /**
    * Create a new world state from a world template.
    */
-  public async create(world: World, params: CreateParams): Promise<State> {
-    const state: State = {
+  public async create(params: CreateParams): Promise<void> {
+    const generator = mustExist(this.generator);
+
+    // find the world, prep the generator
+    const world = mustFind(this.worlds, (it) => it.meta.id === params.id);
+    generator.setWorld(world);
+
+    const meta = await generator.createMetadata(world.meta, 'world');
+    this.state = {
       focus: {
         actor: '',
         room: '',
       },
-      meta: {
-        desc: '',
-        id: '',
-        name: '',
-        template: '',
-      },
+      meta,
       rooms: [],
       start: {
         actor: '',
@@ -127,16 +132,17 @@ export class LocalStateService implements StateService {
       },
     };
 
-    // save state for later
-    this.state = state;
-    this.world = world;
+    mustExist(this.focus).setState(this.state);
+    mustExist(this.transfer).setState(this.state);
 
-    // prep helpers
-    await this.createHelpers();
+    // reseed the prng
+    this.random.reseed(this.state.world.seed); // TODO: fast-forward to last state
 
-    // assign metadata
-    const generator = mustExist(this.generator);
-    state.meta = await generator.createMetadata(world.meta, 'world');
+    // load the world locale
+    this.event.emit('locale-bundle', {
+      name: 'world',
+      bundle: mustExist(world).locale,
+    });
 
     // pick a starting room and create it
     const startRoomRef = randomItem(world.start.rooms, this.random);
@@ -151,7 +157,7 @@ export class LocalStateService implements StateService {
     }, 'creating start room');
 
     const startRoom = await generator.createRoom(startRoomTemplate);
-    state.rooms.push(startRoom);
+    this.state.rooms.push(startRoom);
 
     // pick a starting actor and create it
     const startActorRef = randomItem(world.start.actors, this.random);
@@ -175,10 +181,8 @@ export class LocalStateService implements StateService {
     await focus.setActor(startActor.meta.id);
 
     // record starting location
-    state.start.room = startRoom.meta.id;
-    state.start.actor = startActor.meta.id;
-
-    return state;
+    this.state.start.room = startRoom.meta.id;
+    this.state.start.actor = startActor.meta.id;
   }
 
   /**
@@ -188,13 +192,12 @@ export class LocalStateService implements StateService {
     this.state = state;
   }
 
-  public async loop(): Promise<void> {
-    const { pending } = onceWithRemove<void>(this.event, 'quit');
+  public async start(): Promise<void> {
+    await this.createHelpers();
 
-    // load the world locale
-    this.event.emit('locale-bundle', {
-      name: 'world',
-      bundle: mustExist(this.world).locale,
+    this.event.on('loader-world', (event) => {
+      this.logger.debug({ event }, 'registering loaded world');
+      this.worlds.push(event.world);
     });
 
     this.event.on('actor-command', (event) => {
@@ -203,8 +206,11 @@ export class LocalStateService implements StateService {
       });
     });
 
-    await this.doHelp();
+    return this.doHelp();
+  }
 
+  public async stop(): Promise<void> {
+    const { pending } = onceWithRemove(this.event, 'quit');
     return pending;
   }
 
@@ -222,7 +228,7 @@ export class LocalStateService implements StateService {
   /**
    * Handler for a line of input from the focus helper.
    */
-  public onOutput(line: string, context?: LocaleContext): void {
+  public async onOutput(line: string, context?: LocaleContext): Promise<void> {
     this.event.emit('state-output', {
       lines: [{
         key: line,
@@ -236,15 +242,15 @@ export class LocalStateService implements StateService {
    * Step the internal world state, simulating some turns and time passing.
    */
   public async onCommand(cmd: Command): Promise<void> {
-    const state = mustExist(this.state);
-
     this.logger.debug({
       cmd,
-      focus: state.focus,
-    }, 'parsed line of player input');
+    }, 'handling input command');
 
     // handle meta commands
     switch (cmd.verb) {
+      case META_CREATE:
+        await this.doCreate(cmd.target, cmd.index);
+        break;
       case META_DEBUG:
         await this.doDebug();
         break;
@@ -271,6 +277,16 @@ export class LocalStateService implements StateService {
     }
   }
 
+  public async doCreate(target: string, depth: number): Promise<void> {
+    const [id, seed] = target.split(' ');
+
+    await this.create({
+      depth,
+      id,
+      seed,
+    });
+  }
+
   public async doDebug(): Promise<void> {
     const state = await this.save();
     const lines = debugState(state);
@@ -286,7 +302,11 @@ export class LocalStateService implements StateService {
       lines: [{
         key: verbs,
       }],
-      step: mustExist(this.state).step,
+      // TODO: remove step from output?
+      step: {
+        time: 0,
+        turn: 0,
+      },
     });
   }
 
@@ -311,11 +331,9 @@ export class LocalStateService implements StateService {
   public async doLoad(path: string, index: number): Promise<void> {
     const dataStr = await this.loader.loadStr(path);
     const data = this.parser.load(dataStr);
+    const state = mustExist(data.state);
 
-    const state = data.states[index];
     this.state = state;
-    this.world = data.worlds.find((it) => it.meta.id === state.meta.template);
-
     await this.createHelpers();
 
     this.event.emit('state-output', {
@@ -328,10 +346,10 @@ export class LocalStateService implements StateService {
 
   public async doSave(path: string): Promise<void> {
     const state = mustExist(this.state);
-    const world = mustExist(this.world);
+    const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.id);
 
     const dataStr = this.parser.save({
-      states: [state],
+      state,
       worlds: [world],
     });
     await this.loader.saveStr(path, dataStr);
@@ -440,33 +458,22 @@ export class LocalStateService implements StateService {
   }
 
   protected async createHelpers(): Promise<void> {
-    const state = mustExist(this.state);
-    const world = mustExist(this.world);
-
     // register focus
     this.focus = await this.container.create(StateFocusResolver, {
       events: {
         onActor: () => Promise.resolve(),
-        onRoom: async (room) => { // TODO: move to method
-          const rooms = await mustExist(this.generator).populateRoom(room, state.world.depth);
-          state.rooms.push(...rooms);
-        },
-        onShow: async (line, context) => {
-          this.onOutput(line, context);
-        },
+        onRoom: async (room) => this.onRoom(room),
+        onShow: async (line, context) => this.onOutput(line, context),
       },
-      state,
     });
 
-    this.generator = await this.container.create(StateEntityGenerator, {
-      world,
-    });
+    this.generator = await this.container.create(StateEntityGenerator);
+    this.transfer = await this.container.create(StateEntityTransfer);
+  }
 
-    this.transfer = await this.container.create(StateEntityTransfer, {
-      state,
-    });
-
-    // reseed the prng
-    this.random.reseed(state.world.seed); // TODO: fast-forward to last state
+  protected async onRoom(room: Room): Promise<void> {
+    const state = mustExist(this.state);
+    const rooms = await mustExist(this.generator).populateRoom(room, state.world.depth);
+    state.rooms.push(...rooms);
   }
 }

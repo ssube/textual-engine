@@ -8,8 +8,7 @@ import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { State } from '../../../src/model/State';
 import { LocalModule } from '../../../src/module/LocalModule';
-import { ShowMessageVolume } from '../../../src/service/script';
-import { StateFocusResolver } from '../../../src/util/state/FocusResolver';
+import { ShowMessageVolume, StateFocusResolver } from '../../../src/util/state/FocusResolver';
 
 const TEST_STATE: State = {
   focus: {
@@ -94,6 +93,7 @@ const TEST_STATE: State = {
   },
   world: {
     depth: 0,
+    id: '',
     seed: '',
   },
 };
@@ -107,20 +107,21 @@ describe('state focus utils', () => {
       });
 
       const actorSpy = spy();
-      const state = {
-        ...TEST_STATE,
-        focus: {
-          ...TEST_STATE.focus,
-        },
-      };
       const focus = await container.create(StateFocusResolver, {
         events: {
           onActor: actorSpy,
           onRoom: spy(),
           onShow: spy(),
         },
-        state,
       });
+
+      const state = {
+        ...TEST_STATE,
+        focus: {
+          ...TEST_STATE.focus,
+        },
+      };
+      focus.setState(state);
 
       await focus.setActor('bun');
 
@@ -141,8 +142,8 @@ describe('state focus utils', () => {
           onRoom: spy(),
           onShow: spy(),
         },
-        state: TEST_STATE,
       });
+      focus.setState(TEST_STATE);
 
       await expect(focus.setActor('none')).to.eventually.be.rejectedWith(InvalidArgumentError);
       expect(actorSpy).to.have.callCount(0);
@@ -157,20 +158,21 @@ describe('state focus utils', () => {
       });
 
       const roomSpy = spy();
-      const state = {
-        ...TEST_STATE,
-        focus: {
-          ...TEST_STATE.focus,
-        },
-      };
       const focus = await container.create(StateFocusResolver, {
         events: {
           onActor: spy(),
           onRoom: roomSpy,
           onShow: spy(),
         },
-        state,
       });
+
+      const state = {
+        ...TEST_STATE,
+        focus: {
+          ...TEST_STATE.focus,
+        },
+      };
+      focus.setState(state);
 
       await focus.setRoom('foo');
 
@@ -191,8 +193,8 @@ describe('state focus utils', () => {
           onRoom: roomSpy,
           onShow: spy(),
         },
-        state: TEST_STATE,
       });
+      focus.setState(TEST_STATE);
 
       await expect(focus.setRoom('none')).to.eventually.be.rejectedWith(InvalidArgumentError);
       expect(roomSpy).to.have.callCount(0);
@@ -213,11 +215,11 @@ describe('state focus utils', () => {
           onRoom: spy(),
           onShow: showSpy,
         },
-        state: {
-          ...TEST_STATE,
-          focus: {
-            ...TEST_STATE.focus,
-          },
+      });
+      focus.setState({
+        ...TEST_STATE,
+        focus: {
+          ...TEST_STATE.focus,
         },
       });
 
@@ -239,11 +241,11 @@ describe('state focus utils', () => {
           onRoom: spy(),
           onShow: showSpy,
         },
-        state: {
-          ...TEST_STATE,
-          focus: {
-            ...TEST_STATE.focus,
-          },
+      });
+      focus.setState({
+        ...TEST_STATE,
+        focus: {
+          ...TEST_STATE.focus,
         },
       });
 
@@ -268,12 +270,12 @@ describe('state focus utils', () => {
           onRoom: spy(),
           onShow: showSpy,
         },
-        state: {
-          ...TEST_STATE,
-          focus: {
-            actor: 'foo',
-            room: TEST_STATE.rooms[1].meta.id,
-          },
+      });
+      focus.setState({
+        ...TEST_STATE,
+        focus: {
+          actor: 'foo',
+          room: TEST_STATE.rooms[1].meta.id,
         },
       });
 
@@ -298,12 +300,12 @@ describe('state focus utils', () => {
           onRoom: spy(),
           onShow: showSpy,
         },
-        state: {
-          ...TEST_STATE,
-          focus: {
-            actor: 'foo',
-            room: TEST_STATE.rooms[1].meta.id,
-          },
+      });
+      focus.setState({
+        ...TEST_STATE,
+        focus: {
+          actor: 'foo',
+          room: TEST_STATE.rooms[1].meta.id,
         },
       });
 
@@ -328,12 +330,12 @@ describe('state focus utils', () => {
           onRoom: spy(),
           onShow: showSpy,
         },
-        state: {
-          ...TEST_STATE,
-          focus: {
-            actor: TEST_STATE.rooms[0].actors[0].meta.id,
-            room: 'foo',
-          },
+      });
+      focus.setState({
+        ...TEST_STATE,
+        focus: {
+          actor: TEST_STATE.rooms[0].actors[0].meta.id,
+          room: 'foo',
         },
       });
 

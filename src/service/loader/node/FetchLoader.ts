@@ -1,14 +1,16 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 import { promises } from 'fs';
 import fetch from 'node-fetch';
-import { BaseOptions } from 'noicejs';
 
-import { Loader } from '..';
+import { LoaderService } from '..';
+import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
 
-export class NodeFetchLoader implements Loader {
+export class NodeFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;
 
-  constructor(options: BaseOptions, f = fetch) {
+  constructor(options: BaseLoaderOptions, f = fetch) {
+    super(options);
+
     this.fetch = fetch;
   }
 

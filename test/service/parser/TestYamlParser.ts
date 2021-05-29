@@ -31,12 +31,9 @@ worlds: []
 
     const parser = await container.create(YamlParser);
     const data = parser.save({
-      states: [],
       worlds: [],
     });
 
-    expect(data).to.deep.equal(`states: []
-worlds: []
-`);
+    expect(data).to.deep.equal('worlds: []\n');
   });
 });

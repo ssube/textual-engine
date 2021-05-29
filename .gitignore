@@ -5,8 +5,4 @@ yarn-error.log
 .vscode/
 
 node_modules/
-out/coverage
-out/*.log
-out/src
-out/test
-out/test.*
+out/

@@ -41938,7 +41938,30 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return doesExist(entity) && entity.type === ACTOR_TYPE;
   }
   __name(isActor, "isActor");
-  var ACTOR_SCHEMA = {
+  var ACTOR_MODIFIER_SCHEMA = {
+    type: "object",
+    properties: {
+      base: {
+        type: "object",
+        required: ["meta"]
+      },
+      chance: {
+        type: "number",
+        default: TEMPLATE_CHANCE
+      },
+      excludes: {
+        type: "array",
+        items: {
+          type: "string"
+        }
+      },
+      id: {
+        type: "string"
+      }
+    },
+    required: []
+  };
+  var ACTOR_TEMPLATE_SCHEMA = {
     type: "object",
     properties: {
       base: {
@@ -41972,10 +41995,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       mods: {
         type: "array",
         default: [],
-        items: {
-          type: "object",
-          required: []
-        }
+        items: ACTOR_MODIFIER_SCHEMA
       }
     },
     required: ["base"],
@@ -41985,6 +42005,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/module/index.js
   init_virtual_process_polyfill();
   init_buffer();
+  var INJECT_CONFIG = Symbol("inject-config");
   var INJECT_COUNTER = Symbol("inject-counter");
   var INJECT_EVENT = Symbol("inject-event-bus");
   var INJECT_LOADER = Symbol("inject-loader");
@@ -44972,6 +44993,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var import_noicejs10 = __toModule(require_main());
   var NextLocaleService = /* @__PURE__ */ __name(class NextLocaleService2 {
     constructor(options) {
+      this.config = mustExist(options[INJECT_CONFIG]).locale;
       this.event = mustExist(options[INJECT_EVENT]);
       this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
@@ -44982,7 +45004,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       const inst = i18next_default.createInstance({
         defaultNS: "world",
         fallbackNS: ["common"],
-        lng: "en"
+        lng: this.config.current
       });
       await inst.init();
       this.i18next = inst;
@@ -45021,7 +45043,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "NextLocaleService");
   NextLocaleService = __decorate([
-    (0, import_noicejs10.Inject)(INJECT_EVENT, INJECT_LOGGER),
+    (0, import_noicejs10.Inject)(INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], NextLocaleService);
 
@@ -48034,7 +48056,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         properties: {
           actors: {
             type: "array",
-            items: ACTOR_SCHEMA
+            items: ACTOR_TEMPLATE_SCHEMA
           },
           items: {
             type: "array",
@@ -48122,7 +48144,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return this.source.double();
     }
     nextInt(max = BYTE_RANGE, min = 0) {
-      const range = max - min;
+      const range = Math.floor(max) - Math.floor(min);
+      if (range < 1) {
+        return max;
+      }
       return Math.abs(this.source.int32()) % range + min;
     }
     reseed(initial) {
@@ -48191,10 +48216,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   function matchIdSegments(value, filter2) {
     const valueParts = value.split("-");
     const filterParts = filter2.split("-");
-    if (filterParts.length < valueParts.length) {
+    if (valueParts.length < filterParts.length) {
       return false;
     }
-    return valueParts.every((it, idx) => it === filterParts[idx]);
+    return filterParts.every((it, idx) => it === valueParts[idx]);
   }
   __name(matchIdSegments, "matchIdSegments");
   var DEFAULT_MATCHERS = {
@@ -48331,6 +48356,18 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/script/common/ActorStep.js
   init_virtual_process_polyfill();
   init_buffer();
+
+  // out/src/service/script/index.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var ShowMessageVolume;
+  (function(ShowMessageVolume2) {
+    ShowMessageVolume2["SELF"] = "self";
+    ShowMessageVolume2["ROOM"] = "room";
+    ShowMessageVolume2["WORLD"] = "world";
+  })(ShowMessageVolume || (ShowMessageVolume = {}));
+
+  // out/src/script/common/ActorStep.js
   async function ActorStep(context, verbs = ACTOR_VERB_SCRIPTS) {
     context.logger.debug({
       meta: this.meta,
@@ -48415,15 +48452,24 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }, FUZZY_MATCHERS);
     const target = indexEntity(results, command.index, isActor);
     if (isNil(target)) {
-      await context.focus.show("actor.step.hit.type", { command });
+      await context.focus.show("actor.step.hit.type", { command }, {
+        source: this,
+        volume: ShowMessageVolume.SELF
+      });
       return;
     }
     if (this === target) {
-      await context.focus.show("actor.step.hit.self", { command });
+      await context.focus.show("actor.step.hit.self", { command }, {
+        source: this,
+        volume: ShowMessageVolume.SELF
+      });
       return;
     }
     if (this.items.length === 0) {
-      await context.focus.show("actor.step.hit.item", { target });
+      await context.focus.show("actor.step.hit.item", { target }, {
+        source: this,
+        volume: ShowMessageVolume.SELF
+      });
       return;
     }
     await context.script.invoke(target, SLOT_HIT, Object.assign(Object.assign({}, context), { actor: this, item: this.items[0] }));
@@ -48505,7 +48551,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       await context.focus.show("actor.step.move.missing", { command });
       return;
     }
-    await context.focus.show("actor.step.move.portal", { actor: this, portal: targetPortal });
+    await context.focus.show("actor.step.move.portal", {
+      actor: this,
+      portal: targetPortal
+    }, {
+      source: this,
+      volume: ShowMessageVolume.SELF
+    });
     await context.transfer.moveActor({
       moving: this,
       source: currentRoom.meta.id,
@@ -48887,7 +48939,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         if (roll > mod.chance) {
           continue;
         }
-        selected.push(mod);
+        selected.push(mod.base);
         for (const e of mod.excludes) {
           excluded.add(e);
         }
@@ -49103,12 +49155,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/state/FocusResolver.js
   init_virtual_process_polyfill();
   init_buffer();
-  var ShowMessageVolume;
-  (function(ShowMessageVolume2) {
-    ShowMessageVolume2["SELF"] = "self";
-    ShowMessageVolume2["ROOM"] = "room";
-    ShowMessageVolume2["WORLD"] = "world";
-  })(ShowMessageVolume || (ShowMessageVolume = {}));
   var StateFocusResolver = class {
     constructor(options) {
       this.state = mustExist(options.state);
@@ -49186,7 +49232,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.parser = options[INJECT_PARSER];
       this.random = options[INJECT_RANDOM];
       this.script = options[INJECT_SCRIPT];
-      this.template = options[INJECT_TEMPLATE];
     }
     async create(world, params) {
       const state = {
@@ -49470,7 +49515,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "LocalStateService");
   LocalStateService = __decorate([
-    (0, import_noicejs16.Inject)(INJECT_ACTOR, INJECT_COUNTER, INJECT_EVENT, INJECT_LOADER, INJECT_LOGGER, INJECT_PARSER, INJECT_RANDOM, INJECT_SCRIPT, INJECT_TEMPLATE),
+    (0, import_noicejs16.Inject)(INJECT_ACTOR, INJECT_COUNTER, INJECT_EVENT, INJECT_LOADER, INJECT_LOGGER, INJECT_PARSER, INJECT_RANDOM, INJECT_SCRIPT),
     __metadata("design:paramtypes", [Object])
   ], LocalStateService);
 
@@ -49478,14 +49523,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   var import_noicejs17 = __toModule(require_main());
-
-  // out/src/util/string.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  function hasText(str2) {
-    return doesExist(str2) && str2.length > 0 && /^\s*$/.test(str2) === false;
-  }
-  __name(hasText, "hasText");
 
   // out/src/util/template/JoinChain.js
   init_virtual_process_polyfill();
@@ -49560,10 +49597,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
     }
     modifyNumber(base, mod) {
-      return base + mod.offset;
+      const offset = this.random.nextInt(mod.max, mod.min);
+      return base + offset;
     }
     modifyString(base, mod) {
-      return [mod.prefix, base, mod.suffix].filter(hasText).join(" ");
+      return mod.base.replace(/{{base}}/g, base);
     }
     modifyNumberList(base, mod) {
       return base.map((it, idx) => this.modifyNumber(it, mod[idx]));
@@ -51593,7 +51631,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         ],
         additionalProperties: true
       },
-      locale: LOCALE_SCHEMA
+      locale: {
+        type: "object",
+        properties: Object.assign(Object.assign({}, LOCALE_SCHEMA.properties), { current: {
+          type: "string",
+          default: "en"
+        } }),
+        required: ["bundles"]
+      }
     },
     required: [
       "locale",
@@ -51652,6 +51697,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       return new ctor();
     });
+    modules[0].bind(INJECT_CONFIG).toInstance(config3);
     const container = import_noicejs21.Container.from(...modules);
     await container.configure({
       logger

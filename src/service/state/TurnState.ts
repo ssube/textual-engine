@@ -17,7 +17,6 @@ import {
   INJECT_PARSER,
   INJECT_RANDOM,
   INJECT_SCRIPT,
-  INJECT_TEMPLATE,
 } from '../../module';
 import { ActorLocator } from '../../module/ActorModule';
 import { randomItem } from '../../util/array';
@@ -44,7 +43,6 @@ import { LocaleContext } from '../locale';
 import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
 import { ScriptFocus, ScriptService, ScriptTransfer, SuppliedScope } from '../script';
-import { TemplateService } from '../template';
 
 export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_ACTOR]: ActorLocator;
@@ -55,7 +53,6 @@ export interface LocalStateServiceOptions extends BaseOptions {
   [INJECT_PARSER]: Parser;
   [INJECT_RANDOM]: RandomGenerator;
   [INJECT_SCRIPT]: ScriptService;
-  [INJECT_TEMPLATE]: TemplateService;
 }
 
 @Inject(
@@ -66,8 +63,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
   INJECT_LOGGER,
   INJECT_PARSER,
   INJECT_RANDOM,
-  INJECT_SCRIPT,
-  INJECT_TEMPLATE
+  INJECT_SCRIPT
 )
 export class LocalStateService implements StateService {
   protected actor: ActorLocator;
@@ -79,7 +75,6 @@ export class LocalStateService implements StateService {
   protected parser: Parser;
   protected random: RandomGenerator;
   protected script: ScriptService;
-  protected template: TemplateService;
 
   protected focus?: ScriptFocus;
   protected generator?: StateEntityGenerator;
@@ -101,7 +96,6 @@ export class LocalStateService implements StateService {
     this.parser = options[INJECT_PARSER];
     this.random = options[INJECT_RANDOM];
     this.script = options[INJECT_SCRIPT];
-    this.template = options[INJECT_TEMPLATE];
   }
 
   /**

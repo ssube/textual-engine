@@ -128,15 +128,16 @@ worlds:
             - chance: 50
               excludes: []
               id: vampire
-              meta:
-                desc:
-                  prefix: vampire
-                name:
-                  prefix: Vampire
-              items: []
-              skills: !map {}
-              stats: !map {}
-              slots: !map {}
+              base:
+                meta:
+                  desc:
+                    base: 'vampire {{base}}'
+                  name:
+                    base: 'Vampire {{base}}'
+                items: []
+                skills: !map {}
+                stats: !map {}
+                slots: !map {}
         - base:
             meta:
               id: actor-goblin
@@ -163,16 +164,17 @@ worlds:
             - chance: 50
               excludes: []
               id: sword
-              meta:
-                desc:
-                  suffix: with swords
-                name:
-                  prefix: Sword
-              items:
-                - id: item-sword
-              skills: !map {}
-              stats: !map {}
-              slots: !map {}
+              base:
+                meta:
+                  desc:
+                    base: '{{base}} with swords'
+                  name:
+                    base: 'Sword {{base}}'
+                items:
+                  - id: item-sword
+                skills: !map {}
+                stats: !map {}
+                slots: !map {}
       items:
         - base:
             meta:
@@ -205,45 +207,51 @@ worlds:
               excludes:
                 - shiny
               id: cracked
-              meta:
-                desc:
-                  suffix: with a large crack
-                name:
-                  prefix: Cracked
-              slots: !map {}
-              stats: !map
-                damage:
-                  offset: -2
-              verbs: !map {}
+              base:
+                meta:
+                  desc:
+                    base: '{{base}} with a large crack'
+                  name:
+                    base: 'Cracked {{base}}'
+                slots: !map {}
+                stats: !map
+                  damage:
+                    min: -4
+                    max: -2
+                verbs: !map {}
             - chance: 25
               excludes:
                 - shiny
               id: rusty
-              meta:
-                desc:
-                  prefix: rusting
-                name:
-                  prefix: Rusty
-              slots: !map {}
-              stats: !map
-                damage:
-                  offset: -3
-              verbs: !map {}
+              base:
+                meta:
+                  desc:
+                    base: 'rusting {{base}}'
+                  name:
+                    base: 'Rusty {{base}}'
+                slots: !map {}
+                stats: !map
+                  damage:
+                    min: -5
+                    max: -3
+                verbs: !map {}
             - chance: 25
               excludes:
                 - cracked
                 - rusty
               id: shiny
-              meta:
-                desc:
-                  prefix: shining
-                name:
-                  prefix: Shiny
-              slots: !map {}
-              stats: !map
-                damage:
-                  offset: 5
-              verbs: !map {}
+              base:
+                meta:
+                  desc:
+                    base: 'shining {{base}}'
+                  name:
+                    base: 'Shiny {{base}}'
+                slots: !map {}
+                stats: !map
+                  damage:
+                    min: 5
+                    max: 5
+                verbs: !map {}
       rooms:
         - base:
             meta:

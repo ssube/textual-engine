@@ -5,7 +5,7 @@ import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { Modifier, ModifierMetadata } from '../../model/meta/Modifier';
+import { BaseModifier, Modifier, ModifierMetadata } from '../../model/meta/Modifier';
 import { BaseTemplate, Template, TemplateMetadata, TemplateRef } from '../../model/meta/Template';
 import { Metadata } from '../../model/Metadata';
 import { World } from '../../model/World';
@@ -215,7 +215,7 @@ export class StateEntityGenerator {
     target.name = this.template.modifyString(target.name, mod.name);
   }
 
-  public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<Modifier<TBase>> {
+  public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<BaseModifier<TBase>> {
     const excluded = new Set<string>();
     const selected = [];
 
@@ -229,7 +229,7 @@ export class StateEntityGenerator {
         continue;
       }
 
-      selected.push(mod);
+      selected.push(mod.base);
 
       for (const e of mod.excludes) {
         excluded.add(e);

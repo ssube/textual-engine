@@ -28,7 +28,10 @@ describe('chain template service', () => {
 
       const template = await container.create(ChainTemplateService);
       expect(template.modifyNumber(0, {
-        offset: 5,
+        min: 5,
+        max: 5,
+        step: 1,
+        type: 'number',
       })).to.equal(5);
     });
 
@@ -40,7 +43,10 @@ describe('chain template service', () => {
 
       const template = await container.create(ChainTemplateService);
       expect(template.modifyNumber(0, {
-        offset: -5,
+        min: -5,
+        max: -5,
+        step: 1,
+        type: 'number',
       })).to.equal(-5);
     });
   });
@@ -54,8 +60,8 @@ describe('chain template service', () => {
 
       const template = await container.create(ChainTemplateService);
       expect(template.modifyString('foo', {
-        prefix: 'bar',
-        suffix: '',
+        base: 'bar {{base}}',
+        type: 'string',
       })).to.equal('bar foo');
     });
 
@@ -67,8 +73,8 @@ describe('chain template service', () => {
 
       const template = await container.create(ChainTemplateService);
       expect(template.modifyString('foo', {
-        prefix: '',
-        suffix: 'bar',
+        base: '{{base}} bar',
+        type: 'string',
       })).to.equal('foo bar');
     });
   });
@@ -89,10 +95,16 @@ describe('chain template service', () => {
         ['bar', 3],
       ]), new Map([
         ['foo', {
-          offset: 1,
+          min: 1,
+          max: 1,
+          step: 1,
+          type: 'number',
         }],
         ['bar', {
-          offset: -1,
+          min: -1,
+          max: -1,
+          step: 1,
+          type: 'number',
         }],
       ]));
 
@@ -113,10 +125,16 @@ describe('chain template service', () => {
         ['bar', 3],
       ]), new Map([
         ['bin', {
-          offset: 1,
+          min: 1,
+          max: 1,
+          step: 1,
+          type: 'number',
         }],
         ['bun', {
-          offset: -1,
+          min: -1,
+          max: -1,
+          step: 1,
+          type: 'number',
         }],
       ]));
 
@@ -137,12 +155,12 @@ describe('chain template service', () => {
         ['bar', 'world'],
       ]), new Map([
         ['foo', {
-          prefix: 'fin',
-          suffix: 'fan',
+          base: 'fin {{base}} fan',
+          type: 'string',
         }],
         ['bar', {
-          prefix: 'bin',
-          suffix: 'ban',
+          base: 'bin {{base}} ban',
+          type: 'string',
         }],
       ]));
 
@@ -163,12 +181,12 @@ describe('chain template service', () => {
         ['bar', 'world'],
       ]), new Map([
         ['bin', {
-          prefix: 'fix',
-          suffix: 'fix',
+          base: 'fix {{base}} fix',
+          type: 'string',
         }],
         ['bun', {
-          prefix: 'fox',
-          suffix: 'fox',
+          base: 'fox {{base}} fox',
+          type: 'string',
         }],
       ]));
 

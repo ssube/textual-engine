@@ -313,12 +313,15 @@ export class LocalStateService implements StateService {
 
   public async doDebug(): Promise<void> {
     const state = await this.save();
-    const line = debugState(state).join('\n');
-    this.event.emit(EVENT_STATE_OUTPUT, {
-      line,
-      step: state.step,
-      volume: ShowVolume.WORLD,
-    });
+    const lines = debugState(state);
+
+    for (const line of lines) {
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line,
+        step: state.step,
+        volume: ShowVolume.WORLD,
+      });
+    }
   }
 
   public async doGraph(path: string): Promise<void> {

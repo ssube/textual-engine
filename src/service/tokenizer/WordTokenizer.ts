@@ -1,4 +1,4 @@
-import { getOrDefault, hasItems, mustExist } from '@apextoaster/js-utils';
+import { getOrDefault, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject } from 'noicejs';
 
 import { TokenizerService } from '.';

@@ -1,4 +1,5 @@
 import { doesExist } from '@apextoaster/js-utils';
+import { Logger } from 'noicejs';
 
 import { AbortEventError } from '../../error/AbortEventError';
 
@@ -68,4 +69,10 @@ export function onceWithRemove<
     pending,
     remove,
   };
+}
+
+export function catchAndLog(p: Promise<any>, logger: Logger, msg: string) {
+  p.catch((err) => {
+    logger.error(err, msg);
+  });
 }

@@ -4,6 +4,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { LoaderService } from '.';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER } from '../../module';
 import { EVENT_LOADER_CONFIG, EVENT_LOADER_PATH, EVENT_LOADER_STATE, EVENT_LOADER_WORLD } from '../../util/constants';
+import { catchAndLog } from '../../util/event';
 import { EventBus } from '../event';
 import { Parser } from '../parser';
 
@@ -27,9 +28,7 @@ export abstract class BaseLoader implements LoaderService {
 
   public async start(): Promise<void> {
     this.events.on(EVENT_LOADER_PATH, (event) => {
-      this.onPath(event.path).catch((err) => {
-        this.logger.error(err, 'error during path');
-      });
+      catchAndLog(this.onPath(event.path), this.logger, 'error during path');
     }, this);
   }
 

@@ -35,7 +35,7 @@ import {
   SLOT_STEP,
 } from '../../util/constants';
 import { debugState, graphState } from '../../util/debug';
-import { onceWithRemove } from '../../util/event';
+import { catchAndLog } from '../../util/event';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { StateFocusResolver } from '../../util/state/FocusResolver';
@@ -201,15 +201,11 @@ export class LocalStateService implements StateService {
     await this.createHelpers();
 
     this.event.on(EVENT_LOADER_WORLD, (event: LoaderWorldEvent) => {
-      this.onWorld(event.world).catch((err) => {
-        this.logger.error(err, 'error during world handler');
-      });
+      catchAndLog(this.onWorld(event.world), this.logger, 'error during world handler');
     }, this);
 
     this.event.on(EVENT_ACTOR_COMMAND, (event: CommandEvent) => {
-      this.onCommand(event.command).catch((err) => {
-        this.logger.error(err, 'error during line handler');
-      });
+      catchAndLog(this.onCommand(event.command), this.logger, 'error during line handler');
     }, this);
   }
 

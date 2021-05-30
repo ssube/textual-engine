@@ -4,7 +4,15 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
-import { COMMON_VERBS, EVENT_ACTOR_COMMAND, EVENT_ACTOR_OUTPUT, EVENT_COMMON_QUIT, EVENT_RENDER_OUTPUT, EVENT_STATE_OUTPUT } from '../../util/constants';
+import {
+  COMMON_VERBS,
+  EVENT_ACTOR_COMMAND,
+  EVENT_ACTOR_OUTPUT,
+  EVENT_COMMON_QUIT,
+  EVENT_RENDER_OUTPUT,
+  EVENT_STATE_OUTPUT,
+} from '../../util/constants';
+import { catchAndLog } from '../../util/event';
 import { EventBus, LineEvent, OutputEvent } from '../event';
 import { LocaleService } from '../locale';
 import { TokenizerService } from '../tokenizer';
@@ -48,19 +56,13 @@ export class PlayerActorService implements ActorService {
     }
 
     this.event.on(EVENT_RENDER_OUTPUT, (event) => {
-      this.onInput(event).catch((err) => {
-        this.logger.error(err, 'error during render output');
-      });
+      catchAndLog(this.onInput(event), this.logger, 'error during render output');
     }, this);
     this.event.on(EVENT_STATE_OUTPUT, (event) => {
-      this.onOutput(event).catch((err) => {
-        this.logger.error(err, 'error during state output');
-      });
+      catchAndLog(this.onOutput(event), this.logger, 'error during state output');
     }, this);
     this.event.on(EVENT_COMMON_QUIT, () => {
-      this.onInputLine('meta.quit').catch((err) => {
-        this.logger.error(err, 'error sending quit output');
-      });
+      catchAndLog(this.onInputLine('meta.quit'), this.logger, 'error sending quit output');
     }, this);
 
     await this.tokenizer.translate(COMMON_VERBS);

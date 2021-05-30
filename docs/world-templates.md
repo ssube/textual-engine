@@ -92,14 +92,36 @@ Each template has metadata, missing the `template` field that exists in entity m
 - `name`: template string, display name
 - `desc`: template string, long description
 
+For example:
+
+```yaml
+meta:
+  id: goblin
+  name:
+    base: Goblin
+  desc:
+    base: ((slimy|smelly)|goblin)
+```
+
 #### Template Number
 
 Template numbers define a range `(min, max)` and select a random integer within that.
 
 - `min`: number
 - `max`: number
+- `step`: interval between values, optional
 
 TODO: document whether min and max are inclusive or exclusive
+
+For example:
+
+```yaml
+stats: !map
+  health:
+    min: 10
+    max: 20
+    step: 5  # produces 10, 15, or 20
+```
 
 #### Template Reference
 
@@ -108,13 +130,29 @@ When templates need to include one another, they can refer to the `id` of the ot
 The `chance` of each template being created is a number in `[0, 100]`, where 0 will never be created, and 100 will
 always be created. The chance for each template is rolled individually, creating zero or more entities.
 
+For example:
+
+```yaml
+items:
+  - id: item-sword
+    chance: 25
+```
+
 #### Template String
 
 Template strings use a series of nested lists, alternating between AND and OR operators, to produce the final
 string. The outermost list starts with the AND operator. Items are joined with spaces.
 
-For example, the template `((gross|slimy)|goblin)` becomes `[[gross OR slimy] AND goblin]`, which will resolve
+The template `((gross|slimy)|goblin)` becomes `[[gross OR slimy] AND goblin]`, which will resolve
 to one of `gross goblin` or `slimy goblin`.
+
+For example:
+
+```yaml
+meta:
+  desc:
+    base: ((gross|slimy)|goblin)
+```
 
 ### Actor Templates
 

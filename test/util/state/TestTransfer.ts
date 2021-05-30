@@ -1,9 +1,9 @@
 import { ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
-import { State } from '../../../src/model/State';
+import { WorldState } from '../../../src/model/world/State';
 
-const TEST_STATE: State = {
+const TEST_STATE: WorldState = {
   meta: {
     desc: '',
     id: '',

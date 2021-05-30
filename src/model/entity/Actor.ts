@@ -1,14 +1,14 @@
 import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
+import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
 import { SkillMap, SlotMap, StatMap } from '../../util/types';
+import { Modifier } from '../mapped/Modifier';
+import { Template, TEMPLATE_REF_SCHEMA } from '../mapped/Template';
 import { Metadata, METADATA_SCHEMA } from '../Metadata';
-import { Template, TEMPLATE_REF_SCHEMA } from '../meta/Template';
 import { Entity } from './Base';
 import { Item } from './Item';
-import { Modifier, MODIFIER_METADATA_SCHEMA } from '../meta/Modifier';
-import { TEMPLATE_CHANCE } from '../../util/constants';
 
 export enum ActorType {
   DEFAULT = 'default',

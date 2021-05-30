@@ -3,14 +3,14 @@ import { Container, NullLogger } from 'noicejs';
 import { spy } from 'sinon';
 
 import { Item } from '../../../src/model/entity/Item';
-import { State } from '../../../src/model/State';
+import { WorldState } from '../../../src/model/world/State';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
 import { getStubHelper } from '../../helper';
 
-const TEST_STATE: State = {
+const TEST_STATE: WorldState = {
   meta: {
     desc: '',
     id: '',

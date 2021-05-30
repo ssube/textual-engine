@@ -4,12 +4,12 @@ import { Container, NullLogger } from 'noicejs';
 import { ACTOR_TYPE, ActorType, isActor } from '../../../src/model/entity/Actor';
 import { isItem, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { isRoom } from '../../../src/model/entity/Room';
-import { World } from '../../../src/model/World';
+import { WorldTemplate } from '../../../src/model/world/Template';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
 
-const TEST_WORLD: World = {
+const TEST_WORLD: WorldTemplate = {
   locale: {
     bundles: {},
   },

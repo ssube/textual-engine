@@ -5,10 +5,10 @@ import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { BaseModifier, Modifier, ModifierMetadata } from '../../model/meta/Modifier';
-import { BaseTemplate, Template, TemplateMetadata, TemplateRef } from '../../model/meta/Template';
+import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
+import { BaseTemplate, Template, TemplateMetadata, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
-import { World } from '../../model/World';
+import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE } from '../../module';
 import { Counter } from '../../service/counter';
 import { RandomGenerator } from '../../service/random';
@@ -31,7 +31,7 @@ export class StateEntityGenerator {
   protected random: RandomGenerator;
   protected template: TemplateService;
 
-  protected world?: World;
+  protected world?: WorldTemplate;
 
   constructor(options: EntityGeneratorOptions) {
     this.counter = mustExist(options[INJECT_COUNTER]);
@@ -42,11 +42,11 @@ export class StateEntityGenerator {
     this.template = mustExist(options[INJECT_TEMPLATE]);
   }
 
-  public getWorld(): World {
+  public getWorld(): WorldTemplate {
     return mustExist(this.world);
   }
 
-  public setWorld(world: World): void {
+  public setWorld(world: WorldTemplate): void {
     this.world = world;
   }
 

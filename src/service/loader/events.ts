@@ -1,7 +1,7 @@
 import { ConfigFile } from '../../model/file/Config';
 import { DataFile } from '../../model/file/Data';
-import { State } from '../../model/State';
-import { World } from '../../model/World';
+import { WorldState } from '../../model/world/State';
+import { WorldTemplate } from '../../model/world/Template';
 
 export interface LoaderReadEvent {
   path: string;
@@ -18,9 +18,9 @@ export interface LoaderConfigEvent {
 }
 
 export interface LoaderStateEvent {
-  state: State;
+  state: WorldState;
 }
 
 export interface LoaderWorldEvent {
-  world: World;
+  world: WorldTemplate;
 }

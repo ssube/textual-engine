@@ -6,7 +6,7 @@ import { WorldEntity } from '../../model/entity';
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem, Item } from '../../model/entity/Item';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
-import { State } from '../../model/State';
+import { WorldState } from '../../model/world/State';
 import { INJECT_LOGGER } from '../../module';
 import { ScriptContext } from '../../service/script';
 import { SLOT_ENTER, SLOT_GET } from '../constants';
@@ -35,7 +35,7 @@ interface EntityTransferOptions extends BaseOptions {
 @Inject(INJECT_LOGGER)
 export class StateEntityTransfer {
   protected logger: Logger;
-  protected state?: State;
+  protected state?: WorldState;
 
   constructor(options: EntityTransferOptions) {
     this.logger = mustExist(options[INJECT_LOGGER]).child({
@@ -43,7 +43,7 @@ export class StateEntityTransfer {
     });
   }
 
-  public setState(state: State): void {
+  public setState(state: WorldState): void {
     this.state = state;
   }
 

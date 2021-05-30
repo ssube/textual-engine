@@ -5,7 +5,7 @@ import { WorldEntity } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
-import { State } from '../../model/State';
+import { WorldState } from '../../model/world/State';
 import { ShowSource, ShowVolume } from '../../util/actor';
 import { SearchParams } from '../../util/state';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
@@ -38,7 +38,7 @@ export interface SuppliedScope {
    *
    * @todo remove direct reference
    */
-  state: Immutable<State>;
+  state: Immutable<WorldState>;
 
   stateHelper: StateHelper;
 

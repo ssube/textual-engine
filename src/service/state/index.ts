@@ -1,4 +1,4 @@
-import { State } from '../../model/State';
+import { WorldState } from '../../model/world/State';
 
 export interface CreateParams {
   /**
@@ -34,17 +34,17 @@ export interface StateService {
   /**
    * Create a new world state from a world template.
    */
-  create(params: CreateParams): Promise<State>;
+  create(params: CreateParams): Promise<WorldState>;
 
   /**
    * Load an existing world state.
    */
-  load(state: State): Promise<void>;
+  load(state: WorldState): Promise<void>;
 
   /**
    * Save the current world state.
    */
-  save(): Promise<State>;
+  save(): Promise<WorldState>;
 
   /**
    * Begin the game loop, continuing until a quit command is received.

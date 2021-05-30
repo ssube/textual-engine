@@ -5,7 +5,7 @@ import { createStubInstance, spy } from 'sinon';
 import { Actor, ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Room } from '../../../src/model/entity/Room';
-import { State } from '../../../src/model/State';
+import { WorldState } from '../../../src/model/world/State';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { ActorStep, ActorStepLookTarget } from '../../../src/script/common/ActorStep';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
@@ -68,7 +68,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
-        state: {} as State,
+        state: {} as WorldState,
         stateHelper,
         transfer,
       }, scripts);
@@ -107,7 +107,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
-        state: {} as State,
+        state: {} as WorldState,
         stateHelper,
         transfer,
       }, scripts);
@@ -139,7 +139,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
-        state: {} as State,
+        state: {} as WorldState,
         stateHelper,
         transfer,
       });
@@ -173,7 +173,7 @@ describe('actor step scripts', () => {
         script: createStubInstance(LocalScriptService),
         state: {
           rooms: [] as Array<Room>,
-        } as State,
+        } as WorldState,
         stateHelper,
         transfer,
       }, '');

@@ -5,7 +5,7 @@ import { Actor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
 import { Room } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
-import { State } from '../../model/State';
+import { WorldState } from '../../model/world/State';
 import { DEFAULT_MATCHERS } from '../entity';
 import { Immutable } from '../types';
 
@@ -24,9 +24,9 @@ export interface SearchParams {
 /**
  * Search state for any matching entities, including actors and their inventories.
  */
-export function searchState(state: State, search: Partial<SearchParams>, matchers?: SearchMatchers): Array<WorldEntity>;
-export function searchState(state: Immutable<State>, search: Partial<SearchParams>, matchers?: SearchMatchers): Array<Immutable<WorldEntity>>;
-export function searchState(state: Immutable<State>, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Immutable<WorldEntity>> {
+export function searchState(state: WorldState, search: Partial<SearchParams>, matchers?: SearchMatchers): Array<WorldEntity>;
+export function searchState(state: Immutable<WorldState>, search: Partial<SearchParams>, matchers?: SearchMatchers): Array<Immutable<WorldEntity>>;
+export function searchState(state: Immutable<WorldState>, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Immutable<WorldEntity>> {
   const results: Array<Immutable<WorldEntity>> = [];
 
   for (const room of state.rooms) {
@@ -69,7 +69,7 @@ export function searchState(state: Immutable<State>, search: Partial<SearchParam
  *
  * @todo stop searching each room once it has been added
  */
-export function findRoom(state: State, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Room> {
+export function findRoom(state: WorldState, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Room> {
   const results = new Set<Room>();
 
   for (const room of state.rooms) {
@@ -102,7 +102,7 @@ export function findRoom(state: State, search: Partial<SearchParams>, matchers =
  *
  * @todo stop searching each room once it has been added
  */
-export function findContainer(state: State, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Actor | Room> {
+export function findContainer(state: WorldState, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Actor | Room> {
   const results = new Set<Actor | Room>();
 
   for (const room of state.rooms) {

@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-import { State } from '../../src/model/State';
+import { WorldState } from '../../src/model/world/State';
 import { debugState, graphState } from '../../src/util/state/debug';
 
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {
-    const state: State = {
+    const state: WorldState = {
       meta: {
         desc: '',
         id: '',
@@ -36,7 +36,7 @@ describe('state debug utils', () => {
   });
 
   it('should include all rooms in graph output', async () => {
-    const state: State = {
+    const state: WorldState = {
       meta: {
         desc: '',
         id: '',

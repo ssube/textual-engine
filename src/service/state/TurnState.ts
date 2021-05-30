@@ -6,8 +6,8 @@ import { NotInitializedError } from '../../error/NotInitializedError';
 import { Command } from '../../model/Command';
 import { Actor, ActorType } from '../../model/entity/Actor';
 import { DataFile } from '../../model/file/Data';
-import { State } from '../../model/State';
-import { World } from '../../model/World';
+import { WorldState } from '../../model/world/State';
+import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
 import { ShowSource, ShowVolume } from '../../util/actor';
 import { catchAndLog, onceEvent } from '../../util/async/event';
@@ -73,9 +73,9 @@ export class LocalStateService implements StateService {
   protected script: ScriptService;
 
   protected commands: StackMap<Actor, Command>;
-  protected worlds: Array<World>;
+  protected worlds: Array<WorldTemplate>;
 
-  protected state?: State;
+  protected state?: WorldState;
   protected generator?: StateEntityGenerator;
   protected transfer?: StateEntityTransfer;
 
@@ -97,7 +97,7 @@ export class LocalStateService implements StateService {
   /**
    * Create a new world state from a world template.
    */
-  public async create(params: CreateParams): Promise<State> {
+  public async create(params: CreateParams): Promise<WorldState> {
     this.logger.debug({ params, worlds: this.worlds.map((it) => it.meta.id) }, 'creating new world state');
     const generator = mustExist(this.generator);
 
@@ -153,14 +153,14 @@ export class LocalStateService implements StateService {
   /**
    * Load an existing world state.
    */
-  public async load(state: State): Promise<void> {
+  public async load(state: WorldState): Promise<void> {
     this.state = state;
   }
 
   /**
    * Save the current world state.
    */
-  public async save(): Promise<State> {
+  public async save(): Promise<WorldState> {
     if (isNil(this.state)) {
       throw new NotInitializedError('state has not been initialized');
     }
@@ -227,7 +227,7 @@ export class LocalStateService implements StateService {
     });
   }
 
-  public async onWorld(world: World): Promise<void> {
+  public async onWorld(world: WorldTemplate): Promise<void> {
     this.logger.debug({ world: world.meta.id }, 'registering loaded world');
     this.worlds.push(world);
   }

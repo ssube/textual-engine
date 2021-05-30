@@ -1,7 +1,7 @@
 import { JSONSchemaType } from 'ajv';
 
-import { Room } from './entity/Room';
-import { Metadata } from './Metadata';
+import { Room } from '../entity/Room';
+import { Metadata } from '../Metadata';
 
 export enum ReactionConfig {
   PLAYER_FIRST = 'player',
@@ -16,7 +16,7 @@ export enum SidebarConfig {
 /**
  * A saved world state.
  */
-export interface State {
+export interface WorldState {
   meta: Metadata;
 
   /**
@@ -57,7 +57,7 @@ export interface State {
   };
 }
 
-export const STATE_SCHEMA: JSONSchemaType<State> = {
+export const WORLD_STATE_SCHEMA: JSONSchemaType<WorldState> = {
   type: 'object',
   properties: {
     meta: {

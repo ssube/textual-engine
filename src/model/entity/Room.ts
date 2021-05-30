@@ -3,8 +3,8 @@ import { JSONSchemaType } from 'ajv';
 
 import { makeConstStringSchema } from '../../util/schema';
 import { SlotMap, VerbMap } from '../../util/types';
+import { Template, TEMPLATE_REF_SCHEMA } from '../mapped/Template';
 import { Metadata, METADATA_SCHEMA } from '../Metadata';
-import { Template, TEMPLATE_REF_SCHEMA } from '../meta/Template';
 import { Actor } from './Actor';
 import { Entity } from './Base';
 import { Item } from './Item';

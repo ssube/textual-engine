@@ -1,9 +1,9 @@
-import { State } from '../../model/State';
+import { WorldState } from '../../model/world/State';
 
 /**
  * @todo return key/context pairs
  */
-export function debugState(state: State): Array<string> {
+export function debugState(state: WorldState): Array<string> {
   const lines = [
     `state: ${state.meta.id}`
   ];
@@ -34,7 +34,7 @@ export function debugState(state: State): Array<string> {
 /**
  * @todo return key/context pairs
  */
-export function graphState(state: State): Array<string> {
+export function graphState(state: WorldState): Array<string> {
   function sanitize(input: string): string {
     return input.replace(/[^a-zA-Z0-9_]/g, '_');
   }

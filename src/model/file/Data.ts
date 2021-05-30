@@ -1,13 +1,13 @@
 import { JSONSchemaType } from 'ajv';
 
-import { State, STATE_SCHEMA } from '../State';
-import { World, WORLD_SCHEMA } from '../World';
+import { WorldState, WORLD_STATE_SCHEMA } from '../world/State';
+import { WorldTemplate, WORLD_TEMPLATE_SCHEMA } from '../world/Template';
 import { ConfigFile, CONFIG_SCHEMA } from './Config';
 
 export interface DataFile {
   config?: ConfigFile;
-  state?: State;
-  worlds: Array<World>;
+  state?: WorldState;
+  worlds: Array<WorldTemplate>;
 }
 
 export const DATA_SCHEMA: JSONSchemaType<DataFile> = {
@@ -18,12 +18,12 @@ export const DATA_SCHEMA: JSONSchemaType<DataFile> = {
       nullable: true,
     },
     state: {
-      ...STATE_SCHEMA,
+      ...WORLD_STATE_SCHEMA,
       nullable: true,
     },
     worlds: {
       type: 'array',
-      items: WORLD_SCHEMA,
+      items: WORLD_TEMPLATE_SCHEMA,
     },
   },
   required: ['worlds'],

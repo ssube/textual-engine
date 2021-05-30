@@ -2,7 +2,7 @@ import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
 
-import { TemplateNumber, TemplateString } from '../../../src/model/meta/Template';
+import { TemplateNumber, TemplateString } from '../../../src/model/mapped/Template';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { ChainTemplateService } from '../../../src/service/template/ChainTemplateService';
 

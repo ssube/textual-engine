@@ -9,10 +9,10 @@ main([
   'core',
   '--module',
   'browser',
-  '--seed',
-  'test',
-  '--world',
-  'test',
+  '--input',
+  'create test test 5',
+  '--input',
+  'help',
 ]).then((exitCode) => {
   // eslint-disable-next-line no-console
   console.log('main exited with status', exitCode);

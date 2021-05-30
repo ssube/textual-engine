@@ -8,7 +8,6 @@ import { CoreModule } from './module/CoreModule';
 import { NodeModule } from './module/NodeModule';
 import { EventBus } from './service/event';
 import { LocaleService } from './service/locale';
-import { asyncTrack, eventDebug } from './util/async/debug';
 import { onceEvent } from './util/async/event';
 import { parseArgs } from './util/config/args';
 import { loadConfig } from './util/config/file';
@@ -21,16 +20,14 @@ import {
 } from './util/constants';
 import { ServiceManager } from './util/service/ServiceManager';
 
-const DI_MODULES = new Map<string, new () => Module>([
+// collect modules
+export const LOADED_MODULES = new Map<string, new () => Module>([
   ['browser', BrowserModule],
-  ['local', CoreModule],
+  ['core', CoreModule],
   ['node', NodeModule],
-]);
+]) as ReadonlyMap<string, new () => Module>;
 
 export async function main(args: Array<string>): Promise<number> {
-  const { asyncHook, asyncOps } = asyncTrack();
-  asyncHook.enable();
-
   // parse args
   const arg = parseArgs(args);
 
@@ -44,19 +41,20 @@ export async function main(args: Array<string>): Promise<number> {
   }, 'textual adventure');
 
   // create DI modules
-  const coreModule = new CoreModule();
-  coreModule.setConfig(config);
-
   const modules = arg.module.map((it) => {
-    const ctor = DI_MODULES.get(it);
+    const ctor = LOADED_MODULES.get(it);
     if (isNil(ctor)) {
       throw new InvalidArgumentError('module not found');
     }
-    return new ctor();
+    const module = new ctor();
+    if (it === 'core') {
+      (module as CoreModule).setConfig(config);
+    }
+    return module;
   });
 
   // configure DI container
-  const container = Container.from(coreModule, ...modules);
+  const container = Container.from(...modules);
   await container.configure({
     logger,
   });

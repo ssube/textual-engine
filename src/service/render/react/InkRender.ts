@@ -34,10 +34,10 @@ export class InkRender extends BaseReactRender implements RenderService {
     this.logger.debug({ line }, 'handling line event from React');
 
     // update inner state
-    this.inputStr = line;
+    this.input = line;
 
     // append to buffer
-    this.output.push(`${this.promptStr} > ${this.inputStr}`);
+    this.output.push(`${this.prompt} > ${this.input}`);
 
     // forward event to state
     this.event.emit('render-output', {
@@ -48,8 +48,9 @@ export class InkRender extends BaseReactRender implements RenderService {
   protected renderRoot(): void {
     const elem = React.createElement(Frame, {
       onLine: (line: string) => this.nextLine(line),
-      prompt: this.promptStr,
       output: this.output,
+      prompt: this.prompt,
+      quit: this.quit,
       step: this.step,
     });
 

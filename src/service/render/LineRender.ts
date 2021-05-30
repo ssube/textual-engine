@@ -53,7 +53,7 @@ export class LineRender implements RenderService {
     return pending;
   }
 
-  public prompt(prompt: string): void {
+  public setPrompt(prompt: string): void {
     mustExist(this.reader).setPrompt(prompt);
   }
 

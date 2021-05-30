@@ -33,16 +33,18 @@ locale:
   current: en
 services:
   actors:
-    - name: test-player
+    - name: actor-player
       kind: core-player-actor
-    - name: test-enemy
+    - name: actor-enemy
       kind: core-behavior-actor
   loaders:
-    - name: test-loader
+    - name: file-loader
       kind: node-file-loader
+    - name: url-loader
+      kind: node-fetch-loader
   renders:
-    - name: test-render
+    - name: local-render
       kind: node-ink-render
   states:
-    - name: test-state
+    - name: local-state
       kind: core-local-state

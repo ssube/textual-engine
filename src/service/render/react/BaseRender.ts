@@ -24,9 +24,10 @@ export abstract class BaseReactRender implements RenderService {
   protected locale: LocaleService;
 
   // state
-  protected inputStr: string;
-  protected promptStr: string;
+  protected input: string;
   protected output: Array<string>;
+  protected prompt: string;
+  protected quit: boolean;
   protected step: StepResult;
 
   protected derender: () => void;
@@ -40,9 +41,10 @@ export abstract class BaseReactRender implements RenderService {
 
     this.derender = debounce(100, () => this.renderRoot());
 
-    this.inputStr = '';
-    this.promptStr = '';
+    this.input = '';
     this.output = [];
+    this.prompt = '';
+    this.quit = false;
     this.step = {
       turn: 0,
       time: 0,
@@ -51,7 +53,7 @@ export abstract class BaseReactRender implements RenderService {
 
   public async start(): Promise<void> {
     this.renderRoot();
-    this.prompt(`turn ${this.step.turn}`);
+    this.setPrompt(`turn ${this.step.turn}`);
 
     this.event.on('actor-output', (output) => this.onOutput(output), this);
     this.event.on('state-room', (room) => this.onRoom(room), this);
@@ -65,8 +67,8 @@ export abstract class BaseReactRender implements RenderService {
 
   protected abstract renderRoot(): void;
 
-  public prompt(prompt: string): void {
-    this.promptStr = prompt;
+  public setPrompt(prompt: string): void {
+    this.prompt = prompt;
   }
 
   public async read(): Promise<string> {
@@ -97,6 +99,7 @@ export abstract class BaseReactRender implements RenderService {
    */
   public onQuit(): void {
     this.logger.debug('handling quit event from state');
+    this.quit = true;
     this.renderRoot();
   }
 
@@ -106,7 +109,7 @@ export abstract class BaseReactRender implements RenderService {
   public onRoom(result: StateRoomEvent): void {
     this.logger.debug(result, 'handling room event from state');
 
-    this.prompt(`turn ${this.step.turn}`);
+    this.setPrompt(`turn ${this.step.turn}`);
     this.renderRoot();
   }
 
@@ -114,7 +117,7 @@ export abstract class BaseReactRender implements RenderService {
     this.logger.debug({ event }, 'handling step event from state');
 
     this.step = event;
-    this.prompt(`turn ${this.step.turn}`);
+    this.setPrompt(`turn ${this.step.turn}`);
     this.renderRoot();
   }
 }

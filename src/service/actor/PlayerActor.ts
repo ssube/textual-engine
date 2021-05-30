@@ -23,7 +23,7 @@ import {
 } from '../../util/constants';
 import { Counter } from '../counter';
 import { EventBus, LineEvent } from '../event';
-import { LocaleService } from '../locale';
+import { LocaleContext, LocaleService } from '../locale';
 import { StateOutputEvent } from '../state/events';
 import { TokenizerService } from '../tokenizer';
 
@@ -112,7 +112,7 @@ export class PlayerActorService implements ActorService {
     this.logger.debug({ event }, 'tokenizing input');
 
     for (const line of event.lines) {
-      await this.showLine(line);
+      await this.parseLine(line);
     }
   }
 
@@ -131,13 +131,10 @@ export class PlayerActorService implements ActorService {
     }
 
     this.logger.debug({ event }, 'translating output');
-    const line = this.locale.translate(event.line, event.context);
-    this.event.emit(EVENT_ACTOR_OUTPUT, {
-      lines: [line],
-    });
+    return this.showLine(event.line, event.context);
   }
 
-  public async showLine(line: string): Promise<void> {
+  public async parseLine(line: string): Promise<void> {
     const commands = await this.tokenizer.parse(line);
     this.logger.debug({ line, commands }, 'parsed input line');
 
@@ -148,5 +145,12 @@ export class PlayerActorService implements ActorService {
         command,
       });
     }
+  }
+
+  public async showLine(key: string, context?: LocaleContext): Promise<void> {
+    const line = this.locale.translate(key, context);
+    this.event.emit(EVENT_ACTOR_OUTPUT, {
+      lines: [line],
+    });
   }
 }

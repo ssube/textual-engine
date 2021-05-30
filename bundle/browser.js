@@ -49363,7 +49363,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         roomTemplate
       }, "creating start room");
       const startRoom = await generator.createRoom(roomTemplate);
-      const rooms = [startRoom];
+      const rooms = await generator.populateRoom(startRoom, params.depth);
+      rooms.unshift(startRoom);
       const meta = await generator.createMetadata(world.meta, "world");
       this.state = {
         meta,
@@ -49505,12 +49506,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async doDebug() {
       const state = await this.save();
-      const line = debugState(state).join("\n");
-      this.event.emit(EVENT_STATE_OUTPUT, {
-        line,
-        step: state.step,
-        volume: ShowVolume.WORLD
-      });
+      const lines = debugState(state);
+      for (const line of lines) {
+        this.event.emit(EVENT_STATE_OUTPUT, {
+          line,
+          step: state.step,
+          volume: ShowVolume.WORLD
+        });
+      }
     }
     async doGraph(path) {
       const state = await this.save();
@@ -51939,10 +51942,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     "core",
     "--module",
     "browser",
-    "--seed",
-    "test",
-    "--world",
-    "test"
+    "--input",
+    "create test test 5",
+    "--input",
+    "help"
   ]).then((exitCode) => {
     console.log("main exited with status", exitCode);
   }).catch((err) => {

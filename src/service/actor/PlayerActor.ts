@@ -1,25 +1,33 @@
-import { constructorName, mustExist } from '@apextoaster/js-utils';
+import { constructorName, doesExist, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
-import { Actor, ActorType } from '../../model/entity/Actor';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
+import { Actor } from '../../model/entity/Actor';
+import { Room } from '../../model/entity/Room';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
+import { showCheck, ShowSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
 import {
   COMMON_VERBS,
   EVENT_ACTOR_COMMAND,
+  EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
   EVENT_COMMON_QUIT,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_OUTPUT,
+  EVENT_STATE_JOIN,
+  EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
 } from '../../util/constants';
-import { EventBus, LineEvent, OutputEvent } from '../event';
+import { Counter } from '../counter';
+import { EventBus, LineEvent } from '../event';
 import { LocaleService } from '../locale';
+import { StateOutputEvent } from '../state/events';
 import { TokenizerService } from '../tokenizer';
 
 export interface PlayerActorOptions extends BaseOptions {
+  [INJECT_COUNTER]?: Counter;
   [INJECT_EVENT]?: EventBus;
   [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
@@ -30,24 +38,35 @@ export interface PlayerActorOptions extends BaseOptions {
  * Behavioral input generates commands based on the actor's current
  * state (room, inventory, etc).
  */
-@Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER)
+@Inject(INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER)
 export class PlayerActorService implements ActorService {
+  protected counter: Counter;
   protected event: EventBus;
   protected locale: LocaleService;
   protected logger: Logger;
   protected tokenizer: TokenizerService;
 
+  // old focus
+  protected actor?: Actor;
+  protected room?: Room;
   protected history: Array<Command>;
 
-  constructor(options: PlayerActorOptions) {
-    this.history = [];
+  /**
+   * Unique player ID for message filtering.
+   */
+  protected pid: string;
 
+  constructor(options: PlayerActorOptions) {
+    this.counter = mustExist(options[INJECT_COUNTER]);
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
     this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
+
+    this.history = [];
+    this.pid = `player-${this.counter.next('player')}`;
   }
 
   public async start() {
@@ -57,11 +76,21 @@ export class PlayerActorService implements ActorService {
     this.event.on(EVENT_RENDER_OUTPUT, (event) => {
       catchAndLog(this.onInput(event), this.logger, 'error during render output');
     }, this);
+    this.event.on(EVENT_STATE_JOIN, (event) => {
+      if (this.pid === event.pid) {
+        this.actor = event.actor;
+      }
+    });
+    this.event.on(EVENT_STATE_LOAD, (event) => {
+      this.event.emit(EVENT_ACTOR_JOIN, {
+        pid: this.pid,
+      });
+    });
     this.event.on(EVENT_STATE_OUTPUT, (event) => {
       catchAndLog(this.onOutput(event), this.logger, 'error during state output');
     }, this);
     this.event.on(EVENT_COMMON_QUIT, () => {
-      catchAndLog(this.onInputLine('meta.quit'), this.logger, 'error sending quit output');
+      catchAndLog(this.showLine('meta.quit'), this.logger, 'error sending quit output');
     }, this);
   }
 
@@ -77,34 +106,41 @@ export class PlayerActorService implements ActorService {
     this.logger.debug({ event }, 'tokenizing input');
 
     for (const line of event.lines) {
-      await this.onInputLine(line);
+      await this.showLine(line);
     }
   }
 
-  public async onInputLine(line: string): Promise<void> {
+  public async onOutput(event: StateOutputEvent): Promise<void> {
+    this.logger.debug({ event }, 'filtering output');
+
+    if (doesExist(event.source)) {
+      const target: ShowSource = {
+        actor: this.actor,
+        room: event.source.room, // TODO: use player's current room
+      };
+
+      if (showCheck(event.source, target, event.volume) === false) {
+        return;
+      }
+    }
+
+    this.logger.debug({ event }, 'translating output');
+    const line = this.locale.translate(event.line, event.context);
+    this.event.emit(EVENT_ACTOR_OUTPUT, {
+      lines: [line],
+    });
+  }
+
+  public async showLine(line: string): Promise<void> {
     const commands = await this.tokenizer.parse(line);
     this.logger.debug({ line, commands }, 'parsed input line');
 
     this.history.push(...commands);
     for (const command of commands) {
       this.event.emit(EVENT_ACTOR_COMMAND, {
-        // TODO: include real player
-        actor: {
-          actorType: ActorType.PLAYER,
-        } as Actor,
+        actor: this.actor,
         command,
       });
     }
-  }
-
-  public async onOutput(event: OutputEvent): Promise<void> {
-    this.logger.debug({ event }, 'translating output');
-
-    // TODO: filter volume here
-
-    const lines = event.lines.map((it) => this.locale.translate(it.key, it.context));
-    this.event.emit(EVENT_ACTOR_OUTPUT, {
-      lines,
-    });
   }
 }

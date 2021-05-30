@@ -7,10 +7,6 @@ import { State } from '../../../src/model/State';
 import { findContainer, findRoom, searchState } from '../../../src/util/state';
 
 const TEST_STATE: State = {
-  focus: {
-    actor: '',
-    room: '',
-  },
   meta: {
     desc: '',
     id: '',
@@ -80,7 +76,6 @@ const TEST_STATE: State = {
     verbs: new Map(),
   }],
   start: {
-    actor: '',
     room: '',
   },
   step: {

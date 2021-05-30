@@ -1,12 +1,20 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { LoaderSaveEvent, LoaderService } from '.';
+import { LoaderService } from '.';
+import { DataFile } from '../../model/file/Data';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER } from '../../module';
 import { catchAndLog } from '../../util/async/event';
-import { EVENT_LOADER_CONFIG, EVENT_LOADER_READ, EVENT_LOADER_SAVE, EVENT_LOADER_STATE, EVENT_LOADER_WORLD } from '../../util/constants';
+import {
+  EVENT_LOADER_CONFIG,
+  EVENT_LOADER_READ,
+  EVENT_LOADER_SAVE,
+  EVENT_LOADER_STATE,
+  EVENT_LOADER_WORLD,
+} from '../../util/constants';
 import { EventBus } from '../event';
 import { Parser } from '../parser';
+import { LoaderSaveEvent } from './events';
 
 export interface BaseLoaderOptions extends BaseOptions {
   [INJECT_EVENT]?: EventBus;
@@ -58,9 +66,10 @@ export abstract class BaseLoader implements LoaderService {
       });
     }
 
-    if (doesExist(data.state)) {
+    const { state } = data;
+    if (doesExist(state)) {
       this.events.emit(EVENT_LOADER_STATE, {
-        state: data.state,
+        state,
       });
     }
   }
@@ -72,6 +81,14 @@ export abstract class BaseLoader implements LoaderService {
       const data = this.parser.save(event.data);
       await this.saveStr(event.path, data);
     }
+  }
+
+  public async loadData(path: string): Promise<DataFile> {
+    return this.parser.load(await this.loadStr(path));
+  }
+
+  public async saveData(path: string, data: DataFile): Promise<void> {
+    return this.saveStr(path, this.parser.save(data));
   }
 
   public abstract dump(path: string, data: Buffer): Promise<void>;

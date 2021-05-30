@@ -9,6 +9,7 @@ export const EVENT_COMMON_QUIT = 'quit';
 
 // service events
 export const EVENT_ACTOR_COMMAND = 'actor-command';
+export const EVENT_ACTOR_JOIN = 'actor-join';
 export const EVENT_ACTOR_OUTPUT = 'actor-output';
 export const EVENT_LOCALE_BUNDLE = 'locale-bundle';
 export const EVENT_LOADER_CONFIG = 'loader-config';
@@ -17,12 +18,15 @@ export const EVENT_LOADER_SAVE = 'loader-save';
 export const EVENT_LOADER_STATE = 'loader-state';
 export const EVENT_LOADER_WORLD = 'loader-world';
 export const EVENT_RENDER_OUTPUT = 'render-output';
+export const EVENT_STATE_JOIN = 'state-join';
+export const EVENT_STATE_LOAD = 'state-load';
 export const EVENT_STATE_OUTPUT = 'state-output';
 export const EVENT_STATE_ROOM = 'state-room';
 export const EVENT_STATE_STEP = 'state-step';
 
 export const EVENT_NAMES = [
   EVENT_ACTOR_COMMAND,
+  EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
   EVENT_COMMON_ERROR,
   EVENT_COMMON_QUIT,
@@ -33,6 +37,8 @@ export const EVENT_NAMES = [
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_OUTPUT,
+  EVENT_STATE_JOIN,
+  EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
@@ -63,10 +69,6 @@ export const META_LOAD = 'verbs.meta.load';
 export const META_QUIT = 'verbs.meta.quit';
 export const META_SAVE = 'verbs.meta.save';
 
-// common stats
-export const STAT_HEALTH = 'health';
-export const STAT_DAMAGE = 'damage';
-
 /**
  * Common verbs and meta commands.
  *
@@ -87,4 +89,13 @@ export const COMMON_VERBS = [
   VERB_TAKE,
   VERB_USE,
   VERB_WAIT,
+] as const;
+
+// common stats
+export const STAT_HEALTH = 'health';
+export const STAT_DAMAGE = 'damage';
+
+export const COMMON_STATS = [
+  STAT_HEALTH,
+  STAT_DAMAGE,
 ] as const;

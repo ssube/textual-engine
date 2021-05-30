@@ -3,8 +3,9 @@ import { BaseOptions } from 'noicejs';
 
 import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { ActorCommandEvent } from '../../../src/service/actor/events';
 import { PlayerActorService } from '../../../src/service/actor/PlayerActor';
-import { CommandEvent, EventBus } from '../../../src/service/event';
+import { EventBus } from '../../../src/service/event';
 import { LocaleService } from '../../../src/service/locale';
 import { onceEvent } from '../../../src/util/async/event';
 import { getTestContainer } from '../../helper';
@@ -23,7 +24,7 @@ describe('player actor', () => {
     const line = `foo bar ${index}`;
 
     const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    const pending = onceEvent<CommandEvent>(event, 'actor-command');
+    const pending = onceEvent<ActorCommandEvent>(event, 'actor-command');
 
     event.emit('render-output', {
       lines: [line],

@@ -6,14 +6,21 @@ import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
 import { State } from '../../model/State';
+import { ShowSource, ShowVolume } from '../../util/actor';
 import { SearchParams } from '../../util/state';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
-import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { Immutable, ScriptData } from '../../util/types';
+import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
 
 export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
+
+export interface StateHelper {
+  enter: (target: ShowSource) => Promise<void>;
+  show: (msg: string, context?: LocaleContext, volume?: ShowVolume, source?: ShowSource) => Promise<void>;
+  quit: () => Promise<void>;
+}
 
 /**
  * The script scope fields that must be supplied by the caller.
@@ -24,17 +31,16 @@ export interface SuppliedScope {
    */
   data: ScriptData;
 
-  /**
-   * State output helper.
-   */
-  focus: StateFocusResolver;
-
   random: RandomGenerator;
 
   /**
    * Immutable reference to state for broadcast, lookups, etc.
+   *
+   * @todo remove direct reference
    */
   state: Immutable<State>;
+
+  stateHelper: StateHelper;
 
   /**
    * Entity transfer helper.

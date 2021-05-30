@@ -1,6 +1,6 @@
 import { doesExist } from '@apextoaster/js-utils';
 
-import { BYTE_RANGE } from './constants';
+import { BYTE_RANGE } from '../constants';
 
 export function decrementKey<TKey>(map: Map<TKey, number>, key: TKey, step = 1, min = 0): number {
   const last = map.get(key);

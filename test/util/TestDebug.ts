@@ -6,10 +6,6 @@ import { debugState, graphState } from '../../src/util/state/debug';
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {
     const state: State = {
-      focus: {
-        actor: '',
-        room: '',
-      },
       meta: {
         desc: '',
         id: '',
@@ -18,7 +14,6 @@ describe('state debug utils', () => {
       },
       rooms: [], // TODO: add some rooms
       start: {
-        actor: '',
         room: '',
       },
       step: {
@@ -42,10 +37,6 @@ describe('state debug utils', () => {
 
   it('should include all rooms in graph output', async () => {
     const state: State = {
-      focus: {
-        actor: '',
-        room: '',
-      },
       meta: {
         desc: '',
         id: '',
@@ -54,7 +45,6 @@ describe('state debug utils', () => {
       },
       rooms: [], // TODO: add some rooms
       start: {
-        actor: '',
         room: '',
       },
       step: {

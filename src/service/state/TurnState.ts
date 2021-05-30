@@ -1,26 +1,30 @@
-import { constructorName, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
+import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
 import { NotInitializedError } from '../../error/NotInitializedError';
 import { Command } from '../../model/Command';
 import { Actor, ActorType } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
-import { randomItem } from '../../util/array';
+import { ShowSource, ShowVolume } from '../../util/actor';
 import { catchAndLog, onceEvent } from '../../util/async/event';
+import { randomItem } from '../../util/collection/array';
+import { StackMap } from '../../util/collection/StackMap';
 import {
   COMMON_VERBS,
   EVENT_ACTOR_COMMAND,
+  EVENT_ACTOR_JOIN,
   EVENT_COMMON_QUIT,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
+  EVENT_STATE_JOIN,
+  EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   META_CREATE,
@@ -31,15 +35,16 @@ import {
   META_QUIT,
   META_SAVE,
   SLOT_STEP,
+  VERB_WAIT,
 } from '../../util/constants';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
-import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { findByTemplateId } from '../../util/template';
+import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
-import { CommandEvent, EventBus } from '../event';
-import { LoaderStateEvent, LoaderWorldEvent } from '../loader';
+import { EventBus } from '../event';
+import { LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
 import { ScriptService, SuppliedScope } from '../script';
@@ -67,10 +72,10 @@ export class LocalStateService implements StateService {
   protected random: RandomGenerator;
   protected script: ScriptService;
 
+  protected commands: StackMap<Actor, Command>;
   protected worlds: Array<World>;
 
   protected state?: State;
-  protected focus?: StateFocusResolver;
   protected generator?: StateEntityGenerator;
   protected transfer?: StateEntityTransfer;
 
@@ -85,6 +90,7 @@ export class LocalStateService implements StateService {
     this.random = mustExist(options[INJECT_RANDOM]);
     this.script = mustExist(options[INJECT_SCRIPT]);
 
+    this.commands = new StackMap();
     this.worlds = [];
   }
 
@@ -98,17 +104,36 @@ export class LocalStateService implements StateService {
     const world = mustFind(this.worlds, (it) => it.meta.id === params.id);
     generator.setWorld(world);
 
+    // load the world locale
+    this.event.emit('locale-bundle', {
+      name: 'world',
+      bundle: world.locale,
+    });
+
+    // reseed the prng
+    this.random.reseed(params.seed); // TODO: fast-forward to last state
+
+    // pick a starting room and populate it
+    const roomRef = randomItem(world.start.rooms, this.random);
+    const roomTemplate = findByTemplateId(world.templates.rooms, roomRef.id);
+    if (isNil(roomTemplate)) {
+      throw new NotFoundError('invalid start room');
+    }
+
+    this.logger.debug({
+      roomRef,
+      roomTemplate,
+    }, 'creating start room');
+
+    const startRoom = await generator.createRoom(roomTemplate);
+    const rooms = [startRoom];
+
     const meta = await generator.createMetadata(world.meta, 'world');
     this.state = {
-      focus: {
-        actor: '',
-        room: '',
-      },
       meta,
-      rooms: [],
+      rooms,
       start: {
-        actor: '',
-        room: '',
+        room: startRoom.meta.id,
       },
       step: {
         time: 0,
@@ -119,57 +144,7 @@ export class LocalStateService implements StateService {
       },
     };
 
-    mustExist(this.focus).setState(this.state);
     mustExist(this.transfer).setState(this.state);
-
-    // reseed the prng
-    this.random.reseed(this.state.world.seed); // TODO: fast-forward to last state
-
-    // load the world locale
-    this.event.emit('locale-bundle', {
-      name: 'world',
-      bundle: mustExist(world).locale,
-    });
-
-    // pick a starting room and create it
-    const startRoomRef = randomItem(world.start.rooms, this.random);
-    const startRoomTemplate = findByTemplateId(world.templates.rooms, startRoomRef.id);
-    if (isNil(startRoomTemplate)) {
-      throw new NotFoundError('invalid start room');
-    }
-
-    this.logger.debug({
-      startRoomRef,
-      startRoomTemplate,
-    }, 'creating start room');
-
-    const startRoom = await generator.createRoom(startRoomTemplate);
-    this.state.rooms.push(startRoom);
-
-    // pick a starting actor and create it
-    const startActorRef = randomItem(world.start.actors, this.random);
-    const startActorTemplate = findByTemplateId(world.templates.actors, startActorRef.id);
-    if (isNil(startActorTemplate)) {
-      throw new NotFoundError('invalid start actor');
-    }
-
-    this.logger.debug({
-      startActorRef,
-      startActorTemplate,
-    }, 'creating start actor');
-
-    const startActor = await generator.createActor(startActorTemplate, ActorType.PLAYER);
-    startActor.actorType = ActorType.PLAYER;
-    startRoom.actors.push(startActor);
-
-    // set initial focus
-    const focus = mustExist(this.focus);
-    await focus.setRoom(startRoom.meta.id);
-    await focus.setActor(startActor.meta.id);
-
-    // record starting location
-    this.state.start.room = startRoom.meta.id;
-    this.state.start.actor = startActor.meta.id;
 
     return this.state;
   }
@@ -179,34 +154,6 @@ export class LocalStateService implements StateService {
    */
   public async load(state: State): Promise<void> {
     this.state = state;
-  }
-
-  public async start(): Promise<void> {
-    this.focus = await this.container.create(StateFocusResolver, {
-      events: {
-        onActor: () => Promise.resolve(),
-        onQuit: () => this.doQuit(),
-        onRoom: (room) => this.onRoom(room),
-        onShow: (line, context) => this.onOutput(line, context),
-      },
-    });
-
-    this.generator = await this.container.create(StateEntityGenerator);
-    this.transfer = await this.container.create(StateEntityTransfer);
-
-    this.event.on(EVENT_LOADER_WORLD, (event: LoaderWorldEvent) => {
-      catchAndLog(this.onWorld(event.world), this.logger, 'error during world handler');
-    }, this);
-
-    this.event.on(EVENT_ACTOR_COMMAND, (event: CommandEvent) => {
-      if (event.actor.actorType === ActorType.PLAYER) {
-        catchAndLog(this.onCommand(event.command), this.logger, 'error during line handler');
-      }
-    }, this);
-  }
-
-  public async stop(): Promise<void> {
-    this.event.removeGroup(this);
   }
 
   /**
@@ -220,16 +167,62 @@ export class LocalStateService implements StateService {
     return this.state;
   }
 
-  /**
-   * Handler for a line of input from the focus helper.
-   */
-  public async onOutput(line: string, context?: LocaleContext): Promise<void> {
-    this.event.emit(EVENT_STATE_OUTPUT, {
-      lines: [{
-        key: line,
-        context,
-      }],
-      step: mustExist(this.state).step,
+  public async start(): Promise<void> {
+    this.generator = await this.container.create(StateEntityGenerator);
+    this.transfer = await this.container.create(StateEntityTransfer);
+
+    this.event.on(EVENT_LOADER_WORLD, (event: LoaderWorldEvent) => {
+      catchAndLog(this.onWorld(event.world), this.logger, 'error during world handler');
+    }, this);
+
+    this.event.on(EVENT_ACTOR_COMMAND, (event: ActorCommandEvent) => {
+      catchAndLog(this.onCommand(event), this.logger, 'error during line handler');
+    }, this);
+
+    this.event.on(EVENT_ACTOR_JOIN, (event) => {
+      catchAndLog(this.onJoin(event), this.logger, 'error during join handler');
+    });
+  }
+
+  public async stop(): Promise<void> {
+    this.event.removeGroup(this);
+  }
+
+  public async onJoin(event: ActorJoinEvent): Promise<void> {
+    const state = mustExist(this.state);
+    const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
+
+    // pick a starting actor and create it
+    const actorRef = randomItem(world.start.actors, this.random);
+    const actorTemplate = findByTemplateId(world.templates.actors, actorRef.id);
+    if (isNil(actorTemplate)) {
+      throw new NotFoundError('invalid start actor');
+    }
+
+    this.logger.debug({
+      actorRef,
+      actorTemplate,
+    }, 'creating player actor');
+
+    const actor = await mustExist(this.generator).createActor(actorTemplate, ActorType.PLAYER);
+    actor.meta.name = event.pid;
+
+    const room = mustFind(state.rooms, (it) => it.meta.id === state.start.room);
+    room.actors.push(actor);
+
+    await this.stepEnter({
+      actor,
+      room,
+    });
+
+    // TODO: find a way to combine these?
+    this.event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid: event.pid,
+    });
+    this.event.emit(EVENT_STATE_ROOM, {
+      actor,
+      room,
     });
   }
 
@@ -241,35 +234,47 @@ export class LocalStateService implements StateService {
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
-  public async onCommand(cmd: Command): Promise<void> {
+  public async onCommand(event: ActorCommandEvent): Promise<void> {
+    const { actor, command } = event;
+
     this.logger.debug({
-      cmd,
-    }, 'handling input command');
+      actor,
+      command,
+    }, 'handling command event');
+
+    if (doesExist(actor)) {
+      this.commands.push(actor, command);
+    }
 
     // handle meta commands
-    switch (cmd.verb) {
+    switch (command.verb) {
       case META_CREATE:
-        await this.doCreate(cmd.target, cmd.index);
+        await this.doCreate(command.target, command.index);
         break;
       case META_DEBUG:
         await this.doDebug();
         break;
       case META_GRAPH:
-        await this.doGraph(cmd.target);
+        await this.doGraph(command.target);
         break;
       case META_HELP:
         await this.doHelp();
         break;
       case META_LOAD:
-        await this.doLoad(cmd.target, cmd.index);
+        await this.doLoad(command.target);
         break;
       case META_QUIT:
         await this.doQuit();
         break;
       case META_SAVE:
-        await this.doSave(cmd.target);
+        await this.doSave(command.target);
         break;
       default: {
+        // TODO: proper wait, don't assume player goes last
+        if (mustExist(event.actor).actorType !== ActorType.PLAYER) {
+          return;
+        }
+
         // step world
         const result = await this.step();
         this.event.emit('state-step', result);
@@ -286,44 +291,32 @@ export class LocalStateService implements StateService {
     });
 
     this.event.emit(EVENT_STATE_OUTPUT, {
-      lines: [{
-        key: 'meta.create',
-        context: {
-          ...state.meta,
-          depth,
-          seed,
-          world: id,
-        },
-      }],
+      context: {
+        ...state.meta,
+        depth,
+        seed,
+        world: id,
+      },
+      line: 'meta.create',
       step: {
         time: 0,
         turn: 0,
       },
+      volume: ShowVolume.WORLD,
+    });
+    this.event.emit(EVENT_STATE_LOAD, {
+      state: state.meta.name,
+      world: state.meta.template,
     });
   }
 
   public async doDebug(): Promise<void> {
     const state = await this.save();
-    const lines = debugState(state);
+    const line = debugState(state).join('\n');
     this.event.emit(EVENT_STATE_OUTPUT, {
-      lines: lines.map((it) => ({ key: it })),
+      line,
       step: state.step,
-    });
-  }
-
-  public async doHelp(): Promise<void> {
-    const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(', ');
-    this.event.emit(EVENT_STATE_OUTPUT, {
-      lines: [{
-        key: 'meta.help',
-        context: {
-          verbs,
-        }
-      }],
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      volume: ShowVolume.WORLD,
     });
   }
 
@@ -338,18 +331,32 @@ export class LocalStateService implements StateService {
     });
 
     this.event.emit(EVENT_STATE_OUTPUT, {
-      lines: [{
-        context: {
-          path,
-          size: state.rooms.length,
-        },
-        key: 'debug.graph.summary',
-      }],
+      context: {
+        path,
+        size: state.rooms.length,
+      },
+      line: 'debug.graph.summary',
       step: state.step,
+      volume: ShowVolume.WORLD,
     });
   }
 
-  public async doLoad(path: string, index: number): Promise<void> {
+  public async doHelp(): Promise<void> {
+    const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(', ');
+    this.event.emit(EVENT_STATE_OUTPUT, {
+      context: {
+        verbs,
+      },
+      line: 'meta.help',
+      step: {
+        time: 0,
+        turn: 0,
+      },
+      volume: ShowVolume.WORLD,
+    });
+  }
+
+  public async doLoad(path: string): Promise<void> {
     const stateEvent = onceEvent<LoaderStateEvent>(this.event, EVENT_LOADER_STATE);
     this.event.emit(EVENT_LOADER_READ, {
       path,
@@ -364,15 +371,13 @@ export class LocalStateService implements StateService {
     });
 
     this.state = state;
-    mustExist(this.focus).setState(state);
     mustExist(this.generator).setWorld(world);
     mustExist(this.transfer).setState(state);
 
     this.event.emit(EVENT_STATE_OUTPUT, {
-      lines: [{
-        key: `loaded world ${state.meta.id} state from ${path}`,
-      }],
+      line: `loaded world ${state.meta.id} state from ${path}`,
       step: state.step,
+      volume: ShowVolume.WORLD,
     });
   }
 
@@ -395,10 +400,9 @@ export class LocalStateService implements StateService {
     });
 
     this.event.emit(EVENT_STATE_OUTPUT, {
-      lines: [{
-        key: `saved world ${state.meta.id} state to ${path}`,
-      }],
+      line: `saved world ${state.meta.id} state to ${path}`,
       step: state.step,
+      volume: ShowVolume.WORLD,
     });
   }
 
@@ -412,9 +416,13 @@ export class LocalStateService implements StateService {
 
     const scope: SuppliedScope = {
       data: new Map(),
-      focus: mustExist(this.focus),
       random: this.random,
       state: this.state,
+      stateHelper: {
+        enter: (target) => this.stepEnter(target),
+        quit: () => this.doQuit(),
+        show: (msg, source, volume, context) => this.stepShow(msg, source, volume, context),
+      },
       transfer: mustExist(this.transfer),
     };
 
@@ -430,8 +438,7 @@ export class LocalStateService implements StateService {
           if (seen.has(actor.meta.id) === false) {
             seen.add(actor.meta.id);
 
-            const command = await this.getActorCommand(actor, room);
-
+            const command = await this.getActorCommand(actor);
             await this.script.invoke(actor, SLOT_STEP, {
               ...scope,
               actor,
@@ -475,29 +482,60 @@ export class LocalStateService implements StateService {
       step: this.state.step,
     }, 'finished world state step');
 
+    await this.notifyChangedRooms();
+
     return {
       time: this.state.step.time,
       turn: this.state.step.turn,
     };
   }
 
-  protected async getActorCommand(actor: Actor, room: Room): Promise<Command> {
-    this.logger.debug({ actor }, 'getting actor command');
-
-    const pending = onceEvent<CommandEvent>(this.event, EVENT_ACTOR_COMMAND);
-
-    this.event.emit(EVENT_STATE_ROOM, {
-      actor,
-      room,
+  /**
+   * Handler for a line of input from the focus helper.
+   */
+  protected async stepShow(line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.WORLD, source?: ShowSource): Promise<void> {
+    this.event.emit(EVENT_STATE_OUTPUT, {
+      line,
+      context,
+      source,
+      step: mustExist(this.state).step,
+      volume,
     });
-
-    const { command } = await pending;
-    return command;
   }
 
-  protected async onRoom(room: Room): Promise<void> {
+  protected async stepEnter(target: ShowSource): Promise<void> {
+    if (doesExist(target.actor) && target.actor.actorType === ActorType.PLAYER) {
+      const state = mustExist(this.state);
+      const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);
+      state.rooms.push(...rooms);
+    }
+  }
+
+  protected async getActorCommand(actor: Actor): Promise<Command> {
+    const command = this.commands.pop(actor);
+
+    if (doesExist(command)) {
+      return command;
+    }
+
+    this.logger.warn({ actor }, 'no command queued for actor');
+    return {
+      index: 0,
+      input: '',
+      target: '',
+      verb: VERB_WAIT,
+    };
+  }
+
+  protected async notifyChangedRooms(): Promise<void> {
     const state = mustExist(this.state);
-    const rooms = await mustExist(this.generator).populateRoom(room, state.world.depth);
-    state.rooms.push(...rooms);
+    for (const room of state.rooms) {
+      for (const actor of room.actors) {
+        this.event.emit(EVENT_STATE_ROOM, {
+          actor,
+          room,
+        });
+      }
+    }
   }
 }

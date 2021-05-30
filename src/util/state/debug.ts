@@ -44,7 +44,7 @@ export function graphState(state: State): Array<string> {
   ];
 
   // add rooms as nodes
-  lines.push(`  ${sanitize(state.focus.room)} [fillcolor=turquoise,style=filled];`);
+  lines.push(`  ${sanitize(state.start.room)} [fillcolor=turquoise,style=filled];`);
 
   // add edges between rooms
   for (const room of state.rooms) {

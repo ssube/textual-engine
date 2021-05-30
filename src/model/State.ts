@@ -37,14 +37,6 @@ export interface State {
   };
 
   /**
-   * The active room and actor, for filtering output.
-   */
-  focus: {
-    actor: string;
-    room: string;
-  };
-
-  /**
    * The root of the entity tree.
    */
   rooms: Array<Room>;
@@ -53,7 +45,6 @@ export interface State {
    * The starting room and actor, for respawning.
    */
   start: {
-    actor: string;
     room: string;
   };
 
@@ -69,18 +60,6 @@ export interface State {
 export const STATE_SCHEMA: JSONSchemaType<State> = {
   type: 'object',
   properties: {
-    focus: {
-      type: 'object',
-      properties: {
-        actor: {
-          type: 'string',
-        },
-        room: {
-          type: 'string',
-        },
-      },
-      required: ['actor', 'room'],
-    },
     meta: {
       type: 'object',
       properties: {
@@ -109,14 +88,11 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
     start: {
       type: 'object',
       properties: {
-        actor: {
-          type: 'string',
-        },
         room: {
           type: 'string',
         },
       },
-      required: ['actor', 'room'],
+      required: ['room'],
     },
     step: {
       type: 'object',
@@ -147,5 +123,5 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
     },
 
   },
-  required: ['focus', 'meta', 'rooms', 'step', 'world'],
+  required: ['meta', 'rooms', 'step', 'world'],
 };

@@ -13,7 +13,7 @@ import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE } from '.
 import { Counter } from '../../service/counter';
 import { RandomGenerator } from '../../service/random';
 import { TemplateService } from '../../service/template';
-import { randomItem } from '../array';
+import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
 import { findByTemplateId } from '../template';
 

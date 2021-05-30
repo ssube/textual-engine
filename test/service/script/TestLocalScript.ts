@@ -8,14 +8,9 @@ import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
-import { StateFocusResolver } from '../../../src/util/state/FocusResolver';
-import { getStubEvents } from '../../helper';
+import { getStubHelper } from '../../helper';
 
 const TEST_STATE: State = {
-  focus: {
-    actor: '',
-    room: '',
-  },
   meta: {
     desc: '',
     id: '',
@@ -24,7 +19,6 @@ const TEST_STATE: State = {
   },
   rooms: [],
   start: {
-    actor: '',
     room: '',
   },
   step: {
@@ -61,12 +55,9 @@ describe('local script service', () => {
     const script = await container.create(LocalScriptService, {}, new Map());
     await script.invoke(target, 'foo', {
       data: new Map(),
-      focus: await container.create(StateFocusResolver, {
-        events: getStubEvents(),
-        state: TEST_STATE,
-      }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
+      stateHelper: getStubHelper(),
       transfer: await container.create(StateEntityTransfer),
     });
   });
@@ -95,12 +86,9 @@ describe('local script service', () => {
     const script = await container.create(LocalScriptService, {}, new Map());
     await script.invoke(target, 'foo', {
       data: new Map(),
-      focus: await container.create(StateFocusResolver, {
-        events: getStubEvents(),
-        state: TEST_STATE,
-      }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
+      stateHelper: getStubHelper(),
       transfer: await container.create(StateEntityTransfer),
     });
   });
@@ -132,12 +120,9 @@ describe('local script service', () => {
     ]));
     await script.invoke(target, 'foo', {
       data: new Map(),
-      focus: await container.create(StateFocusResolver, {
-        events: getStubEvents(),
-        state: TEST_STATE,
-      }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
+      stateHelper: getStubHelper(),
       transfer: await container.create(StateEntityTransfer),
     });
 

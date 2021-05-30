@@ -3,11 +3,12 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
-import { onceEvent } from '../../../util/async/event';
 import { debounce } from '../../../util/async/Debounce';
-import { EventBus, LineEvent, OutputEvent, RoomEvent } from '../../event';
+import { onceEvent } from '../../../util/async/event';
+import { EventBus, LineEvent } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
+import { StateRoomEvent } from '../../state/events';
 
 export interface BaseRenderOptions extends BaseOptions {
   [INJECT_EVENT]?: EventBus;
@@ -69,8 +70,8 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   public async read(): Promise<string> {
-    const event = await onceEvent<OutputEvent>(this.event, 'actor-output');
-    return event.lines[0].key;
+    const event = await onceEvent<LineEvent>(this.event, 'actor-output');
+    return event.lines[0];
   }
 
   public async show(msg: string): Promise<void> {
@@ -102,7 +103,7 @@ export abstract class BaseReactRender implements RenderService {
   /**
    * Handler for step events received from state service.
    */
-  public onRoom(result: RoomEvent): void {
+  public onRoom(result: StateRoomEvent): void {
     this.logger.debug(result, 'handling room event from state');
 
     this.prompt(`turn ${this.step.turn}`);

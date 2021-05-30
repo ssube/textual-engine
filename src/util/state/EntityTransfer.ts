@@ -96,10 +96,10 @@ export class StateEntityTransfer {
       data: new Map([
         ['source', transfer.source],
       ]),
-      focus: context.focus,
       random: context.random,
-      transfer: context.transfer,
       state: context.state,
+      stateHelper: context.stateHelper,
+      transfer: context.transfer,
     });
   }
 
@@ -159,10 +159,10 @@ export class StateEntityTransfer {
       data: new Map([
         ['source', transfer.source],
       ]),
-      focus: context.focus,
       random: context.random,
-      transfer: context.transfer,
       state: context.state,
+      stateHelper: context.stateHelper,
+      transfer: context.transfer,
     });
   }
 }

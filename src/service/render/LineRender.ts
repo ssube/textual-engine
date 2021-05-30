@@ -5,11 +5,12 @@ import { createInterface, Interface as LineInterface } from 'readline';
 
 import { RenderService } from '.';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
-import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, META_QUIT } from '../../util/constants';
 import { onceEvent } from '../../util/async/event';
-import { EventBus, LineEvent, RoomEvent } from '../event';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, META_QUIT } from '../../util/constants';
+import { EventBus, LineEvent } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
+import { StateRoomEvent } from '../state/events';
 import { BaseRenderOptions } from './react/BaseRender';
 
 @Inject(/* all from base */)
@@ -120,7 +121,7 @@ export class LineRender implements RenderService {
     this.showPrompt();
   }
 
-  public onRoom(event: RoomEvent): void {
+  public onRoom(event: StateRoomEvent): void {
     this.logger.debug({ event }, 'handling step event from state');
 
     this.showPrompt();

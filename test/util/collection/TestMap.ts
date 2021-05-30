@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { decrementKey, getKey, incrementKey } from '../../src/util/map';
+import { decrementKey, getKey, incrementKey } from '../../../src/util/collection/map';
 
 describe('map utils', () => {
   describe('decrement key helper', () => {

@@ -6,8 +6,9 @@ import { Command } from '../../model/Command';
 import { Actor, ActorType } from '../../model/entity/Actor';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM } from '../../module';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
-import { EventBus, RoomEvent } from '../event';
+import { EventBus } from '../event';
 import { RandomGenerator } from '../random';
+import { StateRoomEvent } from '../state/events';
 
 const WAIT_CMD: Command = {
   index: 0,
@@ -61,7 +62,7 @@ export class BehaviorActorService implements ActorService {
     throw new NotImplementedError();
   }
 
-  public onRoom(event: RoomEvent) {
+  public onRoom(event: StateRoomEvent) {
     const behavior = this.random.nextFloat();
     this.logger.debug({ event, which: behavior }, 'received room event from state');
 

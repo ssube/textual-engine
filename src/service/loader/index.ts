@@ -1,8 +1,5 @@
 import { Service } from '..';
-import { ConfigFile } from '../../model/file/Config';
 import { DataFile } from '../../model/file/Data';
-import { State } from '../../model/State';
-import { World } from '../../model/World';
 
 export interface LoaderService extends Service {
   /**
@@ -31,25 +28,8 @@ export interface LoaderService extends Service {
    * Save a resource from a UTF-8 string.
    */
   saveStr(path: string, data: string): Promise<void>;
-}
 
-export interface LoaderReadEvent {
-  path: string;
-}
+  loadData(path: string): Promise<DataFile>;
 
-export interface LoaderSaveEvent {
-  data: DataFile | string;
-  path: string;
-}
-
-export interface LoaderConfigEvent {
-  config: ConfigFile;
-}
-
-export interface LoaderStateEvent {
-  state: State;
-}
-
-export interface LoaderWorldEvent {
-  world: World;
+  saveData(path: string, data: DataFile): Promise<void>;
 }

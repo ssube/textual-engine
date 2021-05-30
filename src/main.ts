@@ -3,15 +3,7 @@ import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import {
-  INJECT_ACTOR,
-  INJECT_CONFIG,
-  INJECT_EVENT,
-  INJECT_LOADER,
-  INJECT_LOCALE,
-  INJECT_RENDER,
-  INJECT_STATE,
-} from './module';
+import { INJECT_ACTOR, INJECT_EVENT, INJECT_LOADER, INJECT_LOCALE, INJECT_RENDER, INJECT_STATE } from './module';
 import { ActorLocator, ActorModule } from './module/ActorModule';
 import { BrowserModule } from './module/BrowserModule';
 import { CoreModule } from './module/CoreModule';
@@ -25,7 +17,7 @@ import { parseArgs } from './util/args';
 import { asyncTrack } from './util/async';
 import { loadConfig } from './util/config/file';
 import { EVENT_ACTOR_OUTPUT, EVENT_LOADER_PATH, EVENT_RENDER_OUTPUT } from './util/constants';
-import { onceWithRemove } from './util/event';
+import { onceEvent } from './util/event';
 
 const DI_MODULES = new Map<string, new () => Module>([
   ['browser', BrowserModule],
@@ -114,12 +106,10 @@ export async function main(args: Array<string>): Promise<number> {
     });
 
     // await output before next command
-    const { pending } = onceWithRemove(events, EVENT_ACTOR_OUTPUT);
-    await pending;
+    await onceEvent(events, EVENT_ACTOR_OUTPUT);
   }
 
-  const { pending } = onceWithRemove(events, 'quit');
-  await pending;
+  await onceEvent(events, 'quit');
 
   await state.stop();
   await render.stop();

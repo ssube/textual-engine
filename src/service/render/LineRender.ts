@@ -6,7 +6,7 @@ import { createInterface, Interface as LineInterface } from 'readline';
 import { RenderService } from '.';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
 import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, META_QUIT } from '../../util/constants';
-import { onceWithRemove } from '../../util/event';
+import { onceEvent } from '../../util/event';
 import { EventBus, LineEvent, RoomEvent } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
@@ -45,7 +45,7 @@ export class LineRender implements RenderService {
   public async read(): Promise<string> {
     const reader = mustExist(this.reader);
 
-    const { pending } = onceWithRemove<string>(reader, 'line');
+    const pending = onceEvent<string>(reader, 'line');
 
     reader.prompt();
 

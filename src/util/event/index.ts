@@ -71,6 +71,20 @@ export function onceWithRemove<
   };
 }
 
+/**
+ * Wait for an event without manual cancellation.
+ *
+ * This wraps `onceWithRemove` to use the same removal logic on resolution/rejection, but throws away the manual
+ * removal function.
+ */
+export function onceEvent<
+  TValue,
+  TName extends string = string
+>(emitter: TypedEmitter<TName, TValue>, event: TName): Promise<TValue> {
+  const { pending } = onceWithRemove(emitter, event);
+  return pending;
+}
+
 export function catchAndLog(p: Promise<any>, logger: Logger, msg: string) {
   p.catch((err) => {
     logger.error(err, msg);

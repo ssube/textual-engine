@@ -3,7 +3,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
-import { onceWithRemove } from '../../../util/event';
+import { onceEvent } from '../../../util/event';
 import { debounce } from '../../../util/event/Debounce';
 import { EventBus, LineEvent, OutputEvent, RoomEvent } from '../../event';
 import { LocaleService } from '../../locale';
@@ -69,9 +69,7 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   public async read(): Promise<string> {
-    const { pending } = onceWithRemove<OutputEvent>(this.event, 'actor-output');
-    const event = await pending;
-
+    const event = await onceEvent<OutputEvent>(this.event, 'actor-output');
     return event.lines[0].key;
   }
 

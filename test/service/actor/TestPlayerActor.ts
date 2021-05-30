@@ -7,7 +7,7 @@ import { ActorLocator, ActorModule } from '../../../src/module/ActorModule';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { CommandEvent, EventBus } from '../../../src/service/event';
 import { LocaleService } from '../../../src/service/locale';
-import { onceWithRemove } from '../../../src/util/event';
+import { onceEvent } from '../../../src/util/event';
 import { getTestContainer } from '../../helper';
 
 describe('player actor', () => {
@@ -28,7 +28,7 @@ describe('player actor', () => {
     const line = `foo bar ${index}`;
 
     const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    const { pending } = onceWithRemove<CommandEvent>(event, 'actor-command');
+    const pending = onceEvent<CommandEvent>(event, 'actor-command');
 
     event.emit('render-output', {
       lines: [line],

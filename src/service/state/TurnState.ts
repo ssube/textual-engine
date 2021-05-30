@@ -127,7 +127,8 @@ export class LocalStateService implements StateService {
     }, 'creating start room');
 
     const startRoom = await generator.createRoom(roomTemplate);
-    const rooms = [startRoom];
+    const rooms = await generator.populateRoom(startRoom, params.depth);
+    rooms.unshift(startRoom);
 
     const meta = await generator.createMetadata(world.meta, 'world');
     this.state = {
@@ -313,12 +314,15 @@ export class LocalStateService implements StateService {
 
   public async doDebug(): Promise<void> {
     const state = await this.save();
-    const line = debugState(state).join('\n');
-    this.event.emit(EVENT_STATE_OUTPUT, {
-      line,
-      step: state.step,
-      volume: ShowVolume.WORLD,
-    });
+    const lines = debugState(state);
+
+    for (const line of lines) {
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line,
+        step: state.step,
+        volume: ShowVolume.WORLD,
+      });
+    }
   }
 
   public async doGraph(path: string): Promise<void> {

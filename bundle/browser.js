@@ -1984,7 +1984,7 @@
         return [];
       }
       __name(getInject, "getInject");
-      function Inject13(...needs) {
+      function Inject15(...needs) {
         return (target, key, providedDesc) => {
           if (isNil3(key)) {
             const prev = getInject(target);
@@ -2001,7 +2001,7 @@
           }
         };
       }
-      __name(Inject13, "Inject");
+      __name(Inject15, "Inject");
       var NullLogger = class {
         child() {
           return NullLogger.global;
@@ -2026,7 +2026,7 @@
         }
       }
       __name(getProvides, "getProvides");
-      function Provides4(...provides) {
+      function Provides2(...provides) {
         return (target, key, providedDesc) => {
           const desc = resolveDescriptor(target, key, providedDesc);
           const prev = getProvides(target);
@@ -2034,14 +2034,14 @@
           Reflect.set(desc.value, providesSymbol, prev.concat(next));
         };
       }
-      __name(Provides4, "Provides");
+      __name(Provides2, "Provides");
       (function(ProviderType) {
         ProviderType[ProviderType["None"] = 0] = "None";
         ProviderType[ProviderType["Constructor"] = 1] = "Constructor";
         ProviderType[ProviderType["Factory"] = 2] = "Factory";
         ProviderType[ProviderType["Instance"] = 3] = "Instance";
       })(exports.ProviderType || (exports.ProviderType = {}));
-      var Module5 = class {
+      var Module3 = class {
         constructor() {
           this.logger = NullLogger.global;
           this.providers = new Map();
@@ -2114,7 +2114,7 @@
           }
         }
       };
-      __name(Module5, "Module");
+      __name(Module3, "Module");
       var VERSION_INFO = {
         build: {
           job: "163779",
@@ -2315,7 +2315,7 @@
         }
       }
       __name(logWithLevel, "logWithLevel");
-      var MapModule = class extends Module5 {
+      var MapModule = class extends Module3 {
         constructor(options) {
           super();
           if (options.providers instanceof Map) {
@@ -2366,15 +2366,15 @@
       exports.ContainerBoundError = ContainerBoundError;
       exports.ContainerNotBoundError = ContainerNotBoundError;
       exports.DescriptorNotFoundError = DescriptorNotFoundError;
-      exports.Inject = Inject13;
+      exports.Inject = Inject15;
       exports.InvalidProviderError = InvalidProviderError;
       exports.InvalidTargetError = InvalidTargetError;
       exports.LoggerNotFoundError = LoggerNotFoundError;
       exports.MapModule = MapModule;
       exports.MissingValueError = MissingValueError;
-      exports.Module = Module5;
+      exports.Module = Module3;
       exports.NullLogger = NullLogger;
-      exports.Provides = Provides4;
+      exports.Provides = Provides2;
       exports.WinstonLogger = WinstonLogger;
       exports.constructWithContainer = constructWithContainer;
       exports.contractName = contractName;
@@ -9916,15 +9916,15 @@
           retrieveMapHandlers.unshift(options.retrieveSourceMap);
         }
         if (options.hookRequire && !isInBrowser()) {
-          var Module5 = dynamicRequire(module, "module");
-          var $compile = Module5.prototype._compile;
+          var Module3 = dynamicRequire(module, "module");
+          var $compile = Module3.prototype._compile;
           if (!$compile.__sourceMapSupport) {
-            Module5.prototype._compile = function(content, filename) {
+            Module3.prototype._compile = function(content, filename) {
               fileContentsCache[filename] = content;
               sourceMapCache[filename] = void 0;
               return $compile.call(this, content, filename);
             };
-            Module5.prototype._compile.__sourceMapSupport = true;
+            Module3.prototype._compile.__sourceMapSupport = true;
           }
         }
         if (!emptyCacheBetweenOperations) {
@@ -11935,7 +11935,7 @@
             }
             return element;
           }, "ReactElement");
-          function createElement3(type3, config3, children) {
+          function createElement4(type3, config3, children) {
             var propName;
             var props = {};
             var key = null;
@@ -11996,7 +11996,7 @@
             }
             return ReactElement(type3, key, ref, self2, source, ReactCurrentOwner.current, props);
           }
-          __name(createElement3, "createElement");
+          __name(createElement4, "createElement");
           function cloneAndReplaceKey(oldElement, newKey) {
             var newElement = ReactElement(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
             return newElement;
@@ -13032,7 +13032,7 @@
                 error2("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
               }
             }
-            var element = createElement3.apply(this, arguments);
+            var element = createElement4.apply(this, arguments);
             if (element == null) {
               return element;
             }
@@ -13975,11 +13975,11 @@
       if (true) {
         (function() {
           "use strict";
-          var React4 = require_react();
+          var React5 = require_react();
           var _assign = require_object_assign();
           var Scheduler = require_scheduler();
           var tracing = require_tracing();
-          var ReactSharedInternals = React4.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React5.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function warn2(format2) {
             {
               for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -14014,7 +14014,7 @@
             }
           }
           __name(printWarning, "printWarning");
-          if (!React4) {
+          if (!React5) {
             {
               throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
             }
@@ -15283,7 +15283,7 @@
           var didWarnInvalidChild = false;
           function flattenChildren(children) {
             var content = "";
-            React4.Children.forEach(children, function(child) {
+            React5.Children.forEach(children, function(child) {
               if (child == null) {
                 return;
               }
@@ -15295,7 +15295,7 @@
           function validateProps(element, props) {
             {
               if (typeof props.children === "object" && props.children !== null) {
-                React4.Children.forEach(props.children, function(child) {
+                React5.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -20285,7 +20285,7 @@
             }
           }
           __name(updateDOMProperties, "updateDOMProperties");
-          function createElement3(type3, props, rootContainerElement, parentNamespace) {
+          function createElement4(type3, props, rootContainerElement, parentNamespace) {
             var isCustomComponentTag;
             var ownerDocument = getOwnerDocumentFromRootContainer(rootContainerElement);
             var domElement;
@@ -20333,7 +20333,7 @@
             }
             return domElement;
           }
-          __name(createElement3, "createElement");
+          __name(createElement4, "createElement");
           function createTextNode(text, rootContainerElement) {
             return getOwnerDocumentFromRootContainer(rootContainerElement).createTextNode(text);
           }
@@ -21182,7 +21182,7 @@
               }
               parentNamespace = hostContextDev.namespace;
             }
-            var domElement = createElement3(type3, props, rootContainerInstance, parentNamespace);
+            var domElement = createElement4(type3, props, rootContainerInstance, parentNamespace);
             precacheFiberNode(internalInstanceHandle, domElement);
             updateFiberProps(domElement, props);
             return domElement;
@@ -22853,7 +22853,7 @@
           __name(commitUpdateQueue, "commitUpdateQueue");
           var fakeInternalInstance = {};
           var isArray3 = Array.isArray;
-          var emptyRefsObject = new React4.Component().refs;
+          var emptyRefsObject = new React5.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -41289,7 +41289,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return [];
     }
     __name(getInject, "getInject");
-    function Inject13(...needs) {
+    function Inject15(...needs) {
       return (target, key, providedDesc) => {
         if (isNil3(key)) {
           const prev = getInject(target);
@@ -41306,7 +41306,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
       };
     }
-    __name(Inject13, "Inject");
+    __name(Inject15, "Inject");
     class NullLogger {
       child() {
         return NullLogger.global;
@@ -41331,7 +41331,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(getProvides, "getProvides");
-    function Provides4(...provides) {
+    function Provides2(...provides) {
       return (target, key, providedDesc) => {
         const desc = resolveDescriptor(target, key, providedDesc);
         const prev = getProvides(target);
@@ -41339,14 +41339,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         Reflect.set(desc.value, providesSymbol, prev.concat(next));
       };
     }
-    __name(Provides4, "Provides");
+    __name(Provides2, "Provides");
     (function(ProviderType) {
       ProviderType[ProviderType["None"] = 0] = "None";
       ProviderType[ProviderType["Constructor"] = 1] = "Constructor";
       ProviderType[ProviderType["Factory"] = 2] = "Factory";
       ProviderType[ProviderType["Instance"] = 3] = "Instance";
     })(exports.ProviderType || (exports.ProviderType = {}));
-    class Module5 {
+    class Module3 {
       constructor() {
         this.logger = NullLogger.global;
         this.providers = new Map();
@@ -41419,7 +41419,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
       }
     }
-    __name(Module5, "Module");
+    __name(Module3, "Module");
     const VERSION_INFO = {
       build: {
         job: "58923",
@@ -41641,7 +41641,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(WinstonLogger, "WinstonLogger");
-    class MapModule extends Module5 {
+    class MapModule extends Module3 {
       constructor(options) {
         super();
         if (options.providers instanceof Map) {
@@ -41671,15 +41671,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     exports.ContainerBoundError = ContainerBoundError;
     exports.ContainerNotBoundError = ContainerNotBoundError;
     exports.DescriptorNotFoundError = DescriptorNotFoundError;
-    exports.Inject = Inject13;
+    exports.Inject = Inject15;
     exports.InvalidProviderError = InvalidProviderError;
     exports.InvalidTargetError = InvalidTargetError;
     exports.LoggerNotFoundError = LoggerNotFoundError;
     exports.MapModule = MapModule;
     exports.MissingValueError = MissingValueError;
-    exports.Module = Module5;
+    exports.Module = Module3;
     exports.NullLogger = NullLogger;
-    exports.Provides = Provides4;
+    exports.Provides = Provides2;
     exports.WinstonLogger = WinstonLogger;
     exports.constructWithContainer = constructWithContainer;
     exports.contractName = contractName;
@@ -41802,6 +41802,521 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   __name(BunyanLogger, "BunyanLogger");
 
+  // out/src/module/index.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var INJECT_CONFIG = Symbol("inject-config");
+  var INJECT_COUNTER = Symbol("inject-counter");
+  var INJECT_EVENT = Symbol("inject-event");
+  var INJECT_LOCALE = Symbol("inject-locale");
+  var INJECT_LOGGER = Symbol("inject-logger");
+  var INJECT_PARSER = Symbol("inject-parser");
+  var INJECT_RANDOM = Symbol("inject-random");
+  var INJECT_SCRIPT = Symbol("inject-script");
+  var INJECT_TEMPLATE = Symbol("inject-template");
+  var INJECT_TOKENIZER = Symbol("inject-tokenizer");
+
+  // out/src/module/BrowserModule.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs5 = __toModule(require_main());
+
+  // out/src/service/loader/browser/FetchLoader.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // out/src/service/loader/BaseLoader.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // node_modules/tslib/modules/index.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_tslib = __toModule(require_tslib());
+  var {
+    __extends,
+    __assign,
+    __rest,
+    __decorate,
+    __param,
+    __metadata,
+    __awaiter,
+    __generator,
+    __exportStar,
+    __createBinding,
+    __values,
+    __read,
+    __spread,
+    __spreadArrays,
+    __spreadArray,
+    __await,
+    __asyncGenerator,
+    __asyncDelegator,
+    __asyncValues,
+    __makeTemplateObject,
+    __importStar,
+    __importDefault,
+    __classPrivateFieldGet,
+    __classPrivateFieldSet
+  } = import_tslib.default;
+
+  // out/src/service/loader/BaseLoader.js
+  var import_noicejs2 = __toModule(require_main());
+
+  // out/src/util/async/event.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // out/src/error/AbortEventError.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs = __toModule(require_main());
+  var AbortEventError = class extends import_noicejs.BaseError {
+  };
+  __name(AbortEventError, "AbortEventError");
+
+  // out/src/util/async/event.js
+  function onceWithRemove(emitter, event, inner) {
+    let error2;
+    let result;
+    let settled = false;
+    const pending = new Promise((res, rej) => {
+      error2 = /* @__PURE__ */ __name((err) => {
+        settled = true;
+        remove2();
+        rej(err);
+      }, "error");
+      result = /* @__PURE__ */ __name((value) => {
+        settled = true;
+        remove2();
+        res(value);
+      }, "result");
+      emitter.once("error", error2);
+      emitter.once(event, result);
+      if (doesExist(inner)) {
+        inner();
+      }
+    });
+    const remove2 = /* @__PURE__ */ __name(() => {
+      emitter.removeListener("error", error2);
+      emitter.removeListener(event, result);
+      if (settled === false) {
+        error2(new AbortEventError(`unsettled listeners removed for ${event}`));
+      }
+    }, "remove");
+    return {
+      pending,
+      remove: remove2
+    };
+  }
+  __name(onceWithRemove, "onceWithRemove");
+  function onceEvent(emitter, event) {
+    const { pending } = onceWithRemove(emitter, event);
+    return pending;
+  }
+  __name(onceEvent, "onceEvent");
+  function catchAndLog(p, logger, msg) {
+    p.catch((err) => {
+      logger.error(err, msg);
+    });
+  }
+  __name(catchAndLog, "catchAndLog");
+
+  // out/src/util/constants.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var BYTE_RANGE = 255;
+  var PORTAL_DEPTH = 4;
+  var TEMPLATE_CHANCE = 100;
+  var EVENT_COMMON_QUIT = "quit";
+  var EVENT_ACTOR_COMMAND = "actor-command";
+  var EVENT_ACTOR_JOIN = "actor-join";
+  var EVENT_ACTOR_OUTPUT = "actor-output";
+  var EVENT_LOCALE_BUNDLE = "locale-bundle";
+  var EVENT_LOADER_CONFIG = "loader-config";
+  var EVENT_LOADER_READ = "loader-read";
+  var EVENT_LOADER_SAVE = "loader-save";
+  var EVENT_LOADER_STATE = "loader-state";
+  var EVENT_LOADER_WORLD = "loader-world";
+  var EVENT_RENDER_OUTPUT = "render-output";
+  var EVENT_STATE_JOIN = "state-join";
+  var EVENT_STATE_LOAD = "state-load";
+  var EVENT_STATE_OUTPUT = "state-output";
+  var EVENT_STATE_ROOM = "state-room";
+  var SLOT_ENTER = "enter";
+  var SLOT_GET = "get";
+  var SLOT_HIT = "hit";
+  var SLOT_STEP = "step";
+  var SLOT_USE = "use";
+  var VERB_DROP = "verbs.common.drop";
+  var VERB_HIT = "verbs.common.hit";
+  var VERB_LOOK = "verbs.common.look";
+  var VERB_MOVE = "verbs.common.move";
+  var VERB_TAKE = "verbs.common.take";
+  var VERB_USE = "verbs.common.use";
+  var VERB_WAIT = "verbs.common.wait";
+  var META_CREATE = "verbs.meta.create";
+  var META_DEBUG = "verbs.meta.debug";
+  var META_GRAPH = "verbs.meta.graph";
+  var META_HELP = "verbs.meta.help";
+  var META_LOAD = "verbs.meta.load";
+  var META_QUIT = "verbs.meta.quit";
+  var META_SAVE = "verbs.meta.save";
+  var COMMON_VERBS = [
+    META_CREATE,
+    META_DEBUG,
+    META_GRAPH,
+    META_HELP,
+    META_LOAD,
+    META_QUIT,
+    META_SAVE,
+    VERB_DROP,
+    VERB_HIT,
+    VERB_LOOK,
+    VERB_MOVE,
+    VERB_TAKE,
+    VERB_USE,
+    VERB_WAIT
+  ];
+  var STAT_HEALTH = "health";
+  var STAT_DAMAGE = "damage";
+
+  // out/src/service/loader/BaseLoader.js
+  var BaseLoader = /* @__PURE__ */ __name(class BaseLoader2 {
+    constructor(options, protocols) {
+      this.events = mustExist(options[INJECT_EVENT]);
+      this.logger = mustExist(options[INJECT_LOGGER]);
+      this.parser = mustExist(options[INJECT_PARSER]);
+      this.protocols = Array.from(protocols);
+    }
+    async start() {
+      this.events.on(EVENT_LOADER_READ, (event) => {
+        catchAndLog(this.onRead(event.path), this.logger, "error during read");
+      }, this);
+      this.events.on(EVENT_LOADER_SAVE, (event) => {
+        catchAndLog(this.onSave(event), this.logger, "error during save");
+      }, this);
+    }
+    async stop() {
+      this.events.removeGroup(this);
+    }
+    async onRead(path) {
+      if (this.checkPath(path) === false) {
+        return;
+      }
+      const dataStr = await this.loadStr(path);
+      const data = this.parser.load(dataStr);
+      if (doesExist(data.config)) {
+        this.events.emit(EVENT_LOADER_CONFIG, {
+          config: data.config
+        });
+        return;
+      }
+      for (const world of data.worlds) {
+        this.events.emit(EVENT_LOADER_WORLD, {
+          world
+        });
+      }
+      const { state } = data;
+      if (doesExist(state)) {
+        this.events.emit(EVENT_LOADER_STATE, {
+          state
+        });
+      }
+    }
+    async onSave(event) {
+      if (this.checkPath(event.path) === false) {
+        return;
+      }
+      if (typeof event.data === "string") {
+        await this.saveStr(event.path, event.data);
+      } else {
+        const data = this.parser.save(event.data);
+        await this.saveStr(event.path, data);
+      }
+    }
+    async loadData(path) {
+      return this.parser.load(await this.loadStr(path));
+    }
+    async saveData(path, data) {
+      return this.saveStr(path, this.parser.save(data));
+    }
+    checkPath(path) {
+      const { protocol } = this.splitPath(path);
+      return doesExist(protocol) && this.protocols.includes(protocol);
+    }
+    splitPath(path) {
+      if (path.includes("://") === false) {
+        return { path };
+      }
+      const [protocol, rest] = path.split("://", 2);
+      return {
+        protocol,
+        path: rest
+      };
+    }
+  }, "BaseLoader");
+  BaseLoader = __decorate([
+    (0, import_noicejs2.Inject)(INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER),
+    __metadata("design:paramtypes", [Object, Array])
+  ], BaseLoader);
+
+  // out/src/service/loader/browser/FetchLoader.js
+  var BrowserFetchLoader = class extends BaseLoader {
+    constructor(options, f = window.fetch) {
+      super(options, ["http", "https"]);
+      this.fetch = fetch;
+    }
+    async dump(path, data) {
+      console.log(path, data);
+    }
+    async load(path) {
+      const text = await this.loadStr(path);
+      return Buffer2.from(text);
+    }
+    async save(path, data) {
+      throw new NotImplementedError();
+    }
+    async loadStr(path) {
+      const res = await this.fetch.call(window, path);
+      const data = await res.text();
+      return data;
+    }
+    async saveStr(path, data) {
+      throw new NotImplementedError();
+    }
+  };
+  __name(BrowserFetchLoader, "BrowserFetchLoader");
+
+  // out/src/service/loader/browser/PageLoader.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var BrowserPageLoader = class extends BaseLoader {
+    constructor(options, dom = document) {
+      super(options, ["page"]);
+      this.dom = dom;
+    }
+    async dump(path, data) {
+      console.log(path, data);
+    }
+    async load(path) {
+      const text = await this.loadStr(path);
+      return Buffer2.from(text);
+    }
+    async save(path, data) {
+      throw new NotImplementedError();
+    }
+    async loadStr(fullPath) {
+      const { path } = this.splitPath(fullPath);
+      const elem = mustExist(this.dom.getElementById(path));
+      const text = mustExist(elem.textContent);
+      return text;
+    }
+    async saveStr(path, data) {
+      throw new NotImplementedError();
+    }
+  };
+  __name(BrowserPageLoader, "BrowserPageLoader");
+
+  // out/src/service/render/react/DomRender.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs4 = __toModule(require_main());
+  var React4 = __toModule(require_react());
+  var import_react_dom = __toModule(require_react_dom());
+
+  // out/src/component/react/Frame.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var React3 = __toModule(require_react());
+
+  // out/src/component/react/Output.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var React = __toModule(require_react());
+  var Output = /* @__PURE__ */ __name((props) => {
+    return React.createElement("div", null, React.createElement("div", null, "Output: ", props.output.length, " lines"), props.output.map((line, idx) => React.createElement("div", { key: idx }, line)));
+  }, "Output");
+
+  // out/src/component/react/Quit.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var React2 = __toModule(require_react());
+  var Quit = /* @__PURE__ */ __name(() => React2.createElement("div", null, React2.createElement("div", null, "Game Over")), "Quit");
+
+  // out/src/component/react/Frame.js
+  var { useState } = React3;
+  var HISTORY_SIZE = 20;
+  var Frame = /* @__PURE__ */ __name((props) => {
+    const [line, setLine] = useState("");
+    const output2 = props.output.slice(-HISTORY_SIZE);
+    function handleChange(event) {
+      setLine(event.target.value);
+    }
+    __name(handleChange, "handleChange");
+    function handleSubmit(event) {
+      event.preventDefault();
+      props.onLine(line);
+      setLine("");
+    }
+    __name(handleSubmit, "handleSubmit");
+    return React3.createElement("div", { style: {
+      fontFamily: "monospace"
+    } }, React3.createElement(Output, { output: output2 }), React3.createElement("div", null, props.quit ? React3.createElement(Quit, null) : React3.createElement("form", { onSubmit: handleSubmit }, React3.createElement("label", null, "turn ", props.step.turn, " >", React3.createElement("input", { type: "text", value: line, onChange: handleChange })), React3.createElement("input", { type: "submit", value: "Go" }))));
+  }, "Frame");
+
+  // out/src/service/render/react/BaseRender.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs3 = __toModule(require_main());
+
+  // out/src/util/async/Debounce.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function debounce(interval, inner) {
+    let fired = false;
+    let timeout;
+    return /* @__PURE__ */ __name(function bouncer() {
+      if (fired === true) {
+        return;
+      }
+      if (isNil(timeout)) {
+        timeout = setTimeout(() => {
+          fired = false;
+          timeout = void 0;
+        }, interval);
+      }
+      fired = true;
+      return inner();
+    }, "bouncer");
+  }
+  __name(debounce, "debounce");
+
+  // out/src/service/render/react/BaseRender.js
+  var BaseReactRender = /* @__PURE__ */ __name(class BaseReactRender2 {
+    constructor(options) {
+      this.event = mustExist(options[INJECT_EVENT]);
+      this.locale = mustExist(options[INJECT_LOCALE]);
+      this.logger = mustExist(options[INJECT_LOGGER]).child({
+        kind: constructorName(this)
+      });
+      this.derender = debounce(100, () => this.renderRoot());
+      this.input = "";
+      this.output = [];
+      this.prompt = "";
+      this.quit = false;
+      this.step = {
+        turn: 0,
+        time: 0
+      };
+    }
+    async start() {
+      this.renderRoot();
+      this.setPrompt(`turn ${this.step.turn}`);
+      this.event.on("actor-output", (output2) => this.onOutput(output2), this);
+      this.event.on("state-room", (room) => this.onRoom(room), this);
+      this.event.on("state-step", (step) => this.onStep(step), this);
+      this.event.on("quit", () => this.onQuit(), this);
+    }
+    async stop() {
+      this.event.removeGroup(this);
+    }
+    setPrompt(prompt) {
+      this.prompt = prompt;
+    }
+    async read() {
+      const event = await onceEvent(this.event, "actor-output");
+      return event.lines[0];
+    }
+    async show(msg) {
+      this.output.push(msg);
+    }
+    onOutput(event) {
+      this.logger.debug({ event }, "handling output event from state");
+      if (!Array.isArray(event.lines)) {
+        throw new InvalidArgumentError("please batch output");
+      }
+      this.output.push(...event.lines);
+      this.renderRoot();
+    }
+    onQuit() {
+      this.logger.debug("handling quit event from state");
+      this.quit = true;
+      this.renderRoot();
+    }
+    onRoom(result) {
+      this.logger.debug(result, "handling room event from state");
+      this.setPrompt(`turn ${this.step.turn}`);
+      this.renderRoot();
+    }
+    onStep(event) {
+      this.logger.debug({ event }, "handling step event from state");
+      this.step = event;
+      this.setPrompt(`turn ${this.step.turn}`);
+      this.renderRoot();
+    }
+  }, "BaseReactRender");
+  BaseReactRender = __decorate([
+    (0, import_noicejs3.Inject)(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER),
+    __metadata("design:paramtypes", [Object])
+  ], BaseReactRender);
+
+  // out/src/service/render/react/DomRender.js
+  var ReactDomRender = /* @__PURE__ */ __name(class ReactDomRender2 extends BaseReactRender {
+    async start() {
+      this.logger.debug("starting React render");
+      return super.start();
+    }
+    async stop() {
+      this.logger.debug("stopping React render");
+      const elem = mustExist(document.getElementById("app"));
+      (0, import_react_dom.unmountComponentAtNode)(elem);
+      return super.stop();
+    }
+    nextLine(line) {
+      this.logger.debug({ line }, "handling line event from React");
+      this.input = line;
+      this.output.push(`${this.prompt} > ${this.input}`);
+      this.event.emit("render-output", {
+        lines: [line]
+      });
+    }
+    renderRoot() {
+      const elem = React4.createElement(Frame, {
+        onLine: (line) => this.nextLine(line),
+        output: this.output,
+        prompt: this.prompt,
+        quit: this.quit,
+        step: this.step
+      });
+      (0, import_react_dom.render)([elem], document.getElementById("app"));
+    }
+  }, "ReactDomRender");
+  ReactDomRender = __decorate([
+    (0, import_noicejs4.Inject)()
+  ], ReactDomRender);
+
+  // out/src/module/BrowserModule.js
+  var BrowserModule = class extends import_noicejs5.Module {
+    async configure(options) {
+      await super.configure(options);
+      this.bind("browser-fetch-loader").toConstructor(BrowserFetchLoader);
+      this.bind("browser-page-loader").toConstructor(BrowserPageLoader);
+      this.bind("browser-dom-render").toConstructor(ReactDomRender);
+    }
+  };
+  __name(BrowserModule, "BrowserModule");
+
+  // out/src/module/CoreModule.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs18 = __toModule(require_main());
+
+  // out/src/service/actor/BehaviorActor.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs6 = __toModule(require_main());
+
   // out/src/model/entity/Actor.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -41831,57 +42346,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(makeConstStringSchema, "makeConstStringSchema");
 
-  // out/src/model/Metadata.js
+  // out/src/model/mapped/Template.js
   init_virtual_process_polyfill();
   init_buffer();
-
-  // out/src/model/meta/Template.js
-  init_virtual_process_polyfill();
-  init_buffer();
-
-  // out/src/util/constants.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var BYTE_RANGE = 255;
-  var PORTAL_DEPTH = 4;
-  var TEMPLATE_CHANCE = 100;
-  var SLOT_ENTER = "enter";
-  var SLOT_GET = "get";
-  var SLOT_HIT = "hit";
-  var SLOT_STEP = "step";
-  var SLOT_USE = "use";
-  var VERB_DROP = "verbs.common.drop";
-  var VERB_HIT = "verbs.common.hit";
-  var VERB_LOOK = "verbs.common.look";
-  var VERB_MOVE = "verbs.common.move";
-  var VERB_TAKE = "verbs.common.take";
-  var VERB_USE = "verbs.common.use";
-  var VERB_WAIT = "verbs.common.wait";
-  var META_DEBUG = "verbs.meta.debug";
-  var META_GRAPH = "verbs.meta.graph";
-  var META_HELP = "verbs.meta.help";
-  var META_LOAD = "verbs.meta.load";
-  var META_QUIT = "verbs.meta.quit";
-  var META_SAVE = "verbs.meta.save";
-  var STAT_HEALTH = "health";
-  var STAT_DAMAGE = "damage";
-  var COMMON_VERBS = [
-    META_DEBUG,
-    META_GRAPH,
-    META_HELP,
-    META_LOAD,
-    META_QUIT,
-    META_SAVE,
-    VERB_DROP,
-    VERB_HIT,
-    VERB_LOOK,
-    VERB_MOVE,
-    VERB_TAKE,
-    VERB_USE,
-    VERB_WAIT
-  ];
-
-  // out/src/model/meta/Template.js
   var TEMPLATE_STRING_SCHEMA = {
     type: "object",
     properties: {
@@ -41914,6 +42381,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
 
   // out/src/model/Metadata.js
+  init_virtual_process_polyfill();
+  init_buffer();
   var METADATA_SCHEMA = {
     type: "object",
     properties: {
@@ -42002,66 +42471,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     additionalProperties: false
   };
 
-  // out/src/module/index.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var INJECT_CONFIG = Symbol("inject-config");
-  var INJECT_COUNTER = Symbol("inject-counter");
-  var INJECT_EVENT = Symbol("inject-event-bus");
-  var INJECT_LOADER = Symbol("inject-loader");
-  var INJECT_LOCALE = Symbol("inject-locale");
-  var INJECT_LOGGER = Symbol("inject-logger");
-  var INJECT_PARSER = Symbol("inject-parser");
-  var INJECT_RANDOM = Symbol("inject-random");
-  var INJECT_RENDER = Symbol("inject-render");
-  var INJECT_SCRIPT = Symbol("inject-script-ctrl");
-  var INJECT_STATE = Symbol("inject-state-ctrl");
-  var INJECT_TEMPLATE = Symbol("inject-template");
-  var INJECT_TOKENIZER = Symbol("inject-tokenizer");
-  var INJECT_ACTOR = Symbol("inject-actor");
-
-  // out/src/module/ActorModule.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs4 = __toModule(require_main());
-
   // out/src/service/actor/BehaviorActor.js
-  init_virtual_process_polyfill();
-  init_buffer();
-
-  // node_modules/tslib/modules/index.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_tslib = __toModule(require_tslib());
-  var {
-    __extends,
-    __assign,
-    __rest,
-    __decorate,
-    __param,
-    __metadata,
-    __awaiter,
-    __generator,
-    __exportStar,
-    __createBinding,
-    __values,
-    __read,
-    __spread,
-    __spreadArrays,
-    __spreadArray,
-    __await,
-    __asyncGenerator,
-    __asyncDelegator,
-    __asyncValues,
-    __makeTemplateObject,
-    __importStar,
-    __importDefault,
-    __classPrivateFieldGet,
-    __classPrivateFieldSet
-  } = import_tslib.default;
-
-  // out/src/service/actor/BehaviorActor.js
-  var import_noicejs = __toModule(require_main());
   var WAIT_CMD = {
     index: 0,
     input: `${VERB_WAIT} turn`,
@@ -42070,25 +42480,25 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   var BehaviorActorService = /* @__PURE__ */ __name(class BehaviorActorService2 {
     constructor(options) {
-      this.actor = mustExist(options.actor);
       this.event = mustExist(options[INJECT_EVENT]);
       this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
       });
       this.random = mustExist(options[INJECT_RANDOM]);
-      this.next = WAIT_CMD;
+      this.next = new Map();
     }
     async start() {
-      this.event.on("state-room", (event) => {
-        if (this.actor === event.actor.meta.id) {
+      this.event.on(EVENT_STATE_ROOM, (event) => {
+        if (event.actor.actorType === ActorType.DEFAULT) {
           this.onRoom(event);
         }
-      });
+      }, this);
     }
     async stop() {
+      this.event.removeGroup(this);
     }
     async last() {
-      return this.next;
+      throw new NotImplementedError();
     }
     onRoom(event) {
       const behavior = this.random.nextFloat();
@@ -42096,12 +42506,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       const player = event.room.actors.find((it) => it.actorType === ActorType.PLAYER);
       if (doesExist(player)) {
         this.logger.debug({ event, player }, "attacking visible player");
-        this.next = {
+        this.queue(event.actor, {
           index: 0,
           input: `${VERB_HIT} ${player.meta.id}`,
           verb: VERB_HIT,
           target: player.meta.id
-        };
+        });
         return;
       }
       if (behavior < 0.25 && event.room.portals.length > 0) {
@@ -42113,47 +42523,102 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           portalCount: event.room.portals.length,
           portalIndex
         }, "moving through random portal");
-        this.next = {
+        this.queue(event.actor, {
           index: 0,
           input: `${VERB_MOVE} ${portal.sourceGroup} ${portal.name}`,
           verb: VERB_MOVE,
           target: `${portal.sourceGroup} ${portal.name}`
-        };
+        });
         return;
       }
-      this.next = WAIT_CMD;
+      this.queue(event.actor, WAIT_CMD);
+    }
+    queue(actor, command) {
+      this.next.set(actor.meta.id, command);
+      this.event.emit(EVENT_ACTOR_COMMAND, {
+        actor,
+        command
+      });
     }
   }, "BehaviorActorService");
   BehaviorActorService = __decorate([
-    (0, import_noicejs.Inject)(INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM),
+    (0, import_noicejs6.Inject)(INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM),
     __metadata("design:paramtypes", [Object])
   ], BehaviorActorService);
 
   // out/src/service/actor/PlayerActor.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs2 = __toModule(require_main());
+  var import_noicejs7 = __toModule(require_main());
+
+  // out/src/util/actor/index.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var ShowVolume;
+  (function(ShowVolume2) {
+    ShowVolume2["SELF"] = "self";
+    ShowVolume2["ROOM"] = "room";
+    ShowVolume2["WORLD"] = "world";
+  })(ShowVolume || (ShowVolume = {}));
+  function showCheck(source, target, volume) {
+    if (volume === ShowVolume.SELF) {
+      if (doesExist(source.actor) && doesExist(target.actor)) {
+        return source.actor.meta.id === target.actor.meta.id;
+      } else {
+        return false;
+      }
+    }
+    if (volume === ShowVolume.ROOM) {
+      return source.room.meta.id === target.room.meta.id;
+    }
+    return true;
+  }
+  __name(showCheck, "showCheck");
+
+  // out/src/service/actor/PlayerActor.js
   var PlayerActorService = /* @__PURE__ */ __name(class PlayerActorService2 {
     constructor(options) {
-      this.history = [];
+      this.counter = mustExist(options[INJECT_COUNTER]);
       this.event = mustExist(options[INJECT_EVENT]);
       this.locale = mustExist(options[INJECT_LOCALE]);
       this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
       });
-      this.started = false;
       this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
+      this.history = [];
+      this.pid = `player-${this.counter.next("player")}`;
     }
     async start() {
-      if (this.started) {
-        return;
-      }
-      this.event.on("render-output", (event) => this.onInput(event));
-      this.event.on("state-output", (event) => this.onOutput(event));
-      await this.tokenizer.translate(COMMON_VERBS);
-      this.started = true;
+      this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
+        catchAndLog(this.tokenizer.translate(COMMON_VERBS), this.logger, "error translating verbs");
+      }, this);
+      this.event.on(EVENT_RENDER_OUTPUT, (event) => {
+        catchAndLog(this.onInput(event), this.logger, "error during render output");
+      }, this);
+      this.event.on(EVENT_STATE_JOIN, (event) => {
+        if (this.pid === event.pid) {
+          this.actor = event.actor;
+        }
+      }, this);
+      this.event.on(EVENT_STATE_LOAD, (event) => {
+        this.event.emit(EVENT_ACTOR_JOIN, {
+          pid: this.pid
+        });
+      }, this);
+      this.event.on(EVENT_STATE_ROOM, (event) => {
+        if (event.room.actors.find((it) => it.meta.name === this.pid)) {
+          this.room = event.room;
+        }
+      }, this);
+      this.event.on(EVENT_STATE_OUTPUT, (event) => {
+        catchAndLog(this.onOutput(event), this.logger, "error during state output");
+      }, this);
+      this.event.on(EVENT_COMMON_QUIT, () => {
+        catchAndLog(this.showLine("meta.quit"), this.logger, "error sending quit output");
+      }, this);
     }
     async stop() {
+      this.event.removeGroup(this);
     }
     async last() {
       return this.history[this.history.length - 1];
@@ -42161,420 +42626,45 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async onInput(event) {
       this.logger.debug({ event }, "tokenizing input");
       for (const line of event.lines) {
-        const commands = await this.tokenizer.parse(line);
-        this.history.push(...commands);
-        this.logger.debug({ event, commands }, "translated event");
-        for (const command of commands) {
-          this.event.emit("actor-command", {
-            command
-          });
-        }
+        await this.parseLine(line);
       }
     }
     async onOutput(event) {
+      this.logger.debug({ event }, "filtering output");
+      if (doesExist(this.actor) && doesExist(this.room) && doesExist(event.source)) {
+        const target = {
+          actor: this.actor,
+          room: this.room
+        };
+        if (showCheck(event.source, target, event.volume) === false) {
+          return;
+        }
+      }
       this.logger.debug({ event }, "translating output");
-      const lines = event.lines.map((it) => this.locale.translate(it.key, it.context));
-      this.event.emit("actor-output", {
-        lines
+      return this.showLine(event.line, event.context);
+    }
+    async parseLine(line) {
+      const commands = await this.tokenizer.parse(line);
+      this.logger.debug({ line, commands }, "parsed input line");
+      this.history.push(...commands);
+      for (const command of commands) {
+        this.event.emit(EVENT_ACTOR_COMMAND, {
+          actor: this.actor,
+          command
+        });
+      }
+    }
+    async showLine(key, context) {
+      const line = this.locale.translate(key, context);
+      this.event.emit(EVENT_ACTOR_OUTPUT, {
+        lines: [line]
       });
     }
   }, "PlayerActorService");
   PlayerActorService = __decorate([
-    (0, import_noicejs2.Inject)(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER),
+    (0, import_noicejs7.Inject)(INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER),
     __metadata("design:paramtypes", [Object])
   ], PlayerActorService);
-
-  // out/src/service/tokenizer/WordTokenizer.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs3 = __toModule(require_main());
-  var REMOVED_WORDS = new Set([
-    "a",
-    "an",
-    "at",
-    "on",
-    "the",
-    "to",
-    "toward",
-    "towards"
-  ]);
-  var SPLIT_CHAR = " ";
-  var WordTokenizer = /* @__PURE__ */ __name(class WordTokenizer2 {
-    constructor(options) {
-      this.locale = mustExist(options[INJECT_LOCALE]);
-      this.verbs = new Map();
-    }
-    async split(input) {
-      return trim(input).toLocaleLowerCase().split(SPLIT_CHAR).map(trim).filter((it) => it.length > 0).filter((it) => REMOVED_WORDS.has(it) === false);
-    }
-    async parse(input) {
-      const [rawVerb, ...targets] = await this.split(input);
-      const verb = getOrDefault(this.verbs, rawVerb, rawVerb);
-      const cmd = {
-        index: 0,
-        input,
-        verb,
-        target: ""
-      };
-      const last = targets[targets.length - 1];
-      if (targets.length > 1 && /^[0-9]+$/.test(last)) {
-        targets.pop();
-        cmd.index = parseInt(last, 10);
-      }
-      cmd.target = targets.join(SPLIT_CHAR);
-      return [cmd];
-    }
-    async translate(verbs) {
-      this.verbs.clear();
-      for (const verb of verbs) {
-        const translated = this.locale.translate(verb);
-        this.verbs.set(translated, verb);
-      }
-    }
-  }, "WordTokenizer");
-  WordTokenizer = __decorate([
-    (0, import_noicejs3.Inject)(INJECT_LOCALE),
-    __metadata("design:paramtypes", [Object])
-  ], WordTokenizer);
-  function trim(str2) {
-    return str2.replace(/^\s+/, "").replace(/\s+$/, "");
-  }
-  __name(trim, "trim");
-
-  // out/src/util/container.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var Singleton = class {
-    constructor(ctor, value) {
-      this.ctor = ctor;
-      this.value = value;
-    }
-    async get() {
-      if (isNil(this.value)) {
-        this.value = await this.ctor();
-      }
-      return this.value;
-    }
-  };
-  __name(Singleton, "Singleton");
-
-  // out/src/module/ActorModule.js
-  var ActorModule = class extends import_noicejs4.Module {
-    constructor() {
-      super();
-      this.actors = new Map();
-      this.locator = {
-        clear: () => this.actors.clear(),
-        get: (options) => this.getActorInput(options)
-      };
-      this.player = new Singleton(() => mustExist(this.container).create(PlayerActorService));
-      this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
-      this.playerStarted = false;
-    }
-    async configure(options) {
-      await super.configure(options);
-      this.bind(INJECT_ACTOR).toInstance(this.locator);
-      this.bind(INJECT_TOKENIZER).toFactory(() => this.tokenizer.get());
-    }
-    async getActorInput(options) {
-      if (options.type === ActorType.PLAYER) {
-        return this.player.get();
-      } else {
-        return this.getBehaviorActor(options);
-      }
-    }
-    async getBehaviorActor(options) {
-      const existing = this.actors.get(options.id);
-      if (doesExist(existing)) {
-        return existing;
-      }
-      const actor = await mustExist(this.container).create(BehaviorActorService, {
-        actor: options.id
-      });
-      this.actors.set(options.id, actor);
-      await actor.start();
-      return actor;
-    }
-  };
-  __name(ActorModule, "ActorModule");
-
-  // out/src/module/BrowserModule.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs8 = __toModule(require_main());
-
-  // out/src/service/loader/browser/FetchLoader.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var BrowserFetchLoader = class {
-    constructor(options, f = window.fetch) {
-      this.fetch = fetch;
-    }
-    async dump(path, data) {
-      console.log(path, data);
-    }
-    async load(path) {
-      const text = await this.loadStr(path);
-      return Buffer2.from(text);
-    }
-    async save(path, data) {
-      throw new NotImplementedError();
-    }
-    async loadStr(path) {
-      const res = await this.fetch.call(window, path);
-      const data = await res.text();
-      return data;
-    }
-    async saveStr(path, data) {
-      throw new NotImplementedError();
-    }
-  };
-  __name(BrowserFetchLoader, "BrowserFetchLoader");
-
-  // out/src/service/loader/browser/PageLoader.js
-  init_virtual_process_polyfill();
-  init_buffer();
-
-  // out/src/service/render/ReactDomRender.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs7 = __toModule(require_main());
-  var React3 = __toModule(require_react());
-  var import_react_dom = __toModule(require_react_dom());
-
-  // out/src/component/react/Frame.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var React2 = __toModule(require_react());
-
-  // out/src/component/react/Output.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var React = __toModule(require_react());
-  var Output = /* @__PURE__ */ __name((props) => {
-    return React.createElement("div", null, React.createElement("div", null, "Output: ", props.output.length, " lines"), props.output.map((line, idx) => React.createElement("div", { key: idx }, line)));
-  }, "Output");
-
-  // out/src/component/react/Frame.js
-  var { useState } = React2;
-  var HISTORY_SIZE = 20;
-  var Frame = /* @__PURE__ */ __name((props) => {
-    const [line, setLine] = useState("");
-    function handleChange(event) {
-      setLine(event.target.value);
-    }
-    __name(handleChange, "handleChange");
-    function handleSubmit(event) {
-      event.preventDefault();
-      props.onLine(line);
-      setLine("");
-    }
-    __name(handleSubmit, "handleSubmit");
-    return React2.createElement("div", { style: {
-      fontFamily: "monospace"
-    } }, React2.createElement(Output, { output: props.output.slice(-HISTORY_SIZE) }), React2.createElement("div", null, React2.createElement("form", { onSubmit: handleSubmit }, React2.createElement("label", null, "turn ", props.step.turn, " >", React2.createElement("input", { type: "text", value: line, onChange: handleChange })), React2.createElement("input", { type: "submit", value: "Go" }))));
-  }, "Frame");
-
-  // out/src/service/render/BaseReactRender.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs6 = __toModule(require_main());
-
-  // out/src/util/event/index.js
-  init_virtual_process_polyfill();
-  init_buffer();
-
-  // out/src/error/AbortEventError.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs5 = __toModule(require_main());
-  var AbortEventError = class extends import_noicejs5.BaseError {
-  };
-  __name(AbortEventError, "AbortEventError");
-
-  // out/src/util/event/index.js
-  function onceWithRemove(emitter, event, inner) {
-    let error2;
-    let result;
-    let settled = false;
-    const pending = new Promise((res, rej) => {
-      error2 = /* @__PURE__ */ __name((err) => {
-        settled = true;
-        remove2();
-        rej(err);
-      }, "error");
-      result = /* @__PURE__ */ __name((value) => {
-        settled = true;
-        remove2();
-        res(value);
-      }, "result");
-      emitter.once("error", error2);
-      emitter.once(event, result);
-      if (doesExist(inner)) {
-        inner();
-      }
-    });
-    const remove2 = /* @__PURE__ */ __name(() => {
-      emitter.removeListener("error", error2);
-      emitter.removeListener(event, result);
-      if (settled === false) {
-        error2(new AbortEventError(`unsettled listeners removed for ${event}`));
-      }
-    }, "remove");
-    return {
-      pending,
-      remove: remove2
-    };
-  }
-  __name(onceWithRemove, "onceWithRemove");
-
-  // out/src/util/event/Debounce.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  function debounce(interval, inner) {
-    let fired = false;
-    let timeout;
-    return /* @__PURE__ */ __name(function bouncer() {
-      if (fired === true) {
-        return;
-      }
-      if (isNil(timeout)) {
-        timeout = setTimeout(() => {
-          fired = false;
-          timeout = void 0;
-        }, interval);
-      }
-      fired = true;
-      return inner();
-    }, "bouncer");
-  }
-  __name(debounce, "debounce");
-
-  // out/src/service/render/BaseReactRender.js
-  var BaseReactRender = /* @__PURE__ */ __name(class BaseReactRender2 {
-    constructor(options) {
-      this.event = mustExist(options[INJECT_EVENT]);
-      this.locale = mustExist(options[INJECT_LOCALE]);
-      this.logger = mustExist(options[INJECT_LOGGER]).child({
-        kind: constructorName(this)
-      });
-      this.derender = debounce(100, () => this.renderRoot());
-      this.inputStr = "";
-      this.promptStr = "";
-      this.output = [];
-      this.step = {
-        turn: 0,
-        time: 0
-      };
-    }
-    prompt(prompt) {
-      this.promptStr = prompt;
-    }
-    async read() {
-      const { pending } = onceWithRemove(this.event, "actor-output");
-      const event = await pending;
-      return event.lines[0].key;
-    }
-    async show(msg) {
-      this.output.push(msg);
-    }
-    onOutput(event) {
-      this.logger.debug({ event }, "handling output event from state");
-      if (!Array.isArray(event.lines)) {
-        throw new InvalidArgumentError("please batch output");
-      }
-      this.output.push(...event.lines);
-      this.renderRoot();
-    }
-    onQuit() {
-      this.logger.debug("handling quit event from state");
-      this.output.push("game over");
-    }
-    onRoom(result) {
-      this.logger.debug(result, "handling room event from state");
-      this.prompt(`turn ${this.step.turn}`);
-      this.renderRoot();
-    }
-    onStep(event) {
-      this.logger.debug({ event }, "handling step event from state");
-      this.step = event;
-      this.prompt(`turn ${this.step.turn}`);
-      this.renderRoot();
-    }
-  }, "BaseReactRender");
-  BaseReactRender = __decorate([
-    (0, import_noicejs6.Inject)(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER),
-    __metadata("design:paramtypes", [Object])
-  ], BaseReactRender);
-
-  // out/src/service/render/ReactDomRender.js
-  var ReactDomRender = /* @__PURE__ */ __name(class ReactDomRender2 extends BaseReactRender {
-    async start() {
-      this.logger.debug("starting React render");
-      this.renderRoot();
-      this.prompt(`turn ${this.step.turn}`);
-      this.event.on("actor-output", (output2) => this.onOutput(output2));
-      this.event.on("state-room", (room) => this.onRoom(room));
-      this.event.on("state-step", (step) => this.onStep(step));
-      this.event.on("quit", () => this.onQuit());
-    }
-    async stop() {
-      this.logger.debug("stopping React render");
-      const elem = mustExist(document.getElementById("app"));
-      (0, import_react_dom.unmountComponentAtNode)(elem);
-    }
-    nextLine(line) {
-      this.logger.debug({ line }, "handling line event from React");
-      this.inputStr = line;
-      this.output.push(`${this.promptStr} > ${this.inputStr}`);
-      this.event.emit("render-output", {
-        lines: [line]
-      });
-    }
-    renderRoot() {
-      const elem = React3.createElement(Frame, {
-        onLine: (line) => this.nextLine(line),
-        prompt: this.promptStr,
-        output: this.output,
-        step: this.step
-      });
-      (0, import_react_dom.render)([elem], document.getElementById("app"));
-    }
-  }, "ReactDomRender");
-  ReactDomRender = __decorate([
-    (0, import_noicejs7.Inject)()
-  ], ReactDomRender);
-
-  // out/src/module/BrowserModule.js
-  var BrowserModule = class extends import_noicejs8.Module {
-    constructor() {
-      super();
-      this.render = new Singleton(() => mustExist(this.container).create(ReactDomRender));
-    }
-    async configure(options) {
-      await super.configure(options);
-      if (true) {
-        this.bind(INJECT_LOADER).toConstructor(BrowserFetchLoader);
-      } else {
-        this.bind(INJECT_LOADER).toConstructor(BrowserPageLoader);
-      }
-    }
-    async getRender() {
-      return this.render.get();
-    }
-  };
-  __name(BrowserModule, "BrowserModule");
-  __decorate([
-    (0, import_noicejs8.Provides)(INJECT_RENDER),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-  ], BrowserModule.prototype, "getRender", null);
-
-  // out/src/module/LocalModule.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs18 = __toModule(require_main());
 
   // out/src/service/counter/LocalCounter.js
   init_virtual_process_polyfill();
@@ -42601,10 +42691,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   init_events();
-  var import_noicejs9 = __toModule(require_main());
+  var import_noicejs8 = __toModule(require_main());
   var NodeEventBus = /* @__PURE__ */ __name(class NodeEventBus2 extends EventEmitter {
     constructor(options) {
       super();
+      this.handlers = new Map();
       this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
       });
@@ -42618,9 +42709,25 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }, "bus proxying event");
       return super.emit(name, ...args);
     }
+    on(name, handler, group) {
+      if (doesExist(group)) {
+        const existing = getOrDefault(this.handlers, group, []);
+        existing.push([name, handler]);
+        this.handlers.set(group, existing);
+      }
+      return super.on(name, handler);
+    }
+    removeGroup(group) {
+      const handlers = this.handlers.get(group);
+      if (doesExist(handlers)) {
+        for (const [name, handler] of handlers) {
+          this.removeListener(name, handler);
+        }
+      }
+    }
   }, "NodeEventBus");
   NodeEventBus = __decorate([
-    (0, import_noicejs9.Inject)(INJECT_LOGGER),
+    (0, import_noicejs8.Inject)(INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], NodeEventBus);
 
@@ -44990,7 +45097,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var i18next_default = i18next;
 
   // out/src/service/locale/NextLocale.js
-  var import_noicejs10 = __toModule(require_main());
+  var import_noicejs9 = __toModule(require_main());
   var NextLocaleService = /* @__PURE__ */ __name(class NextLocaleService2 {
     constructor(options) {
       this.config = mustExist(options[INJECT_CONFIG]).locale;
@@ -45008,10 +45115,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
       await inst.init();
       this.i18next = inst;
-      this.event.on("locale-bundle", (event) => {
+      this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
         this.deleteBundle(event.name);
         this.addBundle(event.name, event.bundle);
-      });
+      }, this);
+    }
+    async stop() {
+      this.event.removeGroup(this);
     }
     addBundle(name, bundle) {
       const langs = new Set();
@@ -45043,7 +45153,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "NextLocaleService");
   NextLocaleService = __decorate([
-    (0, import_noicejs10.Inject)(INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER),
+    (0, import_noicejs9.Inject)(INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], NextLocaleService);
 
@@ -47785,8 +47895,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/error/DataError.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs11 = __toModule(require_main());
-  var DataLoadError = class extends import_noicejs11.BaseError {
+  var import_noicejs10 = __toModule(require_main());
+  var DataLoadError = class extends import_noicejs10.BaseError {
   };
   __name(DataLoadError, "DataLoadError");
 
@@ -47794,7 +47904,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
 
-  // out/src/model/State.js
+  // out/src/model/world/State.js
   init_virtual_process_polyfill();
   init_buffer();
   var ReactionConfig;
@@ -47807,21 +47917,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     SidebarConfig2["NEVER_OPEN"] = "never";
     SidebarConfig2["ALWAYS_OPEN"] = "always";
   })(SidebarConfig || (SidebarConfig = {}));
-  var STATE_SCHEMA = {
+  var WORLD_STATE_SCHEMA = {
     type: "object",
     properties: {
-      focus: {
-        type: "object",
-        properties: {
-          actor: {
-            type: "string"
-          },
-          room: {
-            type: "string"
-          }
-        },
-        required: ["actor", "room"]
-      },
       meta: {
         type: "object",
         properties: {
@@ -47850,14 +47948,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       start: {
         type: "object",
         properties: {
-          actor: {
-            type: "string"
-          },
           room: {
             type: "string"
           }
         },
-        required: ["actor", "room"]
+        required: ["room"]
       },
       step: {
         type: "object",
@@ -47877,17 +47972,20 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           depth: {
             type: "number"
           },
+          id: {
+            type: "string"
+          },
           seed: {
             type: "string"
           }
         },
-        required: ["depth", "seed"]
+        required: ["depth", "id", "seed"]
       }
     },
-    required: ["focus", "meta", "rooms", "step", "world"]
+    required: ["meta", "rooms", "step", "world"]
   };
 
-  // out/src/model/World.js
+  // out/src/model/world/Template.js
   init_virtual_process_polyfill();
   init_buffer();
 
@@ -48031,8 +48129,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     required: ["bundles"]
   };
 
-  // out/src/model/World.js
-  var WORLD_SCHEMA = {
+  // out/src/model/world/Template.js
+  var WORLD_TEMPLATE_SCHEMA = {
     type: "object",
     properties: {
       locale: LOCALE_SCHEMA,
@@ -48073,20 +48171,82 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     required: ["meta", "start", "templates"]
   };
 
+  // out/src/model/file/Config.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var CONFIG_SCHEMA = {
+    type: "object",
+    properties: {
+      logger: {
+        type: "object",
+        properties: {
+          level: {
+            type: "string"
+          },
+          name: {
+            type: "string"
+          },
+          streams: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                level: {
+                  type: "string"
+                },
+                type: {
+                  type: "string"
+                },
+                path: {
+                  type: "string"
+                },
+                stream: {
+                  type: "object",
+                  required: []
+                }
+              },
+              required: []
+            }
+          }
+        },
+        required: [
+          "level",
+          "name"
+        ],
+        additionalProperties: true
+      },
+      locale: {
+        type: "object",
+        properties: Object.assign(Object.assign({}, LOCALE_SCHEMA.properties), { current: {
+          type: "string",
+          default: "en"
+        } }),
+        required: ["bundles"]
+      },
+      services: {
+        type: "object",
+        required: []
+      }
+    },
+    required: [
+      "locale",
+      "logger",
+      "services"
+    ]
+  };
+
   // out/src/model/file/Data.js
   var DATA_SCHEMA = {
     type: "object",
     properties: {
-      states: {
-        type: "array",
-        items: STATE_SCHEMA
-      },
+      config: Object.assign(Object.assign({}, CONFIG_SCHEMA), { nullable: true }),
+      state: Object.assign(Object.assign({}, WORLD_STATE_SCHEMA), { nullable: true }),
       worlds: {
         type: "array",
-        items: WORLD_SCHEMA
+        items: WORLD_TEMPLATE_SCHEMA
       }
     },
-    required: ["states", "worlds"]
+    required: ["worlds"]
   };
 
   // out/src/service/parser/yaml/MapType.js
@@ -48159,7 +48319,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/service/script/LocalScript.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs12 = __toModule(require_main());
+  var import_noicejs11 = __toModule(require_main());
 
   // out/src/util/state/index.js
   init_virtual_process_polyfill();
@@ -48168,6 +48328,21 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/entity.js
   init_virtual_process_polyfill();
   init_buffer();
+
+  // out/src/util/string.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function matchIdSegments(value, filter2) {
+    const valueParts = value.split("-");
+    const filterParts = filter2.split("-");
+    if (valueParts.length < filterParts.length) {
+      return false;
+    }
+    return filterParts.every((it, idx) => it === valueParts[idx]);
+  }
+  __name(matchIdSegments, "matchIdSegments");
+
+  // out/src/util/entity.js
   function indexEntity(entities, index, guard) {
     if (entities.length <= index) {
       return void 0;
@@ -48213,15 +48388,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return matched;
   }
   __name(matchMetadataFuzzy, "matchMetadataFuzzy");
-  function matchIdSegments(value, filter2) {
-    const valueParts = value.split("-");
-    const filterParts = filter2.split("-");
-    if (valueParts.length < filterParts.length) {
-      return false;
-    }
-    return filterParts.every((it, idx) => it === valueParts[idx]);
-  }
-  __name(matchIdSegments, "matchIdSegments");
   var DEFAULT_MATCHERS = {
     entity: matchEntity,
     metadata: matchMetadata
@@ -48263,29 +48429,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return results;
   }
   __name(searchState, "searchState");
-  function findRoom(state, search, matchers = DEFAULT_MATCHERS) {
-    const results = new Set();
-    for (const room of state.rooms) {
-      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
-        continue;
-      }
-      for (const actor of room.actors) {
-        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
-          continue;
-        }
-        if (matchers.entity(actor, search, matchers)) {
-          results.add(room);
-        }
-      }
-      for (const item of room.items) {
-        if (matchers.entity(item, search, matchers)) {
-          results.add(room);
-        }
-      }
-    }
-    return Array.from(results);
-  }
-  __name(findRoom, "findRoom");
 
   // out/src/script/common/ActorGet.js
   init_virtual_process_polyfill();
@@ -48296,7 +48439,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     if (this.actorType === ActorType.PLAYER) {
       const item = mustExist(context.item);
-      await context.focus.show("actor.get.player", { item });
+      await context.stateHelper.show("actor.get.player", { item });
     }
   }
   __name(ActorGet, "ActorGet");
@@ -48305,7 +48448,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
 
-  // out/src/util/map.js
+  // out/src/util/collection/map.js
   init_virtual_process_polyfill();
   init_buffer();
   function decrementKey(map2, key, step = 1, min = 0) {
@@ -48337,7 +48480,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     const attacker = mustExist(context.actor);
     const item = mustExist(context.item);
-    await context.focus.show("actor.hit.hit", {
+    await context.stateHelper.show("actor.hit.hit", {
       actor: this,
       attacker,
       item
@@ -48346,9 +48489,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const damage = context.random.nextInt(maxDamage);
     const health = decrementKey(this.stats, STAT_HEALTH, damage);
     if (health > 0) {
-      await context.focus.show("actor.hit.health", { actor: this, health });
+      await context.stateHelper.show("actor.hit.health", { actor: this, health });
     } else {
-      await context.focus.show("actor.hit.dead", { actor: this });
+      await context.stateHelper.show("actor.hit.dead", { actor: this });
     }
   }
   __name(ActorHit, "ActorHit");
@@ -48356,18 +48499,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/script/common/ActorStep.js
   init_virtual_process_polyfill();
   init_buffer();
-
-  // out/src/service/script/index.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var ShowMessageVolume;
-  (function(ShowMessageVolume2) {
-    ShowMessageVolume2["SELF"] = "self";
-    ShowMessageVolume2["ROOM"] = "room";
-    ShowMessageVolume2["WORLD"] = "world";
-  })(ShowMessageVolume || (ShowMessageVolume = {}));
-
-  // out/src/script/common/ActorStep.js
   async function ActorStep(context, verbs = ACTOR_VERB_SCRIPTS) {
     context.logger.debug({
       meta: this.meta,
@@ -48379,7 +48510,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const health = getKey(this.stats, STAT_HEALTH, 0);
     if (health <= 0) {
       if (this.actorType === ActorType.PLAYER) {
-        await context.focus.show("actor.step.command.dead", { actor: this });
+        await context.stateHelper.show("actor.step.command.dead", { actor: this });
+        await context.stateHelper.quit();
       }
       return;
     }
@@ -48390,15 +48522,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const { command } = context;
     const verb = verbs.get(command.verb);
     if (isNil(verb)) {
-      await context.focus.show("actor.step.command.unknown", { actor: this, command });
+      await context.stateHelper.show("actor.step.command.unknown", { actor: this, command });
       context.logger.warn({ command }, "unknown verb");
       return;
     }
     if (this.actorType === ActorType.PLAYER) {
       if (command.target.length > 0) {
-        await context.focus.show("actor.step.command.player.target", { actor: this, command });
+        await context.stateHelper.show("actor.step.command.player.target", { actor: this, command });
       } else {
-        await context.focus.show("actor.step.command.player.verb", { actor: this, command });
+        await context.stateHelper.show("actor.step.command.player.verb", { actor: this, command });
       }
     }
     await verb.call(this, context);
@@ -48429,7 +48561,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }, FUZZY_MATCHERS);
     const moving = indexEntity(results, command.index, isItem);
     if (isNil(moving)) {
-      await context.focus.show("actor.step.drop.type", { command });
+      await context.stateHelper.show("actor.step.drop.type", { command });
       return;
     }
     await context.transfer.moveItem({
@@ -48452,23 +48584,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }, FUZZY_MATCHERS);
     const target = indexEntity(results, command.index, isActor);
     if (isNil(target)) {
-      await context.focus.show("actor.step.hit.type", { command }, {
-        source: this,
-        volume: ShowMessageVolume.SELF
+      await context.stateHelper.show("actor.step.hit.type", { command }, ShowVolume.SELF, {
+        actor: this,
+        room
       });
       return;
     }
     if (this === target) {
-      await context.focus.show("actor.step.hit.self", { command }, {
-        source: this,
-        volume: ShowMessageVolume.SELF
+      await context.stateHelper.show("actor.step.hit.self", { command }, ShowVolume.SELF, {
+        actor: this,
+        room
       });
       return;
     }
     if (this.items.length === 0) {
-      await context.focus.show("actor.step.hit.item", { target }, {
-        source: this,
-        volume: ShowMessageVolume.SELF
+      await context.stateHelper.show("actor.step.hit.item", { target }, ShowVolume.SELF, {
+        actor: this,
+        room
       });
       return;
     }
@@ -48500,15 +48632,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (isItem(target)) {
       return ActorStepLookItem.call(this, Object.assign(Object.assign({}, context), { item: target }));
     }
-    await context.focus.show("actor.step.look.none");
+    await context.stateHelper.show("actor.step.look.none");
   }
   __name(ActorStepLookTarget, "ActorStepLookTarget");
   async function ActorStepLookRoom(context) {
     const room = mustExist(context.room);
-    await context.focus.show("actor.step.look.room.you", { actor: this });
-    await context.focus.show("actor.step.look.room.seen", { room });
+    await context.stateHelper.show("actor.step.look.room.you", { actor: this });
+    await context.stateHelper.show("actor.step.look.room.seen", { room });
     for (const item of this.items) {
-      await context.focus.show("actor.step.look.room.inventory", { item });
+      await context.stateHelper.show("actor.step.look.room.inventory", { item });
     }
     for (const actor of room.actors) {
       if (actor !== this) {
@@ -48519,22 +48651,22 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       await ActorStepLookItem.call(this, Object.assign(Object.assign({}, context), { item }));
     }
     for (const portal of room.portals) {
-      await context.focus.show("actor.step.look.room.portal", { portal });
+      await context.stateHelper.show("actor.step.look.room.portal", { portal });
     }
   }
   __name(ActorStepLookRoom, "ActorStepLookRoom");
   async function ActorStepLookActor(context) {
     const actor = mustExist(context.actor);
-    await context.focus.show("actor.step.look.actor.seen", { actor });
+    await context.stateHelper.show("actor.step.look.actor.seen", { actor });
     const health = getKey(actor.stats, STAT_HEALTH, 0);
     if (health <= 0) {
-      await context.focus.show("actor.step.look.actor.dead", { actor });
+      await context.stateHelper.show("actor.step.look.actor.dead", { actor });
     }
   }
   __name(ActorStepLookActor, "ActorStepLookActor");
   async function ActorStepLookItem(context) {
     const item = mustExist(context.item);
-    await context.focus.show("actor.step.look.item.seen", { item });
+    await context.stateHelper.show("actor.step.look.item.seen", { item });
   }
   __name(ActorStepLookItem, "ActorStepLookItem");
   async function ActorStepMove(context) {
@@ -48548,15 +48680,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     });
     const targetPortal = results[command.index];
     if (isNil(targetPortal)) {
-      await context.focus.show("actor.step.move.missing", { command });
+      await context.stateHelper.show("actor.step.move.missing", { command });
       return;
     }
-    await context.focus.show("actor.step.move.portal", {
+    await context.stateHelper.show("actor.step.move.portal", {
       actor: this,
       portal: targetPortal
-    }, {
-      source: this,
-      volume: ShowMessageVolume.SELF
+    }, ShowVolume.SELF, {
+      actor: this,
+      room: currentRoom
     });
     await context.transfer.moveActor({
       moving: this,
@@ -48564,7 +48696,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       target: targetPortal.dest
     }, context);
     if (this.actorType === ActorType.PLAYER) {
-      await context.focus.setRoom(targetPortal.dest);
       await ActorStepLookTarget.call(this, context, targetPortal.dest);
     }
   }
@@ -48590,7 +48721,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     } }));
     const moving = indexEntity(results, command.index, isItem);
     if (isNil(moving)) {
-      await context.focus.show("actor.step.take.type", { command });
+      await context.stateHelper.show("actor.step.take.type", { command });
       return;
     }
     await context.transfer.moveItem({
@@ -48613,7 +48744,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }, FUZZY_MATCHERS);
     const target = indexEntity(results, command.index, isItem);
     if (!isItem(target)) {
-      await context.focus.show("actor.step.use.type", { command });
+      await context.stateHelper.show("actor.step.use.type", { command });
       return;
     }
     await context.script.invoke(target, SLOT_USE, Object.assign(Object.assign({}, context), { actor: this }));
@@ -48643,7 +48774,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_buffer();
   async function ItemUse(context) {
     const actor = mustExist(context.actor);
-    await context.focus.show("item.use.any", { actor, item: this });
+    await context.stateHelper.show("item.use.any", { actor, item: this });
   }
   __name(ItemUse, "ItemUse");
 
@@ -48709,24 +48840,24 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "LocalScriptService");
   LocalScriptService = __decorate([
-    (0, import_noicejs12.Inject)(INJECT_LOGGER),
+    (0, import_noicejs11.Inject)(INJECT_LOGGER),
     __metadata("design:paramtypes", [Object, Object])
   ], LocalScriptService);
 
   // out/src/service/state/TurnState.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs16 = __toModule(require_main());
+  var import_noicejs15 = __toModule(require_main());
 
   // out/src/error/NotInitializedError.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs13 = __toModule(require_main());
-  var NotInitializedError = class extends import_noicejs13.BaseError {
+  var import_noicejs12 = __toModule(require_main());
+  var NotInitializedError = class extends import_noicejs12.BaseError {
   };
   __name(NotInitializedError, "NotInitializedError");
 
-  // out/src/util/array.js
+  // out/src/util/collection/array.js
   init_virtual_process_polyfill();
   init_buffer();
   function randomItem(items, random) {
@@ -48734,7 +48865,40 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(randomItem, "randomItem");
 
-  // out/src/util/debug.js
+  // out/src/util/collection/StackMap.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var StackMap = class {
+    constructor() {
+      this.data = new Map();
+    }
+    has(key) {
+      return this.data.has(key);
+    }
+    get(key) {
+      return this.getOrCreate(key);
+    }
+    push(key, item) {
+      const stack = this.getOrCreate(key);
+      return stack.push(item);
+    }
+    pop(key) {
+      const stack = this.getOrCreate(key);
+      return stack.pop();
+    }
+    getOrCreate(key) {
+      const existing = this.data.get(key);
+      if (doesExist(existing)) {
+        return existing;
+      }
+      const stack = [];
+      this.data.set(key, stack);
+      return stack;
+    }
+  };
+  __name(StackMap, "StackMap");
+
+  // out/src/util/state/debug.js
   init_virtual_process_polyfill();
   init_buffer();
   function debugState(state) {
@@ -48767,7 +48931,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const lines = [
       "strict digraph {"
     ];
-    lines.push(`  ${sanitize(state.focus.room)} [fillcolor=turquoise,style=filled];`);
+    lines.push(`  ${sanitize(state.start.room)} [fillcolor=turquoise,style=filled];`);
     for (const room of state.rooms) {
       for (const portal of room.portals) {
         const segments = [
@@ -48787,7 +48951,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/state/EntityGenerator.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs14 = __toModule(require_main());
+  var import_noicejs13 = __toModule(require_main());
 
   // out/src/util/template/index.js
   init_virtual_process_polyfill();
@@ -48806,7 +48970,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
       this.random = mustExist(options[INJECT_RANDOM]);
       this.template = mustExist(options[INJECT_TEMPLATE]);
-      this.world = mustExist(options.world);
+    }
+    getWorld() {
+      return mustExist(this.world);
+    }
+    setWorld(world) {
+      this.world = world;
     }
     async createActor(template, actorType = ActorType.DEFAULT) {
       const items = await this.createItemList(template.base.items);
@@ -48823,12 +48992,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return actor;
     }
     async createActorList(templates) {
+      const world = this.getWorld();
       const actors = [];
       for (const templateRef of templates) {
         if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
           continue;
         }
-        const template = findByTemplateId(this.world.templates.actors, templateRef.id);
+        const template = findByTemplateId(world.templates.actors, templateRef.id);
         this.logger.debug({
           template,
           templateRef
@@ -48853,12 +49023,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return item;
     }
     async createItemList(templates) {
+      const world = this.getWorld();
       const items = [];
       for (const templateRef of templates) {
         if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
           continue;
         }
-        const template = findByTemplateId(this.world.templates.items, templateRef.id);
+        const template = findByTemplateId(world.templates.items, templateRef.id);
         this.logger.debug({
           template,
           templateRef
@@ -48950,7 +49121,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       if (depth < 0) {
         return [];
       }
-      const templateRoom = findByTemplateId(mustExist(this.world).templates.rooms, room.meta.template);
+      const world = this.getWorld();
+      const templateRoom = findByTemplateId(world.templates.rooms, room.meta.template);
       const templatePortals = templateRoom.base.portals.filter((it) => {
         this.logger.debug({ it, room }, "looking for portal matching template in room");
         return room.portals.some((p) => p.name === it.name.base && p.sourceGroup === it.sourceGroup.base) === false;
@@ -48997,13 +49169,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           rooms: []
         };
       }
+      const world = this.getWorld();
       const groups = this.groupPortals(templates);
       const portals = [];
       const rooms = [];
       for (const [sourceGroup, group] of groups) {
         const potentialDests = Array.from(group.dests);
         const destTemplateId = randomItem(potentialDests, this.random);
-        const destTemplate = findByTemplateId(this.world.templates.rooms, destTemplateId);
+        const destTemplate = findByTemplateId(world.templates.rooms, destTemplateId);
         if (isNil(destTemplate)) {
           throw new NotFoundError("invalid room in portal dest");
         }
@@ -49041,27 +49214,30 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "StateEntityGenerator");
   StateEntityGenerator = __decorate([
-    (0, import_noicejs14.Inject)(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE),
+    (0, import_noicejs13.Inject)(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE),
     __metadata("design:paramtypes", [Object])
   ], StateEntityGenerator);
 
   // out/src/util/state/EntityTransfer.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs15 = __toModule(require_main());
+  var import_noicejs14 = __toModule(require_main());
   var StateEntityTransfer = /* @__PURE__ */ __name(class StateEntityTransfer2 {
     constructor(options) {
       this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
       });
-      this.state = mustExist(options.state);
+    }
+    setState(state) {
+      this.state = state;
     }
     async moveActor(transfer, context) {
+      const state = mustExist(this.state);
       if (!isActor(transfer.moving)) {
         this.logger.warn(transfer, "moving entity is not an actor");
         return;
       }
-      const [target] = searchState(this.state, {
+      const [target] = searchState(state, {
         meta: {
           id: transfer.target
         },
@@ -49071,7 +49247,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         this.logger.warn(transfer, "destination room does not exist");
         return;
       }
-      const [source] = searchState(this.state, {
+      const [source] = searchState(state, {
         meta: {
           id: transfer.source
         },
@@ -49094,13 +49270,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         data: new Map([
           ["source", transfer.source]
         ]),
-        focus: context.focus,
         random: context.random,
-        transfer: context.transfer,
-        state: context.state
+        state: context.state,
+        stateHelper: context.stateHelper,
+        transfer: context.transfer
       });
     }
     async moveItem(transfer, context) {
+      const state = mustExist(this.state);
       if (!isItem(transfer.moving)) {
         this.logger.warn({ transfer }, "moving entity is not an item");
         return;
@@ -49109,12 +49286,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         this.logger.debug({ transfer }, "cannot transfer item between the same source and target");
         return;
       }
-      const [source] = searchState(this.state, {
+      const [source] = searchState(state, {
         meta: {
           id: transfer.source
         }
       });
-      const [target] = searchState(this.state, {
+      const [target] = searchState(state, {
         meta: {
           id: transfer.target
         }
@@ -49140,115 +49317,59 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         data: new Map([
           ["source", transfer.source]
         ]),
-        focus: context.focus,
         random: context.random,
-        transfer: context.transfer,
-        state: context.state
+        state: context.state,
+        stateHelper: context.stateHelper,
+        transfer: context.transfer
       });
     }
   }, "StateEntityTransfer");
   StateEntityTransfer = __decorate([
-    (0, import_noicejs15.Inject)(INJECT_LOGGER),
+    (0, import_noicejs14.Inject)(INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], StateEntityTransfer);
-
-  // out/src/util/state/FocusResolver.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var StateFocusResolver = class {
-    constructor(options) {
-      this.state = mustExist(options.state);
-      const events = mustExist(options.events);
-      this.onActor = events.onActor;
-      this.onRoom = events.onRoom;
-      this.onShow = events.onShow;
-    }
-    async setActor(id) {
-      const [actor] = searchState(this.state, {
-        meta: {
-          id
-        },
-        type: ACTOR_TYPE
-      });
-      if (isActor(actor)) {
-        this.state.focus.actor = id;
-        await this.onActor(actor);
-      } else {
-        throw new InvalidArgumentError("unable to find actor ID in state");
-      }
-    }
-    async setRoom(id) {
-      const [room] = searchState(this.state, {
-        meta: {
-          id
-        },
-        type: ROOM_TYPE
-      });
-      if (isRoom(room)) {
-        this.state.focus.room = id;
-        await this.onRoom(room);
-      } else {
-        throw new InvalidArgumentError("unable to find room ID in state");
-      }
-    }
-    async show(msg, context, source) {
-      if (doesExist(source) && this.showCheck(source) === false) {
-        return;
-      }
-      await this.onShow(msg, context);
-    }
-    showCheck(source) {
-      if (source.volume === ShowMessageVolume.SELF) {
-        return source.source.meta.id === this.state.focus.actor;
-      }
-      if (source.volume === ShowMessageVolume.ROOM) {
-        if (source.source.type === ROOM_TYPE) {
-          return source.source.meta.id === this.state.focus.room;
-        } else {
-          const rooms = findRoom(this.state, {
-            meta: {
-              id: source.source.meta.id
-            }
-          });
-          return doesExist(rooms.find((it) => it.meta.id === this.state.focus.room));
-        }
-      }
-      return true;
-    }
-  };
-  __name(StateFocusResolver, "StateFocusResolver");
 
   // out/src/service/state/TurnState.js
   var LocalStateService = /* @__PURE__ */ __name(class LocalStateService2 {
     constructor(options) {
       this.container = options.container;
-      this.logger = options[INJECT_LOGGER].child({
+      this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
       });
-      this.actor = options[INJECT_ACTOR];
-      this.counter = options[INJECT_COUNTER];
-      this.event = options[INJECT_EVENT];
-      this.loader = options[INJECT_LOADER];
-      this.parser = options[INJECT_PARSER];
-      this.random = options[INJECT_RANDOM];
-      this.script = options[INJECT_SCRIPT];
+      this.counter = mustExist(options[INJECT_COUNTER]);
+      this.event = mustExist(options[INJECT_EVENT]);
+      this.random = mustExist(options[INJECT_RANDOM]);
+      this.script = mustExist(options[INJECT_SCRIPT]);
+      this.commands = new StackMap();
+      this.worlds = [];
     }
-    async create(world, params) {
-      const state = {
-        focus: {
-          actor: "",
-          room: ""
-        },
-        meta: {
-          desc: "",
-          id: "",
-          name: "",
-          template: ""
-        },
-        rooms: [],
+    async create(params) {
+      this.logger.debug({ params, worlds: this.worlds.map((it) => it.meta.id) }, "creating new world state");
+      const generator = mustExist(this.generator);
+      const world = mustFind(this.worlds, (it) => it.meta.id === params.id);
+      generator.setWorld(world);
+      this.event.emit("locale-bundle", {
+        name: "world",
+        bundle: world.locale
+      });
+      this.random.reseed(params.seed);
+      const roomRef = randomItem(world.start.rooms, this.random);
+      const roomTemplate = findByTemplateId(world.templates.rooms, roomRef.id);
+      if (isNil(roomTemplate)) {
+        throw new NotFoundError("invalid start room");
+      }
+      this.logger.debug({
+        roomRef,
+        roomTemplate
+      }, "creating start room");
+      const startRoom = await generator.createRoom(roomTemplate);
+      const rooms = [startRoom];
+      const meta = await generator.createMetadata(world.meta, "world");
+      this.state = {
+        meta,
+        rooms,
         start: {
-          actor: "",
-          room: ""
+          room: startRoom.meta.id
         },
         step: {
           time: 0,
@@ -49256,57 +49377,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         },
         world: Object.assign({}, params)
       };
-      this.state = state;
-      this.world = world;
-      await this.createHelpers();
-      const generator = mustExist(this.generator);
-      state.meta = await generator.createMetadata(world.meta, "world");
-      const startRoomRef = randomItem(world.start.rooms, this.random);
-      const startRoomTemplate = findByTemplateId(world.templates.rooms, startRoomRef.id);
-      if (isNil(startRoomTemplate)) {
-        throw new NotFoundError("invalid start room");
-      }
-      this.logger.debug({
-        startRoomRef,
-        startRoomTemplate
-      }, "creating start room");
-      const startRoom = await generator.createRoom(startRoomTemplate);
-      state.rooms.push(startRoom);
-      const startActorRef = randomItem(world.start.actors, this.random);
-      const startActorTemplate = findByTemplateId(world.templates.actors, startActorRef.id);
-      if (isNil(startActorTemplate)) {
-        throw new NotFoundError("invalid start actor");
-      }
-      this.logger.debug({
-        startActorRef,
-        startActorTemplate
-      }, "creating start actor");
-      const startActor = await generator.createActor(startActorTemplate, ActorType.PLAYER);
-      startActor.actorType = ActorType.PLAYER;
-      startRoom.actors.push(startActor);
-      const focus = mustExist(this.focus);
-      await focus.setRoom(startRoom.meta.id);
-      await focus.setActor(startActor.meta.id);
-      state.start.room = startRoom.meta.id;
-      state.start.actor = startActor.meta.id;
-      return state;
+      mustExist(this.transfer).setState(this.state);
+      return this.state;
     }
     async load(state) {
       this.state = state;
-    }
-    async loop() {
-      const { pending } = onceWithRemove(this.event, "quit");
-      this.event.emit("locale-bundle", {
-        name: "world",
-        bundle: mustExist(this.world).locale
-      });
-      this.event.on("actor-command", (event) => {
-        this.onCommand(event.command).catch((err) => {
-          this.logger.error(err, "error during line handler");
-        });
-      });
-      await this.doHelp();
-      return pending;
     }
     async save() {
       if (isNil(this.state)) {
@@ -49314,105 +49389,199 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       return this.state;
     }
-    onOutput(line, context) {
-      this.event.emit("state-output", {
-        lines: [{
-          key: line,
-          context
-        }],
-        step: mustExist(this.state).step
+    async start() {
+      this.generator = await this.container.create(StateEntityGenerator);
+      this.transfer = await this.container.create(StateEntityTransfer);
+      this.event.on(EVENT_LOADER_WORLD, (event) => {
+        catchAndLog(this.onWorld(event.world), this.logger, "error during world handler");
+      }, this);
+      this.event.on(EVENT_ACTOR_COMMAND, (event) => {
+        catchAndLog(this.onCommand(event), this.logger, "error during line handler");
+      }, this);
+      this.event.on(EVENT_ACTOR_JOIN, (event) => {
+        catchAndLog(this.onJoin(event), this.logger, "error during join handler");
+      }, this);
+    }
+    async stop() {
+      this.event.removeGroup(this);
+    }
+    async onJoin(event) {
+      const state = mustExist(this.state);
+      const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
+      const actorRef = randomItem(world.start.actors, this.random);
+      const actorTemplate = findByTemplateId(world.templates.actors, actorRef.id);
+      if (isNil(actorTemplate)) {
+        throw new NotFoundError("invalid start actor");
+      }
+      this.logger.debug({
+        actorRef,
+        actorTemplate
+      }, "creating player actor");
+      const actor = await mustExist(this.generator).createActor(actorTemplate, ActorType.PLAYER);
+      actor.meta.name = event.pid;
+      const room = mustFind(state.rooms, (it) => it.meta.id === state.start.room);
+      room.actors.push(actor);
+      await this.stepEnter({
+        actor,
+        room
+      });
+      this.event.emit(EVENT_STATE_JOIN, {
+        actor,
+        pid: event.pid
+      });
+      this.event.emit(EVENT_STATE_ROOM, {
+        actor,
+        room
       });
     }
-    async onCommand(cmd) {
-      const state = mustExist(this.state);
+    async onWorld(world) {
+      this.logger.debug({ world: world.meta.id }, "registering loaded world");
+      this.worlds.push(world);
+    }
+    async onCommand(event) {
+      const { actor, command } = event;
       this.logger.debug({
-        cmd,
-        focus: state.focus
-      }, "parsed line of player input");
-      switch (cmd.verb) {
+        actor,
+        command
+      }, "handling command event");
+      if (doesExist(actor)) {
+        this.commands.push(actor, command);
+      }
+      switch (command.verb) {
+        case META_CREATE:
+          await this.doCreate(command.target, command.index);
+          break;
         case META_DEBUG:
           await this.doDebug();
           break;
         case META_GRAPH:
-          await this.doGraph(cmd.target);
+          await this.doGraph(command.target);
           break;
         case META_HELP:
           await this.doHelp();
           break;
         case META_LOAD:
-          await this.doLoad(cmd.target, cmd.index);
-          break;
-        case META_SAVE:
-          await this.doSave(cmd.target);
+          await this.doLoad(command.target);
           break;
         case META_QUIT:
-          this.event.emit("quit");
+          await this.doQuit();
+          break;
+        case META_SAVE:
+          await this.doSave(command.target);
           break;
         default: {
+          if (mustExist(event.actor).actorType !== ActorType.PLAYER) {
+            return;
+          }
           const result = await this.step();
           this.event.emit("state-step", result);
         }
       }
     }
-    async doDebug() {
-      const state = await this.save();
-      const lines = debugState(state);
-      this.event.emit("state-output", {
-        lines: lines.map((it) => ({ key: it })),
-        step: state.step
+    async doCreate(target, depth) {
+      const [id, seed] = target.split(" ");
+      const state = await this.create({
+        depth,
+        id,
+        seed
+      });
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        context: Object.assign(Object.assign({}, state.meta), {
+          depth,
+          seed,
+          world: id
+        }),
+        line: "meta.create",
+        step: {
+          time: 0,
+          turn: 0
+        },
+        volume: ShowVolume.WORLD
+      });
+      this.event.emit(EVENT_STATE_LOAD, {
+        state: state.meta.name,
+        world: state.meta.template
       });
     }
-    async doHelp() {
-      const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(", ");
-      this.event.emit("state-output", {
-        lines: [{
-          key: verbs
-        }],
-        step: mustExist(this.state).step
+    async doDebug() {
+      const state = await this.save();
+      const line = debugState(state).join("\n");
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line,
+        step: state.step,
+        volume: ShowVolume.WORLD
       });
     }
     async doGraph(path) {
       const state = await this.save();
       const lines = graphState(state);
-      await this.loader.saveStr(path, lines.join("\n"));
-      this.event.emit("state-output", {
-        lines: [{
-          context: {
-            path,
-            size: state.rooms.length
-          },
-          key: "debug.graph.summary"
-        }],
-        step: state.step
+      const data = lines.join("\n");
+      this.event.emit(EVENT_LOADER_SAVE, {
+        data,
+        path
+      });
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        context: {
+          path,
+          size: state.rooms.length
+        },
+        line: "debug.graph.summary",
+        step: state.step,
+        volume: ShowVolume.WORLD
       });
     }
-    async doLoad(path, index) {
-      const dataStr = await this.loader.loadStr(path);
-      const data = this.parser.load(dataStr);
-      const state = data.states[index];
-      this.state = state;
-      this.world = data.worlds.find((it) => it.meta.id === state.meta.template);
-      await this.createHelpers();
-      this.event.emit("state-output", {
-        lines: [{
-          key: `loaded world ${state.meta.id} state from ${path}`
-        }],
-        step: state.step
+    async doHelp() {
+      const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(", ");
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        context: {
+          verbs
+        },
+        line: "meta.help",
+        step: {
+          time: 0,
+          turn: 0
+        },
+        volume: ShowVolume.WORLD
       });
+    }
+    async doLoad(path) {
+      const stateEvent = onceEvent(this.event, EVENT_LOADER_STATE);
+      this.event.emit(EVENT_LOADER_READ, {
+        path
+      });
+      const { state } = await stateEvent;
+      const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
+      this.event.emit(EVENT_LOCALE_BUNDLE, {
+        bundle: world.locale,
+        name: "world"
+      });
+      this.state = state;
+      mustExist(this.generator).setWorld(world);
+      mustExist(this.transfer).setState(state);
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line: `loaded world ${state.meta.id} state from ${path}`,
+        step: state.step,
+        volume: ShowVolume.WORLD
+      });
+    }
+    async doQuit() {
+      this.event.emit(EVENT_COMMON_QUIT);
     }
     async doSave(path) {
       const state = mustExist(this.state);
-      const world = mustExist(this.world);
-      const dataStr = this.parser.save({
-        states: [state],
+      const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
+      const data = {
+        state,
         worlds: [world]
+      };
+      this.event.emit(EVENT_LOADER_SAVE, {
+        data,
+        path
       });
-      await this.loader.saveStr(path, dataStr);
-      this.event.emit("state-output", {
-        lines: [{
-          key: `saved world ${state.meta.id} state to ${path}`
-        }],
-        step: state.step
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line: `saved world ${state.meta.id} state to ${path}`,
+        step: state.step,
+        volume: ShowVolume.WORLD
       });
     }
     async step() {
@@ -49423,9 +49592,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       const start = Date.now();
       const scope = {
         data: new Map(),
-        focus: mustExist(this.focus),
         random: this.random,
         state: this.state,
+        stateHelper: {
+          enter: (target) => this.stepEnter(target),
+          quit: () => this.doQuit(),
+          show: (msg, source, volume, context) => this.stepShow(msg, source, volume, context)
+        },
         transfer: mustExist(this.transfer)
       };
       for (const room of this.state.rooms) {
@@ -49435,7 +49608,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           for (const actor of room.actors) {
             if (seen.has(actor.meta.id) === false) {
               seen.add(actor.meta.id);
-              const command = await this.getActorCommand(actor, room);
+              const command = await this.getActorCommand(actor);
               await this.script.invoke(actor, SLOT_STEP, Object.assign(Object.assign({}, scope), {
                 actor,
                 command,
@@ -49472,57 +49645,62 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         spent,
         step: this.state.step
       }, "finished world state step");
+      await this.notifyChangedRooms();
       return {
         time: this.state.step.time,
         turn: this.state.step.turn
       };
     }
-    async getActorCommand(actor, room) {
-      this.logger.debug({ actor }, "getting actor command");
-      this.event.emit("state-room", {
-        actor,
-        room
+    async stepShow(line, context, volume = ShowVolume.WORLD, source) {
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line,
+        context,
+        source,
+        step: mustExist(this.state).step,
+        volume
       });
-      const actorProxy = await this.actor.get({
-        id: actor.meta.id,
-        type: actor.actorType
-      });
-      return actorProxy.last();
     }
-    async createHelpers() {
+    async stepEnter(target) {
+      if (doesExist(target.actor) && target.actor.actorType === ActorType.PLAYER) {
+        const state = mustExist(this.state);
+        const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);
+        state.rooms.push(...rooms);
+      }
+    }
+    async getActorCommand(actor) {
+      const command = this.commands.pop(actor);
+      if (doesExist(command)) {
+        return command;
+      }
+      this.logger.warn({ actor }, "no command queued for actor");
+      return {
+        index: 0,
+        input: "",
+        target: "",
+        verb: VERB_WAIT
+      };
+    }
+    async notifyChangedRooms() {
       const state = mustExist(this.state);
-      const world = mustExist(this.world);
-      this.focus = await this.container.create(StateFocusResolver, {
-        events: {
-          onActor: () => Promise.resolve(),
-          onRoom: async (room) => {
-            const rooms = await mustExist(this.generator).populateRoom(room, state.world.depth);
-            state.rooms.push(...rooms);
-          },
-          onShow: async (line, context) => {
-            this.onOutput(line, context);
-          }
-        },
-        state
-      });
-      this.generator = await this.container.create(StateEntityGenerator, {
-        world
-      });
-      this.transfer = await this.container.create(StateEntityTransfer, {
-        state
-      });
-      this.random.reseed(state.world.seed);
+      for (const room of state.rooms) {
+        for (const actor of room.actors) {
+          this.event.emit(EVENT_STATE_ROOM, {
+            actor,
+            room
+          });
+        }
+      }
     }
   }, "LocalStateService");
   LocalStateService = __decorate([
-    (0, import_noicejs16.Inject)(INJECT_ACTOR, INJECT_COUNTER, INJECT_EVENT, INJECT_LOADER, INJECT_LOGGER, INJECT_PARSER, INJECT_RANDOM, INJECT_SCRIPT),
+    (0, import_noicejs15.Inject)(INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT),
     __metadata("design:paramtypes", [Object])
   ], LocalStateService);
 
   // out/src/service/template/ChainTemplateService.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs17 = __toModule(require_main());
+  var import_noicejs16 = __toModule(require_main());
 
   // out/src/util/template/JoinChain.js
   init_virtual_process_polyfill();
@@ -49699,12 +49877,86 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "ChainTemplateService");
   ChainTemplateService = __decorate([
-    (0, import_noicejs17.Inject)(INJECT_RANDOM),
+    (0, import_noicejs16.Inject)(INJECT_RANDOM),
     __metadata("design:paramtypes", [Object])
   ], ChainTemplateService);
 
-  // out/src/module/LocalModule.js
-  var LocalModule = class extends import_noicejs18.Module {
+  // out/src/service/tokenizer/WordTokenizer.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs17 = __toModule(require_main());
+  var REMOVED_WORDS = new Set([
+    "a",
+    "an",
+    "at",
+    "on",
+    "the",
+    "to",
+    "toward",
+    "towards"
+  ]);
+  var SPLIT_CHAR = " ";
+  var WordTokenizer = /* @__PURE__ */ __name(class WordTokenizer2 {
+    constructor(options) {
+      this.locale = mustExist(options[INJECT_LOCALE]);
+      this.verbs = new Map();
+    }
+    async split(input) {
+      return trim(input).toLocaleLowerCase().split(SPLIT_CHAR).map(trim).filter((it) => it.length > 0).filter((it) => REMOVED_WORDS.has(it) === false);
+    }
+    async parse(input) {
+      const [rawVerb, ...targets] = await this.split(input);
+      const verb = getOrDefault(this.verbs, rawVerb, rawVerb);
+      const cmd = {
+        index: 0,
+        input,
+        verb,
+        target: ""
+      };
+      const last = targets[targets.length - 1];
+      if (targets.length > 1 && /^[0-9]+$/.test(last)) {
+        targets.pop();
+        cmd.index = parseInt(last, 10);
+      }
+      cmd.target = targets.join(SPLIT_CHAR);
+      return [cmd];
+    }
+    async translate(verbs) {
+      this.verbs.clear();
+      for (const verb of verbs) {
+        const translated = this.locale.translate(verb);
+        this.verbs.set(translated, verb);
+      }
+    }
+  }, "WordTokenizer");
+  WordTokenizer = __decorate([
+    (0, import_noicejs17.Inject)(INJECT_LOCALE),
+    __metadata("design:paramtypes", [Object])
+  ], WordTokenizer);
+  function trim(str2) {
+    return str2.replace(/^\s+/, "").replace(/\s+$/, "");
+  }
+  __name(trim, "trim");
+
+  // out/src/util/container.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var Singleton = class {
+    constructor(ctor, value) {
+      this.ctor = ctor;
+      this.value = value;
+    }
+    async get() {
+      if (isNil(this.value)) {
+        this.value = await this.ctor();
+      }
+      return this.value;
+    }
+  };
+  __name(Singleton, "Singleton");
+
+  // out/src/module/CoreModule.js
+  var CoreModule = class extends import_noicejs18.Module {
     constructor() {
       super();
       this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));
@@ -49712,13 +49964,19 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
       this.random = new Singleton(() => mustExist(this.container).create(SeedRandomGenerator));
       this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
-      this.state = new Singleton(() => mustExist(this.container).create(LocalStateService));
       this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
     }
     async configure(options) {
       await super.configure(options);
       this.bind(INJECT_EVENT).toFactory(() => this.event.get());
       this.bind(INJECT_PARSER).toConstructor(YamlParser);
+      this.bind(INJECT_TOKENIZER).toConstructor(WordTokenizer);
+      this.bind("core-player-actor").toConstructor(PlayerActorService);
+      this.bind("core-behavior-actor").toConstructor(BehaviorActorService);
+      this.bind("core-local-state").toConstructor(LocalStateService);
+    }
+    setConfig(config3) {
+      this.bind(INJECT_CONFIG).toInstance(config3);
     }
     async getCounter() {
       return this.counter.get();
@@ -49735,109 +49993,53 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async getScript() {
       return this.script.get();
     }
-    async getState() {
-      return this.state.get();
-    }
     async getTemplate() {
       return this.template.get();
     }
   };
-  __name(LocalModule, "LocalModule");
+  __name(CoreModule, "CoreModule");
   __decorate([
     (0, import_noicejs18.Provides)(INJECT_COUNTER),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-  ], LocalModule.prototype, "getCounter", null);
+  ], CoreModule.prototype, "getCounter", null);
   __decorate([
     (0, import_noicejs18.Provides)(INJECT_LOCALE),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-  ], LocalModule.prototype, "getLocale", null);
+  ], CoreModule.prototype, "getLocale", null);
   __decorate([
     (0, import_noicejs18.Provides)(INJECT_LOGGER),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-  ], LocalModule.prototype, "getLogger", null);
+  ], CoreModule.prototype, "getLogger", null);
   __decorate([
     (0, import_noicejs18.Provides)(INJECT_RANDOM),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-  ], LocalModule.prototype, "getRandom", null);
+  ], CoreModule.prototype, "getRandom", null);
   __decorate([
     (0, import_noicejs18.Provides)(INJECT_SCRIPT),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-  ], LocalModule.prototype, "getScript", null);
-  __decorate([
-    (0, import_noicejs18.Provides)(INJECT_STATE),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-  ], LocalModule.prototype, "getState", null);
+  ], CoreModule.prototype, "getScript", null);
   __decorate([
     (0, import_noicejs18.Provides)(INJECT_TEMPLATE),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-  ], LocalModule.prototype, "getTemplate", null);
+  ], CoreModule.prototype, "getTemplate", null);
 
-  // out/src/module/NodeModule.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var import_noicejs19 = __toModule(require_main());
-
-  // ignore:../service/loader/node/FetchLoader
+  // ignore:./module/NodeModule
   init_virtual_process_polyfill();
   init_buffer();
 
-  // ignore:../service/loader/node/FileLoader
-  init_virtual_process_polyfill();
-  init_buffer();
-
-  // ignore:../service/render/InkRender
-  init_virtual_process_polyfill();
-  init_buffer();
-
-  // ignore:../service/render/LineRender
-  init_virtual_process_polyfill();
-  init_buffer();
-
-  // out/src/module/NodeModule.js
-  var NodeModule = class extends import_noicejs19.Module {
-    constructor() {
-      super();
-      if (true) {
-        this.render = new Singleton(() => mustExist(this.container).create(void 0));
-      } else {
-        this.render = new Singleton(() => mustExist(this.container).create(void 0));
-      }
-    }
-    async configure(options) {
-      await super.configure(options);
-      if (true) {
-        this.bind(INJECT_LOADER).toConstructor(void 0);
-      } else {
-        this.bind(INJECT_LOADER).toConstructor(void 0);
-      }
-    }
-    async getRender() {
-      return this.render.get();
-    }
-  };
-  __name(NodeModule, "NodeModule");
-  __decorate([
-    (0, import_noicejs19.Provides)(INJECT_RENDER),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-  ], NodeModule.prototype, "getRender", null);
-
-  // out/src/util/args.js
+  // out/src/util/config/args.js
   init_virtual_process_polyfill();
   init_buffer();
 
@@ -50841,19 +51043,21 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   yargsParser.looksLikeNumber = looksLikeNumber;
   var browser_default = yargsParser;
 
-  // out/src/util/args.js
+  // out/src/util/config/args.js
   function parseArgs(args) {
     const argv3 = browser_default(args, {
       alias: {
-        data: ["d"]
+        config: ["c"],
+        data: ["d"],
+        input: ["i"],
+        module: ["m"]
       },
-      array: ["data", "module"],
+      array: ["data", "input", "module"],
       default: {
         depth: PORTAL_DEPTH,
-        module: ["local", "input", "node"]
+        module: ["core", "node"]
       },
-      number: ["depth"],
-      string: ["config", "seed", "world"]
+      string: ["config"]
     });
     return argv3;
   }
@@ -51001,7 +51205,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return [];
     }
     __name(getInject, "getInject");
-    function Inject13(...needs) {
+    function Inject15(...needs) {
       return (target, key, providedDesc) => {
         if (isNil3(key)) {
           const prev = getInject(target);
@@ -51018,7 +51222,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
       };
     }
-    __name(Inject13, "Inject");
+    __name(Inject15, "Inject");
     class NullLogger {
       child() {
         return NullLogger.global;
@@ -51043,7 +51247,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(getProvides, "getProvides");
-    function Provides4(...provides) {
+    function Provides2(...provides) {
       return (target, key, providedDesc) => {
         const desc = resolveDescriptor(target, key, providedDesc);
         const prev = getProvides(target);
@@ -51051,14 +51255,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         Reflect.set(desc.value, providesSymbol, prev.concat(next));
       };
     }
-    __name(Provides4, "Provides");
+    __name(Provides2, "Provides");
     (function(ProviderType) {
       ProviderType[ProviderType["None"] = 0] = "None";
       ProviderType[ProviderType["Constructor"] = 1] = "Constructor";
       ProviderType[ProviderType["Factory"] = 2] = "Factory";
       ProviderType[ProviderType["Instance"] = 3] = "Instance";
     })(exports.ProviderType || (exports.ProviderType = {}));
-    class Module5 {
+    class Module3 {
       constructor() {
         this.logger = NullLogger.global;
         this.providers = new Map();
@@ -51131,7 +51335,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
       }
     }
-    __name(Module5, "Module");
+    __name(Module3, "Module");
     const VERSION_INFO = {
       build: {
         job: "58923",
@@ -51353,7 +51557,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(WinstonLogger, "WinstonLogger");
-    class MapModule extends Module5 {
+    class MapModule extends Module3 {
       constructor(options) {
         super();
         if (options.providers instanceof Map) {
@@ -51383,15 +51587,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     exports.ContainerBoundError = ContainerBoundError;
     exports.ContainerNotBoundError = ContainerNotBoundError;
     exports.DescriptorNotFoundError = DescriptorNotFoundError;
-    exports.Inject = Inject13;
+    exports.Inject = Inject15;
     exports.InvalidProviderError = InvalidProviderError;
     exports.InvalidTargetError = InvalidTargetError;
     exports.LoggerNotFoundError = LoggerNotFoundError;
     exports.MapModule = MapModule;
     exports.MissingValueError = MissingValueError;
-    exports.Module = Module5;
+    exports.Module = Module3;
     exports.NullLogger = NullLogger;
-    exports.Provides = Provides4;
+    exports.Provides = Provides2;
     exports.WinstonLogger = WinstonLogger;
     exports.constructWithContainer = constructWithContainer;
     exports.contractName = contractName;
@@ -51582,69 +51786,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/error/ConfigError.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs20 = __toModule(require_main());
-  var ConfigError = class extends import_noicejs20.BaseError {
+  var import_noicejs19 = __toModule(require_main());
+  var ConfigError = class extends import_noicejs19.BaseError {
   };
   __name(ConfigError, "ConfigError");
-
-  // out/src/model/file/Config.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var CONFIG_SCHEMA = {
-    type: "object",
-    properties: {
-      logger: {
-        type: "object",
-        properties: {
-          level: {
-            type: "string"
-          },
-          name: {
-            type: "string"
-          },
-          streams: {
-            type: "array",
-            items: {
-              type: "object",
-              properties: {
-                level: {
-                  type: "string"
-                },
-                type: {
-                  type: "string"
-                },
-                path: {
-                  type: "string"
-                },
-                stream: {
-                  type: "object",
-                  required: []
-                }
-              },
-              required: []
-            }
-          }
-        },
-        required: [
-          "level",
-          "name"
-        ],
-        additionalProperties: true
-      },
-      locale: {
-        type: "object",
-        properties: Object.assign(Object.assign({}, LOCALE_SCHEMA.properties), { current: {
-          type: "string",
-          default: "en"
-        } }),
-        required: ["bundles"]
-      }
-    },
-    required: [
-      "locale",
-      "logger"
-    ]
-  };
 
   // out/src/util/config/page.js
   async function loadConfig(path) {
@@ -51676,12 +51821,56 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(loadConfig, "loadConfig");
 
+  // out/src/util/service/ServiceManager.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs20 = __toModule(require_main());
+  var ServiceManager = /* @__PURE__ */ __name(class ServiceManager2 {
+    constructor(options) {
+      this.container = options.container;
+      this.services = new Map();
+    }
+    add(name, svc) {
+      this.services.set(name, svc);
+    }
+    async create(config3) {
+      for (const loader2 of config3.loaders) {
+        const svc = await this.container.create(loader2.kind);
+        await svc.start();
+        this.add(loader2.name, svc);
+      }
+      for (const actor of config3.actors) {
+        const svc = await this.container.create(actor.kind);
+        await svc.start();
+        this.add(actor.name, svc);
+      }
+      for (const render2 of config3.renders) {
+        const svc = await this.container.create(render2.kind);
+        await svc.start();
+        this.add(render2.name, svc);
+      }
+      for (const state of config3.states) {
+        const svc = await this.container.create(state.kind);
+        await svc.start();
+        this.add(state.name, svc);
+      }
+    }
+    async stop() {
+      for (const [_name, svc] of this.services) {
+        await svc.stop();
+      }
+    }
+  }, "ServiceManager");
+  ServiceManager = __decorate([
+    (0, import_noicejs20.Inject)(),
+    __metadata("design:paramtypes", [Object])
+  ], ServiceManager);
+
   // out/src/main.js
-  var DI_MODULES = new Map([
+  var LOADED_MODULES = new Map([
     ["browser", BrowserModule],
-    ["input", ActorModule],
-    ["local", LocalModule],
-    ["node", NodeModule]
+    ["core", CoreModule],
+    ["node", void 0]
   ]);
   async function main3(args) {
     const arg = parseArgs(args);
@@ -51691,52 +51880,51 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       arg
     }, "textual adventure");
     const modules = arg.module.map((it) => {
-      const ctor = DI_MODULES.get(it);
+      const ctor = LOADED_MODULES.get(it);
       if (isNil(ctor)) {
         throw new InvalidArgumentError("module not found");
       }
-      return new ctor();
+      const module = new ctor();
+      if (it === "core") {
+        module.setConfig(config3);
+      }
+      return module;
     });
-    modules[0].bind(INJECT_CONFIG).toInstance(config3);
     const container = import_noicejs21.Container.from(...modules);
     await container.configure({
       logger
     });
     const locale = await container.create(INJECT_LOCALE);
     await locale.start();
-    locale.addBundle("common", config3.locale);
-    const locator = await container.create(INJECT_ACTOR);
-    const actor = await locator.get({
-      id: "",
-      type: ActorType.PLAYER
+    const services = await container.create(ServiceManager);
+    await services.create(config3.services);
+    const events = await container.create(INJECT_EVENT);
+    events.emit(EVENT_LOCALE_BUNDLE, {
+      name: "common",
+      bundle: config3.locale
     });
-    await actor.start();
-    const loader2 = await container.create(INJECT_LOADER);
-    const parser2 = await container.create(INJECT_PARSER);
-    const worlds = [];
-    for (const path of arg.data) {
-      const dataStr = await loader2.loadStr(path);
-      const data = parser2.load(dataStr);
-      worlds.push(...data.worlds);
-    }
     logger.info({
-      paths: arg.data,
-      worlds: worlds.map((it) => it.meta.id)
-    }, "loaded worlds from data files");
-    const world = worlds.find((it) => it.meta.id === arg.world);
-    if (isNil(world)) {
-      logger.error({ world: arg.world }, "invalid world name");
-      return 1;
+      paths: arg.data
+    }, "loading worlds from data files");
+    for (const path of arg.data) {
+      const pending = onceEvent(events, EVENT_LOADER_WORLD);
+      events.emit(EVENT_LOADER_READ, {
+        path
+      });
+      await pending;
     }
-    const state = await container.create(INJECT_STATE);
-    await state.create(world, {
-      depth: arg.depth,
-      seed: arg.seed
-    });
-    const render2 = await container.create(INJECT_RENDER);
-    await render2.start();
-    await state.loop();
-    await render2.stop();
+    for (const input of arg.input) {
+      const pending = onceEvent(events, EVENT_ACTOR_OUTPUT);
+      events.emit(EVENT_RENDER_OUTPUT, {
+        lines: [
+          input
+        ]
+      });
+      await pending;
+    }
+    await onceEvent(events, "quit");
+    await services.stop();
+    await locale.stop();
     return 0;
   }
   __name(main3, "main");
@@ -51748,9 +51936,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     "--data",
     "https://raw.githubusercontent.com/ssube/textual-engine/master/data/base.yml",
     "--module",
-    "local",
-    "--module",
-    "input",
+    "core",
     "--module",
     "browser",
     "--seed",

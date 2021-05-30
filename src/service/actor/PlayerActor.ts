@@ -3,16 +3,18 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
+import { Actor, ActorType } from '../../model/entity/Actor';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
+import { catchAndLog } from '../../util/async/event';
 import {
   COMMON_VERBS,
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_OUTPUT,
   EVENT_COMMON_QUIT,
+  EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_OUTPUT,
   EVENT_STATE_OUTPUT,
 } from '../../util/constants';
-import { catchAndLog } from '../../util/async/event';
 import { EventBus, LineEvent, OutputEvent } from '../event';
 import { LocaleService } from '../locale';
 import { TokenizerService } from '../tokenizer';
@@ -33,7 +35,6 @@ export class PlayerActorService implements ActorService {
   protected event: EventBus;
   protected locale: LocaleService;
   protected logger: Logger;
-  protected started: boolean;
   protected tokenizer: TokenizerService;
 
   protected history: Array<Command>;
@@ -46,15 +47,13 @@ export class PlayerActorService implements ActorService {
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
-    this.started = false;
     this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
   }
 
   public async start() {
-    if (this.started) {
-      return;
-    }
-
+    this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
+      catchAndLog(this.tokenizer.translate(COMMON_VERBS), this.logger, 'error translating verbs');
+    }, this);
     this.event.on(EVENT_RENDER_OUTPUT, (event) => {
       catchAndLog(this.onInput(event), this.logger, 'error during render output');
     }, this);
@@ -64,10 +63,6 @@ export class PlayerActorService implements ActorService {
     this.event.on(EVENT_COMMON_QUIT, () => {
       catchAndLog(this.onInputLine('meta.quit'), this.logger, 'error sending quit output');
     }, this);
-
-    await this.tokenizer.translate(COMMON_VERBS);
-
-    this.started = true;
   }
 
   public async stop() {
@@ -93,6 +88,10 @@ export class PlayerActorService implements ActorService {
     this.history.push(...commands);
     for (const command of commands) {
       this.event.emit(EVENT_ACTOR_COMMAND, {
+        // TODO: include real player
+        actor: {
+          actorType: ActorType.PLAYER,
+        } as Actor,
         command,
       });
     }
@@ -100,6 +99,8 @@ export class PlayerActorService implements ActorService {
 
   public async onOutput(event: OutputEvent): Promise<void> {
     this.logger.debug({ event }, 'translating output');
+
+    // TODO: filter volume here
 
     const lines = event.lines.map((it) => this.locale.translate(it.key, it.context));
     this.event.emit(EVENT_ACTOR_OUTPUT, {

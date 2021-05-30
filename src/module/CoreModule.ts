@@ -11,8 +11,11 @@ import {
   INJECT_RANDOM,
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
+  INJECT_TOKENIZER,
 } from '.';
 import { ConfigFile } from '../model/file/Config';
+import { BehaviorActorService } from '../service/actor/BehaviorActor';
+import { PlayerActorService } from '../service/actor/PlayerActor';
 import { Counter } from '../service/counter';
 import { LocalCounter } from '../service/counter/LocalCounter';
 import { EventBus } from '../service/event';
@@ -27,6 +30,7 @@ import { LocalScriptService } from '../service/script/LocalScript';
 import { LocalStateService } from '../service/state/TurnState';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
+import { WordTokenizer } from '../service/tokenizer/WordTokenizer';
 import { Singleton } from '../util/container';
 
 export class CoreModule extends Module {
@@ -53,8 +57,12 @@ export class CoreModule extends Module {
 
     this.bind(INJECT_EVENT).toFactory(() => this.event.get());
     this.bind(INJECT_PARSER).toConstructor(YamlParser);
+    this.bind(INJECT_TOKENIZER).toConstructor(WordTokenizer);
 
-    this.bind('local-state').toConstructor(LocalStateService);
+    this.bind('core-player-actor').toConstructor(PlayerActorService);
+    this.bind('core-behavior-actor').toConstructor(BehaviorActorService);
+
+    this.bind('core-local-state').toConstructor(LocalStateService);
   }
 
   public setConfig(config: ConfigFile): void {

@@ -1,11 +1,11 @@
-import { constructorName, doesExist, mustExist } from '@apextoaster/js-utils';
+import { constructorName, doesExist, mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
-import { ActorType } from '../../model/entity/Actor';
+import { Actor, ActorType } from '../../model/entity/Actor';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM } from '../../module';
-import { EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
+import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
 import { EventBus, RoomEvent } from '../event';
 import { RandomGenerator } from '../random';
 
@@ -29,26 +29,25 @@ export interface BehaviorActorOptions extends BaseOptions {
  */
 @Inject(INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM)
 export class BehaviorActorService implements ActorService {
-  protected actor: string;
   protected event: EventBus;
   protected logger: Logger;
-  protected next: Command;
   protected random: RandomGenerator;
 
+  protected next: Map<string, Command>;
+
   constructor(options: BehaviorActorOptions) {
-    this.actor = mustExist(options.actor);
     this.event = mustExist(options[INJECT_EVENT]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
     this.random = mustExist(options[INJECT_RANDOM]);
 
-    this.next = WAIT_CMD;
+    this.next = new Map();
   }
 
   public async start() {
     this.event.on(EVENT_STATE_ROOM, (event) => {
-      if (this.actor === event.actor.meta.id) {
+      if (event.actor.actorType === ActorType.DEFAULT) {
         this.onRoom(event);
       }
     });
@@ -59,7 +58,7 @@ export class BehaviorActorService implements ActorService {
   }
 
   public async last(): Promise<Command> {
-    return this.next;
+    throw new NotImplementedError();
   }
 
   public onRoom(event: RoomEvent) {
@@ -70,12 +69,12 @@ export class BehaviorActorService implements ActorService {
     const player = event.room.actors.find((it) => it.actorType === ActorType.PLAYER);
     if (doesExist(player)) {
       this.logger.debug({ event, player }, 'attacking visible player');
-      this.next = {
+      this.queue(event.actor, {
         index: 0,
         input: `${VERB_HIT} ${player.meta.id}`,
         verb: VERB_HIT,
         target: player.meta.id,
-      };
+      });
       return;
     }
 
@@ -90,15 +89,24 @@ export class BehaviorActorService implements ActorService {
         portalIndex,
       }, 'moving through random portal');
 
-      this.next = {
+      this.queue(event.actor, {
         index: 0,
         input: `${VERB_MOVE} ${portal.sourceGroup} ${portal.name}`,
         verb: VERB_MOVE,
         target: `${portal.sourceGroup} ${portal.name}`,
-      };
+      });
       return;
     }
 
-    this.next = WAIT_CMD;
+    this.queue(event.actor, WAIT_CMD);
+  }
+
+  protected queue(actor: Actor, command: Command): void {
+    this.next.set(actor.meta.id, command);
+
+    this.event.emit(EVENT_ACTOR_COMMAND, {
+      actor,
+      command,
+    });
   }
 }

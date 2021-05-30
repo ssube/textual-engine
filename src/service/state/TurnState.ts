@@ -9,8 +9,7 @@ import { Room } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
-import { INJECT_ACTOR, INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
-import { ActorLocator } from '../../module/ActorModule';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
 import { randomItem } from '../../util/array';
 import { catchAndLog, onceEvent } from '../../util/async/event';
 import {
@@ -23,6 +22,7 @@ import {
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_ROOM,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -45,7 +45,6 @@ import { RandomGenerator } from '../random';
 import { ScriptService, SuppliedScope } from '../script';
 
 export interface LocalStateServiceOptions extends BaseOptions {
-  [INJECT_ACTOR]?: ActorLocator;
   [INJECT_COUNTER]?: Counter;
   [INJECT_EVENT]?: EventBus;
   [INJECT_LOGGER]?: Logger;
@@ -54,7 +53,6 @@ export interface LocalStateServiceOptions extends BaseOptions {
 }
 
 @Inject(
-  INJECT_ACTOR,
   INJECT_COUNTER,
   INJECT_EVENT,
   INJECT_LOGGER,
@@ -62,7 +60,6 @@ export interface LocalStateServiceOptions extends BaseOptions {
   INJECT_SCRIPT
 )
 export class LocalStateService implements StateService {
-  protected actor: ActorLocator;
   protected container: Container;
   protected counter: Counter;
   protected event: EventBus;
@@ -83,7 +80,6 @@ export class LocalStateService implements StateService {
       kind: constructorName(this),
     });
 
-    this.actor = mustExist(options[INJECT_ACTOR]);
     this.counter = mustExist(options[INJECT_COUNTER]);
     this.event = mustExist(options[INJECT_EVENT]);
     this.random = mustExist(options[INJECT_RANDOM]);
@@ -196,14 +192,16 @@ export class LocalStateService implements StateService {
     });
 
     this.generator = await this.container.create(StateEntityGenerator);
-    this.transfer = await this.container.create(StateEntityTransfer)
+    this.transfer = await this.container.create(StateEntityTransfer);
 
     this.event.on(EVENT_LOADER_WORLD, (event: LoaderWorldEvent) => {
       catchAndLog(this.onWorld(event.world), this.logger, 'error during world handler');
     }, this);
 
     this.event.on(EVENT_ACTOR_COMMAND, (event: CommandEvent) => {
-      catchAndLog(this.onCommand(event.command), this.logger, 'error during line handler');
+      if (event.actor.actorType === ActorType.PLAYER) {
+        catchAndLog(this.onCommand(event.command), this.logger, 'error during line handler');
+      }
     }, this);
   }
 
@@ -486,17 +484,15 @@ export class LocalStateService implements StateService {
   protected async getActorCommand(actor: Actor, room: Room): Promise<Command> {
     this.logger.debug({ actor }, 'getting actor command');
 
-    this.event.emit('state-room', {
+    const pending = onceEvent<CommandEvent>(this.event, EVENT_ACTOR_COMMAND);
+
+    this.event.emit(EVENT_STATE_ROOM, {
       actor,
       room,
     });
 
-    const actorProxy = await this.actor.get({
-      id: actor.meta.id,
-      type: actor.actorType,
-    });
-
-    return actorProxy.last();
+    const { command } = await pending;
+    return command;
   }
 
   protected async onRoom(room: Room): Promise<void> {

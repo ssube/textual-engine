@@ -38,7 +38,7 @@ export interface OutputEvent {
 }
 
 export interface CommandEvent {
-  // actor: Actor;
+  actor: Actor;
   command: Command;
 }
 

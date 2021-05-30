@@ -20,7 +20,7 @@ export function parseArgs(args: Array<string>): ParsedArgs {
     array: ['data', 'input', 'module'],
     default: {
       depth: PORTAL_DEPTH,
-      module: ['input', 'node'],
+      module: ['node'],
     },
     // envPrefix: 'TEXTUAL_',
     string: ['config'],

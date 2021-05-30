@@ -1,10 +1,9 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 
-import { ActorType } from '../../../src/model/entity/Actor';
-import { INJECT_ACTOR, INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
-import { ActorLocator, ActorModule } from '../../../src/module/ActorModule';
+import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { PlayerActorService } from '../../../src/service/actor/PlayerActor';
 import { CommandEvent, EventBus } from '../../../src/service/event';
 import { LocaleService } from '../../../src/service/locale';
 import { onceEvent } from '../../../src/util/async/event';
@@ -12,16 +11,12 @@ import { getTestContainer } from '../../helper';
 
 describe('player actor', () => {
   it('should parse render output into commands', async () => {
-    const container = await getTestContainer(new CoreModule(), new ActorModule());
+    const container = await getTestContainer(new CoreModule());
 
     const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
     await locale.start();
 
-    const locator = await container.create<ActorLocator, BaseOptions>(INJECT_ACTOR);
-    const actor = await locator.get({
-      id: 'foo',
-      type: ActorType.PLAYER,
-    });
+    const actor = await container.create(PlayerActorService);
     await actor.start();
 
     const index = 13;

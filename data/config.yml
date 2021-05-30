@@ -32,14 +32,17 @@ locale:
           save: save
   current: en
 services:
-  actors: []
+  actors:
+    - name: test-player
+      kind: core-player-actor
+    - name: test-enemy
+      kind: core-behavior-actor
   loaders:
     - name: test-loader
       kind: node-file-loader
-  locales: []
   renders:
     - name: test-render
       kind: node-ink-render
   states:
     - name: test-state
-      kind: local-state
+      kind: core-local-state

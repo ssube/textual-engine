@@ -20,8 +20,10 @@ ci: build cover
 clean:
 	rm -rf node_modules/ out/
 
+GRAPH_LAYOUT ?= dot
+
 graph: ## render any debug graphs
-	cat out/debug-graph | dot -Tpng -oout/debug-graph.png && sensible-browser out/debug-graph.png
+	cat out/debug-graph | $(GRAPH_LAYOUT) -Tpng -oout/debug-graph.png && sensible-browser out/debug-graph.png
 
 image: ## build the docker image
 	docker build $(DOCKER_ARGS) -f Dockerfile -t $(DOCKER_IMAGE) .

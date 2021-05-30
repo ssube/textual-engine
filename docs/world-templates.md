@@ -1,16 +1,15 @@
-# Worlds
+# World Templates
 
-This guide covers the format of a game world and how to make your own.
+This guide covers the format of a world template and how to make your own.
 
 ## Contents
 
-- [Worlds](#worlds)
+- [World Templates](#world-templates)
   - [Contents](#contents)
   - [Concepts](#concepts)
-    - [New Game, Save, and Load](#new-game-save-and-load)
     - [Starting Actor & Room](#starting-actor--room)
     - [Rooms & Portals](#rooms--portals)
-  - [Format](#format)
+  - [Loading Worlds](#loading-worlds)
   - [Metadata](#metadata)
   - [Start](#start)
     - [Start Actors](#start-actors)
@@ -28,13 +27,6 @@ This guide covers the format of a game world and how to make your own.
 
 ## Concepts
 
-### New Game, Save, and Load
-
-Starting a new game creates a world state from the selected world template.
-
-Saving and loading the game state write both the state and world template into the save file, so the
-world remains on the same version.
-
 ### Starting Actor & Room
 
 When starting a new game, the world state begins empty. A starting actor and room are selected from
@@ -47,21 +39,19 @@ Each room has some portals, grouped by wall or direction, with a destination roo
 When the player enters a new room, including the starting room, the game generates destination rooms
 for each group and creates links in both directions, ensuring the player can backtrack.
 
-## Format
+## Loading Worlds
 
-Worlds are part of a normal data files, which has twin root fields:
+World templates are part of a normal data files, which should not have the `config` and `state` keys:
 
 ```yaml
-states: []
+# config: {}
+# state: []
 worlds:
   - meta:
       id: test-world
 ```
 
-When authoring worlds, the `states` key should be an empty list: `states: []`.
-While unused, invalid data here will cause schema errors.
-
-For the typical `YamlParser`, the world should be in a YAML file, using the UTF-8 encoding.
+For the typical `YamlParser`, the world should be in a YAML file with UTF-8 encoding.
 
 ## Metadata
 
@@ -76,12 +66,13 @@ Worlds have template metadata, with a literal `id` and template strings for the 
 
 ### Start Actors
 
-A list of possible player actor templates. One of these will be selected and created in the start room.
+A list of possible player actor templates. One of these will be selected and created in the start room for each
+player.
 
 ### Start Rooms
 
 A list of possible start room templates. One of these will be selected and created, then other rooms created as the
-starting room's portals are populated.
+starting room's portals are populated. New player actors will be placed in the start room.
 
 ## Templates
 

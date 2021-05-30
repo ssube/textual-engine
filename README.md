@@ -72,7 +72,7 @@ Available documentation includes:
 - [Engine Architecture](docs/architecture.md)
 - [Development Workflow](docs/development.md)
 - [Getting Started](docs/getting-started.md)
-- [Creating Worlds](docs/worlds.md)
+- [Creating Worlds](docs/world-templates.md)
 
 ## License
 

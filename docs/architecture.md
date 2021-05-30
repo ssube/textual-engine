@@ -16,19 +16,28 @@ This guide covers the engine architecture and what role each service type plays.
     - [Item Entity](#item-entity)
     - [Room Entity](#room-entity)
   - [Modules](#modules)
-    - [Input Module](#input-module)
-    - [Local Module](#local-module)
+    - [Browser Module](#browser-module)
+    - [Core Module](#core-module)
+    - [Node Module](#node-module)
   - [Services](#services)
-    - [Input Service](#input-service)
+    - [Actor Service](#actor-service)
     - [Loader Service](#loader-service)
-      - [File Loader Service](#file-loader-service)
-      - [Fetch Loader Service](#fetch-loader-service)
+      - [Browser Fetch Loader Service](#browser-fetch-loader-service)
+      - [Browser Page Loader Service](#browser-page-loader-service)
+      - [Node Fetch Loader Service](#node-fetch-loader-service)
+      - [Node File Loader Service](#node-file-loader-service)
     - [Parser Service](#parser-service)
     - [Random Service](#random-service)
     - [Render Service](#render-service)
       - [Line Render Service](#line-render-service)
       - [Ink Render Service](#ink-render-service)
-      - [React Render Service](#react-render-service)
+      - [React DOM Render Service](#react-dom-render-service)
+    - [Script Service](#script-service)
+    - [State Service](#state-service)
+      - [Local State](#local-state)
+    - [Tokenizer Service](#tokenizer-service)
+      - [Natural Tokenizer](#natural-tokenizer)
+      - [Word Tokenizer](#word-tokenizer)
   - [Scripts](#scripts)
     - [Script Context](#script-context)
       - [Script Target (`this`)](#script-target-this)
@@ -97,14 +106,15 @@ TODO: explain rooms
 
 Modules are dependency injection groups, binding a related set of services.
 
-### Input Module
+### Browser Module
 
-Binds:
+Provides:
 
-- `BehaviorInput` to `Input` for `actorType === DEFAULT`
-- `ClassicInput` to `Input` for `actorType === PLAYER`
+- `browser-fetch-loader`
+- `browser-page-loader`
+- `browser-dom-render`
 
-### Local Module
+### Core Module
 
 Binds:
 
@@ -113,16 +123,20 @@ Binds:
 - `LocalScript`
 - `LocalState`
 
+### Node Module
+
+Provides:
+
+- `node-file-loader`
+- `node-fetch-loader`
+- `node-ink-render`
+- `node-line-render`
+
 ## Services
 
-### Input Service
+### Actor Service
 
-The input service handles actor command tokenization.
-
-TODO: rename
-
-The name is a misnomer, left over from when the input service worked with [the render service](#render-service) to
-actually read player input.
+The actor service handles actor commands and tokenization.
 
 ### Loader Service
 
@@ -130,13 +144,39 @@ The loader service handles file I/O: reading from and writing to paths.
 
 This may wrap a remote server, accept URLs, or load from archives.
 
-#### File Loader Service
+#### Browser Fetch Loader Service
+
+Uses the `fetch` interface in a browser.
+
+Protocols:
+
+- `https`
+- `http`: use `https` whenever possible
+
+#### Browser Page Loader Service
+
+Loads from elements on the page.
+
+Protocols:
+
+- `page`
+
+#### Node Fetch Loader Service
+
+Uses the `fetch` interface on the CLI via [`node-fetch`](https://www.npmjs.com/package/node-fetch).
+
+Protocols:
+
+- `https`
+- `http`: use `https` whenever possible
+
+#### Node File Loader Service
 
 Uses the Node `fs` module on the CLI.
 
-#### Fetch Loader Service
+Protocols:
 
-TODO: Uses the `fetch` interface in a browser.
+- `file`
 
 ### Parser Service
 
@@ -154,15 +194,48 @@ This may wrap a lower-level rendering interface and capture input events.
 
 #### Line Render Service
 
-Uses the Node `readline` module on the CLI.
+Uses [the Node `readline` module](https://nodejs.org/api/readline.html) on the CLI to draw a basic line-based interface.
 
 #### Ink Render Service
 
-Uses https://github.com/vadimdemedes/ink on the CLI.
+Uses [the Ink library](https://github.com/vadimdemedes/ink) on the CLI to draw a responsive text interface.
 
-#### React Render Service
+#### React DOM Render Service
 
-TODO: uses https://github.com/facebook/react/ in a browser
+Uses [the React library](https://github.com/facebook/react/) in the browser to draw an HTML interface.
+
+### Script Service
+
+The script service invokes command scripts on behalf of world entities.
+
+### State Service
+
+The state service manages world state, creating it from templates and stepping it each turn.
+
+#### Local State
+
+Step state in-memory.
+
+### Tokenizer Service
+
+#### Natural Tokenizer
+
+**Not implemented yet.**
+
+Use natural language processing to tag parts of speech and build a command.
+
+#### Word Tokenizer
+
+Simple positional arguments, split on whitespace and with articles removed.
+
+The first word is the verb, and the last word is considered an index, if it is numeric.
+
+For example:
+
+```none
+move west
+hit goblin 2
+```
 
 ## Scripts
 

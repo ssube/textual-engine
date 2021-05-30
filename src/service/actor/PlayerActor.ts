@@ -4,7 +4,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
-import { COMMON_VERBS, EVENT_ACTOR_COMMAND, EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_OUTPUT } from '../../util/constants';
+import { COMMON_VERBS, EVENT_ACTOR_COMMAND, EVENT_ACTOR_OUTPUT, EVENT_COMMON_QUIT, EVENT_RENDER_OUTPUT, EVENT_STATE_OUTPUT } from '../../util/constants';
 import { EventBus, LineEvent, OutputEvent } from '../event';
 import { LocaleService } from '../locale';
 import { TokenizerService } from '../tokenizer';
@@ -47,8 +47,21 @@ export class PlayerActorService implements ActorService {
       return;
     }
 
-    this.event.on(EVENT_RENDER_OUTPUT, (event) => this.onInput(event), this);
-    this.event.on(EVENT_STATE_OUTPUT, (event) => this.onOutput(event), this);
+    this.event.on(EVENT_RENDER_OUTPUT, (event) => {
+      this.onInput(event).catch((err) => {
+        this.logger.error(err, 'error during render output');
+      });
+    }, this);
+    this.event.on(EVENT_STATE_OUTPUT, (event) => {
+      this.onOutput(event).catch((err) => {
+        this.logger.error(err, 'error during state output');
+      });
+    }, this);
+    this.event.on(EVENT_COMMON_QUIT, () => {
+      this.onInputLine('meta.quit').catch((err) => {
+        this.logger.error(err, 'error sending quit output');
+      });
+    }, this);
 
     await this.tokenizer.translate(COMMON_VERBS);
 
@@ -67,16 +80,19 @@ export class PlayerActorService implements ActorService {
     this.logger.debug({ event }, 'tokenizing input');
 
     for (const line of event.lines) {
-      const commands = await this.tokenizer.parse(line);
-      this.history.push(...commands);
+      await this.onInputLine(line);
+    }
+  }
 
-      this.logger.debug({ event, commands }, 'translated event');
+  public async onInputLine(line: string): Promise<void> {
+    const commands = await this.tokenizer.parse(line);
+    this.logger.debug({ line, commands }, 'parsed input line');
 
-      for (const command of commands) {
-        this.event.emit(EVENT_ACTOR_COMMAND, {
-          command,
-        });
-      }
+    this.history.push(...commands);
+    for (const command of commands) {
+      this.event.emit(EVENT_ACTOR_COMMAND, {
+        command,
+      });
     }
   }
 

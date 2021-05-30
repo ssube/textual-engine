@@ -7,6 +7,7 @@ export function testFocus(): StateFocusResolver {
     setActor: stub(),
     setRoom: stub(),
     show: stub(),
+    quit: stub(),
   } as any;
 }
 

@@ -107,7 +107,7 @@ export class LocalStateService implements StateService {
   /**
    * Create a new world state from a world template.
    */
-  public async create(params: CreateParams): Promise<void> {
+  public async create(params: CreateParams): Promise<State> {
     const generator = mustExist(this.generator);
 
     // find the world, prep the generator
@@ -186,6 +186,8 @@ export class LocalStateService implements StateService {
     // record starting location
     this.state.start.room = startRoom.meta.id;
     this.state.start.actor = startActor.meta.id;
+
+    return this.state;
   }
 
   /**
@@ -285,11 +287,26 @@ export class LocalStateService implements StateService {
 
   public async doCreate(target: string, depth: number): Promise<void> {
     const [id, seed] = target.split(' ');
-
-    await this.create({
+    const state = await this.create({
       depth,
       id,
       seed,
+    });
+
+    this.event.emit(EVENT_STATE_OUTPUT, {
+      lines: [{
+        key: 'meta.create',
+        context: {
+          ...state.meta,
+          depth,
+          seed,
+          world: id,
+        },
+      }],
+      step: {
+        time: 0,
+        turn: 0,
+      },
     });
   }
 
@@ -306,7 +323,10 @@ export class LocalStateService implements StateService {
     const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(', ');
     this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
-        key: verbs,
+        key: 'meta.help',
+        context: {
+          verbs,
+        }
       }],
       step: {
         time: 0,

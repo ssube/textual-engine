@@ -34,7 +34,7 @@ export interface StateService {
   /**
    * Create a new world state from a world template.
    */
-  create(params: CreateParams): Promise<void>;
+  create(params: CreateParams): Promise<State>;
 
   /**
    * Load an existing world state.

@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
 
 import { TemplateNumber, TemplateString } from '../../../src/model/meta/Template';
-import { LocalModule } from '../../../src/module/LocalModule';
+import { CoreModule } from '../../../src/module/CoreModule';
 import { ChainTemplateService } from '../../../src/service/template/ChainTemplateService';
 
 const DEFAULT_NUMBER: TemplateNumber = {
@@ -21,7 +21,7 @@ const DEFAULT_STRING: TemplateString = {
 describe('chain template service', () => {
   describe('modify number', () => {
     it('should increment the value', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -36,7 +36,7 @@ describe('chain template service', () => {
     });
 
     it('should increment the value with negative modifiers', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -53,7 +53,7 @@ describe('chain template service', () => {
 
   describe('modify string', () => {
     xit('should prepend the prefix', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -66,7 +66,7 @@ describe('chain template service', () => {
     });
 
     it('should append the suffix', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -84,7 +84,7 @@ describe('chain template service', () => {
 
   describe('modify number maps', () => {
     it('should modify keys that exist in the modifier', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -114,7 +114,7 @@ describe('chain template service', () => {
     });
 
     it('should not modify keys that do not exist in the modifier', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -144,7 +144,7 @@ describe('chain template service', () => {
 
   describe('modify string maps', () => {
     it('should modify keys that exist in the modifier', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -170,7 +170,7 @@ describe('chain template service', () => {
     });
 
     it('should not modify keys that do not exist in the modifier', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -196,7 +196,7 @@ describe('chain template service', () => {
 
   describe('render template number', () => {
     it('should render numbers', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -206,7 +206,7 @@ describe('chain template service', () => {
     });
 
     it('should render numbers with step < 1', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -222,7 +222,7 @@ describe('chain template service', () => {
     });
 
     it('should throw if step is < 0', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -237,7 +237,7 @@ describe('chain template service', () => {
 
   describe('render template string', () => {
     it('should render strings', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -249,7 +249,7 @@ describe('chain template service', () => {
 
   describe('render template list', () => {
     it('should render many numbers', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -267,7 +267,7 @@ describe('chain template service', () => {
     });
 
     it('should render many strings', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -287,7 +287,7 @@ describe('chain template service', () => {
 
   describe('render template maps', () => {
     it('should render many number values', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -303,7 +303,7 @@ describe('chain template service', () => {
     });
 
     it('should render many string values', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });

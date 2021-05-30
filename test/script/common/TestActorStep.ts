@@ -6,7 +6,7 @@ import { Actor, ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Room } from '../../../src/model/entity/Room';
 import { State } from '../../../src/model/State';
-import { LocalModule } from '../../../src/module/LocalModule';
+import { CoreModule } from '../../../src/module/CoreModule';
 import { ActorStep, ActorStepLookTarget } from '../../../src/script/common/ActorStep';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
@@ -44,7 +44,7 @@ const TEST_ACTOR: Actor = {
 describe('actor step scripts', () => {
   describe('actor step command', () => {
     it('should invoke the command verb script', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -77,7 +77,7 @@ describe('actor step scripts', () => {
     });
 
     it('should not invoke scripts on dead actors', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -116,7 +116,7 @@ describe('actor step scripts', () => {
     });
 
     it('should show messages to player actors', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -150,7 +150,7 @@ describe('actor step scripts', () => {
 
   describe('actor step look with target', async () => {
     it('should warn about missing target', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });

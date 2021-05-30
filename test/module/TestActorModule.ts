@@ -4,14 +4,14 @@ import { BaseOptions, Container, NullLogger } from 'noicejs';
 import { ActorType } from '../../src/model/entity/Actor';
 import { INJECT_ACTOR, INJECT_LOCALE } from '../../src/module';
 import { ActorLocator, ActorModule } from '../../src/module/ActorModule';
-import { LocalModule } from '../../src/module/LocalModule';
+import { CoreModule } from '../../src/module/CoreModule';
 import { PlayerActorService } from '../../src/service/actor/PlayerActor';
 import { NextLocaleService } from '../../src/service/locale/NextLocale';
 import { getTestContainer } from '../helper';
 
 describe('actor module', () => {
   it('should provide a player actor service for player actors', async () => {
-    const container = await getTestContainer(new LocalModule(), new ActorModule());
+    const container = await getTestContainer(new CoreModule(), new ActorModule());
 
     const locale = await container.create<NextLocaleService, BaseOptions>(INJECT_LOCALE);
     await locale.start();
@@ -26,7 +26,7 @@ describe('actor module', () => {
   });
 
   it('should provide the same input for the same actor id', async () => {
-    const container = Container.from(new LocalModule(), new ActorModule());
+    const container = Container.from(new CoreModule(), new ActorModule());
     await container.configure({
       logger: NullLogger.global,
     });

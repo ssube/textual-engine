@@ -5,7 +5,7 @@ import { ACTOR_TYPE, ActorType, isActor } from '../../../src/model/entity/Actor'
 import { isItem, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { isRoom } from '../../../src/model/entity/Room';
 import { World } from '../../../src/model/World';
-import { LocalModule } from '../../../src/module/LocalModule';
+import { CoreModule } from '../../../src/module/CoreModule';
 import { TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
 
@@ -126,7 +126,7 @@ const TEST_WORLD: World = {
 describe('state entity generator', () => {
   describe('create actor helper', () => {
     it('should create actors with inventory', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -143,7 +143,7 @@ describe('state entity generator', () => {
 
   describe('create item helper', () => {
     it('should create items', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -160,7 +160,7 @@ describe('state entity generator', () => {
 
   describe('create room helper', () => {
     it('should create a room with actors in it', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });

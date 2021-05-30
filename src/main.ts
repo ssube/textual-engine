@@ -14,7 +14,7 @@ import {
 } from './module';
 import { ActorLocator, ActorModule } from './module/ActorModule';
 import { BrowserModule } from './module/BrowserModule';
-import { LocalModule } from './module/LocalModule';
+import { CoreModule } from './module/CoreModule';
 import { NodeModule } from './module/NodeModule';
 import { EventBus } from './service/event';
 import { LoaderService } from './service/loader';
@@ -22,15 +22,15 @@ import { LocaleService } from './service/locale';
 import { RenderService } from './service/render';
 import { StateService } from './service/state';
 import { parseArgs } from './util/args';
-import { asyncTrack, eventDebug } from './util/async';
+import { asyncTrack } from './util/async';
 import { loadConfig } from './util/config/file';
-import { EVENT_ACTOR_OUTPUT, EVENT_LOADER_PATH, EVENT_NAMES, EVENT_RENDER_OUTPUT } from './util/constants';
+import { EVENT_ACTOR_OUTPUT, EVENT_LOADER_PATH, EVENT_RENDER_OUTPUT } from './util/constants';
 import { onceWithRemove } from './util/event';
 
 const DI_MODULES = new Map<string, new () => Module>([
   ['browser', BrowserModule],
   ['input', ActorModule],
-  ['local', LocalModule],
+  ['local', CoreModule],
   ['node', NodeModule],
 ]);
 
@@ -51,6 +51,9 @@ export async function main(args: Array<string>): Promise<number> {
   }, 'textual adventure');
 
   // create DI modules
+  const coreModule = new CoreModule();
+  coreModule.setConfig(config);
+
   const modules = arg.module.map((it) => {
     const ctor = DI_MODULES.get(it);
     if (isNil(ctor)) {
@@ -59,11 +62,8 @@ export async function main(args: Array<string>): Promise<number> {
     return new ctor();
   });
 
-  // TODO: bind to base module, once such a thing exists
-  modules[0].bind(INJECT_CONFIG).toInstance(config);
-
   // configure DI container
-  const container = Container.from(...modules);
+  const container = Container.from(coreModule, ...modules);
   await container.configure({
     logger,
   });

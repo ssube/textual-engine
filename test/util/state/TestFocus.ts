@@ -6,7 +6,7 @@ import { ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { State } from '../../../src/model/State';
-import { LocalModule } from '../../../src/module/LocalModule';
+import { CoreModule } from '../../../src/module/CoreModule';
 import { ShowMessageVolume, StateFocusResolver } from '../../../src/util/state/FocusResolver';
 import { getStubEvents } from '../../helper';
 
@@ -101,7 +101,7 @@ const TEST_STATE: State = {
 describe('state focus utils', () => {
   describe('focus actor helper', () => {
     it('should set the focus actor', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -126,7 +126,7 @@ describe('state focus utils', () => {
     });
 
     it('should throw when the actor is missing', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -144,7 +144,7 @@ describe('state focus utils', () => {
 
   describe('focus room helper', () => {
     it('should set the focus room', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -169,7 +169,7 @@ describe('state focus utils', () => {
     });
 
     it('should throw when the room is missing', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -187,7 +187,7 @@ describe('state focus utils', () => {
 
   describe('show message helper', () => {
     it('should forward the message with context', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -209,7 +209,7 @@ describe('state focus utils', () => {
     });
 
     it('should always show messages to the current world', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -234,7 +234,7 @@ describe('state focus utils', () => {
     });
 
     it('should show room messages from the current room', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -260,7 +260,7 @@ describe('state focus utils', () => {
     });
 
     it('should filter room messages from other rooms', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
@@ -286,7 +286,7 @@ describe('state focus utils', () => {
     });
 
     it('should show self messages from the current actor', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });

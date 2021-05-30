@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { spy, stub } from 'sinon';
 
-import { LocalModule } from '../../../../src/module/LocalModule';
+import { CoreModule } from '../../../../src/module/CoreModule';
 import { BrowserPageLoader } from '../../../../src/service/loader/browser/PageLoader';
 import { getTestContainer } from '../../../helper';
 
 describe('page loader', () => {
   it('should load strings from element contents', async () => {
-    const container = await getTestContainer(new LocalModule());
+    const container = await getTestContainer(new CoreModule());
 
     const elem = {
       get textContent() {
@@ -28,7 +28,7 @@ describe('page loader', () => {
   });
 
   it('should load buffers from elements', async () => {
-    const container = await getTestContainer(new LocalModule());
+    const container = await getTestContainer(new CoreModule());
 
     const content = 'foo';
     const elem = {
@@ -50,7 +50,7 @@ describe('page loader', () => {
   });
 
   it('should dump debug data to console', async () => {
-    const container = await getTestContainer(new LocalModule());
+    const container = await getTestContainer(new CoreModule());
 
     const dom = {
       getElementById: stub().returns(undefined),

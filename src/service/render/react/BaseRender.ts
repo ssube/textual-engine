@@ -98,7 +98,6 @@ export abstract class BaseReactRender implements RenderService {
    */
   public onQuit(): void {
     this.logger.debug('handling quit event from state');
-    this.output.push('game over');
     this.renderRoot();
   }
 

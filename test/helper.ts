@@ -1,4 +1,4 @@
-import { Container, LogLevel, Module, NullLogger } from 'noicejs';
+import { ConsoleLogger, Container, LogLevel, Module, NullLogger } from 'noicejs';
 import { stub } from 'sinon';
 
 import { ConfigFile } from '../src/model/file/Config';

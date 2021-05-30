@@ -4,7 +4,7 @@ import { spy } from 'sinon';
 
 import { Item } from '../../../src/model/entity/Item';
 import { State } from '../../../src/model/State';
-import { LocalModule } from '../../../src/module/LocalModule';
+import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
@@ -40,7 +40,7 @@ const TEST_STATE: State = {
 
 describe('local script service', () => {
   it('should invoke the script with target', async () => {
-    const container = Container.from(new LocalModule());
+    const container = Container.from(new CoreModule());
     await container.configure({
       logger: NullLogger.global,
     });
@@ -72,7 +72,7 @@ describe('local script service', () => {
   });
 
   it('should gracefully handle unknown scripts', async () => {
-    const container = Container.from(new LocalModule());
+    const container = Container.from(new CoreModule());
     await container.configure({
       logger: NullLogger.global,
     });
@@ -106,7 +106,7 @@ describe('local script service', () => {
   });
 
   it('should invoke scripts with entity', async () => {
-    const container = Container.from(new LocalModule());
+    const container = Container.from(new CoreModule());
     await container.configure({
       logger: NullLogger.global,
     });

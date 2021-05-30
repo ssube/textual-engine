@@ -9,7 +9,10 @@ logger:
 locale:
   bundles:
     en:
-      turn-prompt: 'turn {{turn}} >'
+      meta:
+        create: 'created new world {{name}} ({{id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
+        help: 'available verbs: {{verbs}}'
+        quit: 'game over.'
       verbs:
         common:
           drop: drop

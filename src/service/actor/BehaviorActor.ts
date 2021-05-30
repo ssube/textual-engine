@@ -51,11 +51,11 @@ export class BehaviorActorService implements ActorService {
       if (event.actor.actorType === ActorType.DEFAULT) {
         this.onRoom(event);
       }
-    });
+    }, this);
   }
 
   public async stop() {
-    /* noop */
+    this.event.removeGroup(this);
   }
 
   public async last(): Promise<Command> {

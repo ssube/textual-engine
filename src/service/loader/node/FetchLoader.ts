@@ -9,7 +9,7 @@ export class NodeFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;
 
   constructor(options: BaseLoaderOptions, f = fetch) {
-    super(options);
+    super(options, ['http', 'https']);
 
     this.fetch = fetch;
   }

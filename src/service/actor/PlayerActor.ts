@@ -19,6 +19,7 @@ import {
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_ROOM,
 } from '../../util/constants';
 import { Counter } from '../counter';
 import { EventBus, LineEvent } from '../event';
@@ -80,12 +81,17 @@ export class PlayerActorService implements ActorService {
       if (this.pid === event.pid) {
         this.actor = event.actor;
       }
-    });
+    }, this);
     this.event.on(EVENT_STATE_LOAD, (event) => {
       this.event.emit(EVENT_ACTOR_JOIN, {
         pid: this.pid,
       });
-    });
+    }, this);
+    this.event.on(EVENT_STATE_ROOM, (event) => {
+      if (event.room.actors.find((it) => it.meta.name === this.pid)) {
+        this.room = event.room;
+      }
+    }, this);
     this.event.on(EVENT_STATE_OUTPUT, (event) => {
       catchAndLog(this.onOutput(event), this.logger, 'error during state output');
     }, this);
@@ -113,10 +119,10 @@ export class PlayerActorService implements ActorService {
   public async onOutput(event: StateOutputEvent): Promise<void> {
     this.logger.debug({ event }, 'filtering output');
 
-    if (doesExist(event.source)) {
+    if (doesExist(this.actor) && doesExist(this.room) && doesExist(event.source)) {
       const target: ShowSource = {
         actor: this.actor,
-        room: event.source.room, // TODO: use player's current room
+        room: this.room,
       };
 
       if (showCheck(event.source, target, event.volume) === false) {

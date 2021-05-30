@@ -98,6 +98,7 @@ export class LocalStateService implements StateService {
    * Create a new world state from a world template.
    */
   public async create(params: CreateParams): Promise<State> {
+    this.logger.debug({ params, worlds: this.worlds.map((it) => it.meta.id) }, 'creating new world state');
     const generator = mustExist(this.generator);
 
     // find the world, prep the generator
@@ -181,7 +182,7 @@ export class LocalStateService implements StateService {
 
     this.event.on(EVENT_ACTOR_JOIN, (event) => {
       catchAndLog(this.onJoin(event), this.logger, 'error during join handler');
-    });
+    }, this);
   }
 
   public async stop(): Promise<void> {

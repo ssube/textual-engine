@@ -55,7 +55,7 @@ release: node_modules
 	GIT_ARGS=--follow-tags $(MAKE) push
 
 RUN_ARGS ?= --config data/config.yml \
-	--data data/base.yml \
+	--data file://data/base.yml \
 	--input help
 
 run: ## run app with demo data

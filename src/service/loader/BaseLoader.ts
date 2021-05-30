@@ -28,10 +28,14 @@ export abstract class BaseLoader implements LoaderService {
   protected logger: Logger;
   protected parser: Parser;
 
-  constructor(options: BaseLoaderOptions) {
+  protected protocols: Array<string>;
+
+  constructor(options: BaseLoaderOptions, protocols: Array<string>) {
     this.events = mustExist(options[INJECT_EVENT]);
     this.logger = mustExist(options[INJECT_LOGGER]);
     this.parser = mustExist(options[INJECT_PARSER]);
+
+    this.protocols = Array.from(protocols);
   }
 
   public async start(): Promise<void> {
@@ -49,6 +53,10 @@ export abstract class BaseLoader implements LoaderService {
   }
 
   public async onRead(path: string): Promise<void> {
+    if (this.checkPath(path) === false) {
+      return;
+    }
+
     const dataStr = await this.loadStr(path);
     const data = this.parser.load(dataStr);
 
@@ -75,6 +83,10 @@ export abstract class BaseLoader implements LoaderService {
   }
 
   public async onSave(event: LoaderSaveEvent): Promise<void> {
+    if (this.checkPath(event.path) === false) {
+      return;
+    }
+
     if (typeof event.data === 'string') {
       await this.saveStr(event.path, event.data);
     } else {
@@ -96,4 +108,24 @@ export abstract class BaseLoader implements LoaderService {
   public abstract save(path: string, data: Buffer): Promise<void>;
   public abstract loadStr(path: string): Promise<string>;
   public abstract saveStr(path: string, data: string): Promise<void>;
+
+  protected checkPath(path: string): boolean {
+    const { protocol } = this.splitPath(path);
+    return doesExist(protocol) && this.protocols.includes(protocol);
+  }
+
+  protected splitPath(path: string): {
+    protocol?: string;
+    path: string;
+  } {
+    if (path.includes('://') === false) {
+      return { path };
+    }
+
+    const [protocol, rest] = path.split('://', 2);
+    return {
+      protocol,
+      path: rest,
+    };
+  }
 }

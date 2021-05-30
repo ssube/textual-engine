@@ -2,21 +2,20 @@ import { InvalidArgumentError, isNil } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_TOKENIZER } from './module';
+import { INJECT_EVENT, INJECT_LOCALE } from './module';
 import { BrowserModule } from './module/BrowserModule';
 import { CoreModule } from './module/CoreModule';
 import { NodeModule } from './module/NodeModule';
 import { EventBus } from './service/event';
 import { LocaleService } from './service/locale';
-import { TokenizerService } from './service/tokenizer';
-import { asyncTrack } from './util/async/debug';
+import { asyncTrack, eventDebug } from './util/async/debug';
 import { onceEvent } from './util/async/event';
 import { parseArgs } from './util/config/args';
 import { loadConfig } from './util/config/file';
 import {
-  COMMON_VERBS,
   EVENT_ACTOR_OUTPUT,
   EVENT_LOADER_READ,
+  EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_OUTPUT,
 } from './util/constants';
@@ -82,33 +81,35 @@ export async function main(args: Array<string>): Promise<number> {
   }, 'loading worlds from data files');
 
   for (const path of arg.data) {
+    const pending = onceEvent(events, EVENT_LOADER_WORLD);
     events.emit(EVENT_LOADER_READ, {
       path,
     });
+    await pending;
   }
 
   // emit input args
   for (const input of arg.input) {
+    // await output before next command
+    const pending = onceEvent(events, EVENT_ACTOR_OUTPUT);
     events.emit(EVENT_RENDER_OUTPUT, {
       lines: [
         input,
       ],
     });
-
-    // await output before next command
-    await onceEvent(events, EVENT_ACTOR_OUTPUT);
+    await pending;
   }
 
   // wait for something to quit
   await onceEvent(events, 'quit');
-
   await services.stop();
 
-  // asyncDebug(asyncOps);
-  // eventDebug(events);
+  // TODO: clean up within services
+  await locale.stop();
 
-  // TODO: clean up within each service
-  events.removeAllListeners();
+  // eventDebug(events);
+  // events.removeAllListeners();
+  // asyncDebug(asyncOps);
 
   return 0;
 }

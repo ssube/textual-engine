@@ -7,7 +7,7 @@ export class BrowserPageLoader extends BaseLoader implements LoaderService {
   protected dom: Document;
 
   constructor(options: BaseLoaderOptions, dom = document) {
-    super(options);
+    super(options, ['page']);
     this.dom = dom;
   }
 
@@ -25,8 +25,8 @@ export class BrowserPageLoader extends BaseLoader implements LoaderService {
     throw new NotImplementedError();
   }
 
-  public async loadStr(path: string): Promise<string> {
-    // load from page or local storage
+  public async loadStr(fullPath: string): Promise<string> {
+    const { path } = this.splitPath(fullPath);
     const elem = mustExist(this.dom.getElementById(path));
     const text = mustExist(elem.textContent);
 

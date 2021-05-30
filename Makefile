@@ -37,6 +37,9 @@ node_modules: install
 
 out: build
 
+pages: bundle
+	cp out/bundle/browser.js bundle/browser.js
+
 push: ## push to both github and gitlab
 	git push $(GIT_ARGS) github $(GIT_HEAD_BRANCH)
 	git push $(GIT_ARGS) gitlab $(GIT_HEAD_BRANCH)
@@ -52,9 +55,8 @@ release: node_modules
 	GIT_ARGS=--follow-tags $(MAKE) push
 
 RUN_ARGS ?= --config data/config.yml \
-	--data data/base.yml \
-	--seed test \
-	--world test
+	--data file://data/base.yml \
+	--input help
 
 run: ## run app with demo data
 run: build

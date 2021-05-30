@@ -1,6 +1,6 @@
 import { JSONSchemaType } from 'ajv';
 
-import { TEMPLATE_STRING_SCHEMA, TemplateMetadata } from './meta/Template';
+import { TEMPLATE_STRING_SCHEMA, TemplateMetadata } from './mapped/Template';
 
 export interface Metadata {
   desc: string;

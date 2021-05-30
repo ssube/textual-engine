@@ -1,6 +1,6 @@
 import { JSONSchemaType } from 'ajv';
 
-import { BaseTemplate, TEMPLATE_STRING_SCHEMA } from '../meta/Template';
+import { BaseTemplate, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 
 export enum PortalLinkage {
   FORWARD = 'forward',

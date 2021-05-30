@@ -2,13 +2,15 @@ import * as React from 'react';
 
 import { StepResult } from '../../service/state';
 import { Output } from './Output';
+import { Quit } from './Quit';
 
 const { useState } = React;
 
 interface FrameProps {
   onLine: (line: string) => void;
-  prompt: string;
   output: Array<string>;
+  prompt: string;
+  quit: boolean;
   step: StepResult;
 }
 
@@ -16,6 +18,7 @@ const HISTORY_SIZE = 20;
 
 export const Frame = (props: FrameProps) => {
   const [line, setLine] = useState('');
+  const output = props.output.slice(-HISTORY_SIZE);
 
   function handleChange(event: any) {
     setLine(event.target.value);
@@ -30,14 +33,14 @@ export const Frame = (props: FrameProps) => {
   return <div style={{
     fontFamily: 'monospace',
   }}>
-    <Output output={props.output.slice(-HISTORY_SIZE)} />
+    <Output output={output} />
     <div>
-      <form onSubmit={handleSubmit}>
+      {props.quit ? <Quit /> : <form onSubmit={handleSubmit}>
         <label>turn {props.step.turn} &gt;
           <input type="text" value={line} onChange={handleChange} />
         </label>
         <input type="submit" value="Go" />
-      </form>
+      </form>}
     </div>
   </div>;
 };

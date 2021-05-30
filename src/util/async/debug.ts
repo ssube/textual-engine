@@ -1,4 +1,7 @@
 import { AsyncHook, createHook } from 'async_hooks';
+import { EventEmitter } from 'events';
+
+import { EVENT_NAMES } from '../constants';
 
 export function asyncTrack(): {
   asyncHook: AsyncHook;
@@ -27,5 +30,12 @@ export function asyncDebug(asyncOps: Map<number, string>): void {
   for (const [key, type] of asyncOps) {
     // eslint-disable-next-line no-console
     console.log(`async: ${key} is ${type}`);
+  }
+}
+
+export function eventDebug(events: EventEmitter): void {
+  for (const event of EVENT_NAMES) {
+    const listeners = events.listeners(event);
+    console.log(`${listeners.length} listeners for ${event}`, listeners);
   }
 }

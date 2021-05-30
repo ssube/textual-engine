@@ -1,15 +1,11 @@
 import { expect } from 'chai';
 
-import { State } from '../../src/model/State';
-import { debugState, graphState } from '../../src/util/debug';
+import { WorldState } from '../../src/model/world/State';
+import { debugState, graphState } from '../../src/util/state/debug';
 
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {
-    const state: State = {
-      focus: {
-        actor: '',
-        room: '',
-      },
+    const state: WorldState = {
       meta: {
         desc: '',
         id: '',
@@ -18,7 +14,6 @@ describe('state debug utils', () => {
       },
       rooms: [], // TODO: add some rooms
       start: {
-        actor: '',
         room: '',
       },
       step: {
@@ -27,6 +22,7 @@ describe('state debug utils', () => {
       },
       world: {
         depth: 0,
+        id: '',
         seed: '',
       },
     };
@@ -40,11 +36,7 @@ describe('state debug utils', () => {
   });
 
   it('should include all rooms in graph output', async () => {
-    const state: State = {
-      focus: {
-        actor: '',
-        room: '',
-      },
+    const state: WorldState = {
       meta: {
         desc: '',
         id: '',
@@ -53,7 +45,6 @@ describe('state debug utils', () => {
       },
       rooms: [], // TODO: add some rooms
       start: {
-        actor: '',
         room: '',
       },
       step: {
@@ -62,6 +53,7 @@ describe('state debug utils', () => {
       },
       world: {
         depth: 0,
+        id: '',
         seed: '',
       },
     };

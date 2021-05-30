@@ -1,4 +1,7 @@
-export interface Loader {
+import { Service } from '..';
+import { DataFile } from '../../model/file/Data';
+
+export interface LoaderService extends Service {
   /**
    * Write a debug payload to a local path.
    *
@@ -25,4 +28,8 @@ export interface Loader {
    * Save a resource from a UTF-8 string.
    */
   saveStr(path: string, data: string): Promise<void>;
+
+  loadData(path: string): Promise<DataFile>;
+
+  saveData(path: string, data: DataFile): Promise<void>;
 }

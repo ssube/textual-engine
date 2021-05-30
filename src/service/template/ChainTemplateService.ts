@@ -2,7 +2,7 @@ import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-util
 import { BaseOptions, Inject } from 'noicejs';
 
 import { TemplateService } from '.';
-import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/meta/Template';
+import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/mapped/Template';
 import { INJECT_RANDOM } from '../../module';
 import { JoinChain } from '../../util/template/JoinChain';
 import { splitChain } from '../../util/template/SplitChain';

@@ -1,12 +1,13 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
-import { BaseOptions } from 'noicejs';
 
-import { Loader } from '..';
+import { LoaderService } from '..';
+import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
 
-export class BrowserPageLoader implements Loader {
+export class BrowserPageLoader extends BaseLoader implements LoaderService {
   protected dom: Document;
 
-  constructor(options: BaseOptions, dom = document) {
+  constructor(options: BaseLoaderOptions, dom = document) {
+    super(options, ['page']);
     this.dom = dom;
   }
 
@@ -24,8 +25,8 @@ export class BrowserPageLoader implements Loader {
     throw new NotImplementedError();
   }
 
-  public async loadStr(path: string): Promise<string> {
-    // load from page or local storage
+  public async loadStr(fullPath: string): Promise<string> {
+    const { path } = this.splitPath(fullPath);
     const elem = mustExist(this.dom.getElementById(path));
     const text = mustExist(elem.textContent);
 

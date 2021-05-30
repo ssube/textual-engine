@@ -4,12 +4,12 @@ import { Container, NullLogger } from 'noicejs';
 import { ACTOR_TYPE, ActorType, isActor } from '../../../src/model/entity/Actor';
 import { isItem, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { isRoom } from '../../../src/model/entity/Room';
-import { World } from '../../../src/model/World';
-import { LocalModule } from '../../../src/module/LocalModule';
+import { WorldTemplate } from '../../../src/model/world/Template';
+import { CoreModule } from '../../../src/module/CoreModule';
 import { TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
 
-const TEST_WORLD: World = {
+const TEST_WORLD: WorldTemplate = {
   locale: {
     bundles: {},
   },
@@ -126,14 +126,14 @@ const TEST_WORLD: World = {
 describe('state entity generator', () => {
   describe('create actor helper', () => {
     it('should create actors with inventory', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
 
-      const generator = await container.create(StateEntityGenerator, {
-        world: TEST_WORLD,
-      });
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
       const actor = await generator.createActor(TEST_WORLD.templates.actors[0]);
 
       expect(isActor(actor)).to.equal(true);
@@ -143,14 +143,14 @@ describe('state entity generator', () => {
 
   describe('create item helper', () => {
     it('should create items', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
 
-      const generator = await container.create(StateEntityGenerator, {
-        world: TEST_WORLD,
-      });
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
       const item = await generator.createItem(TEST_WORLD.templates.items[0]);
 
       expect(isItem(item)).to.equal(true);
@@ -160,14 +160,14 @@ describe('state entity generator', () => {
 
   describe('create room helper', () => {
     it('should create a room with actors in it', async () => {
-      const container = Container.from(new LocalModule());
+      const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,
       });
 
-      const generator = await container.create(StateEntityGenerator, {
-        world: TEST_WORLD,
-      });
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
       const room = await generator.createRoom(TEST_WORLD.templates.rooms[0]);
 
       expect(isRoom(room)).to.equal(true);

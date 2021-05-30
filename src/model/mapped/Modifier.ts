@@ -1,7 +1,8 @@
 import { JSONSchemaType } from 'ajv';
+
 import { Entity } from '../entity/Base';
 import { Metadata } from '../Metadata';
-import { BaseTemplate, TemplateNumber, TemplateRef, TemplateString, TEMPLATE_STRING_SCHEMA } from './Template';
+import { BaseTemplate, TEMPLATE_STRING_SCHEMA, TemplateNumber, TemplateRef, TemplateString } from './Template';
 
 export type ModifierMetadata = BaseTemplate<Omit<Metadata, 'id' | 'template'>>;
 

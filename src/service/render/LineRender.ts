@@ -5,12 +5,13 @@ import { createInterface, Interface as LineInterface } from 'readline';
 
 import { RenderService } from '.';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
-import { META_QUIT } from '../../util/constants';
-import { onceWithRemove } from '../../util/event';
-import { EventBus, LineEvent, RoomEvent } from '../event';
+import { onceEvent } from '../../util/async/event';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, META_QUIT } from '../../util/constants';
+import { EventBus, LineEvent } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
-import { BaseRenderOptions } from './BaseReactRender';
+import { StateRoomEvent } from '../state/events';
+import { BaseRenderOptions } from './react/BaseRender';
 
 @Inject(/* all from base */)
 export class LineRender implements RenderService {
@@ -45,14 +46,14 @@ export class LineRender implements RenderService {
   public async read(): Promise<string> {
     const reader = mustExist(this.reader);
 
-    const { pending } = onceWithRemove<string>(reader, 'line');
+    const pending = onceEvent<string>(reader, 'line');
 
     reader.prompt();
 
     return pending;
   }
 
-  public prompt(prompt: string): void {
+  public setPrompt(prompt: string): void {
     mustExist(this.reader).setPrompt(prompt);
   }
 
@@ -76,20 +77,20 @@ export class LineRender implements RenderService {
       this.padPrompt = false;
 
       this.logger.debug({ line }, 'read line');
-      this.event.emit('render-output', {
+      this.event.emit(EVENT_RENDER_OUTPUT, {
         lines: [line],
       });
     });
 
     this.reader.on('SIGINT', () => {
       this.logger.debug('sending interrupt as quit command');
-      this.event.emit('render-output', {
+      this.event.emit(EVENT_RENDER_OUTPUT, {
         lines: [META_QUIT],
       });
     });
 
-    this.event.on('actor-output', (output) => this.onOutput(output));
-    this.event.on('state-room', (room) => this.onRoom(room));
+    this.event.on(EVENT_ACTOR_OUTPUT, (output) => this.onOutput(output));
+    this.event.on(EVENT_STATE_ROOM, (room) => this.onRoom(room));
 
     this.showPrompt();
   }
@@ -120,7 +121,7 @@ export class LineRender implements RenderService {
     this.showPrompt();
   }
 
-  public onRoom(event: RoomEvent): void {
+  public onRoom(event: StateRoomEvent): void {
     this.logger.debug({ event }, 'handling step event from state');
 
     this.showPrompt();

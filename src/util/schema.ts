@@ -1,6 +1,6 @@
 import { JSONSchemaType } from 'ajv';
 
-import { TemplateString } from '../model/meta/Template';
+import { TemplateString } from '../model/mapped/Template';
 
 /**
  * @todo: make this typesafe for literal string types

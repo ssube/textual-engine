@@ -2,26 +2,30 @@ import { InvalidArgumentError, isNil } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
-import { ActorType } from './model/entity/Actor';
-import { INJECT_ACTOR, INJECT_CONFIG, INJECT_LOADER, INJECT_LOCALE, INJECT_PARSER, INJECT_RENDER, INJECT_STATE } from './module';
-import { ActorLocator, ActorModule } from './module/ActorModule';
+import { INJECT_EVENT, INJECT_LOCALE } from './module';
 import { BrowserModule } from './module/BrowserModule';
-import { LocalModule } from './module/LocalModule';
+import { CoreModule } from './module/CoreModule';
 import { NodeModule } from './module/NodeModule';
-import { Loader } from './service/loader';
+import { EventBus } from './service/event';
 import { LocaleService } from './service/locale';
-import { Parser } from './service/parser';
-import { RenderService } from './service/render';
-import { StateService } from './service/state';
-import { parseArgs } from './util/args';
+import { onceEvent } from './util/async/event';
+import { parseArgs } from './util/config/args';
 import { loadConfig } from './util/config/file';
+import {
+  EVENT_ACTOR_OUTPUT,
+  EVENT_LOADER_READ,
+  EVENT_LOADER_WORLD,
+  EVENT_LOCALE_BUNDLE,
+  EVENT_RENDER_OUTPUT,
+} from './util/constants';
+import { ServiceManager } from './util/service/ServiceManager';
 
-const DI_MODULES = new Map<string, new () => Module>([
+// collect modules
+export const LOADED_MODULES = new Map<string, new () => Module>([
   ['browser', BrowserModule],
-  ['input', ActorModule],
-  ['local', LocalModule],
+  ['core', CoreModule],
   ['node', NodeModule],
-]);
+]) as ReadonlyMap<string, new () => Module>;
 
 export async function main(args: Array<string>): Promise<number> {
   // parse args
@@ -38,15 +42,16 @@ export async function main(args: Array<string>): Promise<number> {
 
   // create DI modules
   const modules = arg.module.map((it) => {
-    const ctor = DI_MODULES.get(it);
+    const ctor = LOADED_MODULES.get(it);
     if (isNil(ctor)) {
       throw new InvalidArgumentError('module not found');
     }
-    return new ctor();
+    const module = new ctor();
+    if (it === 'core') {
+      (module as CoreModule).setConfig(config);
+    }
+    return module;
   });
-
-  // TODO: bind to base module, once such a thing exists
-  modules[0].bind(INJECT_CONFIG).toInstance(config);
 
   // configure DI container
   const container = Container.from(...modules);
@@ -54,56 +59,55 @@ export async function main(args: Array<string>): Promise<number> {
     logger,
   });
 
-  // load config locale
   const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
   await locale.start();
 
-  locale.addBundle('common', config.locale);
+  // start svc mgr
+  const services = await container.create(ServiceManager);
+  await services.create(config.services);
 
-  // start player actor
-  // TODO: this does not belong here
-  const locator = await container.create<ActorLocator, BaseOptions>(INJECT_ACTOR);
-  const actor = await locator.get({
-    id: '', // does not matter, very smelly
-    type: ActorType.PLAYER,
+  // load common locale
+  const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+  events.emit(EVENT_LOCALE_BUNDLE, {
+    name: 'common',
+    bundle: config.locale,
   });
-  await actor.start();
 
-  // load data files
-  const loader = await container.create<Loader, BaseOptions>(INJECT_LOADER);
-  const parser = await container.create<Parser, BaseOptions>(INJECT_PARSER);
-
-  const worlds = [];
-  for (const path of arg.data) {
-    const dataStr = await loader.loadStr(path);
-    const data = parser.load(dataStr);
-    worlds.push(...data.worlds);
-  }
-
+  // emit data paths
   logger.info({
     paths: arg.data,
-    worlds: worlds.map((it) => it.meta.id),
-  }, 'loaded worlds from data files');
+  }, 'loading worlds from data files');
 
-  // find world template
-  const world = worlds.find((it) => it.meta.id === arg.world);
-  if (isNil(world)) {
-    logger.error({ world: arg.world }, 'invalid world name');
-    return 1;
+  for (const path of arg.data) {
+    const pending = onceEvent(events, EVENT_LOADER_WORLD);
+    events.emit(EVENT_LOADER_READ, {
+      path,
+    });
+    await pending;
   }
 
-  // create state from world
-  const state = await container.create<StateService, BaseOptions>(INJECT_STATE);
-  await state.create(world, {
-    depth: arg.depth,
-    seed: arg.seed,
-  });
+  // emit input args
+  for (const input of arg.input) {
+    // await output before next command
+    const pending = onceEvent(events, EVENT_ACTOR_OUTPUT);
+    events.emit(EVENT_RENDER_OUTPUT, {
+      lines: [
+        input,
+      ],
+    });
+    await pending;
+  }
 
-  // start renderer
-  const render = await container.create<RenderService, BaseOptions>(INJECT_RENDER);
-  await render.start();
-  await state.loop();
-  await render.stop();
+  // wait for something to quit
+  await onceEvent(events, 'quit');
+  await services.stop();
+
+  // TODO: clean up within services
+  await locale.stop();
+
+  // eventDebug(events);
+  // events.removeAllListeners();
+  // asyncDebug(asyncOps);
 
   return 0;
 }

@@ -1,18 +1,10 @@
 import { stub } from 'sinon';
 
-import { ScriptFocus, ScriptTransfer } from '../../src/service/script';
+import { StateEntityTransfer } from '../../src/util/state/EntityTransfer';
 
-export function testFocus(): ScriptFocus {
-  return {
-    setActor: stub(),
-    setRoom: stub(),
-    show: stub(),
-  };
-}
-
-export function testTransfer(): ScriptTransfer {
+export function testTransfer(): StateEntityTransfer {
   return {
     moveActor: stub(),
     moveItem: stub(),
-  };
+  } as any;
 }

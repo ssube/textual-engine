@@ -3,7 +3,7 @@ import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { isActor } from '../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { STAT_DAMAGE, STAT_HEALTH } from '../../util/constants';
-import { decrementKey, getKey } from '../../util/map';
+import { decrementKey, getKey } from '../../util/collection/map';
 
 export async function ActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -13,7 +13,7 @@ export async function ActorHit(this: ScriptTarget, context: ScriptContext): Prom
   const attacker = mustExist(context.actor);
   const item = mustExist(context.item);
 
-  await context.focus.show('actor.hit.hit', {
+  await context.stateHelper.show('actor.hit.hit', {
     actor: this,
     attacker,
     item,
@@ -24,8 +24,8 @@ export async function ActorHit(this: ScriptTarget, context: ScriptContext): Prom
 
   const health = decrementKey(this.stats, STAT_HEALTH, damage);
   if (health > 0) {
-    await context.focus.show('actor.hit.health', { actor: this, health });
+    await context.stateHelper.show('actor.hit.health', { actor: this, health });
   } else {
-    await context.focus.show('actor.hit.dead', { actor: this });
+    await context.stateHelper.show('actor.hit.dead', { actor: this });
   }
 }

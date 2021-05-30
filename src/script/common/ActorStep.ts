@@ -3,7 +3,8 @@ import { InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
 import { Actor, ActorType, isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { isRoom } from '../../model/entity/Room';
-import { ScriptContext, ScriptTarget, ShowMessageVolume } from '../../service/script';
+import { ScriptContext, ScriptTarget } from '../../service/script';
+import { ShowVolume } from '../../util/actor';
 import {
   SLOT_HIT,
   SLOT_USE,
@@ -17,7 +18,7 @@ import {
   VERB_WAIT,
 } from '../../util/constants';
 import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
-import { getKey } from '../../util/map';
+import { getKey } from '../../util/collection/map';
 import { searchState } from '../../util/state';
 
 export async function ActorStep(this: ScriptTarget, context: ScriptContext, verbs = ACTOR_VERB_SCRIPTS): Promise<void> {
@@ -33,7 +34,8 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext, verb
   const health = getKey(this.stats, STAT_HEALTH, 0);
   if (health <= 0) {
     if (this.actorType === ActorType.PLAYER) {
-      await context.focus.show('actor.step.command.dead', { actor: this });
+      await context.stateHelper.show('actor.step.command.dead', { actor: this });
+      await context.stateHelper.quit();
     }
     return;
   }
@@ -47,16 +49,16 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext, verb
   const verb = verbs.get(command.verb);
 
   if (isNil(verb)) {
-    await context.focus.show('actor.step.command.unknown', { actor: this, command });
+    await context.stateHelper.show('actor.step.command.unknown', { actor: this, command });
     context.logger.warn({ command }, 'unknown verb');
     return;
   }
 
   if (this.actorType === ActorType.PLAYER) {
     if (command.target.length > 0) {
-      await context.focus.show('actor.step.command.player.target', { actor: this, command });
+      await context.stateHelper.show('actor.step.command.player.target', { actor: this, command });
     } else {
-      await context.focus.show('actor.step.command.player.verb', { actor: this, command });
+      await context.stateHelper.show('actor.step.command.player.verb', { actor: this, command });
     }
   }
 
@@ -91,7 +93,7 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
 
   const moving = indexEntity(results, command.index, isItem);
   if (isNil(moving)) {
-    await context.focus.show('actor.step.drop.type', { command });
+    await context.stateHelper.show('actor.step.drop.type', { command });
     return;
   }
 
@@ -117,25 +119,25 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
   const target = indexEntity(results, command.index, isActor);
 
   if (isNil(target)) {
-    await context.focus.show('actor.step.hit.type', { command }, {
-      source: this,
-      volume: ShowMessageVolume.SELF,
+    await context.stateHelper.show('actor.step.hit.type', { command }, ShowVolume.SELF, {
+      actor: this,
+      room,
     });
     return;
   }
 
   if (this === target) {
-    await context.focus.show('actor.step.hit.self', { command }, {
-      source: this,
-      volume: ShowMessageVolume.SELF,
+    await context.stateHelper.show('actor.step.hit.self', { command }, ShowVolume.SELF, {
+      actor: this,
+      room,
     });
     return;
   }
 
   if (this.items.length === 0) {
-    await context.focus.show('actor.step.hit.item', { target }, {
-      source: this,
-      volume: ShowMessageVolume.SELF,
+    await context.stateHelper.show('actor.step.hit.item', { target }, ShowVolume.SELF, {
+      actor: this,
+      room,
     });
     return;
   }
@@ -186,16 +188,16 @@ export async function ActorStepLookTarget(this: Actor, context: ScriptContext, t
     });
   }
 
-  await context.focus.show('actor.step.look.none');
+  await context.stateHelper.show('actor.step.look.none');
 }
 
 export async function ActorStepLookRoom(this: Actor, context: ScriptContext): Promise<void> {
   const room = mustExist(context.room);
-  await context.focus.show('actor.step.look.room.you', { actor: this });
-  await context.focus.show('actor.step.look.room.seen', { room });
+  await context.stateHelper.show('actor.step.look.room.you', { actor: this });
+  await context.stateHelper.show('actor.step.look.room.seen', { room });
 
   for (const item of this.items) {
-    await context.focus.show('actor.step.look.room.inventory', { item });
+    await context.stateHelper.show('actor.step.look.room.inventory', { item });
   }
 
   for (const actor of room.actors) {
@@ -215,22 +217,22 @@ export async function ActorStepLookRoom(this: Actor, context: ScriptContext): Pr
   }
 
   for (const portal of room.portals) {
-    await context.focus.show('actor.step.look.room.portal', { portal });
+    await context.stateHelper.show('actor.step.look.room.portal', { portal });
   }
 }
 
 export async function ActorStepLookActor(this: Actor, context: ScriptContext): Promise<void> {
   const actor = mustExist(context.actor);
-  await context.focus.show('actor.step.look.actor.seen', { actor });
+  await context.stateHelper.show('actor.step.look.actor.seen', { actor });
   const health = getKey(actor.stats, STAT_HEALTH, 0);
   if (health <= 0) {
-    await context.focus.show('actor.step.look.actor.dead', { actor });
+    await context.stateHelper.show('actor.step.look.actor.dead', { actor });
   }
 }
 
 export async function ActorStepLookItem(this: Actor, context: ScriptContext): Promise<void> {
   const item = mustExist(context.item);
-  await context.focus.show('actor.step.look.item.seen', { item });
+  await context.stateHelper.show('actor.step.look.item.seen', { item });
 }
 
 export async function ActorStepMove(this: Actor, context: ScriptContext): Promise<void> {
@@ -248,17 +250,17 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
   const targetPortal = results[command.index];
 
   if (isNil(targetPortal)) {
-    await context.focus.show('actor.step.move.missing', { command });
+    await context.stateHelper.show('actor.step.move.missing', { command });
     return;
   }
 
   // move the actor and focus
-  await context.focus.show('actor.step.move.portal', {
+  await context.stateHelper.show('actor.step.move.portal', {
     actor: this,
     portal: targetPortal,
-  }, {
-    source: this,
-    volume: ShowMessageVolume.SELF,
+  }, ShowVolume.SELF, {
+    actor: this,
+    room: currentRoom,
   });
   await context.transfer.moveActor({
     moving: this,
@@ -267,7 +269,6 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
   }, context);
 
   if (this.actorType === ActorType.PLAYER) {
-    await context.focus.setRoom(targetPortal.dest);
     await ActorStepLookTarget.call(this, context, targetPortal.dest);
   }
 }
@@ -300,7 +301,7 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
   const moving = indexEntity(results, command.index, isItem);
 
   if (isNil(moving)) {
-    await context.focus.show('actor.step.take.type', { command });
+    await context.stateHelper.show('actor.step.take.type', { command });
     return;
   }
 
@@ -325,7 +326,7 @@ export async function ActorStepUse(this: Actor, context: ScriptContext): Promise
   const target = indexEntity(results, command.index, isItem);
 
   if (!isItem(target)) {
-    await context.focus.show('actor.step.use.type', { command });
+    await context.stateHelper.show('actor.step.use.type', { command });
     return;
   }
 

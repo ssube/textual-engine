@@ -3,9 +3,9 @@ import { Inject } from 'noicejs';
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
 
-import { RenderService } from '.';
-import { Frame } from '../../component/react/Frame';
-import { BaseReactRender } from './BaseReactRender';
+import { RenderService } from '..';
+import { Frame } from '../../../component/react/Frame';
+import { BaseReactRender } from './BaseRender';
 
 /**
  * Interface with React tree using an event emitter.
@@ -15,22 +15,17 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
   public async start(): Promise<void> {
     this.logger.debug('starting React render');
 
-    this.renderRoot();
-    this.prompt(`turn ${this.step.turn}`);
-
-    this.event.on('actor-output', (output) => this.onOutput(output));
-    this.event.on('state-room', (room) => this.onRoom(room));
-    this.event.on('state-step', (step) => this.onStep(step));
-    this.event.on('quit', () => this.onQuit());
+    return super.start();
   }
 
   public async stop(): Promise<void> {
     this.logger.debug('stopping React render');
 
+    // TODO: does unmounting hide game over screen?
     const elem = mustExist(document.getElementById('app'));
     unmountComponentAtNode(elem);
 
-    // TODO: remove event handlers from state
+    return super.stop();
   }
 
   /**
@@ -40,10 +35,10 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
     this.logger.debug({ line }, 'handling line event from React');
 
     // update inner state
-    this.inputStr = line;
+    this.input = line;
 
     // append to buffer
-    this.output.push(`${this.promptStr} > ${this.inputStr}`);
+    this.output.push(`${this.prompt} > ${this.input}`);
 
     // forward event to state
     this.event.emit('render-output', {
@@ -54,8 +49,9 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
   protected renderRoot(): void {
     const elem = React.createElement(Frame, {
       onLine: (line: string) => this.nextLine(line),
-      prompt: this.promptStr,
       output: this.output,
+      prompt: this.prompt,
+      quit: this.quit,
       step: this.step,
     });
     render([elem], document.getElementById('app'));

@@ -1,12 +1,13 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
-import { BaseOptions } from 'noicejs';
 
-import { Loader } from '..';
+import { LoaderService } from '..';
+import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
 
-export class BrowserFetchLoader implements Loader {
+export class BrowserFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;
 
-  constructor(options: BaseOptions, f = window.fetch) {
+  constructor(options: BaseLoaderOptions, f = window.fetch) {
+    super(options, ['http', 'https']);
     this.fetch = fetch;
   }
 

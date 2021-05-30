@@ -1,12 +1,12 @@
 import { doesExist } from '@apextoaster/js-utils';
-import { EventEmitter } from 'events';
+import { Logger } from 'noicejs';
 
 import { AbortEventError } from '../../error/AbortEventError';
 
 export type EventHandler<TEvent> = (event: TEvent) => void;
 export type ErrorHandler = (err?: Error) => void;
 
-export interface TypedEmitter<TName extends string, TValue> extends EventEmitter {
+export interface TypedEmitter<TName extends string, TValue> {
   on(name: 'error', handler: ErrorHandler): this;
   on(name: TName, handler: EventHandler<TValue>): this;
 
@@ -69,4 +69,24 @@ export function onceWithRemove<
     pending,
     remove,
   };
+}
+
+/**
+ * Wait for an event without manual cancellation.
+ *
+ * This wraps `onceWithRemove` to use the same removal logic on resolution/rejection, but throws away the manual
+ * removal function.
+ */
+export function onceEvent<
+  TValue,
+  TName extends string = string
+>(emitter: TypedEmitter<TName, TValue>, event: TName): Promise<TValue> {
+  const { pending } = onceWithRemove(emitter, event);
+  return pending;
+}
+
+export function catchAndLog(p: Promise<any>, logger: Logger, msg: string) {
+  p.catch((err) => {
+    logger.error(err, msg);
+  });
 }

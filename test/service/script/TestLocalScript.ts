@@ -3,18 +3,14 @@ import { Container, NullLogger } from 'noicejs';
 import { spy } from 'sinon';
 
 import { Item } from '../../../src/model/entity/Item';
-import { State } from '../../../src/model/State';
-import { LocalModule } from '../../../src/module/LocalModule';
+import { WorldState } from '../../../src/model/world/State';
+import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
-import { StateFocusResolver } from '../../../src/util/state/FocusResolver';
+import { getStubHelper } from '../../helper';
 
-const TEST_STATE: State = {
-  focus: {
-    actor: '',
-    room: '',
-  },
+const TEST_STATE: WorldState = {
   meta: {
     desc: '',
     id: '',
@@ -23,7 +19,6 @@ const TEST_STATE: State = {
   },
   rooms: [],
   start: {
-    actor: '',
     room: '',
   },
   step: {
@@ -32,13 +27,14 @@ const TEST_STATE: State = {
   },
   world: {
     depth: 0,
+    id: '',
     seed: '',
   },
 };
 
 describe('local script service', () => {
   it('should invoke the script with target', async () => {
-    const container = Container.from(new LocalModule());
+    const container = Container.from(new CoreModule());
     await container.configure({
       logger: NullLogger.global,
     });
@@ -59,24 +55,15 @@ describe('local script service', () => {
     const script = await container.create(LocalScriptService, {}, new Map());
     await script.invoke(target, 'foo', {
       data: new Map(),
-      focus: await container.create(StateFocusResolver, {
-        events: {
-          onActor: async () => { },
-          onRoom: async () => { },
-          onShow: async () => { },
-        },
-        state: TEST_STATE,
-      }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
-      transfer: await container.create(StateEntityTransfer, {
-        state: TEST_STATE,
-      }),
+      stateHelper: getStubHelper(),
+      transfer: await container.create(StateEntityTransfer),
     });
   });
 
   it('should gracefully handle unknown scripts', async () => {
-    const container = Container.from(new LocalModule());
+    const container = Container.from(new CoreModule());
     await container.configure({
       logger: NullLogger.global,
     });
@@ -99,24 +86,15 @@ describe('local script service', () => {
     const script = await container.create(LocalScriptService, {}, new Map());
     await script.invoke(target, 'foo', {
       data: new Map(),
-      focus: await container.create(StateFocusResolver, {
-        events: {
-          onActor: async () => { },
-          onRoom: async () => { },
-          onShow: async () => { },
-        },
-        state: TEST_STATE,
-      }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
-      transfer: await container.create(StateEntityTransfer, {
-        state: TEST_STATE,
-      }),
+      stateHelper: getStubHelper(),
+      transfer: await container.create(StateEntityTransfer),
     });
   });
 
   it('should invoke scripts with entity', async () => {
-    const container = Container.from(new LocalModule());
+    const container = Container.from(new CoreModule());
     await container.configure({
       logger: NullLogger.global,
     });
@@ -142,19 +120,10 @@ describe('local script service', () => {
     ]));
     await script.invoke(target, 'foo', {
       data: new Map(),
-      focus: await container.create(StateFocusResolver, {
-        events: {
-          onActor: async () => { },
-          onRoom: async () => { },
-          onShow: async () => { },
-        },
-        state: TEST_STATE,
-      }),
       random: await container.create(MathRandomGenerator),
       state: TEST_STATE,
-      transfer: await container.create(StateEntityTransfer, {
-        state: TEST_STATE,
-      }),
+      stateHelper: getStubHelper(),
+      transfer: await container.create(StateEntityTransfer),
     });
 
     expect(scriptSpy).to.have.callCount(1);

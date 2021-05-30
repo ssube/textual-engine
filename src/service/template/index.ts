@@ -1,4 +1,4 @@
-import { TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/meta/Template';
+import { TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/mapped/Template';
 import { VerbMap } from '../../util/types';
 
 export interface TemplateService {

@@ -1,7 +1,7 @@
 import { JSONSchemaType } from 'ajv';
 
-import { Room } from './entity/Room';
-import { Metadata } from './Metadata';
+import { Room } from '../entity/Room';
+import { Metadata } from '../Metadata';
 
 export enum ReactionConfig {
   PLAYER_FIRST = 'player',
@@ -16,7 +16,7 @@ export enum SidebarConfig {
 /**
  * A saved world state.
  */
-export interface State {
+export interface WorldState {
   meta: Metadata;
 
   /**
@@ -28,18 +28,12 @@ export interface State {
      */
     depth: number;
 
+    id: string;
+
     /**
      * The random generator's seed.
      */
     seed: string;
-  };
-
-  /**
-   * The active room and actor, for filtering output.
-   */
-  focus: {
-    actor: string;
-    room: string;
   };
 
   /**
@@ -51,7 +45,6 @@ export interface State {
    * The starting room and actor, for respawning.
    */
   start: {
-    actor: string;
     room: string;
   };
 
@@ -64,21 +57,9 @@ export interface State {
   };
 }
 
-export const STATE_SCHEMA: JSONSchemaType<State> = {
+export const WORLD_STATE_SCHEMA: JSONSchemaType<WorldState> = {
   type: 'object',
   properties: {
-    focus: {
-      type: 'object',
-      properties: {
-        actor: {
-          type: 'string',
-        },
-        room: {
-          type: 'string',
-        },
-      },
-      required: ['actor', 'room'],
-    },
     meta: {
       type: 'object',
       properties: {
@@ -107,14 +88,11 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
     start: {
       type: 'object',
       properties: {
-        actor: {
-          type: 'string',
-        },
         room: {
           type: 'string',
         },
       },
-      required: ['actor', 'room'],
+      required: ['room'],
     },
     step: {
       type: 'object',
@@ -134,13 +112,16 @@ export const STATE_SCHEMA: JSONSchemaType<State> = {
         depth: {
           type: 'number',
         },
+        id: {
+          type: 'string',
+        },
         seed: {
           type: 'string',
         },
       },
-      required: ['depth', 'seed'],
+      required: ['depth', 'id', 'seed'],
     },
 
   },
-  required: ['focus', 'meta', 'rooms', 'step', 'world'],
+  required: ['meta', 'rooms', 'step', 'world'],
 };

@@ -5,71 +5,22 @@ import { WorldEntity } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
-import { State } from '../../model/State';
-import { LocaleContext } from '../../service/locale';
+import { WorldState } from '../../model/world/State';
+import { ShowSource, ShowVolume } from '../../util/actor';
 import { SearchParams } from '../../util/state';
+import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { Immutable, ScriptData } from '../../util/types';
+import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
-
-export enum ShowMessageVolume {
-  SELF = 'self', // narrowest scope
-  ROOM = 'room',
-  WORLD = 'world',
-}
-
-export interface ShowSource {
-  source: WorldEntity;
-  volume: ShowMessageVolume;
-}
-
-export interface ScriptFocus {
-  /**
-   * Set the currently-focused room.
-   */
-  setRoom(id: string): Promise<void>;
-
-  /**
-   * Set the currently-focused actor.
-   */
-  setActor(id: string): Promise<void>;
-
-  /**
-   * Display a message from an entity.
-   */
-  show(msg: string, context?: LocaleContext, source?: ShowSource): Promise<void>;
-}
-
-export interface TransferParams<TEntity extends WorldEntity> {
-  /**
-   * The entity to transfer.
-   */
-  moving: TEntity;
-
-  /**
-   * The source container from which `id` will be transferred.
-   */
-  source: string;
-
-  /**
-   * The target container into which `id` will be transferred.
-   */
-  target: string;
-}
-
-export interface ScriptTransfer {
-  /**
-   * Move an actor from one room to another.
-   */
-  moveActor(transfer: TransferParams<Actor>, context: ScriptContext): Promise<void>;
-
-  /**
-   * Move an item from one actor or room to another.
-   */
-  moveItem(transfer: TransferParams<Item>, context: ScriptContext): Promise<void>;
-}
 
 export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
+
+export interface StateHelper {
+  enter: (target: ShowSource) => Promise<void>;
+  show: (msg: string, context?: LocaleContext, volume?: ShowVolume, source?: ShowSource) => Promise<void>;
+  quit: () => Promise<void>;
+}
 
 /**
  * The script scope fields that must be supplied by the caller.
@@ -80,22 +31,21 @@ export interface SuppliedScope {
    */
   data: ScriptData;
 
-  /**
-   * State output helper.
-   */
-  focus: ScriptFocus;
-
   random: RandomGenerator;
 
   /**
    * Immutable reference to state for broadcast, lookups, etc.
+   *
+   * @todo remove direct reference
    */
-  state: Immutable<State>;
+  state: Immutable<WorldState>;
+
+  stateHelper: StateHelper;
 
   /**
    * Entity transfer helper.
    */
-  transfer: ScriptTransfer;
+  transfer: StateEntityTransfer;
 
   // optional fields
   actor?: Actor;

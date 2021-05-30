@@ -1,24 +1,30 @@
 import { JSONSchemaType } from 'ajv';
 
-import { State, STATE_SCHEMA } from '../State';
-import { World, WORLD_SCHEMA } from '../World';
+import { WorldState, WORLD_STATE_SCHEMA } from '../world/State';
+import { WorldTemplate, WORLD_TEMPLATE_SCHEMA } from '../world/Template';
+import { ConfigFile, CONFIG_SCHEMA } from './Config';
 
 export interface DataFile {
-  states: Array<State>;
-  worlds: Array<World>;
+  config?: ConfigFile;
+  state?: WorldState;
+  worlds: Array<WorldTemplate>;
 }
 
 export const DATA_SCHEMA: JSONSchemaType<DataFile> = {
   type: 'object',
   properties: {
-    states: {
-      type: 'array',
-      items: STATE_SCHEMA,
+    config: {
+      ...CONFIG_SCHEMA,
+      nullable: true,
+    },
+    state: {
+      ...WORLD_STATE_SCHEMA,
+      nullable: true,
     },
     worlds: {
       type: 'array',
-      items: WORLD_SCHEMA,
+      items: WORLD_TEMPLATE_SCHEMA,
     },
   },
-  required: ['states', 'worlds'],
+  required: ['worlds'],
 };

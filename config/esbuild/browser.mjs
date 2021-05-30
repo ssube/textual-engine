@@ -31,10 +31,13 @@ build({
             resourceRegExp: /components\/ink/,
             contextRegExp: /./,
         }, {
-            resourceRegExp: /render\/(Ink|Line)Render/,
+            resourceRegExp: /render\/(Line|react\/Ink)Render/,
             contextRegExp: /./,
         }, {
             resourceRegExp: /loader\/node\//,
+            contextRegExp: /./,
+        }, {
+            resourceRegExp: /module\/NodeModule/,
             contextRegExp: /./,
         }, {
             resourceRegExp: /index/,

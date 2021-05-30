@@ -2,7 +2,7 @@ export interface RenderService {
   /**
    * Set the default prompt for future reads.
    */
-  prompt(prompt: string): void;
+  setPrompt(prompt: string): void;
 
   /**
    * Wait for the next line of input.

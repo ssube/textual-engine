@@ -10,6 +10,6 @@ export async function ActorGet(this: ScriptTarget, context: ScriptContext): Prom
 
   if (this.actorType === ActorType.PLAYER) {
     const item = mustExist(context.item);
-    await context.focus.show('actor.get.player', { item });
+    await context.stateHelper.show('actor.get.player', { item });
   }
 }

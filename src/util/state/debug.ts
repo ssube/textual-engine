@@ -1,9 +1,9 @@
-import { State } from '../model/State';
+import { WorldState } from '../../model/world/State';
 
 /**
  * @todo return key/context pairs
  */
-export function debugState(state: State): Array<string> {
+export function debugState(state: WorldState): Array<string> {
   const lines = [
     `state: ${state.meta.id}`
   ];
@@ -34,7 +34,7 @@ export function debugState(state: State): Array<string> {
 /**
  * @todo return key/context pairs
  */
-export function graphState(state: State): Array<string> {
+export function graphState(state: WorldState): Array<string> {
   function sanitize(input: string): string {
     return input.replace(/[^a-zA-Z0-9_]/g, '_');
   }
@@ -44,7 +44,7 @@ export function graphState(state: State): Array<string> {
   ];
 
   // add rooms as nodes
-  lines.push(`  ${sanitize(state.focus.room)} [fillcolor=turquoise,style=filled];`);
+  lines.push(`  ${sanitize(state.start.room)} [fillcolor=turquoise,style=filled];`);
 
   // add edges between rooms
   for (const room of state.rooms) {

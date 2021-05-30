@@ -2,7 +2,7 @@ import { JSONSchemaType } from 'ajv';
 import { LogLevel } from 'noicejs';
 import { Writable } from 'stream';
 
-import { LocaleBundle, LOCALE_SCHEMA } from './Locale';
+import { LOCALE_SCHEMA, LocaleBundle } from './Locale';
 
 export interface ConfigLogger {
   level: LogLevel;
@@ -15,11 +15,25 @@ export interface ConfigLogger {
   }>;
 }
 
+export interface ConfigServiceRef {
+  kind: string;
+  name: string;
+}
+
+export interface ConfigServices {
+  actors: Array<ConfigServiceRef>;
+  loaders: Array<ConfigServiceRef>;
+  // locales: Array<ConfigServiceRef>;
+  renders: Array<ConfigServiceRef>;
+  states: Array<ConfigServiceRef>;
+}
+
 export interface ConfigFile {
   logger: ConfigLogger;
   locale: LocaleBundle & {
     current: string;
   };
+  services: ConfigServices;
 }
 
 export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
@@ -74,9 +88,14 @@ export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
       },
       required: ['bundles'],
     },
+    services: {
+      type: 'object',
+      required: [],
+    },
   },
   required: [
     'locale',
     'logger',
+    'services'
   ],
 };

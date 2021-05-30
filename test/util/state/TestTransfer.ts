@@ -1,16 +1,9 @@
-import { expect } from 'chai';
-
 import { ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
-import { State } from '../../../src/model/State';
-import { findContainer, findRoom, searchState } from '../../../src/util/state';
+import { WorldState } from '../../../src/model/world/State';
 
-const TEST_STATE: State = {
-  focus: {
-    actor: '',
-    room: '',
-  },
+const TEST_STATE: WorldState = {
   meta: {
     desc: '',
     id: '',
@@ -80,7 +73,6 @@ const TEST_STATE: State = {
     verbs: new Map(),
   }],
   start: {
-    actor: '',
     room: '',
   },
   step: {
@@ -89,6 +81,7 @@ const TEST_STATE: State = {
   },
   world: {
     depth: 0,
+    id: '',
     seed: '',
   },
 };

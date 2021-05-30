@@ -65,24 +65,6 @@ worlds:
               use:
                 type: |-
                   {{command.target}} is not a usable item!
-          debug:
-            graph:
-              focus:
-                room: '  {{room}} [fillcolor=turquoise,style=filled];'
-              node:
-                room: '  {{room}}'
-                portal: '  {{room.meta.id}} -- {{portal.dest}} [label="{{portal.sourceGroup}} -> {{portal.name}} -> {{portal.targetGroup}}"];'
-              root:
-                close: '}'
-                open: 'strict graph {'
-              summary: 'wrote {{size}} node graph to {{-path}}'
-            tree:
-              actor: '    actor: {{actor.meta.name}} ({{actor.meta.id}}, {{actor.actorType}})'
-              item: '    item: {{item.meta.name}} ({{item.meta.id}})'
-              portal:
-                both: '    portal: {{portal.name}} ({{portal.sourceGroup}} <-> {{portal.dest}} ({{portal.targetGroup}})'
-              root: 'state {{state.meta.id}}'
-              room: '  room: {{room.meta.name}} ({{room.meta.id}})'
           item:
             use:
               any: |-
@@ -182,12 +164,12 @@ worlds:
               name:
                 base: Bat Teeth
               desc:
-                base: sharp bat teeth
+                base: bat teeth
             slots: !map {}
             stats: !map
               damage:
-                min: 1
-                max: 2
+                min: 2
+                max: 5
             verbs: !map {}
         - base:
             meta:

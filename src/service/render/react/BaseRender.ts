@@ -1,13 +1,14 @@
 import { constructorName, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { RenderService } from '.';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
-import { onceWithRemove } from '../../util/event';
-import { debounce } from '../../util/event/Debounce';
-import { EventBus, LineEvent, OutputEvent, RoomEvent } from '../event';
-import { LocaleService } from '../locale';
-import { StepResult } from '../state';
+import { RenderService } from '..';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
+import { debounce } from '../../../util/async/Debounce';
+import { onceEvent } from '../../../util/async/event';
+import { EventBus, LineEvent } from '../../event';
+import { LocaleService } from '../../locale';
+import { StepResult } from '../../state';
+import { StateRoomEvent } from '../../state/events';
 
 export interface BaseRenderOptions extends BaseOptions {
   [INJECT_EVENT]?: EventBus;
@@ -23,9 +24,10 @@ export abstract class BaseReactRender implements RenderService {
   protected locale: LocaleService;
 
   // state
-  protected inputStr: string;
-  protected promptStr: string;
+  protected input: string;
   protected output: Array<string>;
+  protected prompt: string;
+  protected quit: boolean;
   protected step: StepResult;
 
   protected derender: () => void;
@@ -39,28 +41,39 @@ export abstract class BaseReactRender implements RenderService {
 
     this.derender = debounce(100, () => this.renderRoot());
 
-    this.inputStr = '';
-    this.promptStr = '';
+    this.input = '';
     this.output = [];
+    this.prompt = '';
+    this.quit = false;
     this.step = {
       turn: 0,
       time: 0,
     };
   }
 
-  public abstract start(): Promise<void>;
-  public abstract stop(): Promise<void>;
+  public async start(): Promise<void> {
+    this.renderRoot();
+    this.setPrompt(`turn ${this.step.turn}`);
+
+    this.event.on('actor-output', (output) => this.onOutput(output), this);
+    this.event.on('state-room', (room) => this.onRoom(room), this);
+    this.event.on('state-step', (step) => this.onStep(step), this);
+    this.event.on('quit', () => this.onQuit(), this);
+  }
+
+  public async stop(): Promise<void> {
+    this.event.removeGroup(this);
+  }
+
   protected abstract renderRoot(): void;
 
-  public prompt(prompt: string): void {
-    this.promptStr = prompt;
+  public setPrompt(prompt: string): void {
+    this.prompt = prompt;
   }
 
   public async read(): Promise<string> {
-    const { pending } = onceWithRemove<OutputEvent>(this.event, 'actor-output');
-    const event = await pending;
-
-    return event.lines[0].key;
+    const event = await onceEvent<LineEvent>(this.event, 'actor-output');
+    return event.lines[0];
   }
 
   public async show(msg: string): Promise<void> {
@@ -86,16 +99,17 @@ export abstract class BaseReactRender implements RenderService {
    */
   public onQuit(): void {
     this.logger.debug('handling quit event from state');
-    this.output.push('game over');
+    this.quit = true;
+    this.renderRoot();
   }
 
   /**
    * Handler for step events received from state service.
    */
-  public onRoom(result: RoomEvent): void {
+  public onRoom(result: StateRoomEvent): void {
     this.logger.debug(result, 'handling room event from state');
 
-    this.prompt(`turn ${this.step.turn}`);
+    this.setPrompt(`turn ${this.step.turn}`);
     this.renderRoot();
   }
 
@@ -103,7 +117,7 @@ export abstract class BaseReactRender implements RenderService {
     this.logger.debug({ event }, 'handling step event from state');
 
     this.step = event;
-    this.prompt(`turn ${this.step.turn}`);
+    this.setPrompt(`turn ${this.step.turn}`);
     this.renderRoot();
   }
 }

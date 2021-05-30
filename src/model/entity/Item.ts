@@ -3,8 +3,8 @@ import { JSONSchemaType } from 'ajv';
 
 import { makeConstStringSchema } from '../../util/schema';
 import { SlotMap, StatMap, VerbMap } from '../../util/types';
+import { Template } from '../mapped/Template';
 import { Metadata, METADATA_SCHEMA } from '../Metadata';
-import { Template } from '../meta/Template';
 import { Entity } from './Base';
 
 export const ITEM_TYPE = 'item' as const;

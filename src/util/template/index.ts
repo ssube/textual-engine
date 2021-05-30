@@ -1,7 +1,7 @@
 import { mustFind } from '@apextoaster/js-utils';
 
 import { Entity } from '../../model/entity/Base';
-import { Template } from '../../model/meta/Template';
+import { Template } from '../../model/mapped/Template';
 
 export type InputChain = Array<string | InputChain>;
 

@@ -4,6 +4,7 @@ import * as React from 'react';
 
 import { StepResult } from '../../service/state';
 import { Output } from './Output';
+import { Quit } from './Quit';
 
 const { useState } = React;
 
@@ -12,29 +13,31 @@ interface FrameProps {
   prompt: string;
   output: Array<string>;
   step: StepResult;
+  quit: boolean;
 }
 
 const HISTORY_SIZE = 20;
 
 export const Frame = (props: FrameProps) => {
   const [line, setLine] = useState('');
+  const output = props.output.slice(-HISTORY_SIZE);
 
   return <Box flexDirection="column">
     <Box>
-      <Output output={props.output.slice(-HISTORY_SIZE)} />
+      <Output output={output} />
     </Box>
     <Box height={1}>
       <Box marginRight={1}>
         <Text color="blueBright">turn {props.step.turn} &gt;</Text>
       </Box>
-      <TextInput
+      {props.quit ? <Quit /> : <TextInput
         onChange={setLine}
         onSubmit={() => {
           setLine('');
           props.onLine(line);
         }}
         value={line}
-      />
+      />}
     </Box>
   </Box>;
 };

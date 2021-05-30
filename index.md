@@ -1,4 +1,5 @@
 <script type="text/yaml" id="data-config">
+{% raw %}
 logger:
   level: warn
   name: textual-engine
@@ -44,6 +45,7 @@ services:
   states:
     - name: local-state
       kind: core-local-state
+{% endraw %}
 </script>
 <div id="app"></div>
 <script src="./bundle/browser.js">

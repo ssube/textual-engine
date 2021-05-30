@@ -34,13 +34,13 @@ services:
     - name: actor-enemy
       kind: core-behavior-actor
   loaders:
-    - name: file-loader
-      kind: node-file-loader
+    - name: page-loader
+      kind: browser-page-loader
     - name: url-loader
-      kind: node-fetch-loader
+      kind: browser-fetch-loader
   renders:
     - name: local-render
-      kind: node-ink-render
+      kind: browser-dom-render
   states:
     - name: local-state
       kind: core-local-state

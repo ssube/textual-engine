@@ -127,7 +127,8 @@ export class LocalStateService implements StateService {
     }, 'creating start room');
 
     const startRoom = await generator.createRoom(roomTemplate);
-    const rooms = [startRoom];
+    const rooms = await generator.populateRoom(startRoom, params.depth);
+    rooms.unshift(startRoom);
 
     const meta = await generator.createMetadata(world.meta, 'world');
     this.state = {

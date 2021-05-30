@@ -1,4 +1,4 @@
-import { ConsoleLogger, Container, LogLevel, Module, NullLogger } from 'noicejs';
+import { Container, LogLevel, Module, NullLogger } from 'noicejs';
 import { stub } from 'sinon';
 
 import { ConfigFile } from '../src/model/file/Config';
@@ -20,6 +20,12 @@ export function getTestConfig(): ConfigFile {
     locale: {
       bundles: {},
       current: 'en',
+    },
+    services: {
+      actors: [],
+      loaders: [],
+      renders: [],
+      states: [],
     },
   };
 }

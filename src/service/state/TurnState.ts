@@ -6,24 +6,22 @@ import { NotInitializedError } from '../../error/NotInitializedError';
 import { Command } from '../../model/Command';
 import { Actor, ActorType } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
+import { DataFile } from '../../model/file/Data';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
-import {
-  INJECT_ACTOR,
-  INJECT_COUNTER,
-  INJECT_EVENT,
-  INJECT_LOADER,
-  INJECT_LOGGER,
-  INJECT_PARSER,
-  INJECT_RANDOM,
-  INJECT_SCRIPT,
-} from '../../module';
+import { INJECT_ACTOR, INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
 import { ActorLocator } from '../../module/ActorModule';
 import { randomItem } from '../../util/array';
+import { catchAndLog, onceEvent } from '../../util/async/event';
 import {
   COMMON_VERBS,
   EVENT_ACTOR_COMMAND,
+  EVENT_COMMON_QUIT,
+  EVENT_LOADER_READ,
+  EVENT_LOADER_SAVE,
+  EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
+  EVENT_LOCALE_BUNDLE,
   EVENT_STATE_OUTPUT,
   META_CREATE,
   META_DEBUG,
@@ -34,38 +32,32 @@ import {
   META_SAVE,
   SLOT_STEP,
 } from '../../util/constants';
-import { debugState, graphState } from '../../util/debug';
-import { catchAndLog } from '../../util/event';
+import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { StateFocusResolver } from '../../util/state/FocusResolver';
 import { findByTemplateId } from '../../util/template';
 import { Counter } from '../counter';
 import { CommandEvent, EventBus } from '../event';
-import { LoaderService, LoaderWorldEvent } from '../loader';
+import { LoaderStateEvent, LoaderWorldEvent } from '../loader';
 import { LocaleContext } from '../locale';
-import { Parser } from '../parser';
 import { RandomGenerator } from '../random';
 import { ScriptService, SuppliedScope } from '../script';
 
 export interface LocalStateServiceOptions extends BaseOptions {
-  [INJECT_ACTOR]: ActorLocator;
-  [INJECT_COUNTER]: Counter;
-  [INJECT_EVENT]: EventBus;
-  [INJECT_LOADER]: LoaderService;
-  [INJECT_LOGGER]: Logger;
-  [INJECT_PARSER]: Parser;
-  [INJECT_RANDOM]: RandomGenerator;
-  [INJECT_SCRIPT]: ScriptService;
+  [INJECT_ACTOR]?: ActorLocator;
+  [INJECT_COUNTER]?: Counter;
+  [INJECT_EVENT]?: EventBus;
+  [INJECT_LOGGER]?: Logger;
+  [INJECT_RANDOM]?: RandomGenerator;
+  [INJECT_SCRIPT]?: ScriptService;
 }
 
 @Inject(
   INJECT_ACTOR,
   INJECT_COUNTER,
   INJECT_EVENT,
-  INJECT_LOADER,
   INJECT_LOGGER,
-  INJECT_PARSER,
   INJECT_RANDOM,
   INJECT_SCRIPT
 )
@@ -74,9 +66,7 @@ export class LocalStateService implements StateService {
   protected container: Container;
   protected counter: Counter;
   protected event: EventBus;
-  protected loader: LoaderService;
   protected logger: Logger;
-  protected parser: Parser;
   protected random: RandomGenerator;
   protected script: ScriptService;
 
@@ -89,17 +79,15 @@ export class LocalStateService implements StateService {
 
   constructor(options: LocalStateServiceOptions) {
     this.container = options.container;
-    this.logger = options[INJECT_LOGGER].child({
+    this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
 
-    this.actor = options[INJECT_ACTOR];
-    this.counter = options[INJECT_COUNTER];
-    this.event = options[INJECT_EVENT];
-    this.loader = options[INJECT_LOADER];
-    this.parser = options[INJECT_PARSER];
-    this.random = options[INJECT_RANDOM];
-    this.script = options[INJECT_SCRIPT];
+    this.actor = mustExist(options[INJECT_ACTOR]);
+    this.counter = mustExist(options[INJECT_COUNTER]);
+    this.event = mustExist(options[INJECT_EVENT]);
+    this.random = mustExist(options[INJECT_RANDOM]);
+    this.script = mustExist(options[INJECT_SCRIPT]);
 
     this.worlds = [];
   }
@@ -198,7 +186,17 @@ export class LocalStateService implements StateService {
   }
 
   public async start(): Promise<void> {
-    await this.createHelpers();
+    this.focus = await this.container.create(StateFocusResolver, {
+      events: {
+        onActor: () => Promise.resolve(),
+        onQuit: () => this.doQuit(),
+        onRoom: (room) => this.onRoom(room),
+        onShow: (line, context) => this.onOutput(line, context),
+      },
+    });
+
+    this.generator = await this.container.create(StateEntityGenerator);
+    this.transfer = await this.container.create(StateEntityTransfer)
 
     this.event.on(EVENT_LOADER_WORLD, (event: LoaderWorldEvent) => {
       catchAndLog(this.onWorld(event.world), this.logger, 'error during world handler');
@@ -334,8 +332,12 @@ export class LocalStateService implements StateService {
   public async doGraph(path: string): Promise<void> {
     const state = await this.save();
     const lines = graphState(state);
+    const data = lines.join('\n');
 
-    await this.loader.saveStr(path, lines.join('\n'));
+    this.event.emit(EVENT_LOADER_SAVE, {
+      data,
+      path,
+    });
 
     this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
@@ -350,12 +352,23 @@ export class LocalStateService implements StateService {
   }
 
   public async doLoad(path: string, index: number): Promise<void> {
-    const dataStr = await this.loader.loadStr(path);
-    const data = this.parser.load(dataStr);
-    const state = mustExist(data.state);
+    const stateEvent = onceEvent<LoaderStateEvent>(this.event, EVENT_LOADER_STATE);
+    this.event.emit(EVENT_LOADER_READ, {
+      path,
+    });
+
+    const { state } = await stateEvent;
+    const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
+
+    this.event.emit(EVENT_LOCALE_BUNDLE, {
+      bundle: world.locale,
+      name: 'world',
+    });
 
     this.state = state;
-    await this.createHelpers();
+    mustExist(this.focus).setState(state);
+    mustExist(this.generator).setWorld(world);
+    mustExist(this.transfer).setState(state);
 
     this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
@@ -366,18 +379,22 @@ export class LocalStateService implements StateService {
   }
 
   public async doQuit(): Promise<void> {
-    this.event.emit('quit');
+    this.event.emit(EVENT_COMMON_QUIT);
   }
 
   public async doSave(path: string): Promise<void> {
     const state = mustExist(this.state);
-    const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.id);
+    const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
-    const dataStr = this.parser.save({
+    const data: DataFile = {
       state,
       worlds: [world],
+    };
+
+    this.event.emit(EVENT_LOADER_SAVE, {
+      data,
+      path,
     });
-    await this.loader.saveStr(path, dataStr);
 
     this.event.emit(EVENT_STATE_OUTPUT, {
       lines: [{
@@ -480,21 +497,6 @@ export class LocalStateService implements StateService {
     });
 
     return actorProxy.last();
-  }
-
-  protected async createHelpers(): Promise<void> {
-    // register focus
-    this.focus = await this.container.create(StateFocusResolver, {
-      events: {
-        onActor: () => Promise.resolve(),
-        onQuit: () => this.doQuit(),
-        onRoom: (room) => this.onRoom(room),
-        onShow: (line, context) => this.onOutput(line, context),
-      },
-    });
-
-    this.generator = await this.container.create(StateEntityGenerator);
-    this.transfer = await this.container.create(StateEntityTransfer);
   }
 
   protected async onRoom(room: Room): Promise<void> {

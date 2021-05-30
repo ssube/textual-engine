@@ -3,9 +3,10 @@ import { EventEmitter } from 'events';
 import { Command } from '../../model/Command';
 import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
+import { DataFile } from '../../model/file/Data';
 import { LocaleBundle } from '../../model/file/Locale';
-import { ErrorHandler, EventHandler } from '../../util/event';
-import { LoaderConfigEvent, LoaderPathEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader';
+import { ErrorHandler, EventHandler } from '../../util/async/event';
+import { LoaderConfigEvent, LoaderReadEvent, LoaderSaveEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader';
 import { LocaleContext } from '../locale';
 import { StepResult } from '../state';
 
@@ -63,7 +64,9 @@ export interface EventBus extends EventEmitter {
 
   emit(name: 'locale-bundle', event: LocaleEvent): boolean;
 
-  emit(name: 'loader-path', event: LoaderPathEvent): boolean;
+  emit(name: 'loader-read', event: LoaderReadEvent): boolean;
+
+  emit(name: 'loader-save', event: LoaderSaveEvent): boolean;
 
   emit(name: 'loader-config', event: LoaderConfigEvent): boolean;
 
@@ -96,7 +99,8 @@ export interface EventBus extends EventEmitter {
   on(name: 'actor-command', handler: EventHandler<CommandEvent>, group?: any): this;
   on(name: 'actor-output', handler: EventHandler<LineEvent>, group?: any): this;
   on(name: 'locale-bundle', handler: EventHandler<LocaleEvent>, group?: any): this;
-  on(name: 'loader-path', handler: EventHandler<LoaderPathEvent>, group?: any): this;
+  on(name: 'loader-read', handler: EventHandler<LoaderReadEvent>, group?: any): this;
+  on(name: 'loader-save', handler: EventHandler<LoaderSaveEvent>, group?: any): this;
   on(name: 'loader-config', handler: EventHandler<LoaderConfigEvent>, group?: any): this;
   on(name: 'loader-state', handler: EventHandler<LoaderStateEvent>, group?: any): this;
   on(name: 'loader-world', handler: EventHandler<LoaderWorldEvent>, group?: any): this;

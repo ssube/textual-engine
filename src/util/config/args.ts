@@ -1,6 +1,6 @@
 import parser from 'yargs-parser';
 
-import { PORTAL_DEPTH } from './constants';
+import { PORTAL_DEPTH } from '../constants';
 
 export interface ParsedArgs {
   config: string;

@@ -4,7 +4,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { EventBus } from '.';
 import { INJECT_LOGGER } from '../../module';
-import { EventHandler } from '../../util/event';
+import { EventHandler } from '../../util/async/event';
 
 interface EventBusOptions extends BaseOptions {
   [INJECT_LOGGER]?: Logger;

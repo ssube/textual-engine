@@ -1,4 +1,4 @@
-import { State } from '../model/State';
+import { State } from '../../model/State';
 
 /**
  * @todo return key/context pairs

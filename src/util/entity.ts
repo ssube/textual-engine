@@ -3,6 +3,7 @@ import { doesExist, Optional } from '@apextoaster/js-utils';
 import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/Metadata';
 import { SearchMatchers, SearchParams } from './state';
+import { matchIdSegments } from './string';
 import { Immutable } from './types';
 
 export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<Entity>>, index: number, guard: (it: Optional<Entity>) => it is TEntity): Optional<TEntity> {
@@ -63,17 +64,6 @@ export function matchMetadataFuzzy(entity: Immutable<Entity>, filter: Partial<Me
   }
 
   return matched;
-}
-
-export function matchIdSegments(value: string, filter: string): boolean {
-  const valueParts = value.split('-');
-  const filterParts = filter.split('-');
-
-  if (valueParts.length < filterParts.length) {
-    return false;
-  }
-
-  return filterParts.every((it, idx) => it === valueParts[idx]);
 }
 
 export const DEFAULT_MATCHERS: SearchMatchers = {

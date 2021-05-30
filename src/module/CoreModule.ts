@@ -10,7 +10,6 @@ import {
   INJECT_PARSER,
   INJECT_RANDOM,
   INJECT_SCRIPT,
-  INJECT_STATE,
   INJECT_TEMPLATE,
 } from '.';
 import { ConfigFile } from '../model/file/Config';
@@ -25,7 +24,6 @@ import { RandomGenerator } from '../service/random';
 import { SeedRandomGenerator } from '../service/random/SeedRandom';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScript';
-import { StateService } from '../service/state';
 import { LocalStateService } from '../service/state/TurnState';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
@@ -37,7 +35,6 @@ export class CoreModule extends Module {
   protected locale: Singleton<LocaleService>;
   protected random: Singleton<RandomGenerator>;
   protected script: Singleton<ScriptService>;
-  protected state: Singleton<StateService>;
   protected template: Singleton<TemplateService>;
 
   constructor() {
@@ -48,7 +45,6 @@ export class CoreModule extends Module {
     this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
     this.random = new Singleton(() => mustExist(this.container).create(SeedRandomGenerator));
     this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
-    this.state = new Singleton(() => mustExist(this.container).create(LocalStateService));
     this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
   }
 
@@ -57,6 +53,8 @@ export class CoreModule extends Module {
 
     this.bind(INJECT_EVENT).toFactory(() => this.event.get());
     this.bind(INJECT_PARSER).toConstructor(YamlParser);
+
+    this.bind('local-state').toConstructor(LocalStateService);
   }
 
   public setConfig(config: ConfigFile): void {
@@ -98,14 +96,6 @@ export class CoreModule extends Module {
   @Provides(INJECT_SCRIPT)
   protected async getScript(): Promise<ScriptService> {
     return this.script.get();
-  }
-
-  /**
-   * Singleton state Service.
-   */
-  @Provides(INJECT_STATE)
-  protected async getState(): Promise<StateService> {
-    return this.state.get();
   }
 
   /**

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { State } from '../../src/model/State';
-import { debugState, graphState } from '../../src/util/debug';
+import { debugState, graphState } from '../../src/util/state/debug';
 
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {

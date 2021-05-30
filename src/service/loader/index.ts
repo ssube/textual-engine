@@ -1,5 +1,6 @@
 import { Service } from '..';
 import { ConfigFile } from '../../model/file/Config';
+import { DataFile } from '../../model/file/Data';
 import { State } from '../../model/State';
 import { World } from '../../model/World';
 
@@ -32,7 +33,12 @@ export interface LoaderService extends Service {
   saveStr(path: string, data: string): Promise<void>;
 }
 
-export interface LoaderPathEvent {
+export interface LoaderReadEvent {
+  path: string;
+}
+
+export interface LoaderSaveEvent {
+  data: DataFile | string;
   path: string;
 }
 

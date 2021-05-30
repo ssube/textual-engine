@@ -1,10 +1,10 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { LoaderService } from '.';
+import { LoaderSaveEvent, LoaderService } from '.';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER } from '../../module';
-import { EVENT_LOADER_CONFIG, EVENT_LOADER_PATH, EVENT_LOADER_STATE, EVENT_LOADER_WORLD } from '../../util/constants';
-import { catchAndLog } from '../../util/event';
+import { catchAndLog } from '../../util/async/event';
+import { EVENT_LOADER_CONFIG, EVENT_LOADER_READ, EVENT_LOADER_SAVE, EVENT_LOADER_STATE, EVENT_LOADER_WORLD } from '../../util/constants';
 import { EventBus } from '../event';
 import { Parser } from '../parser';
 
@@ -27,8 +27,12 @@ export abstract class BaseLoader implements LoaderService {
   }
 
   public async start(): Promise<void> {
-    this.events.on(EVENT_LOADER_PATH, (event) => {
-      catchAndLog(this.onPath(event.path), this.logger, 'error during path');
+    this.events.on(EVENT_LOADER_READ, (event) => {
+      catchAndLog(this.onRead(event.path), this.logger, 'error during read');
+    }, this);
+
+    this.events.on(EVENT_LOADER_SAVE, (event) => {
+      catchAndLog(this.onSave(event), this.logger, 'error during save');
     }, this);
   }
 
@@ -36,7 +40,7 @@ export abstract class BaseLoader implements LoaderService {
     this.events.removeGroup(this);
   }
 
-  public async onPath(path: string): Promise<void> {
+  public async onRead(path: string): Promise<void> {
     const dataStr = await this.loadStr(path);
     const data = this.parser.load(dataStr);
 
@@ -58,6 +62,15 @@ export abstract class BaseLoader implements LoaderService {
       this.events.emit(EVENT_LOADER_STATE, {
         state: data.state,
       });
+    }
+  }
+
+  public async onSave(event: LoaderSaveEvent): Promise<void> {
+    if (typeof event.data === 'string') {
+      await this.saveStr(event.path, event.data);
+    } else {
+      const data = this.parser.save(event.data);
+      await this.saveStr(event.path, data);
     }
   }
 

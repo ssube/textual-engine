@@ -12,7 +12,8 @@ export const EVENT_ACTOR_COMMAND = 'actor-command';
 export const EVENT_ACTOR_OUTPUT = 'actor-output';
 export const EVENT_LOCALE_BUNDLE = 'locale-bundle';
 export const EVENT_LOADER_CONFIG = 'loader-config';
-export const EVENT_LOADER_PATH = 'loader-path';
+export const EVENT_LOADER_READ = 'loader-read';
+export const EVENT_LOADER_SAVE = 'loader-save';
 export const EVENT_LOADER_STATE = 'loader-state';
 export const EVENT_LOADER_WORLD = 'loader-world';
 export const EVENT_RENDER_OUTPUT = 'render-output';
@@ -26,7 +27,8 @@ export const EVENT_NAMES = [
   EVENT_COMMON_ERROR,
   EVENT_COMMON_QUIT,
   EVENT_LOADER_CONFIG,
-  EVENT_LOADER_PATH,
+  EVENT_LOADER_READ,
+  EVENT_LOADER_SAVE,
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,

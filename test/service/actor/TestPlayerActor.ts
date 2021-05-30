@@ -7,7 +7,7 @@ import { ActorLocator, ActorModule } from '../../../src/module/ActorModule';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { CommandEvent, EventBus } from '../../../src/service/event';
 import { LocaleService } from '../../../src/service/locale';
-import { onceEvent } from '../../../src/util/event';
+import { onceEvent } from '../../../src/util/async/event';
 import { getTestContainer } from '../../helper';
 
 describe('player actor', () => {

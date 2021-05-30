@@ -31,3 +31,15 @@ locale:
           quit: quit
           save: save
   current: en
+services:
+  actors: []
+  loaders:
+    - name: test-loader
+      kind: node-file-loader
+  locales: []
+  renders:
+    - name: test-render
+      kind: node-ink-render
+  states:
+    - name: test-state
+      kind: local-state

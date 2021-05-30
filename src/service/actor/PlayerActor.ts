@@ -12,7 +12,7 @@ import {
   EVENT_RENDER_OUTPUT,
   EVENT_STATE_OUTPUT,
 } from '../../util/constants';
-import { catchAndLog } from '../../util/event';
+import { catchAndLog } from '../../util/async/event';
 import { EventBus, LineEvent, OutputEvent } from '../event';
 import { LocaleService } from '../locale';
 import { TokenizerService } from '../tokenizer';

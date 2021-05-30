@@ -3,8 +3,8 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
-import { onceEvent } from '../../../util/event';
-import { debounce } from '../../../util/event/Debounce';
+import { onceEvent } from '../../../util/async/event';
+import { debounce } from '../../../util/async/Debounce';
 import { EventBus, LineEvent, OutputEvent, RoomEvent } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';

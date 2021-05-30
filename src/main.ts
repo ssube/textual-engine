@@ -3,21 +3,19 @@ import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger';
 import { ActorType } from './model/entity/Actor';
-import { INJECT_ACTOR, INJECT_EVENT, INJECT_LOADER, INJECT_LOCALE, INJECT_RENDER, INJECT_STATE } from './module';
+import { INJECT_ACTOR, INJECT_EVENT, INJECT_LOCALE } from './module';
 import { ActorLocator, ActorModule } from './module/ActorModule';
 import { BrowserModule } from './module/BrowserModule';
 import { CoreModule } from './module/CoreModule';
 import { NodeModule } from './module/NodeModule';
 import { EventBus } from './service/event';
-import { LoaderService } from './service/loader';
 import { LocaleService } from './service/locale';
-import { RenderService } from './service/render';
-import { StateService } from './service/state';
-import { parseArgs } from './util/args';
-import { asyncTrack } from './util/async';
+import { asyncTrack } from './util/async/debug';
+import { onceEvent } from './util/async/event';
+import { parseArgs } from './util/config/args';
 import { loadConfig } from './util/config/file';
-import { EVENT_ACTOR_OUTPUT, EVENT_LOADER_PATH, EVENT_RENDER_OUTPUT } from './util/constants';
-import { onceEvent } from './util/event';
+import { EVENT_ACTOR_OUTPUT, EVENT_LOADER_READ, EVENT_LOCALE_BUNDLE, EVENT_RENDER_OUTPUT } from './util/constants';
+import { ServiceManager } from './util/service/ServiceManager';
 
 const DI_MODULES = new Map<string, new () => Module>([
   ['browser', BrowserModule],
@@ -60,11 +58,19 @@ export async function main(args: Array<string>): Promise<number> {
     logger,
   });
 
-  // load config locale
   const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
   await locale.start();
 
-  locale.addBundle('common', config.locale);
+  // start svc mgr
+  const services = await container.create(ServiceManager);
+  await services.create(config.services);
+
+  // load common locale
+  const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+  events.emit(EVENT_LOCALE_BUNDLE, {
+    name: 'common',
+    bundle: config.locale,
+  });
 
   // start player actor
   // TODO: this does not belong here
@@ -75,29 +81,18 @@ export async function main(args: Array<string>): Promise<number> {
   });
   await actor.start();
 
-  // load data files
-  const loader = await container.create<LoaderService, BaseOptions>(INJECT_LOADER);
-  await loader.start();
-
-  // start renderer
-  const render = await container.create<RenderService, BaseOptions>(INJECT_RENDER);
-  await render.start();
-
-  // create state from world
-  const state = await container.create<StateService, BaseOptions>(INJECT_STATE);
-  await state.start();
-
+  // emit data paths
   logger.info({
     paths: arg.data,
   }, 'loading worlds from data files');
 
-  const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
   for (const path of arg.data) {
-    events.emit(EVENT_LOADER_PATH, {
+    events.emit(EVENT_LOADER_READ, {
       path,
     });
   }
 
+  // emit input args
   for (const input of arg.input) {
     events.emit(EVENT_RENDER_OUTPUT, {
       lines: [
@@ -109,13 +104,11 @@ export async function main(args: Array<string>): Promise<number> {
     await onceEvent(events, EVENT_ACTOR_OUTPUT);
   }
 
+  // wait for something to quit
   await onceEvent(events, 'quit');
 
-  await state.stop();
-  await render.stop();
-  await loader.stop();
+  await services.stop();
   await actor.stop();
-  await locale.stop();
 
   // asyncDebug(asyncOps);
   // eventDebug(events);

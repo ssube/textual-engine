@@ -58,9 +58,7 @@ be run with:
 ```shell
 > docker run --rm -it ssube/textual-engine:master-stretch \
   --config data/config.yml \
-  --data data/base.yml \
-  --seed test \
-  --world test
+  --data file://data/base.yml
 ```
 
 ## Docs

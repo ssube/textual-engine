@@ -177,6 +177,8 @@ available verbs: create, debug, graph, help, load, quit, save, drop, hit, look, 
 
 These verbs are split into two groups: commands to the game world and meta-commands to the game itself.
 
+Additional room and item-specific verbs are planned (https://github.com/ssube/textual-engine/issues/78).
+
 ### World Commands
 
 - `drop <item>`

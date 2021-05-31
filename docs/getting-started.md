@@ -13,9 +13,9 @@ This guide covers a little bit of everything in light detail.
     - [For Interactive Fiction](#for-interactive-fiction)
     - [For Dungeon Crawlers](#for-dungeon-crawlers)
   - [Concepts](#concepts)
-    - [Entity Types](#entity-types)
     - [Command Structure](#command-structure)
-    - [World State and Templates](#world-state-and-templates)
+    - [Entity Types](#entity-types)
+    - [Worlds and Templates](#worlds-and-templates)
   - [Playing The Game](#playing-the-game)
     - [Common Commands](#common-commands)
     - [Game Commands](#game-commands)
@@ -26,7 +26,6 @@ This guide covers a little bit of everything in light detail.
     - [Saving and Loading Worlds](#saving-and-loading-worlds)
   - [Further Reading](#further-reading)
     - [Creating World Templates](#creating-world-templates)
-    - [Adding Command Scripts](#adding-command-scripts)
     - [Developing The Engine](#developing-the-engine)
     - [Engine Architecture](#engine-architecture)
 
@@ -36,6 +35,11 @@ This project is a text adventure engine with a set of sample worlds. Both random
 and intentionally written interactive fiction are possible, in a turn-based system with easy scripting.
 
 ### What Is A Text Adventure?
+
+TODO:
+
+- some history
+- IF vs Roguelike
 
 ### Where Can I Play?
 
@@ -55,12 +59,25 @@ be run with:
 
 ### Notable Features
 
-TODO:
+If a concept exists in computer science, it has been applied to text adventures at some point in history - they started
+using NLP in the 1960s. `textual-engine` scales up to larger worlds with many thousand rooms, while attempting to
+retain some of the depth that made early text adventures such a defining genre.
 
-- monster movement
-- world templates
-- event-driven engine
-- _list more_
+The world grows as the player moves through it, with new rooms being added from the world template (and optionally
+pruned to limit the size of saved games). `textual-engine` supports both dungeon crawlers with randomly generated rooms
+and more structured interactive fiction with pre-written rooms. Within the game world, monsters have emergent behavior,
+watching the room they are in and wandering if they have not seen a player recently.
+
+`textual-engine` runs on both the CLI and in recent browsers, with a demo hosted on Github pages. It is an event-driven
+and service-oriented architecture, with replaceable controllers for actor AI, rendering, world state simulation, and
+even the event bus. Resource loaders are provided for many common protocols, such as local files and HTTPS resources,
+giving players an easy way to load new worlds. Text output is fully localized on the client and world templates include
+a locale bundle, allowing a world to be written in multiple languages without duplicating content or logic.
+
+Command verbs are implemented as extension methods on the entity models, with network-safe methods to search the world
+for other entities and show output to the player. Scripts are invoked through a slot and signal system, where events
+in the game engine invoke a named slot (and corresponding script) on the target entity, and can be extended through the
+module system.
 
 ### For Interactive Fiction
 
@@ -83,21 +100,6 @@ TODO:
 
 ## Concepts
 
-### Entity Types
-
-The commands shown above often require a target, the game entity with which you want to interact.
-
-Entities come in 3 types, and 1 special not-entity subtype:
-
-- `actor`
-  - a player or an NPC with behavior
-- `item`
-  - objects that can be held and used
-- `room`
-  - areas within the game
-- `portal`
-  - passage between rooms
-
 ### Command Structure
 
 When using the classic input mode, the structure of each command line should be: `verb [...target] [index]`
@@ -118,7 +120,22 @@ TODO: note target forms: id, name
 
 A natural-language processing command mode is planned (https://github.com/ssube/textual-engine/issues/94).
 
-### World State and Templates
+### Entity Types
+
+The commands shown above often require a target, the game entity with which you want to interact.
+
+Entities come in 3 types, and 1 special not-entity subtype:
+
+- `actor`
+  - a player or an NPC with behavior
+- `item`
+  - objects that can be held and used
+- `room`
+  - areas within the game
+- `portal`
+  - passage between rooms
+
+### Worlds and Templates
 
 TODO:
 
@@ -304,13 +321,6 @@ TODO:
 - how to validate
 - post them as gists or use github raw links
 - planned: world editor (https://github.com/ssube/textual-engine/issues/73)
-
-### Adding Command Scripts
-
-TODO:
-
-- writing command scripts
-- adding command script modules
 
 ### Developing The Engine
 

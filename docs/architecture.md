@@ -55,8 +55,6 @@ Commands are built by splitting input on whitespace, removing articles (a, an, t
 assuming the verb and target are in the correct order. Some validation is done when invoking commands, but the parsing
 is very simple.
 
-TODO: add NLP tokenization for commands, use parts of speech
-
 #### Common Commands
 
 There are common verbs built into the engine for actions such as:
@@ -66,12 +64,15 @@ There are common verbs built into the engine for actions such as:
 - `look` at an entity
 - `move` to another room
 - `take` an item
+- `use` an item
 - `wait` the turn
 
 #### Meta Commands
 
 There are some meta commands that are handled by the state service, rather than actor scripts.
 
+- `create`
+  - create a new world from the template
 - `debug`
   - print the world state to output
 - `graph`
@@ -118,10 +119,20 @@ Provides:
 
 Binds:
 
+- `LocalCounter`
+- `NodeEventBus`
+- `NextLocale`
+- `YamlParser`
 - `SeedRandom`
-- `InkRender`
 - `LocalScript`
-- `LocalState`
+- `ChainTemplate`
+- `WordTokenizer`
+
+Provides:
+
+- `core-behavior-actor`
+- `core-player-actor`
+- `core-local-state`
 
 ### Node Module
 
@@ -136,7 +147,7 @@ Provides:
 
 ### Actor Service
 
-The actor service handles actor commands and tokenization.
+The actor service handles actor command tokenization and output translation.
 
 ### Loader Service
 

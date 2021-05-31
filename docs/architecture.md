@@ -159,6 +159,7 @@ When the player submits a world command, it is parsed into commands and triggers
 
 <details>
 <summary>
+
 When the client is connected to a remote state service, with a corresponding remote actor on the server-side, the
 command flow is similar but extended. Notably, localization occurs on the client-side after output has been returned,
 one reason for having actor services on both sides.

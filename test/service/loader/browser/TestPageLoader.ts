@@ -65,8 +65,4 @@ describe('page loader', () => {
     consoleSpy.restore();
     expect(consoleSpy).to.have.callCount(1);
   });
-
-  xit('should save strings to local storage');
-  xit('should load strings from local storage');
-  xit('should prefer local storage over page elements');
 });

@@ -30,4 +30,6 @@ describe('word tokenizer', () => {
       verb: 'foo',
     }]);
   });
+
+  xit('should translate and cache verbs');
 });

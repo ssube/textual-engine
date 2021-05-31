@@ -129,6 +129,41 @@ describe('local script service', () => {
     expect(scriptSpy).to.have.callCount(1);
   });
 
-  xit('should gracefully handle undefined slots');
+  it('should gracefully handle undefined slots', async () => {
+    const container = Container.from(new CoreModule());
+    await container.configure({
+      logger: NullLogger.global,
+    });
+
+    const target: Item = {
+      type: 'item',
+      meta: {
+        desc: '',
+        id: '',
+        name: '',
+        template: '',
+      },
+      slots: new Map([
+        ['foo', 'bar'],
+      ]),
+      stats: new Map(),
+      verbs: new Map(),
+    };
+
+    const scriptSpy = spy();
+    const script = await container.create(LocalScriptService, {}, new Map([
+      ['bar', scriptSpy],
+    ]));
+    await script.invoke(target, 'bar', {
+      data: new Map(),
+      random: await container.create(MathRandomGenerator),
+      state: TEST_STATE,
+      stateHelper: getStubHelper(),
+      transfer: await container.create(StateEntityTransfer),
+    });
+
+    expect(scriptSpy).to.have.callCount(0);
+  });
+
   xit('should broadcast events to matching entities');
 });

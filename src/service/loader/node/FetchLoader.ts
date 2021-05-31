@@ -11,7 +11,7 @@ export class NodeFetchLoader extends BaseLoader implements LoaderService {
   constructor(options: BaseLoaderOptions, f = fetch) {
     super(options, ['http', 'https']);
 
-    this.fetch = fetch;
+    this.fetch = f;
   }
 
   public async dump(path: string, data: Buffer): Promise<void> {

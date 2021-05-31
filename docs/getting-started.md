@@ -10,20 +10,20 @@ This guide covers a little bit of everything in light detail.
     - [What Is A Text Adventure?](#what-is-a-text-adventure)
     - [Where Can I Play?](#where-can-i-play)
     - [Notable Features](#notable-features)
-    - [For Interactive Fiction](#for-interactive-fiction)
-    - [For Dungeon Crawlers](#for-dungeon-crawlers)
+      - [For Dungeon Crawlers](#for-dungeon-crawlers)
+      - [For Interactive Fiction](#for-interactive-fiction)
   - [Concepts](#concepts)
     - [Command Structure](#command-structure)
     - [Entity Types](#entity-types)
     - [Worlds and Templates](#worlds-and-templates)
   - [Playing The Game](#playing-the-game)
-    - [Common Commands](#common-commands)
-    - [Game Commands](#game-commands)
-    - [Creating New Worlds](#creating-new-worlds)
+    - [World Commands](#world-commands)
+    - [Meta Commands](#meta-commands)
     - [Looking and Moving](#looking-and-moving)
     - [Inventory and Using Items](#inventory-and-using-items)
     - [Health and Hitting Enemies](#health-and-hitting-enemies)
     - [Saving and Loading Worlds](#saving-and-loading-worlds)
+    - [Creating New Worlds](#creating-new-worlds)
   - [Further Reading](#further-reading)
     - [Creating World Templates](#creating-world-templates)
     - [Developing The Engine](#developing-the-engine)
@@ -79,7 +79,16 @@ for other entities and show output to the player. Scripts are invoked through a 
 in the game engine invoke a named slot (and corresponding script) on the target entity, and can be extended through the
 module system.
 
-### For Interactive Fiction
+#### For Dungeon Crawlers
+
+TODO:
+
+- procedural dungeon crawlers
+- expanding as player moves
+- limited by memory and time
+  - pruning old rooms
+
+#### For Interactive Fiction
 
 TODO:
 
@@ -88,15 +97,6 @@ TODO:
   - no template strings
   - 100% chance on all template refs
   - no procedural rooms, all portals match
-
-### For Dungeon Crawlers
-
-TODO:
-
-- procedural dungeon crawlers
-- expanding as player moves
-- limited by memory and time
-  - pruning old rooms
 
 ## Concepts
 
@@ -157,9 +157,9 @@ turn 1 > help
 available verbs: create, debug, graph, help, load, quit, save, drop, hit, look, move, take, use, wait
 ```
 
-These verbs are split into two groups: commands to the current world and commands to the game itself (meta-commands).
+These verbs are split into two groups: commands to the game world and meta-commands to the game itself.
 
-### Common Commands
+### World Commands
 
 - `drop <item>`
   - drop an item from your inventory
@@ -182,7 +182,7 @@ These verbs are split into two groups: commands to the current world and command
 - `wait`
   - skip your turn
 
-### Game Commands
+### Meta Commands
 
 - `create <template> <seed> [depth]`
   - generate a new world from the `template` with the random `seed`
@@ -201,19 +201,6 @@ These verbs are split into two groups: commands to the current world and command
   - stop the game without saving
 - `save <path>`
   - save the current world to `path`
-
-### Creating New Worlds
-
-When the demo loads, it will create a new world from the `test` template and populate some rooms, so you can start
-playing right away.
-
-A new world can be created at any point with the `create` command: `create template seed [depth]`.
-
-The `depth` parameter controls the initial size of the world and the number of rooms that will be generated before
-the game loads. It does not control the final size of the world, but a large `depth` greater than 10 can cause the
-game to load slowly.
-
-A command to list available world templates is planned (https://github.com/ssube/textual-engine/issues/104).
 
 ### Looking and Moving
 
@@ -306,6 +293,19 @@ loaded world test-0 state from file:///home/ssube/textual-saves/example.yml
 
 Note: the PRNG does not yet resume where it left off, so saving and loading a game may change the outcome of
 random decisions: damage rolls and new rooms, in particular. A fix for this is planned (https://github.com/ssube/textual-engine/issues/108).
+
+### Creating New Worlds
+
+When the demo loads, it will create a new world from the `test` template and populate some rooms, so you can start
+playing right away.
+
+A new world can be created at any point with the `create` command: `create template seed [depth]`.
+
+The `depth` parameter controls the initial size of the world and the number of rooms that will be generated before
+the game loads. It does not control the final size of the world, but a large `depth` greater than 10 can cause the
+game to load slowly.
+
+A command to list available world templates is planned (https://github.com/ssube/textual-engine/issues/104).
 
 ## Further Reading
 

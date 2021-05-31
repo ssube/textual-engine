@@ -1,8 +1,7 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 
-import { ScriptContext, ScriptTarget } from '../../service/script';
 import { isRoom } from '../../model/entity/Room';
-import { SLOT_USE } from '../../util/constants';
+import { ScriptContext, ScriptTarget } from '../../service/script';
 
 export async function RoomStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({
@@ -13,14 +12,4 @@ export async function RoomStep(this: ScriptTarget, context: ScriptContext): Prom
   if (!isRoom(this)) {
     throw new InvalidArgumentError('script target must be a room');
   }
-
-  // TODO: remove, testing broadcast system
-  await context.script.broadcast({
-    meta: {
-      id: 'actor-goblin',
-    },
-    room: {
-      id: this.meta.id,
-    },
-  }, SLOT_USE, context);
 }

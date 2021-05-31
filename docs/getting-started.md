@@ -15,7 +15,7 @@ This guide covers a little bit of everything in light detail.
   - [Concepts](#concepts)
     - [Entity Types](#entity-types)
     - [Command Structure](#command-structure)
-    - [Worlds](#worlds)
+    - [World State and Templates](#world-state-and-templates)
   - [Playing The Game](#playing-the-game)
     - [Common Commands](#common-commands)
     - [Game Commands](#game-commands)
@@ -114,9 +114,16 @@ hit goblin 2
 When multiple entities match the `target`, the `index` can be used to differentiate. Both `target` and `index`
 are optional in some commands.
 
-A natural-language processing command mode is planned.
+TODO: note target forms: id, name
 
-### Worlds
+A natural-language processing command mode is planned (https://github.com/ssube/textual-engine/issues/94).
+
+### World State and Templates
+
+TODO:
+
+- saved game state
+- world templates
 
 ## Playing The Game
 
@@ -189,7 +196,7 @@ The `depth` parameter controls the initial size of the world and the number of r
 the game loads. It does not control the final size of the world, but a large `depth` greater than 10 can cause the
 game to load slowly.
 
-A command to list available world templates is planned.
+A command to list available world templates is planned (https://github.com/ssube/textual-engine/issues/104).
 
 ### Looking and Moving
 
@@ -236,7 +243,7 @@ You can `take` an item to pick it up, or `drop` something you are already carryi
 
 Carried items will be automatically used when you `hit` an enemy, but you can `use` an item on yourself to heal.
 
-Using items on actors or with other items is planned.
+Using items on actors or with other items is planned (https://github.com/ssube/textual-engine/issues/102, https://github.com/ssube/textual-engine/issues/107).
 
 ### Health and Hitting Enemies
 
@@ -281,7 +288,7 @@ loaded world test-0 state from file:///home/ssube/textual-saves/example.yml
 ```
 
 Note: the PRNG does not yet resume where it left off, so saving and loading a game may change the outcome of
-random decisions: damage rolls and new rooms, in particular. A fix for this is planned.
+random decisions: damage rolls and new rooms, in particular. A fix for this is planned (https://github.com/ssube/textual-engine/issues/108).
 
 ## Further Reading
 
@@ -296,7 +303,7 @@ TODO:
 - write the YAML
 - how to validate
 - post them as gists or use github raw links
-- planned: world editor
+- planned: world editor (https://github.com/ssube/textual-engine/issues/73)
 
 ### Adding Command Scripts
 

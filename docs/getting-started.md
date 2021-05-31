@@ -143,8 +143,8 @@ These verbs are split into two groups: commands to the current world and command
   - hit an enemy actor
 - `look [entity]`
   - describe the current room, or a specific actor or item within it
-- `move [direction] [portal]`
-  - move through the given portal
+- `move [group] [name]`
+  - move through the named portal
   - you must provide one or both of `direction` and `portal`
   - for example, if the `west door` is the only `door` and only portal on the `west` side of the room, any of the following will work:
     - `west`
@@ -161,22 +161,22 @@ These verbs are split into two groups: commands to the current world and command
 ### Game Commands
 
 - `create <template> <seed> [depth]`
-  - generate a new world from the given `template` and `seed`
+  - generate a new world from the `template` with the random `seed`
   - the optional `depth` parameter controls the number of rooms (and monsters) generated before the world loads
 - `debug`
   - print a debug view of the world
   - not for normal gameplay
 - `graph <path>`
-  - print a debug graph of the world
+  - save a debug graph of the world to `path`
   - not for normal gameplay
 - `help`
   - print the localized list of available verbs
 - `load <path>`
-  - load an existing world from the given path
+  - load an existing world from `path`
 - `quit`
   - stop the game without saving
 - `save <path>`
-  - save the current world to the given path
+  - save the current world to `path`
 
 ### Creating New Worlds
 

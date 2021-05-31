@@ -56,11 +56,11 @@ export class CoreModule extends Module {
     await super.configure(options);
 
     this.bind(INJECT_EVENT).toFactory(() => this.event.get());
-    this.bind(INJECT_PARSER).toConstructor(YamlParser);
-    this.bind(INJECT_TOKENIZER).toConstructor(WordTokenizer);
+    this.bind(INJECT_PARSER).toConstructor(YamlParser); // TODO: singleton
+    this.bind(INJECT_TOKENIZER).toConstructor(WordTokenizer); // TODO: singleton
 
-    this.bind('core-player-actor').toConstructor(PlayerActorService);
     this.bind('core-behavior-actor').toConstructor(BehaviorActorService);
+    this.bind('core-player-actor').toConstructor(PlayerActorService);
 
     this.bind('core-local-state').toConstructor(LocalStateService);
   }

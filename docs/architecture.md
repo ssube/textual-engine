@@ -8,13 +8,14 @@ This guide covers the engine architecture and what role each service type plays.
   - [Contents](#contents)
   - [Commands](#commands)
     - [Command Tokenization](#command-tokenization)
-      - [Common Commands](#common-commands)
-      - [Meta Commands](#meta-commands)
-      - [Verb Commands](#verb-commands)
+    - [Common Commands](#common-commands)
+    - [Meta Commands](#meta-commands)
+    - [Custom Verb Commands](#custom-verb-commands)
   - [Entities](#entities)
     - [Actor Entity](#actor-entity)
     - [Item Entity](#item-entity)
     - [Room Entity](#room-entity)
+      - [Room Portal Entity](#room-portal-entity)
   - [Events](#events)
     - [Event Flow: Creating a New World](#event-flow-creating-a-new-world)
     - [Event Flow: Loading an Existing World](#event-flow-loading-an-existing-world)
@@ -26,20 +27,34 @@ This guide covers the engine architecture and what role each service type plays.
     - [Node Module](#node-module)
   - [Services](#services)
     - [Actor Service](#actor-service)
+      - [Behavior Actor](#behavior-actor)
+      - [Player Actor](#player-actor)
+    - [Counter Service](#counter-service)
+      - [Local Counter](#local-counter)
+    - [Event Service](#event-service)
+      - [Node Event Bus](#node-event-bus)
     - [Loader Service](#loader-service)
       - [Browser Fetch Loader Service](#browser-fetch-loader-service)
       - [Browser Page Loader Service](#browser-page-loader-service)
       - [Node Fetch Loader Service](#node-fetch-loader-service)
       - [Node File Loader Service](#node-file-loader-service)
+    - [Locale Service](#locale-service)
+      - [Next Locale](#next-locale)
     - [Parser Service](#parser-service)
+      - [YAML Parser](#yaml-parser)
     - [Random Service](#random-service)
+      - [Alea Random](#alea-random)
+      - [Math Random](#math-random)
     - [Render Service](#render-service)
-      - [Line Render Service](#line-render-service)
-      - [Ink Render Service](#ink-render-service)
-      - [React DOM Render Service](#react-dom-render-service)
+      - [Browser DOM Render Service](#browser-dom-render-service)
+      - [Node Line Render Service](#node-line-render-service)
+      - [Node Ink Render Service](#node-ink-render-service)
     - [Script Service](#script-service)
+      - [Local Script](#local-script)
     - [State Service](#state-service)
       - [Local State](#local-state)
+    - [Template Service](#template-service)
+      - [Chain Template](#chain-template)
     - [Tokenizer Service](#tokenizer-service)
       - [Natural Tokenizer](#natural-tokenizer)
       - [Word Tokenizer](#word-tokenizer)
@@ -60,7 +75,7 @@ Commands are built by splitting input on whitespace, removing articles (a, an, t
 assuming the verb and target are in the correct order. Some validation is done when invoking commands, but the parsing
 is very simple.
 
-#### Common Commands
+### Common Commands
 
 There are common verbs built into the engine for actions such as:
 
@@ -72,7 +87,7 @@ There are common verbs built into the engine for actions such as:
 - `use` an item
 - `wait` the turn
 
-#### Meta Commands
+### Meta Commands
 
 There are some meta commands that are handled by the state service, rather than actor scripts.
 
@@ -90,7 +105,7 @@ There are some meta commands that are handled by the state service, rather than 
   - save the world state to a path
 - `quit`
 
-#### Verb Commands
+### Custom Verb Commands
 
 World entities may define their own verbs, which can be invoked normally through input.
 
@@ -107,6 +122,10 @@ TODO: explain items
 ### Room Entity
 
 TODO: explain rooms
+
+#### Room Portal Entity
+
+TODO: explain portals
 
 ## Events
 
@@ -137,7 +156,7 @@ triggers the auto-join sequence ([shown in the create event flow](#event-flow-cr
 
 </summary>
 
-![flowchart with player input being processed locally](./events-command-local.svg)
+![flowchart with player input being processed locally](./events-world-load.svg)
 
 </details>
 
@@ -214,6 +233,30 @@ Provides:
 
 The actor service handles actor command tokenization and output translation.
 
+#### Behavior Actor
+
+Batch handling of NPCs.
+
+#### Player Actor
+
+Singular player client.
+
+### Counter Service
+
+Provide unique IDs.
+
+#### Local Counter
+
+In-memory incrementing integer counter.
+
+### Event Service
+
+Ship events between services.
+
+#### Node Event Bus
+
+Uses Node's EventEmitter or polyfill.
+
 ### Loader Service
 
 The loader service handles file I/O: reading from and writing to paths.
@@ -254,13 +297,33 @@ Protocols:
 
 - `file`
 
+### Locale Service
+
+Provides translations.
+
+#### Next Locale
+
+Based on i18next.
+
 ### Parser Service
 
 The parser service parses data files loaded by the loader service.
 
+#### YAML Parser
+
+js-yaml based with extended types.
+
 ### Random Service
 
 The random generator service generates pseudo-random numbers.
+
+#### Alea Random
+
+seedrandom-based Alea generator.
+
+#### Math Random
+
+Not very random and not recommended for gameplay, good for testing.
 
 ### Render Service
 
@@ -268,21 +331,25 @@ The render service handles player I/O, that is, reading from and writing to the 
 
 This may wrap a lower-level rendering interface and capture input events.
 
-#### Line Render Service
+#### Browser DOM Render Service
+
+Uses [the React library](https://github.com/facebook/react/) in the browser to draw an HTML interface.
+
+#### Node Line Render Service
 
 Uses [the Node `readline` module](https://nodejs.org/api/readline.html) on the CLI to draw a basic line-based interface.
 
-#### Ink Render Service
+#### Node Ink Render Service
 
 Uses [the Ink library](https://github.com/vadimdemedes/ink) on the CLI to draw a responsive text interface.
-
-#### React DOM Render Service
-
-Uses [the React library](https://github.com/facebook/react/) in the browser to draw an HTML interface.
 
 ### Script Service
 
 The script service invokes command scripts on behalf of world entities.
+
+#### Local Script
+
+Run scripts from modules in the current runtime.
 
 ### State Service
 
@@ -291,6 +358,14 @@ The state service manages world state, creating it from templates and stepping i
 #### Local State
 
 Step state in-memory.
+
+### Template Service
+
+Renders template primitives.
+
+#### Chain Template
+
+Uses `(foo|bar)` chains for input and `AND/OR` chains for output.
 
 ### Tokenizer Service
 

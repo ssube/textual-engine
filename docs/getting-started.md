@@ -84,6 +84,7 @@ module system.
 TODO:
 
 - procedural dungeon crawlers
+- templates and layered modifiers
 - expanding as player moves
 - limited by memory and time
   - pruning old rooms
@@ -102,7 +103,9 @@ TODO:
 
 ### Command Structure
 
-When using the classic input mode, the structure of each command line should be: `verb [...target] [index]`
+When using the classic input mode, the structure of each command line should be `verb [...target] [index]`. The `verb`
+is always required, while the `target` and `index` are optional in some commands (see
+[the list of commands](#world-commands) for specifics).
 
 For example:
 
@@ -113,32 +116,47 @@ move west
 hit goblin 2
 ```
 
-When multiple entities match the `target`, the `index` can be used to differentiate. Both `target` and `index`
-are optional in some commands.
+The `target` can be an entity's name or its unique ID, if the name might be ambiguous. For example, in this room:
 
-TODO: note target forms: id, name
+```none
+You are in Dungeon: damp dungeon (room-dungeon-0).
+You are holding a Cracked Sword: short sword with a large crack (item-sword-15).
+A Goblin is in the room: smelly goblin (actor-goblin-0).
+A window leads to the west (room-marsh-1).
+A door leads to the east (room-cave-16).
+```
+
+The valid targets include:
+
+- `sword`, `cracked sword`, and `item-sword-15` all refer to the short sword you are holding
+- `goblin` or `actor-goblin-0` is the smelly goblin enemy
+- `window`, `west`, and `west window` all lead to `room-marsh-1`
+
+When multiple entities match the `target`, the `index` can be used to differentiate.
 
 A natural-language processing command mode is planned (https://github.com/ssube/textual-engine/issues/94).
 
 ### Entity Types
 
-The commands shown above often require a target, the game entity with which you want to interact.
-
-Entities come in 3 types, and 1 special not-entity subtype:
+The commands shown above often require a target, the game entity with which you want to interact. There are a few
+kinds of entities in the world:
 
 - `actor`
-  - a player or an NPC with behavior
+  - a player character responding to input
+  - or an NPC character with AI behavior
 - `item`
-  - objects that can be held and used
+  - objects that can be carried and used
 - `room`
   - areas within the game
-- `portal`
-  - passage between rooms
+  - both indoor and outdoor areas
+
+The portals that lead into other rooms are also valid targets, but are not proper entities on their own.
 
 ### Worlds and Templates
 
 TODO:
 
+- loading games, templates
 - saved game state
 - world templates
 
@@ -187,7 +205,8 @@ These verbs are split into two groups: commands to the game world and meta-comma
 - `create <template> <seed> [depth]`
   - generate a new world from the `template` with the random `seed`
   - the optional `depth` parameter controls the number of rooms (and monsters) generated before the world loads
-- `debug`
+  - the default `depth` is 4, and values greater than 12 will generate thousands of rooms, slowing the game down
+-`debug`
   - print a debug view of the world
   - not for normal gameplay
 - `graph <path>`
@@ -215,10 +234,18 @@ turn 0 > look
 player-0 will look the next turn.
 You are a player-0: smelly goblin with swords (actor-goblin-11).
 You are in Dungeon: damp dungeon (room-dungeon-0).
-You are holding a Cracked Sword: short sword with a large crack (short sword with a large crack).
+You are holding a Cracked Sword: short sword with a large crack (item-sword-15).
 A Goblin is in the room: smelly goblin (actor-goblin-0).
 A window leads to the west (room-marsh-1).
 A door leads to the east (room-cave-16).
+```
+
+You can also `look` at an actor or item within the room for more details:
+
+```none
+turn 1 > look goblin
+player-0 will look the goblin.
+A Goblin is in the room: smelly goblin (actor-goblin-0).
 ```
 
 You can `move` through a portal into another room by name (`window`), group (`west`), or both (`west window`). Portals
@@ -239,11 +266,12 @@ picked up, carried, and later used on yourself or to fight enemies.
 When you `look` around, your inventory will be listed, followed by items in the current room:
 
 ```none
-You are holding a Cracked Sword: short sword with a large crack (short sword with a large crack).
+You are holding a Cracked Sword: short sword with a large crack (item-sword-15).
 You see a Rusty Sword: rusting short sword (item-sword-10).
 ```
 
-You can `take` an item to pick it up, or `drop` something you are already carrying.
+You can `take` an item to pick it up, or `drop` something you are already carrying. There is not an inventory limit
+at this time.
 
 Carried items will be automatically used when you `hit` an enemy, but you can `use` an item on yourself to heal.
 
@@ -302,8 +330,7 @@ playing right away.
 A new world can be created at any point with the `create` command: `create template seed [depth]`.
 
 The `depth` parameter controls the initial size of the world and the number of rooms that will be generated before
-the game loads. It does not control the final size of the world, but a large `depth` greater than 10 can cause the
-game to load slowly.
+the game loads, but it does not control the final size of the world.
 
 A command to list available world templates is planned (https://github.com/ssube/textual-engine/issues/104).
 

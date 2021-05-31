@@ -137,11 +137,11 @@ These verbs are split into two groups: commands to the current world and command
 
 ### Common Commands
 
-- `drop item`
+- `drop <item>`
   - drop an item from your inventory
-- `hit enemy`
+- `hit <actor>`
   - hit an enemy actor
-- `look [noun]`
+- `look [entity]`
   - describe the current room, or a specific actor or item within it
 - `move [direction] [portal]`
   - move through the given portal
@@ -150,9 +150,9 @@ These verbs are split into two groups: commands to the current world and command
     - `west`
     - `door`
     - `west door`
-- `take item`
+- `take <item>`
   - take an item from the current room
-- `use item`
+- `use <item>`
   - use an item on yourself
   - (using items on other actors is a planned feature)
 - `wait`
@@ -160,22 +160,22 @@ These verbs are split into two groups: commands to the current world and command
 
 ### Game Commands
 
-- `create template seed [depth]`
+- `create <template> <seed> [depth]`
   - generate a new world from the given `template` and `seed`
   - the optional `depth` parameter controls the number of rooms (and monsters) generated before the world loads
 - `debug`
   - print a debug view of the world
   - not for normal gameplay
-- `graph path`
+- `graph <path>`
   - print a debug graph of the world
   - not for normal gameplay
 - `help`
   - print the localized list of available verbs
-- `load path`
+- `load <path>`
   - load an existing world from the given path
 - `quit`
   - stop the game without saving
-- `save path`
+- `save <path>`
   - save the current world to the given path
 
 ### Creating New Worlds

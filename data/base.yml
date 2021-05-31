@@ -1,4 +1,3 @@
-states: [] # template file
 worlds:
   - locale:
       bundles:
@@ -22,7 +21,7 @@ worlds:
                   seen: |-
                     You are in {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
                   inventory: |-
-                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.desc}}).
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
                   portal: |-
                     A {{portal.name}} leads to the {{portal.sourceGroup}} ({{portal.dest}}).
                 actor:

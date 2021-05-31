@@ -36,10 +36,11 @@ and intentionally written interactive fiction are possible, in a turn-based syst
 
 ### What Is A Text Adventure?
 
-TODO:
-
-- some history
-- IF vs Roguelike
+Text adventures are some of the oldest computer games, including a huge range of titles, from classic literature
+adapter as [interactive fiction](https://en.wikipedia.org/wiki/Interactive_fiction#Notable_works) to
+[Roguelikes](https://en.wikipedia.org/wiki/Text-based_game#Roguelike) with random dungeons and ASCII tiles. Text
+adventures have been documented since the 19060s, became commercially successful in the 1970s and 80s, and now enjoy
+a [large supply of indie releases](https://textadventures.co.uk/).
 
 ### Where Can I Play?
 

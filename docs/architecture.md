@@ -15,6 +15,11 @@ This guide covers the engine architecture and what role each service type plays.
     - [Actor Entity](#actor-entity)
     - [Item Entity](#item-entity)
     - [Room Entity](#room-entity)
+  - [Events](#events)
+    - [Event Flow: Creating a New World](#event-flow-creating-a-new-world)
+    - [Event Flow: Loading an Existing World](#event-flow-loading-an-existing-world)
+    - [Event Flow: Command with Local State](#event-flow-command-with-local-state)
+    - [Event Flow: Command with Remote State](#event-flow-command-with-remote-state)
   - [Modules](#modules)
     - [Browser Module](#browser-module)
     - [Core Module](#core-module)
@@ -102,6 +107,66 @@ TODO: explain items
 ### Room Entity
 
 TODO: explain rooms
+
+## Events
+
+The entire engine is event-driven, with intentionally little direct coupling between services. Some operations are
+too trivial to bus, like translating a string, but any significant change to game state should be sent as an event.
+
+### Event Flow: Creating a New World
+
+<details>
+<summary>
+
+When the player sends a `create` command, generate a new world and inform the actor service, which will automatically
+join the loaded world.
+
+</summary>
+
+![flowchart with actor joining local world](./events-world-create.svg)
+
+</details>
+
+### Event Flow: Loading an Existing World
+
+<details>
+<summary>
+
+When the player sends a `load` command, the path is passed on to the loader, which responds with the loaded state and
+triggers the auto-join sequence ([shown in the create event flow](#event-flow-creating-a-new-world)).
+
+</summary>
+
+![flowchart with player input being processed locally](./events-command-local.svg)
+
+</details>
+
+### Event Flow: Command with Local State
+
+<details>
+<summary>
+
+When the player submits a world command, it is parsed into commands and triggers a state step, processed locally.
+
+</summary>
+
+![flowchart with player input being processed locally](./events-command-local.svg)
+
+</details>
+
+### Event Flow: Command with Remote State
+
+<details>
+<summary>
+When the client is connected to a remote state service, with a corresponding remote actor on the server-side, the
+command flow is similar but extended. Notably, localization occurs on the client-side after output has been returned,
+one reason for having actor services on both sides.
+
+</summary>
+
+![flowchart with player input being sent to remote server](./events-command-remote.svg)
+
+</details>
 
 ## Modules
 

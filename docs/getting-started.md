@@ -206,7 +206,7 @@ These verbs are split into two groups: commands to the game world and meta-comma
   - generate a new world from the `template` with the random `seed`
   - the optional `depth` parameter controls the number of rooms (and monsters) generated before the world loads
   - the default `depth` is 4, and values greater than 12 will generate thousands of rooms, slowing the game down
--`debug`
+- `debug`
   - print a debug view of the world
   - not for normal gameplay
 - `graph <path>`

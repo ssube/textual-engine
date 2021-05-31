@@ -3,7 +3,7 @@ import { alea } from 'seedrandom';
 import { RandomGenerator } from '.';
 import { BYTE_RANGE } from '../../util/constants';
 
-export class SeedRandomGenerator implements RandomGenerator {
+export class AleaRandomGenerator implements RandomGenerator {
   protected source: ReturnType<typeof alea>; // this should be imported above, but... that is an error, this works
 
   constructor() {

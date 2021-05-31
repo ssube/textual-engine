@@ -189,7 +189,7 @@ Binds:
 - `NodeEventBus`
 - `NextLocale`
 - `YamlParser`
-- `SeedRandom`
+- `AleaRandom`
 - `LocalScript`
 - `ChainTemplate`
 - `WordTokenizer`

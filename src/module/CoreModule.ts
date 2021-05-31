@@ -24,7 +24,7 @@ import { LocaleService } from '../service/locale';
 import { NextLocaleService } from '../service/locale/NextLocale';
 import { YamlParser } from '../service/parser/YamlParser';
 import { RandomGenerator } from '../service/random';
-import { SeedRandomGenerator } from '../service/random/SeedRandom';
+import { AleaRandomGenerator } from '../service/random/AleaRandom';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScript';
 import { LocalStateService } from '../service/state/TurnState';
@@ -47,7 +47,7 @@ export class CoreModule extends Module {
     this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));
     this.event = new Singleton(() => mustExist(this.container).create(NodeEventBus));
     this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
-    this.random = new Singleton(() => mustExist(this.container).create(SeedRandomGenerator));
+    this.random = new Singleton(() => mustExist(this.container).create(AleaRandomGenerator));
     this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
     this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
   }

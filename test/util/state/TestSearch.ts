@@ -1,93 +1,18 @@
 import { expect } from 'chai';
 
-import { ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
-import { ITEM_TYPE } from '../../../src/model/entity/Item';
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { WorldState } from '../../../src/model/world/State';
 import { findContainer, findRoom, searchState } from '../../../src/util/state';
+import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
 
-const TEST_STATE: WorldState = {
-  meta: {
-    desc: '',
-    id: '',
-    name: '',
-    template: '',
-  },
-  rooms: [{
-    actors: [{
-      actorType: ActorType.DEFAULT,
-      items: [{
-        meta: {
-          desc: 'bon',
-          id: 'bon',
-          name: 'bon',
-          template: 'bon',
-        },
-        slots: new Map(),
-        stats: new Map(),
-        type: ITEM_TYPE,
-        verbs: new Map(),
-      }],
-      meta: {
-        desc: 'bun',
-        id: 'bun',
-        name: 'bun',
-        template: 'bun',
-      },
-      skills: new Map(),
-      slots: new Map(),
-      stats: new Map(),
-      type: ACTOR_TYPE,
-    }],
-    items: [],
-    meta: {
-      desc: 'foo',
-      id: 'foo',
-      name: 'foo',
-      template: 'foo',
-    },
-    portals: [],
-    slots: new Map(),
-    type: ROOM_TYPE,
-    verbs: new Map(),
-  }, {
-    actors: [],
-    items: [{
-      meta: {
-        desc: 'bin',
-        id: 'bin',
-        name: 'bin',
-        template: 'bin',
-      },
-      slots: new Map(),
-      stats: new Map(),
-      type: ITEM_TYPE,
-      verbs: new Map(),
-    }],
-    meta: {
-      desc: 'bar',
-      id: 'bar',
-      name: 'bar',
-      template: 'bar',
-    },
-    portals: [],
-    slots: new Map(),
-    type: ROOM_TYPE,
-    verbs: new Map(),
-  }],
-  start: {
-    room: '',
-  },
-  step: {
-    time: 0,
-    turn: 0,
-  },
-  world: {
-    depth: 0,
-    id: '',
-    seed: '',
-  },
-};
+const TEST_STATE: WorldState = makeTestState('', [
+  makeTestRoom('foo', 'foo', 'foo', [
+    makeTestActor('bun', 'bun', 'bun', makeTestItem('bon', 'bon', 'bon'))
+  ], [/* no items */]),
+  makeTestRoom('bar', 'bar', 'bar', [/* no actors */], [
+    makeTestItem('bin', 'bin', 'bin'),
+  ]),
+]);
 
 describe('state search utils', () => {
   describe('search state helper', () => {

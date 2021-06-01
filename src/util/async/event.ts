@@ -85,7 +85,10 @@ export function onceEvent<
   return pending;
 }
 
-export function catchAndLog(p: Promise<any>, logger: Logger, msg: string) {
+/**
+ * Wrap a promise to log errors when it is rejected.
+ */
+export function catchAndLog(p: Promise<unknown>, logger: Logger, msg: string): void {
   p.catch((err) => {
     logger.error(err, msg);
   });

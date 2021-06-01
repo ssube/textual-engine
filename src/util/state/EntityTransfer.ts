@@ -92,14 +92,11 @@ export class StateEntityTransfer {
     target.actors.push(transfer.moving);
 
     await context.script.invoke(target, SLOT_ENTER, {
+      ...context,
       actor: transfer.moving,
       data: new Map([
         ['source', transfer.source],
       ]),
-      random: context.random,
-      state: context.state,
-      stateHelper: context.stateHelper,
-      transfer: context.transfer,
     });
   }
 
@@ -155,14 +152,11 @@ export class StateEntityTransfer {
     target.items.push(transfer.moving);
 
     await context.script.invoke(target, SLOT_GET, {
+      ...context,
       item: transfer.moving,
       data: new Map([
         ['source', transfer.source],
       ]),
-      random: context.random,
-      state: context.state,
-      stateHelper: context.stateHelper,
-      transfer: context.transfer,
     });
   }
 }

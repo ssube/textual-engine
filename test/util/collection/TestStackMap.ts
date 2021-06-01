@@ -41,7 +41,7 @@ describe('stack map', () => {
     expect(map.get('bar')).to.deep.equal([]);
   });
 
-  it('should clear items normally', async () => {
+  it('should clear data normally', async () => {
     const map = new StackMap();
     map.push('foo', 1);
     map.push('bar', 1);
@@ -49,5 +49,13 @@ describe('stack map', () => {
 
     map.clear();
     expect(map.size).to.equal(0);
+  });
+
+  it('should test key presence normally', async () => {
+    const map = new StackMap();
+    map.push('foo', 1);
+
+    expect(map.has('foo')).to.equal(true);
+    expect(map.has('bar')).to.equal(false);
   });
 });

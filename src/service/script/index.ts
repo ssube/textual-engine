@@ -18,6 +18,8 @@ export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Pro
 
 export interface StateHelper {
   enter: (target: ShowSource) => Promise<void>;
+  // find: () => Promise<Array<WorldEntity>>; // replaces searchState
+  // move: () => Promise<void>; // replaces transfer
   show: (msg: string, context?: LocaleContext, volume?: ShowVolume, source?: ShowSource) => Promise<void>;
   quit: () => Promise<void>;
 }

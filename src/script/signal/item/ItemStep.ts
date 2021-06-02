@@ -1,7 +1,7 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 
-import { ScriptContext, ScriptTarget } from '../../service/script';
-import { isItem } from '../../model/entity/Item';
+import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { isItem } from '../../../model/entity/Item';
 
 export async function ItemStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({

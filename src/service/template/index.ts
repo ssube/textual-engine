@@ -1,5 +1,6 @@
+import { ModifierPrimitive } from '../../model/mapped/Modifier';
 import { TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/mapped/Template';
-import { VerbMap } from '../../util/types';
+import { ScriptMap } from '../../util/types';
 
 export interface TemplateService {
   modifyNumber(base: number, mod: TemplateNumber): number;
@@ -8,6 +9,7 @@ export interface TemplateService {
   modifyStringList(base: Array<string>, mod: Array<TemplateString>): Array<string>;
   modifyNumberMap(base: Map<string, number>, mod: Map<string, TemplateNumber>): Map<string, number>;
   modifyStringMap(base: Map<string, string>, mod: Map<string, TemplateString>): Map<string, string>;
+  modifyScriptMap(target: ScriptMap, mods: ModifierPrimitive<ScriptMap>): ScriptMap;
 
   renderString(input: TemplateString): string;
   renderNumber(input: TemplateNumber): number;
@@ -15,5 +17,5 @@ export interface TemplateService {
   renderStringList(input: Array<TemplateString>): Array<string>;
   renderNumberMap(input: Map<string, TemplateNumber>): Map<string, number>;
   renderStringMap(input: Map<string, TemplateString>): Map<string, string>;
-  renderVerbMap(input: TemplatePrimitive<VerbMap>): VerbMap;
+  renderScriptMap(input: TemplatePrimitive<ScriptMap>): ScriptMap;
 }

@@ -156,34 +156,30 @@ meta:
 
 ### Actor Templates
 
-Actor templates have metadata and slots, act as a container for items (inventory), and store some numeric data (skills
-and stats).
+Actor templates have metadata and scripts, act as a container for items (inventory), and store some numeric stats.
 
 - `meta`: template metadata
 - `items`: list of item template refs
-- `skills`: a `[string, number]` map of actor skills (swords, bows, etc)
-- `slots`: a `[string, string]` map of event scripts
+- `scripts`: a `[string, string]` map of event scripts
 - `stats`: a `[string, number]` map of actor statistics (health, stamina, etc)
 
 ### Item Templates
 
-Item templates have metadata and slots, have custom verbs, and store some numeric data (skills and stats).
+Item templates have metadata and scripts, have custom verbs, and store some numeric stats.
 
 - `meta`: template metadata
-- `slots`: a `[string, string]` map of event scripts
+- `scripts`: a `[string, TODO]` map of event scripts
 - `stats`: a `[string, number]` map of item statistics (health, damage, etc)
-- `verbs`: a map, unused
 
 ### Room Templates
 
-Room templates have metadata and slots, have custom verbs, and act as a container for actors, items, and portals.
+Room templates have metadata and scripts, have custom verbs, and act as a container for actors, items, and portals.
 
 - `meta`: template metadata
 - `actors`: list of actor template refs
 - `items`: list of item template refs
 - `portals`: list of portal templates
-- `slots`: a `[string, string]` map of event scripts
-- `verbs`: a map, unused
+- `scripts`: a `[string, TODO]` map of event scripts
 
 #### Room Portal Templates
 

@@ -2,11 +2,12 @@ import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-util
 import { BaseOptions, Inject } from 'noicejs';
 
 import { TemplateService } from '.';
+import { ModifierPrimitive } from '../../model/mapped/Modifier';
 import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/mapped/Template';
 import { INJECT_RANDOM } from '../../module';
 import { JoinChain } from '../../util/template/JoinChain';
 import { splitChain } from '../../util/template/SplitChain';
-import { VerbMap, VerbSlot } from '../../util/types';
+import { ScriptMap, ScriptRef } from '../../util/types';
 import { RandomGenerator } from '../random';
 
 export interface PipeTemplateOptions extends BaseOptions {
@@ -68,6 +69,10 @@ export class ChainTemplateService implements TemplateService {
       }
     }
     return result;
+  }
+
+  public modifyScriptMap(target: ScriptMap, mods: ModifierPrimitive<ScriptMap>): ScriptMap {
+    return target;
   }
 
   public renderString(input: TemplateString): string {
@@ -137,13 +142,13 @@ export class ChainTemplateService implements TemplateService {
     return result;
   }
 
-  public renderVerbMap(input: Map<string, BaseTemplate<VerbSlot>>): VerbMap {
+  public renderScriptMap(input: Map<string, BaseTemplate<ScriptRef>>): ScriptMap {
     const result = new Map();
 
     for (const [key, value] of input) {
-      const verb: VerbSlot = {
-        slot: this.renderString(value.slot),
+      const verb: ScriptRef = {
         data: this.renderPrimitiveMap(value.data),
+        name: this.renderString(value.name),
       };
 
       result.set(key, verb);

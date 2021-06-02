@@ -8,7 +8,8 @@ import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
-import { getStubHelper } from '../../helper';
+import { makeTestItem } from '../../entity';
+import { getStubHelper, getTestContainer } from '../../helper';
 
 const TEST_STATE: WorldState = {
   meta: {
@@ -47,9 +48,8 @@ describe('local script service', () => {
         name: '',
         template: '',
       },
-      slots: new Map(),
+      scripts: new Map(),
       stats: new Map(),
-      verbs: new Map(),
     };
 
     const script = await container.create(LocalScriptService, {}, new Map());
@@ -62,26 +62,17 @@ describe('local script service', () => {
     });
   });
 
-  it('should gracefully handle unknown scripts', async () => {
+  it('should gracefully skip unknown scripts', async () => {
     const container = Container.from(new CoreModule());
     await container.configure({
       logger: NullLogger.global,
     });
 
-    const target: Item = {
-      type: 'item',
-      meta: {
-        desc: '',
-        id: '',
-        name: '',
-        template: '',
-      },
-      slots: new Map([
-        ['foo', 'none'],
-      ]),
-      stats: new Map(),
-      verbs: new Map(),
-    };
+    const target: Item = makeTestItem('', '', '');
+    target.scripts.set('foo', {
+      data: new Map(),
+      name: 'none',
+    });
 
     const script = await container.create(LocalScriptService, {}, new Map());
     await script.invoke(target, 'foo', {
@@ -94,25 +85,13 @@ describe('local script service', () => {
   });
 
   it('should invoke scripts with entity', async () => {
-    const container = Container.from(new CoreModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
+    const container = await getTestContainer(new CoreModule());
 
-    const target: Item = {
-      type: 'item',
-      meta: {
-        desc: '',
-        id: '',
-        name: '',
-        template: '',
-      },
-      slots: new Map([
-        ['foo', 'bar'],
-      ]),
-      stats: new Map(),
-      verbs: new Map(),
-    };
+    const target: Item = makeTestItem('', '', '');
+    target.scripts.set('foo', {
+      data: new Map(),
+      name: 'bar',
+    });
 
     const scriptSpy = spy();
     const script = await container.create(LocalScriptService, {}, new Map([
@@ -129,26 +108,17 @@ describe('local script service', () => {
     expect(scriptSpy).to.have.callCount(1);
   });
 
-  it('should gracefully handle undefined slots', async () => {
+  it('should gracefully handle undefined scripts', async () => {
     const container = Container.from(new CoreModule());
     await container.configure({
       logger: NullLogger.global,
     });
 
-    const target: Item = {
-      type: 'item',
-      meta: {
-        desc: '',
-        id: '',
-        name: '',
-        template: '',
-      },
-      slots: new Map([
-        ['foo', 'bar'],
-      ]),
-      stats: new Map(),
-      verbs: new Map(),
-    };
+    const target: Item = makeTestItem('', '', '');
+    target.scripts.set('foo', {
+      data: new Map(),
+      name: 'bar',
+    });
 
     const scriptSpy = spy();
     const script = await container.create(LocalScriptService, {}, new Map([

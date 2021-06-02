@@ -2,7 +2,7 @@ import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
 import { makeConstStringSchema } from '../../util/schema';
-import { SlotMap, VerbMap } from '../../util/types';
+import { ScriptMap } from '../../util/types';
 import { Template, TEMPLATE_REF_SCHEMA } from '../mapped/Template';
 import { Metadata, METADATA_SCHEMA } from '../Metadata';
 import { Actor } from './Actor';
@@ -18,8 +18,7 @@ export interface Room {
   actors: Array<Actor>;
   items: Array<Item>;
   portals: Array<Portal>;
-  slots: SlotMap;
-  verbs: VerbMap;
+  scripts: ScriptMap;
 }
 
 export function isRoom(entity: Optional<Entity>): entity is Room {
@@ -46,16 +45,12 @@ export const ROOM_SCHEMA: JSONSchemaType<Template<Room>> = {
           type: 'array',
           items: PORTAL_SCHEMA,
         },
-        slots: {
-          type: 'object',
-          required: [],
-        },
-        verbs: {
+        scripts: {
           type: 'object',
           required: [],
         },
       },
-      required: ['actors', 'items', 'meta', 'portals', 'slots', 'type', 'verbs'],
+      required: ['actors', 'items', 'meta', 'portals', 'scripts', 'type'],
     },
     mods: {
       type: 'array',

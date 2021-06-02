@@ -34,8 +34,8 @@ This guide covers the engine architecture in detail, describing entities and sho
     - [Script Context](#script-context)
       - [Script Target (`this`)](#script-target-this)
       - [Scope Data](#scope-data)
-    - [Slots](#slots)
-    - [Verbs](#verbs)
+    - [Signal Scripts](#signal-scripts)
+    - [Verb Scripts](#verb-scripts)
 
 ## Config
 
@@ -236,10 +236,10 @@ The context contains a data field, suitable for passing in non-nested numbers an
 
 TODO: support custom template data for scripts
 
-### Slots
+### Signal Scripts
 
-Slots are named events on an entity, linked to (named) scripts.
+Signals are named events on an entity, linked to (named) scripts.
 
-### Verbs
+### Verb Scripts
 
 Verbs are custom commands, which invoke a slot with some additional data.

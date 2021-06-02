@@ -1,6 +1,6 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptContext, ScriptTarget } from '../../service/script';
+import { ScriptContext, ScriptTarget } from '../../../service/script';
 
 export async function ItemUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
   const actor = mustExist(context.actor);

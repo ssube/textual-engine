@@ -1,9 +1,9 @@
 import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 
-import { isActor } from '../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../service/script';
-import { STAT_DAMAGE, STAT_HEALTH } from '../../util/constants';
-import { decrementKey, getKey } from '../../util/collection/map';
+import { isActor } from '../../../model/entity/Actor';
+import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
+import { decrementKey, getKey } from '../../../util/collection/map';
 
 export async function ActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

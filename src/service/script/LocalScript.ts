@@ -4,24 +4,42 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
 import { WorldEntity } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
+import { ActorGet } from '../../script/signal/actor/ActorGet';
+import { ActorHit } from '../../script/signal/actor/ActorHit';
+import { ActorStep } from '../../script/signal/actor/ActorStep';
+import { ItemStep } from '../../script/signal/item/ItemStep';
+import { ItemUse } from '../../script/signal/item/ItemUse';
+import { RoomStep } from '../../script/signal/room/RoomStep';
+import {
+  ActorStepDrop,
+  ActorStepHit,
+  ActorStepLook,
+  ActorStepMove,
+  ActorStepTake,
+  ActorStepUse,
+  ActorStepWait,
+} from '../../script/verb/common';
 import { SearchParams, searchState } from '../../util/state';
-import { ActorGet } from '../../script/common/ActorGet';
-import { ActorHit } from '../../script/common/ActorHit';
-import { ActorStep } from '../../script/common/ActorStep';
-import { ItemStep } from '../../script/common/ItemStep';
-import { ItemUse } from '../../script/common/ItemUse';
-import { RoomStep } from '../../script/common/RoomStep';
 
 /**
  * Common scripts, built into the engine and always available.
  */
 const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
+  // signal scripts
   ['actor-get', ActorGet],
   ['actor-hit', ActorHit],
   ['actor-step', ActorStep],
   ['item-step', ItemStep],
   ['item-use', ItemUse],
   ['room-step', RoomStep],
+  // verb scripts
+  ['verb-drop', ActorStepDrop],
+  ['verb-hit', ActorStepHit],
+  ['verb-look', ActorStepLook],
+  ['verb-move', ActorStepMove],
+  ['verb-take', ActorStepTake],
+  ['verb-use', ActorStepUse],
+  ['verb-wait', ActorStepWait],
 ];
 
 export interface LocalScriptServiceOptions extends BaseOptions {
@@ -43,22 +61,22 @@ export class LocalScriptService implements ScriptService {
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
     this.logger.debug({ slot, target }, 'invoke slot on target');
 
-    const scriptName = target.slots.get(slot);
-    if (isNil(scriptName)) {
+    const scriptRef = target.scripts.get(slot);
+    if (isNil(scriptRef)) {
       this.logger.debug({ slot, target }, 'target does not have a script defined for slot');
       return;
     }
 
-    const script = this.scripts.get(scriptName);
+    const script = this.scripts.get(scriptRef.name);
     if (isNil(script)) {
-      this.logger.error({ scriptName }, 'unknown script name');
+      this.logger.error({ scriptName: scriptRef }, 'unknown script name');
       return;
     }
 
     await script.call(target, {
       ...scope,
       logger: this.logger.child({
-        script: scriptName,
+        script: scriptRef,
       }),
       script: this,
     });

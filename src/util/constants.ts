@@ -44,12 +44,12 @@ export const EVENT_NAMES = [
   EVENT_STATE_STEP,
 ] as const;
 
-// script slots
-export const SLOT_ENTER = 'enter';
-export const SLOT_GET = 'get';
-export const SLOT_HIT = 'hit';
-export const SLOT_STEP = 'step';
-export const SLOT_USE = 'use';
+// script signals
+export const SLOT_ENTER = 'signal.enter';
+export const SLOT_GET = 'signal.get';
+export const SLOT_HIT = 'signal.hit';
+export const SLOT_STEP = 'signal.step';
+export const SLOT_USE = 'signal.use';
 
 // common verbs
 export const VERB_DROP = 'verbs.common.drop';

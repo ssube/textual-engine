@@ -1,7 +1,7 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 
-import { isRoom } from '../../model/entity/Room';
-import { ScriptContext, ScriptTarget } from '../../service/script';
+import { isRoom } from '../../../model/entity/Room';
+import { ScriptContext, ScriptTarget } from '../../../service/script';
 
 export async function RoomStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({

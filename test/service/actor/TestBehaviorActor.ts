@@ -36,8 +36,7 @@ describe('behavior actor', () => {
         name: '',
         template: '',
       },
-      skills: new Map(),
-      slots: new Map(),
+      scripts: new Map(),
       stats: new Map(),
       type: 'actor',
     };
@@ -51,9 +50,8 @@ describe('behavior actor', () => {
         template: '',
       },
       portals: [],
-      slots: new Map(),
+      scripts: new Map(),
       type: 'room',
-      verbs: new Map(),
     };
     events.emit('state-room', {
       actor,

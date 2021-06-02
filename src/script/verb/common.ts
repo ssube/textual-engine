@@ -1,81 +1,21 @@
-import { InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
+import { isNil, mustExist } from '@apextoaster/js-utils';
 
+import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Actor, ActorType, isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { isRoom } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
-import {
-  SLOT_HIT,
-  SLOT_USE,
-  STAT_HEALTH,
-  VERB_DROP,
-  VERB_HIT,
-  VERB_LOOK,
-  VERB_MOVE,
-  VERB_TAKE,
-  VERB_USE,
-  VERB_WAIT,
-} from '../../util/constants';
-import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
 import { getKey } from '../../util/collection/map';
+import { SLOT_HIT, SLOT_USE, STAT_HEALTH } from '../../util/constants';
+import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
 import { searchState } from '../../util/state';
 
-export async function ActorStep(this: ScriptTarget, context: ScriptContext, verbs = ACTOR_VERB_SCRIPTS): Promise<void> {
-  context.logger.debug({
-    meta: this.meta,
-    scope: Object.keys(context),
-  }, 'step script');
-
+export async function ActorStepDrop(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
-    throw new InvalidArgumentError('script target must be an actor');
+    throw new ScriptTargetError('script target must be an actor');
   }
 
-  const health = getKey(this.stats, STAT_HEALTH, 0);
-  if (health <= 0) {
-    if (this.actorType === ActorType.PLAYER) {
-      await context.stateHelper.show('actor.step.command.dead', { actor: this });
-      await context.stateHelper.quit();
-    }
-    return;
-  }
-
-  if (isNil(context.command)) {
-    context.logger.debug({ target: this }, 'actor has nothing to do');
-    return;
-  }
-
-  const { command } = context;
-  const verb = verbs.get(command.verb);
-
-  if (isNil(verb)) {
-    await context.stateHelper.show('actor.step.command.unknown', { actor: this, command });
-    context.logger.warn({ command }, 'unknown verb');
-    return;
-  }
-
-  if (this.actorType === ActorType.PLAYER) {
-    if (command.target.length > 0) {
-      await context.stateHelper.show('actor.step.command.player.target', { actor: this, command });
-    } else {
-      await context.stateHelper.show('actor.step.command.player.verb', { actor: this, command });
-    }
-  }
-
-  await verb.call(this, context);
-}
-
-const ACTOR_VERB_SCRIPTS = new Map([
-  [VERB_DROP, ActorStepDrop],
-  [VERB_HIT, ActorStepHit],
-  [VERB_LOOK, ActorStepLook],
-  [VERB_MOVE, ActorStepMove],
-  [VERB_TAKE, ActorStepTake],
-  [VERB_USE, ActorStepUse],
-  [VERB_WAIT, ActorStepWait],
-]);
-
-export async function ActorStepDrop(this: Actor, context: ScriptContext): Promise<void> {
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 
@@ -104,7 +44,11 @@ export async function ActorStepDrop(this: Actor, context: ScriptContext): Promis
   }, context);
 }
 
-export async function ActorStepHit(this: Actor, context: ScriptContext): Promise<void> {
+export async function ActorStepHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
+  if (!isActor(this)) {
+    throw new ScriptTargetError('script target must be an actor');
+  }
+
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 
@@ -149,7 +93,11 @@ export async function ActorStepHit(this: Actor, context: ScriptContext): Promise
   });
 }
 
-export async function ActorStepLook(this: Actor, context: ScriptContext): Promise<void> {
+export async function ActorStepLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
+  if (!isActor(this)) {
+    throw new ScriptTargetError('script target must be an actor');
+  }
+
   const command = mustExist(context.command);
   if (command.target === '') {
     return ActorStepLookRoom.call(this, context);
@@ -235,7 +183,11 @@ export async function ActorStepLookItem(this: Actor, context: ScriptContext): Pr
   await context.stateHelper.show('actor.step.look.item.seen', { item });
 }
 
-export async function ActorStepMove(this: Actor, context: ScriptContext): Promise<void> {
+export async function ActorStepMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
+  if (!isActor(this)) {
+    throw new ScriptTargetError('script target must be an actor');
+  }
+
   // find the new room
   const command = mustExist(context.command);
   const targetName = command.target;
@@ -273,7 +225,11 @@ export async function ActorStepMove(this: Actor, context: ScriptContext): Promis
   }
 }
 
-export async function ActorStepTake(this: Actor, context: ScriptContext): Promise<void> {
+export async function ActorStepTake(this: ScriptTarget, context: ScriptContext): Promise<void> {
+  if (!isActor(this)) {
+    throw new ScriptTargetError('script target must be an actor');
+  }
+
   const command = mustExist(context.command);
   const room = mustExist(context.room);
   context.logger.debug({ command, room }, 'taking item from room');
@@ -312,7 +268,11 @@ export async function ActorStepTake(this: Actor, context: ScriptContext): Promis
   }, context);
 }
 
-export async function ActorStepUse(this: Actor, context: ScriptContext): Promise<void> {
+export async function ActorStepUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
+  if (!isActor(this)) {
+    throw new ScriptTargetError('script target must be an actor');
+  }
+
   const command = mustExist(context.command);
   const room = mustExist(context.room);
   const results = searchState(context.state, {
@@ -336,6 +296,11 @@ export async function ActorStepUse(this: Actor, context: ScriptContext): Promise
   });
 }
 
-export async function ActorStepWait(this: Actor, context: ScriptContext): Promise<void> {
+export async function ActorStepWait(this: ScriptTarget, context: ScriptContext): Promise<void> {
+  if (!isActor(this)) {
+    throw new ScriptTargetError('script target must be an actor');
+  }
+
   context.logger.debug({ target: this }, 'actor is skipping a turn');
 }
+ 

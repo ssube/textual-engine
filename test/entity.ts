@@ -13,8 +13,7 @@ export function makeTestActor(id: string, name: string, template: string, ...ite
       name,
       template,
     },
-    skills: new Map(),
-    slots: new Map(),
+    scripts: new Map(),
     stats: new Map(),
     type: ACTOR_TYPE,
   };
@@ -28,10 +27,9 @@ export function makeTestItem(id: string, name: string, template: string): Item {
       name,
       template,
     },
-    slots: new Map(),
+    scripts: new Map(),
     stats: new Map(),
     type: ITEM_TYPE,
-    verbs: new Map(),
   };
 }
 
@@ -46,9 +44,8 @@ export function makeTestRoom(id: string, name: string, template: string, actors:
       template,
     },
     portals: [],
-    slots: new Map(),
+    scripts: new Map(),
     type: ROOM_TYPE,
-    verbs: new Map(),
   };
 }
 

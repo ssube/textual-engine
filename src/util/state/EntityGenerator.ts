@@ -58,8 +58,7 @@ export class StateEntityGenerator {
       actorType,
       items,
       meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
-      skills: this.template.renderNumberMap(template.base.skills),
-      slots: this.template.renderStringMap(template.base.slots),
+      scripts: this.template.renderScriptMap(template.base.scripts),
       stats: this.template.renderNumberMap(template.base.stats),
     };
 
@@ -99,8 +98,7 @@ export class StateEntityGenerator {
       type: ITEM_TYPE,
       meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
       stats: this.template.renderNumberMap(template.base.stats),
-      slots: this.template.renderStringMap(template.base.slots),
-      verbs: this.template.renderVerbMap(template.base.verbs),
+      scripts: this.template.renderScriptMap(template.base.scripts),
     };
 
     await this.modifyItem(item, template.mods);
@@ -143,8 +141,7 @@ export class StateEntityGenerator {
       items,
       meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
       portals: [],
-      slots: this.template.renderStringMap(template.base.slots),
-      verbs: this.template.renderVerbMap(template.base.verbs),
+      scripts: this.template.renderScriptMap(template.base.scripts),
     };
 
     await this.modifyRoom(room, template.mods);
@@ -171,10 +168,8 @@ export class StateEntityGenerator {
       await this.modifyMetadata(target.meta, mod.meta);
       // target.actorType cannot be modified
 
-      target.skills = this.template.modifyNumberMap(target.skills, mod.skills);
       target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
-      target.slots = this.template.modifyStringMap(target.slots, mod.slots);
-      // TODO: target.verbs
+      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
 
       const items = await this.createItemList(mod.items);
       target.items.push(...items);
@@ -191,8 +186,7 @@ export class StateEntityGenerator {
       await this.modifyMetadata(target.meta, mod.meta);
 
       target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
-      target.slots = this.template.modifyStringMap(target.slots, mod.slots);
-      // TODO: target.verbs
+      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
     }
   }
 
@@ -206,8 +200,7 @@ export class StateEntityGenerator {
       await this.modifyMetadata(target.meta, mod.meta);
 
       // TODO: target.portals
-      target.slots = this.template.modifyStringMap(target.slots, mod.slots);
-      // TODO: target.verbs
+      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
 
       const actors = await this.createActorList(mod.actors);
       target.actors.push(...actors);
@@ -375,5 +368,4 @@ export class StateEntityGenerator {
       rooms,
     };
   }
-
 }

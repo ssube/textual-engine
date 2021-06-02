@@ -93,18 +93,23 @@ worlds:
                 base: flying bat
             items:
               - id: item-bat-teeth
-            skills: !map {}
             stats: !map
               health:
                 max: 50
                 min: 30
-            slots: !map
-              get:
-                base: actor-get
-              hit:
-                base: actor-hit
-              step:
-                base: actor-step
+            scripts: !map
+              signal.get:
+                data: !map {}
+                name:
+                  base: actor-get
+              signal.hit:
+                data: !map {}
+                name:
+                  base: actor-hit
+              signal.step:
+                data: !map {}
+                name:
+                  base: actor-step
           mods:
             - chance: 50
               excludes: []
@@ -116,9 +121,8 @@ worlds:
                   name:
                     base: 'Vampire {{base}}'
                 items: []
-                skills: !map {}
                 stats: !map {}
-                slots: !map {}
+                scripts: !map {}
         - base:
             meta:
               id: actor-goblin
@@ -129,18 +133,23 @@ worlds:
             items:
               - id: item-sword
                 chance: 20
-            skills: !map {}
             stats: !map
               health:
                 max: 20
                 min: 14
-            slots: !map
-              get:
-                base: actor-get
-              hit:
-                base: actor-hit
-              step:
-                base: actor-step
+            scripts: !map
+              signal.get:
+                data: !map {}
+                name:
+                  base: actor-get
+              signal.hit:
+                data: !map {}
+                name:
+                  base: actor-hit
+              signal.step:
+                data: !map {}
+                name:
+                  base: actor-step
           mods:
             - chance: 50
               excludes: []
@@ -153,9 +162,8 @@ worlds:
                     base: 'Sword {{base}}'
                 items:
                   - id: item-sword
-                skills: !map {}
                 stats: !map {}
-                slots: !map {}
+                scripts: !map {}
       items:
         - base:
             meta:
@@ -164,12 +172,11 @@ worlds:
                 base: Bat Teeth
               desc:
                 base: bat teeth
-            slots: !map {}
+            scripts: !map {}
             stats: !map
               damage:
                 min: 2
                 max: 5
-            verbs: !map {}
         - base:
             meta:
               id: item-sword
@@ -177,12 +184,11 @@ worlds:
                 base: Sword
               desc:
                 base: short sword
-            slots: !map {}
+            scripts: !map {}
             stats: !map
               damage:
                 min: 5
                 max: 10
-            verbs: !map {}
           mods:
             - chance: 25
               excludes:
@@ -194,12 +200,11 @@ worlds:
                     base: '{{base}} with a large crack'
                   name:
                     base: 'Cracked {{base}}'
-                slots: !map {}
+                scripts: !map {}
                 stats: !map
                   damage:
                     min: -4
                     max: -2
-                verbs: !map {}
             - chance: 25
               excludes:
                 - shiny
@@ -210,12 +215,11 @@ worlds:
                     base: 'rusting {{base}}'
                   name:
                     base: 'Rusty {{base}}'
-                slots: !map {}
+                scripts: !map {}
                 stats: !map
                   damage:
                     min: -5
                     max: -3
-                verbs: !map {}
             - chance: 25
               excludes:
                 - cracked
@@ -227,12 +231,11 @@ worlds:
                     base: 'shining {{base}}'
                   name:
                     base: 'Shiny {{base}}'
-                slots: !map {}
+                scripts: !map {}
                 stats: !map
                   damage:
                     min: 5
                     max: 5
-                verbs: !map {}
       rooms:
         - base:
             meta:
@@ -263,10 +266,11 @@ worlds:
                   base: door
                 dest:
                   base: ((room-cave|room-cave|room-marsh))
-            slots: !map
-              step:
-                base: room-step
-            verbs: !map {}
+            scripts: !map
+              signal.step:
+                data: !map {}
+                name:
+                  base: room-step
         - base:
             meta:
               id: room-cave
@@ -297,10 +301,11 @@ worlds:
                   base: window
                 dest:
                   base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
-            slots: !map
-              step:
-                base: room-step
-            verbs: !map {}
+            scripts: !map
+              signal.step:
+                data: !map {}
+                name:
+                  base: room-step
         - base:
             meta:
               id: room-marsh
@@ -329,7 +334,8 @@ worlds:
                   base: window
                 dest:
                   base: room-dungeon
-            slots: !map
-              step:
-                base: room-step
-            verbs: !map {}
+            scripts: !map
+              signal.step:
+                data: !map {}
+                name:
+                  base: room-step

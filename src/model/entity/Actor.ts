@@ -3,7 +3,7 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { SkillMap, SlotMap, StatMap } from '../../util/types';
+import { ScriptMap, StatMap } from '../../util/types';
 import { Modifier } from '../mapped/Modifier';
 import { Template, TEMPLATE_REF_SCHEMA } from '../mapped/Template';
 import { Metadata, METADATA_SCHEMA } from '../Metadata';
@@ -23,8 +23,7 @@ export interface Actor {
   actorType: ActorType;
   meta: Metadata;
   items: Array<Item>;
-  skills: SkillMap;
-  slots: SlotMap;
+  scripts: ScriptMap;
   stats: StatMap;
 }
 
@@ -37,10 +36,13 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
   properties: {
     base: {
       type: 'object',
-      /* properties: {
+      /*
+      properties: {
         meta: MODIFIER_METADATA_SCHEMA,
-      }, */
+      },
       required: ['meta'],
+      */
+      required: [],
     },
     chance: {
       type: 'number',
@@ -75,20 +77,16 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
         },
         meta: METADATA_SCHEMA,
         type: makeConstStringSchema(ACTOR_TYPE),
-        skills: {
-          type: 'object',
-          required: [],
-        },
         stats: {
           type: 'object',
           required: [],
         },
-        slots: {
+        scripts: {
           type: 'object',
           required: [],
         },
       },
-      required: ['items', 'meta', 'type', 'skills', 'stats', 'slots'],
+      required: ['items', 'meta', 'type', 'scripts', 'stats'],
     },
     mods: {
       type: 'array',

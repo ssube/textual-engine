@@ -1,13 +1,15 @@
-import { doesExist } from '@apextoaster/js-utils';
+import { doesExist, mergeMap, mustExist, Optional } from '@apextoaster/js-utils';
 
 import { WorldEntity, WorldEntityType } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
-import { Room } from '../../model/entity/Room';
+import { isItem } from '../../model/entity/Item';
+import { isRoom, Room } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
+import { META_VERBS, VERB_PREFIX } from '../constants';
 import { DEFAULT_MATCHERS } from '../entity';
-import { Immutable } from '../types';
+import { Immutable, ScriptMap } from '../types';
 
 export interface SearchMatchers {
   entity: (entity: Immutable<Entity>, search: Partial<SearchParams>, matchers?: SearchMatchers) => boolean;
@@ -134,4 +136,53 @@ export function findContainer(state: WorldState, search: Partial<SearchParams>, 
   }
 
   return Array.from(results);
+}
+
+/**
+ * @todo remove existing verbs
+ */
+export function getScripts(state: Optional<Immutable<WorldState>>, target: Optional<WorldEntity>): ScriptMap {
+  const scripts: ScriptMap = new Map();
+
+  // TODO: this should only be in getVerbs, not getScripts
+  for (const verb of META_VERBS) {
+    scripts.set(verb, {
+      data: new Map(),
+      name: '',
+    });
+  }
+
+  if (doesExist(target)) {
+    // TODO: bad cast
+    if (!isRoom(target)) {
+      const [room] = findRoom(mustExist(state) as WorldState, {
+        actor: {
+          id: target.meta.id,
+        },
+      });
+
+      if (isRoom(room)) {
+        for (const [name, script] of room.scripts) {
+          if (name.startsWith(VERB_PREFIX)) {
+            scripts.set(name, script);
+          }
+        }
+      }
+    }
+
+    if (!isItem(target)) {
+      for (const item of target.items) {
+        for (const [name, script] of item.scripts) {
+          if (name.startsWith(VERB_PREFIX)) {
+            scripts.set(name, script);
+          }
+        }
+      }
+    }
+
+    // merge everything, including signals, from the target
+    mergeMap(scripts, target.scripts);
+  }
+
+  return scripts;
 }

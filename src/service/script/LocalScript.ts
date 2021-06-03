@@ -19,7 +19,7 @@ import {
   ActorStepUse,
   ActorStepWait,
 } from '../../script/verb/common';
-import { SearchParams, searchState } from '../../util/state';
+import { getScripts, SearchParams, searchState } from '../../util/state';
 
 /**
  * Common scripts, built into the engine and always available.
@@ -61,27 +61,36 @@ export class LocalScriptService implements ScriptService {
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
     this.logger.debug({ slot, target }, 'trying to invoke slot on target');
 
-    const scriptRef = target.scripts.get(slot);
+    const scripts = getScripts(scope.state, target);
+    const scriptRef = scripts.get(slot);
+
     if (isNil(scriptRef)) {
-      this.logger.debug({ slot, target }, 'target does not have a script defined for slot');
+      this.logger.debug({ slot, scripts, target }, 'target does not have a script defined for slot');
       return;
     }
 
-    const script = this.scripts.get(scriptRef.name);
-    if (isNil(script)) {
-      this.logger.error({ scriptName: scriptRef }, 'unknown script name');
+    const scriptName = this.scripts.get(scriptRef.name);
+    if (isNil(scriptName)) {
+      this.logger.error({
+        scriptRef,
+        scripts: Array.from(scripts.keys()),
+      }, 'unknown script name');
       return;
     }
 
-    this.logger.debug({ script: scriptRef.name, target: target.meta.id }, 'invoking script on target');
+    this.logger.debug({ scriptRef, target }, 'invoking script on target');
 
-    await script.call(target, {
-      ...scope,
-      logger: this.logger.child({
-        script: scriptRef,
-      }),
-      script: this,
-    });
+    try {
+      await scriptName.call(target, {
+        ...scope,
+        logger: this.logger.child({
+          script: scriptRef.name,
+        }),
+        script: this,
+      });
+    } catch (err) {
+      this.logger.error(err, 'error invoking script');
+    }
   }
 
   public async broadcast(filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {

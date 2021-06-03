@@ -9,12 +9,11 @@ import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
-import { StateSource, ShowVolume } from '../../util/actor';
+import { ShowVolume, StateSource } from '../../util/actor';
 import { catchAndLog, onceEvent } from '../../util/async/event';
 import { randomItem } from '../../util/collection/array';
 import { StackMap } from '../../util/collection/StackMap';
 import {
-  COMMON_VERBS,
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_COMMON_QUIT,
@@ -36,8 +35,10 @@ import {
   META_SAVE,
   META_WORLDS,
   SLOT_STEP,
+  VERB_PREFIX,
   VERB_WAIT,
 } from '../../util/constants';
+import { getScripts } from '../../util/state';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
@@ -276,16 +277,29 @@ export class LocalStateService implements StateService {
         await this.doWorlds();
         break;
       default: {
-        // TODO: proper wait, don't assume player goes last
-        if (mustExist(event.actor).actorType !== ActorType.PLAYER) {
-          return;
-        }
-
-        // step world
-        const result = await this.step();
-        this.event.emit('state-step', result);
+        await this.doStep(actor);
       }
     }
+  }
+
+  public async doStep(actor: Optional<Actor>): Promise<void> {
+    // TODO: proper wait, don't assume player goes last
+    if (isNil(actor)) {
+      return;
+    }
+
+    if (actor.actorType !== ActorType.PLAYER) {
+      return;
+    }
+
+    if (isNil(this.state)) {
+      return;
+    }
+
+    // step world
+    const result = await this.step();
+    this.event.emit('state-step', result);
+
   }
 
   public async doCreate(target: string, depth: number): Promise<void> {
@@ -350,26 +364,10 @@ export class LocalStateService implements StateService {
     });
   }
 
-  /**
-   * @todo collect verbs from room, items
-   * @todo prevent/remove verbs
-   */
-  public async getVerbs(actor: Optional<Actor>): Promise<ReadonlyArray<string>> {
-    if (doesExist(actor)) {
-      const verbs = new Set<string>(COMMON_VERBS);
-      for (const key of actor.scripts.keys()) {
-        if (key.startsWith('verbs.')) {
-          verbs.add(key);
-        }
-      }
-      return Array.from(verbs);
-    } else {
-      return COMMON_VERBS;
-    }
-  }
-
   public async doHelp(actor: Optional<Actor>): Promise<void> {
-    const verbs = (await this.getVerbs(actor))
+    const scripts = getScripts(this.state, actor);
+    const verbs = Array.from(scripts.keys())
+      .filter((it) => it.startsWith(VERB_PREFIX))
       .map((it) => `$t(${it})`)
       .join(', ');
 

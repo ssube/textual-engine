@@ -145,8 +145,10 @@ worlds:
                 {{item.meta.name}} has been used by {{actor.meta.name}}!
           verbs:
             world:
+              slog: slog
               swing: swing
       verbs:
+        - verbs.world.slog
         - verbs.world.swing
     meta:
       id: test
@@ -394,3 +396,7 @@ worlds:
                 data: !map {}
                 name:
                   base: room-step
+              verbs.world.slog:
+                data: !map {}
+                name:
+                  base: verb-move

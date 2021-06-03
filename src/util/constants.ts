@@ -51,6 +51,8 @@ export const SLOT_HIT = 'signal.hit';
 export const SLOT_STEP = 'signal.step';
 export const SLOT_USE = 'signal.use';
 
+export const VERB_PREFIX = 'verbs.';
+
 // common verbs
 export const VERB_DROP = 'verbs.common.drop';
 export const VERB_HIT = 'verbs.common.hit';
@@ -70,12 +72,7 @@ export const META_QUIT = 'verbs.meta.quit';
 export const META_SAVE = 'verbs.meta.save';
 export const META_WORLDS = 'verbs.meta.worlds';
 
-/**
- * Common verbs and meta commands.
- *
- * Should include all `META_*` and `VERB_*` constants from this file.
- */
-export const COMMON_VERBS = [
+export const META_VERBS = [
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -84,6 +81,15 @@ export const COMMON_VERBS = [
   META_QUIT,
   META_SAVE,
   META_WORLDS,
+];
+
+/**
+ * Common verbs and meta commands.
+ *
+ * Should include all `META_*` and `VERB_*` constants from this file.
+ */
+export const COMMON_VERBS = [
+  ...META_VERBS,
   VERB_DROP,
   VERB_HIT,
   VERB_LOOK,

@@ -58,9 +58,7 @@ be run with:
 ```shell
 > docker run --rm -it ssube/textual-engine:master-stretch \
   --config data/config.yml \
-  --data data/base.yml \
-  --seed test \
-  --world test
+  --data file://data/base.yml
 ```
 
 ## Docs
@@ -72,7 +70,7 @@ Available documentation includes:
 - [Engine Architecture](docs/architecture.md)
 - [Development Workflow](docs/development.md)
 - [Getting Started](docs/getting-started.md)
-- [Creating Worlds](docs/worlds.md)
+- [Creating Worlds](docs/world-templates.md)
 
 ## License
 

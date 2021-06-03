@@ -22,14 +22,16 @@ import { EventBus } from '../service/event';
 import { NodeEventBus } from '../service/event/NodeEventBus';
 import { LocaleService } from '../service/locale';
 import { NextLocaleService } from '../service/locale/NextLocale';
+import { Parser } from '../service/parser';
 import { YamlParser } from '../service/parser/YamlParser';
 import { RandomGenerator } from '../service/random';
-import { SeedRandomGenerator } from '../service/random/SeedRandom';
+import { AleaRandomGenerator } from '../service/random/AleaRandom';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScript';
 import { LocalStateService } from '../service/state/TurnState';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
+import { TokenizerService } from '../service/tokenizer';
 import { WordTokenizer } from '../service/tokenizer/WordTokenizer';
 import { Singleton } from '../util/container';
 
@@ -37,30 +39,35 @@ export class CoreModule extends Module {
   protected counter: Singleton<Counter>;
   protected event: Singleton<EventBus>;
   protected locale: Singleton<LocaleService>;
+  protected parser: Singleton<Parser>;
   protected random: Singleton<RandomGenerator>;
   protected script: Singleton<ScriptService>;
   protected template: Singleton<TemplateService>;
+  protected tokenizer: Singleton<TokenizerService>;
 
   constructor() {
     super();
 
+    // these cannot share a reference to container, that would take closure
     this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));
     this.event = new Singleton(() => mustExist(this.container).create(NodeEventBus));
     this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
-    this.random = new Singleton(() => mustExist(this.container).create(SeedRandomGenerator));
+    this.parser = new Singleton(() => mustExist(this.container).create(YamlParser));
+    this.random = new Singleton(() => mustExist(this.container).create(AleaRandomGenerator));
     this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
     this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
+    this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
   }
 
   public async configure(options: ModuleOptions): Promise<void> {
     await super.configure(options);
 
     this.bind(INJECT_EVENT).toFactory(() => this.event.get());
-    this.bind(INJECT_PARSER).toConstructor(YamlParser);
-    this.bind(INJECT_TOKENIZER).toConstructor(WordTokenizer);
+    this.bind(INJECT_PARSER).toFactory(() => this.parser.get());
+    this.bind(INJECT_TOKENIZER).toFactory(() => this.tokenizer.get());
 
-    this.bind('core-player-actor').toConstructor(PlayerActorService);
     this.bind('core-behavior-actor').toConstructor(BehaviorActorService);
+    this.bind('core-player-actor').toConstructor(PlayerActorService);
 
     this.bind('core-local-state').toConstructor(LocalStateService);
   }

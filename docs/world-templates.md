@@ -1,16 +1,15 @@
-# Worlds
+# World Templates
 
-This guide covers the format of a game world and how to make your own.
+This guide covers the format of a world template and how to make your own.
 
 ## Contents
 
-- [Worlds](#worlds)
+- [World Templates](#world-templates)
   - [Contents](#contents)
   - [Concepts](#concepts)
-    - [New Game, Save, and Load](#new-game-save-and-load)
     - [Starting Actor & Room](#starting-actor--room)
     - [Rooms & Portals](#rooms--portals)
-  - [Format](#format)
+  - [Loading Worlds](#loading-worlds)
   - [Metadata](#metadata)
   - [Start](#start)
     - [Start Actors](#start-actors)
@@ -28,13 +27,6 @@ This guide covers the format of a game world and how to make your own.
 
 ## Concepts
 
-### New Game, Save, and Load
-
-Starting a new game creates a world state from the selected world template.
-
-Saving and loading the game state write both the state and world template into the save file, so the
-world remains on the same version.
-
 ### Starting Actor & Room
 
 When starting a new game, the world state begins empty. A starting actor and room are selected from
@@ -47,21 +39,19 @@ Each room has some portals, grouped by wall or direction, with a destination roo
 When the player enters a new room, including the starting room, the game generates destination rooms
 for each group and creates links in both directions, ensuring the player can backtrack.
 
-## Format
+## Loading Worlds
 
-Worlds are part of a normal data files, which has twin root fields:
+World templates are part of a normal data files, which should not have the `config` and `state` keys:
 
 ```yaml
-states: []
+# config: {}
+# state: []
 worlds:
   - meta:
       id: test-world
 ```
 
-When authoring worlds, the `states` key should be an empty list: `states: []`.
-While unused, invalid data here will cause schema errors.
-
-For the typical `YamlParser`, the world should be in a YAML file, using the UTF-8 encoding.
+For the typical `YamlParser`, the world should be in a YAML file with UTF-8 encoding.
 
 ## Metadata
 
@@ -76,12 +66,13 @@ Worlds have template metadata, with a literal `id` and template strings for the 
 
 ### Start Actors
 
-A list of possible player actor templates. One of these will be selected and created in the start room.
+A list of possible player actor templates. One of these will be selected and created in the start room for each
+player.
 
 ### Start Rooms
 
 A list of possible start room templates. One of these will be selected and created, then other rooms created as the
-starting room's portals are populated.
+starting room's portals are populated. New player actors will be placed in the start room.
 
 ## Templates
 
@@ -101,14 +92,36 @@ Each template has metadata, missing the `template` field that exists in entity m
 - `name`: template string, display name
 - `desc`: template string, long description
 
+For example:
+
+```yaml
+meta:
+  id: goblin
+  name:
+    base: Goblin
+  desc:
+    base: ((slimy|smelly)|goblin)
+```
+
 #### Template Number
 
 Template numbers define a range `(min, max)` and select a random integer within that.
 
 - `min`: number
 - `max`: number
+- `step`: interval between values, optional
 
 TODO: document whether min and max are inclusive or exclusive
+
+For example:
+
+```yaml
+stats: !map
+  health:
+    min: 10
+    max: 20
+    step: 5  # produces 10, 15, or 20
+```
 
 #### Template Reference
 
@@ -117,44 +130,56 @@ When templates need to include one another, they can refer to the `id` of the ot
 The `chance` of each template being created is a number in `[0, 100]`, where 0 will never be created, and 100 will
 always be created. The chance for each template is rolled individually, creating zero or more entities.
 
+For example:
+
+```yaml
+items:
+  - id: item-sword
+    chance: 25
+```
+
 #### Template String
 
 Template strings use a series of nested lists, alternating between AND and OR operators, to produce the final
 string. The outermost list starts with the AND operator. Items are joined with spaces.
 
-For example, the template `((gross|slimy)|goblin)` becomes `[[gross OR slimy] AND goblin]`, which will resolve
+The template `((gross|slimy)|goblin)` becomes `[[gross OR slimy] AND goblin]`, which will resolve
 to one of `gross goblin` or `slimy goblin`.
+
+For example:
+
+```yaml
+meta:
+  desc:
+    base: ((gross|slimy)|goblin)
+```
 
 ### Actor Templates
 
-Actor templates have metadata and slots, act as a container for items (inventory), and store some numeric data (skills
-and stats).
+Actor templates have metadata and scripts, act as a container for items (inventory), and store some numeric stats.
 
 - `meta`: template metadata
 - `items`: list of item template refs
-- `skills`: a `[string, number]` map of actor skills (swords, bows, etc)
-- `slots`: a `[string, string]` map of event scripts
+- `scripts`: a `[string, string]` map of event scripts
 - `stats`: a `[string, number]` map of actor statistics (health, stamina, etc)
 
 ### Item Templates
 
-Item templates have metadata and slots, have custom verbs, and store some numeric data (skills and stats).
+Item templates have metadata and scripts, have custom verbs, and store some numeric stats.
 
 - `meta`: template metadata
-- `slots`: a `[string, string]` map of event scripts
+- `scripts`: a `[string, TODO]` map of event scripts
 - `stats`: a `[string, number]` map of item statistics (health, damage, etc)
-- `verbs`: a map, unused
 
 ### Room Templates
 
-Room templates have metadata and slots, have custom verbs, and act as a container for actors, items, and portals.
+Room templates have metadata and scripts, have custom verbs, and act as a container for actors, items, and portals.
 
 - `meta`: template metadata
 - `actors`: list of actor template refs
 - `items`: list of item template refs
 - `portals`: list of portal templates
-- `slots`: a `[string, string]` map of event scripts
-- `verbs`: a map, unused
+- `scripts`: a `[string, TODO]` map of event scripts
 
 #### Room Portal Templates
 

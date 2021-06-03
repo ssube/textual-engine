@@ -1,4 +1,4 @@
-import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
+import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError, Optional } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
@@ -9,12 +9,11 @@ import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
-import { ShowSource, ShowVolume } from '../../util/actor';
+import { ShowVolume, StateSource } from '../../util/actor';
 import { catchAndLog, onceEvent } from '../../util/async/event';
 import { randomItem } from '../../util/collection/array';
 import { StackMap } from '../../util/collection/StackMap';
 import {
-  COMMON_VERBS,
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_COMMON_QUIT,
@@ -34,9 +33,12 @@ import {
   META_LOAD,
   META_QUIT,
   META_SAVE,
+  META_WORLDS,
   SLOT_STEP,
+  VERB_PREFIX,
   VERB_WAIT,
 } from '../../util/constants';
+import { getScripts } from '../../util/state';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
@@ -260,7 +262,7 @@ export class LocalStateService implements StateService {
         await this.doGraph(command.target);
         break;
       case META_HELP:
-        await this.doHelp();
+        await this.doHelp(actor);
         break;
       case META_LOAD:
         await this.doLoad(command.target);
@@ -271,17 +273,33 @@ export class LocalStateService implements StateService {
       case META_SAVE:
         await this.doSave(command.target);
         break;
+      case META_WORLDS:
+        await this.doWorlds();
+        break;
       default: {
-        // TODO: proper wait, don't assume player goes last
-        if (mustExist(event.actor).actorType !== ActorType.PLAYER) {
-          return;
-        }
-
-        // step world
-        const result = await this.step();
-        this.event.emit('state-step', result);
+        await this.doStep(actor);
       }
     }
+  }
+
+  public async doStep(actor: Optional<Actor>): Promise<void> {
+    // TODO: proper wait, don't assume player goes last
+    if (isNil(actor)) {
+      return;
+    }
+
+    if (actor.actorType !== ActorType.PLAYER) {
+      return;
+    }
+
+    if (isNil(this.state)) {
+      return;
+    }
+
+    // step world
+    const result = await this.step();
+    this.event.emit('state-step', result);
+
   }
 
   public async doCreate(target: string, depth: number): Promise<void> {
@@ -346,8 +364,13 @@ export class LocalStateService implements StateService {
     });
   }
 
-  public async doHelp(): Promise<void> {
-    const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(', ');
+  public async doHelp(actor: Optional<Actor>): Promise<void> {
+    const scripts = getScripts(this.state, actor);
+    const verbs = Array.from(scripts.keys())
+      .filter((it) => it.startsWith(VERB_PREFIX))
+      .map((it) => `$t(${it})`)
+      .join(', ');
+
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
         verbs,
@@ -380,7 +403,11 @@ export class LocalStateService implements StateService {
     mustExist(this.transfer).setState(state);
 
     this.event.emit(EVENT_STATE_OUTPUT, {
-      line: `loaded world ${state.meta.id} state from ${path}`,
+      context: {
+        meta: state.meta,
+        path,
+      },
+      line: 'meta.load',
       step: state.step,
       volume: ShowVolume.WORLD,
     });
@@ -405,10 +432,31 @@ export class LocalStateService implements StateService {
     });
 
     this.event.emit(EVENT_STATE_OUTPUT, {
-      line: `saved world ${state.meta.id} state to ${path}`,
+      context: {
+        meta: state.meta,
+        path,
+      },
+      line: 'meta.save',
       step: state.step,
       volume: ShowVolume.WORLD,
     });
+  }
+
+  public async doWorlds(): Promise<void> {
+    for (const world of this.worlds) {
+      this.event.emit('state-output', {
+        context: {
+          id: world.meta.id,
+          name: world.meta.name.base,
+        },
+        line: 'meta.world',
+        step: {
+          time: 0,
+          turn: 0,
+        },
+        volume: ShowVolume.WORLD,
+      });
+    }
   }
 
   public async step(): Promise<StepResult> {
@@ -498,7 +546,7 @@ export class LocalStateService implements StateService {
   /**
    * Handler for a line of input from the focus helper.
    */
-  protected async stepShow(line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.WORLD, source?: ShowSource): Promise<void> {
+  protected async stepShow(line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.WORLD, source?: StateSource): Promise<void> {
     this.event.emit(EVENT_STATE_OUTPUT, {
       line,
       context,
@@ -508,7 +556,7 @@ export class LocalStateService implements StateService {
     });
   }
 
-  protected async stepEnter(target: ShowSource): Promise<void> {
+  protected async stepEnter(target: StateSource): Promise<void> {
     if (doesExist(target.actor) && target.actor.actorType === ActorType.PLAYER) {
       const state = mustExist(this.state);
       const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);

@@ -20,26 +20,16 @@ export type Replace<TBase, TKey extends keyof TBase, TValue> = Omit<TBase, TKey>
   [K in TKey]: TValue;
 };
 
-/**
- * Map of skill names to their current value.
- */
-export type SkillMap = Map<string, number>;
+export type ScriptData = Map<string, number | string>;
 
-export type SlotMap = Map<string, string>;
+export interface ScriptRef {
+  data: ScriptData;
+  name: string;
+}
+
+export type ScriptMap = Map<string, ScriptRef>;
 
 /**
  * Map of stat names to their current value.
  */
 export type StatMap = Map<string, number>;
-
-export type ScriptData = Map<string, number | string>;
-
-export interface VerbSlot {
-  slot: string;
-  data: ScriptData;
-}
-
-/**
- * Map of verbs (actions) to script keys.
- */
-export type VerbMap = Map<string, VerbSlot>;

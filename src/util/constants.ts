@@ -44,12 +44,14 @@ export const EVENT_NAMES = [
   EVENT_STATE_STEP,
 ] as const;
 
-// script slots
-export const SLOT_ENTER = 'enter';
-export const SLOT_GET = 'get';
-export const SLOT_HIT = 'hit';
-export const SLOT_STEP = 'step';
-export const SLOT_USE = 'use';
+// script signals
+export const SLOT_ENTER = 'signal.enter';
+export const SLOT_GET = 'signal.get';
+export const SLOT_HIT = 'signal.hit';
+export const SLOT_STEP = 'signal.step';
+export const SLOT_USE = 'signal.use';
+
+export const VERB_PREFIX = 'verbs.';
 
 // common verbs
 export const VERB_DROP = 'verbs.common.drop';
@@ -68,13 +70,9 @@ export const META_HELP = 'verbs.meta.help';
 export const META_LOAD = 'verbs.meta.load';
 export const META_QUIT = 'verbs.meta.quit';
 export const META_SAVE = 'verbs.meta.save';
+export const META_WORLDS = 'verbs.meta.worlds';
 
-/**
- * Common verbs and meta commands.
- *
- * Should include all `META_*` and `VERB_*` constants from this file.
- */
-export const COMMON_VERBS = [
+export const META_VERBS = [
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -82,6 +80,16 @@ export const COMMON_VERBS = [
   META_LOAD,
   META_QUIT,
   META_SAVE,
+  META_WORLDS,
+];
+
+/**
+ * Common verbs and meta commands.
+ *
+ * Should include all `META_*` and `VERB_*` constants from this file.
+ */
+export const COMMON_VERBS = [
+  ...META_VERBS,
   VERB_DROP,
   VERB_HIT,
   VERB_LOOK,

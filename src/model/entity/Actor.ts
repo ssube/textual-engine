@@ -3,9 +3,9 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { SkillMap, SlotMap, StatMap } from '../../util/types';
-import { Modifier } from '../mapped/Modifier';
-import { Template, TEMPLATE_REF_SCHEMA } from '../mapped/Template';
+import { ScriptMap, StatMap } from '../../util/types';
+import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
+import { Template, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, METADATA_SCHEMA } from '../Metadata';
 import { Entity } from './Base';
 import { Item } from './Item';
@@ -23,8 +23,7 @@ export interface Actor {
   actorType: ActorType;
   meta: Metadata;
   items: Array<Item>;
-  skills: SkillMap;
-  slots: SlotMap;
+  scripts: ScriptMap;
   stats: StatMap;
 }
 
@@ -37,9 +36,26 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
   properties: {
     base: {
       type: 'object',
-      /* properties: {
+      properties: {
+        actorType: TEMPLATE_STRING_SCHEMA,
+        items: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: [],
+          },
+        },
         meta: MODIFIER_METADATA_SCHEMA,
-      }, */
+        stats: {
+          type: 'object',
+          required: [],
+        },
+        scripts: {
+          type: 'object',
+          required: [],
+        },
+        type: TEMPLATE_STRING_SCHEMA,
+      },
       required: ['meta'],
     },
     chance: {
@@ -48,6 +64,7 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
     },
     excludes: {
       type: 'array',
+      default: [],
       items: {
         type: 'string',
       },
@@ -56,7 +73,7 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
       type: 'string',
     },
   },
-  required: [],
+  required: ['base', 'id'],
 };
 
 export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
@@ -75,20 +92,16 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
         },
         meta: METADATA_SCHEMA,
         type: makeConstStringSchema(ACTOR_TYPE),
-        skills: {
-          type: 'object',
-          required: [],
-        },
         stats: {
           type: 'object',
           required: [],
         },
-        slots: {
+        scripts: {
           type: 'object',
           required: [],
         },
       },
-      required: ['items', 'meta', 'type', 'skills', 'stats', 'slots'],
+      required: ['items', 'meta', 'type', 'scripts', 'stats'],
     },
     mods: {
       type: 'array',

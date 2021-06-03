@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
 
+import { DataLoadError } from '../../../src/error/DataError';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { YamlParser } from '../../../src/service/parser/YamlParser';
 
@@ -35,5 +36,15 @@ worlds: []
     });
 
     expect(data).to.deep.equal('worlds: []\n');
+  });
+
+  it('should error when loading invalid data files', async () => {
+    const container = Container.from(new CoreModule());
+    await container.configure({
+      logger: NullLogger.global,
+    });
+
+    const parser = await container.create(YamlParser);
+    expect(() => parser.load('nope: {}')).to.throw(DataLoadError);
   });
 });

@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import { Container } from 'noicejs';
 
-import { SeedRandomGenerator } from '../../../src/service/random/SeedRandom';
+import { AleaRandomGenerator } from '../../../src/service/random/AleaRandom';
 
-describe('seed random generator', () => {
+describe('alea random generator', () => {
   it('should generate random integers', async () => {
     const container = Container.from();
     await container.configure();
 
-    const random = await container.create(SeedRandomGenerator);
+    const random = await container.create(AleaRandomGenerator);
     expect(random.nextInt()).to.be.greaterThan(0);
   });
 
@@ -16,7 +16,7 @@ describe('seed random generator', () => {
     const container = Container.from();
     await container.configure();
 
-    const random = await container.create(SeedRandomGenerator);
+    const random = await container.create(AleaRandomGenerator);
     expect(random.nextFloat()).to.be.greaterThan(0);
   });
 
@@ -24,7 +24,7 @@ describe('seed random generator', () => {
     const container = Container.from();
     await container.configure();
 
-    const random = await container.create(SeedRandomGenerator);
+    const random = await container.create(AleaRandomGenerator);
 
     random.reseed('foo');
     const first = [
@@ -45,7 +45,7 @@ describe('seed random generator', () => {
     const container = Container.from();
     await container.configure();
 
-    const random = await container.create(SeedRandomGenerator);
+    const random = await container.create(AleaRandomGenerator);
 
     for (let i = 0; i < 1_000; ++i) {
       const value = random.nextInt();

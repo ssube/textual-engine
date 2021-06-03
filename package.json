@@ -7,7 +7,7 @@
   "dependencies": {
     "@apextoaster/js-utils": "^0.2.1",
     "@apextoaster/js-yaml-schema": "^0.4.0-4",
-    "ajv": "^8.4.0",
+    "ajv": "^8.5.0",
     "bunyan": "^1.8.15",
     "esm": "^3.2.25",
     "i18next": "^20.2.4",
@@ -64,9 +64,10 @@
     "typescript": "^4.2.4"
   },
   "nyc": {
-    "branches": 10,
-    "lines": 10,
-    "functions": 10,
-    "statements": 10
+    "cache": false,
+    "branches": 40,
+    "lines": 40,
+    "functions": 40,
+    "statements": 40
   }
 }

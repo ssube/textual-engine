@@ -1,18 +1,19 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { createStubInstance, spy } from 'sinon';
+import { createStubInstance } from 'sinon';
 
-import { Actor, ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
-import { ITEM_TYPE } from '../../../src/model/entity/Item';
-import { Room } from '../../../src/model/entity/Room';
-import { WorldState } from '../../../src/model/world/State';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { ActorStep, ActorStepLookTarget } from '../../../src/script/common/ActorStep';
-import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
-import { LocalScriptService } from '../../../src/service/script/LocalScript';
-import { STAT_HEALTH, VERB_LOOK, VERB_WAIT } from '../../../src/util/constants';
-import { getStubHelper } from '../../helper';
-import { testTransfer } from '../helper';
+import { Actor, ACTOR_TYPE, ActorType } from '../../../../src/model/entity/Actor';
+import { ITEM_TYPE } from '../../../../src/model/entity/Item';
+import { Room } from '../../../../src/model/entity/Room';
+import { WorldState } from '../../../../src/model/world/State';
+import { CoreModule } from '../../../../src/module/CoreModule';
+import { ActorStep } from '../../../../src/script/signal/actor/ActorStep';
+import { ActorStepLookTarget } from '../../../../src/script/verb/common';
+import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { LocalScriptService } from '../../../../src/service/script/LocalScript';
+import { STAT_HEALTH, VERB_LOOK, VERB_WAIT } from '../../../../src/util/constants';
+import { getStubHelper } from '../../../helper';
+import { testTransfer } from '../../helper';
 
 const TEST_ACTOR: Actor = {
   actorType: ActorType.DEFAULT,
@@ -23,10 +24,9 @@ const TEST_ACTOR: Actor = {
       name: 'bon',
       template: 'bon',
     },
-    slots: new Map(),
+    scripts: new Map(),
     stats: new Map(),
     type: ITEM_TYPE,
-    verbs: new Map(),
   }],
   meta: {
     desc: 'bun',
@@ -34,8 +34,12 @@ const TEST_ACTOR: Actor = {
     name: 'bun',
     template: 'bun',
   },
-  skills: new Map(),
-  slots: new Map(),
+  scripts: new Map([
+    [VERB_WAIT, {
+      data: new Map(),
+      name: 'verb-wait',
+    }],
+  ]),
   stats: new Map([
     [STAT_HEALTH, 10],
   ]),
@@ -45,16 +49,8 @@ const TEST_ACTOR: Actor = {
 describe('actor step scripts', () => {
   describe('actor step command', () => {
     it('should invoke the command verb script', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const script = createStubInstance(LocalScriptService);
       const stateHelper = getStubHelper();
-      const waitSpy = spy();
-      const scripts = new Map([
-        [VERB_WAIT, waitSpy],
-      ]);
       const transfer = testTransfer();
 
       await ActorStep.call(TEST_ACTOR, {
@@ -67,27 +63,19 @@ describe('actor step scripts', () => {
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
-        script: createStubInstance(LocalScriptService),
+        script,
         state: {} as WorldState,
         stateHelper,
         transfer,
-      }, scripts);
+      });
 
-      expect(waitSpy, 'wait script').to.have.callCount(1);
+      expect(script.invoke, 'wait script').to.have.callCount(1).and.been.calledWith(TEST_ACTOR, VERB_WAIT);
       expect(stateHelper.show, 'focus show').to.have.callCount(0);
     });
 
     it('should not invoke scripts on dead actors', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const script = createStubInstance(LocalScriptService);
       const stateHelper = getStubHelper();
-      const waitSpy = spy();
-      const scripts = new Map([
-        [VERB_WAIT, waitSpy],
-      ]);
       const transfer = testTransfer();
 
       await ActorStep.call({
@@ -106,13 +94,13 @@ describe('actor step scripts', () => {
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
-        script: createStubInstance(LocalScriptService),
+        script,
         state: {} as WorldState,
         stateHelper,
         transfer,
-      }, scripts);
+      });
 
-      expect(waitSpy).to.have.callCount(0);
+      expect(script.invoke).to.have.callCount(0);
       expect(stateHelper.show).to.have.callCount(1);
     });
 

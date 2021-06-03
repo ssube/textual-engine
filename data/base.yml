@@ -1,6 +1,80 @@
-states: [] # template file
 worlds:
-  - locale:
+  - defaults:
+      actor:
+        meta:
+          id: actor-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        items: []
+        stats: !map {}
+        scripts: !map
+          signal.get:
+            data: !map {}
+            name:
+              base: actor-get
+          signal.hit:
+            data: !map {}
+            name:
+              base: actor-hit
+          signal.step:
+            data: !map {}
+            name:
+              base: actor-step
+          verbs.common.drop:
+            data: !map {}
+            name:
+              base: verb-drop
+          verbs.common.hit:
+            data: !map {}
+            name:
+              base: verb-hit
+          verbs.common.look:
+            data: !map {}
+            name:
+              base: verb-look
+          verbs.common.move:
+            data: !map {}
+            name:
+              base: verb-move
+          verbs.common.take:
+            data: !map {}
+            name:
+              base: verb-take
+          verbs.common.use:
+            data: !map {}
+            name:
+              base: verb-use
+          verbs.common.wait:
+            data: !map {}
+            name:
+              base: verb-wait
+          verbs.world.swing:
+            data: !map {}
+            name:
+              base: verb-hit
+      item:
+        meta:
+          id: item-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        stats: !map {}
+        scripts: !map {}
+      room:
+        meta:
+          id: room-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        actors: []
+        items: []
+        portals: []
+        scripts: !map {}
+    locale:
       bundles:
         en:
           actor:
@@ -22,7 +96,7 @@ worlds:
                   seen: |-
                     You are in {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
                   inventory: |-
-                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.desc}}).
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
                   portal: |-
                     A {{portal.name}} leads to the {{portal.sourceGroup}} ({{portal.dest}}).
                 actor:
@@ -69,7 +143,13 @@ worlds:
             use:
               any: |-
                 {{item.meta.name}} has been used by {{actor.meta.name}}!
-
+          verbs:
+            world:
+              slog: slog
+              swing: swing
+      verbs:
+        - verbs.world.slog
+        - verbs.world.swing
     meta:
       id: test
       name:
@@ -94,18 +174,11 @@ worlds:
                 base: flying bat
             items:
               - id: item-bat-teeth
-            skills: !map {}
             stats: !map
               health:
                 max: 50
                 min: 30
-            slots: !map
-              get:
-                base: actor-get
-              hit:
-                base: actor-hit
-              step:
-                base: actor-step
+            scripts: !map {}
           mods:
             - chance: 50
               excludes: []
@@ -117,9 +190,8 @@ worlds:
                   name:
                     base: 'Vampire {{base}}'
                 items: []
-                skills: !map {}
                 stats: !map {}
-                slots: !map {}
+                scripts: !map {}
         - base:
             meta:
               id: actor-goblin
@@ -130,18 +202,11 @@ worlds:
             items:
               - id: item-sword
                 chance: 20
-            skills: !map {}
             stats: !map
               health:
                 max: 20
                 min: 14
-            slots: !map
-              get:
-                base: actor-get
-              hit:
-                base: actor-hit
-              step:
-                base: actor-step
+            scripts: !map {}
           mods:
             - chance: 50
               excludes: []
@@ -154,9 +219,8 @@ worlds:
                     base: 'Sword {{base}}'
                 items:
                   - id: item-sword
-                skills: !map {}
                 stats: !map {}
-                slots: !map {}
+                scripts: !map {}
       items:
         - base:
             meta:
@@ -165,12 +229,11 @@ worlds:
                 base: Bat Teeth
               desc:
                 base: bat teeth
-            slots: !map {}
+            scripts: !map {}
             stats: !map
               damage:
                 min: 2
                 max: 5
-            verbs: !map {}
         - base:
             meta:
               id: item-sword
@@ -178,12 +241,11 @@ worlds:
                 base: Sword
               desc:
                 base: short sword
-            slots: !map {}
+            scripts: !map {}
             stats: !map
               damage:
                 min: 5
                 max: 10
-            verbs: !map {}
           mods:
             - chance: 25
               excludes:
@@ -195,12 +257,11 @@ worlds:
                     base: '{{base}} with a large crack'
                   name:
                     base: 'Cracked {{base}}'
-                slots: !map {}
+                scripts: !map {}
                 stats: !map
                   damage:
                     min: -4
                     max: -2
-                verbs: !map {}
             - chance: 25
               excludes:
                 - shiny
@@ -211,12 +272,11 @@ worlds:
                     base: 'rusting {{base}}'
                   name:
                     base: 'Rusty {{base}}'
-                slots: !map {}
+                scripts: !map {}
                 stats: !map
                   damage:
                     min: -5
                     max: -3
-                verbs: !map {}
             - chance: 25
               excludes:
                 - cracked
@@ -228,12 +288,11 @@ worlds:
                     base: 'shining {{base}}'
                   name:
                     base: 'Shiny {{base}}'
-                slots: !map {}
+                scripts: !map {}
                 stats: !map
                   damage:
                     min: 5
                     max: 5
-                verbs: !map {}
       rooms:
         - base:
             meta:
@@ -264,10 +323,11 @@ worlds:
                   base: door
                 dest:
                   base: ((room-cave|room-cave|room-marsh))
-            slots: !map
-              step:
-                base: room-step
-            verbs: !map {}
+            scripts: !map
+              signal.step:
+                data: !map {}
+                name:
+                  base: room-step
         - base:
             meta:
               id: room-cave
@@ -298,10 +358,11 @@ worlds:
                   base: window
                 dest:
                   base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
-            slots: !map
-              step:
-                base: room-step
-            verbs: !map {}
+            scripts: !map
+              signal.step:
+                data: !map {}
+                name:
+                  base: room-step
         - base:
             meta:
               id: room-marsh
@@ -330,7 +391,12 @@ worlds:
                   base: window
                 dest:
                   base: room-dungeon
-            slots: !map
-              step:
-                base: room-step
-            verbs: !map {}
+            scripts: !map
+              signal.step:
+                data: !map {}
+                name:
+                  base: room-step
+              verbs.world.slog:
+                data: !map {}
+                name:
+                  base: verb-move

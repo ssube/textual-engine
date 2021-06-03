@@ -8,10 +8,78 @@ import { WorldTemplate } from '../../../src/model/world/Template';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
+import { getTestContainer } from '../../helper';
 
 const TEST_WORLD: WorldTemplate = {
+  defaults: {
+    actor: {
+      actorType: {
+        base: '',
+        type: 'string',
+      },
+      items: [],
+      meta: {
+        desc: {
+          base: '',
+          type: 'string',
+        },
+        id: '',
+        name: {
+          base: '',
+          type: 'string',
+        },
+      },
+      scripts: new Map(),
+      stats: new Map(),
+      type: {
+        base: ACTOR_TYPE,
+        type: 'string',
+      },
+    },
+    item: {
+      meta: {
+        desc: {
+          base: '',
+          type: 'string',
+        },
+        id: '',
+        name: {
+          base: '',
+          type: 'string',
+        },
+      },
+      scripts: new Map(),
+      stats: new Map(),
+      type: {
+        base: ITEM_TYPE,
+        type: 'string',
+      },
+    },
+    room: {
+      actors: [],
+      items: [],
+      meta: {
+        desc: {
+          base: '',
+          type: 'string',
+        },
+        id: '',
+        name: {
+          base: '',
+          type: 'string',
+        },
+      },
+      portals: [],
+      scripts: new Map(),
+      type: {
+        base: ITEM_TYPE,
+        type: 'string',
+      },
+    },
+  },
   locale: {
     bundles: {},
+    verbs: [],
   },
   meta: {
     desc: {
@@ -51,8 +119,7 @@ const TEST_WORLD: WorldTemplate = {
             type: 'string',
           },
         },
-        skills: new Map(),
-        slots: new Map(),
+        scripts: new Map(),
         stats: new Map(),
         type: {
           base: ACTOR_TYPE,
@@ -74,7 +141,7 @@ const TEST_WORLD: WorldTemplate = {
             type: 'string',
           },
         },
-        slots: new Map(),
+        scripts: new Map(),
         stats: new Map([
           ['bar', {
             min: 0,
@@ -87,7 +154,6 @@ const TEST_WORLD: WorldTemplate = {
           base: ITEM_TYPE,
           type: 'string',
         },
-        verbs: new Map(),
       },
       mods: [],
     }],
@@ -111,12 +177,11 @@ const TEST_WORLD: WorldTemplate = {
           },
         },
         portals: [],
-        slots: new Map(),
+        scripts: new Map(),
         type: {
           base: ITEM_TYPE,
           type: 'string',
         },
-        verbs: new Map(),
       },
       mods: [],
     }],
@@ -160,11 +225,7 @@ describe('state entity generator', () => {
 
   describe('create room helper', () => {
     it('should create a room with actors in it', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -175,10 +236,101 @@ describe('state entity generator', () => {
     });
   });
 
-  xit('modify actor');
-  xit('modify item');
-  xit('modify room');
-  xit('modify metadata');
-  xit('select modifiers');
-  xit('populate portals');
+  describe('modify actor helper', () => {
+    it('should update meta fields', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const actor = await generator.createActor(TEST_WORLD.templates.actors[0]);
+      expect(isActor(actor)).to.equal(true);
+
+      const original = actor.meta.name;
+      await generator.modifyActor(actor, [{
+        base: {
+          actorType: {
+            base: 'default',
+            type: 'string',
+          },
+          items: [],
+          meta: {
+            desc: {
+              base: '',
+              type: 'string',
+            },
+            name: {
+              base: 'foo {{base}}',
+              type: 'string',
+            },
+          },
+          type: {
+            base: 'actor',
+            type: 'string',
+          },
+          scripts: new Map(),
+          stats: new Map(),
+        },
+        chance: TEMPLATE_CHANCE,
+        excludes: [],
+        id: 'test',
+      }]);
+      expect(original).not.to.equal(actor.meta.name);
+    });
+  });
+
+  describe('modify item helper', () => {
+    it('should update meta fields', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const item = await generator.createItem(TEST_WORLD.templates.items[0]);
+      expect(isItem(item)).to.equal(true);
+
+      const original = item.meta.name;
+      await generator.modifyItem(item, [{
+        base: {
+          meta: {
+            desc: {
+              base: '',
+              type: 'string',
+            },
+            name: {
+              base: 'foo {{base}}',
+              type: 'string',
+            },
+          },
+          type: {
+            base: 'actor',
+            type: 'string',
+          },
+          scripts: new Map(),
+          stats: new Map(),
+        },
+        chance: TEMPLATE_CHANCE,
+        excludes: [],
+        id: 'test',
+      }]);
+      expect(original).not.to.equal(item.meta.name);
+    });
+  });
+
+  describe('modify room helper', () => {
+    xit('should update meta fields');
+  });
+
+  describe('modify meta helper', () => {
+    xit('should not update id');
+    xit('should update name');
+  });
+
+  describe('select modifiers helper', () => {
+    xit('should select modifiers based on chance');
+    xit('should not select excluded modifiers');
+    xit('should select implied modifiers unless excluded');
+  });
+
+  describe('populate portals helper', () => {
+    xit('should create destination rooms for unfilled portals');
+  });
 });

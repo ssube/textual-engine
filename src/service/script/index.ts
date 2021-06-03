@@ -6,7 +6,7 @@ import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
 import { WorldState } from '../../model/world/State';
-import { ShowSource, ShowVolume } from '../../util/actor';
+import { StateSource, ShowVolume } from '../../util/actor';
 import { SearchParams } from '../../util/state';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { Immutable, ScriptData } from '../../util/types';
@@ -17,8 +17,10 @@ export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
 
 export interface StateHelper {
-  enter: (target: ShowSource) => Promise<void>;
-  show: (msg: string, context?: LocaleContext, volume?: ShowVolume, source?: ShowSource) => Promise<void>;
+  enter: (target: StateSource) => Promise<void>;
+  // find: () => Promise<Array<WorldEntity>>; // replaces searchState
+  // move: () => Promise<void>; // replaces transfer
+  show: (msg: string, context?: LocaleContext, volume?: ShowVolume, source?: StateSource) => Promise<void>;
   quit: () => Promise<void>;
 }
 

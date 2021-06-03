@@ -52,7 +52,7 @@ describe('chain template service', () => {
   });
 
   describe('modify string', () => {
-    xit('should prepend the prefix', async () => {
+    it('should prepend the prefix', async () => {
       const container = Container.from(new CoreModule());
       await container.configure({
         logger: NullLogger.global,

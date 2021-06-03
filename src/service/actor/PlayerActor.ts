@@ -6,7 +6,7 @@ import { Command } from '../../model/Command';
 import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
-import { showCheck, ShowSource } from '../../util/actor';
+import { showCheck, StateSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
 import {
   COMMON_VERBS,
@@ -70,9 +70,12 @@ export class PlayerActorService implements ActorService {
     this.pid = `player-${this.counter.next('player')}`;
   }
 
-  public async start() {
+  public async start(): Promise<void> {
     this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
-      catchAndLog(this.tokenizer.translate(COMMON_VERBS), this.logger, 'error translating verbs');
+      catchAndLog(this.tokenizer.translate([
+        ...COMMON_VERBS,
+        ...event.bundle.verbs,
+      ]), this.logger, 'error translating verbs');
     }, this);
     this.event.on(EVENT_RENDER_OUTPUT, (event) => {
       catchAndLog(this.onInput(event), this.logger, 'error during render output');
@@ -100,7 +103,7 @@ export class PlayerActorService implements ActorService {
     }, this);
   }
 
-  public async stop() {
+  public async stop(): Promise<void> {
     this.event.removeGroup(this);
   }
 
@@ -120,7 +123,7 @@ export class PlayerActorService implements ActorService {
     this.logger.debug({ event }, 'filtering output');
 
     if (doesExist(this.actor) && doesExist(this.room) && doesExist(event.source)) {
-      const target: ShowSource = {
+      const target: StateSource = {
         actor: this.actor,
         room: this.room,
       };

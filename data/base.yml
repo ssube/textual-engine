@@ -110,6 +110,34 @@ worlds:
                 data: !map {}
                 name:
                   base: actor-step
+              verbs.common.drop:
+                data: !map {}
+                name:
+                  base: verb-drop
+              verbs.common.hit:
+                data: !map {}
+                name:
+                  base: verb-hit
+              verbs.common.look:
+                data: !map {}
+                name:
+                  base: verb-look
+              verbs.common.move:
+                data: !map {}
+                name:
+                  base: verb-move
+              verbs.common.take:
+                data: !map {}
+                name:
+                  base: verb-take
+              verbs.common.use:
+                data: !map {}
+                name:
+                  base: verb-use
+              verbs.common.wait:
+                data: !map {}
+                name:
+                  base: verb-wait
           mods:
             - chance: 50
               excludes: []
@@ -150,6 +178,34 @@ worlds:
                 data: !map {}
                 name:
                   base: actor-step
+              verbs.common.drop:
+                data: !map {}
+                name:
+                  base: verb-drop
+              verbs.common.hit:
+                data: !map {}
+                name:
+                  base: verb-hit
+              verbs.common.look:
+                data: !map {}
+                name:
+                  base: verb-look
+              verbs.common.move:
+                data: !map {}
+                name:
+                  base: verb-move
+              verbs.common.take:
+                data: !map {}
+                name:
+                  base: verb-take
+              verbs.common.use:
+                data: !map {}
+                name:
+                  base: verb-use
+              verbs.common.wait:
+                data: !map {}
+                name:
+                  base: verb-wait
           mods:
             - chance: 50
               excludes: []

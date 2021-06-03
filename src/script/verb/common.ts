@@ -1,9 +1,9 @@
-import { isNil, mustExist } from '@apextoaster/js-utils';
+import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Actor, ActorType, isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
-import { isRoom } from '../../model/entity/Room';
+import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
 import { getKey } from '../../util/collection/map';
@@ -193,20 +193,38 @@ export async function ActorStepMove(this: ScriptTarget, context: ScriptContext):
   const targetName = command.target;
 
   const currentRoom = mustExist(context.room);
-  const results = currentRoom.portals.filter((it) => {
+  const portals = currentRoom.portals.filter((it) => {
     const group = it.sourceGroup.toLocaleLowerCase();
     const name = it.name.toLocaleLowerCase();
     // portals in the same group usually lead to the same place, but name and group can both be ambiguous
     return (name === targetName || group === targetName || `${group} ${name}` === targetName);
   });
-  const targetPortal = results[command.index];
+  const targetPortal = portals[command.index];
 
   if (isNil(targetPortal)) {
     await context.stateHelper.show('actor.step.move.missing', { command });
     return;
   }
 
+  const rooms = searchState(context.state, {
+    meta: {
+      id: targetPortal.dest,
+    },
+    type: ROOM_TYPE,
+  });
+  const targetRoom = indexEntity(rooms, command.index, isRoom);
+
+  if (!isRoom(targetRoom)) {
+    throw new NotFoundError('destination room not found');
+  }
+
   // move the actor and focus
+  await context.transfer.moveActor({
+    moving: this,
+    source: currentRoom,
+    target: targetRoom,
+  }, context);
+
   await context.stateHelper.show('actor.step.move.portal', {
     actor: this,
     portal: targetPortal,
@@ -214,13 +232,10 @@ export async function ActorStepMove(this: ScriptTarget, context: ScriptContext):
     actor: this,
     room: currentRoom,
   });
-  await context.transfer.moveActor({
-    moving: this,
-    source: currentRoom.meta.id,
-    target: targetPortal.dest
-  }, context);
 
   if (this.actorType === ActorType.PLAYER) {
+    context.logger.debug({ actor: this, room: targetRoom }, 'player entered room');
+    await context.stateHelper.enter({ actor: this, room: targetRoom });
     await ActorStepLookTarget.call(this, context, targetPortal.dest);
   }
 }

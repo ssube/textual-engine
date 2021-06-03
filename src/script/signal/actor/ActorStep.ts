@@ -4,7 +4,7 @@ import { ActorType, isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { getKey } from '../../../util/collection/map';
 import { STAT_HEALTH } from '../../../util/constants';
-import { getScripts } from '../../../util/state';
+import { getVerbScripts } from '../../../util/state';
 
 export async function ActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({
@@ -32,7 +32,7 @@ export async function ActorStep(this: ScriptTarget, context: ScriptContext): Pro
 
   const { command } = context;
 
-  const scripts = getScripts(context.state, this);
+  const scripts = getVerbScripts(context.state, this);
   if (scripts.has(command.verb) === false) {
     await context.stateHelper.show('actor.step.command.unknown', { actor: this, command });
     context.logger.warn({ command }, 'unknown verb');

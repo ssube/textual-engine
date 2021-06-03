@@ -396,6 +396,10 @@ worlds:
                 data: !map {}
                 name:
                   base: room-step
+              verbs.common.move:
+                data: !map {}
+                name:
+                  base: ''
               verbs.world.slog:
                 data: !map {}
                 name:

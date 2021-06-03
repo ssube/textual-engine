@@ -19,7 +19,7 @@ import {
   ActorStepUse,
   ActorStepWait,
 } from '../../script/verb/common';
-import { getScripts, SearchParams, searchState } from '../../util/state';
+import { getVerbScripts, SearchParams, searchState } from '../../util/state';
 
 /**
  * Common scripts, built into the engine and always available.
@@ -61,7 +61,7 @@ export class LocalScriptService implements ScriptService {
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
     this.logger.debug({ slot, target }, 'trying to invoke slot on target');
 
-    const scripts = getScripts(scope.state, target);
+    const scripts = getVerbScripts(scope.state, target);
     const scriptRef = scripts.get(slot);
 
     if (isNil(scriptRef)) {

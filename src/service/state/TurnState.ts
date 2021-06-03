@@ -33,12 +33,13 @@ import {
   META_LOAD,
   META_QUIT,
   META_SAVE,
+  META_VERBS,
   META_WORLDS,
   SLOT_STEP,
   VERB_PREFIX,
   VERB_WAIT,
 } from '../../util/constants';
-import { getScripts } from '../../util/state';
+import { getVerbScripts } from '../../util/state';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
@@ -365,9 +366,12 @@ export class LocalStateService implements StateService {
   }
 
   public async doHelp(actor: Optional<Actor>): Promise<void> {
-    const scripts = getScripts(this.state, actor);
-    const verbs = Array.from(scripts.keys())
-      .filter((it) => it.startsWith(VERB_PREFIX))
+    const scripts = getVerbScripts(this.state, actor);
+    const worldVerbs = Array.from(scripts.keys()).filter((it) => it.startsWith(VERB_PREFIX));
+    const verbs = [
+      ...worldVerbs,
+      ...META_VERBS,
+    ].sort()
       .map((it) => `$t(${it})`)
       .join(', ');
 

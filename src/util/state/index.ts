@@ -141,18 +141,22 @@ export function findContainer(state: WorldState, search: Partial<SearchParams>, 
 /**
  * @todo remove existing verbs
  */
-export function getScripts(state: Optional<Immutable<WorldState>>, target: Optional<WorldEntity>): ScriptMap {
+export function getVerbScripts(state: Optional<Immutable<WorldState>>, target: Optional<WorldEntity>): ScriptMap {
   const scripts: ScriptMap = new Map();
 
-  // TODO: this should only be in getVerbs, not getScripts
-  for (const verb of META_VERBS) {
-    scripts.set(verb, {
-      data: new Map(),
-      name: '',
-    });
-  }
-
   if (doesExist(target)) {
+    mergeMap(scripts, target.scripts);
+
+    if (!isItem(target)) {
+      for (const item of target.items) {
+        for (const [name, script] of item.scripts) {
+          if (name.startsWith(VERB_PREFIX)) {
+            scripts.set(name, script);
+          }
+        }
+      }
+    }
+
     // TODO: bad cast
     if (!isRoom(target)) {
       const [room] = findRoom(mustExist(state) as WorldState, {
@@ -169,19 +173,14 @@ export function getScripts(state: Optional<Immutable<WorldState>>, target: Optio
         }
       }
     }
+  }
 
-    if (!isItem(target)) {
-      for (const item of target.items) {
-        for (const [name, script] of item.scripts) {
-          if (name.startsWith(VERB_PREFIX)) {
-            scripts.set(name, script);
-          }
-        }
-      }
+  const scriptNames = Array.from(scripts.keys()); // needs to be pulled AOT since the Map will be mutated
+  for (const name of scriptNames) {
+    const script = scripts.get(name);
+    if (doesExist(script) && script.name.length === 0) {
+      scripts.delete(name);
     }
-
-    // merge everything, including signals, from the target
-    mergeMap(scripts, target.scripts);
   }
 
   return scripts;

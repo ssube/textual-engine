@@ -1858,7 +1858,7 @@
       init_virtual_process_polyfill();
       init_buffer();
       "use strict";
-      var BaseError5 = class extends Error {
+      var BaseError6 = class extends Error {
         constructor(message, ...nested) {
           super(message);
           this.message = message;
@@ -1878,26 +1878,26 @@
           return this.nested.length;
         }
       };
-      __name(BaseError5, "BaseError");
-      var ContainerBoundError = class extends BaseError5 {
+      __name(BaseError6, "BaseError");
+      var ContainerBoundError = class extends BaseError6 {
         constructor(msg = "container is already bound", ...nested) {
           super(msg, ...nested);
         }
       };
       __name(ContainerBoundError, "ContainerBoundError");
-      var ContainerNotBoundError = class extends BaseError5 {
+      var ContainerNotBoundError = class extends BaseError6 {
         constructor(msg = "container is not bound", ...nested) {
           super(msg, ...nested);
         }
       };
       __name(ContainerNotBoundError, "ContainerNotBoundError");
-      var InvalidProviderError = class extends BaseError5 {
+      var InvalidProviderError = class extends BaseError6 {
         constructor(msg = "invalid provider type", ...nested) {
           super(msg, ...nested);
         }
       };
       __name(InvalidProviderError, "InvalidProviderError");
-      var MissingValueError = class extends BaseError5 {
+      var MissingValueError = class extends BaseError6 {
         constructor(msg = "required value is null or undefined", ...nested) {
           super(msg, ...nested);
         }
@@ -1933,13 +1933,13 @@
         });
       }
       __name(resolveDepends, "resolveDepends");
-      var InvalidTargetError = class extends BaseError5 {
+      var InvalidTargetError = class extends BaseError6 {
         constructor(msg = "invalid decorator target", ...nested) {
           super(msg, ...nested);
         }
       };
       __name(InvalidTargetError, "InvalidTargetError");
-      var DescriptorNotFoundError = class extends BaseError5 {
+      var DescriptorNotFoundError = class extends BaseError6 {
         constructor(msg = "property descriptor not found", ...nested) {
           super(msg, ...nested);
         }
@@ -2360,7 +2360,7 @@
         }
       };
       __name(WinstonLogger, "WinstonLogger");
-      exports.BaseError = BaseError5;
+      exports.BaseError = BaseError6;
       exports.ConsoleLogger = ConsoleLogger;
       exports.Container = Container2;
       exports.ContainerBoundError = ContainerBoundError;
@@ -36138,9 +36138,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       function getSchemaRefs(schema2) {
         if (typeof schema2 == "boolean")
           return {};
-        const schemaId = normalizeId(schema2.$id);
-        const baseIds = { "": schemaId };
-        const pathPrefix = getFullPath(schemaId, false);
+        const { schemaId } = this.opts;
+        const schId = normalizeId(schema2[schemaId]);
+        const baseIds = { "": schId };
+        const pathPrefix = getFullPath(schId, false);
         const localRefs = {};
         const schemaRefs = new Set();
         traverse(schema2, { allKeys: true }, (sch, jsonPtr, _23, parentJsonPtr) => {
@@ -36148,8 +36149,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             return;
           const fullPath = pathPrefix + jsonPtr;
           let baseId = baseIds[parentJsonPtr];
-          if (typeof sch.$id == "string")
-            baseId = addRef.call(this, sch.$id);
+          if (typeof sch[schemaId] == "string")
+            baseId = addRef.call(this, sch[schemaId]);
           addAnchor.call(this, sch.$anchor);
           addAnchor.call(this, sch.$dynamicAnchor);
           baseIds[jsonPtr] = baseId;
@@ -36289,7 +36290,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       __name(resetEvaluated, "resetEvaluated");
       function funcSourceUrl(schema2, opts) {
-        return typeof schema2 == "object" && schema2.$id && (opts.code.source || opts.code.process) ? codegen_1._`/*# sourceURL=${schema2.$id} */` : codegen_1.nil;
+        const schId = typeof schema2 == "object" && schema2[opts.schemaId];
+        return schId && (opts.code.source || opts.code.process) ? codegen_1._`/*# sourceURL=${schId} */` : codegen_1.nil;
       }
       __name(funcSourceUrl, "funcSourceUrl");
       function subschemaCode(it, valid) {
@@ -36355,8 +36357,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       __name(checkNoDefault, "checkNoDefault");
       function updateContext(it) {
-        if (it.schema.$id)
-          it.baseId = resolve_1.resolveUrl(it.baseId, it.schema.$id);
+        const schId = it.schema[it.opts.schemaId];
+        if (schId)
+          it.baseId = resolve_1.resolveUrl(it.baseId, schId);
       }
       __name(updateContext, "updateContext");
       function checkAsyncSchema(it) {
@@ -36793,8 +36796,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           if (typeof env3.schema == "object")
             schema2 = env3.schema;
           this.schema = env3.schema;
+          this.schemaId = env3.schemaId;
           this.root = env3.root || this;
-          this.baseId = (_a = env3.baseId) !== null && _a !== void 0 ? _a : resolve_1.normalizeId(schema2 === null || schema2 === void 0 ? void 0 : schema2.$id);
+          this.baseId = (_a = env3.baseId) !== null && _a !== void 0 ? _a : resolve_1.normalizeId(schema2 === null || schema2 === void 0 ? void 0 : schema2[env3.schemaId || "$id"]);
           this.schemaPath = env3.schemaPath;
           this.localRefs = env3.localRefs;
           this.meta = env3.meta;
@@ -36899,8 +36903,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         let _sch = resolve2.call(this, root, ref);
         if (_sch === void 0) {
           const schema2 = (_a = root.localRefs) === null || _a === void 0 ? void 0 : _a[ref];
+          const { schemaId } = this.opts;
           if (schema2)
-            _sch = new SchemaEnv({ schema: schema2, root, baseId });
+            _sch = new SchemaEnv({ schema: schema2, schemaId, root, baseId });
         }
         if (_sch === void 0)
           return;
@@ -36954,9 +36959,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           compileSchema.call(this, schOrRef);
         if (id === resolve_1.normalizeId(ref)) {
           const { schema: schema2 } = schOrRef;
-          if (schema2.$id)
-            baseId = resolve_1.resolveUrl(baseId, schema2.$id);
-          return new SchemaEnv({ schema: schema2, root, baseId });
+          const { schemaId } = this.opts;
+          const schId = schema2[schemaId];
+          if (schId)
+            baseId = resolve_1.resolveUrl(baseId, schId);
+          return new SchemaEnv({ schema: schema2, schemaId, root, baseId });
         }
         return getJsonPointer.call(this, p, schOrRef);
       }
@@ -36979,8 +36986,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           schema2 = schema2[util_1.unescapeFragment(part)];
           if (schema2 === void 0)
             return;
-          if (!PREVENT_SCOPE_CHANGE.has(part) && typeof schema2 == "object" && schema2.$id) {
-            baseId = resolve_1.resolveUrl(baseId, schema2.$id);
+          const schId = typeof schema2 == "object" && schema2[this.opts.schemaId];
+          if (!PREVENT_SCOPE_CHANGE.has(part) && schId) {
+            baseId = resolve_1.resolveUrl(baseId, schId);
           }
         }
         let env3;
@@ -36988,7 +36996,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           const $ref = resolve_1.resolveUrl(baseId, schema2.$ref);
           env3 = resolveSchema.call(this, root, $ref);
         }
-        env3 = env3 || new SchemaEnv({ schema: schema2, root, baseId });
+        const { schemaId } = this.opts;
+        env3 = env3 || new SchemaEnv({ schema: schema2, schemaId, root, baseId });
         if (env3.schema !== env3.root.schema)
           return env3;
         return void 0;
@@ -37081,7 +37090,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         missingRefs: "Pass empty schema with $id that should be ignored to ajv.addSchema.",
         processCode: "Use option `code: {process: (code, schemaEnv: object) => string}`",
         sourceCode: "Use option `code: {source: true}`",
-        schemaId: "JSON Schema draft-04 is not supported in Ajv v7/8.",
         strictDefaults: "It is default now, see option `strict`.",
         strictKeywords: "It is default now, see option `strict`.",
         uniqueItems: '"uniqueItems" keyword is always validated.',
@@ -37097,7 +37105,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       };
       var MAX_EXPRESSION = 200;
       function requiredOptions(o) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
         const s = o.strict;
         const _optz = (_a = o.code) === null || _a === void 0 ? void 0 : _a.optimize;
         const optimize = _optz === true || _optz === void 0 ? 1 : _optz || 0;
@@ -37113,10 +37121,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           meta: (_p = o.meta) !== null && _p !== void 0 ? _p : true,
           messages: (_q = o.messages) !== null && _q !== void 0 ? _q : true,
           inlineRefs: (_r = o.inlineRefs) !== null && _r !== void 0 ? _r : true,
-          addUsedSchema: (_s = o.addUsedSchema) !== null && _s !== void 0 ? _s : true,
-          validateSchema: (_t = o.validateSchema) !== null && _t !== void 0 ? _t : true,
-          validateFormats: (_u = o.validateFormats) !== null && _u !== void 0 ? _u : true,
-          unicodeRegExp: (_v = o.unicodeRegExp) !== null && _v !== void 0 ? _v : true
+          schemaId: (_s = o.schemaId) !== null && _s !== void 0 ? _s : "$id",
+          addUsedSchema: (_t = o.addUsedSchema) !== null && _t !== void 0 ? _t : true,
+          validateSchema: (_u = o.validateSchema) !== null && _u !== void 0 ? _u : true,
+          validateFormats: (_v = o.validateFormats) !== null && _v !== void 0 ? _v : true,
+          unicodeRegExp: (_w = o.unicodeRegExp) !== null && _w !== void 0 ? _w : true
         };
       }
       __name(requiredOptions, "requiredOptions");
@@ -37153,13 +37162,19 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           this.addKeyword("$async");
         }
         _addDefaultMetaSchema() {
-          const { $data, meta } = this.opts;
+          const { $data, meta, schemaId } = this.opts;
+          let _dataRefSchema = $dataRefSchema;
+          if (schemaId === "id") {
+            _dataRefSchema = { ...$dataRefSchema };
+            _dataRefSchema.id = _dataRefSchema.$id;
+            delete _dataRefSchema.$id;
+          }
           if (meta && $data)
-            this.addMetaSchema($dataRefSchema, $dataRefSchema.$id, false);
+            this.addMetaSchema(_dataRefSchema, _dataRefSchema[schemaId], false);
         }
         defaultMeta() {
-          const { meta } = this.opts;
-          return this.opts.defaultMeta = typeof meta == "object" ? meta.$id || meta : void 0;
+          const { meta, schemaId } = this.opts;
+          return this.opts.defaultMeta = typeof meta == "object" ? meta[schemaId] || meta : void 0;
         }
         validate(schemaKeyRef, data) {
           let v;
@@ -37243,9 +37258,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           }
           let id;
           if (typeof schema2 === "object") {
-            id = schema2.$id;
-            if (id !== void 0 && typeof id != "string")
-              throw new Error("schema $id must be string");
+            const { schemaId } = this.opts;
+            id = schema2[schemaId];
+            if (id !== void 0 && typeof id != "string") {
+              throw new Error(`schema ${schemaId} must be string`);
+            }
           }
           key = resolve_1.normalizeId(key || id);
           this._checkUnique(key);
@@ -37285,7 +37302,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           while (typeof (sch = getSchEnv.call(this, keyRef)) == "string")
             keyRef = sch;
           if (sch === void 0) {
-            const root = new compile_1.SchemaEnv({ schema: {} });
+            const { schemaId } = this.opts;
+            const root = new compile_1.SchemaEnv({ schema: {}, schemaId });
             sch = compile_1.resolveSchema.call(this, root, keyRef);
             if (!sch)
               return;
@@ -37316,7 +37334,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             case "object": {
               const cacheKey = schemaKeyRef;
               this._cache.delete(cacheKey);
-              let id = schemaKeyRef.$id;
+              let id = schemaKeyRef[this.opts.schemaId];
               if (id) {
                 id = resolve_1.normalizeId(id);
                 delete this.schemas[id];
@@ -37425,8 +37443,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
         _addSchema(schema2, meta, baseId, validateSchema = this.opts.validateSchema, addSchema = this.opts.addUsedSchema) {
           let id;
+          const { schemaId } = this.opts;
           if (typeof schema2 == "object") {
-            id = schema2.$id;
+            id = schema2[schemaId];
           } else {
             if (this.opts.jtd)
               throw new Error("schema must be object");
@@ -37438,7 +37457,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             return sch;
           const localRefs = resolve_1.getSchemaRefs.call(this, schema2);
           baseId = resolve_1.normalizeId(id || baseId);
-          sch = new compile_1.SchemaEnv({ schema: schema2, meta, baseId, localRefs });
+          sch = new compile_1.SchemaEnv({ schema: schema2, schemaId, meta, baseId, localRefs });
           this._cache.set(sch.schema, sch);
           if (addSchema && !baseId.startsWith("#")) {
             if (baseId)
@@ -38204,8 +38223,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         $data: true,
         error: error2,
         code(cxt) {
-          const { gen, data, schemaCode } = cxt;
-          cxt.fail$data(codegen_1._`!${util_1.useFunc(gen, equal_1.default)}(${data}, ${schemaCode})`);
+          const { gen, data, $data, schemaCode, schema: schema2 } = cxt;
+          if ($data || schema2 && typeof schema2 == "object") {
+            cxt.fail$data(codegen_1._`!${util_1.useFunc(gen, equal_1.default)}(${data}, ${schemaCode})`);
+          } else {
+            cxt.fail(codegen_1._`${schema2} !== ${data}`);
+          }
         }
       };
       exports.default = def;
@@ -38255,7 +38278,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           __name(loopEnum, "loopEnum");
           function equalCode(vSchema, i) {
             const sch = schema2[i];
-            return sch && typeof sch === "object" ? codegen_1._`${eql}(${data}, ${vSchema}[${i}])` : codegen_1._`${data} === ${sch}`;
+            return typeof sch === "object" && sch !== null ? codegen_1._`${eql}(${data}, ${vSchema}[${i}])` : codegen_1._`${data} === ${sch}`;
           }
           __name(equalCode, "equalCode");
         }
@@ -41163,7 +41186,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(createCommonjsModule, "createCommonjsModule");
   var main = createCommonjsModule(function(module, exports) {
-    class BaseError5 extends Error {
+    class BaseError6 extends Error {
       constructor(message, ...nested) {
         super(message);
         this.message = message;
@@ -41183,26 +41206,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         return this.nested.length;
       }
     }
-    __name(BaseError5, "BaseError");
-    class ContainerBoundError extends BaseError5 {
+    __name(BaseError6, "BaseError");
+    class ContainerBoundError extends BaseError6 {
       constructor(msg = "container is already bound", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(ContainerBoundError, "ContainerBoundError");
-    class ContainerNotBoundError extends BaseError5 {
+    class ContainerNotBoundError extends BaseError6 {
       constructor(msg = "container is not bound", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(ContainerNotBoundError, "ContainerNotBoundError");
-    class InvalidProviderError extends BaseError5 {
+    class InvalidProviderError extends BaseError6 {
       constructor(msg = "invalid provider type", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(InvalidProviderError, "InvalidProviderError");
-    class MissingValueError extends BaseError5 {
+    class MissingValueError extends BaseError6 {
       constructor(msg = "required value is null or undefined", ...nested) {
         super(msg, ...nested);
       }
@@ -41238,13 +41261,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
     }
     __name(resolveDepends, "resolveDepends");
-    class InvalidTargetError extends BaseError5 {
+    class InvalidTargetError extends BaseError6 {
       constructor(msg = "invalid decorator target", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(InvalidTargetError, "InvalidTargetError");
-    class DescriptorNotFoundError extends BaseError5 {
+    class DescriptorNotFoundError extends BaseError6 {
       constructor(msg = "property descriptor not found", ...nested) {
         super(msg, ...nested);
       }
@@ -41665,7 +41688,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(MapModule, "MapModule");
-    exports.BaseError = BaseError5;
+    exports.BaseError = BaseError6;
     exports.ConsoleLogger = ConsoleLogger;
     exports.Container = Container2;
     exports.ContainerBoundError = ContainerBoundError;
@@ -41774,6 +41797,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return defaultValue;
   }
   __name(getOrDefault, "getOrDefault");
+  function mergeMap(target, source) {
+    for (const [k, v] of source) {
+      target.set(k, v);
+    }
+    return target;
+  }
+  __name(mergeMap, "mergeMap");
   var ChecklistMode;
   (function(ChecklistMode3) {
     ChecklistMode3["INCLUDE"] = "include";
@@ -41789,7 +41819,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   __name(constructorName, "constructorName");
 
   // out/src/main.js
-  var import_noicejs21 = __toModule(require_main());
+  var import_noicejs22 = __toModule(require_main());
 
   // out/src/logger/BunyanLogger.js
   init_virtual_process_polyfill();
@@ -41943,11 +41973,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var EVENT_STATE_LOAD = "state-load";
   var EVENT_STATE_OUTPUT = "state-output";
   var EVENT_STATE_ROOM = "state-room";
-  var SLOT_ENTER = "enter";
-  var SLOT_GET = "get";
-  var SLOT_HIT = "hit";
-  var SLOT_STEP = "step";
-  var SLOT_USE = "use";
+  var SLOT_ENTER = "signal.enter";
+  var SLOT_GET = "signal.get";
+  var SLOT_HIT = "signal.hit";
+  var SLOT_STEP = "signal.step";
+  var SLOT_USE = "signal.use";
+  var VERB_PREFIX = "verbs.";
   var VERB_DROP = "verbs.common.drop";
   var VERB_HIT = "verbs.common.hit";
   var VERB_LOOK = "verbs.common.look";
@@ -41962,7 +41993,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var META_LOAD = "verbs.meta.load";
   var META_QUIT = "verbs.meta.quit";
   var META_SAVE = "verbs.meta.save";
-  var COMMON_VERBS = [
+  var META_WORLDS = "verbs.meta.worlds";
+  var META_VERBS = [
     META_CREATE,
     META_DEBUG,
     META_GRAPH,
@@ -41970,6 +42002,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     META_LOAD,
     META_QUIT,
     META_SAVE,
+    META_WORLDS
+  ];
+  var COMMON_VERBS = [
+    ...META_VERBS,
     VERB_DROP,
     VERB_HIT,
     VERB_LOOK,
@@ -42310,7 +42346,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/module/CoreModule.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs18 = __toModule(require_main());
+  var import_noicejs19 = __toModule(require_main());
 
   // out/src/service/actor/BehaviorActor.js
   init_virtual_process_polyfill();
@@ -42346,6 +42382,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(makeConstStringSchema, "makeConstStringSchema");
 
+  // out/src/model/mapped/Modifier.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
   // out/src/model/mapped/Template.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -42380,6 +42420,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     required: ["id"]
   };
 
+  // out/src/model/mapped/Modifier.js
+  var MODIFIER_METADATA_SCHEMA = {
+    type: "object",
+    properties: {
+      desc: TEMPLATE_STRING_SCHEMA,
+      name: TEMPLATE_STRING_SCHEMA
+    },
+    required: ["desc", "name"]
+  };
+
   // out/src/model/Metadata.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -42412,6 +42462,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     properties: {
       base: {
         type: "object",
+        properties: {
+          actorType: TEMPLATE_STRING_SCHEMA,
+          items: {
+            type: "array",
+            items: {
+              type: "object",
+              required: []
+            }
+          },
+          meta: MODIFIER_METADATA_SCHEMA,
+          stats: {
+            type: "object",
+            required: []
+          },
+          scripts: {
+            type: "object",
+            required: []
+          },
+          type: TEMPLATE_STRING_SCHEMA
+        },
         required: ["meta"]
       },
       chance: {
@@ -42420,6 +42490,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       },
       excludes: {
         type: "array",
+        default: [],
         items: {
           type: "string"
         }
@@ -42428,7 +42499,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         type: "string"
       }
     },
-    required: []
+    required: ["base", "id"]
   };
   var ACTOR_TEMPLATE_SCHEMA = {
     type: "object",
@@ -42446,20 +42517,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           },
           meta: METADATA_SCHEMA,
           type: makeConstStringSchema(ACTOR_TYPE),
-          skills: {
-            type: "object",
-            required: []
-          },
           stats: {
             type: "object",
             required: []
           },
-          slots: {
+          scripts: {
             type: "object",
             required: []
           }
         },
-        required: ["items", "meta", "type", "skills", "stats", "slots"]
+        required: ["items", "meta", "type", "scripts", "stats"]
       },
       mods: {
         type: "array",
@@ -42590,7 +42657,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async start() {
       this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
-        catchAndLog(this.tokenizer.translate(COMMON_VERBS), this.logger, "error translating verbs");
+        catchAndLog(this.tokenizer.translate([
+          ...COMMON_VERBS,
+          ...event.bundle.verbs
+        ]), this.logger, "error translating verbs");
       }, this);
       this.event.on(EVENT_RENDER_OUTPUT, (event) => {
         catchAndLog(this.onInput(event), this.logger, "error during render output");
@@ -47997,7 +48067,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return doesExist(entity) && entity.type === ITEM_TYPE;
   }
   __name(isItem, "isItem");
-  var ITEM_SCHEMA = {
+  var ITEM_TEMPLATE_SCHEMA = {
     type: "object",
     properties: {
       base: {
@@ -48005,20 +48075,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         properties: {
           type: makeConstStringSchema(ITEM_TYPE),
           meta: METADATA_SCHEMA,
-          slots: {
+          scripts: {
             type: "object",
             required: []
           },
           stats: {
             type: "object",
             required: []
-          },
-          verbs: {
-            type: "object",
-            required: []
           }
         },
-        required: ["meta", "slots", "stats", "type", "verbs"]
+        required: ["meta", "scripts", "stats", "type"]
       },
       mods: {
         type: "array",
@@ -48065,7 +48131,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return doesExist(entity) && entity.type === ROOM_TYPE;
   }
   __name(isRoom, "isRoom");
-  var ROOM_SCHEMA = {
+  var ROOM_TEMPLATE_SCHEMA = {
     type: "object",
     properties: {
       base: {
@@ -48085,16 +48151,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             type: "array",
             items: PORTAL_SCHEMA
           },
-          slots: {
-            type: "object",
-            required: []
-          },
-          verbs: {
+          scripts: {
             type: "object",
             required: []
           }
         },
-        required: ["actors", "items", "meta", "portals", "slots", "type", "verbs"]
+        required: ["actors", "items", "meta", "portals", "scripts", "type"]
       },
       mods: {
         type: "array",
@@ -48124,15 +48186,30 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             required: []
           }
         }
+      },
+      verbs: {
+        type: "array",
+        items: {
+          type: "string"
+        }
       }
     },
-    required: ["bundles"]
+    required: ["bundles", "verbs"]
   };
 
   // out/src/model/world/Template.js
   var WORLD_TEMPLATE_SCHEMA = {
     type: "object",
     properties: {
+      defaults: {
+        type: "object",
+        properties: {
+          actor: ACTOR_TEMPLATE_SCHEMA.properties.base,
+          item: ITEM_TEMPLATE_SCHEMA.properties.base,
+          room: ROOM_TEMPLATE_SCHEMA.properties.base
+        },
+        required: ["actor", "item", "room"]
+      },
       locale: LOCALE_SCHEMA,
       meta: METADATA_SCHEMA,
       start: {
@@ -48158,17 +48235,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           },
           items: {
             type: "array",
-            items: ITEM_SCHEMA
+            items: ITEM_TEMPLATE_SCHEMA
           },
           rooms: {
             type: "array",
-            items: ROOM_SCHEMA
+            items: ROOM_TEMPLATE_SCHEMA
           }
         },
         required: ["actors", "items", "rooms"]
       }
     },
-    required: ["meta", "start", "templates"]
+    required: ["defaults", "locale", "meta", "start", "templates"]
   };
 
   // out/src/model/file/Config.js
@@ -48292,11 +48369,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   __name(YamlParser, "YamlParser");
 
-  // out/src/service/random/SeedRandom.js
+  // out/src/service/random/AleaRandom.js
   init_virtual_process_polyfill();
   init_buffer();
   var import_seedrandom = __toModule(require_seedrandom2());
-  var SeedRandomGenerator = class {
+  var AleaRandomGenerator = class {
     constructor() {
       this.source = (0, import_seedrandom.alea)();
     }
@@ -48314,12 +48391,82 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.source = (0, import_seedrandom.alea)(initial);
     }
   };
-  __name(SeedRandomGenerator, "SeedRandomGenerator");
+  __name(AleaRandomGenerator, "AleaRandomGenerator");
 
   // out/src/service/script/LocalScript.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs11 = __toModule(require_main());
+  var import_noicejs12 = __toModule(require_main());
+
+  // out/src/script/signal/actor/ActorGet.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  async function ActorGet(context) {
+    if (!isActor(this)) {
+      throw new InvalidArgumentError("invalid entity type");
+    }
+    if (this.actorType === ActorType.PLAYER) {
+      const item = mustExist(context.item);
+      await context.stateHelper.show("actor.get.player", { item });
+    }
+  }
+  __name(ActorGet, "ActorGet");
+
+  // out/src/script/signal/actor/ActorHit.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // out/src/util/collection/map.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function decrementKey(map2, key, step = 1, min = 0) {
+    const last = map2.get(key);
+    if (doesExist(last)) {
+      const next = Math.max(min, last - step);
+      map2.set(key, next);
+      return next;
+    } else {
+      map2.set(key, min);
+      return min;
+    }
+  }
+  __name(decrementKey, "decrementKey");
+  function getKey(map2, key, defaultValue = 0) {
+    const last = map2.get(key);
+    if (doesExist(last)) {
+      return last;
+    } else {
+      return defaultValue;
+    }
+  }
+  __name(getKey, "getKey");
+
+  // out/src/script/signal/actor/ActorHit.js
+  async function ActorHit(context) {
+    if (!isActor(this)) {
+      throw new InvalidArgumentError("invalid entity type");
+    }
+    const attacker = mustExist(context.actor);
+    const item = mustExist(context.item);
+    await context.stateHelper.show("actor.hit.hit", {
+      actor: this,
+      attacker,
+      item
+    });
+    const maxDamage = getKey(item.stats, STAT_DAMAGE, 1) + getKey(attacker.stats, STAT_DAMAGE, 0);
+    const damage = context.random.nextInt(maxDamage);
+    const health = decrementKey(this.stats, STAT_HEALTH, damage);
+    if (health > 0) {
+      await context.stateHelper.show("actor.hit.health", { actor: this, health });
+    } else {
+      await context.stateHelper.show("actor.hit.dead", { actor: this });
+    }
+  }
+  __name(ActorHit, "ActorHit");
+
+  // out/src/script/signal/actor/ActorStep.js
+  init_virtual_process_polyfill();
+  init_buffer();
 
   // out/src/util/state/index.js
   init_virtual_process_polyfill();
@@ -48429,77 +48576,69 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return results;
   }
   __name(searchState, "searchState");
-
-  // out/src/script/common/ActorGet.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  async function ActorGet(context) {
-    if (!isActor(this)) {
-      throw new InvalidArgumentError("invalid entity type");
+  function findRoom(state, search, matchers = DEFAULT_MATCHERS) {
+    const results = new Set();
+    for (const room of state.rooms) {
+      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
+        continue;
+      }
+      for (const actor of room.actors) {
+        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
+          continue;
+        }
+        if (matchers.entity(actor, search, matchers)) {
+          results.add(room);
+        }
+      }
+      for (const item of room.items) {
+        if (matchers.entity(item, search, matchers)) {
+          results.add(room);
+        }
+      }
     }
-    if (this.actorType === ActorType.PLAYER) {
-      const item = mustExist(context.item);
-      await context.stateHelper.show("actor.get.player", { item });
-    }
+    return Array.from(results);
   }
-  __name(ActorGet, "ActorGet");
-
-  // out/src/script/common/ActorHit.js
-  init_virtual_process_polyfill();
-  init_buffer();
-
-  // out/src/util/collection/map.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  function decrementKey(map2, key, step = 1, min = 0) {
-    const last = map2.get(key);
-    if (doesExist(last)) {
-      const next = Math.max(min, last - step);
-      map2.set(key, next);
-      return next;
-    } else {
-      map2.set(key, min);
-      return min;
+  __name(findRoom, "findRoom");
+  function getScripts(state, target) {
+    const scripts = new Map();
+    for (const verb of META_VERBS) {
+      scripts.set(verb, {
+        data: new Map(),
+        name: ""
+      });
     }
+    if (doesExist(target)) {
+      if (!isRoom(target)) {
+        const [room] = findRoom(mustExist(state), {
+          actor: {
+            id: target.meta.id
+          }
+        });
+        if (isRoom(room)) {
+          for (const [name, script] of room.scripts) {
+            if (name.startsWith(VERB_PREFIX)) {
+              scripts.set(name, script);
+            }
+          }
+        }
+      }
+      if (!isItem(target)) {
+        for (const item of target.items) {
+          for (const [name, script] of item.scripts) {
+            if (name.startsWith(VERB_PREFIX)) {
+              scripts.set(name, script);
+            }
+          }
+        }
+      }
+      mergeMap(scripts, target.scripts);
+    }
+    return scripts;
   }
-  __name(decrementKey, "decrementKey");
-  function getKey(map2, key, defaultValue = 0) {
-    const last = map2.get(key);
-    if (doesExist(last)) {
-      return last;
-    } else {
-      return defaultValue;
-    }
-  }
-  __name(getKey, "getKey");
+  __name(getScripts, "getScripts");
 
-  // out/src/script/common/ActorHit.js
-  async function ActorHit(context) {
-    if (!isActor(this)) {
-      throw new InvalidArgumentError("invalid entity type");
-    }
-    const attacker = mustExist(context.actor);
-    const item = mustExist(context.item);
-    await context.stateHelper.show("actor.hit.hit", {
-      actor: this,
-      attacker,
-      item
-    });
-    const maxDamage = getKey(item.stats, STAT_DAMAGE, 1) + getKey(attacker.stats, STAT_DAMAGE, 0);
-    const damage = context.random.nextInt(maxDamage);
-    const health = decrementKey(this.stats, STAT_HEALTH, damage);
-    if (health > 0) {
-      await context.stateHelper.show("actor.hit.health", { actor: this, health });
-    } else {
-      await context.stateHelper.show("actor.hit.dead", { actor: this });
-    }
-  }
-  __name(ActorHit, "ActorHit");
-
-  // out/src/script/common/ActorStep.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  async function ActorStep(context, verbs = ACTOR_VERB_SCRIPTS) {
+  // out/src/script/signal/actor/ActorStep.js
+  async function ActorStep(context) {
     context.logger.debug({
       meta: this.meta,
       scope: Object.keys(context)
@@ -48520,8 +48659,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return;
     }
     const { command } = context;
-    const verb = verbs.get(command.verb);
-    if (isNil(verb)) {
+    const scripts = getScripts(context.state, this);
+    if (scripts.has(command.verb) === false) {
       await context.stateHelper.show("actor.step.command.unknown", { actor: this, command });
       context.logger.warn({ command }, "unknown verb");
       return;
@@ -48533,19 +48672,64 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         await context.stateHelper.show("actor.step.command.player.verb", { actor: this, command });
       }
     }
-    await verb.call(this, context);
+    return context.script.invoke(this, command.verb, context);
   }
   __name(ActorStep, "ActorStep");
-  var ACTOR_VERB_SCRIPTS = new Map([
-    [VERB_DROP, ActorStepDrop],
-    [VERB_HIT, ActorStepHit],
-    [VERB_LOOK, ActorStepLook],
-    [VERB_MOVE, ActorStepMove],
-    [VERB_TAKE, ActorStepTake],
-    [VERB_USE, ActorStepUse],
-    [VERB_WAIT, ActorStepWait]
-  ]);
+
+  // out/src/script/signal/item/ItemStep.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  async function ItemStep(context) {
+    context.logger.debug({
+      meta: this.meta,
+      scope: Object.keys(context)
+    }, "step script");
+    if (!isItem(this)) {
+      throw new InvalidArgumentError("target must be an item");
+    }
+  }
+  __name(ItemStep, "ItemStep");
+
+  // out/src/script/signal/item/ItemUse.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  async function ItemUse(context) {
+    const actor = mustExist(context.actor);
+    await context.stateHelper.show("item.use.any", { actor, item: this });
+  }
+  __name(ItemUse, "ItemUse");
+
+  // out/src/script/signal/room/RoomStep.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  async function RoomStep(context) {
+    context.logger.debug({
+      meta: this.meta,
+      scope: Object.keys(context)
+    }, "step script");
+    if (!isRoom(this)) {
+      throw new InvalidArgumentError("script target must be a room");
+    }
+  }
+  __name(RoomStep, "RoomStep");
+
+  // out/src/script/verb/common.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // out/src/error/ScriptTargetError.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var import_noicejs11 = __toModule(require_main());
+  var ScriptTargetError = class extends import_noicejs11.BaseError {
+  };
+  __name(ScriptTargetError, "ScriptTargetError");
+
+  // out/src/script/verb/common.js
   async function ActorStepDrop(context) {
+    if (!isActor(this)) {
+      throw new ScriptTargetError("script target must be an actor");
+    }
     const command = mustExist(context.command);
     const room = mustExist(context.room);
     const results = searchState(context.state, {
@@ -48572,6 +48756,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepDrop, "ActorStepDrop");
   async function ActorStepHit(context) {
+    if (!isActor(this)) {
+      throw new ScriptTargetError("script target must be an actor");
+    }
     const command = mustExist(context.command);
     const room = mustExist(context.room);
     const results = searchState(context.state, {
@@ -48608,6 +48795,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepHit, "ActorStepHit");
   async function ActorStepLook(context) {
+    if (!isActor(this)) {
+      throw new ScriptTargetError("script target must be an actor");
+    }
     const command = mustExist(context.command);
     if (command.target === "") {
       return ActorStepLookRoom.call(this, context);
@@ -48670,19 +48860,37 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepLookItem, "ActorStepLookItem");
   async function ActorStepMove(context) {
+    if (!isActor(this)) {
+      throw new ScriptTargetError("script target must be an actor");
+    }
     const command = mustExist(context.command);
     const targetName = command.target;
     const currentRoom = mustExist(context.room);
-    const results = currentRoom.portals.filter((it) => {
+    const portals = currentRoom.portals.filter((it) => {
       const group = it.sourceGroup.toLocaleLowerCase();
       const name = it.name.toLocaleLowerCase();
       return name === targetName || group === targetName || `${group} ${name}` === targetName;
     });
-    const targetPortal = results[command.index];
+    const targetPortal = portals[command.index];
     if (isNil(targetPortal)) {
       await context.stateHelper.show("actor.step.move.missing", { command });
       return;
     }
+    const rooms = searchState(context.state, {
+      meta: {
+        id: targetPortal.dest
+      },
+      type: ROOM_TYPE
+    });
+    const targetRoom = indexEntity(rooms, command.index, isRoom);
+    if (!isRoom(targetRoom)) {
+      throw new NotFoundError("destination room not found");
+    }
+    await context.transfer.moveActor({
+      moving: this,
+      source: currentRoom,
+      target: targetRoom
+    }, context);
     await context.stateHelper.show("actor.step.move.portal", {
       actor: this,
       portal: targetPortal
@@ -48690,17 +48898,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       actor: this,
       room: currentRoom
     });
-    await context.transfer.moveActor({
-      moving: this,
-      source: currentRoom.meta.id,
-      target: targetPortal.dest
-    }, context);
     if (this.actorType === ActorType.PLAYER) {
+      context.logger.debug({ actor: this, room: targetRoom }, "player entered room");
+      await context.stateHelper.enter({ actor: this, room: targetRoom });
       await ActorStepLookTarget.call(this, context, targetPortal.dest);
     }
   }
   __name(ActorStepMove, "ActorStepMove");
   async function ActorStepTake(context) {
+    if (!isActor(this)) {
+      throw new ScriptTargetError("script target must be an actor");
+    }
     const command = mustExist(context.command);
     const room = mustExist(context.room);
     context.logger.debug({ command, room }, "taking item from room");
@@ -48732,6 +48940,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepTake, "ActorStepTake");
   async function ActorStepUse(context) {
+    if (!isActor(this)) {
+      throw new ScriptTargetError("script target must be an actor");
+    }
     const command = mustExist(context.command);
     const room = mustExist(context.room);
     const results = searchState(context.state, {
@@ -48751,54 +48962,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ActorStepUse, "ActorStepUse");
   async function ActorStepWait(context) {
+    if (!isActor(this)) {
+      throw new ScriptTargetError("script target must be an actor");
+    }
     context.logger.debug({ target: this }, "actor is skipping a turn");
   }
   __name(ActorStepWait, "ActorStepWait");
-
-  // out/src/script/common/ItemStep.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  async function ItemStep(context) {
-    context.logger.debug({
-      meta: this.meta,
-      scope: Object.keys(context)
-    }, "step script");
-    if (!isItem(this)) {
-      throw new InvalidArgumentError("target must be an item");
-    }
-  }
-  __name(ItemStep, "ItemStep");
-
-  // out/src/script/common/ItemUse.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  async function ItemUse(context) {
-    const actor = mustExist(context.actor);
-    await context.stateHelper.show("item.use.any", { actor, item: this });
-  }
-  __name(ItemUse, "ItemUse");
-
-  // out/src/script/common/RoomStep.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  async function RoomStep(context) {
-    context.logger.debug({
-      meta: this.meta,
-      scope: Object.keys(context)
-    }, "step script");
-    if (!isRoom(this)) {
-      throw new InvalidArgumentError("script target must be a room");
-    }
-    await context.script.broadcast({
-      meta: {
-        id: "actor-goblin"
-      },
-      room: {
-        id: this.meta.id
-      }
-    }, SLOT_USE, context);
-  }
-  __name(RoomStep, "RoomStep");
 
   // out/src/service/script/LocalScript.js
   var COMMON_SCRIPTS = [
@@ -48807,7 +48976,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     ["actor-step", ActorStep],
     ["item-step", ItemStep],
     ["item-use", ItemUse],
-    ["room-step", RoomStep]
+    ["room-step", RoomStep],
+    ["verb-drop", ActorStepDrop],
+    ["verb-hit", ActorStepHit],
+    ["verb-look", ActorStepLook],
+    ["verb-move", ActorStepMove],
+    ["verb-take", ActorStepTake],
+    ["verb-use", ActorStepUse],
+    ["verb-wait", ActorStepWait]
   ];
   var LocalScriptService = /* @__PURE__ */ __name(class LocalScriptService2 {
     constructor(options, scripts = COMMON_SCRIPTS) {
@@ -48817,20 +48993,29 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.scripts = new Map(scripts);
     }
     async invoke(target, slot, scope) {
-      this.logger.debug({ slot, target }, "invoke slot on target");
-      const scriptName = target.slots.get(slot);
+      this.logger.debug({ slot, target }, "trying to invoke slot on target");
+      const scripts = getScripts(scope.state, target);
+      const scriptRef = scripts.get(slot);
+      if (isNil(scriptRef)) {
+        this.logger.debug({ slot, scripts, target }, "target does not have a script defined for slot");
+        return;
+      }
+      const scriptName = this.scripts.get(scriptRef.name);
       if (isNil(scriptName)) {
-        this.logger.debug({ slot, target }, "target does not have a script defined for slot");
+        this.logger.error({
+          scriptRef,
+          scripts: Array.from(scripts.keys())
+        }, "unknown script name");
         return;
       }
-      const script = this.scripts.get(scriptName);
-      if (isNil(script)) {
-        this.logger.error({ scriptName }, "unknown script name");
-        return;
+      this.logger.debug({ scriptRef, target }, "invoking script on target");
+      try {
+        await scriptName.call(target, Object.assign(Object.assign({}, scope), { logger: this.logger.child({
+          script: scriptRef.name
+        }), script: this }));
+      } catch (err) {
+        this.logger.error(err, "error invoking script");
       }
-      await script.call(target, Object.assign(Object.assign({}, scope), { logger: this.logger.child({
-        script: scriptName
-      }), script: this }));
     }
     async broadcast(filter2, slot, scope) {
       const targets = searchState(scope.state, filter2);
@@ -48840,20 +49025,20 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "LocalScriptService");
   LocalScriptService = __decorate([
-    (0, import_noicejs11.Inject)(INJECT_LOGGER),
+    (0, import_noicejs12.Inject)(INJECT_LOGGER),
     __metadata("design:paramtypes", [Object, Object])
   ], LocalScriptService);
 
   // out/src/service/state/TurnState.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs15 = __toModule(require_main());
+  var import_noicejs16 = __toModule(require_main());
 
   // out/src/error/NotInitializedError.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs12 = __toModule(require_main());
-  var NotInitializedError = class extends import_noicejs12.BaseError {
+  var import_noicejs13 = __toModule(require_main());
+  var NotInitializedError = class extends import_noicejs13.BaseError {
   };
   __name(NotInitializedError, "NotInitializedError");
 
@@ -48872,11 +49057,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     constructor() {
       this.data = new Map();
     }
-    has(key) {
-      return this.data.has(key);
+    clear() {
+      return this.data.clear();
     }
     get(key) {
       return this.getOrCreate(key);
+    }
+    has(key) {
+      return this.data.has(key);
     }
     push(key, item) {
       const stack = this.getOrCreate(key);
@@ -48885,6 +49073,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     pop(key) {
       const stack = this.getOrCreate(key);
       return stack.pop();
+    }
+    get size() {
+      return this.data.size;
     }
     getOrCreate(key) {
       const existing = this.data.get(key);
@@ -48951,7 +49142,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/state/EntityGenerator.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs13 = __toModule(require_main());
+  var import_noicejs14 = __toModule(require_main());
 
   // out/src/util/template/index.js
   init_virtual_process_polyfill();
@@ -48978,14 +49169,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.world = world;
     }
     async createActor(template, actorType = ActorType.DEFAULT) {
-      const items = await this.createItemList(template.base.items);
       const actor = {
         type: "actor",
         actorType,
-        items,
+        items: await this.createItemList(template.base.items),
         meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
-        skills: this.template.renderNumberMap(template.base.skills),
-        slots: this.template.renderStringMap(template.base.slots),
+        scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
         stats: this.template.renderNumberMap(template.base.stats)
       };
       await this.modifyActor(actor, template.mods);
@@ -49016,8 +49205,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         type: ITEM_TYPE,
         meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
         stats: this.template.renderNumberMap(template.base.stats),
-        slots: this.template.renderStringMap(template.base.slots),
-        verbs: this.template.renderVerbMap(template.base.verbs)
+        scripts: await this.createScripts(template.base.scripts, ITEM_TYPE)
       };
       await this.modifyItem(item, template.mods);
       return item;
@@ -49043,16 +49231,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return items;
     }
     async createRoom(template) {
-      const actors = await this.createActorList(template.base.actors);
-      const items = await this.createItemList(template.base.items);
       const room = {
         type: ROOM_TYPE,
-        actors,
-        items,
+        actors: await this.createActorList(template.base.actors),
+        items: await this.createItemList(template.base.items),
         meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
         portals: [],
-        slots: this.template.renderStringMap(template.base.slots),
-        verbs: this.template.renderVerbMap(template.base.verbs)
+        scripts: await this.createScripts(template.base.scripts, ROOM_TYPE)
       };
       await this.modifyRoom(room, template.mods);
       return room;
@@ -49065,13 +49250,18 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         template: template.id
       };
     }
+    async createScripts(template, type3) {
+      const world = this.getWorld();
+      const baseScripts = this.template.renderScriptMap(world.defaults[type3].scripts);
+      const scripts = this.template.renderScriptMap(template);
+      return mergeMap(baseScripts, scripts);
+    }
     async modifyActor(target, available) {
       const selected = this.selectModifiers(available);
       for (const mod of selected) {
         await this.modifyMetadata(target.meta, mod.meta);
-        target.skills = this.template.modifyNumberMap(target.skills, mod.skills);
         target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
-        target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
         const items = await this.createItemList(mod.items);
         target.items.push(...items);
       }
@@ -49081,14 +49271,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       for (const mod of selected) {
         await this.modifyMetadata(target.meta, mod.meta);
         target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
-        target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
       }
     }
     async modifyRoom(target, available) {
       const selected = this.selectModifiers(available);
       for (const mod of selected) {
         await this.modifyMetadata(target.meta, mod.meta);
-        target.slots = this.template.modifyStringMap(target.slots, mod.slots);
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
         const actors = await this.createActorList(mod.actors);
         target.actors.push(...actors);
         const items = await this.createItemList(mod.items);
@@ -49214,14 +49404,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "StateEntityGenerator");
   StateEntityGenerator = __decorate([
-    (0, import_noicejs13.Inject)(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE),
+    (0, import_noicejs14.Inject)(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE),
     __metadata("design:paramtypes", [Object])
   ], StateEntityGenerator);
 
   // out/src/util/state/EntityTransfer.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs14 = __toModule(require_main());
+  var import_noicejs15 = __toModule(require_main());
   var StateEntityTransfer = /* @__PURE__ */ __name(class StateEntityTransfer2 {
     constructor(options) {
       this.logger = mustExist(options[INJECT_LOGGER]).child({
@@ -49232,49 +49422,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.state = state;
     }
     async moveActor(transfer, context) {
-      const state = mustExist(this.state);
-      if (!isActor(transfer.moving)) {
+      const { moving, source, target } = transfer;
+      if (!isActor(moving)) {
         this.logger.warn(transfer, "moving entity is not an actor");
         return;
       }
-      const [target] = searchState(state, {
-        meta: {
-          id: transfer.target
-        },
-        type: ROOM_TYPE
-      });
-      if (!isRoom(target)) {
-        this.logger.warn(transfer, "destination room does not exist");
-        return;
-      }
-      const [source] = searchState(state, {
-        meta: {
-          id: transfer.source
-        },
-        type: ROOM_TYPE
-      });
-      if (!isRoom(source)) {
-        this.logger.warn(transfer, "source room does not exist");
-        return;
-      }
-      const idx = source.actors.indexOf(transfer.moving);
+      const idx = source.actors.indexOf(moving);
       if (idx < 0) {
-        this.logger.warn({ source, transfer }, "source does not directly contain moving entity");
+        this.logger.warn(moving, "source does not directly contain moving entity");
         return;
       }
       this.logger.debug(transfer, "moving actor between rooms");
       source.actors.splice(idx, 1);
       target.actors.push(transfer.moving);
-      await context.script.invoke(target, SLOT_ENTER, {
-        actor: transfer.moving,
-        data: new Map([
-          ["source", transfer.source]
-        ]),
-        random: context.random,
-        state: context.state,
-        stateHelper: context.stateHelper,
-        transfer: context.transfer
-      });
+      await context.script.invoke(target, SLOT_ENTER, Object.assign(Object.assign({}, context), { actor: transfer.moving, data: new Map([
+        ["source", transfer.source.meta.id],
+        ["target", transfer.target.meta.id]
+      ]) }));
     }
     async moveItem(transfer, context) {
       const state = mustExist(this.state);
@@ -49312,20 +49476,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }, "moving item between entities");
       source.items.splice(idx, 1);
       target.items.push(transfer.moving);
-      await context.script.invoke(target, SLOT_GET, {
-        item: transfer.moving,
-        data: new Map([
-          ["source", transfer.source]
-        ]),
-        random: context.random,
-        state: context.state,
-        stateHelper: context.stateHelper,
-        transfer: context.transfer
-      });
+      await context.script.invoke(target, SLOT_GET, Object.assign(Object.assign({}, context), { item: transfer.moving, data: new Map([
+        ["source", transfer.source]
+      ]) }));
     }
   }, "StateEntityTransfer");
   StateEntityTransfer = __decorate([
-    (0, import_noicejs14.Inject)(INJECT_LOGGER),
+    (0, import_noicejs15.Inject)(INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], StateEntityTransfer);
 
@@ -49459,7 +49616,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           await this.doGraph(command.target);
           break;
         case META_HELP:
-          await this.doHelp();
+          await this.doHelp(actor);
           break;
         case META_LOAD:
           await this.doLoad(command.target);
@@ -49470,14 +49627,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         case META_SAVE:
           await this.doSave(command.target);
           break;
+        case META_WORLDS:
+          await this.doWorlds();
+          break;
         default: {
-          if (mustExist(event.actor).actorType !== ActorType.PLAYER) {
-            return;
-          }
-          const result = await this.step();
-          this.event.emit("state-step", result);
+          await this.doStep(actor);
         }
       }
+    }
+    async doStep(actor) {
+      if (isNil(actor)) {
+        return;
+      }
+      if (actor.actorType !== ActorType.PLAYER) {
+        return;
+      }
+      if (isNil(this.state)) {
+        return;
+      }
+      const result = await this.step();
+      this.event.emit("state-step", result);
     }
     async doCreate(target, depth) {
       const [id, seed] = target.split(" ");
@@ -49533,8 +49702,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         volume: ShowVolume.WORLD
       });
     }
-    async doHelp() {
-      const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(", ");
+    async doHelp(actor) {
+      const scripts = getScripts(this.state, actor);
+      const verbs = Array.from(scripts.keys()).filter((it) => it.startsWith(VERB_PREFIX)).map((it) => `$t(${it})`).join(", ");
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
           verbs
@@ -49562,7 +49732,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       mustExist(this.generator).setWorld(world);
       mustExist(this.transfer).setState(state);
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: `loaded world ${state.meta.id} state from ${path}`,
+        context: {
+          meta: state.meta,
+          path
+        },
+        line: "meta.load",
         step: state.step,
         volume: ShowVolume.WORLD
       });
@@ -49582,10 +49756,30 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         path
       });
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: `saved world ${state.meta.id} state to ${path}`,
+        context: {
+          meta: state.meta,
+          path
+        },
+        line: "meta.save",
         step: state.step,
         volume: ShowVolume.WORLD
       });
+    }
+    async doWorlds() {
+      for (const world of this.worlds) {
+        this.event.emit("state-output", {
+          context: {
+            id: world.meta.id,
+            name: world.meta.name.base
+          },
+          line: "meta.world",
+          step: {
+            time: 0,
+            turn: 0
+          },
+          volume: ShowVolume.WORLD
+        });
+      }
     }
     async step() {
       if (isNil(this.state)) {
@@ -49696,14 +49890,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "LocalStateService");
   LocalStateService = __decorate([
-    (0, import_noicejs15.Inject)(INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT),
+    (0, import_noicejs16.Inject)(INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT),
     __metadata("design:paramtypes", [Object])
   ], LocalStateService);
 
   // out/src/service/template/ChainTemplateService.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs16 = __toModule(require_main());
+  var import_noicejs17 = __toModule(require_main());
 
   // out/src/util/template/JoinChain.js
   init_virtual_process_polyfill();
@@ -49814,6 +50008,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       return result;
     }
+    modifyScriptMap(target, mods) {
+      return target;
+    }
     renderString(input) {
       const chain = splitChain(input.base, {
         group: {
@@ -49867,12 +50064,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       return result;
     }
-    renderVerbMap(input) {
+    renderScriptMap(input) {
       const result = new Map();
       for (const [key, value] of input) {
         const verb = {
-          slot: this.renderString(value.slot),
-          data: this.renderPrimitiveMap(value.data)
+          data: this.renderPrimitiveMap(value.data),
+          name: this.renderString(value.name)
         };
         result.set(key, verb);
       }
@@ -49880,14 +50077,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "ChainTemplateService");
   ChainTemplateService = __decorate([
-    (0, import_noicejs16.Inject)(INJECT_RANDOM),
+    (0, import_noicejs17.Inject)(INJECT_RANDOM),
     __metadata("design:paramtypes", [Object])
   ], ChainTemplateService);
 
   // out/src/service/tokenizer/WordTokenizer.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs17 = __toModule(require_main());
+  var import_noicejs18 = __toModule(require_main());
   var REMOVED_WORDS = new Set([
     "a",
     "an",
@@ -49902,6 +50099,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var WordTokenizer = /* @__PURE__ */ __name(class WordTokenizer2 {
     constructor(options) {
       this.locale = mustExist(options[INJECT_LOCALE]);
+      this.logger = mustExist(options[INJECT_LOGGER]).child({
+        kind: constructorName(this)
+      });
       this.verbs = new Map();
     }
     async split(input) {
@@ -49926,6 +50126,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async translate(verbs) {
       this.verbs.clear();
+      this.logger.debug({ verbs }, "translating verbs");
       for (const verb of verbs) {
         const translated = this.locale.translate(verb);
         this.verbs.set(translated, verb);
@@ -49933,7 +50134,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "WordTokenizer");
   WordTokenizer = __decorate([
-    (0, import_noicejs17.Inject)(INJECT_LOCALE),
+    (0, import_noicejs18.Inject)(INJECT_LOCALE, INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], WordTokenizer);
   function trim(str2) {
@@ -49959,23 +50160,25 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   __name(Singleton, "Singleton");
 
   // out/src/module/CoreModule.js
-  var CoreModule = class extends import_noicejs18.Module {
+  var CoreModule = class extends import_noicejs19.Module {
     constructor() {
       super();
       this.counter = new Singleton(() => mustExist(this.container).create(LocalCounter));
       this.event = new Singleton(() => mustExist(this.container).create(NodeEventBus));
       this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
-      this.random = new Singleton(() => mustExist(this.container).create(SeedRandomGenerator));
+      this.parser = new Singleton(() => mustExist(this.container).create(YamlParser));
+      this.random = new Singleton(() => mustExist(this.container).create(AleaRandomGenerator));
       this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
       this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
+      this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
     }
     async configure(options) {
       await super.configure(options);
       this.bind(INJECT_EVENT).toFactory(() => this.event.get());
-      this.bind(INJECT_PARSER).toConstructor(YamlParser);
-      this.bind(INJECT_TOKENIZER).toConstructor(WordTokenizer);
-      this.bind("core-player-actor").toConstructor(PlayerActorService);
+      this.bind(INJECT_PARSER).toFactory(() => this.parser.get());
+      this.bind(INJECT_TOKENIZER).toFactory(() => this.tokenizer.get());
       this.bind("core-behavior-actor").toConstructor(BehaviorActorService);
+      this.bind("core-player-actor").toConstructor(PlayerActorService);
       this.bind("core-local-state").toConstructor(LocalStateService);
     }
     setConfig(config3) {
@@ -50002,37 +50205,37 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   __name(CoreModule, "CoreModule");
   __decorate([
-    (0, import_noicejs18.Provides)(INJECT_COUNTER),
+    (0, import_noicejs19.Provides)(INJECT_COUNTER),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], CoreModule.prototype, "getCounter", null);
   __decorate([
-    (0, import_noicejs18.Provides)(INJECT_LOCALE),
+    (0, import_noicejs19.Provides)(INJECT_LOCALE),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], CoreModule.prototype, "getLocale", null);
   __decorate([
-    (0, import_noicejs18.Provides)(INJECT_LOGGER),
+    (0, import_noicejs19.Provides)(INJECT_LOGGER),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], CoreModule.prototype, "getLogger", null);
   __decorate([
-    (0, import_noicejs18.Provides)(INJECT_RANDOM),
+    (0, import_noicejs19.Provides)(INJECT_RANDOM),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], CoreModule.prototype, "getRandom", null);
   __decorate([
-    (0, import_noicejs18.Provides)(INJECT_SCRIPT),
+    (0, import_noicejs19.Provides)(INJECT_SCRIPT),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
   ], CoreModule.prototype, "getScript", null);
   __decorate([
-    (0, import_noicejs18.Provides)(INJECT_TEMPLATE),
+    (0, import_noicejs19.Provides)(INJECT_TEMPLATE),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -51082,7 +51285,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(createCommonjsModule$1, "createCommonjsModule$1");
   var main2 = createCommonjsModule$1(function(module, exports) {
-    class BaseError5 extends Error {
+    class BaseError6 extends Error {
       constructor(message, ...nested) {
         super(message);
         this.message = message;
@@ -51102,26 +51305,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         return this.nested.length;
       }
     }
-    __name(BaseError5, "BaseError");
-    class ContainerBoundError extends BaseError5 {
+    __name(BaseError6, "BaseError");
+    class ContainerBoundError extends BaseError6 {
       constructor(msg = "container is already bound", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(ContainerBoundError, "ContainerBoundError");
-    class ContainerNotBoundError extends BaseError5 {
+    class ContainerNotBoundError extends BaseError6 {
       constructor(msg = "container is not bound", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(ContainerNotBoundError, "ContainerNotBoundError");
-    class InvalidProviderError extends BaseError5 {
+    class InvalidProviderError extends BaseError6 {
       constructor(msg = "invalid provider type", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(InvalidProviderError, "InvalidProviderError");
-    class MissingValueError extends BaseError5 {
+    class MissingValueError extends BaseError6 {
       constructor(msg = "required value is null or undefined", ...nested) {
         super(msg, ...nested);
       }
@@ -51157,13 +51360,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
     }
     __name(resolveDepends, "resolveDepends");
-    class InvalidTargetError extends BaseError5 {
+    class InvalidTargetError extends BaseError6 {
       constructor(msg = "invalid decorator target", ...nested) {
         super(msg, ...nested);
       }
     }
     __name(InvalidTargetError, "InvalidTargetError");
-    class DescriptorNotFoundError extends BaseError5 {
+    class DescriptorNotFoundError extends BaseError6 {
       constructor(msg = "property descriptor not found", ...nested) {
         super(msg, ...nested);
       }
@@ -51584,7 +51787,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     __name(MapModule, "MapModule");
-    exports.BaseError = BaseError5;
+    exports.BaseError = BaseError6;
     exports.ConsoleLogger = ConsoleLogger;
     exports.Container = Container2;
     exports.ContainerBoundError = ContainerBoundError;
@@ -51789,8 +51992,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/error/ConfigError.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs19 = __toModule(require_main());
-  var ConfigError = class extends import_noicejs19.BaseError {
+  var import_noicejs20 = __toModule(require_main());
+  var ConfigError = class extends import_noicejs20.BaseError {
   };
   __name(ConfigError, "ConfigError");
 
@@ -51827,7 +52030,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/service/ServiceManager.js
   init_virtual_process_polyfill();
   init_buffer();
-  var import_noicejs20 = __toModule(require_main());
+  var import_noicejs21 = __toModule(require_main());
   var ServiceManager = /* @__PURE__ */ __name(class ServiceManager2 {
     constructor(options) {
       this.container = options.container;
@@ -51865,7 +52068,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "ServiceManager");
   ServiceManager = __decorate([
-    (0, import_noicejs20.Inject)(),
+    (0, import_noicejs21.Inject)(),
     __metadata("design:paramtypes", [Object])
   ], ServiceManager);
 
@@ -51893,7 +52096,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       return module;
     });
-    const container = import_noicejs21.Container.from(...modules);
+    const container = import_noicejs22.Container.from(...modules);
     await container.configure({
       logger
     });

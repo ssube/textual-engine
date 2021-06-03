@@ -6,10 +6,16 @@ logger:
 locale:
   bundles:
     en:
+      debug:
+        graph:
+          summary: 'wrote {{size}} node graph to {{-path}}'
       meta:
         create: 'created new world {{name}} ({{id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
         help: 'available verbs: {{verbs}}'
+        load: 'loaded world state {{meta.id}} from {{-path}}'
+        save: 'saved world state {{meta.id}} from {{-path}}'
         quit: 'game over.'
+        world: '{{name}} ({{id}})'
       verbs:
         common:
           drop: drop
@@ -27,7 +33,9 @@ locale:
           load: load
           quit: quit
           save: save
+          worlds: worlds
   current: en
+  verbs: []
 services:
   actors:
     - name: actor-player

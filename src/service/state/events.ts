@@ -1,7 +1,7 @@
 import { StepResult } from '.';
 import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
-import { ShowSource, ShowVolume } from '../../util/actor';
+import { StateSource, ShowVolume } from '../../util/actor';
 import { LocaleContext } from '../locale';
 
 export interface StateJoinEvent {
@@ -33,7 +33,7 @@ export interface StateOutputEvent {
   /**
    * Message source.
    */
-  source?: ShowSource;
+  source?: StateSource;
 
   /**
    * The state step from which this output was emitted.

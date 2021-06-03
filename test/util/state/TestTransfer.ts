@@ -22,8 +22,8 @@ describe('state transfer utils', () => {
 
       await transfer.moveActor({
         moving: actor,
-        source: sourceRoom.meta.id,
-        target: targetRoom.meta.id,
+        source: sourceRoom,
+        target: targetRoom,
       }, {
         data: new Map(),
         logger: getTestLogger(),
@@ -63,13 +63,13 @@ describe('state transfer utils', () => {
 
       await expect(transfer.moveActor({
         moving: item as any,
-        source: sourceRoom.meta.id,
-        target: targetRoom.meta.id,
+        source: sourceRoom,
+        target: targetRoom,
       }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
       await expect(transfer.moveActor({
         moving: sourceRoom as any,
-        source: sourceRoom.meta.id,
-        target: targetRoom.meta.id,
+        source: sourceRoom,
+        target: targetRoom,
       }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
     });
 

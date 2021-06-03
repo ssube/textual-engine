@@ -6,7 +6,7 @@ import { Command } from '../../model/Command';
 import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
-import { showCheck, ShowSource } from '../../util/actor';
+import { showCheck, StateSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
 import {
   COMMON_VERBS,
@@ -120,7 +120,7 @@ export class PlayerActorService implements ActorService {
     this.logger.debug({ event }, 'filtering output');
 
     if (doesExist(this.actor) && doesExist(this.room) && doesExist(event.source)) {
-      const target: ShowSource = {
+      const target: StateSource = {
         actor: this.actor,
         room: this.room,
       };

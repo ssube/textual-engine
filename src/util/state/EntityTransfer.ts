@@ -5,7 +5,7 @@ import { searchState } from '.';
 import { WorldEntity } from '../../model/entity';
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem, Item } from '../../model/entity/Item';
-import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
+import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { WorldState } from '../../model/world/State';
 import { INJECT_LOGGER } from '../../module';
 import { ScriptContext } from '../../service/script';
@@ -26,6 +26,12 @@ export interface TransferParams<TEntity extends WorldEntity> {
    * The target container into which `id` will be transferred.
    */
   target: string;
+}
+
+export interface ActorTransfer {
+  moving: Actor;
+  source: Room;
+  target: Room;
 }
 
 interface EntityTransferOptions extends BaseOptions {
@@ -50,39 +56,17 @@ export class StateEntityTransfer {
   /**
    * Move an actor from one room to another.
    */
-  public async moveActor(transfer: TransferParams<Actor>, context: ScriptContext): Promise<void> {
-    const state = mustExist(this.state);
+  public async moveActor(transfer: ActorTransfer, context: ScriptContext): Promise<void> {
+    const { moving, source, target } = transfer;
 
-    if (!isActor(transfer.moving)) {
+    if (!isActor(moving)) {
       this.logger.warn(transfer, 'moving entity is not an actor');
       return;
     }
 
-    const [target] = searchState(state, {
-      meta: {
-        id: transfer.target,
-      },
-      type: ROOM_TYPE,
-    });
-    if (!isRoom(target)) {
-      this.logger.warn(transfer, 'destination room does not exist');
-      return;
-    }
-
-    const [source] = searchState(state, {
-      meta: {
-        id: transfer.source,
-      },
-      type: ROOM_TYPE,
-    });
-    if (!isRoom(source)) {
-      this.logger.warn(transfer, 'source room does not exist');
-      return;
-    }
-
-    const idx = source.actors.indexOf(transfer.moving);
+    const idx = source.actors.indexOf(moving);
     if (idx < 0) {
-      this.logger.warn({ source, transfer }, 'source does not directly contain moving entity');
+      this.logger.warn(moving, 'source does not directly contain moving entity');
       return;
     }
 
@@ -95,7 +79,8 @@ export class StateEntityTransfer {
       ...context,
       actor: transfer.moving,
       data: new Map([
-        ['source', transfer.source],
+        ['source', transfer.source.meta.id],
+        ['target', transfer.target.meta.id],
       ]),
     });
   }

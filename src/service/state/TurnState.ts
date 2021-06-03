@@ -9,7 +9,7 @@ import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
-import { ShowSource, ShowVolume } from '../../util/actor';
+import { StateSource, ShowVolume } from '../../util/actor';
 import { catchAndLog, onceEvent } from '../../util/async/event';
 import { randomItem } from '../../util/collection/array';
 import { StackMap } from '../../util/collection/StackMap';
@@ -498,7 +498,7 @@ export class LocalStateService implements StateService {
   /**
    * Handler for a line of input from the focus helper.
    */
-  protected async stepShow(line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.WORLD, source?: ShowSource): Promise<void> {
+  protected async stepShow(line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.WORLD, source?: StateSource): Promise<void> {
     this.event.emit(EVENT_STATE_OUTPUT, {
       line,
       context,
@@ -508,7 +508,7 @@ export class LocalStateService implements StateService {
     });
   }
 
-  protected async stepEnter(target: ShowSource): Promise<void> {
+  protected async stepEnter(target: StateSource): Promise<void> {
     if (doesExist(target.actor) && target.actor.actorType === ActorType.PLAYER) {
       const state = mustExist(this.state);
       const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);

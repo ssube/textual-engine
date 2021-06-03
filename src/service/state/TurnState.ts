@@ -211,20 +211,20 @@ export class LocalStateService implements StateService {
     const actor = await mustExist(this.generator).createActor(actorTemplate, ActorType.PLAYER);
     actor.meta.name = event.pid;
 
-    const room = mustFind(state.rooms, (it) => it.meta.id === state.start.room);
-    room.actors.push(actor);
-
-    await this.stepEnter({
-      actor,
-      room,
-    });
-
-    // TODO: find a way to combine these?
     this.event.emit(EVENT_STATE_JOIN, {
       actor,
       pid: event.pid,
     });
+
+    const room = mustFind(state.rooms, (it) => it.meta.id === state.start.room);
+    room.actors.push(actor);
+
     this.event.emit(EVENT_STATE_ROOM, {
+      actor,
+      room,
+    });
+
+    await this.stepEnter({
       actor,
       room,
     });

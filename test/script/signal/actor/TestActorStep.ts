@@ -12,6 +12,7 @@ import { ActorStepLookTarget } from '../../../../src/script/verb/common';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_LOOK, VERB_WAIT } from '../../../../src/util/constants';
+import { makeTestState } from '../../../entity';
 import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
@@ -64,7 +65,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script,
-        state: {} as WorldState,
+        state: makeTestState('', []),
         stateHelper,
         transfer,
       });
@@ -95,7 +96,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script,
-        state: {} as WorldState,
+        state: makeTestState('', []),
         stateHelper,
         transfer,
       });
@@ -127,7 +128,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
-        state: {} as WorldState,
+        state: makeTestState('', []),
         stateHelper,
         transfer,
       });
@@ -159,9 +160,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
-        state: {
-          rooms: [] as Array<Room>,
-        } as WorldState,
+        state: makeTestState('', []),
         stateHelper,
         transfer,
       }, '');

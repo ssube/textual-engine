@@ -1,6 +1,7 @@
 import { Actor, ACTOR_TYPE, ActorType } from '../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../src/model/entity/Item';
 import { Room, ROOM_TYPE } from '../src/model/entity/Room';
+import { Metadata } from '../src/model/Metadata';
 import { WorldState } from '../src/model/world/State';
 
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
@@ -46,6 +47,15 @@ export function makeTestRoom(id: string, name: string, template: string, actors:
     portals: [],
     scripts: new Map(),
     type: ROOM_TYPE,
+  };
+}
+
+export function makeTestMeta(id: string, name: string = '', template: string = ''): Metadata {
+  return {
+    desc: '',
+    id,
+    name,
+    template,
   };
 }
 

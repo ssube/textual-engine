@@ -1,11 +1,11 @@
-import { ConsoleLogger, Container, LogLevel, Module, NullLogger } from 'noicejs';
+import { ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
 import { stub } from 'sinon';
 
 import { ConfigFile } from '../src/model/file/Config';
 import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
 import { StateHelper } from '../src/service/script';
 
-export function getTestLogger() {
+export function getTestLogger(): Logger {
   if (process.env.DEBUG === 'TRUE') {
     return ConsoleLogger.global;
   } else {

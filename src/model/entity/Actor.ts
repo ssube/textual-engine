@@ -4,8 +4,8 @@ import { JSONSchemaType } from 'ajv';
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
 import { ScriptMap, StatMap } from '../../util/types';
-import { Modifier } from '../mapped/Modifier';
-import { Template, TEMPLATE_REF_SCHEMA } from '../mapped/Template';
+import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
+import { Template, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, METADATA_SCHEMA } from '../Metadata';
 import { Entity } from './Base';
 import { Item } from './Item';
@@ -36,13 +36,27 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
   properties: {
     base: {
       type: 'object',
-      /*
       properties: {
+        actorType: TEMPLATE_STRING_SCHEMA,
+        items: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: [],
+          },
+        },
         meta: MODIFIER_METADATA_SCHEMA,
+        stats: {
+          type: 'object',
+          required: [],
+        },
+        scripts: {
+          type: 'object',
+          required: [],
+        },
+        type: TEMPLATE_STRING_SCHEMA,
       },
       required: ['meta'],
-      */
-      required: [],
     },
     chance: {
       type: 'number',
@@ -50,6 +64,7 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
     },
     excludes: {
       type: 'array',
+      default: [],
       items: {
         type: 'string',
       },
@@ -58,7 +73,7 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
       type: 'string',
     },
   },
-  required: [],
+  required: ['base', 'id'],
 };
 
 export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {

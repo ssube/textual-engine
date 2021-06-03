@@ -17,8 +17,11 @@ bundle: build
 
 ci: build cover
 
-clean:
-	rm -rf node_modules/ out/
+clean: clean-target
+	rm -rf node_modules/
+
+clean-target:
+	rm -rf out/
 
 GRAPH_LAYOUT ?= dot
 

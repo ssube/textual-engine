@@ -11,6 +11,72 @@ import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
 import { getTestContainer } from '../../helper';
 
 const TEST_WORLD: WorldTemplate = {
+  defaults: {
+    actor: {
+      actorType: {
+        base: '',
+        type: 'string',
+      },
+      items: [],
+      meta: {
+        desc: {
+          base: '',
+          type: 'string',
+        },
+        id: '',
+        name: {
+          base: '',
+          type: 'string',
+        },
+      },
+      scripts: new Map(),
+      stats: new Map(),
+      type: {
+        base: ACTOR_TYPE,
+        type: 'string',
+      },
+    },
+    item: {
+      meta: {
+        desc: {
+          base: '',
+          type: 'string',
+        },
+        id: '',
+        name: {
+          base: '',
+          type: 'string',
+        },
+      },
+      scripts: new Map(),
+      stats: new Map(),
+      type: {
+        base: ITEM_TYPE,
+        type: 'string',
+      },
+    },
+    room: {
+      actors: [],
+      items: [],
+      meta: {
+        desc: {
+          base: '',
+          type: 'string',
+        },
+        id: '',
+        name: {
+          base: '',
+          type: 'string',
+        },
+      },
+      portals: [],
+      scripts: new Map(),
+      type: {
+        base: ITEM_TYPE,
+        type: 'string',
+      },
+    },
+  },
   locale: {
     bundles: {},
   },

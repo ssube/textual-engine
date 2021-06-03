@@ -25,7 +25,7 @@ export function isRoom(entity: Optional<Entity>): entity is Room {
   return doesExist(entity) && entity.type === ROOM_TYPE;
 }
 
-export const ROOM_SCHEMA: JSONSchemaType<Template<Room>> = {
+export const ROOM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Room>> = {
   type: 'object',
   properties: {
     base: {

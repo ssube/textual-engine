@@ -20,7 +20,7 @@ export function isItem(entity: Optional<Entity>): entity is Item {
   return doesExist(entity) && entity.type === ITEM_TYPE;
 }
 
-export const ITEM_SCHEMA: JSONSchemaType<Template<Item>> = {
+export const ITEM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Item>> = {
   type: 'object',
   properties: {
     base: {

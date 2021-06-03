@@ -1,12 +1,13 @@
-import { constructorName, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { constructorName, isNil, mergeMap, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
+import { WorldEntityType } from '../../model/entity';
 
 import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
-import { BaseTemplate, Template, TemplateMetadata, TemplateRef } from '../../model/mapped/Template';
+import { BaseTemplate, Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
 import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE } from '../../module';
@@ -16,6 +17,7 @@ import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
 import { findByTemplateId } from '../template';
+import { ScriptMap } from '../types';
 
 export interface EntityGeneratorOptions extends BaseOptions {
   [INJECT_COUNTER]?: Counter;
@@ -52,13 +54,12 @@ export class StateEntityGenerator {
 
   // take ID and look up template?
   public async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {
-    const items = await this.createItemList(template.base.items);
     const actor: Actor = {
       type: 'actor',
       actorType,
-      items,
+      items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
-      scripts: this.template.renderScriptMap(template.base.scripts),
+      scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
       stats: this.template.renderNumberMap(template.base.stats),
     };
 
@@ -98,7 +99,7 @@ export class StateEntityGenerator {
       type: ITEM_TYPE,
       meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
       stats: this.template.renderNumberMap(template.base.stats),
-      scripts: this.template.renderScriptMap(template.base.scripts),
+      scripts: await this.createScripts(template.base.scripts, ITEM_TYPE),
     };
 
     await this.modifyItem(item, template.mods);
@@ -133,15 +134,13 @@ export class StateEntityGenerator {
   }
 
   public async createRoom(template: Template<Room>): Promise<Room> {
-    const actors = await this.createActorList(template.base.actors);
-    const items = await this.createItemList(template.base.items);
     const room: Room = {
       type: ROOM_TYPE,
-      actors,
-      items,
+      actors: await this.createActorList(template.base.actors),
+      items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
       portals: [],
-      scripts: this.template.renderScriptMap(template.base.scripts),
+      scripts: await this.createScripts(template.base.scripts, ROOM_TYPE),
     };
 
     await this.modifyRoom(room, template.mods);
@@ -156,6 +155,13 @@ export class StateEntityGenerator {
       name: this.template.renderString(template.name),
       template: template.id,
     };
+  }
+
+  public async createScripts(template: TemplatePrimitive<ScriptMap>, type: WorldEntityType): Promise<ScriptMap> {
+    const world = this.getWorld();
+    const baseScripts = this.template.renderScriptMap(world.defaults[type].scripts);
+    const scripts = this.template.renderScriptMap(template);
+    return mergeMap(baseScripts, scripts);
   }
 
   /**

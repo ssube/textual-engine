@@ -1,5 +1,76 @@
 worlds:
-  - locale:
+  - defaults:
+      actor:
+        meta:
+          id: actor-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        items: []
+        stats: !map {}
+        scripts: !map
+          signal.get:
+            data: !map {}
+            name:
+              base: actor-get
+          signal.hit:
+            data: !map {}
+            name:
+              base: actor-hit
+          signal.step:
+            data: !map {}
+            name:
+              base: actor-step
+          verbs.common.drop:
+            data: !map {}
+            name:
+              base: verb-drop
+          verbs.common.hit:
+            data: !map {}
+            name:
+              base: verb-hit
+          verbs.common.look:
+            data: !map {}
+            name:
+              base: verb-look
+          verbs.common.move:
+            data: !map {}
+            name:
+              base: verb-move
+          verbs.common.take:
+            data: !map {}
+            name:
+              base: verb-take
+          verbs.common.use:
+            data: !map {}
+            name:
+              base: verb-use
+          verbs.common.wait:
+            data: !map {}
+            name:
+              base: verb-wait
+      item:
+        meta:
+          id: item-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        stats: !map {}
+        scripts: !map {}
+      room:
+        meta:
+          id: room-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        actors: []
+        items: []
+        portals: []
+        scripts: !map {}
+    locale:
       bundles:
         en:
           actor:
@@ -68,7 +139,6 @@ worlds:
             use:
               any: |-
                 {{item.meta.name}} has been used by {{actor.meta.name}}!
-
     meta:
       id: test
       name:
@@ -97,47 +167,7 @@ worlds:
               health:
                 max: 50
                 min: 30
-            scripts: !map
-              signal.get:
-                data: !map {}
-                name:
-                  base: actor-get
-              signal.hit:
-                data: !map {}
-                name:
-                  base: actor-hit
-              signal.step:
-                data: !map {}
-                name:
-                  base: actor-step
-              verbs.common.drop:
-                data: !map {}
-                name:
-                  base: verb-drop
-              verbs.common.hit:
-                data: !map {}
-                name:
-                  base: verb-hit
-              verbs.common.look:
-                data: !map {}
-                name:
-                  base: verb-look
-              verbs.common.move:
-                data: !map {}
-                name:
-                  base: verb-move
-              verbs.common.take:
-                data: !map {}
-                name:
-                  base: verb-take
-              verbs.common.use:
-                data: !map {}
-                name:
-                  base: verb-use
-              verbs.common.wait:
-                data: !map {}
-                name:
-                  base: verb-wait
+            scripts: !map {}
           mods:
             - chance: 50
               excludes: []
@@ -165,47 +195,7 @@ worlds:
               health:
                 max: 20
                 min: 14
-            scripts: !map
-              signal.get:
-                data: !map {}
-                name:
-                  base: actor-get
-              signal.hit:
-                data: !map {}
-                name:
-                  base: actor-hit
-              signal.step:
-                data: !map {}
-                name:
-                  base: actor-step
-              verbs.common.drop:
-                data: !map {}
-                name:
-                  base: verb-drop
-              verbs.common.hit:
-                data: !map {}
-                name:
-                  base: verb-hit
-              verbs.common.look:
-                data: !map {}
-                name:
-                  base: verb-look
-              verbs.common.move:
-                data: !map {}
-                name:
-                  base: verb-move
-              verbs.common.take:
-                data: !map {}
-                name:
-                  base: verb-take
-              verbs.common.use:
-                data: !map {}
-                name:
-                  base: verb-use
-              verbs.common.wait:
-                data: !map {}
-                name:
-                  base: verb-wait
+            scripts: !map {}
           mods:
             - chance: 50
               excludes: []

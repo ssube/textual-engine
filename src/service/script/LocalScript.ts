@@ -59,7 +59,7 @@ export class LocalScriptService implements ScriptService {
   }
 
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
-    this.logger.debug({ slot, target }, 'invoke slot on target');
+    this.logger.debug({ slot, target }, 'trying to invoke slot on target');
 
     const scriptRef = target.scripts.get(slot);
     if (isNil(scriptRef)) {
@@ -72,6 +72,8 @@ export class LocalScriptService implements ScriptService {
       this.logger.error({ scriptName: scriptRef }, 'unknown script name');
       return;
     }
+
+    this.logger.debug({ script: scriptRef.name, target: target.meta.id }, 'invoking script on target');
 
     await script.call(target, {
       ...scope,

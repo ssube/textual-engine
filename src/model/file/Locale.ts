@@ -4,6 +4,7 @@ export type LocaleLanguage = Record<string, Record<string, string>>;
 
 export interface LocaleBundle {
   bundles: LocaleLanguage;
+  verbs: Array<string>;
 }
 
 export const LOCALE_SCHEMA: JSONSchemaType<LocaleBundle> = {
@@ -20,6 +21,12 @@ export const LOCALE_SCHEMA: JSONSchemaType<LocaleBundle> = {
         },
       },
     },
+    verbs: {
+      type: 'array',
+      items: {
+        type: 'string',
+      },
+    },
   },
-  required: ['bundles'],
+  required: ['bundles', 'verbs'],
 };

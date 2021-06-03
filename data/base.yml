@@ -50,6 +50,10 @@ worlds:
             data: !map {}
             name:
               base: verb-wait
+          verbs.world.swing:
+            data: !map {}
+            name:
+              base: verb-hit
       item:
         meta:
           id: item-none
@@ -139,6 +143,11 @@ worlds:
             use:
               any: |-
                 {{item.meta.name}} has been used by {{actor.meta.name}}!
+          verbs:
+            world:
+              swing: swing
+      verbs:
+        - verbs.world.swing
     meta:
       id: test
       name:

@@ -1,4 +1,4 @@
-import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
+import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError, Optional } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
@@ -261,7 +261,7 @@ export class LocalStateService implements StateService {
         await this.doGraph(command.target);
         break;
       case META_HELP:
-        await this.doHelp();
+        await this.doHelp(actor);
         break;
       case META_LOAD:
         await this.doLoad(command.target);
@@ -350,8 +350,29 @@ export class LocalStateService implements StateService {
     });
   }
 
-  public async doHelp(): Promise<void> {
-    const verbs = COMMON_VERBS.map((it) => `$t(${it})`).join(', ');
+  /**
+   * @todo collect verbs from room, items
+   * @todo prevent/remove verbs
+   */
+  public async getVerbs(actor: Optional<Actor>): Promise<ReadonlyArray<string>> {
+    if (doesExist(actor)) {
+      const verbs = new Set<string>(COMMON_VERBS);
+      for (const key of actor.scripts.keys()) {
+        if (key.startsWith('verbs.')) {
+          verbs.add(key);
+        }
+      }
+      return Array.from(verbs);
+    } else {
+      return COMMON_VERBS;
+    }
+  }
+
+  public async doHelp(actor: Optional<Actor>): Promise<void> {
+    const verbs = (await this.getVerbs(actor))
+      .map((it) => `$t(${it})`)
+      .join(', ');
+
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
         verbs,

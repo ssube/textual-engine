@@ -38,6 +38,7 @@ locale:
           save: save
           worlds: worlds
   current: en
+  verbs: []
 services:
   actors:
     - name: actor-player

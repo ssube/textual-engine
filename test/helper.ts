@@ -23,6 +23,7 @@ export function getTestConfig(): ConfigFile {
     locale: {
       bundles: {},
       current: 'en',
+      verbs: [],
     },
     services: {
       actors: [],

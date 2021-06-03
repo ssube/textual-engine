@@ -79,6 +79,7 @@ const TEST_WORLD: WorldTemplate = {
   },
   locale: {
     bundles: {},
+    verbs: [],
   },
   meta: {
     desc: {

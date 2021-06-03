@@ -68,6 +68,7 @@ export const META_HELP = 'verbs.meta.help';
 export const META_LOAD = 'verbs.meta.load';
 export const META_QUIT = 'verbs.meta.quit';
 export const META_SAVE = 'verbs.meta.save';
+export const META_WORLDS = 'verbs.meta.worlds';
 
 /**
  * Common verbs and meta commands.
@@ -82,6 +83,7 @@ export const COMMON_VERBS = [
   META_LOAD,
   META_QUIT,
   META_SAVE,
+  META_WORLDS,
   VERB_DROP,
   VERB_HIT,
   VERB_LOOK,

@@ -34,6 +34,7 @@ import {
   META_LOAD,
   META_QUIT,
   META_SAVE,
+  META_WORLDS,
   SLOT_STEP,
   VERB_WAIT,
 } from '../../util/constants';
@@ -271,6 +272,9 @@ export class LocalStateService implements StateService {
       case META_SAVE:
         await this.doSave(command.target);
         break;
+      case META_WORLDS:
+        await this.doWorlds();
+        break;
       default: {
         // TODO: proper wait, don't assume player goes last
         if (mustExist(event.actor).actorType !== ActorType.PLAYER) {
@@ -380,7 +384,11 @@ export class LocalStateService implements StateService {
     mustExist(this.transfer).setState(state);
 
     this.event.emit(EVENT_STATE_OUTPUT, {
-      line: `loaded world ${state.meta.id} state from ${path}`,
+      context: {
+        meta: state.meta,
+        path,
+      },
+      line: 'meta.load',
       step: state.step,
       volume: ShowVolume.WORLD,
     });
@@ -405,10 +413,31 @@ export class LocalStateService implements StateService {
     });
 
     this.event.emit(EVENT_STATE_OUTPUT, {
-      line: `saved world ${state.meta.id} state to ${path}`,
+      context: {
+        meta: state.meta,
+        path,
+      },
+      line: 'meta.save',
       step: state.step,
       volume: ShowVolume.WORLD,
     });
+  }
+
+  public async doWorlds(): Promise<void> {
+    for (const world of this.worlds) {
+      this.event.emit('state-output', {
+        context: {
+          id: world.meta.id,
+          name: world.meta.name.base,
+        },
+        line: 'meta.world',
+        step: {
+          time: 0,
+          turn: 0,
+        },
+        volume: ShowVolume.WORLD,
+      });
+    }
   }
 
   public async step(): Promise<StepResult> {

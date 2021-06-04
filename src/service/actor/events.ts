@@ -1,9 +1,11 @@
 import { Command } from '../../model/Command';
 import { Actor } from '../../model/entity/Actor';
+import { Room } from '../../model/entity/Room';
 
 export interface ActorCommandEvent {
-  actor?: Actor;
   command: Command;
+  actor?: Actor;
+  room?: Room;
 }
 
 export interface ActorJoinEvent {

@@ -125,7 +125,6 @@ worlds:
                     {{actor.meta.name}} will $t({{command.verb}}) the next turn.
                   target: |-
                     {{actor.meta.name}} will $t({{command.verb}}) the {{command.target}}.
-
                 unknown: |-
                   {{actor.meta.name}} does not know how to $t({{command.verb}})!
               move:

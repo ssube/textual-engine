@@ -1,37 +1,24 @@
 import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { searchState } from '.';
-import { WorldEntity } from '../../model/entity';
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem, Item } from '../../model/entity/Item';
-import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
+import { Room } from '../../model/entity/Room';
 import { WorldState } from '../../model/world/State';
 import { INJECT_LOGGER } from '../../module';
 import { ScriptContext } from '../../service/script';
 import { SLOT_ENTER, SLOT_GET } from '../constants';
 
-export interface TransferParams<TEntity extends WorldEntity> {
-  /**
-   * The entity to transfer.
-   */
-  moving: TEntity;
-
-  /**
-   * The source container from which `id` will be transferred.
-   */
-  source: string;
-
-  /**
-   * The target container into which `id` will be transferred.
-   */
-  target: string;
-}
-
 export interface ActorTransfer {
   moving: Actor;
   source: Room;
   target: Room;
+}
+
+export interface ItemTransfer {
+  moving: Item;
+  source: Actor | Room;
+  target: Actor | Room;
 }
 
 interface EntityTransferOptions extends BaseOptions {
@@ -75,6 +62,11 @@ export class StateEntityTransfer {
     source.actors.splice(idx, 1);
     target.actors.push(transfer.moving);
 
+    await context.stateHelper.enter({
+      actor: moving,
+      room: target,
+    });
+
     await context.script.invoke(target, SLOT_ENTER, {
       ...context,
       actor: transfer.moving,
@@ -88,32 +80,18 @@ export class StateEntityTransfer {
   /**
    * Move an item from one actor or room to another.
    */
-  public async moveItem(transfer: TransferParams<Item>, context: ScriptContext): Promise<void> {
-    const state = mustExist(this.state);
+  public async moveItem(transfer: ItemTransfer, context: ScriptContext): Promise<void> {
+    const { moving, source, target } = transfer;
 
-    if (!isItem(transfer.moving)) {
+    if (!isItem(moving)) {
       this.logger.warn({ transfer }, 'moving entity is not an item');
       return;
     }
 
-    if (transfer.source === transfer.target) {
+    if (source === target) {
       this.logger.debug({ transfer }, 'cannot transfer item between the same source and target');
       return;
     }
-
-    // find source entity
-    const [source] = searchState(state, {
-      meta: {
-        id: transfer.source,
-      },
-    });
-
-    // find target entity
-    const [target] = searchState(state, {
-      meta: {
-        id: transfer.target,
-      },
-    });
 
     // ensure source and dest are both actor/room (types are greatly narrowed after these guards)
     if (isItem(source) || isItem(target)) {
@@ -121,7 +99,7 @@ export class StateEntityTransfer {
       return;
     }
 
-    const idx = source.items.indexOf(transfer.moving);
+    const idx = source.items.indexOf(moving);
     if (idx < 0) {
       this.logger.warn({ source, transfer }, 'source does not directly contain moving entity');
       return;
@@ -134,14 +112,23 @@ export class StateEntityTransfer {
       transfer,
     }, 'moving item between entities');
     source.items.splice(idx, 1);
-    target.items.push(transfer.moving);
+    target.items.push(moving);
 
     await context.script.invoke(target, SLOT_GET, {
       ...context,
-      item: transfer.moving,
+      item: moving,
       data: new Map([
-        ['source', transfer.source],
+        ['source', source.meta.id],
+        ['target', target.meta.id],
       ]),
     });
   }
+}
+
+export function isActorTransfer(tx: ActorTransfer | ItemTransfer): tx is ActorTransfer {
+  return isActor(tx.moving);
+}
+
+export function isItemTransfer(tx: ActorTransfer | ItemTransfer): tx is ItemTransfer {
+  return isItem(tx.moving);
 }

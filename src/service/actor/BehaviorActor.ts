@@ -4,6 +4,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { Actor, ActorType } from '../../model/entity/Actor';
+import { Room } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM } from '../../module';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
 import { EventBus } from '../event';
@@ -70,7 +71,7 @@ export class BehaviorActorService implements ActorService {
     const player = event.room.actors.find((it) => it.actorType === ActorType.PLAYER);
     if (doesExist(player)) {
       this.logger.debug({ event, player }, 'attacking visible player');
-      this.queue(event.actor, {
+      this.queue(event.room, event.actor, {
         index: 0,
         input: `${VERB_HIT} ${player.meta.id}`,
         verb: VERB_HIT,
@@ -90,7 +91,7 @@ export class BehaviorActorService implements ActorService {
         portalIndex,
       }, 'moving through random portal');
 
-      this.queue(event.actor, {
+      this.queue(event.room, event.actor, {
         index: 0,
         input: `${VERB_MOVE} ${portal.sourceGroup} ${portal.name}`,
         verb: VERB_MOVE,
@@ -99,15 +100,16 @@ export class BehaviorActorService implements ActorService {
       return;
     }
 
-    this.queue(event.actor, WAIT_CMD);
+    this.queue(event.room, event.actor, WAIT_CMD);
   }
 
-  protected queue(actor: Actor, command: Command): void {
+  protected queue(room: Room, actor: Actor, command: Command): void {
     this.next.set(actor.meta.id, command);
 
     this.event.emit(EVENT_ACTOR_COMMAND, {
       actor,
       command,
+      room,
     });
   }
 }

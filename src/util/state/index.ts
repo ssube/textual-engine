@@ -1,13 +1,13 @@
-import { doesExist, mergeMap, mustExist, Optional } from '@apextoaster/js-utils';
+import { doesExist, mergeMap, mustCoalesce } from '@apextoaster/js-utils';
 
 import { WorldEntity, WorldEntityType } from '../../model/entity';
-import { Actor } from '../../model/entity/Actor';
+import { Actor, isActor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
-import { isItem } from '../../model/entity/Item';
+import { isItem, Item } from '../../model/entity/Item';
 import { isRoom, Room } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
-import { META_VERBS, VERB_PREFIX } from '../constants';
+import { VERB_PREFIX } from '../constants';
 import { DEFAULT_MATCHERS } from '../entity';
 import { Immutable, ScriptMap } from '../types';
 
@@ -21,14 +21,17 @@ export interface SearchParams {
   meta: Partial<Metadata>;
   room: Partial<Metadata>;
   type: WorldEntityType;
+
+  matchers?: SearchMatchers;
 }
 
 /**
  * Search state for any matching entities, including actors and their inventories.
  */
-export function searchState(state: WorldState, search: Partial<SearchParams>, matchers?: SearchMatchers): Array<WorldEntity>;
-export function searchState(state: Immutable<WorldState>, search: Partial<SearchParams>, matchers?: SearchMatchers): Array<Immutable<WorldEntity>>;
-export function searchState(state: Immutable<WorldState>, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Immutable<WorldEntity>> {
+export function searchState(state: WorldState, search: Partial<SearchParams>): Array<WorldEntity>;
+export function searchState(state: Immutable<WorldState>, search: Partial<SearchParams>): Array<Immutable<WorldEntity>>;
+export function searchState(state: Immutable<WorldState>, search: Partial<SearchParams>): Array<Immutable<WorldEntity>> {
+  const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
   const results: Array<Immutable<WorldEntity>> = [];
 
   for (const room of state.rooms) {
@@ -71,7 +74,8 @@ export function searchState(state: Immutable<WorldState>, search: Partial<Search
  *
  * @todo stop searching each room once it has been added
  */
-export function findRoom(state: WorldState, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Room> {
+export function findRoom(state: WorldState, search: Partial<SearchParams>): Array<Room> {
+  const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
   const results = new Set<Room>();
 
   for (const room of state.rooms) {
@@ -104,7 +108,8 @@ export function findRoom(state: WorldState, search: Partial<SearchParams>, match
  *
  * @todo stop searching each room once it has been added
  */
-export function findContainer(state: WorldState, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): Array<Actor | Room> {
+export function findContainer(state: WorldState, search: Partial<SearchParams>): Array<Actor | Room> {
+  const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
   const results = new Set<Actor | Room>();
 
   for (const room of state.rooms) {
@@ -138,41 +143,46 @@ export function findContainer(state: WorldState, search: Partial<SearchParams>, 
   return Array.from(results);
 }
 
+interface VerbTarget {
+  actor?: Actor;
+  item?: Item;
+  room?: Room;
+}
+
+export function getSignalScripts(target: WorldEntity): ScriptMap {
+  const scripts: ScriptMap = new Map();
+
+  for (const [name, script] of target.scripts) {
+    if (name.startsWith('signal.')) {
+      scripts.set(name, script);
+    }
+  }
+
+  return scripts;
+}
+
 /**
  * @todo optimize, currently on a hot path
  */
-export function getVerbScripts(state: Optional<Immutable<WorldState>>, target: Optional<WorldEntity>): ScriptMap {
+export function getVerbScripts(target: VerbTarget): ScriptMap {
   const scripts: ScriptMap = new Map();
 
-  if (doesExist(target)) {
-    mergeMap(scripts, target.scripts);
+  if (isActor(target.actor)) {
+    mergeVerbScripts(scripts, target.actor.scripts);
 
-    if (!isItem(target)) {
-      for (const item of target.items) {
-        for (const [name, script] of item.scripts) {
-          if (name.startsWith(VERB_PREFIX)) {
-            scripts.set(name, script);
-          }
-        }
-      }
+    for (const item of target.actor.items) {
+      mergeVerbScripts(scripts, item.scripts);
     }
+  }
 
-    // TODO: bad cast
-    if (!isRoom(target)) {
-      const [room] = findRoom(mustExist(state) as WorldState, {
-        actor: {
-          id: target.meta.id,
-        },
-      });
+  if (isItem(target.item)) {
+    mergeVerbScripts(scripts, target.item.scripts);
+  }
 
-      if (isRoom(room)) {
-        for (const [name, script] of room.scripts) {
-          if (name.startsWith(VERB_PREFIX)) {
-            scripts.set(name, script);
-          }
-        }
-      }
-    }
+  if (isRoom(target.room)) {
+    mergeVerbScripts(scripts, target.room.scripts);
+
+    // TODO: add room items?
   }
 
   const scriptNames = Array.from(scripts.keys()); // needs to be pulled AOT since the Map will be mutated
@@ -184,4 +194,12 @@ export function getVerbScripts(state: Optional<Immutable<WorldState>>, target: O
   }
 
   return scripts;
+}
+
+export function mergeVerbScripts(target: ScriptMap, source: ScriptMap): void {
+  for (const [name, script] of source) {
+    if (name.startsWith(VERB_PREFIX)) {
+      target.set(name, script);
+    }
+  }
 }

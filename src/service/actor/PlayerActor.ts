@@ -24,7 +24,7 @@ import {
 import { Counter } from '../counter';
 import { EventBus, LineEvent } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
-import { StateJoinEvent, StateOutputEvent } from '../state/events';
+import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
 import { TokenizerService } from '../tokenizer';
 
 export interface PlayerActorOptions extends BaseOptions {
@@ -89,9 +89,7 @@ export class PlayerActorService implements ActorService {
       });
     }, this);
     this.event.on(EVENT_STATE_ROOM, (event) => {
-      if (event.room.actors.find((it) => it.meta.name === this.pid)) {
-        this.room = event.room;
-      }
+      this.onRoom(event);
     }, this);
     this.event.on(EVENT_STATE_OUTPUT, (event) => {
       catchAndLog(this.onOutput(event), this.logger, 'error during state output');
@@ -116,6 +114,13 @@ export class PlayerActorService implements ActorService {
       this.room = event.room;
     } else {
       this.logger.debug({ event }, 'actor joined state');
+    }
+  }
+
+  public onRoom(event: StateRoomEvent): void {
+    if (event.room.actors.find((it) => it.meta.id === this.pid)) {
+      this.logger.debug({ event }, 'updating own room');
+      this.room = event.room;
     }
   }
 
@@ -154,6 +159,7 @@ export class PlayerActorService implements ActorService {
       this.event.emit(EVENT_ACTOR_COMMAND, {
         actor: this.actor,
         command,
+        room: this.room,
       });
     }
   }

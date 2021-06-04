@@ -1,4 +1,4 @@
-import { constructorName, isNil } from '@apextoaster/js-utils';
+import { constructorName, isNil, mergeMap } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
@@ -17,7 +17,7 @@ import { VerbActorMove } from '../../script/verb/ActorMove';
 import { VerbActorTake } from '../../script/verb/ActorTake';
 import { VerbActorUse } from '../../script/verb/ActorUse';
 import { VerbActorWait } from '../../script/verb/ActorWait';
-import { getVerbScripts, SearchParams, searchState } from '../../util/state';
+import { getSignalScripts, getVerbScripts, SearchParams } from '../../util/state';
 
 /**
  * Common scripts, built into the engine and always available.
@@ -59,9 +59,10 @@ export class LocalScriptService implements ScriptService {
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
     this.logger.debug({ slot, target }, 'trying to invoke slot on target');
 
-    const scripts = getVerbScripts(scope.state, target);
-    const scriptRef = scripts.get(slot);
+    const scripts = getVerbScripts(scope);
+    mergeMap(scripts, getSignalScripts(target));
 
+    const scriptRef = scripts.get(slot);
     if (isNil(scriptRef)) {
       this.logger.debug({ slot, scripts, target }, 'target does not have a script defined for slot');
       return;
@@ -92,7 +93,7 @@ export class LocalScriptService implements ScriptService {
   }
 
   public async broadcast(filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
-    const targets = searchState(scope.state, filter);
+    const targets = await scope.stateHelper.find(filter);
 
     for (const target of targets) {
       await this.invoke(target as WorldEntity, slot, scope);

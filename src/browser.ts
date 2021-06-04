@@ -2,7 +2,7 @@ import { main } from './main';
 
 main([
   '--config',
-  'data-config',
+  'page://data-config',
   '--data',
   'https://raw.githubusercontent.com/ssube/textual-engine/master/data/base.yml',
   '--module',

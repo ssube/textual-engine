@@ -11,11 +11,12 @@ See [the demo on Github Pages](https://ssube.github.io/textual-engine/) or [the 
 - text
 - adventure
 - worlds:
+  - contextual verbs
   - item modifiers
   - persistent rooms
-  - procedural world growth
-  - save and load world state
+  - procedural expansion
   - wandering monsters
+  - save and load
 - engine:
   - entity scripts
   - event broadcast
@@ -23,7 +24,6 @@ See [the demo on Github Pages](https://ssube.github.io/textual-engine/) or [the 
   - multiple data sources (fetch and file in Node CLI, fetch and page element in browser)
   - multiple rendering engines ([readline](https://nodejs.org/api/readline.html), [Ink](https://github.com/vadimdemedes/ink), and [React](https://github.com/facebook/react/))
 - planned:
-  - custom verbs from items or rooms
   - natural language processing for input
   - world editor for React browser UI
 

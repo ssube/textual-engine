@@ -13,6 +13,7 @@ export const EVENT_ACTOR_JOIN = 'actor-join';
 export const EVENT_ACTOR_OUTPUT = 'actor-output';
 export const EVENT_LOCALE_BUNDLE = 'locale-bundle';
 export const EVENT_LOADER_CONFIG = 'loader-config';
+export const EVENT_LOADER_DONE = 'loader-done';
 export const EVENT_LOADER_READ = 'loader-read';
 export const EVENT_LOADER_SAVE = 'loader-save';
 export const EVENT_LOADER_STATE = 'loader-state';

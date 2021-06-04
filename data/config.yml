@@ -15,7 +15,9 @@ locale:
       meta:
         create: 'created new world {{name}} ({{id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
         help: 'available verbs: {{verbs}}'
-        load: 'loaded world state {{meta.id}} from {{-path}}'
+        load:
+          none: 'no world states loaded from {{-path}}'
+          state: 'loaded world state {{meta.id}} from {{-path}}'
         save: 'saved world state {{meta.id}} from {{-path}}'
         quit: 'game over.'
         world: '{{name}} ({{id}})'

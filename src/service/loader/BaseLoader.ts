@@ -7,6 +7,7 @@ import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import {
   EVENT_LOADER_CONFIG,
+  EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,
   EVENT_LOADER_STATE,
@@ -80,6 +81,10 @@ export abstract class BaseLoader implements LoaderService {
         state,
       });
     }
+
+    this.events.emit(EVENT_LOADER_DONE, {
+      path,
+    });
   }
 
   public async onSave(event: LoaderSaveEvent): Promise<void> {

@@ -17,6 +17,7 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_COMMON_QUIT,
+  EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,
   EVENT_LOADER_STATE,
@@ -47,7 +48,7 @@ import { findByTemplateId } from '../../util/template';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
-import { LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
+import { hasPath, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
 import { ScriptService, SuppliedScope } from '../script';
@@ -389,12 +390,31 @@ export class LocalStateService implements StateService {
   }
 
   public async doLoad(path: string): Promise<void> {
+    const doneEvent = onceEvent<LoaderReadEvent>(this.event, EVENT_LOADER_DONE);
     const stateEvent = onceEvent<LoaderStateEvent>(this.event, EVENT_LOADER_STATE);
     this.event.emit(EVENT_LOADER_READ, {
       path,
     });
 
-    const { state } = await stateEvent;
+    const event = await Promise.race([doneEvent, stateEvent]);
+    if (hasPath(event)) {
+      // done event arrived first, no states loaded
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        context: {
+          path,
+        },
+        line: 'meta.load.none',
+        step: {
+          time: 0,
+          turn: 0,
+        },
+        volume: ShowVolume.WORLD,
+      });
+      return;
+    }
+
+    // was a state event
+    const { state } = event;
     const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
     this.event.emit(EVENT_LOCALE_BUNDLE, {
@@ -411,7 +431,7 @@ export class LocalStateService implements StateService {
         meta: state.meta,
         path,
       },
-      line: 'meta.load',
+      line: 'meta.load.state',
       step: state.step,
       volume: ShowVolume.WORLD,
     });

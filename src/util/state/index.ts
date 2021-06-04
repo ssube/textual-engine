@@ -139,7 +139,7 @@ export function findContainer(state: WorldState, search: Partial<SearchParams>, 
 }
 
 /**
- * @todo remove existing verbs
+ * @todo optimize, currently on a hot path
  */
 export function getVerbScripts(state: Optional<Immutable<WorldState>>, target: Optional<WorldEntity>): ScriptMap {
   const scripts: ScriptMap = new Map();

@@ -72,13 +72,12 @@ watching the room they are in and wandering if they have not seen a player recen
 `textual-engine` runs on both the CLI and in recent browsers, with a demo hosted on Github pages. It is an event-driven
 and service-oriented architecture, with replaceable controllers for actor AI, rendering, world state simulation, and
 even the event bus. Resource loaders are provided for many common protocols, such as local files and HTTPS resources,
-giving players an easy way to load new worlds. Text output is fully localized on the client and world templates include
-a locale bundle, allowing a world to be written in multiple languages without duplicating content or logic.
+giving players an easy way to load new worlds. Text output is fully localized by the client and world templates can
+include multiple languages without duplicating templates.
 
-Command verbs are implemented as extension methods on the entity models, with network-safe methods to search the world
-for other entities and show output to the player. Scripts are invoked through a slot and signal system, where events
-in the game engine invoke a named slot (and corresponding script) on the target entity, and can be extended through the
-module system.
+Command verbs are implemented as extension methods on the entity models, with network-safe helpers to search the world
+for other entities and show output to the player. Scripts are invoked through a named signal system, where events in
+the game engine invoke a named script on the target entity, and can be extended through the module system.
 
 #### For Dungeon Crawlers
 

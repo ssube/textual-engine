@@ -102,51 +102,6 @@ export class LocalStateService implements StateService {
     this.worlds = [];
   }
 
-  /**
-   * Create a new world state from a world template.
-   *
-   * @todo move to state generator
-   */
-  public async create(params: CreateParams): Promise<WorldState> {
-    this.logger.debug({ params, worlds: this.worlds.map((it) => it.meta.id) }, 'creating new world state');
-    const generator = mustExist(this.generator);
-    const transfer = mustExist(this.transfer);
-
-    // find the world, prep the generator
-    const world = mustFind(this.worlds, (it) => it.meta.id === params.id);
-
-    // load the world locale
-    this.event.emit('locale-bundle', {
-      name: 'world',
-      bundle: world.locale,
-    });
-
-    // create a state
-    generator.setWorld(world);
-    this.state = await generator.createState(world, params);
-    transfer.setState(this.state);
-
-    return this.state;
-  }
-
-  /**
-   * Load an existing world state.
-   */
-  public async load(state: WorldState): Promise<void> {
-    this.state = state;
-  }
-
-  /**
-   * Save the current world state.
-   */
-  public async save(): Promise<WorldState> {
-    if (isNil(this.state)) {
-      throw new NotInitializedError('state has not been initialized');
-    }
-
-    return this.state;
-  }
-
   public async start(): Promise<void> {
     this.generator = await this.container.create(StateEntityGenerator);
     this.transfer = await this.container.create(StateEntityTransfer);
@@ -322,18 +277,40 @@ export class LocalStateService implements StateService {
    * Create a new world and invite players to join.
    */
   public async doCreate(target: string, depth: number): Promise<void> {
+    const generator = mustExist(this.generator);
+    const transfer = mustExist(this.transfer);
+
     const [id, seed] = target.split(' ', 2);
-    const state = await this.create({
+    this.logger.debug({
+      depth,
+      id,
+      seed,
+      worlds: this.worlds.map((it) => it.meta.id),
+    }, 'creating new world state');
+
+    // find the world, prep the generator
+    const world = mustFind(this.worlds, (it) => it.meta.id === id);
+
+    // load the world locale
+    this.event.emit('locale-bundle', {
+      name: 'world',
+      bundle: world.locale,
+    });
+
+    // create a state
+    generator.setWorld(world);
+    this.state = await generator.createState(world, {
       depth,
       id,
       seed,
     });
+    transfer.setState(this.state);
 
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
-        ...state.meta,
         depth,
         seed,
+        state: this.state.meta,
         world: id,
       },
       line: 'meta.create',
@@ -344,8 +321,8 @@ export class LocalStateService implements StateService {
       volume: ShowVolume.WORLD,
     });
     this.event.emit(EVENT_STATE_LOAD, {
-      state: state.meta.name,
-      world: state.meta.template,
+      state: this.state.meta.name,
+      world: this.state.meta.template,
     });
   }
 
@@ -365,13 +342,12 @@ export class LocalStateService implements StateService {
       return;
     }
 
-    const state = await this.save();
-    const lines = debugState(state);
+    const lines = debugState(this.state);
 
     for (const line of lines) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line,
-        step: state.step,
+        step: this.state.step,
         volume: ShowVolume.WORLD,
       });
     }
@@ -393,8 +369,7 @@ export class LocalStateService implements StateService {
       return;
     }
 
-    const state = await this.save();
-    const lines = graphState(state);
+    const lines = graphState(this.state);
     const data = lines.join('\n');
 
     this.event.emit(EVENT_LOADER_SAVE, {
@@ -405,10 +380,10 @@ export class LocalStateService implements StateService {
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
         path,
-        size: state.rooms.length,
+        size: this.state.rooms.length,
       },
       line: 'debug.graph.summary',
-      step: state.step,
+      step: this.state.step,
       volume: ShowVolume.WORLD,
     });
   }

@@ -1,5 +1,3 @@
-import { WorldState } from '../../model/world/State';
-
 export interface CreateParams {
   /**
    * The number of rooms to pregenerate.
@@ -31,21 +29,6 @@ export interface StepResult {
 }
 
 export interface StateService {
-  /**
-   * Create a new world state from a world template.
-   */
-  create(params: CreateParams): Promise<WorldState>;
-
-  /**
-   * Load an existing world state.
-   */
-  load(state: WorldState): Promise<void>;
-
-  /**
-   * Save the current world state.
-   */
-  save(): Promise<WorldState>;
-
   /**
    * Begin the game loop, continuing until a quit command is received.
    */

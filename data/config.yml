@@ -13,7 +13,7 @@ locale:
         graph:
           summary: 'wrote {{size}} node graph to {{-path}}'
       meta:
-        create: 'created new world {{name}} ({{id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
+        create: 'created new world {{state.name}} ({{state.id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
         debug:
           none: 'no world state to debug'
         graph:

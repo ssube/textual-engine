@@ -26,6 +26,15 @@ export async function ActorHit(this: ScriptTarget, context: ScriptContext): Prom
   if (health > 0) {
     await context.stateHelper.show('actor.hit.health', { actor: this, health });
   } else {
+    // drop inventory
+    const room = mustExist(context.room);
+    for (const dropItem of this.items) {
+      await context.transfer.moveItem({
+        moving: dropItem,
+        source: this.meta.id,
+        target: room.meta.id,
+      }, context);
+    }
     await context.stateHelper.show('actor.hit.dead', { actor: this });
   }
 }

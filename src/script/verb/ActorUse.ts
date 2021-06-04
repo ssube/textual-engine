@@ -6,7 +6,6 @@ import { isItem } from '../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { SLOT_USE } from '../../util/constants';
 import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
-import { searchState } from '../../util/state';
 
 export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -15,14 +14,15 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
 
   const command = mustExist(context.command);
   const room = mustExist(context.room);
-  const results = searchState(context.state, {
+  const results = await context.stateHelper.find({
     meta: {
       name: command.target,
     },
     room: {
       id: room.meta.id,
     },
-  }, FUZZY_MATCHERS);
+    matchers: FUZZY_MATCHERS
+  });
   const target = indexEntity(results, command.index, isItem);
 
   if (!isItem(target)) {

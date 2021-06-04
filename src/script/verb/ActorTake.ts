@@ -5,7 +5,6 @@ import { isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
-import { searchState } from '../../util/state';
 
 export async function VerbActorTake(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -17,22 +16,23 @@ export async function VerbActorTake(this: ScriptTarget, context: ScriptContext):
   context.logger.debug({ command, room }, 'taking item from room');
 
   const valid = new Set(room.items.map((it) => it.meta.id));
-  const results = searchState(context.state, {
+  const results = await context.stateHelper.find({
     meta: {
       name: command.target,
     },
     room: {
       id: room.meta.id,
     },
-  }, {
-    ...FUZZY_MATCHERS,
-    entity: (entity, search) => {
-      // exclude own and other's inventory items
-      if (valid.has(entity.meta.id)) {
-        return FUZZY_MATCHERS.entity(entity, search);
-      } else {
-        return false;
-      }
+    matchers: {
+      ...FUZZY_MATCHERS,
+      entity: (entity, search) => {
+        // exclude own and other's inventory items
+        if (valid.has(entity.meta.id)) {
+          return FUZZY_MATCHERS.entity(entity, search);
+        } else {
+          return false;
+        }
+      },
     },
   });
 
@@ -45,7 +45,7 @@ export async function VerbActorTake(this: ScriptTarget, context: ScriptContext):
 
   await context.transfer.moveItem({
     moving,
-    source: room.meta.id,
-    target: this.meta.id
+    source: room,
+    target: this
   }, context);
 }

@@ -6,9 +6,9 @@ import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
 import { WorldState } from '../../model/world/State';
-import { StateSource, ShowVolume } from '../../util/actor';
+import { ShowVolume, StateSource } from '../../util/actor';
 import { SearchParams } from '../../util/state';
-import { StateEntityTransfer } from '../../util/state/EntityTransfer';
+import { ActorTransfer, ItemTransfer, StateEntityTransfer } from '../../util/state/EntityTransfer';
 import { Immutable, ScriptData } from '../../util/types';
 import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
@@ -18,8 +18,8 @@ export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Pro
 
 export interface StateHelper {
   enter: (target: StateSource) => Promise<void>;
-  // find: () => Promise<Array<WorldEntity>>; // replaces searchState
-  // move: () => Promise<void>; // replaces transfer
+  find: (search: Partial<SearchParams>) => Promise<Array<WorldEntity>>;
+  move: (target: ActorTransfer | ItemTransfer, context: ScriptContext) => Promise<void>; // replaces transfer
   show: (msg: string, context?: LocaleContext, volume?: ShowVolume, source?: StateSource) => Promise<void>;
   quit: () => Promise<void>;
 }

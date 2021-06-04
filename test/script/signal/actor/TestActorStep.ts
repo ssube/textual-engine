@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { createStubInstance } from 'sinon';
+import { createStubInstance, SinonStub } from 'sinon';
 
 import { Actor, ACTOR_TYPE, ActorType } from '../../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
@@ -143,6 +143,8 @@ describe('actor step scripts', () => {
       });
 
       const stateHelper = getStubHelper();
+      (stateHelper.find as SinonStub).returns(Promise.resolve([]));
+
       const transfer = testTransfer();
       await ActorLookTarget.call({
         ...TEST_ACTOR,

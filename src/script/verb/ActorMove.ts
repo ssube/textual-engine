@@ -6,7 +6,6 @@ import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
 import { indexEntity } from '../../util/entity';
-import { searchState } from '../../util/state';
 import { ActorLookTarget } from './ActorLook';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -32,7 +31,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     return;
   }
 
-  const rooms = searchState(context.state, {
+  const rooms = await context.stateHelper.find({
     meta: {
       id: targetPortal.dest,
     },

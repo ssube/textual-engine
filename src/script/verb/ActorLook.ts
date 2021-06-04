@@ -8,7 +8,6 @@ import { ScriptContext, ScriptTarget } from '../../service/script';
 import { getKey } from '../../util/collection/map';
 import { STAT_HEALTH } from '../../util/constants';
 import { FUZZY_MATCHERS } from '../../util/entity';
-import { searchState } from '../../util/state';
 
 export async function VerbActorLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -24,11 +23,12 @@ export async function VerbActorLook(this: ScriptTarget, context: ScriptContext):
 }
 
 export async function ActorLookTarget(this: Actor, context: ScriptContext, targetName: string): Promise<void> {
-  const results = searchState(context.state, {
+  const results = await context.stateHelper.find({
     meta: {
       name: targetName,
-    }
-  }, FUZZY_MATCHERS);
+    },
+    matchers: FUZZY_MATCHERS
+  });
 
   const target = results[mustExist(context.command).index];
 

@@ -31,8 +31,8 @@ export async function SignalActorHit(this: ScriptTarget, context: ScriptContext)
     for (const dropItem of this.items) {
       await context.transfer.moveItem({
         moving: dropItem,
-        source: this.meta.id,
-        target: room.meta.id,
+        source: this,
+        target: room,
       }, context);
     }
     await context.stateHelper.show('actor.hit.dead', { actor: this });

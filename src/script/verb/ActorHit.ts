@@ -6,7 +6,6 @@ import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
 import { SLOT_HIT } from '../../util/constants';
 import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
-import { searchState } from '../../util/state';
 
 export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -16,14 +15,15 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 
-  const results = searchState(context.state, {
+  const results = await context.stateHelper.find({
     meta: {
       name: command.target,
     },
     room: {
       id: room.meta.id,
     },
-  }, FUZZY_MATCHERS);
+    matchers: FUZZY_MATCHERS,
+  });
   const target = indexEntity(results, command.index, isActor);
 
   if (isNil(target)) {

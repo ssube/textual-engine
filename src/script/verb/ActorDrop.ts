@@ -5,7 +5,6 @@ import { isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
-import { searchState } from '../../util/state';
 
 export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -15,7 +14,7 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 
-  const results = searchState(context.state, {
+  const results = await context.stateHelper.find({
     actor: {
       id: this.meta.id,
     },
@@ -25,7 +24,8 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
     room: {
       id: room.meta.id,
     },
-  }, FUZZY_MATCHERS);
+    matchers: FUZZY_MATCHERS,
+  });
 
   const moving = indexEntity(results, command.index, isItem);
   if (isNil(moving)) {
@@ -35,7 +35,7 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
 
   await context.transfer.moveItem({
     moving,
-    source: this.meta.id,
-    target: room.meta.id,
+    source: this,
+    target: room,
   }, context);
 }

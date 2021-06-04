@@ -10,7 +10,7 @@ import { BehaviorActorService } from '../../../src/service/actor/BehaviorActor';
 import { ActorCommandEvent } from '../../../src/service/actor/events';
 import { EventBus } from '../../../src/service/event';
 import { onceEvent } from '../../../src/util/async/event';
-import { VERB_WAIT } from '../../../src/util/constants';
+import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_WAIT } from '../../../src/util/constants';
 
 describe('behavior actor', () => {
   it('should respond to room events for non-player actors with a command for the same actor', async () => {
@@ -25,7 +25,7 @@ describe('behavior actor', () => {
     await actorService.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    const pending = onceEvent<ActorCommandEvent>(events, 'actor-command');
+    const pending = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
     const actor: Actor = {
       actorType: ActorType.DEFAULT,
@@ -53,7 +53,7 @@ describe('behavior actor', () => {
       scripts: new Map(),
       type: 'room',
     };
-    events.emit('state-room', {
+    events.emit(EVENT_STATE_ROOM, {
       actor,
       room,
     });

@@ -4,7 +4,7 @@ import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 import { CreateParams, StateService, StepResult } from '.';
 import { NotInitializedError } from '../../error/NotInitializedError';
 import { Command } from '../../model/Command';
-import { Actor, ActorType } from '../../model/entity/Actor';
+import { Actor, ActorType, ACTOR_TYPE, isActor } from '../../model/entity/Actor';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
@@ -40,7 +40,7 @@ import {
   VERB_PREFIX,
   VERB_WAIT,
 } from '../../util/constants';
-import { getVerbScripts } from '../../util/state';
+import { getVerbScripts, searchState } from '../../util/state';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
@@ -198,6 +198,21 @@ export class LocalStateService implements StateService {
     const state = mustExist(this.state);
     const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
+    // find an existing actor, if one exists
+    const [existingActor] = searchState(state, {
+      meta: {
+        id: event.pid,
+      },
+      type: ACTOR_TYPE,
+    });
+    if (isActor(existingActor)) {
+      this.event.emit(EVENT_STATE_JOIN, {
+        actor: existingActor,
+        pid: event.pid,
+      });
+      return;
+    }
+
     // pick a starting actor and create it
     const actorRef = randomItem(world.start.actors, this.random);
     const actorTemplate = findByTemplateId(world.templates.actors, actorRef.id);
@@ -211,7 +226,7 @@ export class LocalStateService implements StateService {
     }, 'creating player actor');
 
     const actor = await mustExist(this.generator).createActor(actorTemplate, ActorType.PLAYER);
-    actor.meta.name = event.pid;
+    actor.meta.id = event.pid;
 
     this.event.emit(EVENT_STATE_JOIN, {
       actor,

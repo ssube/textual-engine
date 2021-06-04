@@ -17,3 +17,18 @@ export function matchIdSegments(value: string, filter: string): boolean {
 
   return filterParts.every((it, idx) => it === valueParts[idx]);
 }
+
+export function splitPath(path: string): {
+  protocol?: string;
+  path: string;
+} {
+  if (path.includes('://') === false) {
+    return { path };
+  }
+
+  const [protocol, rest] = path.split('://', 2);
+  return {
+    protocol,
+    path: rest,
+  };
+}

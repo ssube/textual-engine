@@ -13,6 +13,7 @@ import {
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
 } from '../../util/constants';
+import { splitPath } from '../../util/string';
 import { EventBus } from '../event';
 import { Parser } from '../parser';
 import { LoaderSaveEvent } from './events';
@@ -115,22 +116,7 @@ export abstract class BaseLoader implements LoaderService {
   public abstract saveStr(path: string, data: string): Promise<void>;
 
   protected checkPath(path: string): boolean {
-    const { protocol } = this.splitPath(path);
+    const { protocol } = splitPath(path);
     return doesExist(protocol) && this.protocols.includes(protocol);
-  }
-
-  protected splitPath(path: string): {
-    protocol?: string;
-    path: string;
-  } {
-    if (path.includes('://') === false) {
-      return { path };
-    }
-
-    const [protocol, rest] = path.split('://', 2);
-    return {
-      protocol,
-      path: rest,
-    };
   }
 }

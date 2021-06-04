@@ -4,11 +4,9 @@ import { createStubInstance } from 'sinon';
 
 import { Actor, ACTOR_TYPE, ActorType } from '../../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
-import { Room } from '../../../../src/model/entity/Room';
-import { WorldState } from '../../../../src/model/world/State';
 import { CoreModule } from '../../../../src/module/CoreModule';
-import { ActorStep } from '../../../../src/script/signal/actor/ActorStep';
-import { ActorStepLookTarget } from '../../../../src/script/verb/common';
+import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
+import { ActorLookTarget } from '../../../../src/script/verb/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_LOOK, VERB_WAIT } from '../../../../src/util/constants';
@@ -54,7 +52,7 @@ describe('actor step scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      await ActorStep.call(TEST_ACTOR, {
+      await SignalActorStep.call(TEST_ACTOR, {
         command: {
           index: 0,
           input: '',
@@ -79,7 +77,7 @@ describe('actor step scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      await ActorStep.call({
+      await SignalActorStep.call({
         ...TEST_ACTOR,
         actorType: ActorType.PLAYER,
         stats: new Map([
@@ -114,7 +112,7 @@ describe('actor step scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      await ActorStep.call({
+      await SignalActorStep.call({
         ...TEST_ACTOR,
         actorType: ActorType.PLAYER,
       }, {
@@ -146,7 +144,7 @@ describe('actor step scripts', () => {
 
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
-      await ActorStepLookTarget.call({
+      await ActorLookTarget.call({
         ...TEST_ACTOR,
         actorType: ActorType.PLAYER,
       }, {

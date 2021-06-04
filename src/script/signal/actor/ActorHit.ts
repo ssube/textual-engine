@@ -5,7 +5,7 @@ import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/collection/map';
 
-export async function ActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
+export async function SignalActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
     throw new InvalidArgumentError('invalid entity type');
   }

@@ -6,7 +6,7 @@ import { getKey } from '../../../util/collection/map';
 import { STAT_HEALTH } from '../../../util/constants';
 import { getVerbScripts } from '../../../util/state';
 
-export async function ActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
+export async function SignalActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({
     meta: this.meta,
     scope: Object.keys(context),

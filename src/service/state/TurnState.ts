@@ -2,9 +2,11 @@ import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError, 
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { CreateParams, StateService, StepResult } from '.';
+import { ActorRoomError } from '../../error/ActorRoomError';
 import { NotInitializedError } from '../../error/NotInitializedError';
 import { Command } from '../../model/Command';
-import { Actor, ActorType, ACTOR_TYPE, isActor } from '../../model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor';
+import { isRoom } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
@@ -27,6 +29,7 @@ import {
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
+  EVENT_STATE_STEP,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -40,7 +43,7 @@ import {
   VERB_PREFIX,
   VERB_WAIT,
 } from '../../util/constants';
-import { getVerbScripts, searchState } from '../../util/state';
+import { findRoom, getVerbScripts, searchState } from '../../util/state';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import { StateEntityTransfer } from '../../util/state/EntityTransfer';
@@ -206,9 +209,20 @@ export class LocalStateService implements StateService {
       type: ACTOR_TYPE,
     });
     if (isActor(existingActor)) {
+      const [room] = findRoom(state, {
+        meta: {
+          id: existingActor.meta.id,
+        },
+      });
+
+      if (!isRoom(room)) {
+        throw new ActorRoomError('room cannot be found for existing actor');
+      }
+
       this.event.emit(EVENT_STATE_JOIN, {
         actor: existingActor,
         pid: event.pid,
+        room,
       });
       return;
     }
@@ -228,11 +242,6 @@ export class LocalStateService implements StateService {
     const actor = await mustExist(this.generator).createActor(actorTemplate, ActorType.PLAYER);
     actor.meta.id = event.pid;
 
-    this.event.emit(EVENT_STATE_JOIN, {
-      actor,
-      pid: event.pid,
-    });
-
     const room = mustFind(state.rooms, (it) => it.meta.id === state.start.room);
     room.actors.push(actor);
 
@@ -243,6 +252,12 @@ export class LocalStateService implements StateService {
 
     await this.stepEnter({
       actor,
+      room,
+    });
+
+    this.event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid: event.pid,
       room,
     });
   }
@@ -262,10 +277,6 @@ export class LocalStateService implements StateService {
       actor,
       command,
     }, 'handling command event');
-
-    if (doesExist(actor)) {
-      this.commands.push(actor, command);
-    }
 
     // handle meta commands
     switch (command.verb) {
@@ -294,14 +305,16 @@ export class LocalStateService implements StateService {
         await this.doWorlds();
         break;
       default: {
-        await this.doStep(actor);
+        await this.doStep(event);
       }
     }
   }
 
-  public async doStep(actor: Optional<Actor>): Promise<void> {
+  public async doStep(event: ActorCommandEvent): Promise<void> {
+    const { actor, command } = event;
+
     // if there is no world state, there won't be an actor, but this error is more informative
-    if (isNil(this.state)) {
+    if (isNil(actor) || isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line: 'meta.step.none',
         step: {
@@ -313,14 +326,16 @@ export class LocalStateService implements StateService {
       return;
     }
 
+    this.commands.push(actor, command);
+
     // TODO: proper wait, don't assume player goes last
-    if (isNil(actor) || actor.actorType !== ActorType.PLAYER) {
+    if (actor.actorType !== ActorType.PLAYER) {
       return;
     }
 
     // step world
     const result = await this.step();
-    this.event.emit('state-step', result);
+    this.event.emit(EVENT_STATE_STEP, result);
 
   }
 
@@ -478,6 +493,10 @@ export class LocalStateService implements StateService {
       line: 'meta.load.state',
       step: state.step,
       volume: ShowVolume.WORLD,
+    });
+    this.event.emit(EVENT_STATE_LOAD, {
+      state: state.meta.name,
+      world: state.meta.template,
     });
   }
 

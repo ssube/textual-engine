@@ -24,7 +24,7 @@ import {
 import { Counter } from '../counter';
 import { EventBus, LineEvent } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
-import { StateOutputEvent } from '../state/events';
+import { StateJoinEvent, StateOutputEvent } from '../state/events';
 import { TokenizerService } from '../tokenizer';
 
 export interface PlayerActorOptions extends BaseOptions {
@@ -81,9 +81,7 @@ export class PlayerActorService implements ActorService {
       catchAndLog(this.onInput(event), this.logger, 'error during render output');
     }, this);
     this.event.on(EVENT_STATE_JOIN, (event) => {
-      if (this.pid === event.pid) {
-        this.actor = event.actor;
-      }
+      this.onJoin(event);
     }, this);
     this.event.on(EVENT_STATE_LOAD, (event) => {
       this.event.emit(EVENT_ACTOR_JOIN, {
@@ -109,6 +107,16 @@ export class PlayerActorService implements ActorService {
 
   public async last(): Promise<Command> {
     return this.history[this.history.length - 1];
+  }
+
+  public onJoin(event: StateJoinEvent): void {
+    if (this.pid === event.pid) {
+      this.logger.debug({ event }, 'registering own actor');
+      this.actor = event.actor;
+      this.room = event.room;
+    } else {
+      this.logger.debug({ event }, 'actor joined state');
+    }
   }
 
   public async onInput(event: LineEvent): Promise<void> {

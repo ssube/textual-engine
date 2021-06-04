@@ -5,6 +5,7 @@ import * as React from 'react';
 
 import { RenderService } from '..';
 import { Frame } from '../../../component/ink/Frame';
+import { EVENT_RENDER_OUTPUT } from '../../../util/constants';
 import { BaseReactRender } from './BaseRender';
 
 /**
@@ -40,9 +41,11 @@ export class InkRender extends BaseReactRender implements RenderService {
     this.output.push(`${this.prompt} > ${this.input}`);
 
     // forward event to state
-    this.event.emit('render-output', {
-      lines: [line],
-    });
+    if (line.length > 0) {
+      this.event.emit(EVENT_RENDER_OUTPUT, {
+        lines: [line],
+      });
+    }
   }
 
   protected renderRoot(): void {

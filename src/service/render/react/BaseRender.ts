@@ -5,6 +5,7 @@ import { RenderService } from '..';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
 import { debounce } from '../../../util/async/Debounce';
 import { onceEvent } from '../../../util/async/event';
+import { EVENT_ACTOR_OUTPUT, EVENT_COMMON_QUIT, EVENT_STATE_ROOM, EVENT_STATE_STEP } from '../../../util/constants';
 import { EventBus, LineEvent } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
@@ -55,10 +56,10 @@ export abstract class BaseReactRender implements RenderService {
     this.renderRoot();
     this.setPrompt(`turn ${this.step.turn}`);
 
-    this.event.on('actor-output', (output) => this.onOutput(output), this);
-    this.event.on('state-room', (room) => this.onRoom(room), this);
-    this.event.on('state-step', (step) => this.onStep(step), this);
-    this.event.on('quit', () => this.onQuit(), this);
+    this.event.on(EVENT_ACTOR_OUTPUT, (output) => this.onOutput(output), this);
+    this.event.on(EVENT_COMMON_QUIT, () => this.onQuit(), this);
+    this.event.on(EVENT_STATE_ROOM, (room) => this.onRoom(room), this);
+    this.event.on(EVENT_STATE_STEP, (step) => this.onStep(step), this);
   }
 
   public async stop(): Promise<void> {
@@ -72,7 +73,7 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   public async read(): Promise<string> {
-    const event = await onceEvent<LineEvent>(this.event, 'actor-output');
+    const event = await onceEvent<LineEvent>(this.event, EVENT_ACTOR_OUTPUT);
     return event.lines[0];
   }
 

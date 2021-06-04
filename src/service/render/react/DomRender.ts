@@ -5,6 +5,7 @@ import { render, unmountComponentAtNode } from 'react-dom';
 
 import { RenderService } from '..';
 import { Frame } from '../../../component/react/Frame';
+import { EVENT_RENDER_OUTPUT } from '../../../util/constants';
 import { BaseReactRender } from './BaseRender';
 
 /**
@@ -40,10 +41,12 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
     // append to buffer
     this.output.push(`${this.prompt} > ${this.input}`);
 
-    // forward event to state
-    this.event.emit('render-output', {
-      lines: [line],
-    });
+    if (line.length > 0) {
+      // forward event to state
+      this.event.emit(EVENT_RENDER_OUTPUT, {
+        lines: [line],
+      });
+    }
   }
 
   protected renderRoot(): void {

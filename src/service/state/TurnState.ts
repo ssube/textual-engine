@@ -285,16 +285,21 @@ export class LocalStateService implements StateService {
   }
 
   public async doStep(actor: Optional<Actor>): Promise<void> {
-    // TODO: proper wait, don't assume player goes last
-    if (isNil(actor)) {
-      return;
-    }
-
-    if (actor.actorType !== ActorType.PLAYER) {
-      return;
-    }
-
+    // if there is no world state, there won't be an actor, but this error is more informative
     if (isNil(this.state)) {
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line: 'meta.step.none',
+        step: {
+          time: 0,
+          turn: 0,
+        },
+        volume: ShowVolume.WORLD,
+      });
+      return;
+    }
+
+    // TODO: proper wait, don't assume player goes last
+    if (isNil(actor) || actor.actorType !== ActorType.PLAYER) {
       return;
     }
 
@@ -333,6 +338,18 @@ export class LocalStateService implements StateService {
   }
 
   public async doDebug(): Promise<void> {
+    if (isNil(this.state)) {
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line: 'meta.debug.none',
+        step: {
+          time: 0,
+          turn: 0,
+        },
+        volume: ShowVolume.WORLD,
+      });
+      return;
+    }
+
     const state = await this.save();
     const lines = debugState(state);
 
@@ -346,6 +363,18 @@ export class LocalStateService implements StateService {
   }
 
   public async doGraph(path: string): Promise<void> {
+    if (isNil(this.state)) {
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line: 'meta.graph.none',
+        step: {
+          time: 0,
+          turn: 0,
+        },
+        volume: ShowVolume.WORLD,
+      });
+      return;
+    }
+
     const state = await this.save();
     const lines = graphState(state);
     const data = lines.join('\n');
@@ -442,7 +471,19 @@ export class LocalStateService implements StateService {
   }
 
   public async doSave(path: string): Promise<void> {
-    const state = mustExist(this.state);
+    if (isNil(this.state)) {
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line: 'meta.save.none',
+        step: {
+          time: 0,
+          turn: 0,
+        },
+        volume: ShowVolume.WORLD,
+      });
+      return;
+    }
+
+    const state = this.state;
     const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
     const data: DataFile = {
@@ -460,7 +501,7 @@ export class LocalStateService implements StateService {
         meta: state.meta,
         path,
       },
-      line: 'meta.save',
+      line: 'meta.save.state',
       step: state.step,
       volume: ShowVolume.WORLD,
     });

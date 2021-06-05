@@ -18,9 +18,14 @@ import {
   EVENT_LOADER_SAVE,
   EVENT_LOADER_WORLD,
   EVENT_STATE_OUTPUT,
+  META_CREATE,
+  META_DEBUG,
+  META_GRAPH,
+  META_HELP,
+  META_QUIT,
   META_VERBS,
+  META_WORLDS,
   TEMPLATE_CHANCE,
-  VERB_WAIT,
 } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
 import { getTestContainer } from '../../helper';
@@ -152,7 +157,14 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await localState.doCreate(TEST_WORLD.meta.id, 1);
+      await localState.onCommand({
+        command: {
+          index: 1,
+          input: '',
+          target: TEST_WORLD.meta.id,
+          verb: META_CREATE,
+        },
+      });
 
       const rooms = await localState.stepFind({
         type: ROOM_TYPE,
@@ -163,7 +175,7 @@ describe('local state service', () => {
   });
 
   describe('debug command', () => {
-    it('should print world contents for debug', async () => {
+    it('should print debug with state', async () => {
       const container = await getTestContainer(new CoreModule());
       const localState = await container.create(LocalStateService);
       await localState.start();
@@ -175,9 +187,16 @@ describe('local state service', () => {
 
       await localState.doCreate(TEST_WORLD.meta.id, 1);
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
-      await localState.doDebug();
-      const output = await pending;
+      await localState.onCommand({
+        command: {
+          index: 0,
+          input: '',
+          target: '',
+          verb: META_DEBUG,
+        },
+      });
 
+      const output = await pending;
       expect(output.line).to.equal('state: foo-0');
     });
 
@@ -192,7 +211,14 @@ describe('local state service', () => {
       });
 
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
-      await localState.doDebug();
+      await localState.onCommand({
+        command: {
+          index: 0,
+          input: '',
+          target: '',
+          verb: META_DEBUG,
+        },
+      });
       const output = await pending;
 
       expect(output.line).to.equal('meta.debug.none');
@@ -200,7 +226,7 @@ describe('local state service', () => {
   });
 
   describe('graph command', () => {
-    it('should print graph for graph', async () => {
+    it('should print graph with state', async () => {
       const container = await getTestContainer(new CoreModule());
       const localState = await container.create(LocalStateService);
       await localState.start();
@@ -212,9 +238,16 @@ describe('local state service', () => {
 
       await localState.doCreate(TEST_WORLD.meta.id, 1);
       const pending = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
-      await localState.doGraph('test://url');
-      const output = await pending;
+      await localState.onCommand({
+        command: {
+          index: 0,
+          input: '',
+          target: 'test://url',
+          verb: META_GRAPH,
+        },
+      });
 
+      const output = await pending;
       expect(output.data).to.include('strict digraph');
       expect(output.path).to.equal('test://url');
     });
@@ -225,14 +258,17 @@ describe('local state service', () => {
       await localState.start();
 
       const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-      events.emit(EVENT_LOADER_WORLD, {
-        world: TEST_WORLD,
+      const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      await localState.onCommand({
+        command: {
+          index: 0,
+          input: '',
+          target: 'test://url',
+          verb: META_GRAPH,
+        },
       });
 
-      const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
-      await localState.doGraph('test://url');
       const output = await pending;
-
       expect(output.line).to.equal('meta.graph.none');
     });
   });
@@ -244,17 +280,13 @@ describe('local state service', () => {
       await localState.start();
 
       const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-      events.emit(EVENT_LOADER_WORLD, {
-        world: TEST_WORLD,
-      });
-
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
-      await localState.doHelp({
+      await localState.onCommand({
         command: {
           index: 0,
           input: '',
           target: '',
-          verb: VERB_WAIT,
+          verb: META_HELP,
         },
       });
 
@@ -285,13 +317,13 @@ describe('local state service', () => {
 
       await localState.doCreate(TEST_WORLD.meta.id, 1);
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
-      await localState.doHelp({
+      await localState.onCommand({
         actor,
         command: {
           index: 0,
           input: '',
           target: '',
-          verb: VERB_WAIT,
+          verb: META_HELP,
         },
         room,
       });
@@ -311,7 +343,23 @@ describe('local state service', () => {
   });
 
   describe('quit command', () => {
-    xit('should emit quit event and resolve stop');
+    it('should emit quit event and resolve stop', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const pending = localState.stop();
+      await localState.onCommand({
+        command: {
+          index: 0,
+          input: '',
+          target: '',
+          verb: META_QUIT,
+        },
+      });
+
+      return expect(pending).to.eventually.equal(undefined);
+    });
   });
 
   describe('save command', () => {
@@ -319,7 +367,29 @@ describe('local state service', () => {
   });
 
   describe('worlds command', () => {
-    xit('should print loaded worlds');
+    it('should print loaded worlds', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      await localState.onCommand({
+        command: {
+          index: 0,
+          input: '',
+          target: '',
+          verb: META_WORLDS,
+        },
+      });
+
+      const output = await pending;
+      expect(output.line).to.equal('meta.world');
+    });
   });
 
   describe('state step', () => {

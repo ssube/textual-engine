@@ -10,11 +10,21 @@ locale:
         graph:
           summary: 'wrote {{size}} node graph to {{-path}}'
       meta:
-        create: 'created new world {{name}} ({{id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
+        create: 'created new world {{state.name}} ({{state.id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
+        debug:
+          none: 'no world state to debug'
+        graph:
+          none: 'no world state to graph'
         help: 'available verbs: {{verbs}}'
-        load: 'loaded world state {{meta.id}} from {{-path}}'
-        save: 'saved world state {{meta.id}} from {{-path}}'
-        quit: 'game over.'
+        load:
+          none: 'no world states loaded from {{-path}}'
+          state: 'loaded world state {{meta.id}} from {{-path}}'
+        quit: 'quitting'
+        save:
+          none: 'no world state to save'
+          state: 'saved world state {{meta.id}} from {{-path}}'
+        step:
+          none: 'please create a world before using any verbs'
         world: '{{name}} ({{id}})'
       verbs:
         common:

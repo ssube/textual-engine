@@ -4,7 +4,7 @@ import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../service/script';
-import { SLOT_USE } from '../../util/constants';
+import { SIGNAL_USE } from '../../util/constants';
 import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
 
 export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -14,7 +14,7 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
 
   const command = mustExist(context.command);
   const room = mustExist(context.room);
-  const results = await context.stateHelper.find({
+  const results = await context.state.find({
     meta: {
       name: command.target,
     },
@@ -26,11 +26,11 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
   const target = indexEntity(results, command.index, isItem);
 
   if (!isItem(target)) {
-    await context.stateHelper.show('actor.step.use.type', { command });
+    await context.state.show('actor.step.use.type', { command });
     return;
   }
 
-  await context.script.invoke(target, SLOT_USE, {
+  await context.script.invoke(target, SIGNAL_USE, {
     ...context,
     actor: this,
   });

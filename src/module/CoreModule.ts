@@ -28,7 +28,7 @@ import { RandomGenerator } from '../service/random';
 import { AleaRandomGenerator } from '../service/random/AleaRandom';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScript';
-import { LocalStateService } from '../service/state/TurnState';
+import { LocalStateService } from '../service/state/LocalState';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
 import { TokenizerService } from '../service/tokenizer';

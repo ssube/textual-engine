@@ -1,4 +1,4 @@
-import { doesExist, mergeMap, mustCoalesce } from '@apextoaster/js-utils';
+import { doesExist, mustCoalesce } from '@apextoaster/js-utils';
 
 import { WorldEntity, WorldEntityType } from '../../model/entity';
 import { Actor, isActor } from '../../model/entity/Actor';
@@ -7,7 +7,7 @@ import { isItem, Item } from '../../model/entity/Item';
 import { isRoom, Room } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
-import { VERB_PREFIX } from '../constants';
+import { SIGNAL_PREFIX, VERB_PREFIX } from '../constants';
 import { DEFAULT_MATCHERS } from '../entity';
 import { Immutable, ScriptMap } from '../types';
 
@@ -153,7 +153,7 @@ export function getSignalScripts(target: WorldEntity): ScriptMap {
   const scripts: ScriptMap = new Map();
 
   for (const [name, script] of target.scripts) {
-    if (name.startsWith('signal.')) {
+    if (name.startsWith(SIGNAL_PREFIX)) {
       scripts.set(name, script);
     }
   }

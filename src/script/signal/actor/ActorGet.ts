@@ -10,6 +10,6 @@ export async function SignalActorGet(this: ScriptTarget, context: ScriptContext)
 
   if (this.actorType === ActorType.PLAYER) {
     const item = mustExist(context.item);
-    await context.stateHelper.show('actor.get.player', { item });
+    await context.state.show('actor.get.player', { item });
   }
 }

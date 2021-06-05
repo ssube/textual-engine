@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError, Optional } from '@apextoaster/js-utils';
+import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject, Logger } from 'noicejs';
 
 import { StateService, StepResult } from '.';
@@ -43,7 +43,7 @@ import {
   META_SAVE,
   META_VERBS,
   META_WORLDS,
-  SLOT_STEP,
+  SIGNAL_STEP,
   VERB_PREFIX,
 } from '../../util/constants';
 import { findRoom, getVerbScripts, SearchParams, searchState } from '../../util/state';
@@ -78,7 +78,7 @@ export interface LocalStateServiceOptions extends BaseOptions {
   INJECT_EVENT,
   INJECT_LOGGER,
   INJECT_RANDOM,
-  INJECT_SCRIPT
+  INJECT_SCRIPT,
 )
 export class LocalStateService implements StateService {
   protected container: Container;
@@ -113,6 +113,7 @@ export class LocalStateService implements StateService {
   }
 
   public async start(): Promise<void> {
+    // TODO: should be injected
     this.generator = await this.container.create(StateEntityGenerator);
     this.transfer = await this.container.create(StateEntityTransfer);
 
@@ -300,7 +301,6 @@ export class LocalStateService implements StateService {
    */
   public async doCreate(target: string, depth: number): Promise<void> {
     const generator = mustExist(this.generator);
-    const transfer = mustExist(this.transfer);
 
     const [id, seed] = target.split(' ', 2);
     this.logger.debug({
@@ -326,7 +326,6 @@ export class LocalStateService implements StateService {
       id,
       seed,
     });
-    transfer.setState(this.state);
 
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
@@ -478,7 +477,6 @@ export class LocalStateService implements StateService {
 
     this.state = state;
     mustExist(this.generator).setWorld(world);
-    mustExist(this.transfer).setState(state);
 
     this.logger.debug('emitting state loaded event');
     this.event.emit(EVENT_STATE_OUTPUT, {
@@ -569,8 +567,7 @@ export class LocalStateService implements StateService {
     const scope: SuppliedScope = {
       data: new Map(),
       random: this.random,
-      state: this.state,
-      stateHelper: {
+      state: {
         enter: (target) => this.stepEnter(target),
         find: (search) => this.stepFind(search),
         move: (target, context) => this.stepMove(target, context),
@@ -583,7 +580,7 @@ export class LocalStateService implements StateService {
     for (const room of this.state.rooms) {
       if (seen.has(room.meta.id) === false) {
         seen.add(room.meta.id);
-        await this.script.invoke(room, SLOT_STEP, {
+        await this.script.invoke(room, SIGNAL_STEP, {
           ...scope,
           room,
         });
@@ -593,7 +590,7 @@ export class LocalStateService implements StateService {
             seen.add(actor.meta.id);
 
             const command = await this.getActorCommand(actor);
-            await this.script.invoke(actor, SLOT_STEP, {
+            await this.script.invoke(actor, SIGNAL_STEP, {
               ...scope,
               actor,
               command,
@@ -603,7 +600,7 @@ export class LocalStateService implements StateService {
             for (const item of actor.items) {
               if (seen.has(item.meta.id) === false) {
                 seen.add(item.meta.id);
-                await this.script.invoke(item, SLOT_STEP, {
+                await this.script.invoke(item, SIGNAL_STEP, {
                   ...scope,
                   actor,
                   item,
@@ -616,7 +613,7 @@ export class LocalStateService implements StateService {
           for (const item of room.items) {
             if (seen.has(item.meta.id) === false) {
               seen.add(item.meta.id);
-              await this.script.invoke(item, SLOT_STEP, {
+              await this.script.invoke(item, SIGNAL_STEP, {
                 ...scope,
                 item,
                 room,
@@ -642,6 +639,48 @@ export class LocalStateService implements StateService {
       time: this.state.step.time,
       turn: this.state.step.turn,
     };
+  }
+
+  /**
+   * Handler for a room change from the state helper.
+   */
+  public async stepEnter(target: StateSource): Promise<void> {
+    if (doesExist(target.actor) && target.actor.actorType === ActorType.PLAYER) {
+      const state = mustExist(this.state);
+      const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);
+      state.rooms.push(...rooms);
+    }
+  }
+
+  public async stepFind(search: Partial<SearchParams>): Promise<Array<WorldEntity>> {
+    return searchState(mustExist(this.state), search);
+  }
+
+  public async stepMove(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void> {
+    const transfer = mustExist(this.transfer);
+
+    if (isActorTransfer(target)) {
+      return transfer.moveActor(target, context);
+    }
+
+    if (isItemTransfer(target)) {
+      return transfer.moveItem(target, context);
+    }
+
+    throw new ScriptTargetError('cannot move rooms');
+  }
+
+  /**
+   * Handler for a line of input from the state helper.
+   */
+  public async stepShow(line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.WORLD, source?: StateSource): Promise<void> {
+    this.event.emit(EVENT_STATE_OUTPUT, {
+      line,
+      context,
+      source,
+      step: mustExist(this.state).step,
+      volume,
+    });
   }
 
   /**
@@ -685,45 +724,4 @@ export class LocalStateService implements StateService {
     }
   }
 
-  /**
-   * Handler for a room change from the state helper.
-   */
-  protected async stepEnter(target: StateSource): Promise<void> {
-    if (doesExist(target.actor) && target.actor.actorType === ActorType.PLAYER) {
-      const state = mustExist(this.state);
-      const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);
-      state.rooms.push(...rooms);
-    }
-  }
-
-  protected async stepFind(search: Partial<SearchParams>): Promise<Array<WorldEntity>> {
-    return searchState(mustExist(this.state), search);
-  }
-
-  protected async stepMove(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void> {
-    const transfer = mustExist(this.transfer);
-
-    if (isActorTransfer(target)) {
-      return transfer.moveActor(target, context);
-    }
-
-    if (isItemTransfer(target)) {
-      return transfer.moveItem(target, context);
-    }
-
-    throw new ScriptTargetError('cannot move rooms');
-  }
-
-  /**
-   * Handler for a line of input from the state helper.
-   */
-  protected async stepShow(line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.WORLD, source?: StateSource): Promise<void> {
-    this.event.emit(EVENT_STATE_OUTPUT, {
-      line,
-      context,
-      source,
-      step: mustExist(this.state).step,
-      volume,
-    });
-  }
 }

@@ -27,11 +27,11 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetPortal = portals[command.index];
 
   if (isNil(targetPortal)) {
-    await context.stateHelper.show('actor.step.move.missing', { command });
+    await context.state.show('actor.step.move.missing', { command });
     return;
   }
 
-  const rooms = await context.stateHelper.find({
+  const rooms = await context.state.find({
     meta: {
       id: targetPortal.dest,
     },
@@ -50,7 +50,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     target: targetRoom,
   }, context);
 
-  await context.stateHelper.show('actor.step.move.portal', {
+  await context.state.show('actor.step.move.portal', {
     actor: this,
     portal: targetPortal,
   }, ShowVolume.SELF, {
@@ -60,7 +60,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
 
   if (this.actorType === ActorType.PLAYER) {
     context.logger.debug({ actor: this, room: targetRoom }, 'player entered room');
-    await context.stateHelper.enter({ actor: this, room: targetRoom });
+    await context.state.enter({ actor: this, room: targetRoom });
     await ActorLookTarget.call(this, context, targetPortal.dest);
   }
 }

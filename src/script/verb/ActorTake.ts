@@ -16,7 +16,7 @@ export async function VerbActorTake(this: ScriptTarget, context: ScriptContext):
   context.logger.debug({ command, room }, 'taking item from room');
 
   const valid = new Set(room.items.map((it) => it.meta.id));
-  const results = await context.stateHelper.find({
+  const results = await context.state.find({
     meta: {
       name: command.target,
     },
@@ -39,7 +39,7 @@ export async function VerbActorTake(this: ScriptTarget, context: ScriptContext):
   const moving = indexEntity(results, command.index, isItem);
 
   if (isNil(moving)) {
-    await context.stateHelper.show('actor.step.take.type', { command });
+    await context.state.show('actor.step.take.type', { command });
     return;
   }
 

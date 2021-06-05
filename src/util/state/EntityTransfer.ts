@@ -7,7 +7,7 @@ import { Room } from '../../model/entity/Room';
 import { WorldState } from '../../model/world/State';
 import { INJECT_LOGGER } from '../../module';
 import { ScriptContext } from '../../service/script';
-import { SLOT_ENTER, SLOT_GET } from '../constants';
+import { SIGNAL_ENTER, SIGNAL_GET } from '../constants';
 
 export interface ActorTransfer {
   moving: Actor;
@@ -28,16 +28,11 @@ interface EntityTransferOptions extends BaseOptions {
 @Inject(INJECT_LOGGER)
 export class StateEntityTransfer {
   protected logger: Logger;
-  protected state?: WorldState;
 
   constructor(options: EntityTransferOptions) {
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
-  }
-
-  public setState(state: WorldState): void {
-    this.state = state;
   }
 
   /**
@@ -62,12 +57,12 @@ export class StateEntityTransfer {
     source.actors.splice(idx, 1);
     target.actors.push(transfer.moving);
 
-    await context.stateHelper.enter({
+    await context.state.enter({
       actor: moving,
       room: target,
     });
 
-    await context.script.invoke(target, SLOT_ENTER, {
+    await context.script.invoke(target, SIGNAL_ENTER, {
       ...context,
       actor: transfer.moving,
       data: new Map([
@@ -114,7 +109,7 @@ export class StateEntityTransfer {
     source.items.splice(idx, 1);
     target.items.push(moving);
 
-    await context.script.invoke(target, SLOT_GET, {
+    await context.script.invoke(target, SIGNAL_GET, {
       ...context,
       item: moving,
       data: new Map([

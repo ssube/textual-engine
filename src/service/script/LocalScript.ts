@@ -93,7 +93,7 @@ export class LocalScriptService implements ScriptService {
   }
 
   public async broadcast(filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
-    const targets = await scope.stateHelper.find(filter);
+    const targets = await scope.state.find(filter);
 
     for (const target of targets) {
       await this.invoke(target as WorldEntity, slot, scope);

@@ -10,7 +10,7 @@ import { ActorLookTarget } from '../../../../src/script/verb/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_LOOK, VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestState } from '../../../entity';
+import { makeTestRoom } from '../../../entity';
 import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
@@ -62,9 +62,9 @@ describe('actor step scripts', () => {
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
+        room: makeTestRoom('', '', '', [], []),
         script,
-        state: makeTestState('', []),
-        stateHelper,
+        state: stateHelper,
         transfer,
       });
 
@@ -94,8 +94,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script,
-        state: makeTestState('', []),
-        stateHelper,
+        state: stateHelper,
         transfer,
       });
 
@@ -112,10 +111,13 @@ describe('actor step scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      await SignalActorStep.call({
+      const room = makeTestRoom('', '', '', [], []);
+      const player = {
         ...TEST_ACTOR,
         actorType: ActorType.PLAYER,
-      }, {
+      };
+      await SignalActorStep.call(player, {
+        actor: player,
         command: {
           index: 0,
           input: '',
@@ -125,13 +127,13 @@ describe('actor step scripts', () => {
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
+        room,
         script: createStubInstance(LocalScriptService),
-        state: makeTestState('', []),
-        stateHelper,
+        state: stateHelper,
         transfer,
       });
 
-      expect(stateHelper.show).to.have.callCount(1);
+      expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWith('actor.step.command.player.verb');
     });
   });
 
@@ -160,8 +162,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
-        state: makeTestState('', []),
-        stateHelper,
+        state: stateHelper,
         transfer,
       }, '');
 

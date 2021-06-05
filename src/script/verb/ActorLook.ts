@@ -23,7 +23,7 @@ export async function VerbActorLook(this: ScriptTarget, context: ScriptContext):
 }
 
 export async function ActorLookTarget(this: Actor, context: ScriptContext, targetName: string): Promise<void> {
-  const results = await context.stateHelper.find({
+  const results = await context.state.find({
     meta: {
       name: targetName,
     },
@@ -53,16 +53,16 @@ export async function ActorLookTarget(this: Actor, context: ScriptContext, targe
     });
   }
 
-  await context.stateHelper.show('actor.step.look.none');
+  await context.state.show('actor.step.look.none');
 }
 
 export async function ActorLookRoom(this: Actor, context: ScriptContext): Promise<void> {
   const room = mustExist(context.room);
-  await context.stateHelper.show('actor.step.look.room.you', { actor: this });
-  await context.stateHelper.show('actor.step.look.room.seen', { room });
+  await context.state.show('actor.step.look.room.you', { actor: this });
+  await context.state.show('actor.step.look.room.seen', { room });
 
   for (const item of this.items) {
-    await context.stateHelper.show('actor.step.look.room.inventory', { item });
+    await context.state.show('actor.step.look.room.inventory', { item });
   }
 
   for (const actor of room.actors) {
@@ -82,20 +82,20 @@ export async function ActorLookRoom(this: Actor, context: ScriptContext): Promis
   }
 
   for (const portal of room.portals) {
-    await context.stateHelper.show('actor.step.look.room.portal', { portal });
+    await context.state.show('actor.step.look.room.portal', { portal });
   }
 }
 
 export async function ActorLookActor(this: Actor, context: ScriptContext): Promise<void> {
   const actor = mustExist(context.actor);
-  await context.stateHelper.show('actor.step.look.actor.seen', { actor });
+  await context.state.show('actor.step.look.actor.seen', { actor });
   const health = getKey(actor.stats, STAT_HEALTH, 0);
   if (health <= 0) {
-    await context.stateHelper.show('actor.step.look.actor.dead', { actor });
+    await context.state.show('actor.step.look.actor.dead', { actor });
   }
 }
 
 export async function ActorLookItem(this: Actor, context: ScriptContext): Promise<void> {
   const item = mustExist(context.item);
-  await context.stateHelper.show('actor.step.look.item.seen', { item });
+  await context.state.show('actor.step.look.item.seen', { item });
 }

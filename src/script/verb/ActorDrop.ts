@@ -14,7 +14,7 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 
-  const results = await context.stateHelper.find({
+  const results = await context.state.find({
     actor: {
       id: this.meta.id,
     },
@@ -29,7 +29,7 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
 
   const moving = indexEntity(results, command.index, isItem);
   if (isNil(moving)) {
-    await context.stateHelper.show('actor.step.drop.type', { command });
+    await context.state.show('actor.step.drop.type', { command });
     return;
   }
 

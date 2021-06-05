@@ -8,6 +8,7 @@ import { PlayerActorService } from '../../../src/service/actor/PlayerActor';
 import { EventBus } from '../../../src/service/event';
 import { LocaleService } from '../../../src/service/locale';
 import { onceEvent } from '../../../src/util/async/event';
+import { EVENT_ACTOR_COMMAND, EVENT_RENDER_OUTPUT } from '../../../src/util/constants';
 import { getTestContainer } from '../../helper';
 
 describe('player actor', () => {
@@ -24,9 +25,9 @@ describe('player actor', () => {
     const line = `foo bar ${index}`;
 
     const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    const pending = onceEvent<ActorCommandEvent>(event, 'actor-command');
+    const pending = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
 
-    event.emit('render-output', {
+    event.emit(EVENT_RENDER_OUTPUT, {
       lines: [line],
     });
 

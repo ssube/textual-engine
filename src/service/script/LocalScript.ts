@@ -1,45 +1,43 @@
-import { constructorName, isNil } from '@apextoaster/js-utils';
+import { constructorName, isNil, mergeMap } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
 import { WorldEntity } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
-import { ActorGet } from '../../script/signal/actor/ActorGet';
-import { ActorHit } from '../../script/signal/actor/ActorHit';
-import { ActorStep } from '../../script/signal/actor/ActorStep';
-import { ItemStep } from '../../script/signal/item/ItemStep';
-import { ItemUse } from '../../script/signal/item/ItemUse';
-import { RoomStep } from '../../script/signal/room/RoomStep';
-import {
-  ActorStepDrop,
-  ActorStepHit,
-  ActorStepLook,
-  ActorStepMove,
-  ActorStepTake,
-  ActorStepUse,
-  ActorStepWait,
-} from '../../script/verb/common';
-import { getScripts, SearchParams, searchState } from '../../util/state';
+import { SignalActorGet } from '../../script/signal/actor/ActorGet';
+import { SignalActorHit } from '../../script/signal/actor/ActorHit';
+import { SignalActorStep } from '../../script/signal/actor/ActorStep';
+import { SignalItemStep } from '../../script/signal/item/ItemStep';
+import { SignalItemUse } from '../../script/signal/item/ItemUse';
+import { SignalRoomStep } from '../../script/signal/room/RoomStep';
+import { VerbActorDrop } from '../../script/verb/ActorDrop';
+import { VerbActorHit } from '../../script/verb/ActorHit';
+import { VerbActorLook } from '../../script/verb/ActorLook';
+import { VerbActorMove } from '../../script/verb/ActorMove';
+import { VerbActorTake } from '../../script/verb/ActorTake';
+import { VerbActorUse } from '../../script/verb/ActorUse';
+import { VerbActorWait } from '../../script/verb/ActorWait';
+import { getSignalScripts, getVerbScripts, SearchParams } from '../../util/state';
 
 /**
  * Common scripts, built into the engine and always available.
  */
 const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   // signal scripts
-  ['actor-get', ActorGet],
-  ['actor-hit', ActorHit],
-  ['actor-step', ActorStep],
-  ['item-step', ItemStep],
-  ['item-use', ItemUse],
-  ['room-step', RoomStep],
+  ['actor-get', SignalActorGet],
+  ['actor-hit', SignalActorHit],
+  ['actor-step', SignalActorStep],
+  ['item-step', SignalItemStep],
+  ['item-use', SignalItemUse],
+  ['room-step', SignalRoomStep],
   // verb scripts
-  ['verb-drop', ActorStepDrop],
-  ['verb-hit', ActorStepHit],
-  ['verb-look', ActorStepLook],
-  ['verb-move', ActorStepMove],
-  ['verb-take', ActorStepTake],
-  ['verb-use', ActorStepUse],
-  ['verb-wait', ActorStepWait],
+  ['verb-drop', VerbActorDrop],
+  ['verb-hit', VerbActorHit],
+  ['verb-look', VerbActorLook],
+  ['verb-move', VerbActorMove],
+  ['verb-take', VerbActorTake],
+  ['verb-use', VerbActorUse],
+  ['verb-wait', VerbActorWait],
 ];
 
 export interface LocalScriptServiceOptions extends BaseOptions {
@@ -61,9 +59,10 @@ export class LocalScriptService implements ScriptService {
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
     this.logger.debug({ slot, target }, 'trying to invoke slot on target');
 
-    const scripts = getScripts(scope.state, target);
-    const scriptRef = scripts.get(slot);
+    const scripts = getVerbScripts(scope);
+    mergeMap(scripts, getSignalScripts(target));
 
+    const scriptRef = scripts.get(slot);
     if (isNil(scriptRef)) {
       this.logger.debug({ slot, scripts, target }, 'target does not have a script defined for slot');
       return;
@@ -94,7 +93,7 @@ export class LocalScriptService implements ScriptService {
   }
 
   public async broadcast(filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
-    const targets = searchState(scope.state, filter);
+    const targets = await scope.state.find(filter);
 
     for (const target of targets) {
       await this.invoke(target as WorldEntity, slot, scope);

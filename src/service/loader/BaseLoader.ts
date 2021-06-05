@@ -7,11 +7,13 @@ import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import {
   EVENT_LOADER_CONFIG,
+  EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
 } from '../../util/constants';
+import { splitPath } from '../../util/string';
 import { EventBus } from '../event';
 import { Parser } from '../parser';
 import { LoaderSaveEvent } from './events';
@@ -80,6 +82,10 @@ export abstract class BaseLoader implements LoaderService {
         state,
       });
     }
+
+    this.events.emit(EVENT_LOADER_DONE, {
+      path,
+    });
   }
 
   public async onSave(event: LoaderSaveEvent): Promise<void> {
@@ -110,22 +116,7 @@ export abstract class BaseLoader implements LoaderService {
   public abstract saveStr(path: string, data: string): Promise<void>;
 
   protected checkPath(path: string): boolean {
-    const { protocol } = this.splitPath(path);
+    const { protocol } = splitPath(path);
     return doesExist(protocol) && this.protocols.includes(protocol);
-  }
-
-  protected splitPath(path: string): {
-    protocol?: string;
-    path: string;
-  } {
-    if (path.includes('://') === false) {
-      return { path };
-    }
-
-    const [protocol, rest] = path.split('://', 2);
-    return {
-      protocol,
-      path: rest,
-    };
   }
 }

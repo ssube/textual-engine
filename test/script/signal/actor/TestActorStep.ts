@@ -1,17 +1,16 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { createStubInstance } from 'sinon';
+import { createStubInstance, SinonStub } from 'sinon';
 
 import { Actor, ACTOR_TYPE, ActorType } from '../../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
-import { Room } from '../../../../src/model/entity/Room';
-import { WorldState } from '../../../../src/model/world/State';
 import { CoreModule } from '../../../../src/module/CoreModule';
-import { ActorStep } from '../../../../src/script/signal/actor/ActorStep';
-import { ActorStepLookTarget } from '../../../../src/script/verb/common';
+import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
+import { ActorLookTarget } from '../../../../src/script/verb/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_LOOK, VERB_WAIT } from '../../../../src/util/constants';
+import { makeTestRoom } from '../../../entity';
 import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
@@ -53,7 +52,7 @@ describe('actor step scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      await ActorStep.call(TEST_ACTOR, {
+      await SignalActorStep.call(TEST_ACTOR, {
         command: {
           index: 0,
           input: '',
@@ -63,9 +62,9 @@ describe('actor step scripts', () => {
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
+        room: makeTestRoom('', '', '', [], []),
         script,
-        state: {} as WorldState,
-        stateHelper,
+        state: stateHelper,
         transfer,
       });
 
@@ -78,7 +77,7 @@ describe('actor step scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      await ActorStep.call({
+      await SignalActorStep.call({
         ...TEST_ACTOR,
         actorType: ActorType.PLAYER,
         stats: new Map([
@@ -95,8 +94,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script,
-        state: {} as WorldState,
-        stateHelper,
+        state: stateHelper,
         transfer,
       });
 
@@ -113,10 +111,13 @@ describe('actor step scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      await ActorStep.call({
+      const room = makeTestRoom('', '', '', [], []);
+      const player = {
         ...TEST_ACTOR,
         actorType: ActorType.PLAYER,
-      }, {
+      };
+      await SignalActorStep.call(player, {
+        actor: player,
         command: {
           index: 0,
           input: '',
@@ -126,13 +127,13 @@ describe('actor step scripts', () => {
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
+        room,
         script: createStubInstance(LocalScriptService),
-        state: {} as WorldState,
-        stateHelper,
+        state: stateHelper,
         transfer,
       });
 
-      expect(stateHelper.show).to.have.callCount(1);
+      expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWith('actor.step.command.player.verb');
     });
   });
 
@@ -144,8 +145,10 @@ describe('actor step scripts', () => {
       });
 
       const stateHelper = getStubHelper();
+      (stateHelper.find as SinonStub).returns(Promise.resolve([]));
+
       const transfer = testTransfer();
-      await ActorStepLookTarget.call({
+      await ActorLookTarget.call({
         ...TEST_ACTOR,
         actorType: ActorType.PLAYER,
       }, {
@@ -159,10 +162,7 @@ describe('actor step scripts', () => {
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
         script: createStubInstance(LocalScriptService),
-        state: {
-          rooms: [] as Array<Room>,
-        } as WorldState,
-        stateHelper,
+        state: stateHelper,
         transfer,
       }, '');
 

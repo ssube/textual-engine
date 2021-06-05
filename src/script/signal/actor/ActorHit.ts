@@ -5,7 +5,7 @@ import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/collection/map';
 
-export async function ActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
+export async function SignalActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
     throw new InvalidArgumentError('invalid entity type');
   }
@@ -13,7 +13,7 @@ export async function ActorHit(this: ScriptTarget, context: ScriptContext): Prom
   const attacker = mustExist(context.actor);
   const item = mustExist(context.item);
 
-  await context.stateHelper.show('actor.hit.hit', {
+  await context.state.show('actor.hit.hit', {
     actor: this,
     attacker,
     item,
@@ -24,8 +24,17 @@ export async function ActorHit(this: ScriptTarget, context: ScriptContext): Prom
 
   const health = decrementKey(this.stats, STAT_HEALTH, damage);
   if (health > 0) {
-    await context.stateHelper.show('actor.hit.health', { actor: this, health });
+    await context.state.show('actor.hit.health', { actor: this, health });
   } else {
-    await context.stateHelper.show('actor.hit.dead', { actor: this });
+    // drop inventory
+    const room = mustExist(context.room);
+    for (const dropItem of this.items) {
+      await context.transfer.moveItem({
+        moving: dropItem,
+        source: this,
+        target: room,
+      }, context);
+    }
+    await context.state.show('actor.hit.dead', { actor: this });
   }
 }

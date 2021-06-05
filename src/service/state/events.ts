@@ -7,6 +7,7 @@ import { LocaleContext } from '../locale';
 export interface StateJoinEvent {
   actor: Actor;
   pid: string;
+  room: Room;
 }
 
 export interface StateRoomEvent {

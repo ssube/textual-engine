@@ -1,3 +1,4 @@
+import { doesExist } from '@apextoaster/js-utils';
 import { ConfigFile } from '../../model/file/Config';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
@@ -23,4 +24,8 @@ export interface LoaderStateEvent {
 
 export interface LoaderWorldEvent {
   world: WorldTemplate;
+}
+
+export function hasPath(it: any): it is LoaderReadEvent {
+  return doesExist(it) && typeof it.path === 'string';
 }

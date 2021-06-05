@@ -13,6 +13,7 @@ export const EVENT_ACTOR_JOIN = 'actor-join';
 export const EVENT_ACTOR_OUTPUT = 'actor-output';
 export const EVENT_LOCALE_BUNDLE = 'locale-bundle';
 export const EVENT_LOADER_CONFIG = 'loader-config';
+export const EVENT_LOADER_DONE = 'loader-done';
 export const EVENT_LOADER_READ = 'loader-read';
 export const EVENT_LOADER_SAVE = 'loader-save';
 export const EVENT_LOADER_STATE = 'loader-state';
@@ -45,15 +46,17 @@ export const EVENT_NAMES = [
 ] as const;
 
 // script signals
-export const SLOT_ENTER = 'signal.enter';
-export const SLOT_GET = 'signal.get';
-export const SLOT_HIT = 'signal.hit';
-export const SLOT_STEP = 'signal.step';
-export const SLOT_USE = 'signal.use';
+export const SIGNAL_PREFIX = 'signal.';
 
-export const VERB_PREFIX = 'verbs.';
+export const SIGNAL_ENTER = 'signal.enter';
+export const SIGNAL_GET = 'signal.get';
+export const SIGNAL_HIT = 'signal.hit';
+export const SIGNAL_STEP = 'signal.step';
+export const SIGNAL_USE = 'signal.use';
 
 // common verbs
+export const VERB_PREFIX = 'verbs.';
+
 export const VERB_DROP = 'verbs.common.drop';
 export const VERB_HIT = 'verbs.common.hit';
 export const VERB_LOOK = 'verbs.common.look';

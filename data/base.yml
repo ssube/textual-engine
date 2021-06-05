@@ -125,9 +125,8 @@ worlds:
                     {{actor.meta.name}} will $t({{command.verb}}) the next turn.
                   target: |-
                     {{actor.meta.name}} will $t({{command.verb}}) the {{command.target}}.
-
                 unknown: |-
-                  {{actor.meta.name}} does not know how to {{command.verb}}!
+                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
               move:
                 missing: |-
                   {{command.target}} is not a portal!
@@ -396,6 +395,10 @@ worlds:
                 data: !map {}
                 name:
                   base: room-step
+              verbs.common.move:
+                data: !map {}
+                name:
+                  base: ''
               verbs.world.slog:
                 data: !map {}
                 name:

@@ -9,10 +9,12 @@ import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
 import { BaseTemplate, Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
+import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE } from '../../module';
 import { Counter } from '../../service/counter';
 import { RandomGenerator } from '../../service/random';
+import { CreateParams } from '../../service/state';
 import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
@@ -133,6 +135,15 @@ export class StateEntityGenerator {
     return items;
   }
 
+  public async createMetadata(template: TemplateMetadata, type: string): Promise<Metadata> {
+    return {
+      desc: this.template.renderString(template.desc),
+      id: `${template.id}-${this.counter.next(type)}`,
+      name: this.template.renderString(template.name),
+      template: template.id,
+    };
+  }
+
   public async createRoom(template: Template<Room>): Promise<Room> {
     const room: Room = {
       type: ROOM_TYPE,
@@ -148,20 +159,48 @@ export class StateEntityGenerator {
     return room;
   }
 
-  public async createMetadata(template: TemplateMetadata, type: string): Promise<Metadata> {
-    return {
-      desc: this.template.renderString(template.desc),
-      id: `${template.id}-${this.counter.next(type)}`,
-      name: this.template.renderString(template.name),
-      template: template.id,
-    };
-  }
-
   public async createScripts(template: TemplatePrimitive<ScriptMap>, type: WorldEntityType): Promise<ScriptMap> {
     const world = this.getWorld();
     const baseScripts = this.template.renderScriptMap(world.defaults[type].scripts);
     const scripts = this.template.renderScriptMap(template);
     return mergeMap(baseScripts, scripts);
+  }
+
+  public async createState(world: WorldTemplate, params: CreateParams): Promise<WorldState> {
+    // reseed the prng
+    this.random.reseed(params.seed); // TODO: fast-forward to last state
+
+    // pick a starting room and populate it
+    const roomRef = randomItem(world.start.rooms, this.random);
+    const roomTemplate = findByTemplateId(world.templates.rooms, roomRef.id);
+    if (isNil(roomTemplate)) {
+      throw new NotFoundError('invalid start room');
+    }
+
+    this.logger.debug({
+      roomRef,
+      roomTemplate,
+    }, 'creating start room');
+
+    const startRoom = await this.createRoom(roomTemplate);
+    const rooms = await this.populateRoom(startRoom, params.depth);
+    rooms.unshift(startRoom);
+
+    const meta = await this.createMetadata(world.meta, 'world');
+    return {
+      meta,
+      rooms,
+      start: {
+        room: startRoom.meta.id,
+      },
+      step: {
+        time: 0,
+        turn: 0,
+      },
+      world: {
+        ...params,
+      },
+    };
   }
 
   /**
@@ -196,6 +235,11 @@ export class StateEntityGenerator {
     }
   }
 
+  public async modifyMetadata(target: Metadata, mod: ModifierMetadata): Promise<void> {
+    target.desc = this.template.modifyString(target.desc, mod.desc);
+    target.name = this.template.modifyString(target.name, mod.name);
+  }
+
   /**
    * Select some modifiers and mutate the given room.
    */
@@ -214,11 +258,6 @@ export class StateEntityGenerator {
       const items = await this.createItemList(mod.items);
       target.items.push(...items);
     }
-  }
-
-  public async modifyMetadata(target: Metadata, mod: ModifierMetadata): Promise<void> {
-    target.desc = this.template.modifyString(target.desc, mod.desc);
-    target.name = this.template.modifyString(target.name, mod.name);
   }
 
   public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<BaseModifier<TBase>> {

@@ -38,11 +38,13 @@ export interface EventBus extends EventEmitter {
 
   emit(name: 'locale-bundle', event: LocaleBundleEvent): boolean;
 
+  emit(name: 'loader-config', event: LoaderConfigEvent): boolean;
+
+  emit(name: 'loader-done', event: LoaderReadEvent): boolean;
+
   emit(name: 'loader-read', event: LoaderReadEvent): boolean;
 
   emit(name: 'loader-save', event: LoaderSaveEvent): boolean;
-
-  emit(name: 'loader-config', event: LoaderConfigEvent): boolean;
 
   emit(name: 'loader-state', event: LoaderStateEvent): boolean;
 
@@ -78,9 +80,10 @@ export interface EventBus extends EventEmitter {
   on(name: 'actor-join', handler: EventHandler<ActorJoinEvent>, group?: EventGroup): this;
   on(name: 'actor-output', handler: EventHandler<LineEvent>, group?: EventGroup): this;
   on(name: 'locale-bundle', handler: EventHandler<LocaleBundleEvent>, group?: EventGroup): this;
+  on(name: 'loader-config', handler: EventHandler<LoaderConfigEvent>, group?: EventGroup): this;
+  on(name: 'loader-done', handler: EventHandler<LoaderReadEvent>, group?: EventGroup): this;
   on(name: 'loader-read', handler: EventHandler<LoaderReadEvent>, group?: EventGroup): this;
   on(name: 'loader-save', handler: EventHandler<LoaderSaveEvent>, group?: EventGroup): this;
-  on(name: 'loader-config', handler: EventHandler<LoaderConfigEvent>, group?: EventGroup): this;
   on(name: 'loader-state', handler: EventHandler<LoaderStateEvent>, group?: EventGroup): this;
   on(name: 'loader-world', handler: EventHandler<LoaderWorldEvent>, group?: EventGroup): this;
   on(name: 'render-output', handler: EventHandler<LineEvent>, group?: EventGroup): this;

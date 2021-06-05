@@ -6,6 +6,7 @@ This guide describes what each service does.
 
 - [Services](#services)
   - [Contents](#contents)
+  - [Summary](#summary)
   - [Actor Service](#actor-service)
     - [Behavior Actor](#behavior-actor)
     - [Player Actor](#player-actor)
@@ -38,6 +39,33 @@ This guide describes what each service does.
   - [Tokenizer Service](#tokenizer-service)
     - [Natural Tokenizer](#natural-tokenizer)
     - [Word Tokenizer](#word-tokenizer)
+  - [Service Utilities](#service-utilities)
+    - [Service Manager](#service-manager)
+
+## Summary
+
+| type      | name          | eventing | coupled                        |
+| --------- | ------------- | -------- | ------------------------------ |
+| actor     | behavior      | yes      | uses locale, tokenizer         |
+| actor     | player        | yes      | uses locale, tokenizer         |
+| counter   | local         |          | used by state                  |
+| event     | node          | yes      |                                |
+| loader    | browser fetch | yes      |                                |
+| loader    | browser page  | yes      |                                |
+| loader    | node fetch    | yes      |                                |
+| loader    | node file     | yes      |                                |
+| locale    | next          | yes      | used by actor                  |
+| parser    | yaml          |          | child of loader                |
+| random    | alea          |          | used by many                   |
+| random    | math          |          | used by many                   |
+| render    | browser DOM   | yes      |                                |
+| render    | node line     | yes      |                                |
+| render    | node Ink      | yes      |                                |
+| script    | local         | yes      |                                |
+| state     | local         | yes      | uses counter, random, template |
+| template  | chain         |          | child of state                 |
+| tokenizer | natural       | yes      | child of actor                 |
+| tokenizer | word          | yes      | child of actor                 |
 
 ## Actor Service
 
@@ -61,11 +89,15 @@ In-memory incrementing integer counter.
 
 ## Event Service
 
-Ship events between services.
+Ship events between services, typically within the same process.
+
+In the current architecture, some services are still tightly coupled where eventing would be
+prohibitively expensive compared to the underlying operator, or it occurs frequently enough that the event
+flow would be difficult to track. The random number generator and localization service are good examples.
 
 ### Node Event Bus
 
-Uses Node's EventEmitter or polyfill.
+Uses Node's EventEmitter or polyfill for in-process eventing.
 
 ## Loader Service
 
@@ -113,7 +145,7 @@ Provides translations.
 
 ### Next Locale
 
-Based on i18next.
+Uses [i18next](https://www.i18next.com/) for localization of input verbs and output strings.
 
 ## Parser Service
 
@@ -121,7 +153,10 @@ The parser service parses data files loaded by the loader service.
 
 ### YAML Parser
 
-js-yaml based with extended types.
+Uses [js-yaml](https://github.com/nodeca/js-yaml) to parse JSON and YAML, with an extended schema:
+
+- `!env` includes environment variables
+- `!map` produces a JS `Map` from a dict
 
 ## Random Service
 
@@ -189,11 +224,16 @@ Use natural language processing to tag parts of speech and build a command.
 
 Simple positional arguments, split on whitespace and with articles removed.
 
-The first word is the verb, and the last word is considered an index, if it is numeric.
+The first word is the verb, and the last word is considered an index if it is numeric.
 
 For example:
 
-```none
-move west
-hit goblin 2
-```
+- `move west` becomes a command with the verb `move` and target `west`
+- `hit goblin 2` becomes a command with the verb `hit`, target `goblin`, and index `2`
+
+## Service Utilities
+
+### Service Manager
+
+This is a small lifecycle manager for the configurable services, creating them from a DI container and calling the
+`start()` and `stop()` lifecycle methods to attach and detach services from the event bus.

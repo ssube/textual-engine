@@ -1,6 +1,7 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 
 import { LoaderService } from '..';
+import { splitPath } from '../../../util/string';
 import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
 
 export class BrowserPageLoader extends BaseLoader implements LoaderService {
@@ -26,11 +27,9 @@ export class BrowserPageLoader extends BaseLoader implements LoaderService {
   }
 
   public async loadStr(fullPath: string): Promise<string> {
-    const { path } = this.splitPath(fullPath);
+    const { path } = splitPath(fullPath);
     const elem = mustExist(this.dom.getElementById(path));
-    const text = mustExist(elem.textContent);
-
-    return text;
+    return mustExist(elem.textContent);
   }
 
   public async saveStr(path: string, data: string): Promise<void> {

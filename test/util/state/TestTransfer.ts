@@ -3,9 +3,10 @@ import { expect } from 'chai';
 
 import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { ScriptContext } from '../../../src/service/script';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
-import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity';
 import { getStubHelper, getTestContainer, getTestLogger } from '../../helper';
 
 describe('state transfer utils', () => {
@@ -14,11 +15,9 @@ describe('state transfer utils', () => {
       const actor = makeTestActor('bun', 'bun', 'bun');
       const sourceRoom = makeTestRoom('foo', 'foo', 'foo', [actor], []);
       const targetRoom = makeTestRoom('bar', 'bar', 'bar', [], []);
-      const state = makeTestState('', [sourceRoom, targetRoom]);
 
       const container = await getTestContainer(new CoreModule());
       const transfer = await container.create(StateEntityTransfer);
-      transfer.setState(state);
 
       await transfer.moveActor({
         moving: actor,
@@ -29,8 +28,7 @@ describe('state transfer utils', () => {
         logger: getTestLogger(),
         random: await container.create(MathRandomGenerator),
         script: await container.create(LocalScriptService),
-        state,
-        stateHelper: getStubHelper(),
+        state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
       });
 
@@ -45,19 +43,16 @@ describe('state transfer utils', () => {
       const item = makeTestItem('bun', 'bun', 'bun');
       const sourceRoom = makeTestRoom('foo', 'foo', 'foo', [], [item]);
       const targetRoom = makeTestRoom('bar', 'bar', 'bar', [], []);
-      const state = makeTestState('', [sourceRoom, targetRoom]);
 
       const container = await getTestContainer(new CoreModule());
       const transfer = await container.create(StateEntityTransfer);
-      transfer.setState(state);
 
-      const context = {
+      const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
         random: await container.create(MathRandomGenerator),
         script: await container.create(LocalScriptService),
-        state,
-        stateHelper: getStubHelper(),
+        state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
       };
 
@@ -76,9 +71,7 @@ describe('state transfer utils', () => {
     xit('should only target rooms');
     xit('should only move actors that are within the source room');
     xit('should invoke the enter script on the destination room');
-
-    // should this one exist or is that too internal?
-    xit('should not modify the moving object when the source and target are the same');
+    xit('should handle the source and target being the same');
   });
 
   describe('move item helper', () => {

@@ -3,7 +3,7 @@ import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { isItem } from '../../../model/entity/Item';
 
-export async function ItemStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
+export async function SignalItemStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({
     meta: this.meta,
     scope: Object.keys(context),

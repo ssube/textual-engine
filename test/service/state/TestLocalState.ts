@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
@@ -11,13 +12,17 @@ import { INJECT_EVENT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
-import { StateOutputEvent } from '../../../src/service/state/events';
+import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../../../src/service/state/events';
 import { LocalStateService } from '../../../src/service/state/LocalState';
+import { ShowVolume } from '../../../src/util/actor';
 import { onceEvent } from '../../../src/util/async/event';
 import {
+  EVENT_ACTOR_JOIN,
   EVENT_LOADER_SAVE,
   EVENT_LOADER_WORLD,
+  EVENT_STATE_JOIN,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_ROOM,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -26,6 +31,7 @@ import {
   META_VERBS,
   META_WORLDS,
   TEMPLATE_CHANCE,
+  VERB_WAIT,
 } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
 import { getTestContainer } from '../../helper';
@@ -115,33 +121,74 @@ const TEST_WORLD: WorldTemplate = {
     desc: { base: 'foo', type: 'string' },
   },
   start: {
-    actors: [],
+    actors: [{
+      chance: TEMPLATE_CHANCE,
+      id: TEST_ACTOR.base.meta.id,
+      type: 'id',
+    }],
     rooms: [{
       chance: TEMPLATE_CHANCE,
-      id: 'bar',
+      id: TEST_ROOM.base.meta.id,
       type: 'id',
     }],
   },
   templates: {
-    actors: [],
+    actors: [TEST_ACTOR],
     items: [],
     rooms: [TEST_ROOM],
   },
 };
 
 describe('local state service', () => {
-  it('should not step without state', async () => {
-    const module = new CoreModule();
-    const container = await getTestContainer(module);
+  describe('player join event', () => {
+    it('should create an actor when a player first joins', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
 
-    const state = await container.create(LocalStateService);
-    await state.start();
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
 
-    return expect(state.step()).to.eventually.be.rejectedWith(NotInitializedError);
+      await localState.doCreate(TEST_WORLD.meta.id, 1);
+
+      const actors = await localState.stepFind({
+        type: ACTOR_TYPE,
+      });
+      expect(actors).to.have.lengthOf(0);
+
+      const pendingJoin = onceEvent<StateJoinEvent>(events, EVENT_STATE_JOIN);
+      const pendingRoom = onceEvent<StateRoomEvent>(events, EVENT_STATE_ROOM);
+
+      const pid = 'player-0';
+      events.emit(EVENT_ACTOR_JOIN, {
+        pid,
+      });
+
+      const join = await pendingJoin;
+      expect(join.pid).to.equal(pid);
+      expect(join.actor.meta.id).to.equal(pid);
+
+      const players = await localState.stepFind({
+        meta: {
+          id: pid,
+        },
+        type: ACTOR_TYPE,
+      });
+      expect(players).to.have.lengthOf(1);
+
+      const room = await pendingRoom;
+      expect(room.actor).to.equal(join.actor);
+      expect(room.room).to.equal(join.room);
+    });
+
+    xit('should use an existing actor when a player rejoins');
   });
 
-  xit('should add actor when a player joins');
-  xit('should register world templates when they load');
+  describe('world load event', () => {
+    xit('should register world templates when they load');
+  });
 
   describe('create command', () => {
     xit('should handle world templates without any rooms');
@@ -392,10 +439,74 @@ describe('local state service', () => {
     });
   });
 
+  // any non-meta commands
+  describe('step commands', () => {
+    it('should not step without actor', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate(TEST_WORLD.meta.id, 1);
+
+      const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      await state.onCommand({
+        command: {
+          index: 0,
+          input: '',
+          target: '',
+          verb: VERB_WAIT,
+        },
+      });
+
+      const output = await pending;
+      expect(output.line).to.equal('meta.step.none');
+    });
+
+    it('should not step without state', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      await state.onCommand({
+        actor: {} as Actor,
+        command: {
+          index: 0,
+          input: '',
+          target: '',
+          verb: VERB_WAIT,
+        },
+      });
+
+      const output = await pending;
+      expect(output.line).to.equal('meta.step.none');
+    });
+  });
+
   describe('state step', () => {
     xit('should invoke step script on each room');
     xit('should invoke step script on each actor');
     xit('should invoke step script on each item');
+
+    it('should not step without state', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      return expect(state.step()).to.eventually.be.rejectedWith(NotInitializedError);
+    });
   });
 
   describe('step enter helper', () => {
@@ -404,7 +515,26 @@ describe('local state service', () => {
   });
 
   describe('step find helper', () => {
-    xit('should search state');
+    it('should search state', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate(TEST_WORLD.meta.id, 1);
+
+      const results = await state.stepFind({
+        type: ROOM_TYPE,
+      });
+
+      expect(results).to.have.lengthOf(1);
+    });
   });
 
   describe('step move helper', () => {
@@ -414,6 +544,26 @@ describe('local state service', () => {
   });
 
   describe('step show helper', () => {
-    xit('should emit messages');
+    it('should emit messages', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate(TEST_WORLD.meta.id, 1);
+
+      const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      await state.stepShow('foo', {}, ShowVolume.SELF);
+
+      const output = await pending;
+      expect(output.line).to.equal('foo');
+      expect(output.volume).to.equal(ShowVolume.SELF);
+    });
   });
 });

@@ -71,9 +71,7 @@ describe('state transfer utils', () => {
     xit('should only target rooms');
     xit('should only move actors that are within the source room');
     xit('should invoke the enter script on the destination room');
-
-    // should this one exist or is that too internal?
-    xit('should not modify the moving object when the source and target are the same');
+    xit('should handle the source and target being the same');
   });
 
   describe('move item helper', () => {

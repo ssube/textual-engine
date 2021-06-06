@@ -1,4 +1,4 @@
-import { constructorName, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
@@ -7,7 +7,8 @@ import { RenderService } from '.';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
 import { onceEvent } from '../../util/async/event';
 import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, META_QUIT } from '../../util/constants';
-import { EventBus, LineEvent } from '../event';
+import { ActorOutputEvent } from '../actor/events';
+import { EventBus } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
 import { StateRoomEvent } from '../state/events';
@@ -78,14 +79,14 @@ export class LineRender implements RenderService {
 
       this.logger.debug({ line }, 'read line');
       this.event.emit(EVENT_RENDER_OUTPUT, {
-        lines: [line],
+        line,
       });
     });
 
     this.reader.on('SIGINT', () => {
       this.logger.debug('sending interrupt as quit command');
       this.event.emit(EVENT_RENDER_OUTPUT, {
-        lines: [META_QUIT],
+        line: META_QUIT,
       });
     });
 
@@ -100,24 +101,17 @@ export class LineRender implements RenderService {
   }
 
   /**
-   * Handler for output line events received from state service.
+   * Handler for output line events received from actor service.
    */
-  public onOutput(event: LineEvent): void {
-    this.logger.debug({ event }, 'handling output event from state');
-
-    if (!Array.isArray(event.lines)) {
-      throw new InvalidArgumentError('please batch output');
-    }
+  public onOutput(event: ActorOutputEvent): void {
+    this.logger.debug({ event }, 'handling output event from actor');
 
     if (this.padPrompt) {
       // a prompt was being shown, move to a newline before output
       this.showSync('');
     }
 
-    for (const line of event.lines) {
-      this.showSync(line);
-    }
-
+    this.showSync(event.line);
     this.showPrompt();
   }
 

@@ -5,7 +5,6 @@ import * as React from 'react';
 
 import { RenderService } from '..';
 import { Frame } from '../../../component/ink/Frame';
-import { EVENT_RENDER_OUTPUT } from '../../../util/constants';
 import { BaseReactRender } from './BaseRender';
 
 /**
@@ -26,26 +25,6 @@ export class InkRender extends BaseReactRender implements RenderService {
     mustExist(this.ink).unmount();
 
     return super.stop();
-  }
-
-  /**
-   * Handler for lines received from the React tree.
-   */
-  public nextLine(line: string): void {
-    this.logger.debug({ line }, 'handling line event from React');
-
-    // update inner state
-    this.input = line;
-
-    // append to buffer
-    this.output.push(`${this.prompt} > ${this.input}`);
-
-    // forward event to state
-    if (line.length > 0) {
-      this.event.emit(EVENT_RENDER_OUTPUT, {
-        lines: [line],
-      });
-    }
   }
 
   protected renderRoot(): void {

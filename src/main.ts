@@ -91,9 +91,7 @@ export async function main(args: Array<string>): Promise<number> {
     // await output before next command
     const pending = onceEvent(events, EVENT_ACTOR_OUTPUT);
     events.emit(EVENT_RENDER_OUTPUT, {
-      lines: [
-        input,
-      ],
+      line: input,
     });
     await pending;
   }

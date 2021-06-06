@@ -5,7 +5,6 @@ import { render, unmountComponentAtNode } from 'react-dom';
 
 import { RenderService } from '..';
 import { Frame } from '../../../component/react/Frame';
-import { EVENT_RENDER_OUTPUT } from '../../../util/constants';
 import { BaseReactRender } from './BaseRender';
 
 /**
@@ -27,26 +26,6 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
     unmountComponentAtNode(elem);
 
     return super.stop();
-  }
-
-  /**
-   * Handler for lines received from the React tree.
-   */
-  public nextLine(line: string): void {
-    this.logger.debug({ line }, 'handling line event from React');
-
-    // update inner state
-    this.input = line;
-
-    // append to buffer
-    this.output.push(`${this.prompt} > ${this.input}`);
-
-    if (line.length > 0) {
-      // forward event to state
-      this.event.emit(EVENT_RENDER_OUTPUT, {
-        lines: [line],
-      });
-    }
   }
 
   protected renderRoot(): void {

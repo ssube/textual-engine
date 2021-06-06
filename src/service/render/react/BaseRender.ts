@@ -5,8 +5,15 @@ import { RenderService } from '..';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
 import { debounce } from '../../../util/async/Debounce';
 import { onceEvent } from '../../../util/async/event';
-import { EVENT_ACTOR_OUTPUT, EVENT_COMMON_QUIT, EVENT_STATE_ROOM, EVENT_STATE_STEP } from '../../../util/constants';
-import { EventBus, LineEvent } from '../../event';
+import {
+  EVENT_ACTOR_OUTPUT,
+  EVENT_COMMON_QUIT,
+  EVENT_RENDER_OUTPUT,
+  EVENT_STATE_ROOM,
+  EVENT_STATE_STEP,
+} from '../../../util/constants';
+import { ActorOutputEvent } from '../../actor/events';
+import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
 import { StateRoomEvent } from '../../state/events';
@@ -73,8 +80,8 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   public async read(): Promise<string> {
-    const event = await onceEvent<LineEvent>(this.event, EVENT_ACTOR_OUTPUT);
-    return event.lines[0];
+    const event = await onceEvent<ActorOutputEvent>(this.event, EVENT_ACTOR_OUTPUT);
+    return event.line;
   }
 
   public async show(msg: string): Promise<void> {
@@ -82,16 +89,11 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   /**
-   * Handler for output line events received from state service.
+   * Handler for output line events received from actor service.
    */
-  public onOutput(event: LineEvent): void {
-    this.logger.debug({ event }, 'handling output event from state');
-
-    if (!Array.isArray(event.lines)) {
-      throw new InvalidArgumentError('please batch output');
-    }
-
-    this.output.push(...event.lines);
+  public onOutput(event: ActorOutputEvent): void {
+    this.logger.debug({ event }, 'handling output event from actor');
+    this.output.push(event.line);
     this.renderRoot();
   }
 
@@ -120,5 +122,25 @@ export abstract class BaseReactRender implements RenderService {
     this.step = event;
     this.setPrompt(`turn ${this.step.turn}`);
     this.renderRoot();
+  }
+
+  /**
+   * Handler for lines received from the React tree.
+   */
+  public nextLine(line: string): void {
+    this.logger.debug({ line }, 'handling line event from React');
+
+    // update inner state
+    this.input = line;
+
+    // append to buffer
+    this.output.push(`${this.prompt} > ${this.input}`);
+
+    if (line.length > 0) {
+      // forward event to state
+      this.event.emit(EVENT_RENDER_OUTPUT, {
+        line,
+      });
+    }
   }
 }

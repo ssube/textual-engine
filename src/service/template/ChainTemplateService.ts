@@ -71,6 +71,9 @@ export class ChainTemplateService implements TemplateService {
     return result;
   }
 
+  /**
+   * @todo implement script modifiers
+   */
   public modifyScriptMap(target: ScriptMap, mods: ModifierPrimitive<ScriptMap>): ScriptMap {
     return target;
   }

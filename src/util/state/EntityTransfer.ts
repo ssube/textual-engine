@@ -4,7 +4,6 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem, Item } from '../../model/entity/Item';
 import { isRoom, Room } from '../../model/entity/Room';
-import { WorldState } from '../../model/world/State';
 import { INJECT_LOGGER } from '../../module';
 import { ScriptContext } from '../../service/script';
 import { SIGNAL_ENTER, SIGNAL_GET } from '../constants';

@@ -3,7 +3,7 @@ import { doesExist, mustCoalesce } from '@apextoaster/js-utils';
 import { WorldEntity, WorldEntityType } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
-import { isRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
+import { isRoom, Room } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
 import { DEFAULT_MATCHERS } from '../entity';

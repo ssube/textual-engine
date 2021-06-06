@@ -1,6 +1,8 @@
 // numeric
 export const BYTE_RANGE = 255;
+export const HISTORY_SIZE = 20;
 export const PORTAL_DEPTH = 4;
+export const RENDER_DELAY = 50;
 export const TEMPLATE_CHANCE = 100;
 
 // common events

@@ -1,8 +1,10 @@
 import * as React from 'react';
 
 import { StepResult } from '../../service/state';
+import { HISTORY_SIZE } from '../../util/constants';
 import { Output } from './Output';
 import { Quit } from './Quit';
+import { Shortcuts } from './Shortcuts';
 
 const { useState } = React;
 
@@ -14,9 +16,7 @@ interface FrameProps {
   step: StepResult;
 }
 
-const HISTORY_SIZE = 20;
-
-export const Frame = (props: FrameProps) => {
+export const Frame = (props: FrameProps): JSX.Element => {
   const [line, setLine] = useState('');
   const output = props.output.slice(-HISTORY_SIZE);
 
@@ -42,5 +42,6 @@ export const Frame = (props: FrameProps) => {
         <input type="submit" value="Go" />
       </form>}
     </div>
+    <Shortcuts />
   </div>;
 };

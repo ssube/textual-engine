@@ -1,5 +1,5 @@
 import * as React from 'react';
 
-export const Quit = () => <div>
+export const Quit = (): JSX.Element => <div>
   <div>Game Over</div>
 </div>;

@@ -1,4 +1,4 @@
-import { doesExist, mustExist } from '@apextoaster/js-utils';
+import { doesExist } from '@apextoaster/js-utils';
 import { Instance as InkInstance, render } from 'ink';
 import { Inject } from 'noicejs';
 import * as React from 'react';
@@ -22,12 +22,15 @@ export class InkRender extends BaseReactRender implements RenderService {
 
   public async stop(): Promise<void> {
     this.logger.debug('stopping Ink render');
-    mustExist(this.ink).unmount();
+
+    if (doesExist(this.ink)) {
+      this.ink.unmount();
+    }
 
     return super.stop();
   }
 
-  protected renderRoot(): void {
+  public update(): void {
     const elem = React.createElement(Frame, {
       onLine: (line: string) => this.nextLine(line),
       output: this.output,

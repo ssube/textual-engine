@@ -5,7 +5,6 @@ import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent } from '../actor/ev
 import { LoaderConfigEvent, LoaderReadEvent, LoaderSaveEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleBundleEvent } from '../locale/events';
 import { RenderOutputEvent } from '../render/events';
-import { StepResult } from '../state';
 import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent, StateStepEvent } from '../state/events';
 
 /**

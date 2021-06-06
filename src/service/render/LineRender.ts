@@ -58,7 +58,7 @@ export class LineRender implements RenderService {
     mustExist(this.reader).setPrompt(prompt);
   }
 
-  public async show(msg: string): Promise<void> {
+  public show(msg: string): void {
     this.showSync(msg);
   }
 
@@ -98,6 +98,11 @@ export class LineRender implements RenderService {
 
   public async stop(): Promise<void> {
     mustExist(this.reader).close();
+  }
+
+
+  public update(): void {
+    /* noop */
   }
 
   /**

@@ -58,14 +58,15 @@ export class LocalScriptService implements ScriptService {
   }
 
   public async invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void> {
-    this.logger.debug({ slot, target }, 'trying to invoke slot on target');
+    this.logger.debug({ slot, target: target.meta.id }, 'trying to invoke slot on target');
 
     const scripts = getVerbScripts(scope);
     mergeMap(scripts, getSignalScripts(target));
 
     const scriptRef = scripts.get(slot);
     if (isNil(scriptRef)) {
-      this.logger.debug({ slot, scripts, target }, 'target does not have a script defined for slot');
+      const scriptNames = Array.from(scripts.keys());
+      this.logger.debug({ slot, scriptNames, target: target.meta.id }, 'target does not have a script defined for slot');
       return;
     }
 
@@ -78,7 +79,7 @@ export class LocalScriptService implements ScriptService {
       return;
     }
 
-    this.logger.debug({ scriptRef, target }, 'invoking script on target');
+    this.logger.debug({ scriptRef, target: target.meta.id }, 'invoking script on target');
 
     try {
       await scriptName.call(target, {

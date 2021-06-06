@@ -1,4 +1,4 @@
-import { constructorName, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
@@ -11,6 +11,7 @@ import {
   EVENT_RENDER_OUTPUT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
+  RENDER_DELAY,
 } from '../../../util/constants';
 import { ActorOutputEvent } from '../../actor/events';
 import { EventBus } from '../../event';
@@ -38,7 +39,9 @@ export abstract class BaseReactRender implements RenderService {
   protected quit: boolean;
   protected step: StepResult;
 
-  protected derender: () => void;
+  protected slowUpdate: () => void;
+
+  public abstract update(): void;
 
   constructor(options: BaseRenderOptions) {
     this.event = mustExist(options[INJECT_EVENT]);
@@ -47,7 +50,7 @@ export abstract class BaseReactRender implements RenderService {
       kind: constructorName(this),
     });
 
-    this.derender = debounce(100, () => this.renderRoot());
+    this.slowUpdate = debounce(RENDER_DELAY, () => this.update());
 
     this.input = '';
     this.output = [];
@@ -60,8 +63,8 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   public async start(): Promise<void> {
-    this.renderRoot();
     this.setPrompt(`turn ${this.step.turn}`);
+    this.update();
 
     this.event.on(EVENT_ACTOR_OUTPUT, (output) => this.onOutput(output), this);
     this.event.on(EVENT_COMMON_QUIT, () => this.onQuit(), this);
@@ -73,14 +76,12 @@ export abstract class BaseReactRender implements RenderService {
     this.event.removeGroup(this);
   }
 
-  protected abstract renderRoot(): void;
-
   public setPrompt(prompt: string): void {
     this.prompt = prompt;
   }
 
   public async read(): Promise<string> {
-    const event = await onceEvent<ActorOutputEvent>(this.event, EVENT_ACTOR_OUTPUT);
+    const event = await onceEvent<ActorOutputEvent>(this.event, EVENT_RENDER_OUTPUT);
     return event.line;
   }
 
@@ -94,7 +95,7 @@ export abstract class BaseReactRender implements RenderService {
   public onOutput(event: ActorOutputEvent): void {
     this.logger.debug({ event }, 'handling output event from actor');
     this.output.push(event.line);
-    this.renderRoot();
+    this.slowUpdate();
   }
 
   /**
@@ -103,7 +104,7 @@ export abstract class BaseReactRender implements RenderService {
   public onQuit(): void {
     this.logger.debug('handling quit event from state');
     this.quit = true;
-    this.renderRoot();
+    this.update();
   }
 
   /**
@@ -113,7 +114,7 @@ export abstract class BaseReactRender implements RenderService {
     this.logger.debug(result, 'handling room event from state');
 
     this.setPrompt(`turn ${this.step.turn}`);
-    this.renderRoot();
+    this.slowUpdate();
   }
 
   public onStep(event: StateStepEvent): void {
@@ -121,7 +122,7 @@ export abstract class BaseReactRender implements RenderService {
 
     this.step = event.step;
     this.setPrompt(`turn ${this.step.turn}`);
-    this.renderRoot();
+    this.update();
   }
 
   /**

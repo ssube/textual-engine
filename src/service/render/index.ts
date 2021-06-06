@@ -12,7 +12,7 @@ export interface RenderService {
   /**
    * Buffer and show a line of output.
    */
-  show(msg: string): Promise<void>;
+  show(msg: string): void;
 
   /**
    * Start the rendering system and start accepting input.
@@ -25,4 +25,6 @@ export interface RenderService {
    * Shut down the rendering subsystem and release resources, unmount elements, and stop accepting input.
    */
   stop(): Promise<void>;
+
+  update(): void;
 }

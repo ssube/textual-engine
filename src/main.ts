@@ -17,6 +17,7 @@ import {
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_OUTPUT,
+  EVENT_STATE_STEP,
 } from './util/constants';
 import { ServiceManager } from './util/service/ServiceManager';
 
@@ -95,6 +96,14 @@ export async function main(args: Array<string>): Promise<number> {
     });
     await pending;
   }
+
+  // trigger the first render
+  events.emit(EVENT_STATE_STEP, {
+    step: {
+      time: 0,
+      turn: 0,
+    },
+  });
 
   // wait for something to quit
   await onceEvent(events, 'quit');

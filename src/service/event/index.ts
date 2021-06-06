@@ -6,7 +6,7 @@ import { LoaderConfigEvent, LoaderReadEvent, LoaderSaveEvent, LoaderStateEvent, 
 import { LocaleBundleEvent } from '../locale/events';
 import { RenderOutputEvent } from '../render/events';
 import { StepResult } from '../state';
-import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
+import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent, StateStepEvent } from '../state/events';
 
 /**
  * @todo find a better type, probably `Service`, so the bus can reach out to groups and request they stop themselves
@@ -61,7 +61,7 @@ export interface EventBus extends EventEmitter {
   /**
    * @todo event type
    */
-  emit(name: 'state-step', event: StepResult): boolean;
+  emit(name: 'state-step', event: StateStepEvent): boolean;
 
   /**
    * Untranslated output coming from state service.
@@ -87,7 +87,7 @@ export interface EventBus extends EventEmitter {
   on(name: 'state-join', handler: EventHandler<StateJoinEvent>, group?: EventGroup): this;
   on(name: 'state-load', handler: EventHandler<StateLoadEvent>, group?: EventGroup): this;
   on(name: 'state-room', handler: EventHandler<StateRoomEvent>, group?: EventGroup): this;
-  on(name: 'state-step', handler: EventHandler<StepResult>, group?: EventGroup): this;
+  on(name: 'state-step', handler: EventHandler<StateStepEvent>, group?: EventGroup): this;
   on(name: 'state-output', handler: EventHandler<StateOutputEvent>, group?: EventGroup): this;
 
   removeGroup(group: EventGroup): void;

@@ -16,7 +16,7 @@ import { ActorOutputEvent } from '../../actor/events';
 import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
-import { StateRoomEvent } from '../../state/events';
+import { StateRoomEvent, StateStepEvent } from '../../state/events';
 
 export interface BaseRenderOptions extends BaseOptions {
   [INJECT_EVENT]?: EventBus;
@@ -116,10 +116,10 @@ export abstract class BaseReactRender implements RenderService {
     this.renderRoot();
   }
 
-  public onStep(event: StepResult): void {
+  public onStep(event: StateStepEvent): void {
     this.logger.debug({ event }, 'handling step event from state');
 
-    this.step = event;
+    this.step = event.step;
     this.setPrompt(`turn ${this.step.turn}`);
     this.renderRoot();
   }

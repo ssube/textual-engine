@@ -542,8 +542,10 @@ export class LocalStateService implements StateService {
         size: this.commandQueue.size,
         verb: command.verb,
       }, 'queue completed on command');
-      const result = await this.step();
-      this.event.emit(EVENT_STATE_STEP, result);
+      const step = await this.step();
+      this.event.emit(EVENT_STATE_STEP, {
+        step,
+      });
     }
   }
 

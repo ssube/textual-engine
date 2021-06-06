@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { match } from 'sinon';
 
 import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
@@ -8,7 +7,6 @@ import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent } from '../../../sr
 import { PlayerActorService } from '../../../src/service/actor/PlayerActor';
 import { EventBus } from '../../../src/service/event';
 import { LocaleService } from '../../../src/service/locale';
-import { StateLoadEvent } from '../../../src/service/state/events';
 import { ShowVolume } from '../../../src/util/actor';
 import { onceEvent } from '../../../src/util/async/event';
 import {

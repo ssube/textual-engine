@@ -6,7 +6,7 @@ import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { ShowVolume, StateSource } from '../../../util/actor';
 import { getKey } from '../../../util/collection/map';
 import { STAT_HEALTH } from '../../../util/constants';
-import { getVerbScripts } from '../../../util/state';
+import { getVerbScripts } from '../../../util/script';
 
 export async function SignalActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   context.logger.debug({

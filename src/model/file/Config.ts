@@ -16,6 +16,7 @@ export interface ConfigLogger {
 }
 
 export interface ConfigServiceRef {
+  data?: any;
   kind: string;
   name: string;
 }
@@ -23,7 +24,6 @@ export interface ConfigServiceRef {
 export interface ConfigServices {
   actors: Array<ConfigServiceRef>;
   loaders: Array<ConfigServiceRef>;
-  // locales: Array<ConfigServiceRef>;
   renders: Array<ConfigServiceRef>;
   states: Array<ConfigServiceRef>;
 }
@@ -35,6 +35,24 @@ export interface ConfigFile {
   };
   services: ConfigServices;
 }
+
+export const CONFIG_SERVICE_SCHEMA: JSONSchemaType<ConfigServiceRef> = {
+  type: 'object',
+  properties: {
+    data: {
+      type: 'object',
+      nullable: true,
+      required: [],
+    },
+    kind: {
+      type: 'string',
+    },
+    name: {
+      type: 'string',
+    },
+  },
+  required: ['kind', 'name'],
+};
 
 export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
   type: 'object',
@@ -90,7 +108,26 @@ export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
     },
     services: {
       type: 'object',
-      required: [],
+      properties: {
+        actors: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
+        loaders: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
+        renders: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
+        states: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
+
+      },
+      required: ['actors', 'loaders', 'renders', 'states'],
     },
   },
   required: [

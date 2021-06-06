@@ -1,6 +1,8 @@
 // numeric
 export const BYTE_RANGE = 255;
+export const HISTORY_SIZE = 20;
 export const PORTAL_DEPTH = 4;
+export const RENDER_DELAY = 50;
 export const TEMPLATE_CHANCE = 100;
 
 // common events
@@ -11,6 +13,7 @@ export const EVENT_COMMON_QUIT = 'quit';
 export const EVENT_ACTOR_COMMAND = 'actor-command';
 export const EVENT_ACTOR_JOIN = 'actor-join';
 export const EVENT_ACTOR_OUTPUT = 'actor-output';
+export const EVENT_ACTOR_ROOM = 'actor-room';
 export const EVENT_LOCALE_BUNDLE = 'locale-bundle';
 export const EVENT_LOADER_CONFIG = 'loader-config';
 export const EVENT_LOADER_DONE = 'loader-done';
@@ -29,6 +32,7 @@ export const EVENT_NAMES = [
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_ROOM,
   EVENT_COMMON_ERROR,
   EVENT_COMMON_QUIT,
   EVENT_LOADER_CONFIG,

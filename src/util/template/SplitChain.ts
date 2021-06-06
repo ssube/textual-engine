@@ -1,5 +1,5 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
-import { alt, createLanguage, regexp, string, empty } from 'parsimmon';
+import { alt, createLanguage, regexp, string } from 'parsimmon';
 
 import { InputChain } from '.';
 
@@ -13,7 +13,7 @@ export interface SplitOptions {
 
 export function splitChain(input: string, options: SplitOptions): InputChain {
   const lang = createLanguage<{
-    Empty: string,
+    Empty: string;
     List: InputChain;
     Token: string;
     Top: InputChain;

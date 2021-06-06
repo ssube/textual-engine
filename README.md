@@ -21,7 +21,7 @@ See [the demo on Github Pages](https://ssube.github.io/textual-engine/) or [the 
   - entity scripts
   - event broadcast
   - localization of both input and output (with [i18next](https://github.com/i18next/i18next))
-  - multiple data sources (fetch and file in Node CLI, fetch and page element in browser)
+  - multiple data loaders (fetch, file, and page elements)
   - multiple rendering engines ([readline](https://nodejs.org/api/readline.html), [Ink](https://github.com/vadimdemedes/ink), and [React](https://github.com/facebook/react/))
 - planned:
   - natural language processing for input

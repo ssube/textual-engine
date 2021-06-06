@@ -1,18 +1,12 @@
 import { EventEmitter } from 'events';
+import { ActorRoomError } from '../../error/ActorRoomError';
 
 import { ErrorHandler, EventHandler } from '../../util/async/event';
-import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
+import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent, ActorRoomEvent } from '../actor/events';
 import { LoaderConfigEvent, LoaderReadEvent, LoaderSaveEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleBundleEvent } from '../locale/events';
-import { StepResult } from '../state';
-import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
-
-/**
- * Line-driven IO, between actor and render.
- */
-export interface LineEvent {
-  lines: Array<string>;
-}
+import { RenderOutputEvent } from '../render/events';
+import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent, StateStepEvent } from '../state/events';
 
 /**
  * @todo find a better type, probably `Service`, so the bus can reach out to groups and request they stop themselves
@@ -34,7 +28,9 @@ export interface EventBus extends EventEmitter {
   /**
    * Translated output coming from actor service.
    */
-  emit(name: 'actor-output', event: LineEvent): boolean;
+  emit(name: 'actor-output', event: ActorOutputEvent): boolean;
+
+  emit(name: 'actor-room', event: ActorRoomEvent): boolean;
 
   emit(name: 'locale-bundle', event: LocaleBundleEvent): boolean;
 
@@ -53,7 +49,7 @@ export interface EventBus extends EventEmitter {
   /**
    * Unparsed input coming from render service.
    */
-  emit(name: 'render-output', event: LineEvent): boolean;
+  emit(name: 'render-output', event: RenderOutputEvent): boolean;
 
   emit(name: 'state-join', event: StateJoinEvent): boolean;
 
@@ -64,7 +60,10 @@ export interface EventBus extends EventEmitter {
    */
   emit(name: 'state-room', event: StateRoomEvent): boolean;
 
-  emit(name: 'state-step', event: StepResult): boolean;
+  /**
+   * @todo event type
+   */
+  emit(name: 'state-step', event: StateStepEvent): boolean;
 
   /**
    * Untranslated output coming from state service.
@@ -78,7 +77,8 @@ export interface EventBus extends EventEmitter {
   // service events
   on(name: 'actor-command', handler: EventHandler<ActorCommandEvent>, group?: EventGroup): this;
   on(name: 'actor-join', handler: EventHandler<ActorJoinEvent>, group?: EventGroup): this;
-  on(name: 'actor-output', handler: EventHandler<LineEvent>, group?: EventGroup): this;
+  on(name: 'actor-output', handler: EventHandler<ActorOutputEvent>, group?: EventGroup): this;
+  on(name: 'actor-room', handler: EventHandler<ActorRoomEvent>, group?: EventGroup): this;
   on(name: 'locale-bundle', handler: EventHandler<LocaleBundleEvent>, group?: EventGroup): this;
   on(name: 'loader-config', handler: EventHandler<LoaderConfigEvent>, group?: EventGroup): this;
   on(name: 'loader-done', handler: EventHandler<LoaderReadEvent>, group?: EventGroup): this;
@@ -86,11 +86,11 @@ export interface EventBus extends EventEmitter {
   on(name: 'loader-save', handler: EventHandler<LoaderSaveEvent>, group?: EventGroup): this;
   on(name: 'loader-state', handler: EventHandler<LoaderStateEvent>, group?: EventGroup): this;
   on(name: 'loader-world', handler: EventHandler<LoaderWorldEvent>, group?: EventGroup): this;
-  on(name: 'render-output', handler: EventHandler<LineEvent>, group?: EventGroup): this;
+  on(name: 'render-output', handler: EventHandler<RenderOutputEvent>, group?: EventGroup): this;
   on(name: 'state-join', handler: EventHandler<StateJoinEvent>, group?: EventGroup): this;
   on(name: 'state-load', handler: EventHandler<StateLoadEvent>, group?: EventGroup): this;
   on(name: 'state-room', handler: EventHandler<StateRoomEvent>, group?: EventGroup): this;
-  on(name: 'state-step', handler: EventHandler<StepResult>, group?: EventGroup): this;
+  on(name: 'state-step', handler: EventHandler<StateStepEvent>, group?: EventGroup): this;
   on(name: 'state-output', handler: EventHandler<StateOutputEvent>, group?: EventGroup): this;
 
   removeGroup(group: EventGroup): void;

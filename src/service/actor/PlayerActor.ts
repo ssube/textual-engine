@@ -13,6 +13,7 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_OUTPUT,
@@ -22,8 +23,10 @@ import {
   EVENT_STATE_ROOM,
 } from '../../util/constants';
 import { Counter } from '../counter';
-import { EventBus, LineEvent } from '../event';
+import { EventBus } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
+import { RenderOutputEvent } from '../render/events';
+import { StepResult } from '../state';
 import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
 import { TokenizerService } from '../tokenizer';
 
@@ -78,7 +81,7 @@ export class PlayerActorService implements ActorService {
       ]), this.logger, 'error translating verbs');
     }, this);
     this.event.on(EVENT_RENDER_OUTPUT, (event) => {
-      catchAndLog(this.onInput(event), this.logger, 'error during render output');
+      catchAndLog(this.onRenderOutput(event), this.logger, 'error during render output');
     }, this);
     this.event.on(EVENT_STATE_JOIN, (event) => {
       this.onJoin(event);
@@ -92,10 +95,10 @@ export class PlayerActorService implements ActorService {
       this.onRoom(event);
     }, this);
     this.event.on(EVENT_STATE_OUTPUT, (event) => {
-      catchAndLog(this.onOutput(event), this.logger, 'error during state output');
+      catchAndLog(this.onStateOutput(event), this.logger, 'error during state output');
     }, this);
     this.event.on(EVENT_COMMON_QUIT, () => {
-      catchAndLog(this.showLine('meta.quit'), this.logger, 'error sending quit output');
+      catchAndLog(this.showLine({ time: 0, turn: 0 }, 'meta.quit'), this.logger, 'error sending quit output');
     }, this);
   }
 
@@ -121,18 +124,30 @@ export class PlayerActorService implements ActorService {
     if (event.room.actors.find((it) => it.meta.id === this.pid)) {
       this.logger.debug({ event }, 'updating own room');
       this.room = event.room;
+
+      this.event.emit(EVENT_ACTOR_ROOM, {
+        room: event.room,
+      });
     }
   }
 
-  public async onInput(event: LineEvent): Promise<void> {
+  public async onRenderOutput(event: RenderOutputEvent): Promise<void> {
     this.logger.debug({ event }, 'tokenizing input');
 
-    for (const line of event.lines) {
-      await this.parseLine(line);
+    const commands = await this.tokenizer.parse(event.line);
+    this.logger.debug({ commands, event }, 'parsed input line');
+
+    this.history.push(...commands);
+    for (const command of commands) {
+      this.event.emit(EVENT_ACTOR_COMMAND, {
+        actor: this.actor,
+        command,
+        room: this.room,
+      });
     }
   }
 
-  public async onOutput(event: StateOutputEvent): Promise<void> {
+  public async onStateOutput(event: StateOutputEvent): Promise<void> {
     this.logger.debug({ event }, 'filtering output');
 
     if (doesExist(this.actor) && doesExist(this.room) && doesExist(event.source)) {
@@ -147,27 +162,14 @@ export class PlayerActorService implements ActorService {
     }
 
     this.logger.debug({ event }, 'translating output');
-    return this.showLine(event.line, event.context);
+    return this.showLine(event.step, event.line, event.context);
   }
 
-  public async parseLine(line: string): Promise<void> {
-    const commands = await this.tokenizer.parse(line);
-    this.logger.debug({ line, commands }, 'parsed input line');
-
-    this.history.push(...commands);
-    for (const command of commands) {
-      this.event.emit(EVENT_ACTOR_COMMAND, {
-        actor: this.actor,
-        command,
-        room: this.room,
-      });
-    }
-  }
-
-  public async showLine(key: string, context?: LocaleContext): Promise<void> {
+  public async showLine(step: StepResult, key: string, context?: LocaleContext): Promise<void> {
     const line = this.locale.translate(key, context);
     this.event.emit(EVENT_ACTOR_OUTPUT, {
-      lines: [line],
+      line,
+      step,
     });
   }
 }

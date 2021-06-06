@@ -46,7 +46,7 @@ import {
   SIGNAL_STEP,
   VERB_PREFIX,
 } from '../../util/constants';
-import { findRoom, getVerbScripts, SearchParams, searchState } from '../../util/state';
+import { getVerbScripts } from '../../util/script';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import {
@@ -56,11 +56,12 @@ import {
   ItemTransfer,
   StateEntityTransfer,
 } from '../../util/state/EntityTransfer';
+import { findMatching, findRoom, SearchFilter } from '../../util/state/search';
 import { findByTemplateId } from '../../util/template';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
-import { hasPath, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
+import { hasState, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
 import { ScriptContext, ScriptService, SuppliedScope } from '../script';
@@ -134,6 +135,50 @@ export class LocalStateService implements StateService {
     this.event.removeGroup(this);
   }
 
+// #region event handlers
+  /**
+   * Step the internal world state, simulating some turns and time passing.
+   */
+  public async onCommand(event: ActorCommandEvent): Promise<void> {
+    const { actor, command } = event;
+
+    this.logger.debug({
+      actor,
+      command,
+    }, 'handling command event');
+
+    // handle meta commands
+    switch (command.verb) {
+      case META_CREATE:
+        await this.doCreate(command.target, command.index);
+        break;
+      case META_DEBUG:
+        await this.doDebug();
+        break;
+      case META_GRAPH:
+        await this.doGraph(command.target);
+        break;
+      case META_HELP:
+        await this.doHelp(event);
+        break;
+      case META_LOAD:
+        await this.doLoad(command.target);
+        break;
+      case META_QUIT:
+        await this.doQuit();
+        break;
+      case META_SAVE:
+        await this.doSave(command.target);
+        break;
+      case META_WORLDS:
+        await this.doWorlds();
+        break;
+      default: {
+        await this.doStep(event);
+      }
+    }
+  }
+
   /**
    * A new player is joining and their actor must be found or created.
    */
@@ -142,7 +187,7 @@ export class LocalStateService implements StateService {
     const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
     // find an existing actor, if one exists
-    const [existingActor] = searchState(state, {
+    const [existingActor] = findMatching(state, {
       meta: {
         id: event.pid,
       },
@@ -213,89 +258,9 @@ export class LocalStateService implements StateService {
     this.logger.debug({ world: world.meta.id }, 'registering loaded world');
     this.worlds.push(world);
   }
+// #endregion event handlers
 
-  /**
-   * Step the internal world state, simulating some turns and time passing.
-   */
-  public async onCommand(event: ActorCommandEvent): Promise<void> {
-    const { actor, command } = event;
-
-    this.logger.debug({
-      actor,
-      command,
-    }, 'handling command event');
-
-    // handle meta commands
-    switch (command.verb) {
-      case META_CREATE:
-        await this.doCreate(command.target, command.index);
-        break;
-      case META_DEBUG:
-        await this.doDebug();
-        break;
-      case META_GRAPH:
-        await this.doGraph(command.target);
-        break;
-      case META_HELP:
-        await this.doHelp(event);
-        break;
-      case META_LOAD:
-        await this.doLoad(command.target);
-        break;
-      case META_QUIT:
-        await this.doQuit();
-        break;
-      case META_SAVE:
-        await this.doSave(command.target);
-        break;
-      case META_WORLDS:
-        await this.doWorlds();
-        break;
-      default: {
-        await this.doStep(event);
-      }
-    }
-  }
-
-  /**
-   * Perform the next world state step.
-   */
-  public async doStep(event: ActorCommandEvent): Promise<void> {
-    const { actor, command } = event;
-
-    // if there is no world state, there won't be an actor, but this error is more informative
-    if (isNil(actor) || isNil(this.state)) {
-      this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.step.none',
-        step: {
-          time: 0,
-          turn: 0,
-        },
-        volume: ShowVolume.WORLD,
-      });
-      return;
-    }
-
-    this.commandBuffer.push(actor, command);
-    this.logger.debug({
-      actor: actor.meta.id,
-      left: this.commandQueue.remaining().map((it) => it.meta.id),
-      size: this.commandQueue.size,
-      verb: command.verb,
-    }, 'pushing command to queue');
-
-    // step world after last actor acts
-    if (this.commandQueue.complete(actor)) {
-      this.logger.debug({
-        actor: actor.meta.id,
-        size: this.commandQueue.size,
-        verb: command.verb,
-      }, 'queue completed on command');
-      const result = await this.step();
-      this.event.emit(EVENT_STATE_STEP, result);
-    }
-  }
-
+// #region meta commands
   /**
    * Create a new world and invite players to join.
    */
@@ -449,7 +414,7 @@ export class LocalStateService implements StateService {
     });
 
     const event = await Promise.race([doneEvent, stateEvent]);
-    if (hasPath(event)) {
+    if (!hasState(event)) {
       this.logger.debug({ event }, 'path read event received first');
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
@@ -523,20 +488,65 @@ export class LocalStateService implements StateService {
       worlds: [world],
     };
 
+    const pendingSave = onceEvent<LoaderReadEvent>(this.event, EVENT_LOADER_DONE);
+
     this.event.emit(EVENT_LOADER_SAVE, {
       data,
       path,
     });
 
+    const save = await pendingSave;
+
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
         meta: state.meta,
-        path,
+        path: save.path,
       },
       line: 'meta.save.state',
       step: state.step,
       volume: ShowVolume.WORLD,
     });
+  }
+
+  /**
+   * Perform the next world state step.
+   */
+  public async doStep(event: ActorCommandEvent): Promise<void> {
+    const { actor, command } = event;
+
+    // if there is no world state, there won't be an actor, but this error is more informative
+    if (isNil(actor) || isNil(this.state)) {
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        line: 'meta.step.none',
+        step: {
+          time: 0,
+          turn: 0,
+        },
+        volume: ShowVolume.WORLD,
+      });
+      return;
+    }
+
+    this.commandBuffer.push(actor, command);
+    this.logger.debug({
+      actor: actor.meta.id,
+      left: this.commandQueue.remaining().map((it) => it.meta.id),
+      size: this.commandQueue.size,
+      verb: command.verb,
+    }, 'pushing command to queue');
+
+    // step world after last actor acts
+    if (this.commandQueue.complete(actor)) {
+      this.logger.debug({
+        actor: actor.meta.id,
+        size: this.commandQueue.size,
+        verb: command.verb,
+      }, 'queue completed on command');
+      const step = await this.step();
+      this.event.emit(EVENT_STATE_STEP, {
+        step,
+      });
+    }
   }
 
   public async doWorlds(): Promise<void> {
@@ -555,6 +565,7 @@ export class LocalStateService implements StateService {
       });
     }
   }
+// #endregion meta commands
 
   public async step(): Promise<StepResult> {
     if (isNil(this.state)) {
@@ -641,6 +652,7 @@ export class LocalStateService implements StateService {
     };
   }
 
+// #region state access callbacks
   /**
    * Handler for a room change from the state helper.
    */
@@ -652,8 +664,8 @@ export class LocalStateService implements StateService {
     }
   }
 
-  public async stepFind(search: Partial<SearchParams>): Promise<Array<WorldEntity>> {
-    return searchState(mustExist(this.state), search);
+  public async stepFind(search: SearchFilter): Promise<Array<WorldEntity>> {
+    return findMatching(mustExist(this.state), search);
   }
 
   public async stepMove(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void> {
@@ -682,6 +694,7 @@ export class LocalStateService implements StateService {
       volume,
     });
   }
+// #endregion state access callbacks
 
   /**
    * Emit changed rooms to relevant actors.
@@ -723,5 +736,4 @@ export class LocalStateService implements StateService {
       throw new Error('actor has not queued a command: ' + actor.meta.id);
     }
   }
-
 }

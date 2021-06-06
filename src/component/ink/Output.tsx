@@ -1,19 +1,13 @@
 import { Newline, Text } from 'ink';
 import * as React from 'react';
 
-interface OutputProps {
-  output: Array<string>;
-}
+import { OutputProps } from '../shared';
 
-export const Output = (props: OutputProps) => {
-  return <Text>
-    <Text>Output: {props.output.length} lines</Text>
+export const Output = (props: OutputProps): JSX.Element => <Text>
+  <Text>Output: {props.output.length} lines</Text>
+  <Newline />
+  {props.output.map((line, idx) => <Text key={idx}>
+    <Text color="green">{line}</Text>
     <Newline />
-    {props.output.map((line, idx) => {
-      return <Text key={idx}>
-        <Text color="green">{line}</Text>
-        <Newline />
-      </Text>;
-    })}
-  </Text>;
-};
+  </Text>)}
+</Text>;

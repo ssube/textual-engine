@@ -1,10 +1,9 @@
-import { constructorName, mustExist } from '@apextoaster/js-utils';
+import { constructorName, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem, Item } from '../../model/entity/Item';
-import { Room } from '../../model/entity/Room';
-import { WorldState } from '../../model/world/State';
+import { isRoom, Room } from '../../model/entity/Room';
 import { INJECT_LOGGER } from '../../module';
 import { ScriptContext } from '../../service/script';
 import { SIGNAL_ENTER, SIGNAL_GET } from '../constants';
@@ -42,14 +41,20 @@ export class StateEntityTransfer {
     const { moving, source, target } = transfer;
 
     if (!isActor(moving)) {
-      this.logger.warn(transfer, 'moving entity is not an actor');
-      return;
+      throw new InvalidArgumentError('moving entity must be an actor');
+    }
+
+    if (!isRoom(source)) {
+      throw new InvalidArgumentError('source entity must be a room');
+    }
+
+    if (!isRoom(target)) {
+      throw new InvalidArgumentError('target entity must be a room');
     }
 
     const idx = source.actors.indexOf(moving);
     if (idx < 0) {
-      this.logger.warn(moving, 'source does not directly contain moving entity');
-      return;
+      throw new InvalidArgumentError('source entity does not contain moving entity');
     }
 
     // move the actor
@@ -79,25 +84,26 @@ export class StateEntityTransfer {
     const { moving, source, target } = transfer;
 
     if (!isItem(moving)) {
-      this.logger.warn({ transfer }, 'moving entity is not an item');
-      return;
+      throw new InvalidArgumentError('moving entity must be an item');
     }
 
+    if (isItem(source)) {
+      throw new InvalidArgumentError('source entity must be an actor or room');
+    }
+
+    if (isItem(target)) {
+      throw new InvalidArgumentError('target entity must be an actor or room');
+    }
+
+    // check this before the more expensive indexOf
     if (source === target) {
-      this.logger.debug({ transfer }, 'cannot transfer item between the same source and target');
-      return;
-    }
-
-    // ensure source and dest are both actor/room (types are greatly narrowed after these guards)
-    if (isItem(source) || isItem(target)) {
-      this.logger.warn({ source, target, transfer }, 'invalid source or target entity type');
+      this.logger.debug({ transfer }, 'source and target entity are the same, skipping transfer');
       return;
     }
 
     const idx = source.items.indexOf(moving);
     if (idx < 0) {
-      this.logger.warn({ source, transfer }, 'source does not directly contain moving entity');
-      return;
+      throw new InvalidArgumentError('source entity does not contain moving entity');
     }
 
     // move target from source to dest

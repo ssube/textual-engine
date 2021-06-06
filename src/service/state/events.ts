@@ -10,11 +10,6 @@ export interface StateJoinEvent {
   room: Room;
 }
 
-export interface StateRoomEvent {
-  actor: Actor;
-  room: Room;
-}
-
 export interface StateLoadEvent {
   state: string;
   world: string;
@@ -42,4 +37,13 @@ export interface StateOutputEvent {
   step: StepResult;
 
   volume: ShowVolume;
+}
+
+export interface StateRoomEvent {
+  actor: Actor;
+  room: Room;
+}
+
+export interface StateStepEvent {
+  step: StepResult;
 }

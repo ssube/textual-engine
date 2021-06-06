@@ -60,7 +60,7 @@ import { findByTemplateId } from '../../util/template';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
-import { hasPath, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
+import { hasState, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
 import { ScriptContext, ScriptService, SuppliedScope } from '../script';
@@ -449,7 +449,7 @@ export class LocalStateService implements StateService {
     });
 
     const event = await Promise.race([doneEvent, stateEvent]);
-    if (hasPath(event)) {
+    if (!hasState(event)) {
       this.logger.debug({ event }, 'path read event received first');
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
@@ -523,15 +523,19 @@ export class LocalStateService implements StateService {
       worlds: [world],
     };
 
+    const pendingSave = onceEvent<LoaderReadEvent>(this.event, EVENT_LOADER_DONE);
+
     this.event.emit(EVENT_LOADER_SAVE, {
       data,
       path,
     });
 
+    const save = await pendingSave;
+
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
         meta: state.meta,
-        path,
+        path: save.path,
       },
       line: 'meta.save.state',
       step: state.step,

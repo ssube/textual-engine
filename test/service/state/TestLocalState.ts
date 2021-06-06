@@ -2,6 +2,7 @@
 import { mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
+import { stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { Actor, ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
@@ -12,30 +13,38 @@ import { INJECT_EVENT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
-import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../../../src/service/state/events';
+import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent } from '../../../src/service/state/events';
 import { LocalStateService } from '../../../src/service/state/LocalState';
 import { ShowVolume } from '../../../src/util/actor';
 import { onceEvent } from '../../../src/util/async/event';
 import {
   EVENT_ACTOR_JOIN,
+  EVENT_LOADER_DONE,
+  EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,
+  EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
   EVENT_STATE_JOIN,
+  EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
   META_HELP,
+  META_LOAD,
   META_QUIT,
+  META_SAVE,
   META_VERBS,
   META_WORLDS,
   TEMPLATE_CHANCE,
   VERB_WAIT,
 } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
+import { makeTestState } from '../../entity';
 import { getTestContainer } from '../../helper';
 
+// #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
     actorType: {
@@ -138,6 +147,7 @@ const TEST_WORLD: WorldTemplate = {
     rooms: [TEST_ROOM],
   },
 };
+// #endregion fixtures
 
 describe('local state service', () => {
   describe('player join event', () => {
@@ -385,8 +395,77 @@ describe('local state service', () => {
   });
 
   describe('load command', () => {
-    xit('should load state from path');
-    xit('should load templates from path');
+    it('should load state from path', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const state = makeTestState('', []);
+      state.meta.template = TEST_WORLD.meta.id;
+
+      // respond to reads with state
+      events.on(EVENT_LOADER_READ, (event) => {
+        events.emit(EVENT_LOADER_STATE, {
+          state,
+        });
+      });
+
+      const pendingOutput = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      const pendingLoad = onceEvent<StateLoadEvent>(events, EVENT_STATE_LOAD);
+      await localState.onCommand({
+        command: {
+          index: 1,
+          input: '',
+          target: 'test://url',
+          verb: META_LOAD,
+        },
+      });
+
+      await expect(pendingOutput).to.eventually.deep.include({
+        line: 'meta.load.state',
+      });
+      await expect(pendingLoad).to.eventually.deep.equal({
+        state: state.meta.name,
+        world: TEST_WORLD.meta.id,
+      });
+    });
+
+    it('should load templates from path', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.on(EVENT_LOADER_READ, (event) => {
+        events.emit(EVENT_LOADER_DONE, {
+          path: event.path,
+        });
+      });
+
+      const loadStub = stub();
+      events.on(EVENT_STATE_LOAD, (event) => {
+        loadStub(event);
+      });
+
+      const pendingOutput = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      await localState.onCommand({
+        command: {
+          index: 1,
+          input: '',
+          target: 'test://url',
+          verb: META_LOAD,
+        },
+      });
+
+      const output = await pendingOutput;
+      expect(output.line).to.equal('meta.load.none');
+      expect(loadStub).to.have.callCount(0);
+    });
   });
 
   describe('quit command', () => {
@@ -410,7 +489,83 @@ describe('local state service', () => {
   });
 
   describe('save command', () => {
-    xit('should save state to path');
+    it('should save state to path', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      // generate a world
+      await localState.onCommand({
+        command: {
+          index: 1,
+          input: '',
+          target: TEST_WORLD.meta.id,
+          verb: META_CREATE,
+        },
+      });
+
+      // respond to reads with state
+      const saveStub = stub();
+      events.on(EVENT_LOADER_SAVE, (event) => {
+        saveStub(event);
+        events.emit(EVENT_LOADER_DONE, {
+          path: event.path,
+        });
+      });
+
+      const pendingOutput = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      await localState.onCommand({
+        command: {
+          index: 1,
+          input: '',
+          target: 'test://url',
+          verb: META_SAVE,
+        },
+      });
+
+      await expect(pendingOutput).to.eventually.deep.include({
+        line: 'meta.save.state',
+      });
+    });
+
+    it('should print an error without state', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      // respond to reads with state
+      const saveStub = stub();
+      events.on(EVENT_LOADER_SAVE, (event) => {
+        saveStub(event);
+        events.emit(EVENT_LOADER_DONE, {
+          path: event.path,
+        });
+      });
+
+      const pendingOutput = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+      await localState.onCommand({
+        command: {
+          index: 1,
+          input: '',
+          target: 'test://url',
+          verb: META_SAVE,
+        },
+      });
+
+      await expect(pendingOutput).to.eventually.deep.include({
+        line: 'meta.save.none',
+      });
+    });
   });
 
   describe('worlds command', () => {

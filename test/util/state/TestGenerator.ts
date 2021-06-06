@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
 
@@ -253,7 +254,11 @@ const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
       base: 'default',
       type: 'string',
     },
-    items: [],
+    items: [{
+      chance: TEMPLATE_CHANCE,
+      id: TEST_ITEM.base.meta.id,
+      type: 'id',
+    }],
     meta: {
       desc: {
         base: '',
@@ -397,7 +402,17 @@ describe('state entity generator', () => {
       expect(original).not.to.equal(actor.meta.name);
     });
 
-    xit('should add inventory items');
+    it('should add inventory items', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const actor = await generator.createActor(TEST_ACTOR);
+      expect(actor.items).to.have.lengthOf(1);
+
+      await generator.modifyActor(actor, TEST_ACTOR_MODS);
+      expect(actor.items).to.have.lengthOf(2);
+    });
   });
 
   describe('modify item', () => {
@@ -451,8 +466,51 @@ describe('state entity generator', () => {
   });
 
   describe('select modifiers', () => {
-    xit('should select modifiers based on chance');
-    xit('should not select excluded modifiers');
+    it('should select modifiers based on chance', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const actor = await generator.createActor(TEST_ACTOR);
+      expect(actor.items).to.have.lengthOf(1);
+
+      await generator.modifyActor(actor, [{
+        ...TEST_ACTOR_MODS[0],
+        chance: 0,
+      }]);
+      expect(actor.items).to.have.lengthOf(1);
+    });
+
+    it('should not select excluded modifiers', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const actor = await generator.createActor(TEST_ACTOR);
+      expect(actor.items).to.have.lengthOf(1);
+
+      const mod = TEST_ACTOR_MODS[0];
+      await generator.modifyActor(actor, [{
+        ...mod,
+        excludes: ['second'],
+      }, {
+        ...mod,
+        base: {
+          ...mod.base,
+          meta: {
+            ...mod.base.meta,
+            name: {
+              base: 'second {{base}}',
+              type: 'string',
+            },
+          },
+        },
+        id: 'second',
+      }]);
+
+      expect(actor.meta.name).to.equal('foo foo');
+    });
+
     xit('should select implied modifiers unless excluded');
   });
 

@@ -99,6 +99,10 @@ export abstract class BaseLoader implements LoaderService {
       const data = this.parser.save(event.data);
       await this.saveStr(event.path, data);
     }
+
+    this.events.emit(EVENT_LOADER_DONE, {
+      path: event.path,
+    });
   }
 
   public async loadData(path: string): Promise<DataFile> {

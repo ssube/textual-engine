@@ -26,6 +26,6 @@ export interface LoaderWorldEvent {
   world: WorldTemplate;
 }
 
-export function hasPath(it: any): it is LoaderReadEvent {
-  return doesExist(it) && typeof it.path === 'string';
+export function hasState(it: any): it is LoaderStateEvent {
+  return doesExist(it) && doesExist(it.state);
 }

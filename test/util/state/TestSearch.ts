@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { WorldState } from '../../../src/model/world/State';
-import { findContainer, findRoom, searchState } from '../../../src/util/state';
+import { findContainer, findRoom, findMatching } from '../../../src/util/state/search';
 import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
 
 const TEST_STATE: WorldState = makeTestState('', [
@@ -17,7 +17,7 @@ const TEST_STATE: WorldState = makeTestState('', [
 describe('state search utils', () => {
   describe('search state helper', () => {
     it('should return matching entities', async () => {
-      const results = searchState(TEST_STATE, {
+      const results = findMatching(TEST_STATE, {
         meta: {
           id: 'bar',
         },
@@ -30,7 +30,7 @@ describe('state search utils', () => {
     });
 
     it('should skip the contents of rooms that do not match the room filter', async () => {
-      const results = searchState(TEST_STATE, {
+      const results = findMatching(TEST_STATE, {
         meta: {
           id: 'bin',
         },
@@ -105,5 +105,3 @@ describe('state search utils', () => {
     });
   });
 });
-
-

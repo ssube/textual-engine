@@ -1,8 +1,8 @@
-import { doesExist, Optional } from '@apextoaster/js-utils';
+import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
 
 import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/Metadata';
-import { SearchMatchers, SearchParams } from './state';
+import { SearchFilter, StateMatchers } from './state/search';
 import { matchIdSegments } from './string';
 import { Immutable } from './types';
 
@@ -19,7 +19,9 @@ export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<En
   return undefined;
 }
 
-export function matchEntity(entity: Immutable<Entity>, search: Partial<SearchParams>, matchers = DEFAULT_MATCHERS): boolean {
+export function matchEntity(entity: Immutable<Entity>, search: SearchFilter): boolean {
+  const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
+
   let matched = true;
 
   if (doesExist(search.type)) {
@@ -66,12 +68,12 @@ export function matchMetadataFuzzy(entity: Immutable<Entity>, filter: Partial<Me
   return matched;
 }
 
-export const DEFAULT_MATCHERS: SearchMatchers = {
+export const DEFAULT_MATCHERS: StateMatchers = {
   entity: matchEntity,
   metadata: matchMetadata,
 };
 
-export const FUZZY_MATCHERS: SearchMatchers = {
+export const FUZZY_MATCHERS: StateMatchers = {
   entity: matchEntity,
   metadata: matchMetadataFuzzy,
 };

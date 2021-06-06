@@ -18,7 +18,7 @@ import { VerbActorTake } from '../../script/verb/ActorTake';
 import { VerbActorUse } from '../../script/verb/ActorUse';
 import { VerbActorWait } from '../../script/verb/ActorWait';
 import { getSignalScripts, getVerbScripts } from '../../util/script';
-import { SearchParams } from '../../util/state';
+import { SearchFilter } from '../../util/state/search';
 
 /**
  * Common scripts, built into the engine and always available.
@@ -93,7 +93,7 @@ export class LocalScriptService implements ScriptService {
     }
   }
 
-  public async broadcast(filter: Partial<SearchParams>, slot: string, scope: SuppliedScope): Promise<void> {
+  public async broadcast(filter: SearchFilter, slot: string, scope: SuppliedScope): Promise<void> {
     const targets = await scope.state.find(filter);
 
     for (const target of targets) {

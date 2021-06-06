@@ -47,7 +47,6 @@ import {
   VERB_PREFIX,
 } from '../../util/constants';
 import { getVerbScripts } from '../../util/script';
-import { findRoom, SearchParams, searchState } from '../../util/state';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import {
@@ -57,6 +56,7 @@ import {
   ItemTransfer,
   StateEntityTransfer,
 } from '../../util/state/EntityTransfer';
+import { findMatching, findRoom, SearchFilter } from '../../util/state/search';
 import { findByTemplateId } from '../../util/template';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
@@ -187,7 +187,7 @@ export class LocalStateService implements StateService {
     const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
     // find an existing actor, if one exists
-    const [existingActor] = searchState(state, {
+    const [existingActor] = findMatching(state, {
       meta: {
         id: event.pid,
       },
@@ -662,8 +662,8 @@ export class LocalStateService implements StateService {
     }
   }
 
-  public async stepFind(search: Partial<SearchParams>): Promise<Array<WorldEntity>> {
-    return searchState(mustExist(this.state), search);
+  public async stepFind(search: SearchFilter): Promise<Array<WorldEntity>> {
+    return findMatching(mustExist(this.state), search);
   }
 
   public async stepMove(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void> {

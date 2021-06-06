@@ -22,18 +22,21 @@ import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
 import { StateStepEvent } from '../../state/events';
 
+export interface BaseRenderConfig {
+  shortcuts: boolean;
+}
 
 export interface BaseRenderOptions extends BaseOptions {
   [INJECT_EVENT]?: EventBus;
   [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
-  config?: ConfigServiceRef;
+  config?: BaseRenderConfig;
 }
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export abstract class BaseReactRender implements RenderService {
   // services
-  protected config: ConfigServiceRef;
+  protected config: BaseRenderConfig;
   protected event: EventBus;
   protected logger: Logger;
   protected locale: LocaleService;
@@ -43,8 +46,7 @@ export abstract class BaseReactRender implements RenderService {
   protected output: Array<string>;
   protected prompt: string;
   protected quit: boolean;
-  protected shortcutData: ShortcutData;
-  protected shortcutShow: boolean;
+  protected shortcuts: ShortcutData;
   protected step: StepResult;
 
   protected slowUpdate: () => void;
@@ -65,7 +67,7 @@ export abstract class BaseReactRender implements RenderService {
     this.output = [];
     this.prompt = '';
     this.quit = false;
-    this.shortcutData = {
+    this.shortcuts = {
       actors: [],
       items: [],
       portals: [],
@@ -74,12 +76,6 @@ export abstract class BaseReactRender implements RenderService {
       turn: 0,
       time: 0,
     };
-
-    if (doesExist(this.config.data)) {
-      this.shortcutShow = mustCoalesce(this.config.data.shortcuts, 'hide') === 'show';
-    } else {
-      this.shortcutShow = false;
-    }
   }
 
   public async start(): Promise<void> {
@@ -140,9 +136,9 @@ export abstract class BaseReactRender implements RenderService {
       };
     }
 
-    this.shortcutData.actors = result.room.actors.map(extractShortcut);
-    this.shortcutData.items = result.room.items.map(extractShortcut);
-    this.shortcutData.portals = result.room.portals.map((it) => ({
+    this.shortcuts.actors = result.room.actors.map(extractShortcut);
+    this.shortcuts.items = result.room.items.map(extractShortcut);
+    this.shortcuts.portals = result.room.portals.map((it) => ({
       id: `${it.sourceGroup} ${it.name}`,
       name: `${it.sourceGroup} ${it.name}`,
     }));

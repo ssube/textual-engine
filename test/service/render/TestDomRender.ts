@@ -9,14 +9,24 @@ import { EventBus } from '../../../src/service/event';
 import { RenderOutputEvent } from '../../../src/service/render/events';
 import { ReactDomRender } from '../../../src/service/render/react/DomRender';
 import { onceEvent } from '../../../src/util/async/event';
-import { EVENT_ACTOR_OUTPUT, EVENT_COMMON_QUIT, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, EVENT_STATE_STEP } from '../../../src/util/constants';
-import { makeTestActor, makeTestRoom } from '../../entity';
+import {
+  EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_ROOM,
+  EVENT_COMMON_QUIT,
+  EVENT_RENDER_OUTPUT,
+  EVENT_STATE_STEP,
+} from '../../../src/util/constants';
+import { makeTestRoom } from '../../entity';
 import { getTestContainer } from '../../helper';
 
 describe('react dom render', () => {
   it('should update the screen on actor output', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(ReactDomRender);
+    const render = await container.create(ReactDomRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -36,14 +46,17 @@ describe('react dom render', () => {
 
   it('should update the screen on room changes', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(ReactDomRender);
+    const render = await container.create(ReactDomRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    events.emit(EVENT_STATE_ROOM, {
-      actor: makeTestActor('', '', ''),
+    events.emit(EVENT_ACTOR_ROOM, {
       room: makeTestRoom('', '', '', [], []),
     });
 
@@ -52,7 +65,11 @@ describe('react dom render', () => {
 
   it('should update the screen on state steps', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(ReactDomRender);
+    const render = await container.create(ReactDomRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -70,7 +87,11 @@ describe('react dom render', () => {
 
   it('should update the screen on quit events', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(ReactDomRender);
+    const render = await container.create(ReactDomRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -83,7 +104,11 @@ describe('react dom render', () => {
 
   it('should not update the screen after being stopped', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(ReactDomRender);
+    const render = await container.create(ReactDomRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -97,7 +122,11 @@ describe('react dom render', () => {
 
   it('should buffer output to be shown later', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(ReactDomRender);
+    const render = await container.create(ReactDomRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -108,7 +137,11 @@ describe('react dom render', () => {
 
   it('should read the next submitted line', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(ReactDomRender);
+    const render = await container.create(ReactDomRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -128,7 +161,11 @@ describe('react dom render', () => {
 
   it('should not emit empty lines', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(ReactDomRender);
+    const render = await container.create(ReactDomRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();

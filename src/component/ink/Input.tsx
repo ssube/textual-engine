@@ -7,7 +7,9 @@ import { InputProps } from '../shared';
  * Wrapper for focus handling.
  */
 export const Input = (props: InputProps): JSX.Element => {
-  const {isFocused} = useFocus();
+  const {isFocused} = useFocus({
+    autoFocus: true,
+  });
 
   return <TextInput
     focus={isFocused}

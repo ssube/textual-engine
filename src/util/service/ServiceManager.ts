@@ -1,3 +1,4 @@
+import { mustCoalesce } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject } from 'noicejs';
 import { ConfigServices } from '../../model/file/Config';
 import { Service } from '../../service';
@@ -21,7 +22,7 @@ export class ServiceManager {
   public async create(config: ConfigServices): Promise<void> {
     for (const loader of config.loaders) {
       const svc = await this.container.create<LocaleService, BaseOptions>(loader.kind, {
-        config: loader,
+        config: mustCoalesce(loader.data, {}),
       });
       await svc.start();
 
@@ -30,7 +31,7 @@ export class ServiceManager {
 
     for (const actor of config.actors) {
       const svc = await this.container.create<LocaleService, BaseOptions>(actor.kind, {
-        config: actor,
+        config: mustCoalesce(actor.data, {}),
       });
       await svc.start();
 
@@ -39,7 +40,7 @@ export class ServiceManager {
 
     for (const render of config.renders) {
       const svc = await this.container.create<LocaleService, BaseOptions>(render.kind, {
-        config: render,
+        config: mustCoalesce(render.data, {}),
       });
       await svc.start();
 
@@ -48,7 +49,7 @@ export class ServiceManager {
 
     for (const state of config.states) {
       const svc = await this.container.create<StateService, BaseOptions>(state.kind, {
-        config: state,
+        config: mustCoalesce(state.data, {}),
       });
       await svc.start();
 

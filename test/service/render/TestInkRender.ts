@@ -7,14 +7,18 @@ import { CoreModule } from '../../../src/module/CoreModule';
 import { NodeModule } from '../../../src/module/NodeModule';
 import { EventBus } from '../../../src/service/event';
 import { InkRender } from '../../../src/service/render/react/InkRender';
-import { EVENT_ACTOR_OUTPUT, EVENT_COMMON_QUIT, EVENT_STATE_ROOM, EVENT_STATE_STEP } from '../../../src/util/constants';
-import { makeTestActor, makeTestRoom } from '../../entity';
+import { EVENT_ACTOR_OUTPUT, EVENT_ACTOR_ROOM, EVENT_COMMON_QUIT, EVENT_STATE_STEP } from '../../../src/util/constants';
+import { makeTestRoom } from '../../entity';
 import { getTestContainer } from '../../helper';
 
 describe('react ink render', () => {
   it('should update the screen on actor output', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(InkRender);
+    const render = await container.create(InkRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -34,14 +38,17 @@ describe('react ink render', () => {
 
   it('should update the screen on room changes', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(InkRender);
+    const render = await container.create(InkRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    events.emit(EVENT_STATE_ROOM, {
-      actor: makeTestActor('', '', ''),
+    events.emit(EVENT_ACTOR_ROOM, {
       room: makeTestRoom('', '', '', [], []),
     });
 
@@ -50,7 +57,11 @@ describe('react ink render', () => {
 
   it('should update the screen on state steps', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(InkRender);
+    const render = await container.create(InkRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -68,7 +79,11 @@ describe('react ink render', () => {
 
   it('should update the screen on quit events', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(InkRender);
+    const render = await container.create(InkRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();
@@ -81,7 +96,11 @@ describe('react ink render', () => {
 
   it('should not update the screen after being stopped', async () => {
     const container = await getTestContainer(new CoreModule(), new NodeModule());
-    const render = await container.create(InkRender);
+    const render = await container.create(InkRender, {
+      config: {
+        shortcuts: true,
+      },
+    });
     const update = stub(render, 'update');
 
     await render.start();

@@ -15,8 +15,8 @@ export interface ConfigLogger {
   }>;
 }
 
-export interface ConfigServiceRef<TData = Record<string, string>> {
-  data?: TData;
+export interface ConfigServiceRef {
+  data?: any;
   kind: string;
   name: string;
 }
@@ -24,7 +24,6 @@ export interface ConfigServiceRef<TData = Record<string, string>> {
 export interface ConfigServices {
   actors: Array<ConfigServiceRef>;
   loaders: Array<ConfigServiceRef>;
-  // locales: Array<ConfigServiceRef>;
   renders: Array<ConfigServiceRef>;
   states: Array<ConfigServiceRef>;
 }
@@ -43,11 +42,6 @@ export const CONFIG_SERVICE_SCHEMA: JSONSchemaType<ConfigServiceRef> = {
     data: {
       type: 'object',
       nullable: true,
-      patternProperties: {
-        '.+': {
-          type: 'string',
-        },
-      },
       required: [],
     },
     kind: {

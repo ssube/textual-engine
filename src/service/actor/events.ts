@@ -24,3 +24,7 @@ export interface ActorOutputEvent {
    */
   step: StepResult;
 }
+
+export interface ActorRoomEvent {
+  room: Room;
+}

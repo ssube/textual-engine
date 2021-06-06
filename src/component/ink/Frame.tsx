@@ -1,26 +1,25 @@
-import { Box, Text } from 'ink';
-import TextInput from 'ink-text-input';
+import { Box, Text, useFocusManager } from 'ink';
 import * as React from 'react';
 
-import { StepResult } from '../../service/state';
 import { HISTORY_SIZE } from '../../util/constants';
+import { FrameProps } from '../shared';
+import { Input } from './Input';
 import { Output } from './Output';
 import { Quit } from './Quit';
 import { Shortcuts } from './Shortcuts';
 
 const { useState } = React;
 
-interface FrameProps {
-  onLine: (line: string) => void;
-  prompt: string;
-  output: Array<string>;
-  step: StepResult;
-  quit: boolean;
-}
-
 export const Frame = (props: FrameProps): JSX.Element => {
   const [line, setLine] = useState('');
   const output = props.output.slice(-HISTORY_SIZE);
+
+  useFocusManager();
+
+  function sendLine(line: string) {
+    setLine('');
+    props.onLine(line);
+  }
 
   return <Box flexDirection="row">
     <Box flexDirection="column">
@@ -31,18 +30,18 @@ export const Frame = (props: FrameProps): JSX.Element => {
         <Box marginRight={1}>
           <Text color="blueBright">turn {props.step.turn} &gt;</Text>
         </Box>
-        {props.quit ? <Quit /> : <TextInput
+        {props.quit ? <Quit /> : <Input
+          line={line}
+          onLine={sendLine}
           onChange={setLine}
-          onSubmit={() => {
-            setLine('');
-            props.onLine(line);
-          }}
-          value={line}
         />}
       </Box>
     </Box>
-    <Box>
-      <Shortcuts />
+    <Box marginLeft={2}>
+      <Shortcuts
+        {...props.shortcuts}
+        onSelect={(id) => setLine(`${line} ${id}`)}
+      />
     </Box>
   </Box>;
 };

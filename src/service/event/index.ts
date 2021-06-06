@@ -1,7 +1,8 @@
 import { EventEmitter } from 'events';
+import { ActorRoomError } from '../../error/ActorRoomError';
 
 import { ErrorHandler, EventHandler } from '../../util/async/event';
-import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent } from '../actor/events';
+import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent, ActorRoomEvent } from '../actor/events';
 import { LoaderConfigEvent, LoaderReadEvent, LoaderSaveEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleBundleEvent } from '../locale/events';
 import { RenderOutputEvent } from '../render/events';
@@ -28,6 +29,8 @@ export interface EventBus extends EventEmitter {
    * Translated output coming from actor service.
    */
   emit(name: 'actor-output', event: ActorOutputEvent): boolean;
+
+  emit(name: 'actor-room', event: ActorRoomEvent): boolean;
 
   emit(name: 'locale-bundle', event: LocaleBundleEvent): boolean;
 
@@ -75,6 +78,7 @@ export interface EventBus extends EventEmitter {
   on(name: 'actor-command', handler: EventHandler<ActorCommandEvent>, group?: EventGroup): this;
   on(name: 'actor-join', handler: EventHandler<ActorJoinEvent>, group?: EventGroup): this;
   on(name: 'actor-output', handler: EventHandler<ActorOutputEvent>, group?: EventGroup): this;
+  on(name: 'actor-room', handler: EventHandler<ActorRoomEvent>, group?: EventGroup): this;
   on(name: 'locale-bundle', handler: EventHandler<LocaleBundleEvent>, group?: EventGroup): this;
   on(name: 'loader-config', handler: EventHandler<LoaderConfigEvent>, group?: EventGroup): this;
   on(name: 'loader-done', handler: EventHandler<LoaderReadEvent>, group?: EventGroup): this;

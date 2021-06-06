@@ -13,6 +13,7 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_OUTPUT,
@@ -123,6 +124,10 @@ export class PlayerActorService implements ActorService {
     if (event.room.actors.find((it) => it.meta.id === this.pid)) {
       this.logger.debug({ event }, 'updating own room');
       this.room = event.room;
+
+      this.event.emit(EVENT_ACTOR_ROOM, {
+        room: event.room,
+      });
     }
   }
 

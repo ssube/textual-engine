@@ -2,22 +2,25 @@ import { constructorName, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
+import { ShortcutData, ShortcutItem } from '../../../component/shared';
+import { Entity } from '../../../model/entity/Base';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
 import { debounce } from '../../../util/async/Debounce';
 import { onceEvent } from '../../../util/async/event';
 import {
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
   EVENT_RENDER_OUTPUT,
-  EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
   RENDER_DELAY,
 } from '../../../util/constants';
-import { ActorOutputEvent } from '../../actor/events';
+import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
 import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
-import { StateRoomEvent, StateStepEvent } from '../../state/events';
+import { StateStepEvent } from '../../state/events';
+
 
 export interface BaseRenderOptions extends BaseOptions {
   [INJECT_EVENT]?: EventBus;
@@ -37,6 +40,7 @@ export abstract class BaseReactRender implements RenderService {
   protected output: Array<string>;
   protected prompt: string;
   protected quit: boolean;
+  protected shortcuts: ShortcutData;
   protected step: StepResult;
 
   protected slowUpdate: () => void;
@@ -56,6 +60,11 @@ export abstract class BaseReactRender implements RenderService {
     this.output = [];
     this.prompt = '';
     this.quit = false;
+    this.shortcuts = {
+      actors: [],
+      items: [],
+      portals: [],
+    };
     this.step = {
       turn: 0,
       time: 0,
@@ -67,8 +76,8 @@ export abstract class BaseReactRender implements RenderService {
     this.update();
 
     this.event.on(EVENT_ACTOR_OUTPUT, (output) => this.onOutput(output), this);
+    this.event.on(EVENT_ACTOR_ROOM, (room) => this.onRoom(room), this);
     this.event.on(EVENT_COMMON_QUIT, () => this.onQuit(), this);
-    this.event.on(EVENT_STATE_ROOM, (room) => this.onRoom(room), this);
     this.event.on(EVENT_STATE_STEP, (step) => this.onStep(step), this);
   }
 
@@ -110,8 +119,22 @@ export abstract class BaseReactRender implements RenderService {
   /**
    * Handler for step events received from state service.
    */
-  public onRoom(result: StateRoomEvent): void {
+  public onRoom(result: ActorRoomEvent): void {
     this.logger.debug(result, 'handling room event from state');
+
+    function extractShortcut(entity: Entity): ShortcutItem {
+      return {
+        id: entity.meta.id,
+        name: entity.meta.name,
+      };
+    }
+
+    this.shortcuts.actors = result.room.actors.map(extractShortcut);
+    this.shortcuts.items = result.room.items.map(extractShortcut);
+    this.shortcuts.portals = result.room.portals.map((it) => ({
+      id: `${it.sourceGroup} ${it.name}`,
+      name: `${it.sourceGroup} ${it.name}`,
+    }));
 
     this.setPrompt(`turn ${this.step.turn}`);
     this.slowUpdate();

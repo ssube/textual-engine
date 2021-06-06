@@ -36,6 +36,7 @@ export class InkRender extends BaseReactRender implements RenderService {
       output: this.output,
       prompt: this.prompt,
       quit: this.quit,
+      shortcuts: this.shortcuts,
       step: this.step,
     });
 

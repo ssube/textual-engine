@@ -1,9 +1,7 @@
 import { Newline, Text } from 'ink';
 import * as React from 'react';
 
-interface OutputProps {
-  output: Array<string>;
-}
+import { OutputProps } from '../shared';
 
 export const Output = (props: OutputProps): JSX.Element => <Text>
   <Text>Output: {props.output.length} lines</Text>

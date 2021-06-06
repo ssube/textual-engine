@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-interface OutputProps {
-  output: Array<string>;
-}
+import { OutputProps } from '../shared';
 
 export const Output = (props: OutputProps): JSX.Element => <div>
   <div>Output: {props.output.length} lines</div>

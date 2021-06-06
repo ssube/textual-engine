@@ -13,6 +13,13 @@ export type Immutable<TBase> =
 
 export type KeyList<TList> = Array<keyof TList>;
 
+type FilterBase<TBase, TCond> = {
+  [TKey in keyof TBase]: TBase[TKey] extends TCond ? TKey : never;
+};
+
+export type FilterKeys<TBase, TCond> = FilterBase<TBase, TCond>[keyof TBase];
+export type Filter<TBase, TCond> = Pick<TBase, FilterKeys<TBase, TCond>>;
+
 /**
  * Remove some fields and redefine them with another type.
  */

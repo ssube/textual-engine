@@ -17,7 +17,8 @@ import { VerbActorMove } from '../../script/verb/ActorMove';
 import { VerbActorTake } from '../../script/verb/ActorTake';
 import { VerbActorUse } from '../../script/verb/ActorUse';
 import { VerbActorWait } from '../../script/verb/ActorWait';
-import { getSignalScripts, getVerbScripts, SearchParams } from '../../util/state';
+import { getSignalScripts, getVerbScripts } from '../../util/script';
+import { SearchParams } from '../../util/state';
 
 /**
  * Common scripts, built into the engine and always available.

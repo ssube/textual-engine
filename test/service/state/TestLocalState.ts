@@ -596,7 +596,7 @@ describe('local state service', () => {
 
   // any non-meta commands
   describe('step commands', () => {
-    it('should not step without actor', async () => {
+    it('should error without actor', async () => {
       const module = new CoreModule();
       const container = await getTestContainer(module);
 
@@ -624,7 +624,7 @@ describe('local state service', () => {
       expect(output.line).to.equal('meta.step.none');
     });
 
-    it('should not step without state', async () => {
+    it('should error without state', async () => {
       const module = new CoreModule();
       const container = await getTestContainer(module);
 
@@ -646,6 +646,8 @@ describe('local state service', () => {
       const output = await pending;
       expect(output.line).to.equal('meta.step.none');
     });
+
+    xit('should step after all actors have submitted a command');
   });
 
   describe('state step', () => {
@@ -653,7 +655,7 @@ describe('local state service', () => {
     xit('should invoke step script on each actor');
     xit('should invoke step script on each item');
 
-    it('should not step without state', async () => {
+    it('should error without state', async () => {
       const module = new CoreModule();
       const container = await getTestContainer(module);
 
@@ -695,7 +697,7 @@ describe('local state service', () => {
   describe('step move helper', () => {
     xit('should move actors');
     xit('should move items');
-    xit('should not allow moving rooms');
+    xit('should error when moving rooms');
   });
 
   describe('step show helper', () => {

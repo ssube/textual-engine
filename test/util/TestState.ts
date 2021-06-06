@@ -6,9 +6,12 @@ describe('state utils', () => {
     xit('should not include entities more than once');
   });
 
-  describe('search state string helper', () => {
-    xit('should find entities whose ID matches');
-    xit('should find entities whose name matches');
-    xit('should not include entities more than once');
+  describe('find room helper', () => {
+    xit('should find the room containing an entity');
+  });
+
+  describe('find container helper', () => {
+    xit('should find the actor containing an item');
+    xit('should find the room containing an entity');
   });
 });

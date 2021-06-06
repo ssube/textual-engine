@@ -20,28 +20,36 @@ export class ServiceManager {
 
   public async create(config: ConfigServices): Promise<void> {
     for (const loader of config.loaders) {
-      const svc = await this.container.create<LocaleService, BaseOptions>(loader.kind);
+      const svc = await this.container.create<LocaleService, BaseOptions>(loader.kind, {
+        config: loader,
+      });
       await svc.start();
 
       this.add(loader.name, svc);
     }
 
     for (const actor of config.actors) {
-      const svc = await this.container.create<LocaleService, BaseOptions>(actor.kind);
+      const svc = await this.container.create<LocaleService, BaseOptions>(actor.kind, {
+        config: actor,
+      });
       await svc.start();
 
       this.add(actor.name, svc);
     }
 
     for (const render of config.renders) {
-      const svc = await this.container.create<LocaleService, BaseOptions>(render.kind);
+      const svc = await this.container.create<LocaleService, BaseOptions>(render.kind, {
+        config: render,
+      });
       await svc.start();
 
       this.add(render.name, svc);
     }
 
     for (const state of config.states) {
-      const svc = await this.container.create<StateService, BaseOptions>(state.kind);
+      const svc = await this.container.create<StateService, BaseOptions>(state.kind, {
+        config: state,
+      });
       await svc.start();
 
       this.add(state.name, svc);

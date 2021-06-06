@@ -52464,6 +52464,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       });
       await pending;
     }
+    events.emit(EVENT_STATE_STEP, {
+      step: {
+        time: 0,
+        turn: 0
+      }
+    });
     await onceEvent(events, "quit");
     await services.stop();
     await locale.stop();

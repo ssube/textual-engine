@@ -19,6 +19,7 @@ export interface InputProps {
   onChange: (line: string) => void;
   onLine: (line: string) => void;
   line: string;
+  prompt: string;
 }
 
 export interface OutputProps {

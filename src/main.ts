@@ -109,7 +109,7 @@ export async function main(args: Array<string>): Promise<number> {
   await onceEvent(events, 'quit');
   await services.stop();
 
-  // TODO: clean up within services
+  // TODO: clean up with other services
   await locale.stop();
 
   // eventDebug(events);

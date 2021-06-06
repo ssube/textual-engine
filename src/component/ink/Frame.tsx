@@ -16,9 +16,9 @@ export const Frame = (props: FrameProps): JSX.Element => {
 
   useFocusManager();
 
-  function sendLine(line: string) {
+  function sendLine(value: string): void {
+    props.onLine(value);
     setLine('');
-    props.onLine(line);
   }
 
   return <Box flexDirection="row">
@@ -27,13 +27,11 @@ export const Frame = (props: FrameProps): JSX.Element => {
         <Output output={output} />
       </Box>
       <Box height={1}>
-        <Box marginRight={1}>
-          <Text color="blueBright">turn {props.step.turn} &gt;</Text>
-        </Box>
         {props.quit ? <Quit /> : <Input
           line={line}
-          onLine={sendLine}
+          prompt={props.prompt}
           onChange={setLine}
+          onLine={sendLine}
         />}
       </Box>
     </Box>

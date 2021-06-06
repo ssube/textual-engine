@@ -1,5 +1,5 @@
 import { StepResult } from '../service/state';
-import { Filter } from '../util/types';
+import { Filter, FilterKeys } from '../util/types';
 
 // shared props used by multiple React renders
 
@@ -9,6 +9,9 @@ export interface FrameProps {
   prompt: string;
   quit: boolean;
   shortcuts: ShortcutData;
+  show: {
+    shortcuts: boolean;
+  };
   step: StepResult;
 }
 
@@ -35,6 +38,7 @@ export interface ShortcutProps {
 }
 
 export type ShortcutData = Filter<ShortcutProps, Array<unknown>>;
+export type ShortcutKeys = FilterKeys<ShortcutProps, Array<unknown>>;
 
 export interface StatusItem {
   name: string;

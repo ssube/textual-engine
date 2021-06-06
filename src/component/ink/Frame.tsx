@@ -38,10 +38,10 @@ export const Frame = (props: FrameProps): JSX.Element => {
       </Box>
     </Box>
     <Box marginLeft={2}>
-      <Shortcuts
+      {props.show.shortcuts && <Shortcuts
         {...props.shortcuts}
         onSelect={(id) => setLine(`${line} ${id}`)}
-      />
+      />}
     </Box>
   </Box>;
 };

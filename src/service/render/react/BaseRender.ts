@@ -1,9 +1,10 @@
-import { constructorName, mustExist } from '@apextoaster/js-utils';
+import { constructorName, doesExist, mustCoalesce, mustExist } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
 import { ShortcutData, ShortcutItem } from '../../../component/shared';
 import { Entity } from '../../../model/entity/Base';
+import { ConfigServiceRef } from '../../../model/file/Config';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
 import { debounce } from '../../../util/async/Debounce';
 import { onceEvent } from '../../../util/async/event';
@@ -26,11 +27,13 @@ export interface BaseRenderOptions extends BaseOptions {
   [INJECT_EVENT]?: EventBus;
   [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
+  config?: ConfigServiceRef;
 }
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export abstract class BaseReactRender implements RenderService {
   // services
+  protected config: ConfigServiceRef;
   protected event: EventBus;
   protected logger: Logger;
   protected locale: LocaleService;
@@ -40,7 +43,8 @@ export abstract class BaseReactRender implements RenderService {
   protected output: Array<string>;
   protected prompt: string;
   protected quit: boolean;
-  protected shortcuts: ShortcutData;
+  protected shortcutData: ShortcutData;
+  protected shortcutShow: boolean;
   protected step: StepResult;
 
   protected slowUpdate: () => void;
@@ -48,6 +52,7 @@ export abstract class BaseReactRender implements RenderService {
   public abstract update(): void;
 
   constructor(options: BaseRenderOptions) {
+    this.config = mustExist(options.config);
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
@@ -60,7 +65,7 @@ export abstract class BaseReactRender implements RenderService {
     this.output = [];
     this.prompt = '';
     this.quit = false;
-    this.shortcuts = {
+    this.shortcutData = {
       actors: [],
       items: [],
       portals: [],
@@ -69,6 +74,12 @@ export abstract class BaseReactRender implements RenderService {
       turn: 0,
       time: 0,
     };
+
+    if (doesExist(this.config.data)) {
+      this.shortcutShow = mustCoalesce(this.config.data.shortcuts, 'hide') === 'show';
+    } else {
+      this.shortcutShow = false;
+    }
   }
 
   public async start(): Promise<void> {
@@ -129,9 +140,9 @@ export abstract class BaseReactRender implements RenderService {
       };
     }
 
-    this.shortcuts.actors = result.room.actors.map(extractShortcut);
-    this.shortcuts.items = result.room.items.map(extractShortcut);
-    this.shortcuts.portals = result.room.portals.map((it) => ({
+    this.shortcutData.actors = result.room.actors.map(extractShortcut);
+    this.shortcutData.items = result.room.items.map(extractShortcut);
+    this.shortcutData.portals = result.room.portals.map((it) => ({
       id: `${it.sourceGroup} ${it.name}`,
       name: `${it.sourceGroup} ${it.name}`,
     }));

@@ -1,12 +1,11 @@
 import * as React from 'react';
 
-import { FilterKeys } from '../../util/types';
-import { ShortcutProps } from '../shared';
+import { ShortcutKeys, ShortcutProps } from '../shared';
 
 const { useState } = React;
 
 export const Shortcuts = (props: ShortcutProps): JSX.Element => {
-  const [selected, setSelected] = useState<FilterKeys<ShortcutProps, Array<unknown>>>('actors');
+  const [selected, setSelected] = useState<ShortcutKeys>('actors');
 
   return <div>
     <div>

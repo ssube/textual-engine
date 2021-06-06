@@ -34,6 +34,6 @@ export const Frame = (props: FrameProps): JSX.Element => {
         <input type="submit" value="Go" />
       </form>}
     </div>
-    <Shortcuts {...props.shortcuts} onSelect={(id) => setLine(`${line} ${id}`)} />
+    {props.show.shortcuts && <Shortcuts {...props.shortcuts} onSelect={(id) => setLine(`${line} ${id}`)} />}
   </div>;
 };

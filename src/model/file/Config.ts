@@ -15,7 +15,8 @@ export interface ConfigLogger {
   }>;
 }
 
-export interface ConfigServiceRef {
+export interface ConfigServiceRef<TData = Record<string, string>> {
+  data?: TData;
   kind: string;
   name: string;
 }
@@ -35,6 +36,29 @@ export interface ConfigFile {
   };
   services: ConfigServices;
 }
+
+export const CONFIG_SERVICE_SCHEMA: JSONSchemaType<ConfigServiceRef> = {
+  type: 'object',
+  properties: {
+    data: {
+      type: 'object',
+      nullable: true,
+      patternProperties: {
+        '.+': {
+          type: 'string',
+        },
+      },
+      required: [],
+    },
+    kind: {
+      type: 'string',
+    },
+    name: {
+      type: 'string',
+    },
+  },
+  required: ['kind', 'name'],
+};
 
 export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
   type: 'object',
@@ -90,7 +114,26 @@ export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
     },
     services: {
       type: 'object',
-      required: [],
+      properties: {
+        actors: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
+        loaders: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
+        renders: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
+        states: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
+
+      },
+      required: ['actors', 'loaders', 'renders', 'states'],
     },
   },
   required: [

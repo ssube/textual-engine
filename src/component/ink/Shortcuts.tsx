@@ -3,8 +3,7 @@ import { Box, useFocus } from 'ink';
 import SelectInput from 'ink-select-input';
 import * as React from 'react';
 
-import { FilterKeys } from '../../util/types';
-import { ShortcutProps } from '../shared';
+import { ShortcutKeys, ShortcutProps } from '../shared';
 
 const { useState } = React;
 
@@ -18,8 +17,6 @@ const SHORTCUT_TABS = [{
   label: 'Portals',
   value: 'portals',
 }];
-
-export type ShortcutKeys = FilterKeys<ShortcutProps, Array<unknown>>;
 
 export const Shortcuts = (props: ShortcutProps): JSX.Element => {
   const [tab, setTab] = useState<ShortcutKeys>('actors');

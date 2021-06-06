@@ -12502,11 +12502,11 @@
             return dispatcher.useContext(Context, unstable_observedBits);
           }
           __name(useContext, "useContext");
-          function useState2(initialState) {
+          function useState3(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
-          __name(useState2, "useState");
+          __name(useState3, "useState");
           function useReducer(reducer, initialArg, init3) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useReducer(reducer, initialArg, init3);
@@ -13121,7 +13121,7 @@
           exports.useMemo = useMemo;
           exports.useReducer = useReducer;
           exports.useRef = useRef;
-          exports.useState = useState2;
+          exports.useState = useState3;
           exports.version = ReactVersion;
         })();
       }
@@ -13975,11 +13975,11 @@
       if (true) {
         (function() {
           "use strict";
-          var React5 = require_react();
+          var React6 = require_react();
           var _assign = require_object_assign();
           var Scheduler = require_scheduler();
           var tracing = require_tracing();
-          var ReactSharedInternals = React5.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React6.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function warn2(format2) {
             {
               for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -14014,7 +14014,7 @@
             }
           }
           __name(printWarning, "printWarning");
-          if (!React5) {
+          if (!React6) {
             {
               throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
             }
@@ -15283,7 +15283,7 @@
           var didWarnInvalidChild = false;
           function flattenChildren(children) {
             var content = "";
-            React5.Children.forEach(children, function(child) {
+            React6.Children.forEach(children, function(child) {
               if (child == null) {
                 return;
               }
@@ -15295,7 +15295,7 @@
           function validateProps(element, props) {
             {
               if (typeof props.children === "object" && props.children !== null) {
-                React5.Children.forEach(props.children, function(child) {
+                React6.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -22853,7 +22853,7 @@
           __name(commitUpdateQueue, "commitUpdateQueue");
           var fakeInternalInstance = {};
           var isArray3 = Array.isArray;
-          var emptyRefsObject = new React5.Component().refs;
+          var emptyRefsObject = new React6.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -41960,12 +41960,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   var BYTE_RANGE = 255;
+  var HISTORY_SIZE = 20;
   var PORTAL_DEPTH = 4;
+  var RENDER_DELAY = 50;
   var TEMPLATE_CHANCE = 100;
   var EVENT_COMMON_QUIT = "quit";
   var EVENT_ACTOR_COMMAND = "actor-command";
   var EVENT_ACTOR_JOIN = "actor-join";
   var EVENT_ACTOR_OUTPUT = "actor-output";
+  var EVENT_ACTOR_ROOM = "actor-room";
   var EVENT_LOCALE_BUNDLE = "locale-bundle";
   var EVENT_LOADER_CONFIG = "loader-config";
   var EVENT_LOADER_DONE = "loader-done";
@@ -42104,6 +42107,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         const data = this.parser.save(event.data);
         await this.saveStr(event.path, data);
       }
+      this.events.emit(EVENT_LOADER_DONE, {
+        path: event.path
+      });
     }
     async loadData(path) {
       return this.parser.load(await this.loadStr(path));
@@ -42181,21 +42187,19 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   var import_noicejs4 = __toModule(require_main());
-  var React4 = __toModule(require_react());
+  var React5 = __toModule(require_react());
   var import_react_dom = __toModule(require_react_dom());
 
   // out/src/component/react/Frame.js
   init_virtual_process_polyfill();
   init_buffer();
-  var React3 = __toModule(require_react());
+  var React4 = __toModule(require_react());
 
   // out/src/component/react/Output.js
   init_virtual_process_polyfill();
   init_buffer();
   var React = __toModule(require_react());
-  var Output = /* @__PURE__ */ __name((props) => {
-    return React.createElement("div", null, React.createElement("div", null, "Output: ", props.output.length, " lines"), props.output.map((line, idx) => React.createElement("div", { key: idx }, line)));
-  }, "Output");
+  var Output = /* @__PURE__ */ __name((props) => React.createElement("div", null, React.createElement("div", null, "Output: ", props.output.length, " lines"), props.output.map((line, idx) => React.createElement("div", { key: idx }, line))), "Output");
 
   // out/src/component/react/Quit.js
   init_virtual_process_polyfill();
@@ -42203,11 +42207,20 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var React2 = __toModule(require_react());
   var Quit = /* @__PURE__ */ __name(() => React2.createElement("div", null, React2.createElement("div", null, "Game Over")), "Quit");
 
-  // out/src/component/react/Frame.js
+  // out/src/component/react/Shortcuts.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var React3 = __toModule(require_react());
   var { useState } = React3;
-  var HISTORY_SIZE = 20;
+  var Shortcuts = /* @__PURE__ */ __name((props) => {
+    const [selected, setSelected] = useState("actors");
+    return React3.createElement("div", null, React3.createElement("div", null, React3.createElement("button", { onClick: () => setSelected("actors") }, "Actors"), React3.createElement("button", { onClick: () => setSelected("items") }, "Items"), React3.createElement("button", { onClick: () => setSelected("portals") }, "Portals")), React3.createElement("div", null, React3.createElement("ol", null, props[selected].map((it) => React3.createElement("li", { key: it.id }, React3.createElement("a", { onClick: () => props.onSelect(it.id) }, it.name))))));
+  }, "Shortcuts");
+
+  // out/src/component/react/Frame.js
+  var { useState: useState2 } = React4;
   var Frame = /* @__PURE__ */ __name((props) => {
-    const [line, setLine] = useState("");
+    const [line, setLine] = useState2("");
     const output2 = props.output.slice(-HISTORY_SIZE);
     function handleChange(event) {
       setLine(event.target.value);
@@ -42219,9 +42232,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       setLine("");
     }
     __name(handleSubmit, "handleSubmit");
-    return React3.createElement("div", { style: {
+    return React4.createElement("div", { style: {
       fontFamily: "monospace"
-    } }, React3.createElement(Output, { output: output2 }), React3.createElement("div", null, props.quit ? React3.createElement(Quit, null) : React3.createElement("form", { onSubmit: handleSubmit }, React3.createElement("label", null, "turn ", props.step.turn, " >", React3.createElement("input", { type: "text", value: line, onChange: handleChange })), React3.createElement("input", { type: "submit", value: "Go" }))));
+    } }, React4.createElement(Output, { output: output2 }), React4.createElement("div", null, props.quit ? React4.createElement(Quit, null) : React4.createElement("form", { onSubmit: handleSubmit }, React4.createElement("label", null, "turn ", props.step.turn, " >", React4.createElement("input", { type: "text", value: line, onChange: handleChange })), React4.createElement("input", { type: "submit", value: "Go" }))), props.show.shortcuts && React4.createElement(Shortcuts, Object.assign({}, props.shortcuts, { onSelect: (id) => setLine(`${line} ${id}`) })));
   }, "Frame");
 
   // out/src/service/render/react/BaseRender.js
@@ -42254,27 +42267,33 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/service/render/react/BaseRender.js
   var BaseReactRender = /* @__PURE__ */ __name(class BaseReactRender2 {
     constructor(options) {
+      this.config = mustExist(options.config);
       this.event = mustExist(options[INJECT_EVENT]);
       this.locale = mustExist(options[INJECT_LOCALE]);
       this.logger = mustExist(options[INJECT_LOGGER]).child({
         kind: constructorName(this)
       });
-      this.derender = debounce(100, () => this.renderRoot());
+      this.slowUpdate = debounce(RENDER_DELAY, () => this.update());
       this.input = "";
       this.output = [];
       this.prompt = "";
       this.quit = false;
+      this.shortcuts = {
+        actors: [],
+        items: [],
+        portals: []
+      };
       this.step = {
         turn: 0,
         time: 0
       };
     }
     async start() {
-      this.renderRoot();
       this.setPrompt(`turn ${this.step.turn}`);
+      this.update();
       this.event.on(EVENT_ACTOR_OUTPUT, (output2) => this.onOutput(output2), this);
+      this.event.on(EVENT_ACTOR_ROOM, (room) => this.onRoom(room), this);
       this.event.on(EVENT_COMMON_QUIT, () => this.onQuit(), this);
-      this.event.on(EVENT_STATE_ROOM, (room) => this.onRoom(room), this);
       this.event.on(EVENT_STATE_STEP, (step) => this.onStep(step), this);
     }
     async stop() {
@@ -42284,35 +42303,55 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.prompt = prompt;
     }
     async read() {
-      const event = await onceEvent(this.event, EVENT_ACTOR_OUTPUT);
-      return event.lines[0];
+      const event = await onceEvent(this.event, EVENT_RENDER_OUTPUT);
+      return event.line;
     }
     async show(msg) {
       this.output.push(msg);
     }
     onOutput(event) {
-      this.logger.debug({ event }, "handling output event from state");
-      if (!Array.isArray(event.lines)) {
-        throw new InvalidArgumentError("please batch output");
-      }
-      this.output.push(...event.lines);
-      this.renderRoot();
+      this.logger.debug({ event }, "handling output event from actor");
+      this.output.push(event.line);
+      this.slowUpdate();
     }
     onQuit() {
       this.logger.debug("handling quit event from state");
       this.quit = true;
-      this.renderRoot();
+      this.update();
     }
     onRoom(result) {
       this.logger.debug(result, "handling room event from state");
+      function extractShortcut(entity) {
+        return {
+          id: entity.meta.id,
+          name: entity.meta.name
+        };
+      }
+      __name(extractShortcut, "extractShortcut");
+      this.shortcuts.actors = result.room.actors.map(extractShortcut);
+      this.shortcuts.items = result.room.items.map(extractShortcut);
+      this.shortcuts.portals = result.room.portals.map((it) => ({
+        id: `${it.sourceGroup} ${it.name}`,
+        name: `${it.sourceGroup} ${it.name}`
+      }));
       this.setPrompt(`turn ${this.step.turn}`);
-      this.renderRoot();
+      this.slowUpdate();
     }
     onStep(event) {
       this.logger.debug({ event }, "handling step event from state");
-      this.step = event;
+      this.step = event.step;
       this.setPrompt(`turn ${this.step.turn}`);
-      this.renderRoot();
+      this.update();
+    }
+    nextLine(line) {
+      this.logger.debug({ line }, "handling line event from React");
+      this.input = line;
+      this.output.push(`${this.prompt} > ${this.input}`);
+      if (line.length > 0) {
+        this.event.emit(EVENT_RENDER_OUTPUT, {
+          line
+        });
+      }
     }
   }, "BaseReactRender");
   BaseReactRender = __decorate([
@@ -42322,39 +42361,40 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
 
   // out/src/service/render/react/DomRender.js
   var ReactDomRender = /* @__PURE__ */ __name(class ReactDomRender2 extends BaseReactRender {
+    constructor(options) {
+      super(options);
+      this.cleanup = false;
+    }
     async start() {
       this.logger.debug("starting React render");
       return super.start();
     }
     async stop() {
       this.logger.debug("stopping React render");
-      const elem = mustExist(document.getElementById("app"));
-      (0, import_react_dom.unmountComponentAtNode)(elem);
+      if (this.cleanup) {
+        const elem = mustExist(document.getElementById("app"));
+        (0, import_react_dom.unmountComponentAtNode)(elem);
+      }
       return super.stop();
     }
-    nextLine(line) {
-      this.logger.debug({ line }, "handling line event from React");
-      this.input = line;
-      this.output.push(`${this.prompt} > ${this.input}`);
-      if (line.length > 0) {
-        this.event.emit(EVENT_RENDER_OUTPUT, {
-          lines: [line]
-        });
-      }
-    }
-    renderRoot() {
-      const elem = React4.createElement(Frame, {
+    update() {
+      const elem = React5.createElement(Frame, {
         onLine: (line) => this.nextLine(line),
         output: this.output,
         prompt: this.prompt,
         quit: this.quit,
+        shortcuts: this.shortcuts,
+        show: {
+          shortcuts: this.config.shortcuts
+        },
         step: this.step
       });
       (0, import_react_dom.render)([elem], document.getElementById("app"));
     }
   }, "ReactDomRender");
   ReactDomRender = __decorate([
-    (0, import_noicejs4.Inject)()
+    (0, import_noicejs4.Inject)(),
+    __metadata("design:paramtypes", [Object])
   ], ReactDomRender);
 
   // out/src/module/BrowserModule.js
@@ -42689,7 +42729,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         ]), this.logger, "error translating verbs");
       }, this);
       this.event.on(EVENT_RENDER_OUTPUT, (event) => {
-        catchAndLog(this.onInput(event), this.logger, "error during render output");
+        catchAndLog(this.onRenderOutput(event), this.logger, "error during render output");
       }, this);
       this.event.on(EVENT_STATE_JOIN, (event) => {
         this.onJoin(event);
@@ -42703,10 +42743,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         this.onRoom(event);
       }, this);
       this.event.on(EVENT_STATE_OUTPUT, (event) => {
-        catchAndLog(this.onOutput(event), this.logger, "error during state output");
+        catchAndLog(this.onStateOutput(event), this.logger, "error during state output");
       }, this);
       this.event.on(EVENT_COMMON_QUIT, () => {
-        catchAndLog(this.showLine("meta.quit"), this.logger, "error sending quit output");
+        catchAndLog(this.showLine({ time: 0, turn: 0 }, "meta.quit"), this.logger, "error sending quit output");
       }, this);
     }
     async stop() {
@@ -42728,15 +42768,25 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       if (event.room.actors.find((it) => it.meta.id === this.pid)) {
         this.logger.debug({ event }, "updating own room");
         this.room = event.room;
+        this.event.emit(EVENT_ACTOR_ROOM, {
+          room: event.room
+        });
       }
     }
-    async onInput(event) {
+    async onRenderOutput(event) {
       this.logger.debug({ event }, "tokenizing input");
-      for (const line of event.lines) {
-        await this.parseLine(line);
+      const commands = await this.tokenizer.parse(event.line);
+      this.logger.debug({ commands, event }, "parsed input line");
+      this.history.push(...commands);
+      for (const command of commands) {
+        this.event.emit(EVENT_ACTOR_COMMAND, {
+          actor: this.actor,
+          command,
+          room: this.room
+        });
       }
     }
-    async onOutput(event) {
+    async onStateOutput(event) {
       this.logger.debug({ event }, "filtering output");
       if (doesExist(this.actor) && doesExist(this.room) && doesExist(event.source)) {
         const target = {
@@ -42748,24 +42798,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
       }
       this.logger.debug({ event }, "translating output");
-      return this.showLine(event.line, event.context);
+      return this.showLine(event.step, event.line, event.context);
     }
-    async parseLine(line) {
-      const commands = await this.tokenizer.parse(line);
-      this.logger.debug({ line, commands }, "parsed input line");
-      this.history.push(...commands);
-      for (const command of commands) {
-        this.event.emit(EVENT_ACTOR_COMMAND, {
-          actor: this.actor,
-          command,
-          room: this.room
-        });
-      }
-    }
-    async showLine(key, context) {
+    async showLine(step, key, context) {
       const line = this.locale.translate(key, context);
       this.event.emit(EVENT_ACTOR_OUTPUT, {
-        lines: [line]
+        line,
+        step
       });
     }
   }, "PlayerActorService");
@@ -48289,6 +48328,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/model/file/Config.js
   init_virtual_process_polyfill();
   init_buffer();
+  var CONFIG_SERVICE_SCHEMA = {
+    type: "object",
+    properties: {
+      data: {
+        type: "object",
+        nullable: true,
+        required: []
+      },
+      kind: {
+        type: "string"
+      },
+      name: {
+        type: "string"
+      }
+    },
+    required: ["kind", "name"]
+  };
   var CONFIG_SCHEMA = {
     type: "object",
     properties: {
@@ -48340,7 +48396,25 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       },
       services: {
         type: "object",
-        required: []
+        properties: {
+          actors: {
+            type: "array",
+            items: CONFIG_SERVICE_SCHEMA
+          },
+          loaders: {
+            type: "array",
+            items: CONFIG_SERVICE_SCHEMA
+          },
+          renders: {
+            type: "array",
+            items: CONFIG_SERVICE_SCHEMA
+          },
+          states: {
+            type: "array",
+            items: CONFIG_SERVICE_SCHEMA
+          }
+        },
+        required: ["actors", "loaders", "renders", "states"]
       }
     },
     required: [
@@ -48514,124 +48588,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
 
-  // out/src/util/state/index.js
+  // out/src/util/script/index.js
   init_virtual_process_polyfill();
   init_buffer();
-
-  // out/src/util/entity.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  function indexEntity(entities, index, guard) {
-    if (entities.length <= index) {
-      return void 0;
-    }
-    const entity = entities[index];
-    if (guard(entity)) {
-      return entity;
-    }
-    return void 0;
-  }
-  __name(indexEntity, "indexEntity");
-  function matchEntity(entity, search, matchers = DEFAULT_MATCHERS) {
-    let matched = true;
-    if (doesExist(search.type)) {
-      matched = matched && entity.type === search.type;
-    }
-    if (doesExist(search.meta)) {
-      matched = matched && matchers.metadata(entity, search.meta);
-    }
-    return matched;
-  }
-  __name(matchEntity, "matchEntity");
-  function matchMetadata(entity, filter2) {
-    let matched = true;
-    if (doesExist(filter2.id)) {
-      matched = matched && matchIdSegments(entity.meta.id.toLocaleLowerCase(), filter2.id);
-    }
-    if (doesExist(filter2.name)) {
-      matched = matched && entity.meta.name.toLocaleLowerCase().includes(filter2.name);
-    }
-    return matched;
-  }
-  __name(matchMetadata, "matchMetadata");
-  function matchMetadataFuzzy(entity, filter2) {
-    let matched = true;
-    const id = entity.meta.id.toLocaleLowerCase();
-    if (doesExist(filter2.id)) {
-      matched = matched && matchIdSegments(id, filter2.id);
-    }
-    if (doesExist(filter2.name)) {
-      matched = matched && (id.includes(filter2.name) || entity.meta.name.toLocaleLowerCase().includes(filter2.name));
-    }
-    return matched;
-  }
-  __name(matchMetadataFuzzy, "matchMetadataFuzzy");
-  var DEFAULT_MATCHERS = {
-    entity: matchEntity,
-    metadata: matchMetadata
-  };
-  var FUZZY_MATCHERS = {
-    entity: matchEntity,
-    metadata: matchMetadataFuzzy
-  };
-
-  // out/src/util/state/index.js
-  function searchState(state, search) {
-    const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
-    const results = [];
-    for (const room of state.rooms) {
-      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
-        continue;
-      }
-      if (matchers.entity(room, search, matchers)) {
-        results.push(room);
-      }
-      for (const actor of room.actors) {
-        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
-          continue;
-        }
-        if (matchers.entity(actor, search, matchers)) {
-          results.push(actor);
-        }
-        for (const item of actor.items) {
-          if (matchers.entity(item, search, matchers)) {
-            results.push(item);
-          }
-        }
-      }
-      for (const item of room.items) {
-        if (matchers.entity(item, search, matchers)) {
-          results.push(item);
-        }
-      }
-    }
-    return results;
-  }
-  __name(searchState, "searchState");
-  function findRoom(state, search) {
-    const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
-    const results = new Set();
-    for (const room of state.rooms) {
-      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
-        continue;
-      }
-      for (const actor of room.actors) {
-        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
-          continue;
-        }
-        if (matchers.entity(actor, search, matchers)) {
-          results.add(room);
-        }
-      }
-      for (const item of room.items) {
-        if (matchers.entity(item, search, matchers)) {
-          results.add(room);
-        }
-      }
-    }
-    return Array.from(results);
-  }
-  __name(findRoom, "findRoom");
   function getSignalScripts(target) {
     const scripts = new Map();
     for (const [name, script] of target.scripts) {
@@ -48770,6 +48729,64 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var ScriptTargetError = class extends import_noicejs11.BaseError {
   };
   __name(ScriptTargetError, "ScriptTargetError");
+
+  // out/src/util/entity.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function indexEntity(entities, index, guard) {
+    if (entities.length <= index) {
+      return void 0;
+    }
+    const entity = entities[index];
+    if (guard(entity)) {
+      return entity;
+    }
+    return void 0;
+  }
+  __name(indexEntity, "indexEntity");
+  function matchEntity(entity, search) {
+    const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
+    let matched = true;
+    if (doesExist(search.type)) {
+      matched = matched && entity.type === search.type;
+    }
+    if (doesExist(search.meta)) {
+      matched = matched && matchers.metadata(entity, search.meta);
+    }
+    return matched;
+  }
+  __name(matchEntity, "matchEntity");
+  function matchMetadata(entity, filter2) {
+    let matched = true;
+    if (doesExist(filter2.id)) {
+      matched = matched && matchIdSegments(entity.meta.id.toLocaleLowerCase(), filter2.id);
+    }
+    if (doesExist(filter2.name)) {
+      matched = matched && entity.meta.name.toLocaleLowerCase().includes(filter2.name);
+    }
+    return matched;
+  }
+  __name(matchMetadata, "matchMetadata");
+  function matchMetadataFuzzy(entity, filter2) {
+    let matched = true;
+    const id = entity.meta.id.toLocaleLowerCase();
+    if (doesExist(filter2.id)) {
+      matched = matched && matchIdSegments(id, filter2.id);
+    }
+    if (doesExist(filter2.name)) {
+      matched = matched && (id.includes(filter2.name) || entity.meta.name.toLocaleLowerCase().includes(filter2.name));
+    }
+    return matched;
+  }
+  __name(matchMetadataFuzzy, "matchMetadataFuzzy");
+  var DEFAULT_MATCHERS = {
+    entity: matchEntity,
+    metadata: matchMetadata
+  };
+  var FUZZY_MATCHERS = {
+    entity: matchEntity,
+    metadata: matchMetadataFuzzy
+  };
 
   // out/src/script/verb/ActorDrop.js
   async function VerbActorDrop(context) {
@@ -49068,12 +49085,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.scripts = new Map(scripts);
     }
     async invoke(target, slot, scope) {
-      this.logger.debug({ slot, target }, "trying to invoke slot on target");
+      this.logger.debug({ slot, target: target.meta.id }, "trying to invoke slot on target");
       const scripts = getVerbScripts(scope);
       mergeMap(scripts, getSignalScripts(target));
       const scriptRef = scripts.get(slot);
       if (isNil(scriptRef)) {
-        this.logger.debug({ slot, scripts, target }, "target does not have a script defined for slot");
+        const scriptNames = Array.from(scripts.keys());
+        this.logger.debug({ slot, scriptNames, target: target.meta.id }, "target does not have a script defined for slot");
         return;
       }
       const scriptName = this.scripts.get(scriptRef.name);
@@ -49084,7 +49102,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }, "unknown script name");
         return;
       }
-      this.logger.debug({ scriptRef, target }, "invoking script on target");
+      this.logger.debug({ scriptRef, target: target.meta.id }, "invoking script on target");
       try {
         await scriptName.call(target, Object.assign(Object.assign({}, scope), { logger: this.logger.child({
           script: scriptRef.name
@@ -49560,13 +49578,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async moveActor(transfer, context) {
       const { moving, source, target } = transfer;
       if (!isActor(moving)) {
-        this.logger.warn(transfer, "moving entity is not an actor");
-        return;
+        throw new InvalidArgumentError("moving entity must be an actor");
+      }
+      if (!isRoom(source)) {
+        throw new InvalidArgumentError("source entity must be a room");
+      }
+      if (!isRoom(target)) {
+        throw new InvalidArgumentError("target entity must be a room");
       }
       const idx = source.actors.indexOf(moving);
       if (idx < 0) {
-        this.logger.warn(moving, "source does not directly contain moving entity");
-        return;
+        throw new InvalidArgumentError("source entity does not contain moving entity");
       }
       this.logger.debug(transfer, "moving actor between rooms");
       source.actors.splice(idx, 1);
@@ -49583,21 +49605,21 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async moveItem(transfer, context) {
       const { moving, source, target } = transfer;
       if (!isItem(moving)) {
-        this.logger.warn({ transfer }, "moving entity is not an item");
-        return;
+        throw new InvalidArgumentError("moving entity must be an item");
+      }
+      if (isItem(source)) {
+        throw new InvalidArgumentError("source entity must be an actor or room");
+      }
+      if (isItem(target)) {
+        throw new InvalidArgumentError("target entity must be an actor or room");
       }
       if (source === target) {
-        this.logger.debug({ transfer }, "cannot transfer item between the same source and target");
-        return;
-      }
-      if (isItem(source) || isItem(target)) {
-        this.logger.warn({ source, target, transfer }, "invalid source or target entity type");
+        this.logger.debug({ transfer }, "source and target entity are the same, skipping transfer");
         return;
       }
       const idx = source.items.indexOf(moving);
       if (idx < 0) {
-        this.logger.warn({ source, transfer }, "source does not directly contain moving entity");
-        return;
+        throw new InvalidArgumentError("source entity does not contain moving entity");
       }
       this.logger.debug({
         source,
@@ -49625,13 +49647,83 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(isItemTransfer, "isItemTransfer");
 
+  // out/src/util/state/search.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function findMatching(state, search) {
+    const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
+    const results = [];
+    for (const room of state.rooms) {
+      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
+        continue;
+      }
+      if (matchers.entity(room, search)) {
+        results.push(room);
+      }
+      for (const actor of room.actors) {
+        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
+          continue;
+        }
+        if (matchers.entity(actor, search)) {
+          results.push(actor);
+        }
+        for (const item of actor.items) {
+          if (matchers.entity(item, search)) {
+            results.push(item);
+          }
+        }
+      }
+      for (const item of room.items) {
+        if (matchers.entity(item, search)) {
+          results.push(item);
+        }
+      }
+    }
+    return results;
+  }
+  __name(findMatching, "findMatching");
+  function findRoom(state, search) {
+    const results = findContainer(state, search);
+    return results.filter(isRoom);
+  }
+  __name(findRoom, "findRoom");
+  function findContainer(state, search) {
+    const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
+    const results = new Set();
+    for (const room of state.rooms) {
+      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
+        continue;
+      }
+      for (const actor of room.actors) {
+        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
+          continue;
+        }
+        if (matchers.entity(actor, search)) {
+          results.add(room);
+        }
+        for (const item of actor.items) {
+          if (matchers.entity(item, search)) {
+            results.add(actor);
+          }
+        }
+      }
+      for (const item of room.items) {
+        if (matchers.entity(item, search)) {
+          results.add(room);
+        }
+      }
+    }
+    return Array.from(results);
+  }
+  __name(findContainer, "findContainer");
+
   // out/src/service/loader/events.js
   init_virtual_process_polyfill();
   init_buffer();
-  function hasPath(it) {
-    return doesExist(it) && typeof it.path === "string";
+  function hasState(it) {
+    return doesExist(it) && doesExist(it.state);
   }
-  __name(hasPath, "hasPath");
+  __name(hasState, "hasState");
 
   // out/src/service/state/LocalState.js
   var LocalStateService = /* @__PURE__ */ __name(class LocalStateService2 {
@@ -49664,10 +49756,46 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async stop() {
       this.event.removeGroup(this);
     }
+    async onCommand(event) {
+      const { actor, command } = event;
+      this.logger.debug({
+        actor,
+        command
+      }, "handling command event");
+      switch (command.verb) {
+        case META_CREATE:
+          await this.doCreate(command.target, command.index);
+          break;
+        case META_DEBUG:
+          await this.doDebug();
+          break;
+        case META_GRAPH:
+          await this.doGraph(command.target);
+          break;
+        case META_HELP:
+          await this.doHelp(event);
+          break;
+        case META_LOAD:
+          await this.doLoad(command.target);
+          break;
+        case META_QUIT:
+          await this.doQuit();
+          break;
+        case META_SAVE:
+          await this.doSave(command.target);
+          break;
+        case META_WORLDS:
+          await this.doWorlds();
+          break;
+        default: {
+          await this.doStep(event);
+        }
+      }
+    }
     async onJoin(event) {
       const state = mustExist(this.state);
       const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
-      const [existingActor] = searchState(state, {
+      const [existingActor] = findMatching(state, {
         meta: {
           id: event.pid
         },
@@ -49723,72 +49851,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async onWorld(world) {
       this.logger.debug({ world: world.meta.id }, "registering loaded world");
       this.worlds.push(world);
-    }
-    async onCommand(event) {
-      const { actor, command } = event;
-      this.logger.debug({
-        actor,
-        command
-      }, "handling command event");
-      switch (command.verb) {
-        case META_CREATE:
-          await this.doCreate(command.target, command.index);
-          break;
-        case META_DEBUG:
-          await this.doDebug();
-          break;
-        case META_GRAPH:
-          await this.doGraph(command.target);
-          break;
-        case META_HELP:
-          await this.doHelp(event);
-          break;
-        case META_LOAD:
-          await this.doLoad(command.target);
-          break;
-        case META_QUIT:
-          await this.doQuit();
-          break;
-        case META_SAVE:
-          await this.doSave(command.target);
-          break;
-        case META_WORLDS:
-          await this.doWorlds();
-          break;
-        default: {
-          await this.doStep(event);
-        }
-      }
-    }
-    async doStep(event) {
-      const { actor, command } = event;
-      if (isNil(actor) || isNil(this.state)) {
-        this.event.emit(EVENT_STATE_OUTPUT, {
-          line: "meta.step.none",
-          step: {
-            time: 0,
-            turn: 0
-          },
-          volume: ShowVolume.WORLD
-        });
-        return;
-      }
-      this.commandBuffer.push(actor, command);
-      this.logger.debug({
-        actor: actor.meta.id,
-        left: this.commandQueue.remaining().map((it) => it.meta.id),
-        size: this.commandQueue.size,
-        verb: command.verb
-      }, "pushing command to queue");
-      if (this.commandQueue.complete(actor)) {
-        this.logger.debug({
-          actor: actor.meta.id,
-          size: this.commandQueue.size,
-          verb: command.verb
-        }, "queue completed on command");
-        const result = await this.step();
-        this.event.emit(EVENT_STATE_STEP, result);
-      }
     }
     async doCreate(target, depth) {
       const generator = mustExist(this.generator);
@@ -49905,7 +49967,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         path
       });
       const event = await Promise.race([doneEvent, stateEvent]);
-      if (hasPath(event)) {
+      if (!hasState(event)) {
         this.logger.debug({ event }, "path read event received first");
         this.event.emit(EVENT_STATE_OUTPUT, {
           context: {
@@ -49965,19 +50027,53 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         state,
         worlds: [world]
       };
+      const pendingSave = onceEvent(this.event, EVENT_LOADER_DONE);
       this.event.emit(EVENT_LOADER_SAVE, {
         data,
         path
       });
+      const save = await pendingSave;
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
           meta: state.meta,
-          path
+          path: save.path
         },
         line: "meta.save.state",
         step: state.step,
         volume: ShowVolume.WORLD
       });
+    }
+    async doStep(event) {
+      const { actor, command } = event;
+      if (isNil(actor) || isNil(this.state)) {
+        this.event.emit(EVENT_STATE_OUTPUT, {
+          line: "meta.step.none",
+          step: {
+            time: 0,
+            turn: 0
+          },
+          volume: ShowVolume.WORLD
+        });
+        return;
+      }
+      this.commandBuffer.push(actor, command);
+      this.logger.debug({
+        actor: actor.meta.id,
+        left: this.commandQueue.remaining().map((it) => it.meta.id),
+        size: this.commandQueue.size,
+        verb: command.verb
+      }, "pushing command to queue");
+      if (this.commandQueue.complete(actor)) {
+        this.logger.debug({
+          actor: actor.meta.id,
+          size: this.commandQueue.size,
+          verb: command.verb
+        }, "queue completed on command");
+        const step = await this.step();
+        this.event.emit(EVENT_STATE_STEP, {
+          step
+        });
+      }
     }
     async doWorlds() {
       for (const world of this.worlds) {
@@ -50071,7 +50167,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     async stepFind(search) {
-      return searchState(mustExist(this.state), search);
+      return findMatching(mustExist(this.state), search);
     }
     async stepMove(target, context) {
       const transfer = mustExist(this.transfer);
@@ -52275,22 +52371,30 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async create(config3) {
       for (const loader2 of config3.loaders) {
-        const svc = await this.container.create(loader2.kind);
+        const svc = await this.container.create(loader2.kind, {
+          config: mustCoalesce(loader2.data, {})
+        });
         await svc.start();
         this.add(loader2.name, svc);
       }
       for (const actor of config3.actors) {
-        const svc = await this.container.create(actor.kind);
+        const svc = await this.container.create(actor.kind, {
+          config: mustCoalesce(actor.data, {})
+        });
         await svc.start();
         this.add(actor.name, svc);
       }
       for (const render2 of config3.renders) {
-        const svc = await this.container.create(render2.kind);
+        const svc = await this.container.create(render2.kind, {
+          config: mustCoalesce(render2.data, {})
+        });
         await svc.start();
         this.add(render2.name, svc);
       }
       for (const state of config3.states) {
-        const svc = await this.container.create(state.kind);
+        const svc = await this.container.create(state.kind, {
+          config: mustCoalesce(state.data, {})
+        });
         await svc.start();
         this.add(state.name, svc);
       }
@@ -52356,9 +52460,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     for (const input of arg.input) {
       const pending = onceEvent(events, EVENT_ACTOR_OUTPUT);
       events.emit(EVENT_RENDER_OUTPUT, {
-        lines: [
-          input
-        ]
+        line: input
       });
       await pending;
     }

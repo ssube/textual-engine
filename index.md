@@ -60,6 +60,8 @@ services:
   renders:
     - name: local-render
       kind: browser-dom-render
+      data:
+        shortcuts: true
   states:
     - name: local-state
       kind: core-local-state

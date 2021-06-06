@@ -9,7 +9,7 @@ export const Input = (props: InputProps) => {
 
   function handleSubmit(event: any) {
     event.preventDefault();
-    props.onLine(event.target.value);
+    props.onLine(props.line);
   }
 
   return <form onSubmit={handleSubmit}>

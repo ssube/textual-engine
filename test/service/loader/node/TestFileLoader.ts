@@ -1,7 +1,14 @@
 import { expect } from 'chai';
-import { CoreModule } from '../../../../src/module/CoreModule';
+import { BaseOptions } from 'noicejs';
+import { stub } from 'sinon';
 
+import { INJECT_EVENT } from '../../../../src/module';
+import { CoreModule } from '../../../../src/module/CoreModule';
+import { EventBus } from '../../../../src/service/event';
 import { NodeFileLoader } from '../../../../src/service/loader/node/FileLoader';
+import { onceEvent } from '../../../../src/util/async/event';
+import { EVENT_LOADER_DONE, EVENT_LOADER_SAVE } from '../../../../src/util/constants';
+import { makeTestState } from '../../../entity';
 import { getTestContainer } from '../../../helper';
 
 describe('file loader', () => {
@@ -33,6 +40,31 @@ describe('file loader', () => {
     await loader.save(path, data);
 
     return expect(loader.load(path)).to.eventually.deep.equal(data);
+  });
+
+  it('should respond to save events for files', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const fetch = stub();
+    const loader = await container.create(NodeFileLoader, {}, fetch);
+    await loader.start();
+
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    const pendingDone = onceEvent(events, EVENT_LOADER_DONE);
+
+    const doneStub = stub();
+    events.on(EVENT_LOADER_DONE, doneStub);
+
+    const state = makeTestState('', []);
+    events.emit(EVENT_LOADER_SAVE, {
+      data: {
+        state,
+        worlds: [],
+      },
+      path: 'file://out/test.yml',
+    });
+
+    await pendingDone;
   });
 });
 

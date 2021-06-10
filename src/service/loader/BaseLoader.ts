@@ -59,8 +59,7 @@ export abstract class BaseLoader implements LoaderService {
       return;
     }
 
-    const dataStr = await this.loadStr(path);
-    const data = this.parser.load(dataStr);
+    const data = await this.loadData(path);
 
     if (doesExist(data.config)) {
       this.events.emit(EVENT_LOADER_CONFIG, {
@@ -96,8 +95,7 @@ export abstract class BaseLoader implements LoaderService {
     if (typeof event.data === 'string') {
       await this.saveStr(event.path, event.data);
     } else {
-      const data = this.parser.save(event.data);
-      await this.saveStr(event.path, data);
+      await this.saveData(event.path, event.data);
     }
 
     this.events.emit(EVENT_LOADER_DONE, {

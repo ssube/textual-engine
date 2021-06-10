@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { spy } from 'sinon';
+import { SinonStub, spy, stub } from 'sinon';
 
 import { Item } from '../../../src/model/entity/Item';
 import { CoreModule } from '../../../src/module/CoreModule';
@@ -75,5 +75,28 @@ describe('local script service', () => {
     expect(scriptSpy).to.have.callCount(0);
   });
 
-  xit('should broadcast events to matching entities');
+  it('should broadcast events to matching entities', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const script = await container.create(LocalScriptService);
+    const invokeStub = stub(script, 'invoke');
+
+    const state = getStubHelper();
+    const target = makeTestItem('', '', '');
+    const results = [
+      makeTestItem('', '', ''),
+      makeTestItem('', '', ''),
+      makeTestItem('', '', ''),
+    ];
+    (state.find as SinonStub).returns(Promise.resolve(results));
+
+    await script.broadcast(target, 'verbs.bar', {
+      data: new Map(),
+      random: await container.create(MathRandomGenerator),
+      state,
+      transfer: await container.create(StateEntityTransfer),
+    });
+
+    expect(invokeStub).to.have.callCount(results.length);
+  });
 });

@@ -194,8 +194,8 @@ describe('actor look scripts', () => {
   });
 
   describe('actor look command with target', () => {
-    it('should describe the target actor');
-    it('should describe the target item');
-    it('should note when actors are dead');
+    xit('should describe the target actor');
+    xit('should describe the target item');
+    xit('should note when actors are dead');
   });
 });

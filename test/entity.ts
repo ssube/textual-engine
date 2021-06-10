@@ -1,8 +1,11 @@
 import { Actor, ACTOR_TYPE, ActorType } from '../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../src/model/entity/Item';
 import { Room, ROOM_TYPE } from '../src/model/entity/Room';
+import { Template } from '../src/model/mapped/Template';
 import { Metadata } from '../src/model/Metadata';
 import { WorldState } from '../src/model/world/State';
+import { WorldTemplate } from '../src/model/world/Template';
+import { TEMPLATE_CHANCE } from '../src/util/constants';
 
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {
@@ -79,6 +82,46 @@ export function makeTestState(id: string, rooms: Array<Room>): WorldState {
       depth: 0,
       id: '',
       seed: '',
+    },
+  };
+}
+
+export function makeTestWorld(actors: Array<Template<Actor>>, items: Array<Template<Item>>, rooms: Array<Template<Room>>): WorldTemplate {
+  const [defaultActor] = actors;
+  const [defaultItem] = items;
+  const [defaultRoom] = rooms;
+
+  return {
+    defaults: {
+      actor: defaultActor.base,
+      item: defaultItem.base,
+      room: defaultRoom.base,
+    },
+    locale: {
+      bundles: {},
+      verbs: [],
+    },
+    meta: {
+      id: 'foo',
+      name: { base: 'foo', type: 'string' },
+      desc: { base: 'foo', type: 'string' },
+    },
+    start: {
+      actors: [{
+        chance: TEMPLATE_CHANCE,
+        id: defaultActor.base.meta.id,
+        type: 'id',
+      }],
+      rooms: [{
+        chance: TEMPLATE_CHANCE,
+        id: defaultRoom.base.meta.id,
+        type: 'id',
+      }],
+    },
+    templates: {
+      actors,
+      items,
+      rooms,
     },
   };
 }

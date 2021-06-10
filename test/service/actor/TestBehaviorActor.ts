@@ -65,4 +65,20 @@ describe('behavior actor', () => {
     const commandActor = mustExist(commandEvent.actor);
     expect(commandActor.meta.id).to.equal(actor.meta.id);
   });
+
+  it('should detach from events when stopped', async () => {
+    const container = Container.from(new CoreModule());
+    await container.configure({
+      logger: NullLogger.global,
+    });
+
+    const actorService = await container.create(BehaviorActorService, {
+      actor: 'foo',
+    });
+    await actorService.start();
+  });
+
+  it('should not implement the last command method');
+  it('should attack players in the same room');
+  it('should move into other rooms on a low roll');
 });

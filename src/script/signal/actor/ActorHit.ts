@@ -1,13 +1,14 @@
-import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { mustExist } from '@apextoaster/js-utils';
 
+import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/collection/map';
+import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
 
 export async function SignalActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
-    throw new InvalidArgumentError('invalid entity type');
+    throw new ScriptTargetError('invalid entity type');
   }
 
   const attacker = mustExist(context.actor);

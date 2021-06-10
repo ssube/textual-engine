@@ -3,6 +3,7 @@ import { Container, NullLogger } from 'noicejs';
 
 import { DataLoadError } from '../../../src/error/DataError';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { mapType } from '../../../src/service/parser/yaml/MapType';
 import { YamlParser } from '../../../src/service/parser/YamlParser';
 
 describe('yaml parser', () => {
@@ -46,5 +47,29 @@ worlds: []
 
     const parser = await container.create(YamlParser);
     expect(() => parser.load('nope: {}')).to.throw(DataLoadError);
+  });
+});
+
+describe('yaml schema', () => {
+  it('should parse maps', async () => {
+    const container = Container.from(new CoreModule());
+    await container.configure({
+      logger: NullLogger.global,
+    });
+
+    expect(mapType.construct({})).to.deep.equal(new Map());
+  });
+
+  it('should write maps', async () => {
+    const container = Container.from(new CoreModule());
+    await container.configure({
+      logger: NullLogger.global,
+    });
+
+    if (typeof mapType.represent !== 'function') {
+      throw new Error('map cannot be called'); // this should never happen, acts as a typeguard
+    }
+
+    expect(mapType.represent(new Map())).to.deep.equal({});
   });
 });

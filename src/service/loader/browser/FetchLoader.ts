@@ -5,10 +5,12 @@ import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
 
 export class BrowserFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;
+  protected scope: typeof window;
 
-  constructor(options: BaseLoaderOptions, f = window.fetch) {
+  constructor(options: BaseLoaderOptions, w = window) {
     super(options, ['http', 'https']);
-    this.fetch = fetch;
+    this.fetch = w.fetch;
+    this.scope = w;
   }
 
   public async load(path: string): Promise<Buffer> {
@@ -21,7 +23,8 @@ export class BrowserFetchLoader extends BaseLoader implements LoaderService {
   }
 
   public async loadStr(path: string): Promise<string> {
-    const res = await this.fetch.call(window, path);
+    // fetch has to be called with this = window
+    const res = await this.fetch.call(this.scope, path);
     // add this method frame to the stack
     // eslint-disable-next-line sonarjs/prefer-immediate-return
     const data = await res.text();

@@ -14,14 +14,13 @@ import { onceEvent } from '../../../../src/util/async/event';
 import {
   EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
-  EVENT_LOADER_SAVE,
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
 } from '../../../../src/util/constants';
 import { makeTestState, makeTestWorld } from '../../../entity';
 import { getTestContainer } from '../../../helper';
 
-describe('fetch loader', () => {
+describe('node fetch loader', () => {
   it('should read from URLs', async () => {
     const container = await getTestContainer(new CoreModule());
 

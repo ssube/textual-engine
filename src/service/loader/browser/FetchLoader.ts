@@ -11,10 +11,6 @@ export class BrowserFetchLoader extends BaseLoader implements LoaderService {
     this.fetch = fetch;
   }
 
-  public async dump(path: string, data: Buffer): Promise<void> {
-    console.log(path, data);
-  }
-
   public async load(path: string): Promise<Buffer> {
     const text = await this.loadStr(path);
     return Buffer.from(text);

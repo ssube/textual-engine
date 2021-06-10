@@ -14,10 +14,6 @@ export class NodeFetchLoader extends BaseLoader implements LoaderService {
     this.fetch = f;
   }
 
-  public async dump(path: string, data: Buffer): Promise<void> {
-    await promises.writeFile(path, data);
-  }
-
   public async load(path: string): Promise<Buffer> {
     const text = await this.loadStr(path);
     return Buffer.from(text);

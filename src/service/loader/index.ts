@@ -3,13 +3,6 @@ import { DataFile } from '../../model/file/Data';
 
 export interface LoaderService extends Service {
   /**
-   * Write a debug payload to a local path.
-   *
-   * This always writes to a local resource, even for network-based loaders.
-   */
-  dump(path: string, data: Buffer): Promise<void>;
-
-  /**
    * Load a resource by path.
    */
   load(path: string): Promise<Buffer>;

@@ -111,7 +111,6 @@ export abstract class BaseLoader implements LoaderService {
     return this.saveStr(path, this.parser.save(data));
   }
 
-  public abstract dump(path: string, data: Buffer): Promise<void>;
   public abstract load(path: string): Promise<Buffer>;
   public abstract save(path: string, data: Buffer): Promise<void>;
   public abstract loadStr(path: string): Promise<string>;

@@ -13,11 +13,6 @@ export class NodeFileLoader extends BaseLoader implements LoaderService {
     this.fs = fs;
   }
 
-  public async dump(fullPath: string, data: Buffer): Promise<void> {
-    const { path } = splitPath(fullPath);
-    await promises.writeFile(path, data);
-  }
-
   public async load(fullPath: string): Promise<Buffer> {
     const { path } = splitPath(fullPath);
     // add this method frame to the stack

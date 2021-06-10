@@ -6,15 +6,15 @@ import { createInterface, Interface as LineInterface } from 'readline';
 import { RenderService } from '.';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
 import { onceEvent } from '../../util/async/event';
-import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, META_QUIT } from '../../util/constants';
-import { ActorOutputEvent } from '../actor/events';
+import { EVENT_ACTOR_OUTPUT, EVENT_ACTOR_ROOM, EVENT_RENDER_OUTPUT, EVENT_STATE_ROOM, EVENT_STATE_STEP, META_QUIT } from '../../util/constants';
+import { ActorOutputEvent, ActorRoomEvent } from '../actor/events';
 import { EventBus } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
-import { StateRoomEvent } from '../state/events';
+import { StateRoomEvent, StateStepEvent } from '../state/events';
 import { BaseRenderOptions } from './react/BaseRender';
 
-@Inject(/* all from base */)
+@Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export class LineRender implements RenderService {
   // services
   protected event: EventBus;
@@ -91,7 +91,8 @@ export class LineRender implements RenderService {
     });
 
     this.event.on(EVENT_ACTOR_OUTPUT, (output) => this.onOutput(output));
-    this.event.on(EVENT_STATE_ROOM, (room) => this.onRoom(room));
+    this.event.on(EVENT_ACTOR_ROOM, (room) => this.onRoom(room));
+    this.event.on(EVENT_STATE_STEP, (step) => this.onStep(step));
 
     this.showPrompt();
   }
@@ -117,12 +118,15 @@ export class LineRender implements RenderService {
     }
 
     this.showSync(event.line);
+  }
+
+  public onRoom(event: ActorRoomEvent): void {
+    this.logger.debug({ event }, 'handling step event from actor');
     this.showPrompt();
   }
 
-  public onRoom(event: StateRoomEvent): void {
+  public onStep(event: StateStepEvent): void {
     this.logger.debug({ event }, 'handling step event from state');
-
     this.showPrompt();
   }
 

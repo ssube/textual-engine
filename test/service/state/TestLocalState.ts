@@ -2,18 +2,22 @@
 import { mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { stub } from 'sinon';
+import { createStubInstance, match, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
-import { Actor, ACTOR_TYPE, ActorType } from '../../../src/model/entity/Actor';
+import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
+import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../../src/model/entity/Actor';
+import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
-import { INJECT_EVENT } from '../../../src/module';
+import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
-import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent } from '../../../src/service/state/events';
+import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { LocalScriptService } from '../../../src/service/script/LocalScript';
+import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent, StateStepEvent } from '../../../src/service/state/events';
 import { LocalStateService } from '../../../src/service/state/LocalState';
 import { ShowVolume } from '../../../src/util/actor';
 import { onceEvent } from '../../../src/util/async/event';
@@ -28,6 +32,7 @@ import {
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
+  EVENT_STATE_STEP,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -37,12 +42,14 @@ import {
   META_SAVE,
   META_VERBS,
   META_WORLDS,
+  SIGNAL_STEP,
   TEMPLATE_CHANCE,
   VERB_WAIT,
 } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
-import { makeTestState } from '../../entity';
-import { getTestContainer } from '../../helper';
+import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
+import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
+import { getStubHelper, getTestContainer, getTestLogger } from '../../helper';
 
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
@@ -81,12 +88,35 @@ const TEST_ACTOR: Template<Actor> = {
   mods: [],
 };
 
+const TEST_ITEM: Template<Item> = {
+  base: {
+    meta: {
+      id: 'bin',
+      name: {
+        base: '',
+        type: 'string',
+      },
+      desc: {
+        base: '',
+        type: 'string',
+      },
+    },
+    scripts: new Map(),
+    stats: new Map(),
+    type: {
+      base: ITEM_TYPE,
+      type: 'string',
+    },
+  },
+  mods: [],
+};
+
 const TEST_ROOM: Template<Room> = {
   base: {
     actors: [],
     items: [],
     meta: {
-      id: 'bar',
+      id: 'foo',
       name: {
         base: 'test',
         type: 'string',
@@ -117,7 +147,7 @@ const TEST_ROOM: Template<Room> = {
 const TEST_WORLD: WorldTemplate = {
   defaults: {
     actor: TEST_ACTOR.base,
-    item: {} as any,
+    item: TEST_ITEM.base,
     room: TEST_ROOM.base,
   },
   locale: {
@@ -143,7 +173,7 @@ const TEST_WORLD: WorldTemplate = {
   },
   templates: {
     actors: [TEST_ACTOR],
-    items: [],
+    items: [TEST_ITEM],
     rooms: [TEST_ROOM],
   },
 };
@@ -651,9 +681,80 @@ describe('local state service', () => {
   });
 
   describe('state step', () => {
-    xit('should invoke step script on each room');
-    xit('should invoke step script on each actor');
-    xit('should invoke step script on each item');
+    it('should invoke step script on each entity in state', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const world: WorldTemplate = {
+        ...TEST_WORLD,
+        templates: {
+          actors: [{
+            base: {
+              ...TEST_ACTOR.base,
+              items: [{
+                chance: TEMPLATE_CHANCE,
+                id: TEST_ITEM.base.meta.id,
+                type: 'id',
+              }],
+            },
+            mods: [],
+          }],
+          items: TEST_WORLD.templates.items,
+          rooms: [{
+            base: {
+              ...TEST_ROOM.base,
+              actors: [{
+                chance: TEMPLATE_CHANCE,
+                id: TEST_ACTOR.base.meta.id,
+                type: 'id',
+              }],
+              items: [{
+                chance: TEMPLATE_CHANCE,
+                id: TEST_ITEM.base.meta.id,
+                type: 'id',
+              }],
+            },
+            mods: TEST_ROOM.mods,
+          }],
+        }
+      };
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, { world });
+
+      await state.doCreate(TEST_WORLD.meta.id, 1);
+      const results = await state.stepFind({
+        type: ACTOR_TYPE,
+      });
+      const actors = results.filter(isActor);
+
+      const script = await container.create<LocalScriptService, BaseOptions>(INJECT_SCRIPT);
+      const invokeStub = stub(script, 'invoke');
+
+      const pending = onceEvent<StateStepEvent>(events, EVENT_STATE_STEP);
+      for (const actor of actors) {
+        await state.onCommand({
+          actor,
+          command: {
+            index: 0,
+            input: '',
+            target: '',
+            verb: VERB_WAIT,
+          },
+        });
+      }
+
+      await pending;
+
+      expect(invokeStub).to.have.callCount(4); // one room, one actor, one item in each
+      expect(invokeStub).to.have.been.calledWithMatch(
+        match.object.and(match.has('type', match.string)),
+        SIGNAL_STEP,
+        match.object
+      );
+    });
 
     it('should error without state', async () => {
       const module = new CoreModule();
@@ -695,9 +796,101 @@ describe('local state service', () => {
   });
 
   describe('step move helper', () => {
-    xit('should move actors');
-    xit('should move items');
-    xit('should error when moving rooms');
+    it('should move actors', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate(TEST_WORLD.meta.id, 1);
+
+      const moving = makeTestActor('', '', '');
+      const transfer = {
+        moving,
+        source: makeTestRoom('', '', '', [moving], []),
+        target: makeTestRoom('', '', '', [], []),
+      };
+      await state.stepMove(transfer, {
+        logger: getTestLogger(),
+        script: createStubInstance(LocalScriptService),
+        data: new Map(),
+        random: await container.create(MathRandomGenerator),
+        state: getStubHelper(),
+        transfer: await container.create(StateEntityTransfer),
+      });
+
+      expect(transfer.source.actors, 'source actors').to.have.lengthOf(0);
+      expect(transfer.target.actors, 'target actors').to.have.lengthOf(1);
+    });
+
+    it('should move items', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate(TEST_WORLD.meta.id, 1);
+
+      const moving = makeTestItem('', '', '');
+      const transfer = {
+        moving,
+        source: makeTestRoom('', '', '', [], [moving]),
+        target: makeTestRoom('', '', '', [], []),
+      };
+      await state.stepMove(transfer, {
+        logger: getTestLogger(),
+        script: createStubInstance(LocalScriptService),
+        data: new Map(),
+        random: await container.create(MathRandomGenerator),
+        state: getStubHelper(),
+        transfer: await container.create(StateEntityTransfer),
+      });
+
+      expect(transfer.source.items, 'source items').to.have.lengthOf(0);
+      expect(transfer.target.items, 'target items').to.have.lengthOf(1);
+    });
+
+    it('should error when moving rooms', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate(TEST_WORLD.meta.id, 1);
+
+      const transfer = {
+        moving: makeTestRoom('', '', '', [], []) as any,
+        source: makeTestRoom('', '', '', [], []),
+        target: makeTestRoom('', '', '', [], []),
+      };
+
+      return expect(state.stepMove(transfer, {
+        logger: getTestLogger(),
+        script: createStubInstance(LocalScriptService),
+        data: new Map(),
+        random: await container.create(MathRandomGenerator),
+        state: getStubHelper(),
+        transfer: await container.create(StateEntityTransfer),
+      })).to.eventually.be.rejectedWith(ScriptTargetError);
+    });
   });
 
   describe('step show helper', () => {

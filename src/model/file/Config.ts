@@ -16,6 +16,8 @@ export interface ConfigLogger {
 }
 
 export interface ConfigServiceRef {
+  // any needed for config schema below
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
   kind: string;
   name: string;

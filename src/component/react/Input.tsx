@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { InputProps } from '../shared';
 
-export const Input = (props: InputProps) => {
+export const Input = (props: InputProps): React.ReactElement => {
   function handleChange(event: any) {
     props.onChange(event.target.value);
   }

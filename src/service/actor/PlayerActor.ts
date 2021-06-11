@@ -86,7 +86,7 @@ export class PlayerActorService implements ActorService {
     this.event.on(EVENT_STATE_JOIN, (event) => {
       this.onJoin(event);
     }, this);
-    this.event.on(EVENT_STATE_LOAD, (event) => {
+    this.event.on(EVENT_STATE_LOAD, (_event) => {
       this.event.emit(EVENT_ACTOR_JOIN, {
         pid: this.pid,
       });

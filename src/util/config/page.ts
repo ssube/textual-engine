@@ -14,9 +14,9 @@ export async function loadConfig(url: string): Promise<ConfigFile> {
 
   const schema = createSchema({
     include: {
-      exists: (path) => doesExist(document.getElementById(path)),
-      join: (...path) => path.join('/'),
-      read: (path) => '',
+      exists: (it) => doesExist(document.getElementById(it)),
+      join: (...it) => it.join('/'),
+      read: (_it) => '',
       resolve: (it) => it,
       schema: DEFAULT_SCHEMA,
     },

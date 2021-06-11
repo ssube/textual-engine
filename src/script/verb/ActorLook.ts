@@ -66,12 +66,14 @@ export async function ActorLookRoom(this: Actor, context: ScriptContext): Promis
   }
 
   for (const actor of room.actors) {
-    if (actor !== this) {
-      await ActorLookActor.call(this, {
-        ...context,
-        actor,
-      });
+    if (actor === this) {
+      continue;
     }
+
+    await ActorLookActor.call(this, {
+      ...context,
+      actor,
+    });
   }
 
   for (const item of room.items) {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { alt, createLanguage, regexp, string } from 'parsimmon';
 

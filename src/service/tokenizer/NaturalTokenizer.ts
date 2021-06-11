@@ -4,15 +4,15 @@ import { TokenizerService } from '.';
 import { Command } from '../../model/Command';
 
 export class NaturalInput implements TokenizerService {
-  public parse(input: string): Promise<Array<Command>> {
+  public parse(_input: string): Promise<Array<Command>> {
     throw new NotImplementedError();
   }
 
-  public split(input: string): Promise<Array<string>> {
+  public split(_input: string): Promise<Array<string>> {
     throw new NotImplementedError();
   }
 
-  public translate(verbs: ReadonlyArray<string>): Promise<void> {
+  public translate(_verbs: ReadonlyArray<string>): Promise<void> {
     throw new NotImplementedError();
   }
 }

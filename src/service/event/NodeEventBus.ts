@@ -1,8 +1,8 @@
-import { constructorName, doesExist, getOrDefault, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { constructorName, doesExist, getOrDefault, mustExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
-import { EventBus } from '.';
+import { EventBus, EventGroup } from '.';
 import { INJECT_LOGGER } from '../../module';
 import { EventHandler } from '../../util/async/event';
 
@@ -12,7 +12,7 @@ interface EventBusOptions extends BaseOptions {
 
 @Inject(INJECT_LOGGER)
 export class NodeEventBus extends EventEmitter implements EventBus {
-  protected handlers: Map<any, Array<[string, EventHandler<unknown>]>>;
+  protected handlers: Map<EventGroup, Array<[string, EventHandler<unknown>]>>;
   protected logger: Logger;
 
   constructor(options: EventBusOptions) {
@@ -35,7 +35,7 @@ export class NodeEventBus extends EventEmitter implements EventBus {
     return super.emit(name, ...args);
   }
 
-  public on(name: string, handler: EventHandler<any>, group?: any): this {
+  public on(name: string, handler: EventHandler<any>, group?: EventGroup): this {
     if (doesExist(group)) {
       const existing = getOrDefault(this.handlers, group, []);
       existing.push([name, handler]);
@@ -45,7 +45,7 @@ export class NodeEventBus extends EventEmitter implements EventBus {
     return super.on(name, handler);
   }
 
-  public removeGroup(group: any): void {
+  public removeGroup(group: EventGroup): void {
     const handlers = this.handlers.get(group);
     if (doesExist(handlers)) {
       for (const [name, handler] of handlers) {

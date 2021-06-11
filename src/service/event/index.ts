@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/unified-signatures */
 import { EventEmitter } from 'events';
-import { ActorRoomError } from '../../error/ActorRoomError';
 
 import { ErrorHandler, EventHandler } from '../../util/async/event';
 import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent, ActorRoomEvent } from '../actor/events';
@@ -60,9 +60,6 @@ export interface EventBus extends EventEmitter {
    */
   emit(name: 'state-room', event: StateRoomEvent): boolean;
 
-  /**
-   * @todo event type
-   */
   emit(name: 'state-step', event: StateStepEvent): boolean;
 
   /**

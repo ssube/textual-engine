@@ -74,7 +74,7 @@ export class ChainTemplateService implements TemplateService {
   /**
    * @todo implement script modifiers
    */
-  public modifyScriptMap(target: ScriptMap, mods: ModifierPrimitive<ScriptMap>): ScriptMap {
+  public modifyScriptMap(target: ScriptMap, _mods: ModifierPrimitive<ScriptMap>): ScriptMap {
     return target;
   }
 
@@ -89,6 +89,9 @@ export class ChainTemplateService implements TemplateService {
     return this.joiner.render(chain);
   }
 
+  /**
+   * @todo use step when it is > 1
+   */
   public renderNumber(input: TemplateNumber): number {
     if (input.step < 0) {
       throw new InvalidArgumentError('template step must be greater than 0');

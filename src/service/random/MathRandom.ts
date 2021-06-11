@@ -11,7 +11,7 @@ export class MathRandomGenerator implements RandomGenerator {
     return Math.floor(Math.random() * range) + min;
   }
 
-  public reseed(initial: string): void {
+  public reseed(_initial: string): void {
     // noop
   }
 }

@@ -47,7 +47,7 @@ export class BehaviorActorService implements ActorService {
     this.next = new Map();
   }
 
-  public async start() {
+  public async start(): Promise<void> {
     this.event.on(EVENT_STATE_ROOM, (event) => {
       if (event.actor.actorType === ActorType.DEFAULT) {
         this.onRoom(event);
@@ -55,7 +55,7 @@ export class BehaviorActorService implements ActorService {
     }, this);
   }
 
-  public async stop() {
+  public async stop(): Promise<void> {
     this.event.removeGroup(this);
   }
 
@@ -63,7 +63,7 @@ export class BehaviorActorService implements ActorService {
     throw new NotImplementedError();
   }
 
-  public onRoom(event: StateRoomEvent) {
+  public onRoom(event: StateRoomEvent): void {
     const behavior = this.random.nextFloat();
     this.logger.debug({ event, which: behavior }, 'received room event from state');
 

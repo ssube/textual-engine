@@ -18,7 +18,7 @@ export class NodeFetchLoader extends BaseLoader implements LoaderService {
     return Buffer.from(text);
   }
 
-  public async save(path: string, data: Buffer): Promise<void> {
+  public async save(_path: string, _data: Buffer): Promise<void> {
     throw new NotImplementedError();
   }
 
@@ -30,7 +30,7 @@ export class NodeFetchLoader extends BaseLoader implements LoaderService {
     return data;
   }
 
-  public async saveStr(path: string, data: string): Promise<void> {
+  public async saveStr(_path: string, _data: string): Promise<void> {
     throw new NotImplementedError();
   }
 }

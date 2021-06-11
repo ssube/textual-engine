@@ -2183,10 +2183,10 @@ esbuild-plugin-ignore@^1.1.0:
   dependencies:
     jest "^26.6.3"
 
-esbuild@^0.12.1:
-  version "0.12.1"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild/-/esbuild-0.12.1.tgz#f652d5b3b9432dbb42fc2c034ddd62360296e03d"
-  integrity sha512-WfQ00MKm/Y4ysz1u9PCUAsV66k5lbrcEvS6aG9jhBIavpB94FBdaWeBkaZXxCZB4w+oqh+j4ozJFWnnFprOXbg==
+esbuild@^0.12.8:
+  version "0.12.8"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild/-/esbuild-0.12.8.tgz#ac90da77cb3bfbf49ab815200bcef7ffe1a3348f"
+  integrity sha512-sx/LwlP/SWTGsd9G4RlOPrXnIihAJ2xwBUmzoqe2nWwbXORMQWtAGNJNYLBJJqa3e9PWvVzxdrtyFZJcr7D87g==
 
 escalade@^3.1.1:
   version "3.1.1"

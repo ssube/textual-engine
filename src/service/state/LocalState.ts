@@ -44,6 +44,7 @@ import {
   META_VERBS,
   META_WORLDS,
   SIGNAL_STEP,
+  SPLIT_HEAD_TAIL,
   VERB_PREFIX,
 } from '../../util/constants';
 import { getVerbScripts } from '../../util/script';
@@ -135,7 +136,7 @@ export class LocalStateService implements StateService {
     this.event.removeGroup(this);
   }
 
-// #region event handlers
+  // #region event handlers
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
@@ -258,16 +259,16 @@ export class LocalStateService implements StateService {
     this.logger.debug({ world: world.meta.id }, 'registering loaded world');
     this.worlds.push(world);
   }
-// #endregion event handlers
+  // #endregion event handlers
 
-// #region meta commands
+  // #region meta commands
   /**
    * Create a new world and invite players to join.
    */
   public async doCreate(target: string, depth: number): Promise<void> {
     const generator = mustExist(this.generator);
 
-    const [id, seed] = target.split(' ', 2);
+    const [id, seed] = target.split(' ', SPLIT_HEAD_TAIL);
     this.logger.debug({
       depth,
       id,
@@ -565,7 +566,7 @@ export class LocalStateService implements StateService {
       });
     }
   }
-// #endregion meta commands
+  // #endregion meta commands
 
   public async step(): Promise<StepResult> {
     if (isNil(this.state)) {
@@ -652,7 +653,7 @@ export class LocalStateService implements StateService {
     };
   }
 
-// #region state access callbacks
+  // #region state access callbacks
   /**
    * Handler for a room change from the state helper.
    */
@@ -694,7 +695,7 @@ export class LocalStateService implements StateService {
       volume,
     });
   }
-// #endregion state access callbacks
+  // #endregion state access callbacks
 
   /**
    * Emit changed rooms to relevant actors.

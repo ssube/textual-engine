@@ -13,7 +13,7 @@ export type Immutable<TBase> =
 
 export type KeyList<TList> = Array<keyof TList>;
 
-type FilterBase<TBase, TCond> = {
+export type FilterBase<TBase, TCond> = {
   [TKey in keyof TBase]: TBase[TKey] extends TCond ? TKey : never;
 };
 

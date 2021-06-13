@@ -10,7 +10,7 @@ import { splitChain } from '../../util/template/SplitChain';
 import { ScriptMap, ScriptRef } from '../../util/types';
 import { RandomGenerator } from '../random';
 
-export interface PipeTemplateOptions extends BaseOptions {
+export interface ChainTemplateOptions extends BaseOptions {
   [INJECT_RANDOM]?: RandomGenerator;
 }
 
@@ -19,7 +19,7 @@ export class ChainTemplateService implements TemplateService {
   protected readonly joiner: JoinChain;
   protected readonly random: RandomGenerator;
 
-  constructor(options: PipeTemplateOptions) {
+  constructor(options: ChainTemplateOptions) {
     this.random = mustExist(options[INJECT_RANDOM]);
     this.joiner = new JoinChain({
       joiners: [' '],

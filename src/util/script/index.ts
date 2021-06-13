@@ -7,7 +7,7 @@ import { isRoom, Room } from '../../model/entity/Room';
 import { SIGNAL_PREFIX, VERB_PREFIX } from '../constants';
 import { ScriptMap } from '../types';
 
-interface VerbTarget {
+export interface VerbTarget {
   actor?: Actor;
   item?: Item;
   room?: Room;

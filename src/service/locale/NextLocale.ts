@@ -9,7 +9,7 @@ import { INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER } from '../../module';
 import { EVENT_LOCALE_BUNDLE } from '../../util/constants';
 import { EventBus } from '../event';
 
-interface NextLocaleOptions extends BaseOptions {
+export interface NextLocaleOptions extends BaseOptions {
   [INJECT_CONFIG]?: ConfigFile;
   [INJECT_EVENT]?: EventBus;
   [INJECT_LOGGER]?: Logger;

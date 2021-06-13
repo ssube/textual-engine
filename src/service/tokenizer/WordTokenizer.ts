@@ -19,7 +19,7 @@ const REMOVED_WORDS = new Set([
 
 const SPLIT_CHAR = ' ';
 
-interface WordTokenizerOptions extends BaseOptions {
+export interface WordTokenizerOptions extends BaseOptions {
   [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
 }

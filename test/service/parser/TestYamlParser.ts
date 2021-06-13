@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
 
-import { DataLoadError } from '../../../src/error/DataError';
+import { DataLoadError } from '../../../src/error/DataLoadError';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { mapType } from '../../../src/service/parser/yaml/MapType';
 import { YamlParser } from '../../../src/service/parser/YamlParser';

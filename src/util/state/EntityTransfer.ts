@@ -20,7 +20,7 @@ export interface ItemTransfer {
   target: Actor | Room;
 }
 
-interface EntityTransferOptions extends BaseOptions {
+export interface EntityTransferOptions extends BaseOptions {
   [INJECT_LOGGER]?: Logger;
 }
 

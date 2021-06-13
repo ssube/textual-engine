@@ -6,7 +6,7 @@ import { EventBus, EventGroup } from '.';
 import { INJECT_LOGGER } from '../../module';
 import { EventHandler } from '../../util/async/event';
 
-interface EventBusOptions extends BaseOptions {
+export interface NodeEventBusOptions extends BaseOptions {
   [INJECT_LOGGER]?: Logger;
 }
 
@@ -15,7 +15,7 @@ export class NodeEventBus extends EventEmitter implements EventBus {
   protected handlers: Map<EventGroup, Array<[string, EventHandler<unknown>]>>;
   protected logger: Logger;
 
-  constructor(options: EventBusOptions) {
+  constructor(options: NodeEventBusOptions) {
     super();
 
     this.handlers = new Map();

@@ -19,7 +19,6 @@ export function parseArgs(args: Array<string>): ParsedArgs {
     },
     array: ['data', 'input', 'module'],
     default: {
-      depth: PORTAL_DEPTH,
       module: ['core', 'node'],
     },
     // envPrefix: 'TEXTUAL_',

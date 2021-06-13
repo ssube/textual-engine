@@ -4,7 +4,7 @@ import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
 
 import { RenderService } from '.';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../module';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { onceEvent } from '../../util/async/event';
 import {
   EVENT_ACTOR_OUTPUT,
@@ -18,7 +18,6 @@ import { EventBus } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
 import { StateStepEvent } from '../state/events';
-import { BaseRenderOptions } from './react/BaseRender';
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export class LineRender implements RenderService {
@@ -34,7 +33,7 @@ export class LineRender implements RenderService {
 
   protected reader?: LineInterface;
 
-  constructor(options: BaseRenderOptions) {
+  constructor(options: InjectedOptions) {
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({

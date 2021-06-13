@@ -7,13 +7,13 @@ import { ActorRoomError } from '../../error/ActorRoomError';
 import { NotInitializedError } from '../../error/NotInitializedError';
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Command } from '../../model/Command';
-import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
+import { EntityForType, WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../model/entity/Actor';
 import { isRoom } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
+import { InjectedOptions, INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
 import { ShowVolume, StateSource } from '../../util/actor';
 import { CompletionSet } from '../../util/async/CompletionSet';
 import { catchAndLog, onceEvent } from '../../util/async/event';
@@ -67,14 +67,6 @@ import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
 import { ScriptContext, ScriptService, SuppliedScope } from '../script';
 
-export interface LocalStateServiceOptions extends BaseOptions {
-  [INJECT_COUNTER]?: Counter;
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOGGER]?: Logger;
-  [INJECT_RANDOM]?: RandomGenerator;
-  [INJECT_SCRIPT]?: ScriptService;
-}
-
 @Inject(
   INJECT_COUNTER,
   INJECT_EVENT,
@@ -98,7 +90,7 @@ export class LocalStateService implements StateService {
   protected generator?: StateEntityGenerator;
   protected transfer?: StateEntityTransfer;
 
-  constructor(options: LocalStateServiceOptions) {
+  constructor(options: InjectedOptions) {
     this.container = options.container;
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),

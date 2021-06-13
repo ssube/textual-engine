@@ -23,9 +23,7 @@ describe('behavior actor', () => {
       logger: NullLogger.global,
     });
 
-    const actorService = await container.create(BehaviorActorService, {
-      actor: 'foo',
-    });
+    const actorService = await container.create(BehaviorActorService);
     await actorService.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
@@ -76,9 +74,7 @@ describe('behavior actor', () => {
       logger: NullLogger.global,
     });
 
-    const actorService = await container.create(BehaviorActorService, {
-      actor: 'foo',
-    });
+    const actorService = await container.create(BehaviorActorService);
     await actorService.start();
     await actorService.stop();
 
@@ -92,9 +88,7 @@ describe('behavior actor', () => {
       logger: NullLogger.global,
     });
 
-    const actorService = await container.create(BehaviorActorService, {
-      actor: 'foo',
-    });
+    const actorService = await container.create(BehaviorActorService);
     await actorService.start();
 
     return expect(actorService.last()).to.eventually.be.rejectedWith(NotImplementedError);

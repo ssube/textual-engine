@@ -1,7 +1,7 @@
 import { constructorName, isNil, mergeMap, mustExist, NotFoundError } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
-import { WorldEntityType } from '../../model/entity';
+import { Inject, Logger } from 'noicejs';
 
+import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
@@ -11,7 +11,7 @@ import { BaseTemplate, Template, TemplateMetadata, TemplatePrimitive, TemplateRe
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
-import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE } from '../../module';
+import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE, InjectedOptions } from '../../module';
 import { Counter } from '../../service/counter';
 import { RandomGenerator } from '../../service/random';
 import { CreateParams } from '../../service/state';
@@ -20,13 +20,6 @@ import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
 import { findByTemplateId } from '../template';
 import { ScriptMap } from '../types';
-
-export interface EntityGeneratorOptions extends BaseOptions {
-  [INJECT_COUNTER]?: Counter;
-  [INJECT_LOGGER]?: Logger;
-  [INJECT_RANDOM]?: RandomGenerator;
-  [INJECT_TEMPLATE]?: TemplateService;
-}
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
 export class StateEntityGenerator {
@@ -37,7 +30,7 @@ export class StateEntityGenerator {
 
   protected world?: WorldTemplate;
 
-  constructor(options: EntityGeneratorOptions) {
+  constructor(options: InjectedOptions) {
     this.counter = mustExist(options[INJECT_COUNTER]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),

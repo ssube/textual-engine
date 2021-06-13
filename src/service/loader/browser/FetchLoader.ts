@@ -1,13 +1,14 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 
 import { LoaderService } from '..';
-import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
+import { InjectedOptions } from '../../../module';
+import { BaseLoader } from '../BaseLoader';
 
 export class BrowserFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;
   protected scope: typeof window;
 
-  constructor(options: BaseLoaderOptions, w = window) {
+  constructor(options: InjectedOptions, w = window) {
     super(options, ['http', 'https']);
     this.fetch = w.fetch;
     this.scope = w;

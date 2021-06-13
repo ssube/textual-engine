@@ -1,11 +1,11 @@
 import { constructorName, doesExist, mustExist, NotImplementedError } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { Actor, ActorSource } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
-import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM } from '../../module';
+import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
 import { EventBus } from '../event';
 import { RandomGenerator } from '../random';
@@ -17,13 +17,6 @@ const WAIT_CMD: Command = {
   verb: VERB_WAIT,
   target: 'turn',
 };
-
-export interface BehaviorActorOptions extends BaseOptions {
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOGGER]?: Logger;
-  [INJECT_RANDOM]?: RandomGenerator;
-  actor?: string;
-}
 
 /**
  * Behavioral input generates commands based on the actor's current
@@ -37,7 +30,7 @@ export class BehaviorActorService implements ActorService {
 
   protected next: Map<string, Command>;
 
-  constructor(options: BehaviorActorOptions) {
+  constructor(options: InjectedOptions) {
     this.event = mustExist(options[INJECT_EVENT]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),

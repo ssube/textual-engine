@@ -1,10 +1,10 @@
 import { constructorName, mustExist } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
 import { ShortcutData, ShortcutItem } from '../../../component/shared';
 import { Entity } from '../../../model/entity/Base';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { debounce } from '../../../util/async/Debounce';
 import { onceEvent } from '../../../util/async/event';
 import {
@@ -24,13 +24,6 @@ import { StateStepEvent } from '../../state/events';
 
 export interface BaseRenderConfig {
   shortcuts: boolean;
-}
-
-export interface BaseRenderOptions extends BaseOptions {
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOCALE]?: LocaleService;
-  [INJECT_LOGGER]?: Logger;
-  config?: BaseRenderConfig;
 }
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
@@ -53,8 +46,8 @@ export abstract class BaseReactRender implements RenderService {
 
   public abstract update(): void;
 
-  constructor(options: BaseRenderOptions) {
-    this.config = mustExist(options.config);
+  constructor(options: InjectedOptions) {
+    this.config = mustExist(options.config) as BaseRenderConfig;
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = mustExist(options[INJECT_LOGGER]).child({

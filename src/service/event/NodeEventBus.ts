@@ -1,21 +1,17 @@
 import { constructorName, doesExist, getOrDefault, mustExist } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { Inject, Logger } from 'noicejs';
 
 import { EventBus, EventGroup } from '.';
-import { INJECT_LOGGER } from '../../module';
+import { INJECT_LOGGER, InjectedOptions } from '../../module';
 import { EventHandler } from '../../util/async/event';
-
-export interface NodeEventBusOptions extends BaseOptions {
-  [INJECT_LOGGER]?: Logger;
-}
 
 @Inject(INJECT_LOGGER)
 export class NodeEventBus extends EventEmitter implements EventBus {
   protected handlers: Map<EventGroup, Array<[string, EventHandler<unknown>]>>;
   protected logger: Logger;
 
-  constructor(options: NodeEventBusOptions) {
+  constructor(options: InjectedOptions) {
     super();
 
     this.handlers = new Map();

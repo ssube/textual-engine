@@ -1,11 +1,11 @@
 import { constructorName, doesExist, mustExist } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER, InjectedOptions } from '../../module';
 import { showCheck, StateSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
 import {
@@ -30,14 +30,6 @@ import { StepResult } from '../state';
 import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
 import { TokenizerService } from '../tokenizer';
 
-export interface PlayerActorOptions extends BaseOptions {
-  [INJECT_COUNTER]?: Counter;
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOCALE]?: LocaleService;
-  [INJECT_LOGGER]?: Logger;
-  [INJECT_TOKENIZER]?: TokenizerService;
-}
-
 /**
  * Behavioral input generates commands based on the actor's current
  * state (room, inventory, etc).
@@ -60,7 +52,7 @@ export class PlayerActorService implements ActorService {
    */
   protected pid: string;
 
-  constructor(options: PlayerActorOptions) {
+  constructor(options: InjectedOptions) {
     this.counter = mustExist(options[INJECT_COUNTER]);
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);

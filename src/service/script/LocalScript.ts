@@ -1,9 +1,9 @@
-import { constructorName, isNil, mergeMap } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { constructorName, isNil, mergeMap, mustExist } from '@apextoaster/js-utils';
+import { Inject, Logger } from 'noicejs';
 
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
 import { WorldEntity, WorldEntityType } from '../../model/entity';
-import { INJECT_LOGGER } from '../../module';
+import { INJECT_LOGGER, InjectedOptions } from '../../module';
 import { SignalActorGet } from '../../script/signal/actor/ActorGet';
 import { SignalActorHit } from '../../script/signal/actor/ActorHit';
 import { SignalActorStep } from '../../script/signal/actor/ActorStep';
@@ -41,17 +41,13 @@ const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['verb-wait', VerbActorWait],
 ];
 
-export interface LocalScriptServiceOptions extends BaseOptions {
-  [INJECT_LOGGER]: Logger;
-}
-
 @Inject(INJECT_LOGGER)
 export class LocalScriptService implements ScriptService {
   protected logger: Logger;
   protected scripts: Map<string, ScriptFunction>;
 
-  constructor(options: LocalScriptServiceOptions, scripts = COMMON_SCRIPTS) {
-    this.logger = options[INJECT_LOGGER].child({
+  constructor(options: InjectedOptions, scripts = COMMON_SCRIPTS) {
+    this.logger = mustExist(options[INJECT_LOGGER]).child({
       kind: constructorName(this),
     });
     this.scripts = new Map(scripts);

@@ -1,13 +1,14 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 
 import { LoaderService } from '..';
+import { InjectedOptions } from '../../../module';
 import { splitPath } from '../../../util/string';
-import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
+import { BaseLoader } from '../BaseLoader';
 
 export class BrowserPageLoader extends BaseLoader implements LoaderService {
   protected dom: Document;
 
-  constructor(options: BaseLoaderOptions, dom = document) {
+  constructor(options: InjectedOptions, dom = document) {
     super(options, ['page']);
     this.dom = dom;
   }

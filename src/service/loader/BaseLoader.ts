@@ -1,9 +1,9 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { Inject, Logger } from 'noicejs';
 
 import { LoaderService } from '.';
 import { DataFile } from '../../model/file/Data';
-import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER } from '../../module';
+import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import {
   EVENT_LOADER_CONFIG,
@@ -18,12 +18,6 @@ import { EventBus } from '../event';
 import { Parser } from '../parser';
 import { LoaderSaveEvent } from './events';
 
-export interface BaseLoaderOptions extends BaseOptions {
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOGGER]?: Logger;
-  [INJECT_PARSER]?: Parser;
-}
-
 @Inject(INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER)
 export abstract class BaseLoader implements LoaderService {
   protected events: EventBus;
@@ -32,7 +26,7 @@ export abstract class BaseLoader implements LoaderService {
 
   protected protocols: Array<string>;
 
-  constructor(options: BaseLoaderOptions, protocols: Array<string>) {
+  constructor(options: InjectedOptions, protocols: Array<string>) {
     this.events = mustExist(options[INJECT_EVENT]);
     this.logger = mustExist(options[INJECT_LOGGER]);
     this.parser = mustExist(options[INJECT_PARSER]);

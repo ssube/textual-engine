@@ -1,25 +1,21 @@
 import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
-import { BaseOptions, Inject } from 'noicejs';
+import { Inject } from 'noicejs';
 
 import { TemplateService } from '.';
 import { ModifierPrimitive } from '../../model/mapped/Modifier';
 import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/mapped/Template';
-import { INJECT_RANDOM } from '../../module';
+import { INJECT_RANDOM, InjectedOptions } from '../../module';
 import { JoinChain } from '../../util/template/JoinChain';
 import { splitChain } from '../../util/template/SplitChain';
 import { ScriptMap, ScriptRef } from '../../util/types';
 import { RandomGenerator } from '../random';
-
-export interface ChainTemplateOptions extends BaseOptions {
-  [INJECT_RANDOM]?: RandomGenerator;
-}
 
 @Inject(INJECT_RANDOM)
 export class ChainTemplateService implements TemplateService {
   protected readonly joiner: JoinChain;
   protected readonly random: RandomGenerator;
 
-  constructor(options: ChainTemplateOptions) {
+  constructor(options: InjectedOptions) {
     this.random = mustExist(options[INJECT_RANDOM]);
     this.joiner = new JoinChain({
       joiners: [' '],

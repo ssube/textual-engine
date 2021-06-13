@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { matchIdSegments } from '../../src/util/string';
+import { hasText, matchIdSegments } from '../../src/util/string';
 
 describe('string utils', () => {
   describe('match ID helper', () => {
@@ -14,6 +14,25 @@ describe('string utils', () => {
     it('should not match if the value starts with a partial segment', async () => {
       // this was the first real bug :D
       expect(matchIdSegments('foo-11', 'foo-1')).to.equal(false);
+    });
+
+    it('should not match if the filter is longer than the ID', async () => {
+      expect(matchIdSegments('foo-1', 'foo-1-1')).to.equal(false);
+      expect(matchIdSegments('foo-bar', 'foo-1-1')).to.equal(false);
+    });
+  });
+
+  describe('has text helper', () => {
+    it('should check existence', async () => {
+      expect(hasText(null as any)).to.equal(false);
+      expect(hasText(undefined as any)).to.equal(false);
+      expect(hasText([] as any)).to.equal(false);
+    });
+
+    it('should check whitespace', async () => {
+      expect(hasText('\n')).to.equal(false);
+      expect(hasText('\t')).to.equal(false);
+      expect(hasText('   ')).to.equal(false);
     });
   });
 });

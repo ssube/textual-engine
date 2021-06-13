@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 
 import { isActor } from '../../src/model/entity/Actor';
-import { indexEntity, matchEntity } from '../../src/util/entity';
-import { makeTestActor, makeTestItem } from '../entity';
+import { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy } from '../../src/util/entity';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../entity';
 
 describe('entity utils', () => {
   describe('index entity helper', () => {
@@ -52,8 +52,40 @@ describe('entity utils', () => {
     });
   });
 
-  describe('match entity metadata helper', () => {
-    xit('should match if the ID starts with the search ID');
-    xit('should check if the name contains the search string');
+  describe('match metadata helper', () => {
+    it('should match if the ID starts with the search ID', async () => {
+      const entity = makeTestRoom('foo-1', 'bar', '', [], []);
+
+      expect(matchMetadata(entity, {
+        id: 'foo',
+      })).to.equal(true);
+    });
+
+    it('should check if the name contains the search string', async () => {
+      const entity = makeTestRoom('foo', 'bar', '', [], []);
+
+      expect(matchMetadata(entity, {
+        name: 'a',
+      })).to.equal(true);
+    });
+  });
+
+  describe('match metadata fuzzy helper', () => {
+    it('should match by default', async () => {
+      const entity = makeTestRoom('foo', 'bar', '', [], []);
+
+      expect(matchMetadataFuzzy(entity, {})).to.equal(true);
+    });
+
+    it('should match name or ID', async () => {
+      const entity = makeTestRoom('foo', 'bar', '', [], []);
+
+      expect(matchMetadataFuzzy(entity, {
+        id: 'foo',
+      })).to.equal(true);
+      expect(matchMetadataFuzzy(entity, {
+        name: 'bar',
+      })).to.equal(true);
+    });
   });
 });

@@ -68,9 +68,9 @@
   },
   "nyc": {
     "cache": false,
-    "branches": 70,
-    "lines": 80,
+    "branches": 75,
+    "lines": 85,
     "functions": 75,
-    "statements": 80
+    "statements": 85
   }
 }

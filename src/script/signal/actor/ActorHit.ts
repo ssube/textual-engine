@@ -25,7 +25,7 @@ export async function SignalActorHit(this: ScriptTarget, context: ScriptContext)
 
   const health = decrementKey(this.stats, STAT_HEALTH, damage);
   if (health > 0) {
-    await context.state.show('actor.hit.health', { actor: this, health });
+    await context.state.show('actor.hit.health', { actor: this, damage, health });
   } else {
     // drop inventory
     const room = mustExist(context.room);
@@ -36,6 +36,6 @@ export async function SignalActorHit(this: ScriptTarget, context: ScriptContext)
         target: room,
       }, context);
     }
-    await context.state.show('actor.hit.dead', { actor: this });
+    await context.state.show('actor.hit.dead', { actor: this, damage });
   }
 }

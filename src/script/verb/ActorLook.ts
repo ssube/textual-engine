@@ -7,7 +7,7 @@ import { isRoom } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { getKey } from '../../util/collection/map';
 import { STAT_HEALTH } from '../../util/constants';
-import { FUZZY_MATCHERS } from '../../util/entity';
+import { createFuzzyMatcher } from '../../util/entity';
 
 export async function VerbActorLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -27,7 +27,7 @@ export async function ActorLookTarget(this: Actor, context: ScriptContext, targe
     meta: {
       name: targetName,
     },
-    matchers: FUZZY_MATCHERS
+    matchers: createFuzzyMatcher(),
   });
 
   const target = results[mustExist(context.command).index];

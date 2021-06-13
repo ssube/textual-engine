@@ -1,7 +1,7 @@
 import { Logger } from 'noicejs';
 
 import { Command } from '../../model/Command';
-import { WorldEntity } from '../../model/entity';
+import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
 import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Room } from '../../model/entity/Room';
@@ -16,11 +16,11 @@ export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
 
 export interface StateHelper {
-  enter: (target: StateSource) => Promise<void>;
-  find: (search: SearchFilter) => Promise<Array<WorldEntity>>;
-  move: (target: ActorTransfer | ItemTransfer, context: ScriptContext) => Promise<void>; // replaces transfer
-  show: (msg: string, context?: LocaleContext, volume?: ShowVolume, source?: StateSource) => Promise<void>;
-  quit: () => Promise<void>;
+  enter(target: StateSource): Promise<void>;
+  find<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>>;
+  move(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void>; // replaces transfer
+  show(msg: string, context?: LocaleContext, volume?: ShowVolume, source?: StateSource): Promise<void>;
+  quit(): Promise<void>;
 }
 
 /**
@@ -69,6 +69,6 @@ export interface ScriptContext extends SuppliedScope {
 }
 
 export interface ScriptService {
-  broadcast(search: SearchFilter, slot: string, scope: SuppliedScope): Promise<void>;
+  broadcast(search: SearchFilter<WorldEntityType>, slot: string, scope: SuppliedScope): Promise<void>;
   invoke(target: ScriptTarget, slot: string, scope: SuppliedScope): Promise<void>;
 }

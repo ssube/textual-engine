@@ -7,8 +7,8 @@ import { ActorRoomError } from '../../error/ActorRoomError';
 import { NotInitializedError } from '../../error/NotInitializedError';
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Command } from '../../model/Command';
-import { WorldEntity } from '../../model/entity';
-import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor';
+import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
+import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../model/entity/Actor';
 import { isRoom } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
@@ -222,7 +222,7 @@ export class LocalStateService implements StateService {
         template: actorTemplate,
       }, 'creating player actor from template');
 
-      const actor = await mustExist(this.generator).createActor(actorTemplate, ActorType.PLAYER);
+      const actor = await mustExist(this.generator).createActor(actorTemplate, ActorSource.PLAYER);
       actor.meta.id = event.pid;
 
       this.logger.debug({
@@ -658,14 +658,14 @@ export class LocalStateService implements StateService {
    * Handler for a room change from the state helper.
    */
   public async stepEnter(target: StateSource): Promise<void> {
-    if (doesExist(target.actor) && target.actor.actorType === ActorType.PLAYER) {
+    if (doesExist(target.actor) && target.actor.source === ActorSource.PLAYER) {
       const state = mustExist(this.state);
       const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);
       state.rooms.push(...rooms);
     }
   }
 
-  public async stepFind(search: SearchFilter): Promise<Array<WorldEntity>> {
+  public async stepFind<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>> {
     return findMatching(mustExist(this.state), search);
   }
 

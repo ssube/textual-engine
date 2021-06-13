@@ -1,4 +1,4 @@
-import { Actor, ACTOR_TYPE, ActorType } from '../src/model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorSource } from '../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../src/model/entity/Item';
 import { Room, ROOM_TYPE } from '../src/model/entity/Room';
 import { Template } from '../src/model/mapped/Template';
@@ -9,7 +9,7 @@ import { TEMPLATE_CHANCE } from '../src/util/constants';
 
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {
-    actorType: ActorType.DEFAULT,
+    source: ActorSource.BEHAVIOR,
     items,
     meta: {
       desc: '',

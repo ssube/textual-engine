@@ -3,7 +3,7 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { ActorType } from '../../../../src/model/entity/Actor';
+import { ActorSource } from '../../../../src/model/entity/Actor';
 import { SignalActorGet } from '../../../../src/script/signal/actor/ActorGet';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
@@ -44,7 +44,7 @@ describe('actor get scripts', () => {
 
       const item = makeTestItem('', '', '');
       const actor = makeTestActor('', '', '');
-      actor.actorType = ActorType.PLAYER;
+      actor.source = ActorSource.PLAYER;
 
       await SignalActorGet.call(actor, {
         actor,

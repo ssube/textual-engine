@@ -9,7 +9,7 @@ export { BunyanLogger } from './logger/BunyanLogger';
 
 export { Command } from './model/Command';
 export { Metadata } from './model/Metadata';
-export { Actor, ACTOR_TYPE, ActorType } from './model/entity/Actor';
+export { Actor, ACTOR_TYPE, ActorSource } from './model/entity/Actor';
 export { Entity } from './model/entity/Base';
 export { Item, ITEM_TYPE } from './model/entity/Item';
 export { Portal, PortalGroups, PortalLinkage } from './model/entity/Portal';
@@ -100,7 +100,7 @@ export { ShowVolume, StateSource, showCheck } from './util/actor/index';
 
 export { TEMPLATE_CHANCE, META_VERBS, COMMON_VERBS, EVENT_NAMES } from './util/constants';
 export { Singleton, SingletonConstructor } from './util/container';
-export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, FUZZY_MATCHERS, DEFAULT_MATCHERS } from './util/entity';
+export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, createFuzzyMatcher, createStrictMatcher } from './util/entity';
 export { makeConstStringSchema } from './util/schema';
 export { hasText, matchIdSegments, splitPath } from './util/string';
 export { Immutable, KeyList, Filter, FilterBase, FilterKeys, Replace, ScriptData, ScriptMap, ScriptRef, StatMap } from './util/types';

@@ -6,7 +6,7 @@ import { createStubInstance, match, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
-import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../../src/model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Template } from '../../../src/model/mapped/Template';
@@ -54,8 +54,8 @@ import { getStubHelper, getTestContainer, getTestLogger } from '../../helper';
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
-    actorType: {
-      base: ActorType.DEFAULT,
+    source: {
+      base: ActorSource.BEHAVIOR,
       type: 'string',
     },
     items: [],

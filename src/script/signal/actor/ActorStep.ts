@@ -1,7 +1,7 @@
 import { isNil, mustExist } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { ActorType, isActor } from '../../../model/entity/Actor';
+import { ActorSource, isActor } from '../../../model/entity/Actor';
 import { LocaleContext } from '../../../service/locale';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { ShowVolume, StateSource } from '../../../util/actor';
@@ -21,7 +21,7 @@ export async function SignalActorStep(this: ScriptTarget, context: ScriptContext
 
   const health = getKey(this.stats, STAT_HEALTH, 0);
   if (health <= 0) {
-    if (this.actorType === ActorType.PLAYER) {
+    if (this.source === ActorSource.PLAYER) {
       await context.state.show('actor.step.command.dead', { actor: this });
       await context.state.quit();
     }
@@ -51,7 +51,7 @@ export async function SignalActorStep(this: ScriptTarget, context: ScriptContext
     return;
   }
 
-  if (this.actorType === ActorType.PLAYER) {
+  if (this.source === ActorSource.PLAYER) {
     if (command.target.length > 0) {
       await context.state.show('actor.step.command.player.target', showContext, ShowVolume.SELF, source);
     } else {

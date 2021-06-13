@@ -2,7 +2,7 @@ import { constructorName, isNil, mergeMap, mustExist, NotFoundError } from '@ape
 import { BaseOptions, Inject, Logger } from 'noicejs';
 import { WorldEntityType } from '../../model/entity';
 
-import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
@@ -55,10 +55,10 @@ export class StateEntityGenerator {
   }
 
   // take ID and look up template?
-  public async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {
+  public async createActor(template: Template<Actor>, source = ActorSource.BEHAVIOR): Promise<Actor> {
     const actor: Actor = {
       type: 'actor',
-      actorType,
+      source,
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
       scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
@@ -211,7 +211,7 @@ export class StateEntityGenerator {
 
     for (const mod of selected) {
       await this.modifyMetadata(target.meta, mod.meta);
-      // target.actorType cannot be modified
+      // target.source cannot be modified
 
       target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
       target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);

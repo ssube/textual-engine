@@ -3,7 +3,7 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { Actor, ACTOR_TYPE, ActorType } from '../../../../src/model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
 import { VerbActorDrop } from '../../../../src/script/verb/ActorDrop';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
@@ -53,7 +53,7 @@ describe('actor drop scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve(items));
 
       const actor: Actor = {
-        actorType: ActorType.DEFAULT,
+        source: ActorSource.BEHAVIOR,
         items: [items[0]],
         meta: {
           id: '',
@@ -101,7 +101,7 @@ describe('actor drop scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve(items));
 
       const actor: Actor = {
-        actorType: ActorType.DEFAULT,
+        source: ActorSource.BEHAVIOR,
         items: [items[0]],
         meta: {
           id: '',
@@ -149,7 +149,7 @@ describe('actor drop scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve(items));
 
       const actor: Actor = {
-        actorType: ActorType.DEFAULT,
+        source: ActorSource.BEHAVIOR,
         items: [items[0]],
         meta: {
           id: '',
@@ -192,7 +192,7 @@ describe('actor drop scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve([]));
 
       const actor: Actor = {
-        actorType: ActorType.DEFAULT,
+        source: ActorSource.BEHAVIOR,
         items: [],
         meta: {
           id: '',

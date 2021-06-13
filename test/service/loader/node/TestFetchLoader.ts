@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { match, stub } from 'sinon';
 
-import { ACTOR_TYPE, ActorType } from '../../../../src/model/entity/Actor';
+import { ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
 import { INJECT_EVENT } from '../../../../src/module';
@@ -51,8 +51,8 @@ describe('node fetch loader', () => {
     const state = makeTestState('', []);
     const world = makeTestWorld([{
       base: {
-        actorType: {
-          base: ActorType.DEFAULT,
+        source: {
+          base: ActorSource.BEHAVIOR,
           type: 'string',
         },
         items: [],

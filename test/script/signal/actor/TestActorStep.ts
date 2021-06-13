@@ -3,7 +3,7 @@ import { Container, NullLogger } from 'noicejs';
 import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { Actor, ACTOR_TYPE, ActorType } from '../../../../src/model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
 import { CoreModule } from '../../../../src/module/CoreModule';
 import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
@@ -16,7 +16,7 @@ import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
 const TEST_ACTOR: Actor = {
-  actorType: ActorType.DEFAULT,
+  source: ActorSource.BEHAVIOR,
   items: [{
     meta: {
       desc: 'bon',
@@ -104,7 +104,7 @@ describe('actor step scripts', () => {
 
       await SignalActorStep.call({
         ...TEST_ACTOR,
-        actorType: ActorType.PLAYER,
+        source: ActorSource.PLAYER,
         stats: new Map([
           [STAT_HEALTH, 0],
         ]),
@@ -139,7 +139,7 @@ describe('actor step scripts', () => {
       const room = makeTestRoom('', '', '', [], []);
       const player = {
         ...TEST_ACTOR,
-        actorType: ActorType.PLAYER,
+        source: ActorSource.PLAYER,
       };
       await SignalActorStep.call(player, {
         actor: player,
@@ -178,7 +178,7 @@ describe('actor step scripts', () => {
       const transfer = testTransfer();
       await ActorLookTarget.call({
         ...TEST_ACTOR,
-        actorType: ActorType.PLAYER,
+        source: ActorSource.PLAYER,
       }, {
         command: {
           index: 0,

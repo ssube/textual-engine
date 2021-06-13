@@ -1,20 +1,20 @@
 import { doesExist, mustCoalesce } from '@apextoaster/js-utils';
 
-import { WorldEntity, WorldEntityType } from '../../model/entity';
-import { Actor } from '../../model/entity/Actor';
+import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
+import { Actor, ActorType, ACTOR_TYPE } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
-import { isRoom, Room } from '../../model/entity/Room';
+import { isRoom, Room, RoomType, ROOM_TYPE } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
-import { DEFAULT_MATCHERS } from '../entity';
+import { createStrictMatcher } from '../entity';
 import { Immutable } from '../types';
 
-export interface StateMatchers {
-  entity: (entity: Immutable<Entity>, search: SearchFilter) => boolean;
+export interface StateMatchers<TEntity extends WorldEntityType> {
+  entity: (entity: Immutable<Entity>, search: SearchFilter<TEntity>) => entity is EntityForType<TEntity>;
   metadata: (entity: Immutable<Entity>, search: Partial<Metadata>) => boolean;
 }
 
-export interface SearchFilter {
+export interface SearchFilter<TType extends WorldEntityType> {
   actor?: Partial<Metadata>;
   meta?: Partial<Metadata>;
   room?: Partial<Metadata>;
@@ -22,17 +22,17 @@ export interface SearchFilter {
   /**
    * @todo infer and specialize results
    */
-  type?: WorldEntityType;
+  type?: TType;
 
-  matchers?: StateMatchers;
+  matchers?: StateMatchers<TType>;
 }
 
 /**
  * Search state for any matching entities, including actors and their inventories.
  */
-export function findMatching(state: WorldState, search: SearchFilter): Array<WorldEntity> {
-  const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
-  const results: Array<WorldEntity> = [];
+export function findMatching<TType extends WorldEntityType>(state: WorldState, search: SearchFilter<TType>): Array<EntityForType<TType>> {
+  const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
+  const results: Array<EntityForType<TType>> = [];
 
   for (const room of state.rooms) {
     if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
@@ -74,7 +74,7 @@ export function findMatching(state: WorldState, search: SearchFilter): Array<Wor
  *
  * @todo stop searching each room once it has been added
  */
-export function findRoom(state: WorldState, search: SearchFilter): Array<Room> {
+export function findRoom(state: WorldState, search: SearchFilter<RoomType>): Array<Room> {
   const results = findContainer(state, search);
   // this has to use the filter and guard, because adding type to the search does not work for containers
   return results.filter(isRoom);
@@ -85,8 +85,8 @@ export function findRoom(state: WorldState, search: SearchFilter): Array<Room> {
  *
  * @todo stop searching each room once it has been added
  */
-export function findContainer(state: WorldState, search: SearchFilter): Array<Actor | Room> {
-  const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
+export function findContainer<TType extends ActorType | RoomType>(state: WorldState, search: SearchFilter<TType>): Array<Actor | Room> {
+  const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
   const results = new Set<Actor | Room>();
 
   for (const room of state.rooms) {

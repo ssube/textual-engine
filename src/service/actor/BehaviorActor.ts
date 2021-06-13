@@ -3,7 +3,7 @@ import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
-import { Actor, ActorType } from '../../model/entity/Actor';
+import { Actor, ActorSource } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM } from '../../module';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
@@ -49,7 +49,7 @@ export class BehaviorActorService implements ActorService {
 
   public async start(): Promise<void> {
     this.event.on(EVENT_STATE_ROOM, (event) => {
-      if (event.actor.actorType === ActorType.DEFAULT) {
+      if (event.actor.source === ActorSource.BEHAVIOR) {
         this.onRoom(event);
       }
     }, this);
@@ -68,7 +68,7 @@ export class BehaviorActorService implements ActorService {
     this.logger.debug({ event, which: behavior }, 'received room event from state');
 
     // attack player if possible
-    const player = event.room.actors.find((it) => it.actorType === ActorType.PLAYER);
+    const player = event.room.actors.find((it) => it.source === ActorSource.PLAYER);
     if (doesExist(player)) {
       this.logger.debug({ event, player }, 'attacking visible player');
       this.queue(event.room, event.actor, {

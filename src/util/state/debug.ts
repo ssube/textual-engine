@@ -9,7 +9,7 @@ export function debugState(state: WorldState): Array<string> {
     lines.push(`  room: ${room.meta.name} (${room.meta.id})`);
 
     for (const actor of room.actors) {
-      lines.push(`    actor: ${actor.meta.name} (${actor.meta.id}, ${actor.actorType})`);
+      lines.push(`    actor: ${actor.meta.name} (${actor.meta.id}, ${actor.source})`);
 
       for (const item of actor.items) {
         lines.push(`      item: ${item.meta.name} (${item.meta.id})`);

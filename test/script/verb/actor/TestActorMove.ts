@@ -4,7 +4,7 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { ActorType } from '../../../../src/model/entity/Actor';
+import { ActorSource } from '../../../../src/model/entity/Actor';
 import { PortalLinkage } from '../../../../src/model/entity/Portal';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
 import { VerbActorMove } from '../../../../src/script/verb/ActorMove';
@@ -255,7 +255,7 @@ describe('actor move scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve([target]));
 
       const actor = makeTestActor('', '', '');
-      actor.actorType = ActorType.PLAYER;
+      actor.source = ActorSource.PLAYER;
 
       const room = makeTestRoom('', '', '', [actor], []);
       room.portals.push({

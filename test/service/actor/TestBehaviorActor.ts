@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { BaseOptions, Container, NullLogger } from 'noicejs';
 import { createStubInstance, match } from 'sinon';
 
-import { Actor, ActorType } from '../../../src/model/entity/Actor';
+import { Actor, ActorSource } from '../../../src/model/entity/Actor';
 import { PortalLinkage } from '../../../src/model/entity/Portal';
 import { Room } from '../../../src/model/entity/Room';
 import { INJECT_EVENT, INJECT_RANDOM } from '../../../src/module';
@@ -32,7 +32,7 @@ describe('behavior actor', () => {
     const pending = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
     const actor: Actor = {
-      actorType: ActorType.DEFAULT,
+      source: ActorSource.BEHAVIOR,
       items: [],
       meta: {
         desc: '',
@@ -113,7 +113,7 @@ describe('behavior actor', () => {
     const pendingCommand = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
     const player = makeTestActor('foo', 'bar', '');
-    player.actorType = ActorType.PLAYER;
+    player.source = ActorSource.PLAYER;
 
     events.emit(EVENT_STATE_ROOM, {
       actor: makeTestActor('', '', ''),

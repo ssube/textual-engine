@@ -9,8 +9,10 @@ import { Entity } from './Base';
 
 export const ITEM_TYPE = 'item' as const;
 
+export type ItemType = typeof ITEM_TYPE;
+
 export interface Item {
-  type: typeof ITEM_TYPE;
+  type: ItemType;
   meta: Metadata;
   scripts: ScriptMap;
   stats: StatMap;

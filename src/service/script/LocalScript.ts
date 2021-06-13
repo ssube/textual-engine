@@ -2,7 +2,7 @@ import { constructorName, isNil, mergeMap } from '@apextoaster/js-utils';
 import { BaseOptions, Inject, Logger } from 'noicejs';
 
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
-import { WorldEntity } from '../../model/entity';
+import { WorldEntity, WorldEntityType } from '../../model/entity';
 import { INJECT_LOGGER } from '../../module';
 import { SignalActorGet } from '../../script/signal/actor/ActorGet';
 import { SignalActorHit } from '../../script/signal/actor/ActorHit';
@@ -94,7 +94,7 @@ export class LocalScriptService implements ScriptService {
     }
   }
 
-  public async broadcast(filter: SearchFilter, slot: string, scope: SuppliedScope): Promise<void> {
+  public async broadcast(filter: SearchFilter<WorldEntityType>, slot: string, scope: SuppliedScope): Promise<void> {
     const targets = await scope.state.find(filter);
 
     for (const target of targets) {

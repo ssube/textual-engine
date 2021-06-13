@@ -19,6 +19,7 @@ export function parseArgs(args: Array<string>): ParsedArgs {
     },
     array: ['data', 'input', 'module'],
     default: {
+      data: [],
       module: ['core', 'node'],
     },
     // envPrefix: 'TEXTUAL_',

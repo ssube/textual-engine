@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
 import { createStubInstance, SinonStub } from 'sinon';
 
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { Actor, ACTOR_TYPE, ActorType } from '../../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
 import { CoreModule } from '../../../../src/module/CoreModule';
@@ -10,7 +11,7 @@ import { ActorLookTarget } from '../../../../src/script/verb/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_LOOK, VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestRoom } from '../../../entity';
+import { makeTestItem, makeTestRoom } from '../../../entity';
 import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
@@ -47,6 +48,30 @@ const TEST_ACTOR: Actor = {
 
 describe('actor step scripts', () => {
   describe('actor step command', () => {
+    it('should require the script target be an actor', async () => {
+      const script = createStubInstance(LocalScriptService);
+      const stateHelper = getStubHelper();
+      const transfer = testTransfer();
+      const context = {
+        command: {
+          index: 0,
+          input: '',
+          target: '',
+          verb: VERB_WAIT,
+        },
+        data: new Map(),
+        logger: NullLogger.global,
+        random: createStubInstance(MathRandomGenerator),
+        room: makeTestRoom('', '', '', [], []),
+        script,
+        state: stateHelper,
+        transfer,
+      };
+
+      await expect(SignalActorStep.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+      await expect(SignalActorStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+    });
+
     it('should invoke the command verb script', async () => {
       const script = createStubInstance(LocalScriptService);
       const stateHelper = getStubHelper();
@@ -135,6 +160,9 @@ describe('actor step scripts', () => {
 
       expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWith('actor.step.command.player.verb');
     });
+
+    xit('should not invoke any scripts without a command');
+    xit('should show a message when the command verb has no script');
   });
 
   describe('actor step look with target', async () => {

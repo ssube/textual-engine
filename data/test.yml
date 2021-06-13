@@ -1,0 +1,25 @@
+logger:
+  level: debug
+  name: textual-engine
+  streams:
+    - level: debug
+      path: out/test.log
+locale:
+  bundles: {}
+  current: en
+  verbs: []
+services:
+  actors:
+    - name: actor-player
+      kind: core-player-actor
+    - name: actor-enemy
+      kind: core-behavior-actor
+  loaders:
+    - name: file-loader
+      kind: node-file-loader
+    - name: url-loader
+      kind: node-fetch-loader
+  renders: []
+  states:
+    - name: local-state
+      kind: core-local-state

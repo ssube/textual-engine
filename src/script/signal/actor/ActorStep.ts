@@ -1,5 +1,6 @@
-import { InvalidArgumentError, isNil, mustExist } from '@apextoaster/js-utils';
+import { isNil, mustExist } from '@apextoaster/js-utils';
 
+import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { ActorType, isActor } from '../../../model/entity/Actor';
 import { LocaleContext } from '../../../service/locale';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
@@ -15,7 +16,7 @@ export async function SignalActorStep(this: ScriptTarget, context: ScriptContext
   }, 'step script');
 
   if (!isActor(this)) {
-    throw new InvalidArgumentError('script target must be an actor');
+    throw new ScriptTargetError('script target must be an actor');
   }
 
   const health = getKey(this.stats, STAT_HEALTH, 0);

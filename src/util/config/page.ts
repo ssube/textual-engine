@@ -7,16 +7,19 @@ import { ConfigError } from '../../error/ConfigError';
 import { CONFIG_SCHEMA, ConfigFile } from '../../model/file/Config';
 import { splitPath } from '../string';
 
-export async function loadConfig(url: string): Promise<ConfigFile> {
+export async function loadConfig(url: string, doc = document): Promise<ConfigFile> {
   const { path } = splitPath(url);
-  const elem = document.getElementById(path);
+  const elem = doc.getElementById(path);
   const text = mustExist(elem).textContent;
 
   const schema = createSchema({
     include: {
-      exists: (it) => doesExist(document.getElementById(it)),
-      join: (...it) => it.join('/'),
-      read: (_it) => '',
+      exists: (it) => doesExist(doc.getElementById(it)),
+      join: (...it) => it.join('-'),
+      read: (it) => {
+        const readElem = mustExist(doc.getElementById(it));
+        return mustExist(readElem.textContent);
+      },
       resolve: (it) => it,
       schema: DEFAULT_SCHEMA,
     },

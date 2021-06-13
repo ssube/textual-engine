@@ -119,8 +119,9 @@ describe('actor look scripts', () => {
 
       await VerbActorLook.call(actor, context);
 
-      expect(stateHelper.show).to.have.callCount(2);
+      expect(stateHelper.show).to.have.callCount(3);
       expect(stateHelper.show).to.have.been.calledWith('actor.step.look.room.you');
+      expect(stateHelper.show).to.have.been.calledWith('actor.step.look.room.health');
       expect(stateHelper.show).to.have.been.calledWith('actor.step.look.room.seen');
     });
 
@@ -150,8 +151,9 @@ describe('actor look scripts', () => {
 
       const showStub = stateHelper.show as SinonStub;
       expect(showStub.getCall(0)).to.have.been.calledWith('actor.step.look.room.you');
-      expect(showStub.getCall(1)).to.have.been.calledWith('actor.step.look.room.seen');
-      expect(showStub.getCall(2)).to.have.been.calledWith('actor.step.look.item.seen');
+      expect(showStub.getCall(1)).to.have.been.calledWith('actor.step.look.room.health');
+      expect(showStub.getCall(2)).to.have.been.calledWith('actor.step.look.room.seen');
+      expect(showStub.getCall(3)).to.have.been.calledWith('actor.step.look.item.seen');
     });
 
     it('should describe portals in the room', async () => {
@@ -188,8 +190,9 @@ describe('actor look scripts', () => {
 
       const showStub = stateHelper.show as SinonStub;
       expect(showStub.getCall(0)).to.have.been.calledWith('actor.step.look.room.you');
-      expect(showStub.getCall(1)).to.have.been.calledWith('actor.step.look.room.seen');
-      expect(showStub.getCall(2)).to.have.been.calledWith('actor.step.look.room.portal');
+      expect(showStub.getCall(1)).to.have.been.calledWith('actor.step.look.room.health');
+      expect(showStub.getCall(2)).to.have.been.calledWith('actor.step.look.room.seen');
+      expect(showStub.getCall(3)).to.have.been.calledWith('actor.step.look.room.portal');
     });
   });
 

@@ -58,7 +58,9 @@ export async function ActorLookTarget(this: Actor, context: ScriptContext, targe
 
 export async function ActorLookRoom(this: Actor, context: ScriptContext): Promise<void> {
   const room = mustExist(context.room);
+  const health = getKey(this.stats, STAT_HEALTH, 0);
   await context.state.show('actor.step.look.room.you', { actor: this });
+  await context.state.show('actor.step.look.room.health', { actor: this, health });
   await context.state.show('actor.step.look.room.seen', { room });
 
   for (const item of this.items) {

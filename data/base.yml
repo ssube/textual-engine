@@ -93,6 +93,8 @@ worlds:
                 room:
                   you: |-
                     You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+                  health: |-
+                    You have {{health}} health.
                   seen: |-
                     You are in {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
                   inventory: |-

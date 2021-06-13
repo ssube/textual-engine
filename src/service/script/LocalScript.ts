@@ -1,4 +1,4 @@
-import { constructorName, isNil, mergeMap, mustExist } from '@apextoaster/js-utils';
+import { isNil, mergeMap } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
@@ -18,6 +18,7 @@ import { VerbActorTake } from '../../script/verb/ActorTake';
 import { VerbActorUse } from '../../script/verb/ActorUse';
 import { VerbActorWait } from '../../script/verb/ActorWait';
 import { getSignalScripts, getVerbScripts } from '../../util/script';
+import { makeServiceLogger } from '../../util/service';
 import { SearchFilter } from '../../util/state/search';
 
 /**
@@ -47,9 +48,7 @@ export class LocalScriptService implements ScriptService {
   protected scripts: Map<string, ScriptFunction>;
 
   constructor(options: InjectedOptions, scripts = COMMON_SCRIPTS) {
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.scripts = new Map(scripts);
   }
 

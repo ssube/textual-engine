@@ -1,9 +1,10 @@
-import { constructorName, getOrDefault, mustExist } from '@apextoaster/js-utils';
+import { getOrDefault, mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { TokenizerService } from '.';
 import { Command } from '../../model/Command';
 import { INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
+import { makeServiceLogger } from '../../util/service';
 import { LocaleService } from '../locale';
 
 const REMOVED_WORDS = new Set([
@@ -27,9 +28,7 @@ export class WordTokenizer implements TokenizerService {
 
   constructor(options: InjectedOptions) {
     this.locale = mustExist(options[INJECT_LOCALE]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.verbs = new Map();
   }
 

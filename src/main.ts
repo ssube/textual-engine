@@ -34,7 +34,10 @@ export async function main(args: Array<string>): Promise<number> {
 
   // load config and create logger
   const config = await loadConfig(arg.config);
-  const logger = BunyanLogger.create(config.logger);
+  const logger = BunyanLogger.create({
+    ...config.logger,
+    kind: 'main',
+  });
 
   // print banner
   logger.info({

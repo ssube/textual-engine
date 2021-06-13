@@ -1,4 +1,4 @@
-import { constructorName, isNil, mergeMap, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { isNil, mergeMap, mustExist, NotFoundError } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { WorldEntityType } from '../../model/entity';
@@ -18,6 +18,7 @@ import { CreateParams } from '../../service/state';
 import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
+import { makeServiceLogger } from '../service';
 import { findByTemplateId } from '../template';
 import { ScriptMap } from '../types';
 
@@ -32,9 +33,7 @@ export class StateEntityGenerator {
 
   constructor(options: InjectedOptions) {
     this.counter = mustExist(options[INJECT_COUNTER]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.random = mustExist(options[INJECT_RANDOM]);
     this.template = mustExist(options[INJECT_TEMPLATE]);
   }

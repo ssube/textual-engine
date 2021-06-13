@@ -1,4 +1,4 @@
-import { constructorName, doesExist, mustExist } from '@apextoaster/js-utils';
+import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
@@ -22,6 +22,7 @@ import {
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
 } from '../../util/constants';
+import { makeServiceLogger } from '../../util/service';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
@@ -56,9 +57,7 @@ export class PlayerActorService implements ActorService {
     this.counter = mustExist(options[INJECT_COUNTER]);
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
 
     this.history = [];

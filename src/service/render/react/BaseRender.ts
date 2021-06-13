@@ -1,4 +1,4 @@
-import { constructorName, mustExist } from '@apextoaster/js-utils';
+import { mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
@@ -16,6 +16,7 @@ import {
   RENDER_DELAY,
 } from '../../../util/constants';
 import { getVerbScripts } from '../../../util/script';
+import { makeServiceLogger } from '../../../util/service';
 import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
 import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
@@ -50,9 +51,7 @@ export abstract class BaseReactRender implements RenderService {
     this.config = mustExist(options.config) as BaseRenderConfig;
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
 
     this.slowUpdate = debounce(RENDER_DELAY, () => this.update());
 

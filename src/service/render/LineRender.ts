@@ -1,4 +1,4 @@
-import { constructorName, mustExist } from '@apextoaster/js-utils';
+import { mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
@@ -13,6 +13,7 @@ import {
   EVENT_STATE_STEP,
   META_QUIT,
 } from '../../util/constants';
+import { makeServiceLogger } from '../../util/service';
 import { ActorOutputEvent, ActorRoomEvent } from '../actor/events';
 import { EventBus } from '../event';
 import { LocaleService } from '../locale';
@@ -36,9 +37,7 @@ export class LineRender implements RenderService {
   constructor(options: InjectedOptions) {
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
 
     this.step = {
       turn: 0,

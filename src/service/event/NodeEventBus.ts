@@ -1,10 +1,11 @@
-import { constructorName, doesExist, getOrDefault, mustExist } from '@apextoaster/js-utils';
+import { doesExist, getOrDefault } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { Inject, Logger } from 'noicejs';
 
 import { EventBus, EventGroup } from '.';
 import { INJECT_LOGGER, InjectedOptions } from '../../module';
 import { EventHandler } from '../../util/async/event';
+import { makeServiceLogger } from '../../util/service';
 
 @Inject(INJECT_LOGGER)
 export class NodeEventBus extends EventEmitter implements EventBus {
@@ -15,9 +16,7 @@ export class NodeEventBus extends EventEmitter implements EventBus {
     super();
 
     this.handlers = new Map();
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
   }
 
   public emit(name: string, ...args: Array<unknown>): boolean {

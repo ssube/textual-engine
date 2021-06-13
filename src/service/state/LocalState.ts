@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
-import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
-import { BaseOptions, Container, Inject, Logger } from 'noicejs';
+import { doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
+import { Container, Inject, Logger } from 'noicejs';
 
 import { StateService, StepResult } from '.';
 import { ActorRoomError } from '../../error/ActorRoomError';
@@ -13,7 +13,7 @@ import { isRoom } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
-import { InjectedOptions, INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
 import { ShowVolume, StateSource } from '../../util/actor';
 import { CompletionSet } from '../../util/async/CompletionSet';
 import { catchAndLog, onceEvent } from '../../util/async/event';
@@ -48,6 +48,7 @@ import {
   VERB_PREFIX,
 } from '../../util/constants';
 import { getVerbScripts } from '../../util/script';
+import { makeServiceLogger } from '../../util/service';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import {
@@ -92,12 +93,9 @@ export class LocalStateService implements StateService {
 
   constructor(options: InjectedOptions) {
     this.container = options.container;
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
-
     this.counter = mustExist(options[INJECT_COUNTER]);
     this.event = mustExist(options[INJECT_EVENT]);
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.random = mustExist(options[INJECT_RANDOM]);
     this.script = mustExist(options[INJECT_SCRIPT]);
 

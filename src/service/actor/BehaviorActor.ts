@@ -1,4 +1,4 @@
-import { constructorName, doesExist, mustExist, NotImplementedError } from '@apextoaster/js-utils';
+import { doesExist, mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
@@ -7,6 +7,7 @@ import { Actor, ActorSource } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
+import { makeServiceLogger } from '../../util/service';
 import { EventBus } from '../event';
 import { RandomGenerator } from '../random';
 import { StateRoomEvent } from '../state/events';
@@ -32,9 +33,7 @@ export class BehaviorActorService implements ActorService {
 
   constructor(options: InjectedOptions) {
     this.event = mustExist(options[INJECT_EVENT]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.random = mustExist(options[INJECT_RANDOM]);
 
     this.next = new Map();

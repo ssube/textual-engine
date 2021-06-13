@@ -1,4 +1,4 @@
-import { constructorName, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { Actor, isActor } from '../../model/entity/Actor';
@@ -7,6 +7,7 @@ import { isRoom, Room } from '../../model/entity/Room';
 import { INJECT_LOGGER, InjectedOptions } from '../../module';
 import { ScriptContext } from '../../service/script';
 import { SIGNAL_ENTER, SIGNAL_GET } from '../constants';
+import { makeServiceLogger } from '../service';
 
 export interface ActorTransfer {
   moving: Actor;
@@ -25,9 +26,7 @@ export class StateEntityTransfer {
   protected logger: Logger;
 
   constructor(options: InjectedOptions) {
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
   }
 
   /**

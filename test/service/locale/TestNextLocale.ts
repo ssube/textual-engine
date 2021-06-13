@@ -76,4 +76,6 @@ describe('next locale service', () => {
 
     expect(locale.translate('foo', { size: 4 })).to.equal('foo');
   });
+
+  xit('should add bundles from events');
 });

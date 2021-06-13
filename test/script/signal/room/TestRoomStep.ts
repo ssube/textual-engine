@@ -37,5 +37,30 @@ describe('room step scripts', () => {
       await expect(SignalRoomStep.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
       await expect(SignalRoomStep.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
     });
+
+    // this can't really be tested
+    it('should be a noop', async () => {
+      const script = createStubInstance(LocalScriptService);
+      const stateHelper = getStubHelper();
+      const transfer = testTransfer();
+
+      const context = {
+        command: {
+          index: 0,
+          input: '',
+          target: '',
+          verb: VERB_WAIT,
+        },
+        data: new Map(),
+        logger: NullLogger.global,
+        random: createStubInstance(MathRandomGenerator),
+        room: makeTestRoom('', '', '', [], []),
+        script,
+        state: stateHelper,
+        transfer,
+      };
+
+      await expect(SignalRoomStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.equal(undefined);
+    });
   });
 });

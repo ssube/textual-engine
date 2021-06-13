@@ -28,6 +28,8 @@
     "@esbuild-plugins/node-globals-polyfill": "^0.1.0",
     "@esbuild-plugins/node-modules-polyfill": "^0.1.1",
     "@istanbuljs/nyc-config-typescript": "^1.0.1",
+    "@microsoft/api-documenter": "^7.13.19",
+    "@microsoft/api-extractor": "^7.16.1",
     "@types/bunyan": "^1.8.6",
     "@types/chai": "^4.2.18",
     "@types/chai-as-promised": "^7.1.4",
@@ -66,9 +68,9 @@
   },
   "nyc": {
     "cache": false,
-    "branches": 40,
-    "lines": 40,
-    "functions": 40,
-    "statements": 40
+    "branches": 70,
+    "lines": 80,
+    "functions": 75,
+    "statements": 80
   }
 }

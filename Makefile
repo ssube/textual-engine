@@ -1,4 +1,4 @@
-.PHONY: build ci clean cover graph image install push run run-debug run-image test
+.PHONY: build ci clean cover docs graph image install push run run-debug run-image test
 
 DOCKER_ARGS ?=
 DOCKER_IMAGE := ssube/textual-engine
@@ -22,6 +22,10 @@ clean: clean-target
 
 clean-target:
 	rm -rf out/
+
+docs:
+	yarn api-extractor run -c config/api-extractor.json
+	yarn api-documenter markdown -i out/temp -o out/docs
 
 GRAPH_LAYOUT ?= dot
 
@@ -89,7 +93,7 @@ MOCHA_ARGS := --async-only \
 
 test: ## run tests
 test: node_modules out
-	yarn mocha $(MOCHA_ARGS) "out/**/Test*.js"
+	yarn mocha $(MOCHA_ARGS) "out/src/lib.js" "out/**/Test*.js"
 
 NYC_ARGS := --all \
 	--check-coverage \

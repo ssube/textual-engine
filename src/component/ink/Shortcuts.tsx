@@ -8,7 +8,7 @@ import { SHORTCUT_TABS, ShortcutKeys, ShortcutProps } from '../shared';
 const { useState } = React;
 
 export const Shortcuts = (props: ShortcutProps): JSX.Element => {
-  const [tab, setTab] = useState<ShortcutKeys>('actors');
+  const [selected, setSelected] = useState<ShortcutKeys>('actors');
   const { isFocused: tabFocus } = useFocus();
   const { isFocused: itemFocus } = useFocus();
 
@@ -18,10 +18,10 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
     }
   }
 
-  const items = props[tab].map((it) => ({
-        label: it.name,
-        value: it.id,
-      }));
+  const items = props[selected].map((it) => ({
+    label: it.name,
+    value: it.id,
+  }));
 
   return <Box flexDirection='column'>
     <Box marginBottom={1}>
@@ -29,7 +29,7 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
         indicatorComponent={tabFocus ? FocusedIndicator : UnfocusedIndicator}
         isFocused={tabFocus}
         items={SHORTCUT_TABS}
-        onSelect={(it) => setTab(it.value as ShortcutKeys)}
+        onSelect={(it) => setSelected(it.value as ShortcutKeys)}
       />
     </Box>
     <Box>

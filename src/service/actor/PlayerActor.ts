@@ -115,6 +115,12 @@ export class PlayerActorService implements ActorService {
       this.logger.debug({ event }, 'registering own actor');
       this.actor = event.actor;
       this.room = event.room;
+
+      this.event.emit(EVENT_ACTOR_ROOM, {
+        actor: this.actor,
+        pid: this.pid,
+        room: this.room,
+      });
     } else {
       this.logger.debug({ event }, 'actor joined state');
     }
@@ -126,6 +132,8 @@ export class PlayerActorService implements ActorService {
       this.room = event.room;
 
       this.event.emit(EVENT_ACTOR_ROOM, {
+        actor: mustExist(this.actor), // TODO: from this or event?
+        pid: this.pid,
         room: event.room,
       });
     }

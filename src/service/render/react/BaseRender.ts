@@ -15,6 +15,7 @@ import {
   EVENT_STATE_STEP,
   RENDER_DELAY,
 } from '../../../util/constants';
+import { getVerbScripts } from '../../../util/script';
 import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
 import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
@@ -70,6 +71,7 @@ export abstract class BaseReactRender implements RenderService {
       actors: [],
       items: [],
       portals: [],
+      verbs: [],
     };
     this.step = {
       turn: 0,
@@ -135,11 +137,15 @@ export abstract class BaseReactRender implements RenderService {
       };
     }
 
-    this.shortcuts.actors = result.room.actors.map(extractShortcut);
+    this.shortcuts.actors = result.room.actors.filter((it) => it.meta.id !== result.pid).map(extractShortcut);
     this.shortcuts.items = result.room.items.map(extractShortcut);
     this.shortcuts.portals = result.room.portals.map((it) => ({
       id: `${it.sourceGroup} ${it.name}`,
       name: `${it.sourceGroup} ${it.name}`,
+    }));
+    this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
+      id: it,
+      name: it,
     }));
 
     this.setPrompt(`turn ${this.step.turn}`);

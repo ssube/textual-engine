@@ -4,7 +4,7 @@ main([
   '--config',
   'page://data-config',
   '--data',
-  'https://raw.githubusercontent.com/ssube/textual-engine/master/data/base.yml',
+  'https://raw.githubusercontent.com/ssube/textual-engine/master/data/demo.yml',
   '--module',
   'core',
   '--module',

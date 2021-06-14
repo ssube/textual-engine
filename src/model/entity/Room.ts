@@ -12,8 +12,10 @@ import { Portal, PORTAL_SCHEMA } from './Portal';
 
 export const ROOM_TYPE = 'room' as const;
 
+export type RoomType = typeof ROOM_TYPE;
+
 export interface Room {
-  type: typeof ROOM_TYPE;
+  type: RoomType;
   meta: Metadata;
   actors: Array<Actor>;
   items: Array<Item>;

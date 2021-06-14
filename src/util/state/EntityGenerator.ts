@@ -1,8 +1,8 @@
-import { constructorName, isNil, mergeMap, mustExist, NotFoundError } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
-import { WorldEntityType } from '../../model/entity';
+import { isNil, mergeMap, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { Inject, Logger } from 'noicejs';
 
-import { Actor, ACTOR_TYPE, ActorType } from '../../model/entity/Actor';
+import { WorldEntityType } from '../../model/entity';
+import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
@@ -11,22 +11,16 @@ import { BaseTemplate, Template, TemplateMetadata, TemplatePrimitive, TemplateRe
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
-import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE } from '../../module';
+import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE, InjectedOptions } from '../../module';
 import { Counter } from '../../service/counter';
 import { RandomGenerator } from '../../service/random';
 import { CreateParams } from '../../service/state';
 import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
+import { makeServiceLogger } from '../service';
 import { findByTemplateId } from '../template';
 import { ScriptMap } from '../types';
-
-export interface EntityGeneratorOptions extends BaseOptions {
-  [INJECT_COUNTER]?: Counter;
-  [INJECT_LOGGER]?: Logger;
-  [INJECT_RANDOM]?: RandomGenerator;
-  [INJECT_TEMPLATE]?: TemplateService;
-}
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
 export class StateEntityGenerator {
@@ -37,11 +31,9 @@ export class StateEntityGenerator {
 
   protected world?: WorldTemplate;
 
-  constructor(options: EntityGeneratorOptions) {
+  constructor(options: InjectedOptions) {
     this.counter = mustExist(options[INJECT_COUNTER]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.random = mustExist(options[INJECT_RANDOM]);
     this.template = mustExist(options[INJECT_TEMPLATE]);
   }
@@ -55,10 +47,10 @@ export class StateEntityGenerator {
   }
 
   // take ID and look up template?
-  public async createActor(template: Template<Actor>, actorType = ActorType.DEFAULT): Promise<Actor> {
+  public async createActor(template: Template<Actor>, source = ActorSource.BEHAVIOR): Promise<Actor> {
     const actor: Actor = {
       type: 'actor',
-      actorType,
+      source,
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
       scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
@@ -211,7 +203,7 @@ export class StateEntityGenerator {
 
     for (const mod of selected) {
       await this.modifyMetadata(target.meta, mod.meta);
-      // target.actorType cannot be modified
+      // target.source cannot be modified
 
       target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
       target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);

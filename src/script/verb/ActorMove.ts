@@ -1,7 +1,7 @@
 import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../error/ScriptTargetError';
-import { ActorType, isActor } from '../../model/entity/Actor';
+import { ActorSource, isActor } from '../../model/entity/Actor';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
@@ -58,7 +58,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     room: currentRoom,
   });
 
-  if (this.actorType === ActorType.PLAYER) {
+  if (this.source === ActorSource.PLAYER) {
     context.logger.debug({ actor: this, room: targetRoom }, 'player entered room');
     await context.state.enter({ actor: this, room: targetRoom });
     await ActorLookTarget.call(this, context, targetPortal.dest);

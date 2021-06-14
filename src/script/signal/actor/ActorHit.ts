@@ -1,13 +1,14 @@
-import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { mustExist } from '@apextoaster/js-utils';
 
+import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
 import { decrementKey, getKey } from '../../../util/collection/map';
+import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
 
 export async function SignalActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
-    throw new InvalidArgumentError('invalid entity type');
+    throw new ScriptTargetError('invalid entity type');
   }
 
   const attacker = mustExist(context.actor);
@@ -24,7 +25,7 @@ export async function SignalActorHit(this: ScriptTarget, context: ScriptContext)
 
   const health = decrementKey(this.stats, STAT_HEALTH, damage);
   if (health > 0) {
-    await context.state.show('actor.hit.health', { actor: this, health });
+    await context.state.show('actor.hit.health', { actor: this, damage, health });
   } else {
     // drop inventory
     const room = mustExist(context.room);
@@ -35,6 +36,6 @@ export async function SignalActorHit(this: ScriptTarget, context: ScriptContext)
         target: room,
       }, context);
     }
-    await context.state.show('actor.hit.dead', { actor: this });
+    await context.state.show('actor.hit.dead', { actor: this, damage });
   }
 }

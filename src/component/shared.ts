@@ -3,6 +3,20 @@ import { Filter, FilterKeys } from '../util/types';
 
 // shared props used by multiple React renders
 
+export const SHORTCUT_TABS = [{
+  label: 'Actors',
+  value: 'actors',
+}, {
+  label: 'Items',
+  value: 'items',
+}, {
+  label: 'Portals',
+  value: 'portals',
+}, {
+  label: 'Verbs',
+  value: 'verbs',
+}];
+
 export interface FrameProps {
   onLine: (line: string) => void;
   output: Array<string>;
@@ -19,6 +33,7 @@ export interface InputProps {
   onChange: (line: string) => void;
   onLine: (line: string) => void;
   line: string;
+  prompt: string;
 }
 
 export interface OutputProps {
@@ -35,6 +50,7 @@ export interface ShortcutProps {
   actors: Array<ShortcutItem>;
   items: Array<ShortcutItem>;
   portals: Array<ShortcutItem>;
+  verbs: Array<ShortcutItem>;
 }
 
 export type ShortcutData = Filter<ShortcutProps, Array<unknown>>;

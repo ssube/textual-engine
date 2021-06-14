@@ -1,11 +1,11 @@
-import { constructorName, doesExist, mustExist } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { doesExist, mustExist } from '@apextoaster/js-utils';
+import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER } from '../../module';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER, InjectedOptions } from '../../module';
 import { showCheck, StateSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
 import {
@@ -22,6 +22,7 @@ import {
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
 } from '../../util/constants';
+import { makeServiceLogger } from '../../util/service';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
@@ -29,14 +30,6 @@ import { RenderOutputEvent } from '../render/events';
 import { StepResult } from '../state';
 import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
 import { TokenizerService } from '../tokenizer';
-
-export interface PlayerActorOptions extends BaseOptions {
-  [INJECT_COUNTER]?: Counter;
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOCALE]?: LocaleService;
-  [INJECT_LOGGER]?: Logger;
-  [INJECT_TOKENIZER]?: TokenizerService;
-}
 
 /**
  * Behavioral input generates commands based on the actor's current
@@ -60,13 +53,11 @@ export class PlayerActorService implements ActorService {
    */
   protected pid: string;
 
-  constructor(options: PlayerActorOptions) {
+  constructor(options: InjectedOptions) {
     this.counter = mustExist(options[INJECT_COUNTER]);
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
 
     this.history = [];
@@ -86,7 +77,7 @@ export class PlayerActorService implements ActorService {
     this.event.on(EVENT_STATE_JOIN, (event) => {
       this.onJoin(event);
     }, this);
-    this.event.on(EVENT_STATE_LOAD, (event) => {
+    this.event.on(EVENT_STATE_LOAD, (_event) => {
       this.event.emit(EVENT_ACTOR_JOIN, {
         pid: this.pid,
       });
@@ -115,6 +106,12 @@ export class PlayerActorService implements ActorService {
       this.logger.debug({ event }, 'registering own actor');
       this.actor = event.actor;
       this.room = event.room;
+
+      this.event.emit(EVENT_ACTOR_ROOM, {
+        actor: this.actor,
+        pid: this.pid,
+        room: this.room,
+      });
     } else {
       this.logger.debug({ event }, 'actor joined state');
     }
@@ -126,6 +123,8 @@ export class PlayerActorService implements ActorService {
       this.room = event.room;
 
       this.event.emit(EVENT_ACTOR_ROOM, {
+        actor: mustExist(this.actor), // TODO: from this or event?
+        pid: this.pid,
         room: event.room,
       });
     }

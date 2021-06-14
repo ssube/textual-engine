@@ -10,20 +10,22 @@ import { Metadata, METADATA_SCHEMA } from '../Metadata';
 import { Entity } from './Base';
 import { Item } from './Item';
 
-export enum ActorType {
-  DEFAULT = 'default',
+export enum ActorSource {
+  BEHAVIOR = 'behavior',
   PLAYER = 'player',
   REMOTE = 'remote',
 }
 
 export const ACTOR_TYPE = 'actor' as const;
 
+export type ActorType = typeof ACTOR_TYPE;
+
 export interface Actor {
-  type: typeof ACTOR_TYPE;
-  actorType: ActorType;
-  meta: Metadata;
+  type: ActorType;
   items: Array<Item>;
+  meta: Metadata;
   scripts: ScriptMap;
+  source: ActorSource;
   stats: StatMap;
 }
 
@@ -37,7 +39,7 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
     base: {
       type: 'object',
       properties: {
-        actorType: TEMPLATE_STRING_SCHEMA,
+        source: TEMPLATE_STRING_SCHEMA,
         items: {
           type: 'array',
           items: {
@@ -82,7 +84,7 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
     base: {
       type: 'object',
       properties: {
-        actorType: {
+        source: {
           type: 'object',
           required: [],
         },

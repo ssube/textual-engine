@@ -8,7 +8,7 @@ import { NodeModule } from '../../../src/module/NodeModule';
 import { EventBus } from '../../../src/service/event';
 import { InkRender } from '../../../src/service/render/react/InkRender';
 import { EVENT_ACTOR_OUTPUT, EVENT_ACTOR_ROOM, EVENT_COMMON_QUIT, EVENT_STATE_STEP } from '../../../src/util/constants';
-import { makeTestRoom } from '../../entity';
+import { makeTestActor, makeTestRoom } from '../../entity';
 import { getTestContainer } from '../../helper';
 
 describe('react ink render', () => {
@@ -49,6 +49,8 @@ describe('react ink render', () => {
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_ACTOR_ROOM, {
+      actor: makeTestActor('', '', ''),
+      pid: '',
       room: makeTestRoom('', '', '', [], []),
     });
 

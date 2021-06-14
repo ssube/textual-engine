@@ -68,7 +68,28 @@ describe('state transfer utils', () => {
       }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
     });
 
-    it('should only target rooms', async () => {
+    it('should only allow source rooms', async () => {
+      const actor = makeTestActor('bun', 'bun', 'bun');
+      const targetRoom = makeTestRoom('foo', 'foo', 'foo', [actor], []);
+
+      const container = await getTestContainer(new CoreModule());
+      const transfer = await container.create(StateEntityTransfer);
+
+      await expect(transfer.moveActor({
+        moving: actor,
+        source: actor as any,
+        target: targetRoom,
+      }, {
+        data: new Map(),
+        logger: getTestLogger(),
+        random: await container.create(MathRandomGenerator),
+        script: await container.create(LocalScriptService),
+        state: getStubHelper(),
+        transfer: await container.create(StateEntityTransfer),
+      })).to.eventually.be.rejectedWith(InvalidArgumentError);
+    });
+
+    it('should only allow target rooms', async () => {
       const actor = makeTestActor('bun', 'bun', 'bun');
       const sourceRoom = makeTestRoom('foo', 'foo', 'foo', [actor], []);
 
@@ -231,8 +252,10 @@ describe('state transfer utils', () => {
       expect(actor.items).to.have.lengthOf(0);
     });
 
-    xit('should not target items');
+    xit('should not allow source items');
+    xit('should not allow target items');
     xit('should only move items that are within the source entity');
     xit('should invoke the get script on the destination entity');
+    xit('should not invoke scripts when the source and target are the same');
   });
 });

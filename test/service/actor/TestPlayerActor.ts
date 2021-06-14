@@ -179,10 +179,18 @@ describe('player actor', () => {
     const { pid } = await pendingJoin;
 
     const actor = makeTestActor(pid, '', '');
-    const room = makeTestRoom('', '', '', [actor], []);
+    const sourceRoom = makeTestRoom('', '', '', [actor], []);
+    const targetRoom = makeTestRoom('', '', '', [actor], []);
+
+    player.onJoin({
+      actor,
+      pid,
+      room: sourceRoom,
+    });
+
     player.onRoom({
       actor,
-      room,
+      room: targetRoom,
     });
 
     const pendingCommand = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
@@ -191,9 +199,8 @@ describe('player actor', () => {
     });
 
     const command = await pendingCommand;
-    // this would normally be set on join, but this player never actually joined
-    expect(command.actor, 'command actor').to.equal(undefined);
-    expect(command.room, 'command room').to.equal(room);
+    expect(command.actor, 'command actor').to.equal(actor);
+    expect(command.room, 'command room').to.equal(targetRoom);
   });
 
   xit('should test output volume when source is set');

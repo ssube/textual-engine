@@ -105,13 +105,11 @@ meta:
 
 #### Template Number
 
-Template numbers define a range `(min, max)` and select a random integer within that.
+Template numbers define a range `[min, max)` and select a random integer within that.
 
-- `min`: number
-- `max`: number
+- `min`: number, inclusive
+- `max`: number, exclusive
 - `step`: interval between values, optional
-
-TODO: document whether min and max are inclusive or exclusive
 
 For example:
 
@@ -168,7 +166,7 @@ Actor templates have metadata and scripts, act as a container for items (invento
 Item templates have metadata and scripts, have custom verbs, and store some numeric stats.
 
 - `meta`: template metadata
-- `scripts`: a `[string, TODO]` map of event scripts
+- `scripts`: a `[string, script]` map of event scripts with name and data
 - `stats`: a `[string, number]` map of item statistics (health, damage, etc)
 
 ### Room Templates
@@ -179,7 +177,7 @@ Room templates have metadata and scripts, have custom verbs, and act as a contai
 - `actors`: list of actor template refs
 - `items`: list of item template refs
 - `portals`: list of portal templates
-- `scripts`: a `[string, TODO]` map of event scripts
+- `scripts`: a `[string, script]` map of event scripts with name and data
 
 #### Room Portal Templates
 

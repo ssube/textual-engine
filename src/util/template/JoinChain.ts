@@ -3,7 +3,7 @@ import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { InputChain } from '.';
 import { RandomGenerator } from '../../service/random';
 
-interface JoinOptions {
+export interface JoinOptions {
   joiners: Array<string>;
   random: RandomGenerator;
 }

@@ -1,4 +1,4 @@
-import { JSONSchemaType } from 'ajv';
+import Ajv, { JSONSchemaType } from 'ajv';
 
 import { TemplateString } from '../model/mapped/Template';
 
@@ -24,4 +24,10 @@ export function makeConstStringSchema<TValue extends string>(value: TValue): JSO
       base: value,
     },
   };
+}
+
+export function makeSchema<TType>(type: JSONSchemaType<TType>) {
+  return new Ajv({
+    useDefaults: true,
+  }).compile(type);
 }

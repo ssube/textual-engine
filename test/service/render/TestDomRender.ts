@@ -16,7 +16,7 @@ import {
   EVENT_RENDER_OUTPUT,
   EVENT_STATE_STEP,
 } from '../../../src/util/constants';
-import { makeTestRoom } from '../../entity';
+import { makeTestActor, makeTestRoom } from '../../entity';
 import { getTestContainer } from '../../helper';
 
 describe('react dom render', () => {
@@ -57,6 +57,8 @@ describe('react dom render', () => {
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_ACTOR_ROOM, {
+      actor: makeTestActor('', '', ''),
+      pid: '',
       room: makeTestRoom('', '', '', [], []),
     });
 

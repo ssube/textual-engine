@@ -59,5 +59,23 @@ describe('next locale service', () => {
     expect(locale.translate('foo', { size: 4 })).to.equal('4 bar');
   });
 
-  xit('should remove language bundles');
+  it('should remove language bundles', async () => {
+    const container = await getTestContainer(new CoreModule());
+    const locale = await container.create(NextLocaleService);
+    await locale.start();
+
+    locale.addBundle('common', {
+      bundles: {
+        en: {
+          foo: '{{size}} bar',
+        },
+      },
+      verbs: [],
+    });
+    locale.deleteBundle('common');
+
+    expect(locale.translate('foo', { size: 4 })).to.equal('foo');
+  });
+
+  xit('should add bundles from events');
 });

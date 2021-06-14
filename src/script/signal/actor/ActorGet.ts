@@ -1,14 +1,15 @@
-import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
+import { mustExist } from '@apextoaster/js-utils';
 
+import { ScriptTargetError } from '../../../error/ScriptTargetError';
+import { ActorSource, isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { ActorType, isActor } from '../../../model/entity/Actor';
 
 export async function SignalActorGet(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
-    throw new InvalidArgumentError('invalid entity type');
+    throw new ScriptTargetError('invalid entity type');
   }
 
-  if (this.actorType === ActorType.PLAYER) {
+  if (this.source === ActorSource.PLAYER) {
     const item = mustExist(context.item);
     await context.state.show('actor.get.player', { item });
   }

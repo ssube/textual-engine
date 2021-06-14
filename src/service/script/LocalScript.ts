@@ -1,9 +1,9 @@
-import { constructorName, isNil, mergeMap } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { isNil, mergeMap } from '@apextoaster/js-utils';
+import { Inject, Logger } from 'noicejs';
 
 import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from '.';
-import { WorldEntity } from '../../model/entity';
-import { INJECT_LOGGER } from '../../module';
+import { WorldEntity, WorldEntityType } from '../../model/entity';
+import { INJECT_LOGGER, InjectedOptions } from '../../module';
 import { SignalActorGet } from '../../script/signal/actor/ActorGet';
 import { SignalActorHit } from '../../script/signal/actor/ActorHit';
 import { SignalActorStep } from '../../script/signal/actor/ActorStep';
@@ -18,6 +18,7 @@ import { VerbActorTake } from '../../script/verb/ActorTake';
 import { VerbActorUse } from '../../script/verb/ActorUse';
 import { VerbActorWait } from '../../script/verb/ActorWait';
 import { getSignalScripts, getVerbScripts } from '../../util/script';
+import { makeServiceLogger } from '../../util/service';
 import { SearchFilter } from '../../util/state/search';
 
 /**
@@ -41,19 +42,13 @@ const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['verb-wait', VerbActorWait],
 ];
 
-export interface LocalScriptServiceOptions extends BaseOptions {
-  [INJECT_LOGGER]: Logger;
-}
-
 @Inject(INJECT_LOGGER)
 export class LocalScriptService implements ScriptService {
   protected logger: Logger;
   protected scripts: Map<string, ScriptFunction>;
 
-  constructor(options: LocalScriptServiceOptions, scripts = COMMON_SCRIPTS) {
-    this.logger = options[INJECT_LOGGER].child({
-      kind: constructorName(this),
-    });
+  constructor(options: InjectedOptions, scripts = COMMON_SCRIPTS) {
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.scripts = new Map(scripts);
   }
 
@@ -94,7 +89,7 @@ export class LocalScriptService implements ScriptService {
     }
   }
 
-  public async broadcast(filter: SearchFilter, slot: string, scope: SuppliedScope): Promise<void> {
+  public async broadcast(filter: SearchFilter<WorldEntityType>, slot: string, scope: SuppliedScope): Promise<void> {
     const targets = await scope.state.find(filter);
 
     for (const target of targets) {

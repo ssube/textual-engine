@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
 
-import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../../src/model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { isRoom, Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Modifier } from '../../../src/model/mapped/Modifier';
@@ -16,8 +16,8 @@ import { getTestContainer } from '../../helper';
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
-    actorType: {
-      base: ActorType.DEFAULT,
+    source: {
+      base: ActorSource.BEHAVIOR,
       type: 'string',
     },
     items: [{
@@ -158,7 +158,7 @@ const TEST_ROOM_PORTALS: Template<Room> = {
 const TEST_WORLD: WorldTemplate = {
   defaults: {
     actor: {
-      actorType: {
+      source: {
         base: '',
         type: 'string',
       },
@@ -250,7 +250,7 @@ const TEST_WORLD: WorldTemplate = {
 
 const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
   base: {
-    actorType: {
+    source: {
       base: 'default',
       type: 'string',
     },

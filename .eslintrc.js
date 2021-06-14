@@ -113,6 +113,16 @@ module.exports = {
       },
       {
         "format": [
+          "camelCase",
+          "UPPER_CASE"
+        ],
+        "leadingUnderscore": "require",
+        "selector": "parameter",
+        "modifiers": ["unused"],
+        "trailingUnderscore": "forbid"
+      },
+      {
+        "format": [
           "PascalCase"
         ],
         "leadingUnderscore": "forbid",
@@ -171,6 +181,13 @@ module.exports = {
     ],
     "@typescript-eslint/no-this-alias": "error",
     "@typescript-eslint/no-unnecessary-type-arguments": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "_.+",
+        "varsIgnorePattern": "_.+"
+      }
+    ],
     "@typescript-eslint/no-use-before-declare": "off",
     "@typescript-eslint/no-var-requires": "error",
     "@typescript-eslint/prefer-for-of": "error",
@@ -310,7 +327,8 @@ module.exports = {
       "MemberExpression[optional=true]",
       "IfStatement[alternate.type='IfStatement']",
       "UnaryExpression[operator='!']",
-      "BinaryExpression[operator='!=='][right.value=true]"
+      "BinaryExpression[operator='==='][right.value=true]",
+      "BinaryExpression[operator='!==']"
     ],
     "no-return-await": "error",
     "no-sequences": "error",

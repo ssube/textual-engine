@@ -1,25 +1,21 @@
 import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
-import { BaseOptions, Inject } from 'noicejs';
+import { Inject } from 'noicejs';
 
 import { TemplateService } from '.';
 import { ModifierPrimitive } from '../../model/mapped/Modifier';
 import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/mapped/Template';
-import { INJECT_RANDOM } from '../../module';
+import { INJECT_RANDOM, InjectedOptions } from '../../module';
 import { JoinChain } from '../../util/template/JoinChain';
 import { splitChain } from '../../util/template/SplitChain';
 import { ScriptMap, ScriptRef } from '../../util/types';
 import { RandomGenerator } from '../random';
-
-export interface PipeTemplateOptions extends BaseOptions {
-  [INJECT_RANDOM]?: RandomGenerator;
-}
 
 @Inject(INJECT_RANDOM)
 export class ChainTemplateService implements TemplateService {
   protected readonly joiner: JoinChain;
   protected readonly random: RandomGenerator;
 
-  constructor(options: PipeTemplateOptions) {
+  constructor(options: InjectedOptions) {
     this.random = mustExist(options[INJECT_RANDOM]);
     this.joiner = new JoinChain({
       joiners: [' '],
@@ -74,7 +70,7 @@ export class ChainTemplateService implements TemplateService {
   /**
    * @todo implement script modifiers
    */
-  public modifyScriptMap(target: ScriptMap, mods: ModifierPrimitive<ScriptMap>): ScriptMap {
+  public modifyScriptMap(target: ScriptMap, _mods: ModifierPrimitive<ScriptMap>): ScriptMap {
     return target;
   }
 
@@ -89,6 +85,9 @@ export class ChainTemplateService implements TemplateService {
     return this.joiner.render(chain);
   }
 
+  /**
+   * @todo use step when it is > 1
+   */
   public renderNumber(input: TemplateNumber): number {
     if (input.step < 0) {
       throw new InvalidArgumentError('template step must be greater than 0');

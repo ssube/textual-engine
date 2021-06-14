@@ -1,21 +1,17 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
-import { promises } from 'fs';
 import fetch from 'node-fetch';
 
 import { LoaderService } from '..';
-import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
+import { InjectedOptions } from '../../../module';
+import { BaseLoader } from '../BaseLoader';
 
 export class NodeFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;
 
-  constructor(options: BaseLoaderOptions, f = fetch) {
+  constructor(options: InjectedOptions, f = fetch) {
     super(options, ['http', 'https']);
 
     this.fetch = f;
-  }
-
-  public async dump(path: string, data: Buffer): Promise<void> {
-    await promises.writeFile(path, data);
   }
 
   public async load(path: string): Promise<Buffer> {
@@ -23,7 +19,7 @@ export class NodeFetchLoader extends BaseLoader implements LoaderService {
     return Buffer.from(text);
   }
 
-  public async save(path: string, data: Buffer): Promise<void> {
+  public async save(_path: string, _data: Buffer): Promise<void> {
     throw new NotImplementedError();
   }
 
@@ -35,7 +31,7 @@ export class NodeFetchLoader extends BaseLoader implements LoaderService {
     return data;
   }
 
-  public async saveStr(path: string, data: string): Promise<void> {
+  public async saveStr(_path: string, _data: string): Promise<void> {
     throw new NotImplementedError();
   }
 }

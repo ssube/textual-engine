@@ -5,7 +5,8 @@ import { render, unmountComponentAtNode } from 'react-dom';
 
 import { RenderService } from '..';
 import { Frame } from '../../../component/react/Frame';
-import { BaseReactRender, BaseRenderOptions } from './BaseRender';
+import { InjectedOptions } from '../../../module';
+import { BaseReactRender } from './BaseRender';
 
 /**
  * Interface with React tree using an event emitter.
@@ -14,7 +15,7 @@ import { BaseReactRender, BaseRenderOptions } from './BaseRender';
 export class ReactDomRender extends BaseReactRender implements RenderService {
   protected cleanup: boolean;
 
-  constructor(options: BaseRenderOptions) {
+  constructor(options: InjectedOptions) {
     super(options);
 
     this.cleanup = false;

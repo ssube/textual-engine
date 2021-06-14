@@ -1,19 +1,19 @@
 /* eslint-disable max-lines */
-import { constructorName, doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
-import { BaseOptions, Container, Inject, Logger } from 'noicejs';
+import { doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
+import { Container, Inject, Logger } from 'noicejs';
 
 import { StateService, StepResult } from '.';
 import { ActorRoomError } from '../../error/ActorRoomError';
 import { NotInitializedError } from '../../error/NotInitializedError';
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Command } from '../../model/Command';
-import { WorldEntity } from '../../model/entity';
-import { Actor, ACTOR_TYPE, ActorType, isActor } from '../../model/entity/Actor';
+import { EntityForType, WorldEntityType } from '../../model/entity';
+import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../model/entity/Actor';
 import { isRoom } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT } from '../../module';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
 import { ShowVolume, StateSource } from '../../util/actor';
 import { CompletionSet } from '../../util/async/CompletionSet';
 import { catchAndLog, onceEvent } from '../../util/async/event';
@@ -44,9 +44,11 @@ import {
   META_VERBS,
   META_WORLDS,
   SIGNAL_STEP,
+  SPLIT_HEAD_TAIL,
   VERB_PREFIX,
 } from '../../util/constants';
 import { getVerbScripts } from '../../util/script';
+import { makeServiceLogger } from '../../util/service';
 import { debugState, graphState } from '../../util/state/debug';
 import { StateEntityGenerator } from '../../util/state/EntityGenerator';
 import {
@@ -65,14 +67,6 @@ import { hasState, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '.
 import { LocaleContext } from '../locale';
 import { RandomGenerator } from '../random';
 import { ScriptContext, ScriptService, SuppliedScope } from '../script';
-
-export interface LocalStateServiceOptions extends BaseOptions {
-  [INJECT_COUNTER]?: Counter;
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOGGER]?: Logger;
-  [INJECT_RANDOM]?: RandomGenerator;
-  [INJECT_SCRIPT]?: ScriptService;
-}
 
 @Inject(
   INJECT_COUNTER,
@@ -97,14 +91,11 @@ export class LocalStateService implements StateService {
   protected generator?: StateEntityGenerator;
   protected transfer?: StateEntityTransfer;
 
-  constructor(options: LocalStateServiceOptions) {
+  constructor(options: InjectedOptions) {
     this.container = options.container;
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
-
     this.counter = mustExist(options[INJECT_COUNTER]);
     this.event = mustExist(options[INJECT_EVENT]);
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.random = mustExist(options[INJECT_RANDOM]);
     this.script = mustExist(options[INJECT_SCRIPT]);
 
@@ -135,7 +126,7 @@ export class LocalStateService implements StateService {
     this.event.removeGroup(this);
   }
 
-// #region event handlers
+  // #region event handlers
   /**
    * Step the internal world state, simulating some turns and time passing.
    */
@@ -221,7 +212,7 @@ export class LocalStateService implements StateService {
         template: actorTemplate,
       }, 'creating player actor from template');
 
-      const actor = await mustExist(this.generator).createActor(actorTemplate, ActorType.PLAYER);
+      const actor = await mustExist(this.generator).createActor(actorTemplate, ActorSource.PLAYER);
       actor.meta.id = event.pid;
 
       this.logger.debug({
@@ -258,16 +249,16 @@ export class LocalStateService implements StateService {
     this.logger.debug({ world: world.meta.id }, 'registering loaded world');
     this.worlds.push(world);
   }
-// #endregion event handlers
+  // #endregion event handlers
 
-// #region meta commands
+  // #region meta commands
   /**
    * Create a new world and invite players to join.
    */
   public async doCreate(target: string, depth: number): Promise<void> {
     const generator = mustExist(this.generator);
 
-    const [id, seed] = target.split(' ', 2);
+    const [id, seed] = target.split(' ', SPLIT_HEAD_TAIL);
     this.logger.debug({
       depth,
       id,
@@ -565,7 +556,7 @@ export class LocalStateService implements StateService {
       });
     }
   }
-// #endregion meta commands
+  // #endregion meta commands
 
   public async step(): Promise<StepResult> {
     if (isNil(this.state)) {
@@ -652,19 +643,19 @@ export class LocalStateService implements StateService {
     };
   }
 
-// #region state access callbacks
+  // #region state access callbacks
   /**
    * Handler for a room change from the state helper.
    */
   public async stepEnter(target: StateSource): Promise<void> {
-    if (doesExist(target.actor) && target.actor.actorType === ActorType.PLAYER) {
+    if (doesExist(target.actor) && target.actor.source === ActorSource.PLAYER) {
       const state = mustExist(this.state);
       const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);
       state.rooms.push(...rooms);
     }
   }
 
-  public async stepFind(search: SearchFilter): Promise<Array<WorldEntity>> {
+  public async stepFind<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>> {
     return findMatching(mustExist(this.state), search);
   }
 
@@ -694,7 +685,7 @@ export class LocalStateService implements StateService {
       volume,
     });
   }
-// #endregion state access callbacks
+  // #endregion state access callbacks
 
   /**
    * Emit changed rooms to relevant actors.

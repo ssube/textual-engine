@@ -36,6 +36,7 @@ export function asyncDebug(asyncOps: Map<number, string>): void {
 export function eventDebug(events: EventEmitter): void {
   for (const event of EVENT_NAMES) {
     const listeners = events.listeners(event);
+    // eslint-disable-next-line no-console
     console.log(`${listeners.length} listeners for ${event}`, listeners);
   }
 }

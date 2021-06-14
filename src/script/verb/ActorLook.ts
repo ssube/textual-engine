@@ -7,7 +7,7 @@ import { isRoom } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { getKey } from '../../util/collection/map';
 import { STAT_HEALTH } from '../../util/constants';
-import { FUZZY_MATCHERS } from '../../util/entity';
+import { createFuzzyMatcher } from '../../util/entity';
 
 export async function VerbActorLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -27,7 +27,7 @@ export async function ActorLookTarget(this: Actor, context: ScriptContext, targe
     meta: {
       name: targetName,
     },
-    matchers: FUZZY_MATCHERS
+    matchers: createFuzzyMatcher(),
   });
 
   const target = results[mustExist(context.command).index];
@@ -58,7 +58,9 @@ export async function ActorLookTarget(this: Actor, context: ScriptContext, targe
 
 export async function ActorLookRoom(this: Actor, context: ScriptContext): Promise<void> {
   const room = mustExist(context.room);
+  const health = getKey(this.stats, STAT_HEALTH, 0);
   await context.state.show('actor.step.look.room.you', { actor: this });
+  await context.state.show('actor.step.look.room.health', { actor: this, health });
   await context.state.show('actor.step.look.room.seen', { room });
 
   for (const item of this.items) {
@@ -66,12 +68,14 @@ export async function ActorLookRoom(this: Actor, context: ScriptContext): Promis
   }
 
   for (const actor of room.actors) {
-    if (actor !== this) {
-      await ActorLookActor.call(this, {
-        ...context,
-        actor,
-      });
+    if (actor === this) {
+      continue;
     }
+
+    await ActorLookActor.call(this, {
+      ...context,
+      actor,
+    });
   }
 
   for (const item of room.items) {

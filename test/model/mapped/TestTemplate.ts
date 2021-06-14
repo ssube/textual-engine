@@ -1,11 +1,11 @@
-import Ajv from 'ajv';
 import { expect } from 'chai';
 
 import { TEMPLATE_NUMBER_SCHEMA, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../../../src/model/mapped/Template';
+import { makeSchema } from '../../../src/util/schema';
 
 describe('template mapped model', () => {
   it('should validate template numbers', async () => {
-    const schema = new Ajv().compile(TEMPLATE_NUMBER_SCHEMA);
+    const schema = makeSchema(TEMPLATE_NUMBER_SCHEMA);
 
     expect(schema({})).to.equal(false);
     expect(schema({
@@ -16,7 +16,7 @@ describe('template mapped model', () => {
   });
 
   it('should validate template strings', async () => {
-    const schema = new Ajv().compile(TEMPLATE_STRING_SCHEMA);
+    const schema = makeSchema(TEMPLATE_STRING_SCHEMA);
 
     expect(schema({})).to.equal(false);
     expect(schema({
@@ -30,9 +30,7 @@ describe('template mapped model', () => {
   });
 
   it('should validate template refs', async () => {
-    const schema = new Ajv({
-      useDefaults: true,
-    }).compile(TEMPLATE_REF_SCHEMA);
+    const schema = makeSchema(TEMPLATE_REF_SCHEMA);
 
     expect(schema({})).to.equal(false);
     expect(schema({
@@ -41,9 +39,7 @@ describe('template mapped model', () => {
   });
 
   it('should add a default chance to template refs', async () => {
-    const schema = new Ajv({
-      useDefaults: true,
-    }).compile(TEMPLATE_REF_SCHEMA);
+    const schema = makeSchema(TEMPLATE_REF_SCHEMA);
 
     const data = {
       id: 'foo',

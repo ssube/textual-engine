@@ -34,7 +34,10 @@ export async function main(args: Array<string>): Promise<number> {
 
   // load config and create logger
   const config = await loadConfig(arg.config);
-  const logger = BunyanLogger.create(config.logger);
+  const logger = BunyanLogger.create({
+    ...config.logger,
+    kind: 'main',
+  });
 
   // print banner
   logger.info({
@@ -87,6 +90,8 @@ export async function main(args: Array<string>): Promise<number> {
     await pending;
   }
 
+  const quit = onceEvent(events, 'quit');
+
   // emit input args
   for (const input of arg.input) {
     // await output before next command
@@ -106,10 +111,10 @@ export async function main(args: Array<string>): Promise<number> {
   });
 
   // wait for something to quit
-  await onceEvent(events, 'quit');
+  await quit;
   await services.stop();
 
-  // TODO: clean up within services
+  // TODO: clean up with other services
   await locale.stop();
 
   // eventDebug(events);

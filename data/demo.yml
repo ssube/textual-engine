@@ -83,7 +83,7 @@ worlds:
                 You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
             hit:
               dead: '{{actor.meta.name}} has died!'
-              health: '{{actor.meta.name}} has {{health}} health left.'
+              health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
               hit: |-
                 {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
             step:
@@ -93,6 +93,8 @@ worlds:
                 room:
                   you: |-
                     You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+                  health: |-
+                    You have {{health}} health.
                   seen: |-
                     You are in {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
                   inventory: |-

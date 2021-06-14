@@ -15,7 +15,7 @@ describe('config utils', () => {
   });
 
   it('should throw when loading data files', async () =>
-    expect(loadConfig('data/base.yml')).to.eventually.be.rejectedWith(ConfigError)
+    expect(loadConfig('data/demo.yml')).to.eventually.be.rejectedWith(ConfigError)
   );
 });
 

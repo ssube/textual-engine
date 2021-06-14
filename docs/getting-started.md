@@ -55,7 +55,7 @@ be run with:
 ```shell
 > docker run --rm -it ssube/textual-engine:master-stretch \
   --config data/config.yml \
-  --data file://data/base.yml
+  --data file://data/demo.yml
 ```
 
 ### Notable Features
@@ -164,7 +164,7 @@ TODO:
 
 [A recent version of the game is available on Github Pages](https://ssube.github.io/textual-engine/).
 
-When the game starts, it will automatically create a small world from [the `test` template](../data/base.yml). Some
+When the game starts, it will automatically create a small world from [the `test` template](../data/demo.yml). Some
 rooms will be generated before the world loads, and more will be added as you wander. Monsters will attack you when
 they are in the same room, and will wander around the world looking for you.
 

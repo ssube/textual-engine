@@ -1,20 +1,16 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 
 import { LoaderService } from '..';
+import { InjectedOptions } from '../../../module';
 import { splitPath } from '../../../util/string';
-import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
+import { BaseLoader } from '../BaseLoader';
 
 export class BrowserPageLoader extends BaseLoader implements LoaderService {
   protected dom: Document;
 
-  constructor(options: BaseLoaderOptions, dom = document) {
+  constructor(options: InjectedOptions, dom = document) {
     super(options, ['page']);
     this.dom = dom;
-  }
-
-  public async dump(path: string, data: Buffer): Promise<void> {
-    // eslint-disable-next-line no-console
-    console.log(path, data);
   }
 
   public async load(path: string): Promise<Buffer> {
@@ -22,7 +18,7 @@ export class BrowserPageLoader extends BaseLoader implements LoaderService {
     return Buffer.from(text);
   }
 
-  public async save(path: string, data: Buffer): Promise<void> {
+  public async save(_path: string, _data: Buffer): Promise<void> {
     throw new NotImplementedError();
   }
 
@@ -32,7 +28,7 @@ export class BrowserPageLoader extends BaseLoader implements LoaderService {
     return mustExist(elem.textContent);
   }
 
-  public async saveStr(path: string, data: string): Promise<void> {
+  public async saveStr(_path: string, _data: string): Promise<void> {
     throw new NotImplementedError();
   }
 }

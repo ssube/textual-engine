@@ -5,7 +5,7 @@ export function debounce<TResult>(interval: number, inner: () => TResult): () =>
   let timeout: Optional<NodeJS.Timeout>;
 
   return function bouncer() {
-    if (fired === true) {
+    if (fired) {
       return;
     }
 

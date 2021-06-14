@@ -1,11 +1,12 @@
-import { constructorName, doesExist, mustCoalesce, mustExist } from '@apextoaster/js-utils';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { mustExist } from '@apextoaster/js-utils';
+import { JSONSchemaType } from 'ajv';
+import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
 import { ShortcutData, ShortcutItem } from '../../../component/shared';
+import { ConfigError } from '../../../error/ConfigError';
 import { Entity } from '../../../model/entity/Base';
-import { ConfigServiceRef } from '../../../model/file/Config';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER } from '../../../module';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { debounce } from '../../../util/async/Debounce';
 import { onceEvent } from '../../../util/async/event';
 import {
@@ -16,6 +17,9 @@ import {
   EVENT_STATE_STEP,
   RENDER_DELAY,
 } from '../../../util/constants';
+import { makeSchema } from '../../../util/schema';
+import { getVerbScripts } from '../../../util/script';
+import { makeServiceLogger } from '../../../util/service';
 import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
 import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
@@ -26,12 +30,16 @@ export interface BaseRenderConfig {
   shortcuts: boolean;
 }
 
-export interface BaseRenderOptions extends BaseOptions {
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOCALE]?: LocaleService;
-  [INJECT_LOGGER]?: Logger;
-  config?: BaseRenderConfig;
-}
+export const BASE_RENDER_SCHEMA: JSONSchemaType<BaseRenderConfig> = {
+  type: 'object',
+  properties: {
+    shortcuts: {
+      type: 'boolean',
+      default: true,
+    },
+  },
+  required: [],
+};
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export abstract class BaseReactRender implements RenderService {
@@ -53,13 +61,17 @@ export abstract class BaseReactRender implements RenderService {
 
   public abstract update(): void;
 
-  constructor(options: BaseRenderOptions) {
-    this.config = mustExist(options.config);
+  constructor(options: InjectedOptions) {
+    const config = mustExist(options.config);
+    const schema = makeSchema(BASE_RENDER_SCHEMA);
+    if (!schema(config)) {
+      throw new ConfigError('invalid service config');
+    }
+
+    this.config = config;
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
 
     this.slowUpdate = debounce(RENDER_DELAY, () => this.update());
 
@@ -71,6 +83,7 @@ export abstract class BaseReactRender implements RenderService {
       actors: [],
       items: [],
       portals: [],
+      verbs: [],
     };
     this.step = {
       turn: 0,
@@ -136,11 +149,15 @@ export abstract class BaseReactRender implements RenderService {
       };
     }
 
-    this.shortcuts.actors = result.room.actors.map(extractShortcut);
+    this.shortcuts.actors = result.room.actors.filter((it) => it.meta.id !== result.pid).map(extractShortcut);
     this.shortcuts.items = result.room.items.map(extractShortcut);
     this.shortcuts.portals = result.room.portals.map((it) => ({
       id: `${it.sourceGroup} ${it.name}`,
       name: `${it.sourceGroup} ${it.name}`,
+    }));
+    this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
+      id: it,
+      name: it,
     }));
 
     this.setPrompt(`turn ${this.step.turn}`);

@@ -1,21 +1,17 @@
 import { promises } from 'fs';
 
 import { LoaderService } from '..';
+import { InjectedOptions } from '../../../module';
 import { splitPath } from '../../../util/string';
-import { BaseLoader, BaseLoaderOptions } from '../BaseLoader';
+import { BaseLoader } from '../BaseLoader';
 
 export class NodeFileLoader extends BaseLoader implements LoaderService {
   protected fs: typeof promises;
 
-  constructor(options: BaseLoaderOptions, fs = promises) {
+  constructor(options: InjectedOptions, fs = promises) {
     super(options, ['file']);
 
     this.fs = fs;
-  }
-
-  public async dump(fullPath: string, data: Buffer): Promise<void> {
-    const { path } = splitPath(fullPath);
-    await promises.writeFile(path, data);
   }
 
   public async load(fullPath: string): Promise<Buffer> {

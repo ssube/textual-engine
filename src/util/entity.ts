@@ -1,4 +1,5 @@
 import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
+import { EntityForType, WorldEntityType } from '../model/entity';
 
 import { Entity } from '../model/entity/Base';
 import { Metadata } from '../model/Metadata';
@@ -19,8 +20,8 @@ export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<En
   return undefined;
 }
 
-export function matchEntity(entity: Immutable<Entity>, search: SearchFilter): boolean {
-  const matchers = mustCoalesce(search.matchers, DEFAULT_MATCHERS);
+export function matchEntity<TType extends WorldEntityType>(entity: Immutable<Entity>, search: SearchFilter<TType>): entity is EntityForType<TType> {
+  const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
 
   let matched = true;
 
@@ -68,12 +69,16 @@ export function matchMetadataFuzzy(entity: Immutable<Entity>, filter: Partial<Me
   return matched;
 }
 
-export const DEFAULT_MATCHERS: StateMatchers = {
-  entity: matchEntity,
-  metadata: matchMetadata,
-};
+export function createFuzzyMatcher<TType extends WorldEntityType>(): StateMatchers<TType> {
+  return {
+    entity: matchEntity,
+    metadata: matchMetadataFuzzy,
+  };
+}
 
-export const FUZZY_MATCHERS: StateMatchers = {
-  entity: matchEntity,
-  metadata: matchMetadataFuzzy,
-};
+export function createStrictMatcher<TType extends WorldEntityType>(): StateMatchers<TType> {
+  return {
+    entity: matchEntity,
+    metadata: matchMetadata,
+  };
+}

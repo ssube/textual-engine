@@ -5,7 +5,7 @@ import { isActor } from '../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
 import { SIGNAL_HIT } from '../../util/constants';
-import { FUZZY_MATCHERS, indexEntity } from '../../util/entity';
+import { createFuzzyMatcher, indexEntity } from '../../util/entity';
 
 export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -22,7 +22,7 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
     room: {
       id: room.meta.id,
     },
-    matchers: FUZZY_MATCHERS,
+    matchers: createFuzzyMatcher(),
   });
   const target = indexEntity(results, command.index, isActor);
 

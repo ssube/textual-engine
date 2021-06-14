@@ -1,19 +1,14 @@
-import { constructorName, doesExist, mustExist } from '@apextoaster/js-utils';
+import { doesExist, mustExist } from '@apextoaster/js-utils';
 import i18next, { i18n } from 'i18next';
-import { BaseOptions, Inject, Logger } from 'noicejs';
+import { Inject, Logger } from 'noicejs';
 
 import { LocaleContext, LocaleService } from '.';
 import { ConfigFile } from '../../model/file/Config';
 import { LocaleBundle } from '../../model/file/Locale';
-import { INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER } from '../../module';
+import { INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { EVENT_LOCALE_BUNDLE } from '../../util/constants';
+import { makeServiceLogger } from '../../util/service';
 import { EventBus } from '../event';
-
-interface NextLocaleOptions extends BaseOptions {
-  [INJECT_CONFIG]?: ConfigFile;
-  [INJECT_EVENT]?: EventBus;
-  [INJECT_LOGGER]?: Logger;
-}
 
 @Inject(INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER)
 export class NextLocaleService implements LocaleService {
@@ -24,12 +19,10 @@ export class NextLocaleService implements LocaleService {
   protected i18next?: i18n;
   protected bundleLangs: Map<string, Set<string>>;
 
-  constructor(options: NextLocaleOptions) {
+  constructor(options: InjectedOptions) {
     this.config = mustExist(options[INJECT_CONFIG]).locale;
     this.event = mustExist(options[INJECT_EVENT]);
-    this.logger = mustExist(options[INJECT_LOGGER]).child({
-      kind: constructorName(this),
-    });
+    this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
 
     this.bundleLangs = new Map();
   }

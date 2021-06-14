@@ -26,5 +26,7 @@ export interface ActorOutputEvent {
 }
 
 export interface ActorRoomEvent {
+  actor: Actor;
+  pid: string;
   room: Room;
 }

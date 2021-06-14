@@ -48,21 +48,4 @@ describe('page loader', () => {
     expect(buffer.length).to.equal(content.length);
     expect(contentSpy.get, 'content spy').to.have.callCount(1);
   });
-
-  it('should dump debug data to console', async () => {
-    const container = await getTestContainer(new CoreModule());
-
-    const dom = {
-      getElementById: stub().returns(undefined),
-    };
-
-    const consoleSpy = spy(console, 'log');
-
-    const loader = await container.create(BrowserPageLoader, {}, dom);
-    await loader.dump('README.md', Buffer.from('foo'));
-
-    // assert what?
-    consoleSpy.restore();
-    expect(consoleSpy).to.have.callCount(1);
-  });
 });

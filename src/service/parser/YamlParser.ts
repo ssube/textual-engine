@@ -4,6 +4,7 @@ import { DEFAULT_SCHEMA, dump, load, Schema } from 'js-yaml';
 import { Parser } from '.';
 import { DataLoadError } from '../../error/DataLoadError';
 import { DATA_SCHEMA, DataFile } from '../../model/file/Data';
+import { makeSchema } from '../../util/schema';
 import { mapType } from './yaml/MapType';
 
 /**
@@ -17,9 +18,7 @@ export class YamlParser implements Parser {
     this.schema = DEFAULT_SCHEMA.extend([
       mapType,
     ]);
-    this.validate = new Ajv({
-      useDefaults: true,
-    }).compile(DATA_SCHEMA);
+    this.validate = makeSchema(DATA_SCHEMA);
   }
 
   public load(data: string): DataFile {

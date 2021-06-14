@@ -1,8 +1,10 @@
 import { mustExist } from '@apextoaster/js-utils';
+import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
 import { ShortcutData, ShortcutItem } from '../../../component/shared';
+import { ConfigError } from '../../../error/ConfigError';
 import { Entity } from '../../../model/entity/Base';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { debounce } from '../../../util/async/Debounce';
@@ -15,6 +17,7 @@ import {
   EVENT_STATE_STEP,
   RENDER_DELAY,
 } from '../../../util/constants';
+import { makeSchema } from '../../../util/schema';
 import { getVerbScripts } from '../../../util/script';
 import { makeServiceLogger } from '../../../util/service';
 import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
@@ -26,6 +29,17 @@ import { StateStepEvent } from '../../state/events';
 export interface BaseRenderConfig {
   shortcuts: boolean;
 }
+
+export const BASE_RENDER_SCHEMA: JSONSchemaType<BaseRenderConfig> = {
+  type: 'object',
+  properties: {
+    shortcuts: {
+      type: 'boolean',
+      default: true,
+    },
+  },
+  required: [],
+};
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export abstract class BaseReactRender implements RenderService {
@@ -48,7 +62,13 @@ export abstract class BaseReactRender implements RenderService {
   public abstract update(): void;
 
   constructor(options: InjectedOptions) {
-    this.config = mustExist(options.config) as BaseRenderConfig;
+    const config = mustExist(options.config);
+    const schema = makeSchema(BASE_RENDER_SCHEMA);
+    if (!schema(config)) {
+      throw new ConfigError('invalid service config');
+    }
+
+    this.config = config;
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);

@@ -1,10 +1,10 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { createSchema } from '@apextoaster/js-yaml-schema';
-import Ajv from 'ajv';
 import { DEFAULT_SCHEMA, load } from 'js-yaml';
 
 import { ConfigError } from '../../error/ConfigError';
 import { CONFIG_SCHEMA, ConfigFile } from '../../model/file/Config';
+import { makeSchema } from '../schema';
 import { splitPath } from '../string';
 
 export async function loadConfig(url: string, doc = document): Promise<ConfigFile> {
@@ -30,7 +30,7 @@ export async function loadConfig(url: string, doc = document): Promise<ConfigFil
       schema,
     });
 
-    const validate = new Ajv().compile(CONFIG_SCHEMA);
+    const validate = makeSchema(CONFIG_SCHEMA);
     if (validate(data)) {
       return data;
     } else {

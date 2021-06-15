@@ -124,4 +124,4 @@ export { SearchFilter, StateMatchers, findContainer, findMatching, findRoom } fr
 
 export { JoinChain, JoinOptions } from './util/template/JoinChain';
 export { SplitOptions, splitChain } from './util/template/SplitChain';
-export { findByTemplateId, InputChain } from './util/template/index';
+export { findByBaseId as findByTemplateId, InputChain } from './util/template/index';

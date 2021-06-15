@@ -4,6 +4,7 @@ import { Container, NullLogger } from 'noicejs';
 
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
+import { Portal, PortalLinkage, PORTAL_TYPE } from '../../../src/model/entity/Portal';
 import { isRoom, Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Modifier } from '../../../src/model/mapped/Modifier';
 import { Template } from '../../../src/model/mapped/Template';
@@ -105,6 +106,47 @@ const TEST_ROOM: Template<Room> = {
   mods: [],
 };
 
+const TEST_PORTAL: Template<Portal> = {
+  base: {
+    dest: {
+      base: 'room-foo',
+      type: 'string',
+    },
+    link: {
+      base: 'both',
+      type: 'string',
+    },
+    meta: {
+      desc: {
+        base: '',
+        type: 'string',
+      },
+      id: 'portal-door',
+      name: {
+        base: 'door',
+        type: 'string',
+      },
+    },
+    groupKey: {
+      base: 'door',
+      type: 'string',
+    },
+    groupSource: {
+      base: 'west',
+      type: 'string',
+    },
+    groupTarget: {
+      base: 'east',
+      type: 'string',
+    },
+    type: {
+      base: PORTAL_TYPE,
+      type: 'string',
+    },
+  },
+  mods: [],
+};
+
 const TEST_ROOM_PORTALS: Template<Room> = {
   base: {
     actors: [{
@@ -125,26 +167,9 @@ const TEST_ROOM_PORTALS: Template<Room> = {
       },
     },
     portals: [{
-      dest: {
-        base: 'room-foo',
-        type: 'string',
-      },
-      link: {
-        base: 'both',
-        type: 'string',
-      },
-      name: {
-        base: 'door',
-        type: 'string',
-      },
-      sourceGroup: {
-        base: 'west',
-        type: 'string',
-      },
-      targetGroup: {
-        base: 'east',
-        type: 'string',
-      },
+      chance: TEMPLATE_CHANCE,
+      id: 'portal-door',
+      type: 'id',
     }],
     scripts: new Map(),
     type: {
@@ -200,6 +225,43 @@ const TEST_WORLD: WorldTemplate = {
         type: 'string',
       },
     },
+    portal: {
+      dest: {
+        base: '',
+        type: 'string',
+      },
+      link: {
+        base: PortalLinkage.BOTH,
+        type: 'string',
+      },
+      meta: {
+        desc: {
+          base: '',
+          type: 'string',
+        },
+        id: '',
+        name: {
+          base: '',
+          type: 'string',
+        },
+      },
+      groupKey: {
+        base: '',
+        type: 'string',
+      },
+      groupSource: {
+        base: '',
+        type: 'string',
+      },
+      groupTarget: {
+        base: '',
+        type: 'string',
+      },
+      type: {
+        base: PORTAL_TYPE,
+        type: 'string',
+      },
+    },
     room: {
       actors: [],
       items: [],
@@ -244,6 +306,7 @@ const TEST_WORLD: WorldTemplate = {
   templates: {
     actors: [TEST_ACTOR],
     items: [TEST_ITEM],
+    portals: [TEST_PORTAL],
     rooms: [TEST_ROOM],
   },
 };
@@ -527,15 +590,19 @@ describe('state entity generator', () => {
       });
 
       const startRoom = await generator.createRoom(TEST_ROOM_PORTALS);
-      expect(startRoom.portals).to.have.lengthOf(0);
+      expect(startRoom.portals, 'start room portals').to.have.lengthOf(0);
 
       const newRooms = await generator.populateRoom(startRoom, 4);
-      expect(newRooms).to.have.lengthOf(5);
+      expect(newRooms, 'new rooms').to.have.lengthOf(5);
 
-      for (const room of newRooms) {
-        expect(isRoom(room), 'room entity').to.equal(true);
-        expect(room.portals, 'room portals').to.have.length.greaterThan(0);
+      for (let i = 0; i < newRooms.length - 1; ++i) {
+        const room = newRooms[i];
+        expect(isRoom(room), `room entity for ${room.meta.id}`).to.equal(true);
+        expect(room.portals, `room portals for ${room.meta.id}`).to.have.length.greaterThan(0);
       }
+
+      const lastRoom = newRooms[newRooms.length - 1];
+      expect(lastRoom.portals, 'last generated room').to.have.lengthOf(0);
     });
 
     xit('should not generate rooms for already filled portals');

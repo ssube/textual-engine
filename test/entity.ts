@@ -1,5 +1,7 @@
+import { Command, Portal } from '../src/lib';
 import { Actor, ACTOR_TYPE, ActorSource } from '../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../src/model/entity/Item';
+import { PortalLinkage, PORTAL_TYPE } from '../src/model/entity/Portal';
 import { Room, ROOM_TYPE } from '../src/model/entity/Room';
 import { Template } from '../src/model/mapped/Template';
 import { Metadata } from '../src/model/Metadata';
@@ -7,6 +9,14 @@ import { WorldState } from '../src/model/world/State';
 import { WorldTemplate } from '../src/model/world/Template';
 import { TEMPLATE_CHANCE } from '../src/util/constants';
 
+export function makeTestCommand(verb: string, target: string, index = 0): Command {
+  return {
+    index,
+    input: `${verb} ${target}`,
+    target,
+    verb,
+  };
+}
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {
     source: ActorSource.BEHAVIOR,
@@ -53,6 +63,23 @@ export function makeTestRoom(id: string, name: string, template: string, actors:
   };
 }
 
+export function makeTestPortal(id: string, name: string, source: string, target: string, dest: string): Portal {
+  return {
+    dest,
+    link: PortalLinkage.BOTH,
+    meta: {
+      desc: '',
+      id,
+      name,
+      template: '',
+    },
+    groupKey: name,
+    groupSource: source,
+    groupTarget: target,
+    type: PORTAL_TYPE,
+  };
+}
+
 export function makeTestMeta(id: string, name: string = '', template: string = ''): Metadata {
   return {
     desc: '',
@@ -86,15 +113,17 @@ export function makeTestState(id: string, rooms: Array<Room>): WorldState {
   };
 }
 
-export function makeTestWorld(actors: Array<Template<Actor>>, items: Array<Template<Item>>, rooms: Array<Template<Room>>): WorldTemplate {
+export function makeTestWorld(actors: Array<Template<Actor>>, items: Array<Template<Item>>, portals: Array<Template<Portal>>, rooms: Array<Template<Room>>): WorldTemplate {
   const [defaultActor] = actors;
   const [defaultItem] = items;
+  const [defaultPortal] = portals;
   const [defaultRoom] = rooms;
 
   return {
     defaults: {
       actor: defaultActor.base,
       item: defaultItem.base,
+      portal: defaultPortal.base,
       room: defaultRoom.base,
     },
     locale: {
@@ -121,6 +150,7 @@ export function makeTestWorld(actors: Array<Template<Actor>>, items: Array<Templ
     templates: {
       actors,
       items,
+      portals,
       rooms,
     },
   };

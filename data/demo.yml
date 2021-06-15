@@ -63,6 +63,23 @@ worlds:
             base: ''
         stats: !map {}
         scripts: !map {}
+      portal:
+        meta:
+          id: portal-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        dest:
+          base: room-none
+        link:
+          base: both
+        groupKey:
+          base: ''
+        groupSource:
+          base: ''
+        groupTarget:
+          base: ''
       room:
         meta:
           id: room-none
@@ -294,6 +311,59 @@ worlds:
                   damage:
                     min: 5
                     max: 5
+      portals:
+        - base:
+            sourceGroup:
+              base: west
+            targetGroup:
+              base: east
+            name:
+              base: window
+            dest:
+              base: ((room-cave|room-cave|room-marsh))
+          mods: []
+        - base:
+            sourceGroup:
+              base: east
+            targetGroup:
+              base: west
+            name:
+              base: door
+            dest:
+              base: ((room-cave|room-cave|room-marsh))
+          mods: []
+        - base:
+            sourceGroup:
+              base: west
+            targetGroup:
+              base: east
+            name:
+              base: door
+            dest:
+              base: ((room-cave|room-marsh))
+          mods: []
+        - base:
+            sourceGroup:
+              base: east
+            targetGroup:
+              base: west
+            name:
+              base: window
+            dest:
+              base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
+          mods: []
+        - base:
+            sourceGroup:
+              base: west
+            targetGroup:
+              base: east
+            name:
+              base: door
+            dest:
+              base: room-cave
+            link:
+              base: forward
+          mods: []
       rooms:
         - base:
             meta:
@@ -308,22 +378,8 @@ worlds:
                 chance: 10
             items: []
             portals:
-              - sourceGroup:
-                  base: west
-                targetGroup:
-                  base: east
-                name:
-                  base: window
-                dest:
-                  base: ((room-cave|room-cave|room-marsh))
-              - sourceGroup:
-                  base: east
-                targetGroup:
-                  base: west
-                name:
-                  base: door
-                dest:
-                  base: ((room-cave|room-cave|room-marsh))
+              - id: window-west
+              - id: door-east
             scripts: !map
               signal.step:
                 data: !map {}
@@ -343,22 +399,8 @@ worlds:
               - id: item-sword
                 chance: 50
             portals:
-              - sourceGroup:
-                  base: west
-                targetGroup:
-                  base: east
-                name:
-                  base: door
-                dest:
-                  base: ((room-cave|room-marsh))
-              - sourceGroup:
-                  base: east
-                targetGroup:
-                  base: west
-                name:
-                  base: window
-                dest:
-                  base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
+              - id: door-west
+              - id: window-east
             scripts: !map
               signal.step:
                 data: !map {}
@@ -374,24 +416,8 @@ worlds:
             actors: []
             items: []
             portals:
-              - sourceGroup:
-                  base: west
-                targetGroup:
-                  base: east
-                name:
-                  base: door
-                dest:
-                  base: room-cave
-                link:
-                  base: forward
-              - sourceGroup:
-                  base: east
-                targetGroup:
-                  base: west
-                name:
-                  base: window
-                dest:
-                  base: room-dungeon
+              - id: door-west-forward
+              - id: window-east
             scripts: !map
               signal.step:
                 data: !map {}

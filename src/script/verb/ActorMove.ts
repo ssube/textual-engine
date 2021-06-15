@@ -19,8 +19,8 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
 
   const currentRoom = mustExist(context.room);
   const portals = currentRoom.portals.filter((it) => {
-    const group = it.sourceGroup.toLocaleLowerCase();
-    const name = it.name.toLocaleLowerCase();
+    const group = it.groupSource.toLocaleLowerCase();
+    const name = it.meta.name.toLocaleLowerCase();
     // portals in the same group usually lead to the same place, but name and group can both be ambiguous
     return (name === targetName || group === targetName || `${group} ${name}` === targetName);
   });

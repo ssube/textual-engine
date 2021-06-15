@@ -59,7 +59,7 @@ import {
   StateEntityTransfer,
 } from '../../util/state/EntityTransfer';
 import { findMatching, findRoom, SearchFilter } from '../../util/state/search';
-import { findByTemplateId } from '../../util/template';
+import { findByBaseId } from '../../util/template';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
@@ -203,7 +203,7 @@ export class LocalStateService implements StateService {
     } else {
       // pick a starting actor and create it
       const actorRef = randomItem(world.start.actors, this.random);
-      const actorTemplate = findByTemplateId(world.templates.actors, actorRef.id);
+      const actorTemplate = findByBaseId(world.templates.actors, actorRef.id);
       if (isNil(actorTemplate)) {
         throw new NotFoundError('invalid start actor');
       }

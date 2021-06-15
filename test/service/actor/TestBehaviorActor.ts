@@ -1,10 +1,10 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions, Container, NullLogger } from 'noicejs';
-import { createStubInstance, match } from 'sinon';
+import { createStubInstance } from 'sinon';
 
 import { Actor, ActorSource } from '../../../src/model/entity/Actor';
-import { PortalLinkage } from '../../../src/model/entity/Portal';
+import { Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
 import { Room } from '../../../src/model/entity/Room';
 import { INJECT_EVENT, INJECT_RANDOM } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
@@ -14,7 +14,7 @@ import { EventBus } from '../../../src/service/event';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { onceEvent } from '../../../src/util/async/event';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../../src/util/constants';
-import { makeTestActor, makeTestRoom } from '../../entity';
+import { makeTestActor, makeTestPortal, makeTestRoom } from '../../entity';
 
 describe('behavior actor', () => {
   it('should respond to room events for non-player actors with a command for the same actor', async () => {
@@ -146,13 +146,7 @@ describe('behavior actor', () => {
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pendingCommand = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
-    const portal = {
-      dest: 'foo',
-      link: PortalLinkage.BOTH,
-      name: 'door',
-      sourceGroup: 'west',
-      targetGroup: 'east',
-    };
+    const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
     const room = makeTestRoom('', '', '', [], []);
     room.portals.push(portal);
 
@@ -164,8 +158,8 @@ describe('behavior actor', () => {
     return expect(pendingCommand).to.eventually.deep.include({
       command: {
         index: 0,
-        input: `${VERB_MOVE} ${portal.sourceGroup} ${portal.name}`,
-        target: `${portal.sourceGroup} ${portal.name}`, // should be specific
+        input: `${VERB_MOVE} ${portal.groupSource} ${portal.meta.name}`,
+        target: `${portal.groupSource} ${portal.meta.name}`, // should be specific
         verb: VERB_MOVE,
       },
     });

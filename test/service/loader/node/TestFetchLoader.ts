@@ -5,6 +5,7 @@ import { match, stub } from 'sinon';
 
 import { ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
+import { PORTAL_TYPE } from '../../../../src/model/entity/Portal';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
 import { INJECT_EVENT } from '../../../../src/module';
 import { CoreModule } from '../../../../src/module/CoreModule';
@@ -92,6 +93,45 @@ describe('node fetch loader', () => {
         stats: new Map(),
         type: {
           base: ITEM_TYPE,
+          type: 'string',
+        },
+      },
+      mods: [],
+    }], [{
+      base: {
+        dest: {
+          base: '',
+          type: 'string',
+        },
+        link: {
+          base: '',
+          type: 'string',
+        },
+        groupKey: {
+          base: '',
+          type: 'string',
+        },
+        groupSource: {
+          base: '',
+          type: 'string',
+        },
+        groupTarget: {
+          base: '',
+          type: 'string',
+        },
+        meta: {
+          desc: {
+            base: '',
+            type: 'string',
+          },
+          id: '',
+          name: {
+            base: '',
+            type: 'string',
+          },
+        },
+        type: {
+          base: PORTAL_TYPE,
           type: 'string',
         },
       },

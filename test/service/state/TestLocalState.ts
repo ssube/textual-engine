@@ -8,6 +8,7 @@ import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
+import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
@@ -111,6 +112,47 @@ const TEST_ITEM: Template<Item> = {
   mods: [],
 };
 
+const TEST_PORTAL: Template<Portal> = {
+  base: {
+    dest: {
+      base: 'room-foo',
+      type: 'string',
+    },
+    link: {
+      base: 'both',
+      type: 'string',
+    },
+    meta: {
+      desc: {
+        base: '',
+        type: 'string',
+      },
+      id: 'portal-door',
+      name: {
+        base: 'door',
+        type: 'string',
+      },
+    },
+    groupKey: {
+      base: 'door',
+      type: 'string',
+    },
+    groupSource: {
+      base: 'west',
+      type: 'string',
+    },
+    groupTarget: {
+      base: 'east',
+      type: 'string',
+    },
+    type: {
+      base: PORTAL_TYPE,
+      type: 'string',
+    },
+  },
+  mods: [],
+};
+
 const TEST_ROOM: Template<Room> = {
   base: {
     actors: [],
@@ -148,6 +190,7 @@ const TEST_WORLD: WorldTemplate = {
   defaults: {
     actor: TEST_ACTOR.base,
     item: TEST_ITEM.base,
+    portal: TEST_PORTAL.base,
     room: TEST_ROOM.base,
   },
   locale: {
@@ -174,6 +217,7 @@ const TEST_WORLD: WorldTemplate = {
   templates: {
     actors: [TEST_ACTOR],
     items: [TEST_ITEM],
+    portals: [],
     rooms: [TEST_ROOM],
   },
 };
@@ -703,6 +747,7 @@ describe('local state service', () => {
             mods: [],
           }],
           items: TEST_WORLD.templates.items,
+          portals: TEST_WORLD.templates.portals,
           rooms: [{
             base: {
               ...TEST_ROOM.base,

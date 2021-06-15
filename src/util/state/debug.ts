@@ -21,7 +21,7 @@ export function debugState(state: WorldState): Array<string> {
     }
 
     for (const portal of room.portals) {
-      lines.push(`    portal: ${portal.name} (${portal.sourceGroup}) -> ${portal.dest} (${portal.targetGroup})`);
+      lines.push(`    portal: ${portal.meta.name} (${portal.groupSource}) -> ${portal.dest} (${portal.groupTarget})`);
     }
   }
 
@@ -46,7 +46,7 @@ export function graphState(state: WorldState): Array<string> {
       const segments = [
         `  ${sanitize(room.meta.id)} -> ${sanitize(portal.dest)}`,
         '[',
-        `label="${portal.sourceGroup} ${portal.name}"`,
+        `label="${portal.groupSource} ${portal.meta.name}"`,
       ];
 
       segments.push('];');

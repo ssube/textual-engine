@@ -41798,6 +41798,30 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return mustFind(values, doesExist);
   }
   __name(mustCoalesce, "mustCoalesce");
+  function mergeList(...parts) {
+    const out = [];
+    for (const part of parts) {
+      if (Array.isArray(part)) {
+        out.push(...part);
+      } else {
+        out.push(part);
+      }
+    }
+    return out;
+  }
+  __name(mergeList, "mergeList");
+  function toList(val) {
+    if (isList(val)) {
+      return val;
+    } else {
+      return [val];
+    }
+  }
+  __name(toList, "toList");
+  function isList(list) {
+    return Array.isArray(list);
+  }
+  __name(isList, "isList");
   function getOrDefault(map2, key, defaultValue) {
     if (map2.has(key)) {
       const data = map2.get(key);
@@ -41808,6 +41832,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return defaultValue;
   }
   __name(getOrDefault, "getOrDefault");
+  function setOrPush(map2, key, val) {
+    const prev = map2.get(key);
+    if (doesExist(prev)) {
+      map2.set(key, mergeList(prev, val));
+    } else {
+      map2.set(key, toList(val));
+    }
+  }
+  __name(setOrPush, "setOrPush");
   function mergeMap(target, source) {
     for (const [k, v] of source) {
       target.set(k, v);
@@ -42041,6 +42074,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/string.js
   init_virtual_process_polyfill();
   init_buffer();
+  function hasText(str2) {
+    return doesExist(str2) && str2.length > 0 && /^\s*$/.test(str2) === false;
+  }
+  __name(hasText, "hasText");
   function matchIdSegments(value, filter2) {
     const valueParts = value.split("-");
     const filterParts = filter2.split("-");
@@ -42398,7 +42435,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/model/Metadata.js
   init_virtual_process_polyfill();
   init_buffer();
-  var METADATA_SCHEMA = {
+  var TEMPLATE_METADATA_SCHEMA = {
     type: "object",
     properties: {
       desc: TEMPLATE_STRING_SCHEMA,
@@ -42480,7 +42517,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             type: "array",
             items: TEMPLATE_REF_SCHEMA
           },
-          meta: METADATA_SCHEMA,
+          meta: TEMPLATE_METADATA_SCHEMA,
           type: makeConstStringSchema(ACTOR_TYPE),
           stats: {
             type: "object",
@@ -42518,7 +42555,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         type: "object",
         properties: {
           type: makeConstStringSchema(ITEM_TYPE),
-          meta: METADATA_SCHEMA,
+          meta: TEMPLATE_METADATA_SCHEMA,
           scripts: {
             type: "object",
             required: []
@@ -42545,31 +42582,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/model/entity/Room.js
   init_virtual_process_polyfill();
   init_buffer();
-
-  // out/src/model/entity/Portal.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  var PortalLinkage;
-  (function(PortalLinkage2) {
-    PortalLinkage2["FORWARD"] = "forward";
-    PortalLinkage2["BOTH"] = "both";
-  })(PortalLinkage || (PortalLinkage = {}));
-  var PORTAL_SCHEMA = {
-    type: "object",
-    properties: {
-      dest: TEMPLATE_STRING_SCHEMA,
-      link: Object.assign(Object.assign({}, TEMPLATE_STRING_SCHEMA), { default: {
-        base: "both",
-        type: "string"
-      } }),
-      name: TEMPLATE_STRING_SCHEMA,
-      sourceGroup: TEMPLATE_STRING_SCHEMA,
-      targetGroup: TEMPLATE_STRING_SCHEMA
-    },
-    required: ["name", "dest", "sourceGroup", "targetGroup"]
-  };
-
-  // out/src/model/entity/Room.js
   var ROOM_TYPE = "room";
   function isRoom(entity) {
     return doesExist(entity) && entity.type === ROOM_TYPE;
@@ -42582,7 +42594,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         type: "object",
         properties: {
           type: makeConstStringSchema(ROOM_TYPE),
-          meta: METADATA_SCHEMA,
+          meta: TEMPLATE_METADATA_SCHEMA,
           actors: {
             type: "array",
             items: TEMPLATE_REF_SCHEMA
@@ -42593,7 +42605,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           },
           portals: {
             type: "array",
-            items: PORTAL_SCHEMA
+            items: TEMPLATE_REF_SCHEMA
           },
           scripts: {
             type: "object",
@@ -42749,8 +42761,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.shortcuts.actors = result.room.actors.filter((it) => it.meta.id !== result.pid).map(extractShortcut);
       this.shortcuts.items = result.room.items.map(extractShortcut);
       this.shortcuts.portals = result.room.portals.map((it) => ({
-        id: `${it.sourceGroup} ${it.name}`,
-        name: `${it.sourceGroup} ${it.name}`
+        id: `${it.groupSource} ${it.meta.name}`,
+        name: `${it.groupSource} ${it.meta.name}`
       }));
       this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
         id: it,
@@ -42890,9 +42902,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }, "moving through random portal");
         this.queue(event.room, event.actor, {
           index: 0,
-          input: `${VERB_MOVE} ${portal.sourceGroup} ${portal.name}`,
+          input: `${VERB_MOVE} ${portal.groupSource} ${portal.meta.name}`,
           verb: VERB_MOVE,
-          target: `${portal.sourceGroup} ${portal.name}`
+          target: `${portal.groupSource} ${portal.meta.name}`
         });
         return;
       }
@@ -48383,6 +48395,58 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
 
+  // out/src/model/entity/Portal.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var PortalLinkage;
+  (function(PortalLinkage2) {
+    PortalLinkage2["FORWARD"] = "forward";
+    PortalLinkage2["BOTH"] = "both";
+  })(PortalLinkage || (PortalLinkage = {}));
+  var PORTAL_TYPE = "portal";
+  var PORTAL_TEMPLATE_SCHEMA = {
+    type: "object",
+    properties: {
+      base: {
+        type: "object",
+        properties: {
+          dest: TEMPLATE_STRING_SCHEMA,
+          groupKey: TEMPLATE_STRING_SCHEMA,
+          groupSource: TEMPLATE_STRING_SCHEMA,
+          groupTarget: TEMPLATE_STRING_SCHEMA,
+          link: Object.assign(Object.assign({}, TEMPLATE_STRING_SCHEMA), { default: {
+            base: "both",
+            type: "string"
+          } }),
+          meta: TEMPLATE_METADATA_SCHEMA,
+          type: {
+            type: "object",
+            properties: {
+              base: {
+                default: PORTAL_TYPE,
+                type: "string"
+              },
+              type: {
+                default: "string",
+                type: "string"
+              }
+            },
+            required: ["base", "type"]
+          }
+        },
+        required: ["dest", "groupKey", "groupSource", "groupTarget", "meta"]
+      },
+      mods: {
+        type: "array",
+        items: {
+          type: "object",
+          required: []
+        }
+      }
+    },
+    required: ["base"]
+  };
+
   // out/src/model/file/Locale.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -48419,12 +48483,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         properties: {
           actor: ACTOR_TEMPLATE_SCHEMA.properties.base,
           item: ITEM_TEMPLATE_SCHEMA.properties.base,
+          portal: PORTAL_TEMPLATE_SCHEMA.properties.base,
           room: ROOM_TEMPLATE_SCHEMA.properties.base
         },
-        required: ["actor", "item", "room"]
+        required: ["actor", "item", "portal", "room"]
       },
       locale: LOCALE_SCHEMA,
-      meta: METADATA_SCHEMA,
+      meta: TEMPLATE_METADATA_SCHEMA,
       start: {
         type: "object",
         properties: {
@@ -48450,12 +48515,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             type: "array",
             items: ITEM_TEMPLATE_SCHEMA
           },
+          portals: {
+            type: "array",
+            items: PORTAL_TEMPLATE_SCHEMA
+          },
           rooms: {
             type: "array",
             items: ROOM_TEMPLATE_SCHEMA
           }
         },
-        required: ["actors", "items", "rooms"]
+        required: ["actors", "items", "portals", "rooms"]
       }
     },
     required: ["defaults", "locale", "meta", "start", "templates"]
@@ -49045,8 +49114,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const targetName = command.target;
     const currentRoom = mustExist(context.room);
     const portals = currentRoom.portals.filter((it) => {
-      const group = it.sourceGroup.toLocaleLowerCase();
-      const name = it.name.toLocaleLowerCase();
+      const group = it.groupSource.toLocaleLowerCase();
+      const name = it.meta.name.toLocaleLowerCase();
       return name === targetName || group === targetName || `${group} ${name}` === targetName;
     });
     const targetPortal = portals[command.index];
@@ -49336,15 +49405,20 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         lines.push(`    item: ${item.meta.name} (${item.meta.id})`);
       }
       for (const portal of room.portals) {
-        lines.push(`    portal: ${portal.name} (${portal.sourceGroup}) -> ${portal.dest} (${portal.targetGroup})`);
+        lines.push(`    portal: ${portal.meta.name} (${portal.groupSource}) -> ${portal.dest} (${portal.groupTarget})`);
       }
     }
     return lines;
   }
   __name(debugState, "debugState");
   function graphState(state) {
+    let unlinked = 0;
     function sanitize(input) {
-      return input.replace(/[^a-zA-Z0-9_]/g, "_");
+      if (hasText(input)) {
+        return input.replace(/[^a-zA-Z0-9_]/g, "_");
+      } else {
+        return `unlinked_${unlinked++}`;
+      }
     }
     __name(sanitize, "sanitize");
     const lines = [
@@ -49356,7 +49430,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         const segments = [
           `  ${sanitize(room.meta.id)} -> ${sanitize(portal.dest)}`,
           "[",
-          `label="${portal.sourceGroup} ${portal.name}"`
+          `label="${portal.groupSource} ${portal.meta.name}"`
         ];
         segments.push("];");
         lines.push(segments.join(" "));
@@ -49375,10 +49449,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/template/index.js
   init_virtual_process_polyfill();
   init_buffer();
-  function findByTemplateId(templates, id) {
+  function findByBaseId(templates, id) {
     return mustFind(templates, (it) => it.base.meta.id === id);
   }
-  __name(findByTemplateId, "findByTemplateId");
+  __name(findByBaseId, "findByBaseId");
 
   // out/src/util/state/EntityGenerator.js
   var StateEntityGenerator = /* @__PURE__ */ __name(class StateEntityGenerator2 {
@@ -49413,7 +49487,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
           continue;
         }
-        const template = findByTemplateId(world.templates.actors, templateRef.id);
+        const template = findByBaseId(world.templates.actors, templateRef.id);
         this.logger.debug({
           template,
           templateRef
@@ -49443,7 +49517,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
           continue;
         }
-        const template = findByTemplateId(world.templates.items, templateRef.id);
+        const template = findByBaseId(world.templates.items, templateRef.id);
         this.logger.debug({
           template,
           templateRef
@@ -49464,13 +49538,46 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         template: template.id
       };
     }
+    async createPortal(template) {
+      const portal = {
+        dest: "",
+        groupKey: this.template.renderString(template.base.groupKey),
+        groupSource: this.template.renderString(template.base.groupSource),
+        groupTarget: this.template.renderString(template.base.groupTarget),
+        link: this.template.renderString(template.base.link),
+        meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
+        type: PORTAL_TYPE
+      };
+      await this.modifyPortal(portal, template.mods);
+      return portal;
+    }
+    async createPortalList(templates) {
+      const world = this.getWorld();
+      const portals = [];
+      for (const templateRef of templates) {
+        if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
+          continue;
+        }
+        const template = findByBaseId(world.templates.portals, templateRef.id);
+        this.logger.debug({
+          template,
+          templateRef
+        }, "create portal for list");
+        if (isNil(template)) {
+          throw new NotFoundError("invalid portal in room");
+        }
+        const portal = await this.createPortal(template);
+        portals.push(portal);
+      }
+      return portals;
+    }
     async createRoom(template) {
       const room = {
         type: ROOM_TYPE,
         actors: await this.createActorList(template.base.actors),
         items: await this.createItemList(template.base.items),
         meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
-        portals: [],
+        portals: await this.createPortalList(template.base.portals),
         scripts: await this.createScripts(template.base.scripts, ROOM_TYPE)
       };
       await this.modifyRoom(room, template.mods);
@@ -49485,7 +49592,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async createState(world, params) {
       this.random.reseed(params.seed);
       const roomRef = randomItem(world.start.rooms, this.random);
-      const roomTemplate = findByTemplateId(world.templates.rooms, roomRef.id);
+      const roomTemplate = findByBaseId(world.templates.rooms, roomRef.id);
       if (isNil(roomTemplate)) {
         throw new NotFoundError("invalid start room");
       }
@@ -49494,7 +49601,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         roomTemplate
       }, "creating start room");
       const startRoom = await this.createRoom(roomTemplate);
-      const rooms = await this.populateRoom(startRoom, params.depth);
+      const rooms = await this.populateRoom(startRoom, [], params.depth);
       rooms.unshift(startRoom);
       const meta = await this.createMetadata(world.meta, "world");
       return {
@@ -49532,6 +49639,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       target.desc = this.template.modifyString(target.desc, mod.desc);
       target.name = this.template.modifyString(target.name, mod.name);
     }
+    async modifyPortal(target, available) {
+      const selected = this.selectModifiers(available);
+      for (const mod of selected) {
+        await this.modifyMetadata(target.meta, mod.meta);
+        target.groupKey = this.template.modifyString(target.groupKey, mod.groupKey);
+        target.groupSource = this.template.modifyString(target.groupSource, mod.groupSource);
+        target.groupTarget = this.template.modifyString(target.groupTarget, mod.groupTarget);
+        target.link = this.template.modifyString(target.link, mod.link);
+      }
+    }
     async modifyRoom(target, available) {
       const selected = this.selectModifiers(available);
       for (const mod of selected) {
@@ -49561,100 +49678,84 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       return selected;
     }
-    async populateRoom(room, depth) {
-      if (depth < 0) {
+    async populateRoom(firstRoom, searchRooms, max) {
+      if (max < 0) {
         return [];
       }
       const world = this.getWorld();
-      const templateRoom = findByTemplateId(world.templates.rooms, room.meta.template);
-      const templatePortals = templateRoom.base.portals.filter((it) => {
-        this.logger.debug({ it, room }, "looking for portal matching template in room");
-        return room.portals.some((p) => p.name === it.name.base && p.sourceGroup === it.sourceGroup.base) === false;
-      });
-      if (templatePortals.length === 0) {
-        this.logger.debug({ room }, "portals have already been populated");
-        return [];
-      }
-      this.logger.debug({
-        portals: templatePortals,
-        room
-      }, `populating ${templatePortals.length} new portals of ${templateRoom.base.portals.length} in room ${room.meta.id}`);
-      const { portals, rooms } = await this.populatePortals(templatePortals, room.meta.id, depth);
-      room.portals.push(...portals);
-      return rooms;
-    }
-    groupPortals(portals) {
-      const groups = new Map();
-      for (const portal of portals) {
-        this.logger.debug({
-          portal
-        }, "grouping portal");
-        const groupName = this.template.renderString(portal.sourceGroup);
-        const group = groups.get(groupName);
-        if (group) {
-          group.dests.add(this.template.renderString(portal.dest));
-          group.portals.add(portal);
-        } else {
-          groups.set(groupName, {
-            dests: new Set([
-              this.template.renderString(portal.dest)
-            ]),
-            portals: new Set([portal])
-          });
-        }
-      }
-      this.logger.debug({ groups: Object.fromEntries(groups.entries()) }, "grouped portals");
-      return groups;
-    }
-    async populatePortals(templates, sourceId, depth) {
-      if (depth < 0) {
-        return {
-          portals: [],
-          rooms: []
-        };
-      }
-      const world = this.getWorld();
-      const groups = this.groupPortals(templates);
-      const portals = [];
-      const rooms = [];
-      for (const [sourceGroup, group] of groups) {
-        const potentialDests = Array.from(group.dests);
-        const destTemplateId = randomItem(potentialDests, this.random);
-        const destTemplate = findByTemplateId(world.templates.rooms, destTemplateId);
-        if (isNil(destTemplate)) {
-          throw new NotFoundError("invalid room in portal dest");
-        }
-        this.logger.debug({ destTemplateId, group, sourceGroup }, "linking source group to destination template");
-        const destRoom = await this.createRoom(destTemplate);
-        rooms.push(destRoom);
-        for (const portal of group.portals) {
-          const link = this.template.renderString(portal.link);
-          const name = this.template.renderString(portal.name);
-          const targetGroup = this.template.renderString(portal.targetGroup);
-          portals.push({
-            dest: destRoom.meta.id,
-            link,
-            name,
-            sourceGroup,
-            targetGroup
-          });
-          if (link === PortalLinkage.BOTH) {
-            destRoom.portals.push({
-              dest: sourceId,
-              link,
-              name,
-              sourceGroup: targetGroup,
-              targetGroup: sourceGroup
-            });
+      const addedRooms = [];
+      const pendingRooms = [firstRoom];
+      while (pendingRooms.length > 0 && addedRooms.length < max) {
+        const room = mustExist(pendingRooms.shift());
+        this.logger.debug({ depth: max, room }, "populating room with portals");
+        const sourceGroups = new Map();
+        for (const portal of room.portals) {
+          if (portal.dest === "") {
+            setOrPush(sourceGroups, portal.groupSource, portal);
           }
         }
-        const further = await this.populateRoom(destRoom, depth - 1);
-        rooms.push(...further);
+        this.logger.debug({
+          groups: Array.from(sourceGroups.keys())
+        }, "finding destinations for portal groups");
+        for (const [group, portals] of sourceGroups) {
+          const groupTemplates = portals.map((it) => findByBaseId(world.templates.portals, it.meta.template));
+          const potentialDests = groupTemplates.map((it) => it.base.dest);
+          const destId = this.template.renderString(randomItem(potentialDests, this.random));
+          this.logger.debug({
+            destId,
+            group
+          }, "selected destination for portal group");
+          const existingRoom = [
+            ...searchRooms,
+            ...addedRooms,
+            ...pendingRooms
+          ].find((it) => {
+            if (it.meta.id === room.meta.id) {
+              return false;
+            }
+            if (matchIdSegments(it.meta.id, destId)) {
+              return it.portals.some((p) => p.dest === "" && p.groupTarget === group);
+            } else {
+              return false;
+            }
+          });
+          if (doesExist(existingRoom)) {
+            this.logger.debug({
+              existingRoom,
+              group
+            }, "linking portal group to existing room");
+            for (const portal of portals) {
+              portal.dest = existingRoom.meta.id;
+            }
+            continue;
+          }
+          const destTemplate = findByBaseId(world.templates.rooms, destId);
+          const destRoom = await this.createRoom(destTemplate);
+          this.logger.debug({
+            destRoom,
+            group
+          }, "linking portal group to new room");
+          for (const portal of portals) {
+            portal.dest = destRoom.meta.id;
+            if (portal.link === PortalLinkage.BOTH) {
+              const destPortal = await this.reversePortal(portal);
+              destPortal.dest = room.meta.id;
+              destRoom.portals.push(destPortal);
+            }
+          }
+          addedRooms.push(destRoom);
+          pendingRooms.push(destRoom);
+        }
       }
-      return {
-        portals,
-        rooms
-      };
+      return addedRooms;
+    }
+    async reversePortal(portal) {
+      return Object.assign(Object.assign({}, portal), { groupSource: portal.groupTarget, groupTarget: portal.groupSource, meta: {
+        desc: portal.meta.desc,
+        id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,
+        name: portal.meta.name,
+        template: portal.meta.template
+      } });
     }
   }, "StateEntityGenerator");
   StateEntityGenerator = __decorate([
@@ -49910,7 +50011,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         });
       } else {
         const actorRef = randomItem(world.start.actors, this.random);
-        const actorTemplate = findByTemplateId(world.templates.actors, actorRef.id);
+        const actorTemplate = findByBaseId(world.templates.actors, actorRef.id);
         if (isNil(actorTemplate)) {
           throw new NotFoundError("invalid start actor");
         }
@@ -49924,11 +50025,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }, "created player actor, placing in room");
         const room = mustFind(state.rooms, (it) => it.meta.id === state.start.room);
         room.actors.push(actor);
-        this.logger.debug({ actor, room }, "player entering room");
-        await this.stepEnter({
-          actor,
-          room
-        });
         this.logger.debug({
           pid: event.pid
         }, "emitting player join event");
@@ -49937,9 +50033,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           pid: event.pid,
           room
         });
+        this.logger.debug({ actor, room }, "player entering room");
+        await this.stepEnter({
+          actor,
+          room
+        });
       }
-      this.logger.debug(event, "notifying world of player");
-      await this.broadcastChanges();
     }
     async onWorld(world) {
       this.logger.debug({ world: world.meta.id }, "registering loaded world");
@@ -50246,17 +50345,21 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         spent,
         step: this.state.step
       }, "finished world state step");
-      await this.broadcastChanges();
+      await this.broadcastChanges(this.state.rooms);
       return {
         time: this.state.step.time,
         turn: this.state.step.turn
       };
     }
     async stepEnter(target) {
+      const generator = mustExist(this.generator);
+      const state = mustExist(this.state);
       if (doesExist(target.actor) && target.actor.source === ActorSource.PLAYER) {
-        const state = mustExist(this.state);
-        const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);
-        state.rooms.push(...rooms);
+        const rooms = await generator.populateRoom(target.room, state.rooms, state.world.depth);
+        if (rooms.length > 0) {
+          state.rooms.push(...rooms);
+        }
+        await this.broadcastChanges(state.rooms);
       }
     }
     async stepFind(search) {
@@ -50281,17 +50384,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         volume
       });
     }
-    async broadcastChanges() {
-      const state = mustExist(this.state);
-      this.logger.debug("broadcasting room changes");
+    async broadcastChanges(rooms) {
+      this.logger.debug("queueing actors");
       this.commandQueue.clear();
-      for (const room of state.rooms) {
+      for (const room of rooms) {
         for (const actor of room.actors) {
           this.commandQueue.add(actor);
           this.logger.debug({ actor: actor.meta.id, size: this.commandQueue.size }, "adding actor to queue");
         }
       }
-      for (const room of state.rooms) {
+      this.logger.debug("broadcasting room changes");
+      for (const room of rooms) {
         for (const actor of room.actors) {
           this.event.emit(EVENT_STATE_ROOM, {
             actor,

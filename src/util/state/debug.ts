@@ -1,4 +1,5 @@
 import { WorldState } from '../../model/world/State';
+import { hasText } from '../string';
 
 export function debugState(state: WorldState): Array<string> {
   const lines = [
@@ -29,8 +30,13 @@ export function debugState(state: WorldState): Array<string> {
 }
 
 export function graphState(state: WorldState): Array<string> {
+  let unlinked = 0;
   function sanitize(input: string): string {
-    return input.replace(/[^a-zA-Z0-9_]/g, '_');
+    if (hasText(input)) {
+      return input.replace(/[^a-zA-Z0-9_]/g, '_');
+    } else {
+      return `unlinked_${unlinked++}`;
+    }
   }
 
   const lines = [

@@ -47,18 +47,6 @@ export class StateEntityGenerator {
     this.world = world;
   }
 
-  public async copyPortal(portal: Portal): Promise<Portal> {
-    return {
-      ...portal,
-      meta: {
-        desc: portal.meta.desc,
-        id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,
-        name: portal.meta.name,
-        template: portal.meta.template,
-      },
-    };
-  }
-
   // take ID and look up template?
   public async createActor(template: Template<Actor>, source = ActorSource.BEHAVIOR): Promise<Actor> {
     const actor: Actor = {
@@ -165,13 +153,35 @@ export class StateEntityGenerator {
     return portal;
   }
 
+  public async createPortalList(templates: Array<TemplateRef>): Promise<Array<Portal>> {
+    const world = this.getWorld();
+    const portals = [];
+
+    for (const templateRef of templates) {
+      const template = findByBaseId(world.templates.portals, templateRef.id);
+      this.logger.debug({
+        template,
+        templateRef,
+      }, 'create portal for list');
+
+      if (isNil(template)) {
+        throw new NotFoundError('invalid portal in room');
+      }
+
+      const portal = await this.createPortal(template);
+      portals.push(portal);
+    }
+
+    return portals;
+  }
+
   public async createRoom(template: Template<Room>): Promise<Room> {
     const room: Room = {
       type: ROOM_TYPE,
       actors: await this.createActorList(template.base.actors),
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
-      portals: [],
+      portals: await this.createPortalList(template.base.portals),
       scripts: await this.createScripts(template.base.scripts, ROOM_TYPE),
     };
 
@@ -318,70 +328,121 @@ export class StateEntityGenerator {
     return selected;
   }
 
-  public async populateRoom(room: Room, depth: number): Promise<Array<Room>> {
+  public async populateRoom(firstRoom: Room, depth: number): Promise<Array<Room>> {
     if (depth < 0) {
       return [];
     }
 
     const world = this.getWorld();
 
-    // get template
-    const roomTemplate = findByBaseId(world.templates.rooms, room.meta.template);
-    const portalRefs = roomTemplate.base.portals.filter((it) => {
-      this.logger.debug({ it, room }, 'looking for portal matching template in room');
+    const addedRooms = [];
+    const pendingRooms = [firstRoom];
 
-      return room.portals.some((p) => matchIdSegments(p.meta.id, it.id)) === false;
-    });
+    let batch = 0;
+    while (pendingRooms.length > 0 && batch < depth) {
+      batch += 1;
 
-    const portalTemplates = portalRefs.map((it) => findByBaseId(world.templates.portals, it.id));
-    const sourceGroups = new Map<string, Array<Portal>>();
-    for (const portalTemplate of portalTemplates) {
-      // generate portal
-      const portal = await this.createPortal(portalTemplate);
-      room.portals.push(portal);
-      setOrPush(sourceGroups, portal.groupSource, portal);
-    }
+      const room = mustExist(pendingRooms.shift());
+      this.logger.debug({ depth, room }, 'populating room with portals');
 
-    // group portals
-    const rooms = [];
-    for (const [_group, portals] of sourceGroups) {
-      // pick a random destination room
-      const groupTemplates = portals.map((it) => findByBaseId(portalTemplates, it.meta.template));
-      const potentialDests = groupTemplates.map((it) => it.base.dest);
-      const destId = this.template.renderString(randomItem(potentialDests, this.random));
+      // group portals
+      const sourceGroups = new Map<string, Array<Portal>>();
+      for (const portal of room.portals) {
+        if (portal.dest === '') {
+          setOrPush(sourceGroups, portal.groupSource, portal);
+        }
+      }
 
-      // look for an existing room
-      // TODO: check for available reverse portals
-      /*
-      const existingRoom = rooms.find((it) => matchIdSegments(it.meta.id, destId));
-      if (doesExist(existingRoom)) {
+      this.logger.debug({
+        groups: Array.from(sourceGroups.keys()),
+      }, 'finding destinations for portal groups');
+
+      // group portals
+      for (const [group, portals] of sourceGroups) {
+        // pick a random destination room
+        const groupTemplates = portals.map((it) => findByBaseId(world.templates.portals, it.meta.template));
+        const potentialDests = groupTemplates.map((it) => it.base.dest);
+        const destId = this.template.renderString(randomItem(potentialDests, this.random));
+
+        this.logger.debug({
+          destId,
+          group,
+        }, 'selected destination for portal group');
+
+        // look for an existing room
+        const existingRoom = [
+          ...addedRooms,
+          ...pendingRooms,
+        ].find((it) => {
+          if (it.meta.id === room.meta.id) {
+            // prevent links to self
+            return false;
+          }
+
+          // if room is a valid dest
+          if (matchIdSegments(it.meta.id, destId)) {
+            // find unlinked portal in opposing group
+            return it.portals.some((p) => p.dest === '' && p.groupTarget === group);
+          } else {
+            return false;
+          }
+        });
+
+        if (doesExist(existingRoom)) {
+          this.logger.debug({
+            existingRoom,
+            group,
+          }, 'linking portal group to existing room');
+
+          for (const portal of portals) {
+            portal.dest = existingRoom.meta.id;
+          }
+
+          continue;
+        }
+
+        // or create a new one
+        const destTemplate = findByBaseId(world.templates.rooms, destId);
+        const destRoom = await this.createRoom(destTemplate);
+
+        this.logger.debug({
+          destRoom,
+          group,
+        }, 'linking portal group to new room');
+
+        // link dest room
         for (const portal of portals) {
-          portal.dest = existingRoom.meta.id;
+          portal.dest = destRoom.meta.id;
+
+          if (portal.link === PortalLinkage.BOTH) {
+            // create reverse link
+            const destPortal = await this.reversePortal(portal);
+            destPortal.dest = room.meta.id;
+            destRoom.portals.push(destPortal);
+          }
         }
+
+        // add room to queue
+        addedRooms.push(destRoom);
+        pendingRooms.push(destRoom);
+        // rooms.push(...await this.populateRoom(destRoom, depth - 1)); // TODO: TCO
       }
-      */
-
-      // or create a new one
-      const destTemplate = findByBaseId(world.templates.rooms, destId);
-      const destRoom = await this.createRoom(destTemplate);
-
-      // link dest room
-      for (const portal of portals) {
-        portal.dest = destRoom.meta.id;
-
-        if (portal.link === PortalLinkage.BOTH) {
-          // create reverse link
-          const destPortal = await this.copyPortal(portal);
-          destPortal.dest = room.meta.id;
-          destRoom.portals.push(destPortal);
-        }
-      }
-
-      // add room to queue
-      rooms.push(destRoom);
-      rooms.push(...await this.populateRoom(destRoom, depth - 1)); // TODO: TCO
     }
 
-    return rooms;
+    return addedRooms;
+  }
+
+  public async reversePortal(portal: Portal): Promise<Portal> {
+    return {
+      ...portal,
+      groupSource: portal.groupTarget,
+      groupTarget: portal.groupSource,
+      meta: {
+        desc: portal.meta.desc,
+        id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,
+        name: portal.meta.name,
+        template: portal.meta.template,
+      },
+    };
   }
 }

@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { expect } from 'chai';
-import { Container, NullLogger } from 'noicejs';
+import { ConsoleLogger, Container, NullLogger } from 'noicejs';
 
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
@@ -10,7 +10,7 @@ import { Modifier } from '../../../src/model/mapped/Modifier';
 import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
 import { CoreModule } from '../../../src/module/CoreModule';
-import { TEMPLATE_CHANCE } from '../../../src/util/constants';
+import { PORTAL_DEPTH, TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
 import { getTestContainer } from '../../helper';
 
@@ -106,7 +106,7 @@ const TEST_ROOM: Template<Room> = {
   mods: [],
 };
 
-const TEST_PORTAL: Template<Portal> = {
+const TEST_PORTAL_EAST: Template<Portal> = {
   base: {
     dest: {
       base: 'room-foo',
@@ -121,7 +121,48 @@ const TEST_PORTAL: Template<Portal> = {
         base: '',
         type: 'string',
       },
-      id: 'portal-door',
+      id: 'portal-door-east',
+      name: {
+        base: 'door',
+        type: 'string',
+      },
+    },
+    groupKey: {
+      base: 'door',
+      type: 'string',
+    },
+    groupSource: {
+      base: 'east',
+      type: 'string',
+    },
+    groupTarget: {
+      base: 'west',
+      type: 'string',
+    },
+    type: {
+      base: PORTAL_TYPE,
+      type: 'string',
+    },
+  },
+  mods: [],
+};
+
+const TEST_PORTAL_WEST: Template<Portal> = {
+  base: {
+    dest: {
+      base: 'room-foo',
+      type: 'string',
+    },
+    link: {
+      base: 'both',
+      type: 'string',
+    },
+    meta: {
+      desc: {
+        base: '',
+        type: 'string',
+      },
+      id: 'portal-door-west',
       name: {
         base: 'door',
         type: 'string',
@@ -168,7 +209,11 @@ const TEST_ROOM_PORTALS: Template<Room> = {
     },
     portals: [{
       chance: TEMPLATE_CHANCE,
-      id: 'portal-door',
+      id: 'portal-door-east',
+      type: 'id',
+    }, {
+      chance: TEMPLATE_CHANCE,
+      id: 'portal-door-west',
       type: 'id',
     }],
     scripts: new Map(),
@@ -306,7 +351,7 @@ const TEST_WORLD: WorldTemplate = {
   templates: {
     actors: [TEST_ACTOR],
     items: [TEST_ITEM],
-    portals: [TEST_PORTAL],
+    portals: [TEST_PORTAL_EAST, TEST_PORTAL_WEST],
     rooms: [TEST_ROOM],
   },
 };
@@ -579,7 +624,10 @@ describe('state entity generator', () => {
 
   describe('populate portals', () => {
     it('should create destination rooms for unfilled portals', async () => {
-      const container = await getTestContainer(new CoreModule());
+      const logger = ConsoleLogger.global;
+      const container = Container.from(new CoreModule());
+      await container.configure({ logger });
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld({
         ...TEST_WORLD,
@@ -590,19 +638,15 @@ describe('state entity generator', () => {
       });
 
       const startRoom = await generator.createRoom(TEST_ROOM_PORTALS);
-      expect(startRoom.portals, 'start room portals').to.have.lengthOf(0);
+      expect(startRoom.portals, 'start room portals').to.have.lengthOf(2);
 
-      const newRooms = await generator.populateRoom(startRoom, 4);
-      expect(newRooms, 'new rooms').to.have.lengthOf(5);
+      const newRooms = await generator.populateRoom(startRoom, PORTAL_DEPTH);
+      expect(newRooms, 'new rooms').to.have.lengthOf(4);
 
-      for (let i = 0; i < newRooms.length - 1; ++i) {
-        const room = newRooms[i];
+      for (const room of newRooms) {
         expect(isRoom(room), `room entity for ${room.meta.id}`).to.equal(true);
         expect(room.portals, `room portals for ${room.meta.id}`).to.have.length.greaterThan(0);
       }
-
-      const lastRoom = newRooms[newRooms.length - 1];
-      expect(lastRoom.portals, 'last generated room').to.have.lengthOf(0);
     });
 
     xit('should not generate rooms for already filled portals');

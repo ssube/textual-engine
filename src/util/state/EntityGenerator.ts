@@ -158,6 +158,10 @@ export class StateEntityGenerator {
     const portals = [];
 
     for (const templateRef of templates) {
+      if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
+        continue;
+      }
+
       const template = findByBaseId(world.templates.portals, templateRef.id);
       this.logger.debug({
         template,
@@ -214,7 +218,7 @@ export class StateEntityGenerator {
     }, 'creating start room');
 
     const startRoom = await this.createRoom(roomTemplate);
-    const rooms = await this.populateRoom(startRoom, params.depth);
+    const rooms = await this.populateRoom(startRoom, [], params.depth);
     rooms.unshift(startRoom);
 
     const meta = await this.createMetadata(world.meta, 'world');
@@ -328,8 +332,8 @@ export class StateEntityGenerator {
     return selected;
   }
 
-  public async populateRoom(firstRoom: Room, depth: number): Promise<Array<Room>> {
-    if (depth < 0) {
+  public async populateRoom(firstRoom: Room, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
+    if (max < 0) {
       return [];
     }
 
@@ -338,12 +342,9 @@ export class StateEntityGenerator {
     const addedRooms = [];
     const pendingRooms = [firstRoom];
 
-    let batch = 0;
-    while (pendingRooms.length > 0 && batch < depth) {
-      batch += 1;
-
+    while (pendingRooms.length > 0 && addedRooms.length < max) {
       const room = mustExist(pendingRooms.shift());
-      this.logger.debug({ depth, room }, 'populating room with portals');
+      this.logger.debug({ depth: max, room }, 'populating room with portals');
 
       // group portals
       const sourceGroups = new Map<string, Array<Portal>>();
@@ -371,6 +372,7 @@ export class StateEntityGenerator {
 
         // look for an existing room
         const existingRoom = [
+          ...searchRooms,
           ...addedRooms,
           ...pendingRooms,
         ].find((it) => {

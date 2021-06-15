@@ -640,7 +640,7 @@ describe('state entity generator', () => {
       const startRoom = await generator.createRoom(TEST_ROOM_PORTALS);
       expect(startRoom.portals, 'start room portals').to.have.lengthOf(2);
 
-      const newRooms = await generator.populateRoom(startRoom, PORTAL_DEPTH);
+      const newRooms = await generator.populateRoom(startRoom, [], PORTAL_DEPTH);
       expect(newRooms, 'new rooms').to.have.lengthOf(4);
 
       for (const room of newRooms) {

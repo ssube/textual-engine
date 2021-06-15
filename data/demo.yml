@@ -378,7 +378,7 @@ worlds:
           mods: []
         - base:
             dest:
-              base: room-cave
+              base: ((room-cave|room-cave|room-marsh))
             groupKey:
               base: door
             groupSource:
@@ -392,7 +392,7 @@ worlds:
                 base: ''
               id: door-west-forward
               name:
-                base: door
+                base: locked door
           mods: []
       rooms:
         - base:
@@ -447,6 +447,7 @@ worlds:
             items: []
             portals:
               - id: door-west-forward
+                chance: 50
               - id: window-east
             scripts: !map
               signal.step:

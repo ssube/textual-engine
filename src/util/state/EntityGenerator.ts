@@ -1,14 +1,13 @@
-import { isNil, mergeMap, mustExist, NotFoundError, setOrPush } from '@apextoaster/js-utils';
+import { doesExist, isNil, mergeMap, mustExist, NotFoundError, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
-import { makeTestPortal } from '../../../test/entity';
 
 import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
-import { Portal, PortalGroups, PortalLinkage, PORTAL_TYPE } from '../../model/entity/Portal';
+import { Portal, PORTAL_TYPE, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
-import { BaseTemplate, Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
+import { Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
@@ -46,6 +45,18 @@ export class StateEntityGenerator {
 
   public setWorld(world: WorldTemplate): void {
     this.world = world;
+  }
+
+  public async copyPortal(portal: Portal): Promise<Portal> {
+    return {
+      ...portal,
+      meta: {
+        desc: portal.meta.desc,
+        id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,
+        name: portal.meta.name,
+        template: portal.meta.template,
+      },
+    };
   }
 
   // take ID and look up template?
@@ -136,6 +147,22 @@ export class StateEntityGenerator {
       name: this.template.renderString(template.name),
       template: template.id,
     };
+  }
+
+  public async createPortal(template: Template<Portal>): Promise<Portal> {
+    const portal: Portal = {
+      dest: '',
+      groupKey: this.template.renderString(template.base.groupKey),
+      groupSource: this.template.renderString(template.base.groupSource),
+      groupTarget: this.template.renderString(template.base.groupTarget),
+      link: this.template.renderString(template.base.link) as PortalLinkage,
+      meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
+      type: PORTAL_TYPE,
+    };
+
+    await this.modifyPortal(portal, template.mods);
+
+    return portal;
   }
 
   public async createRoom(template: Template<Room>): Promise<Room> {
@@ -234,6 +261,19 @@ export class StateEntityGenerator {
     target.name = this.template.modifyString(target.name, mod.name);
   }
 
+  public async modifyPortal(target: Portal, available: Array<Modifier<Portal>>): Promise<void> {
+    const selected = this.selectModifiers(available);
+
+    for (const mod of selected) {
+      await this.modifyMetadata(target.meta, mod.meta);
+
+      target.groupKey = this.template.modifyString(target.groupKey, mod.groupKey);
+      target.groupSource = this.template.modifyString(target.groupSource, mod.groupSource);
+      target.groupTarget = this.template.modifyString(target.groupTarget, mod.groupTarget);
+      target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
+    }
+  }
+
   /**
    * Select some modifiers and mutate the given room.
    */
@@ -297,15 +337,7 @@ export class StateEntityGenerator {
     const sourceGroups = new Map<string, Array<Portal>>();
     for (const portalTemplate of portalTemplates) {
       // generate portal
-      const portal: Portal = {
-        dest: '',
-        groupKey: this.template.renderString(portalTemplate.base.groupKey),
-        groupSource: this.template.renderString(portalTemplate.base.groupSource),
-        groupTarget: this.template.renderString(portalTemplate.base.groupTarget),
-        link: PortalLinkage.BOTH,
-        meta: await this.createMetadata(portalTemplate.base.meta, PORTAL_TYPE),
-        type: PORTAL_TYPE,
-      };
+      const portal = await this.createPortal(portalTemplate);
       room.portals.push(portal);
       setOrPush(sourceGroups, portal.groupSource, portal);
     }
@@ -313,23 +345,41 @@ export class StateEntityGenerator {
     // group portals
     const rooms = [];
     for (const [_group, portals] of sourceGroups) {
-      // find templates for group
+      // pick a random destination room
       const groupTemplates = portals.map((it) => findByBaseId(portalTemplates, it.meta.template));
       const potentialDests = groupTemplates.map((it) => it.base.dest);
-
-      // find or create dest room
       const destId = this.template.renderString(randomItem(potentialDests, this.random));
+
+      // look for an existing room
+      // TODO: check for available reverse portals
+      /*
+      const existingRoom = rooms.find((it) => matchIdSegments(it.meta.id, destId));
+      if (doesExist(existingRoom)) {
+        for (const portal of portals) {
+          portal.dest = existingRoom.meta.id;
+        }
+      }
+      */
+
+      // or create a new one
       const destTemplate = findByBaseId(world.templates.rooms, destId);
       const destRoom = await this.createRoom(destTemplate);
 
       // link dest room
       for (const portal of portals) {
         portal.dest = destRoom.meta.id;
+
+        if (portal.link === PortalLinkage.BOTH) {
+          // create reverse link
+          const destPortal = await this.copyPortal(portal);
+          destPortal.dest = room.meta.id;
+          destRoom.portals.push(destPortal);
+        }
       }
 
       // add room to queue
       rooms.push(destRoom);
-      rooms.push(...await this.populateRoom(destRoom, depth - 1));
+      rooms.push(...await this.populateRoom(destRoom, depth - 1)); // TODO: TCO
     }
 
     return rooms;

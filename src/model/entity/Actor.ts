@@ -6,7 +6,7 @@ import { makeConstStringSchema } from '../../util/schema';
 import { ScriptMap, StatMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
 import { Template, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
-import { Metadata, METADATA_SCHEMA } from '../Metadata';
+import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { Entity } from './Base';
 import { Item } from './Item';
 
@@ -92,7 +92,7 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
           type: 'array',
           items: TEMPLATE_REF_SCHEMA,
         },
-        meta: METADATA_SCHEMA,
+        meta: TEMPLATE_METADATA_SCHEMA,
         type: makeConstStringSchema(ACTOR_TYPE),
         stats: {
           type: 'object',

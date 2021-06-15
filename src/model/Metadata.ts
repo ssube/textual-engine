@@ -9,7 +9,7 @@ export interface Metadata {
   template: string;
 }
 
-export const METADATA_SCHEMA: JSONSchemaType<TemplateMetadata> = {
+export const TEMPLATE_METADATA_SCHEMA: JSONSchemaType<TemplateMetadata> = {
   type: 'object',
   properties: {
     desc: TEMPLATE_STRING_SCHEMA,

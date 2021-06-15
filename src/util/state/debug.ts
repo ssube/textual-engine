@@ -1,4 +1,5 @@
 import { WorldState } from '../../model/world/State';
+import { hasText } from '../string';
 
 export function debugState(state: WorldState): Array<string> {
   const lines = [
@@ -21,7 +22,7 @@ export function debugState(state: WorldState): Array<string> {
     }
 
     for (const portal of room.portals) {
-      lines.push(`    portal: ${portal.name} (${portal.sourceGroup}) -> ${portal.dest} (${portal.targetGroup})`);
+      lines.push(`    portal: ${portal.meta.name} (${portal.groupSource}) -> ${portal.dest} (${portal.groupTarget})`);
     }
   }
 
@@ -29,8 +30,13 @@ export function debugState(state: WorldState): Array<string> {
 }
 
 export function graphState(state: WorldState): Array<string> {
+  let unlinked = 0;
   function sanitize(input: string): string {
-    return input.replace(/[^a-zA-Z0-9_]/g, '_');
+    if (hasText(input)) {
+      return input.replace(/[^a-zA-Z0-9_]/g, '_');
+    } else {
+      return `unlinked_${unlinked++}`;
+    }
   }
 
   const lines = [
@@ -46,7 +52,7 @@ export function graphState(state: WorldState): Array<string> {
       const segments = [
         `  ${sanitize(room.meta.id)} -> ${sanitize(portal.dest)}`,
         '[',
-        `label="${portal.sourceGroup} ${portal.name}"`,
+        `label="${portal.groupSource} ${portal.meta.name}"`,
       ];
 
       segments.push('];');

@@ -9,7 +9,7 @@ import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Command } from '../../model/Command';
 import { EntityForType, WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../model/entity/Actor';
-import { isRoom } from '../../model/entity/Room';
+import { isRoom, Room } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
@@ -59,7 +59,7 @@ import {
   StateEntityTransfer,
 } from '../../util/state/EntityTransfer';
 import { findMatching, findRoom, SearchFilter } from '../../util/state/search';
-import { findByTemplateId } from '../../util/template';
+import { findByBaseId } from '../../util/template';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
@@ -203,7 +203,7 @@ export class LocalStateService implements StateService {
     } else {
       // pick a starting actor and create it
       const actorRef = randomItem(world.start.actors, this.random);
-      const actorTemplate = findByTemplateId(world.templates.actors, actorRef.id);
+      const actorTemplate = findByBaseId(world.templates.actors, actorRef.id);
       if (isNil(actorTemplate)) {
         throw new NotFoundError('invalid start actor');
       }
@@ -222,12 +222,6 @@ export class LocalStateService implements StateService {
       const room = mustFind(state.rooms, (it) => it.meta.id === state.start.room);
       room.actors.push(actor);
 
-      this.logger.debug({ actor, room }, 'player entering room');
-      await this.stepEnter({
-        actor,
-        room,
-      });
-
       this.logger.debug({
         pid: event.pid,
       }, 'emitting player join event');
@@ -236,10 +230,13 @@ export class LocalStateService implements StateService {
         pid: event.pid,
         room,
       });
-    }
 
-    this.logger.debug(event, 'notifying world of player');
-    await this.broadcastChanges();
+      this.logger.debug({ actor, room }, 'player entering room');
+      await this.stepEnter({
+        actor,
+        room,
+      });
+    }
   }
 
   /**
@@ -635,7 +632,7 @@ export class LocalStateService implements StateService {
       step: this.state.step,
     }, 'finished world state step');
 
-    await this.broadcastChanges();
+    await this.broadcastChanges(this.state.rooms);
 
     return {
       time: this.state.step.time,
@@ -648,10 +645,16 @@ export class LocalStateService implements StateService {
    * Handler for a room change from the state helper.
    */
   public async stepEnter(target: StateSource): Promise<void> {
+    const generator = mustExist(this.generator);
+    const state = mustExist(this.state);
+
     if (doesExist(target.actor) && target.actor.source === ActorSource.PLAYER) {
-      const state = mustExist(this.state);
-      const rooms = await mustExist(this.generator).populateRoom(target.room, state.world.depth);
-      state.rooms.push(...rooms);
+      const rooms = await generator.populateRoom(target.room, state.rooms, state.world.depth);
+      if (rooms.length > 0) {
+        state.rooms.push(...rooms);
+      }
+
+      await this.broadcastChanges(state.rooms);
     }
   }
 
@@ -693,19 +696,18 @@ export class LocalStateService implements StateService {
    * @todo only emit changed rooms
    * @todo do not double-loop
    */
-  protected async broadcastChanges(): Promise<void> {
-    const state = mustExist(this.state);
-    this.logger.debug('broadcasting room changes');
-
+  protected async broadcastChanges(rooms: Array<Room>): Promise<void> {
+    this.logger.debug('queueing actors');
     this.commandQueue.clear();
-    for (const room of state.rooms) {
+    for (const room of rooms) {
       for (const actor of room.actors) {
         this.commandQueue.add(actor);
         this.logger.debug({ actor: actor.meta.id, size: this.commandQueue.size }, 'adding actor to queue');
       }
     }
 
-    for (const room of state.rooms) {
+    this.logger.debug('broadcasting room changes');
+    for (const room of rooms) {
       for (const actor of room.actors) {
         this.event.emit(EVENT_STATE_ROOM, {
           actor,

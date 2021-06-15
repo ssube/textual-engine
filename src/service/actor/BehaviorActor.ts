@@ -85,9 +85,9 @@ export class BehaviorActorService implements ActorService {
 
       this.queue(event.room, event.actor, {
         index: 0,
-        input: `${VERB_MOVE} ${portal.sourceGroup} ${portal.name}`,
+        input: `${VERB_MOVE} ${portal.groupSource} ${portal.meta.name}`,
         verb: VERB_MOVE,
-        target: `${portal.sourceGroup} ${portal.name}`,
+        target: `${portal.groupSource} ${portal.meta.name}`,
       });
       return;
     }

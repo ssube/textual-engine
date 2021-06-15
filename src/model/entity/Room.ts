@@ -4,11 +4,11 @@ import { JSONSchemaType } from 'ajv';
 import { makeConstStringSchema } from '../../util/schema';
 import { ScriptMap } from '../../util/types';
 import { Template, TEMPLATE_REF_SCHEMA } from '../mapped/Template';
-import { Metadata, METADATA_SCHEMA } from '../Metadata';
+import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { Actor } from './Actor';
 import { Entity } from './Base';
 import { Item } from './Item';
-import { Portal, PORTAL_SCHEMA } from './Portal';
+import { Portal, PORTAL_TEMPLATE_SCHEMA } from './Portal';
 
 export const ROOM_TYPE = 'room' as const;
 
@@ -34,7 +34,7 @@ export const ROOM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Room>> = {
       type: 'object',
       properties: {
         type: makeConstStringSchema(ROOM_TYPE),
-        meta: METADATA_SCHEMA,
+        meta: TEMPLATE_METADATA_SCHEMA,
         actors: {
           type: 'array',
           items: TEMPLATE_REF_SCHEMA,
@@ -45,7 +45,7 @@ export const ROOM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Room>> = {
         },
         portals: {
           type: 'array',
-          items: PORTAL_SCHEMA,
+          items: TEMPLATE_REF_SCHEMA,
         },
         scripts: {
           type: 'object',

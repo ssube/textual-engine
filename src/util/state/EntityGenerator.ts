@@ -1,13 +1,13 @@
-import { isNil, mergeMap, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { doesExist, isNil, mergeMap, mustExist, NotFoundError, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
-import { Portal, PortalGroups, PortalLinkage } from '../../model/entity/Portal';
+import { Portal, PORTAL_TYPE, PortalLinkage } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
-import { BaseTemplate, Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
+import { Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
@@ -19,7 +19,8 @@ import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
 import { makeServiceLogger } from '../service';
-import { findByTemplateId } from '../template';
+import { matchIdSegments } from '../string';
+import { findByBaseId } from '../template';
 import { ScriptMap } from '../types';
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
@@ -71,7 +72,7 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByTemplateId(world.templates.actors, templateRef.id);
+      const template = findByBaseId(world.templates.actors, templateRef.id);
       this.logger.debug({
         template,
         templateRef,
@@ -110,7 +111,7 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByTemplateId(world.templates.items, templateRef.id);
+      const template = findByBaseId(world.templates.items, templateRef.id);
       this.logger.debug({
         template,
         templateRef,
@@ -136,13 +137,55 @@ export class StateEntityGenerator {
     };
   }
 
+  public async createPortal(template: Template<Portal>): Promise<Portal> {
+    const portal: Portal = {
+      dest: '',
+      groupKey: this.template.renderString(template.base.groupKey),
+      groupSource: this.template.renderString(template.base.groupSource),
+      groupTarget: this.template.renderString(template.base.groupTarget),
+      link: this.template.renderString(template.base.link) as PortalLinkage,
+      meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
+      type: PORTAL_TYPE,
+    };
+
+    await this.modifyPortal(portal, template.mods);
+
+    return portal;
+  }
+
+  public async createPortalList(templates: Array<TemplateRef>): Promise<Array<Portal>> {
+    const world = this.getWorld();
+    const portals = [];
+
+    for (const templateRef of templates) {
+      if (this.random.nextInt(TEMPLATE_CHANCE) > templateRef.chance) {
+        continue;
+      }
+
+      const template = findByBaseId(world.templates.portals, templateRef.id);
+      this.logger.debug({
+        template,
+        templateRef,
+      }, 'create portal for list');
+
+      if (isNil(template)) {
+        throw new NotFoundError('invalid portal in room');
+      }
+
+      const portal = await this.createPortal(template);
+      portals.push(portal);
+    }
+
+    return portals;
+  }
+
   public async createRoom(template: Template<Room>): Promise<Room> {
     const room: Room = {
       type: ROOM_TYPE,
       actors: await this.createActorList(template.base.actors),
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
-      portals: [],
+      portals: await this.createPortalList(template.base.portals),
       scripts: await this.createScripts(template.base.scripts, ROOM_TYPE),
     };
 
@@ -164,7 +207,7 @@ export class StateEntityGenerator {
 
     // pick a starting room and populate it
     const roomRef = randomItem(world.start.rooms, this.random);
-    const roomTemplate = findByTemplateId(world.templates.rooms, roomRef.id);
+    const roomTemplate = findByBaseId(world.templates.rooms, roomRef.id);
     if (isNil(roomTemplate)) {
       throw new NotFoundError('invalid start room');
     }
@@ -175,7 +218,7 @@ export class StateEntityGenerator {
     }, 'creating start room');
 
     const startRoom = await this.createRoom(roomTemplate);
-    const rooms = await this.populateRoom(startRoom, params.depth);
+    const rooms = await this.populateRoom(startRoom, [], params.depth);
     rooms.unshift(startRoom);
 
     const meta = await this.createMetadata(world.meta, 'world');
@@ -232,6 +275,19 @@ export class StateEntityGenerator {
     target.name = this.template.modifyString(target.name, mod.name);
   }
 
+  public async modifyPortal(target: Portal, available: Array<Modifier<Portal>>): Promise<void> {
+    const selected = this.selectModifiers(available);
+
+    for (const mod of selected) {
+      await this.modifyMetadata(target.meta, mod.meta);
+
+      target.groupKey = this.template.modifyString(target.groupKey, mod.groupKey);
+      target.groupSource = this.template.modifyString(target.groupSource, mod.groupSource);
+      target.groupTarget = this.template.modifyString(target.groupTarget, mod.groupTarget);
+      target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
+    }
+  }
+
   /**
    * Select some modifiers and mutate the given room.
    */
@@ -276,133 +332,119 @@ export class StateEntityGenerator {
     return selected;
   }
 
-  public async populateRoom(room: Room, depth: number): Promise<Array<Room>> {
-    if (depth < 0) {
+  public async populateRoom(firstRoom: Room, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
+    if (max < 0) {
       return [];
     }
 
     const world = this.getWorld();
 
-    // get template
-    const templateRoom = findByTemplateId(world.templates.rooms, room.meta.template);
-    const templatePortals = templateRoom.base.portals.filter((it) => {
-      this.logger.debug({ it, room }, 'looking for portal matching template in room');
+    const addedRooms = [];
+    const pendingRooms = [firstRoom];
 
-      return room.portals.some((p) =>
-        p.name === it.name.base && p.sourceGroup === it.sourceGroup.base
-      ) === false;
-    });
+    while (pendingRooms.length > 0 && addedRooms.length < max) {
+      const room = mustExist(pendingRooms.shift());
+      this.logger.debug({ depth: max, room }, 'populating room with portals');
 
-    if (templatePortals.length === 0) {
-      this.logger.debug({ room }, 'portals have already been populated');
-      return [];
-    }
-
-    // extend map
-    this.logger.debug({
-      portals: templatePortals,
-      room,
-    }, `populating ${templatePortals.length} new portals of ${templateRoom.base.portals.length} in room ${room.meta.id}`);
-
-    const {portals, rooms} = await this.populatePortals(templatePortals, room.meta.id, depth);
-    room.portals.push(...portals);
-
-    // TODO: populate rooms here to avoid large-world stack overflows, first with direct recursion, then tail recursion
-    return rooms;
-  }
-
-  /**
-   * Gather portal destinations from a room by group.
-   */
-  protected groupPortals(portals: Array<BaseTemplate<Portal>>): PortalGroups {
-    const groups: PortalGroups = new Map();
-
-    for (const portal of portals) {
-      this.logger.debug({
-        portal,
-      }, 'grouping portal');
-      const groupName = this.template.renderString(portal.sourceGroup);
-      const group = groups.get(groupName);
-
-      if (group) {
-        group.dests.add(this.template.renderString(portal.dest));
-        group.portals.add(portal);
-      } else {
-        groups.set(groupName, {
-          dests: new Set([
-            this.template.renderString(portal.dest),
-          ]),
-          portals: new Set([portal]),
-        });
-      }
-    }
-
-    this.logger.debug({ groups: Object.fromEntries(groups.entries()) }, 'grouped portals');
-
-    return groups;
-  }
-
-  protected async populatePortals(templates: Array<BaseTemplate<Portal>>, sourceId: string, depth: number): Promise<{
-    portals: Array<Portal>;
-    rooms: Array<Room>;
-  }> {
-    if (depth < 0) {
-      return {
-        portals: [],
-        rooms: [],
-      };
-    }
-
-    const world = this.getWorld();
-    const groups = this.groupPortals(templates);
-    const portals: Array<Portal> = [];
-    const rooms: Array<Room> = [];
-
-    for (const [sourceGroup, group] of groups) {
-      const potentialDests = Array.from(group.dests);
-      const destTemplateId = randomItem(potentialDests, this.random);
-      const destTemplate = findByTemplateId(world.templates.rooms, destTemplateId);
-
-      if (isNil(destTemplate)) {
-        throw new NotFoundError('invalid room in portal dest');
-      }
-
-      this.logger.debug({ destTemplateId, group, sourceGroup }, 'linking source group to destination template');
-
-      const destRoom = await this.createRoom(destTemplate);
-      rooms.push(destRoom);
-
-      for (const portal of group.portals) {
-        const link = this.template.renderString(portal.link) as PortalLinkage;
-        const name = this.template.renderString(portal.name);
-        const targetGroup = this.template.renderString(portal.targetGroup);
-
-        portals.push({
-          dest: destRoom.meta.id,
-          link,
-          name,
-          sourceGroup,
-          targetGroup,
-        });
-
-        if (link === PortalLinkage.BOTH) {
-          destRoom.portals.push({
-            dest: sourceId,
-            link,
-            name,
-            sourceGroup: targetGroup,
-            targetGroup: sourceGroup,
-          });
+      // group portals
+      const sourceGroups = new Map<string, Array<Portal>>();
+      for (const portal of room.portals) {
+        if (portal.dest === '') {
+          setOrPush(sourceGroups, portal.groupSource, portal);
         }
       }
 
-      const further = await this.populateRoom(destRoom, depth - 1);
-      rooms.push(...further);
+      this.logger.debug({
+        groups: Array.from(sourceGroups.keys()),
+      }, 'finding destinations for portal groups');
+
+      // group portals
+      for (const [group, portals] of sourceGroups) {
+        // pick a random destination room
+        const groupTemplates = portals.map((it) => findByBaseId(world.templates.portals, it.meta.template));
+        const potentialDests = groupTemplates.map((it) => it.base.dest);
+        const destId = this.template.renderString(randomItem(potentialDests, this.random));
+
+        this.logger.debug({
+          destId,
+          group,
+        }, 'selected destination for portal group');
+
+        // look for an existing room
+        const existingRoom = [
+          ...searchRooms,
+          ...addedRooms,
+          ...pendingRooms,
+        ].find((it) => {
+          if (it.meta.id === room.meta.id) {
+            // prevent links to self
+            return false;
+          }
+
+          // if room is a valid dest
+          if (matchIdSegments(it.meta.id, destId)) {
+            // find unlinked portal in opposing group
+            return it.portals.some((p) => p.dest === '' && p.groupTarget === group);
+          } else {
+            return false;
+          }
+        });
+
+        if (doesExist(existingRoom)) {
+          this.logger.debug({
+            existingRoom,
+            group,
+          }, 'linking portal group to existing room');
+
+          for (const portal of portals) {
+            portal.dest = existingRoom.meta.id;
+          }
+
+          continue;
+        }
+
+        // or create a new one
+        const destTemplate = findByBaseId(world.templates.rooms, destId);
+        const destRoom = await this.createRoom(destTemplate);
+
+        this.logger.debug({
+          destRoom,
+          group,
+        }, 'linking portal group to new room');
+
+        // link dest room
+        for (const portal of portals) {
+          portal.dest = destRoom.meta.id;
+
+          if (portal.link === PortalLinkage.BOTH) {
+            // create reverse link
+            const destPortal = await this.reversePortal(portal);
+            destPortal.dest = room.meta.id;
+            destRoom.portals.push(destPortal);
+          }
+        }
+
+        // add room to queue
+        addedRooms.push(destRoom);
+        pendingRooms.push(destRoom);
+        // rooms.push(...await this.populateRoom(destRoom, depth - 1)); // TODO: TCO
+      }
     }
 
+    return addedRooms;
+  }
+
+  public async reversePortal(portal: Portal): Promise<Portal> {
     return {
-      portals,
-      rooms,
+      ...portal,
+      groupSource: portal.groupTarget,
+      groupTarget: portal.groupSource,
+      meta: {
+        desc: portal.meta.desc,
+        id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,
+        name: portal.meta.name,
+        template: portal.meta.template,
+      },
     };
   }
 }

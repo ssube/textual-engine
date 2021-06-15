@@ -3,13 +3,13 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { PortalLinkage } from '../../../../src/model/entity/Portal';
+import { PORTAL_TYPE, PortalLinkage } from '../../../../src/model/entity/Portal';
 import { VerbActorLook } from '../../../../src/script/verb/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_LOOK } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
+import { makeTestActor, makeTestCommand, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
@@ -162,21 +162,11 @@ describe('actor look scripts', () => {
       const transfer = testTransfer();
 
       const room = makeTestRoom('', '', '', [], []);
-      room.portals.push({
-        dest: 'foo',
-        link: PortalLinkage.BOTH,
-        name: 'door',
-        sourceGroup: 'west',
-        targetGroup: 'east',
-      });
+      const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
+      room.portals.push(portal);
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_LOOK,
-        },
+        command: makeTestCommand(VERB_LOOK, ''),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

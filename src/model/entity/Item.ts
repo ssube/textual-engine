@@ -4,7 +4,7 @@ import { JSONSchemaType } from 'ajv';
 import { makeConstStringSchema } from '../../util/schema';
 import { ScriptMap, StatMap } from '../../util/types';
 import { Template } from '../mapped/Template';
-import { Metadata, METADATA_SCHEMA } from '../Metadata';
+import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { Entity } from './Base';
 
 export const ITEM_TYPE = 'item' as const;
@@ -29,7 +29,7 @@ export const ITEM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Item>> = {
       type: 'object',
       properties: {
         type: makeConstStringSchema(ITEM_TYPE),
-        meta: METADATA_SCHEMA,
+        meta: TEMPLATE_METADATA_SCHEMA,
         scripts: {
           type: 'object',
           required: [],

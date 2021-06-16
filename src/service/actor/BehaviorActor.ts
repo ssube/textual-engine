@@ -73,13 +73,14 @@ export class BehaviorActorService implements ActorService {
     }
 
     // 25% chance to move
-    if (behavior < 0.25 && event.room.portals.length > 0) {
-      const portalIndex = this.random.nextInt(event.room.portals.length);
-      const portal = event.room.portals[portalIndex];
+    const portals = event.room.portals.filter((it) => it.dest.length > 0);
+    if (behavior < 0.25 && portals.length > 0) {
+      const portalIndex = this.random.nextInt(portals.length);
+      const portal = portals[portalIndex];
       this.logger.debug({
         event,
         portal,
-        portalCount: event.room.portals.length,
+        portalCount: portals.length,
         portalIndex,
       }, 'moving through random portal');
 

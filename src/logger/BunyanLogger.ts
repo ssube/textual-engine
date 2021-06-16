@@ -1,10 +1,17 @@
 import { constructorName } from '@apextoaster/js-utils';
 import { createLogger, LoggerOptions, stdSerializers } from 'bunyan';
 import { Logger } from 'noicejs';
-import { Entity } from '../model/entity/Base';
 
-export function entityMeta(entity: Entity): string {
-  return `${entity.meta.id} - ${entity.meta.name}`;
+import { isActor } from '../model/entity/Actor';
+import { isItem } from '../model/entity/Item';
+import { isRoom } from '../model/entity/Room';
+
+export function entityMeta(entity: any): object {
+  if (isActor(entity) || isItem(entity) || isRoom(entity)) {
+    return entity.meta;
+  } else {
+    return entity;
+  }
 }
 
 /**
@@ -16,12 +23,12 @@ export class BunyanLogger {
       ...options,
       serializers: {
         ...stdSerializers,
-        // actor: entityMeta,
+        actor: entityMeta,
         container: constructorName,
-        // item: entityMeta,
+        item: entityMeta,
         logger: constructorName,
         module: constructorName,
-        // room: entityMeta,
+        room: entityMeta,
       },
     });
   }

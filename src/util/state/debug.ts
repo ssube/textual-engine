@@ -35,7 +35,9 @@ export function graphState(state: WorldState): Array<string> {
     if (hasText(input)) {
       return input.replace(/[^a-zA-Z0-9_]/g, '_');
     } else {
-      return `unlinked_${unlinked++}`;
+      const id = `unlinked_${unlinked}`;
+      unlinked += 1;
+      return id;
     }
   }
 

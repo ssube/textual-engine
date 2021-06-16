@@ -95,6 +95,16 @@ module.exports = {
       "error",
       {
         "format": [
+          "camelCase",
+          "PascalCase"
+        ],
+        "leadingUnderscore": "forbid",
+        "selector": "variable",
+        "types": ["function"],
+        "trailingUnderscore": "forbid"
+      },
+      {
+        "format": [
           "camelCase"
         ],
         "leadingUnderscore": "require",

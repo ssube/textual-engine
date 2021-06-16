@@ -1,9 +1,9 @@
 import { doesExist, mustCoalesce } from '@apextoaster/js-utils';
 
-import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
-import { Actor, ActorType, ACTOR_TYPE } from '../../model/entity/Actor';
+import { EntityForType, WorldEntityType } from '../../model/entity';
+import { Actor, ActorType } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
-import { isRoom, Room, RoomType, ROOM_TYPE } from '../../model/entity/Room';
+import { isRoom, Room, RoomType } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
 import { createStrictMatcher } from '../entity';

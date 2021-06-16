@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
@@ -39,6 +40,7 @@ export type TemplatePrimitive<TBase> =
   TBase extends Array<Entity> ? Array<TemplateRef> :                                    // Array<entity> -> Array<id>
   TBase extends Array<infer TValue> ? Array<TemplatePrimitive<TValue>> :                // Array<TValue> -> Array<Template<TValue>>
   TBase extends Map<infer TKey, infer TValue> ? Map<TKey, TemplatePrimitive<TValue>> :  // Map<TKey, TValue> -> Map<TKey, Template<TValue>>
+  // eslint-disable-next-line @typescript-eslint/ban-types
   TBase extends object ? BaseTemplate<TBase> :                                          // {[TKey]: TValue] -> {[TKey]: Template<TValue>}
   never;
 

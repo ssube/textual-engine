@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { JSONSchemaType } from 'ajv';
 
 import { Entity } from '../entity/Base';
@@ -13,6 +14,7 @@ export type ModifierPrimitive<TBase> =
   TBase extends Array<Entity> ? Array<TemplateRef> :
   TBase extends Array<infer TValue> ? Array<ModifierPrimitive<TValue>> :
   TBase extends Map<infer TKey, infer TValue> ? Map<TKey, ModifierPrimitive<TValue>> :
+  // eslint-disable-next-line @typescript-eslint/ban-types
   TBase extends object ? BaseModifier<TBase> :
   never;
 

@@ -106,7 +106,7 @@ export { hasText, matchIdSegments, splitPath } from './util/string';
 export { Immutable, KeyList, Filter, FilterBase, FilterKeys, Replace, ScriptData, ScriptMap, ScriptRef, StatMap } from './util/types';
 
 export { CompletionSet } from './util/async/CompletionSet';
-export { debounce } from './util/async/Debounce';
+export { debounce, throttle } from './util/async/Throttle';
 export { WatchableMap } from './util/async/WatchableMap';
 export { onceEvent, onceWithRemove, ErrorHandler, EventHandler, TypedEmitter, RemoveResult } from './util/async/event';
 
@@ -124,4 +124,4 @@ export { SearchFilter, StateMatchers, findContainer, findMatching, findRoom } fr
 
 export { JoinChain, JoinOptions } from './util/template/JoinChain';
 export { SplitOptions, splitChain } from './util/template/SplitChain';
-export { findByBaseId as findByTemplateId, InputChain } from './util/template/index';
+export { findByBaseId, InputChain } from './util/template/index';

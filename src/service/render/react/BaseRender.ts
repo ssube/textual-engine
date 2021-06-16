@@ -7,8 +7,8 @@ import { ShortcutData, ShortcutItem } from '../../../component/shared';
 import { ConfigError } from '../../../error/ConfigError';
 import { Entity } from '../../../model/entity/Base';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
-import { debounce } from '../../../util/async/Debounce';
 import { onceEvent } from '../../../util/async/event';
+import { debounce, ClearResult } from '../../../util/async/Throttle';
 import {
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_ROOM,
@@ -57,7 +57,7 @@ export abstract class BaseReactRender implements RenderService {
   protected shortcuts: ShortcutData;
   protected step: StepResult;
 
-  protected slowUpdate: () => void;
+  protected queueUpdate: ClearResult;
 
   public abstract update(): void;
 
@@ -73,7 +73,7 @@ export abstract class BaseReactRender implements RenderService {
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
 
-    this.slowUpdate = debounce(RENDER_DELAY, () => this.update());
+    this.queueUpdate = debounce(RENDER_DELAY, () => this.update());
 
     this.input = '';
     this.output = [];
@@ -102,6 +102,7 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   public async stop(): Promise<void> {
+    this.queueUpdate.clear();
     this.event.removeGroup(this);
   }
 
@@ -124,7 +125,7 @@ export abstract class BaseReactRender implements RenderService {
   public onOutput(event: ActorOutputEvent): void {
     this.logger.debug({ event }, 'handling output event from actor');
     this.output.push(event.line);
-    this.slowUpdate();
+    this.queueUpdate.call();
   }
 
   /**
@@ -161,7 +162,7 @@ export abstract class BaseReactRender implements RenderService {
     }));
 
     this.setPrompt(`turn ${this.step.turn}`);
-    this.slowUpdate();
+    this.queueUpdate.call();
   }
 
   public onStep(event: StateStepEvent): void {

@@ -43,13 +43,13 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
   </Box>;
 };
 
-export const FocusedIndicator = ({ isSelected = false }) => (
+export const FocusedIndicator = ({ isSelected = false }): JSX.Element => (
   <Box marginRight={1}>
     {isSelected ? <Text color="green">&gt;</Text> : <Text> </Text>}
   </Box>
 );
 
-export const UnfocusedIndicator = ({ isSelected = false }) => (
+export const UnfocusedIndicator = ({ isSelected = false }): JSX.Element => (
   <Box marginRight={1}>
     {isSelected ? <Text color="blue">&gt;</Text> : <Text> </Text>}
   </Box>

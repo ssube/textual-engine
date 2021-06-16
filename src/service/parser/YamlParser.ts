@@ -1,4 +1,4 @@
-import Ajv, { ValidateFunction } from 'ajv';
+import { ValidateFunction } from 'ajv';
 import { DEFAULT_SCHEMA, dump, load, Schema } from 'js-yaml';
 
 import { Parser } from '.';

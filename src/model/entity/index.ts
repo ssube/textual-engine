@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/indent */
 import { Actor, ActorType } from './Actor';
 import { Item, ItemType } from './Item';
 import { Room, RoomType } from './Room';

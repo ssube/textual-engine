@@ -2,6 +2,7 @@ import { doesExist } from '@apextoaster/js-utils';
 import { Instance as InkInstance, render } from 'ink';
 import { Inject } from 'noicejs';
 import * as React from 'react';
+import { I18nextProvider } from 'react-i18next';
 
 import { RenderService } from '..';
 import { Frame } from '../../../component/ink/Frame';
@@ -31,7 +32,7 @@ export class InkRender extends BaseReactRender implements RenderService {
   }
 
   public update(): void {
-    const elem = React.createElement(Frame, {
+    const frame = React.createElement(Frame, {
       onLine: (line: string) => this.nextLine(line),
       output: this.output,
       prompt: this.prompt,
@@ -43,10 +44,14 @@ export class InkRender extends BaseReactRender implements RenderService {
       step: this.step,
     });
 
+    const locale = React.createElement(I18nextProvider, {
+      i18n: this.locale.getInstance(),
+    }, frame);
+
     if (doesExist(this.ink)) {
-      this.ink.rerender(elem);
+      this.ink.rerender(locale);
     } else {
-      this.ink = render(elem);
+      this.ink = render(locale);
     }
   }
 }

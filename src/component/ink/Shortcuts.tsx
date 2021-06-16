@@ -2,12 +2,14 @@ import { doesExist, Optional } from '@apextoaster/js-utils';
 import { Box, Text, useFocus } from 'ink';
 import SelectInput from 'ink-select-input';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { SHORTCUT_TABS, ShortcutKeys, ShortcutProps } from '../shared';
 
 const { useState } = React;
 
 export const Shortcuts = (props: ShortcutProps): JSX.Element => {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState<ShortcutKeys>('actors');
   const { isFocused: tabFocus } = useFocus();
   const { isFocused: itemFocus } = useFocus();
@@ -19,7 +21,7 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
   }
 
   const items = props[selected].map((it) => ({
-    label: it.name,
+    label: t(it.name),
     value: it.id,
   }));
 
@@ -43,13 +45,17 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
   </Box>;
 };
 
-export const FocusedIndicator = ({ isSelected = false }): JSX.Element => (
+interface SelectedProps {
+  isSelected?: boolean;
+}
+
+export const FocusedIndicator = ({ isSelected = false }: SelectedProps): JSX.Element => (
   <Box marginRight={1}>
     {isSelected ? <Text color="green">&gt;</Text> : <Text> </Text>}
   </Box>
 );
 
-export const UnfocusedIndicator = ({ isSelected = false }): JSX.Element => (
+export const UnfocusedIndicator = ({ isSelected = false }: SelectedProps): JSX.Element => (
   <Box marginRight={1}>
     {isSelected ? <Text color="blue">&gt;</Text> : <Text> </Text>}
   </Box>

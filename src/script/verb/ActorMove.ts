@@ -40,6 +40,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetRoom = indexEntity(rooms, command.index, isRoom);
 
   if (!isRoom(targetRoom)) {
+    context.logger.warn({ command, rooms, targetPortal }, 'destination room not found');
     throw new NotFoundError('destination room not found');
   }
 

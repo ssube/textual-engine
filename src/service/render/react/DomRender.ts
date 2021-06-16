@@ -2,6 +2,7 @@ import { mustExist } from '@apextoaster/js-utils';
 import { Inject } from 'noicejs';
 import * as React from 'react';
 import { render, unmountComponentAtNode } from 'react-dom';
+import { I18nextProvider } from 'react-i18next';
 
 import { RenderService } from '..';
 import { Frame } from '../../../component/react/Frame';
@@ -39,7 +40,7 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
   }
 
   public update(): void {
-    const elem = React.createElement(Frame, {
+    const frame = React.createElement(Frame, {
       onLine: (line: string) => this.nextLine(line),
       output: this.output,
       prompt: this.prompt,
@@ -50,6 +51,10 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
       },
       step: this.step,
     });
-    render([elem], document.getElementById('app'));
+    const locale = React.createElement(I18nextProvider, {
+      i18n: this.locale.getInstance(),
+    }, frame);
+
+    render(locale, document.getElementById('app'));
   }
 }

@@ -619,6 +619,17 @@ export class LocalStateService implements StateService {
               });
             }
           }
+
+          for (const portal of room.portals) {
+            if (seen.has(portal.meta.id) === false) {
+              seen.add(portal.meta.id);
+              await this.script.invoke(portal, SIGNAL_STEP, {
+                ...scope,
+                portal,
+                room,
+              });
+            }
+          }
         }
       }
     }

@@ -165,6 +165,8 @@ describe('actor look scripts', () => {
       const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
       room.portals.push(portal);
 
+      (stateHelper.find as SinonStub).returns(Promise.resolve([room]));
+
       const context: ScriptContext = {
         command: makeTestCommand(VERB_LOOK, ''),
         data: new Map(),

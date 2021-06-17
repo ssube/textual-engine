@@ -130,6 +130,7 @@ describe('node fetch loader', () => {
             type: 'string',
           },
         },
+        scripts: new Map(),
         type: {
           base: PORTAL_TYPE,
           type: 'string',

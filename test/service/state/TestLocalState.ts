@@ -145,6 +145,7 @@ const TEST_PORTAL: Template<Portal> = {
       base: 'east',
       type: 'string',
     },
+    scripts: new Map(),
     type: {
       base: PORTAL_TYPE,
       type: 'string',

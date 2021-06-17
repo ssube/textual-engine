@@ -139,6 +139,7 @@ const TEST_PORTAL_EAST: Template<Portal> = {
       base: 'west',
       type: 'string',
     },
+    scripts: new Map(),
     type: {
       base: PORTAL_TYPE,
       type: 'string',
@@ -180,6 +181,7 @@ const TEST_PORTAL_WEST: Template<Portal> = {
       base: 'east',
       type: 'string',
     },
+    scripts: new Map(),
     type: {
       base: PORTAL_TYPE,
       type: 'string',
@@ -302,6 +304,7 @@ const TEST_WORLD: WorldTemplate = {
         base: '',
         type: 'string',
       },
+      scripts: new Map(),
       type: {
         base: PORTAL_TYPE,
         type: 'string',

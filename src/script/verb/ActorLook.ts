@@ -3,7 +3,8 @@ import { mustExist } from '@apextoaster/js-utils';
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem } from '../../model/entity/Item';
-import { isRoom } from '../../model/entity/Room';
+import { isPortal } from '../../model/entity/Portal';
+import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { getKey } from '../../util/collection/map';
 import { STAT_HEALTH } from '../../util/constants';
@@ -53,7 +54,44 @@ export async function ActorLookTarget(this: Actor, context: ScriptContext, targe
     });
   }
 
+  if (isPortal(target)) {
+    return ActorLookPortal.call(this, {
+      ...context,
+      portal: target,
+    });
+  }
+
   await context.state.show('actor.step.look.none');
+}
+
+export async function ActorLookActor(this: Actor, context: ScriptContext): Promise<void> {
+  const actor = mustExist(context.actor);
+  await context.state.show('actor.step.look.actor.seen', { actor });
+  const health = getKey(actor.stats, STAT_HEALTH, 0);
+  if (health <= 0) {
+    await context.state.show('actor.step.look.actor.dead', { actor });
+  }
+}
+
+export async function ActorLookItem(this: Actor, context: ScriptContext): Promise<void> {
+  const item = mustExist(context.item);
+  await context.state.show('actor.step.look.item.seen', { item });
+}
+
+export async function ActorLookPortal(this: Actor, context: ScriptContext): Promise<void> {
+  const portal = mustExist(context.portal);
+  await context.state.show('actor.step.look.room.portal', { portal });
+
+  if (portal.dest.length > 0) {
+    const [room] = await context.state.find({
+      meta: {
+        id: portal.dest,
+      },
+      type: ROOM_TYPE,
+    });
+
+    await context.state.show('actor.step.look.room.dest', { portal, room });
+  }
 }
 
 export async function ActorLookRoom(this: Actor, context: ScriptContext): Promise<void> {
@@ -86,20 +124,9 @@ export async function ActorLookRoom(this: Actor, context: ScriptContext): Promis
   }
 
   for (const portal of room.portals) {
-    await context.state.show('actor.step.look.room.portal', { portal });
+    await ActorLookPortal.call(this, {
+      ...context,
+      portal,
+    });
   }
-}
-
-export async function ActorLookActor(this: Actor, context: ScriptContext): Promise<void> {
-  const actor = mustExist(context.actor);
-  await context.state.show('actor.step.look.actor.seen', { actor });
-  const health = getKey(actor.stats, STAT_HEALTH, 0);
-  if (health <= 0) {
-    await context.state.show('actor.step.look.actor.dead', { actor });
-  }
-}
-
-export async function ActorLookItem(this: Actor, context: ScriptContext): Promise<void> {
-  const item = mustExist(context.item);
-  await context.state.show('actor.step.look.item.seen', { item });
 }

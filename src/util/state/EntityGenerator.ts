@@ -145,6 +145,7 @@ export class StateEntityGenerator {
       groupTarget: this.template.renderString(template.base.groupTarget),
       link: this.template.renderString(template.base.link) as PortalLinkage,
       meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
+      scripts: this.template.renderScriptMap(template.base.scripts),
       type: PORTAL_TYPE,
     };
 
@@ -285,6 +286,7 @@ export class StateEntityGenerator {
       target.groupSource = this.template.modifyString(target.groupSource, mod.groupSource);
       target.groupTarget = this.template.modifyString(target.groupTarget, mod.groupTarget);
       target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
+      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
     }
   }
 

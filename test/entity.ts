@@ -76,6 +76,7 @@ export function makeTestPortal(id: string, name: string, source: string, target:
     groupKey: name,
     groupSource: source,
     groupTarget: target,
+    scripts: new Map(),
     type: PORTAL_TYPE,
   };
 }

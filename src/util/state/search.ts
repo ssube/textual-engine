@@ -64,6 +64,12 @@ export function findMatching<TType extends WorldEntityType>(state: WorldState, s
         results.push(item);
       }
     }
+
+    for (const portal of room.portals) {
+      if (matchers.entity(portal, search)) {
+        results.push(portal);
+      }
+    }
   }
 
   return results;
@@ -85,6 +91,7 @@ export function findRoom(state: WorldState, search: SearchFilter<RoomType>): Arr
  *
  * @todo stop searching each room once it has been added
  */
+// eslint-disable-next-line complexity,sonarjs/cognitive-complexity
 export function findContainer<TType extends ActorType | RoomType>(state: WorldState, search: SearchFilter<TType>): Array<Actor | Room> {
   const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
   const results = new Set<Actor | Room>();
@@ -112,6 +119,12 @@ export function findContainer<TType extends ActorType | RoomType>(state: WorldSt
 
     for (const item of room.items) {
       if (matchers.entity(item, search)) {
+        results.add(room);
+      }
+    }
+
+    for (const portal of room.portals) {
+      if (matchers.entity(portal, search)) {
         results.add(room);
       }
     }

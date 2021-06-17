@@ -80,6 +80,7 @@ worlds:
           base: ''
         groupTarget:
           base: ''
+        scripts: !map {}
       room:
         meta:
           id: room-none
@@ -113,11 +114,13 @@ worlds:
                   health: |-
                     You have {{health}} health.
                   seen: |-
-                    You are in {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
+                    You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
                   inventory: |-
                     You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
                   portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.groupSource}} ({{portal.dest}}).
+                    A {{portal.meta.name}} leads to the {{portal.groupSource}}.
+                  dest: |-
+                    You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
                 actor:
                   seen: |-
                     A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
@@ -327,6 +330,7 @@ worlds:
               id: window-west
               name:
                 base: window
+            scripts: !map {}
           mods: []
         - base:
             dest:
@@ -343,6 +347,7 @@ worlds:
               id: door-east
               name:
                 base: door
+            scripts: !map {}
           mods: []
         - base:
             dest:
@@ -359,6 +364,7 @@ worlds:
               id: door-west
               name:
                 base: door
+            scripts: !map {}
           mods: []
         - base:
             dest:
@@ -375,6 +381,7 @@ worlds:
               id: window-east
               name:
                 base: window
+            scripts: !map {}
           mods: []
         - base:
             dest:
@@ -393,6 +400,7 @@ worlds:
               id: door-west-forward
               name:
                 base: locked door
+            scripts: !map {}
           mods: []
       rooms:
         - base:

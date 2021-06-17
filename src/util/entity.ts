@@ -2,6 +2,7 @@ import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
 import { EntityForType, WorldEntityType } from '../model/entity';
 
 import { Entity } from '../model/entity/Base';
+import { isPortal } from '../model/entity/Portal';
 import { Metadata } from '../model/Metadata';
 import { SearchFilter, StateMatchers } from './state/search';
 import { matchIdSegments } from './string';
@@ -37,36 +38,53 @@ export function matchEntity<TType extends WorldEntityType>(entity: Immutable<Ent
 }
 
 export function matchMetadata(entity: Immutable<Entity>, filter: Partial<Metadata>): boolean {
-  let matched = true;
+  // if either one is specified but does not match, reject
+  const matched = {
+    id: true,
+    name: true,
+  };
 
   if (doesExist(filter.id)) {
-    matched = matched && matchIdSegments(entity.meta.id.toLocaleLowerCase(), filter.id);
+    const id = entity.meta.id.toLocaleLowerCase();
+    matched.id = matchIdSegments(id, filter.id);
   }
 
   if (doesExist(filter.name)) {
-    matched = matched && entity.meta.name.toLocaleLowerCase().includes(filter.name);
+    const name = entity.meta.name.toLocaleLowerCase();
+    matched.name = name.includes(filter.name);
   }
 
-  return matched;
+  return matched.id && matched.name;
 }
 
 export function matchMetadataFuzzy(entity: Immutable<Entity>, filter: Partial<Metadata>): boolean {
-  let matched = true;
+  const matched = {
+    id: true,
+    name: true,
+  };
 
   const id = entity.meta.id.toLocaleLowerCase();
-
   if (doesExist(filter.id)) {
-    matched = matched && matchIdSegments(id, filter.id);
+    matched.id = matchIdSegments(id, filter.id);
   }
 
   if (doesExist(filter.name)) {
-    matched = matched && (
-      id.includes(filter.name) ||
-      entity.meta.name.toLocaleLowerCase().includes(filter.name)
-    );
+    matched.name = id.includes(filter.name);
+
+    const name = entity.meta.name.toLocaleLowerCase();
+    matched.name = matched.name || name.includes(filter.name);
+
+    // TODO: extract into helper
+    if (isPortal(entity)) {
+      const sourceName = [
+        entity.groupSource.toLocaleLowerCase(),
+        name,
+      ].join(' ');
+      matched.name = matched.name || sourceName.includes(filter.name);
+    }
   }
 
-  return matched;
+  return matched.id && matched.name;
 }
 
 export function createFuzzyMatcher<TType extends WorldEntityType>(): StateMatchers<TType> {

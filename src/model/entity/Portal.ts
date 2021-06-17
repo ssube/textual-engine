@@ -1,7 +1,10 @@
+import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
+import { ScriptMap } from '../../util/types';
 
 import { BaseTemplate, Template, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
+import { Entity } from './Base';
 
 export enum PortalLinkage {
   FORWARD = 'forward',
@@ -34,6 +37,8 @@ export interface Portal {
 
   meta: Metadata;
 
+  scripts: ScriptMap;
+
   type: PortalType;
 }
 
@@ -41,6 +46,10 @@ export type PortalGroups = Map<string, {
   dests: Set<string>;
   portals: Set<BaseTemplate<Portal>>;
 }>;
+
+export function isPortal(it: Optional<Entity>): it is Portal {
+  return doesExist(it) && it.type === PORTAL_TYPE;
+}
 
 export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
   type: 'object',
@@ -60,6 +69,10 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
           },
         },
         meta: TEMPLATE_METADATA_SCHEMA,
+        scripts: {
+          type: 'object',
+          required: [],
+        },
         type: {
           type: 'object',
           properties: {
@@ -75,7 +88,7 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
           required: ['base', 'type'],
         },
       },
-      required: ['dest', 'groupKey', 'groupSource', 'groupTarget', 'meta'],
+      required: ['dest', 'groupKey', 'groupSource', 'groupTarget', 'meta', 'scripts'],
     },
     mods: {
       type: 'array',

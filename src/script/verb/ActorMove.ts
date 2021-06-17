@@ -2,6 +2,7 @@ import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { ActorSource, isActor } from '../../model/entity/Actor';
+import { isPortal } from '../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
@@ -19,12 +20,13 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
 
   const currentRoom = mustExist(context.room);
   const portals = currentRoom.portals.filter((it) => {
+    // TODO: use entity search helper
     const group = it.groupSource.toLocaleLowerCase();
     const name = it.meta.name.toLocaleLowerCase();
     // portals in the same group usually lead to the same place, but name and group can both be ambiguous
-    return (name === targetName || group === targetName || `${group} ${name}` === targetName);
+    return (it.meta.id === targetName || name === targetName || group === targetName || `${group} ${name}` === targetName);
   });
-  const targetPortal = portals[command.index];
+  const targetPortal = indexEntity(portals, command.index, isPortal);
 
   if (isNil(targetPortal)) {
     await context.state.show('actor.step.move.missing', { command });
@@ -40,7 +42,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetRoom = indexEntity(rooms, command.index, isRoom);
 
   if (!isRoom(targetRoom)) {
-    context.logger.warn({ command, rooms, targetPortal }, 'destination room not found');
+    context.logger.warn({ actor: this, command, rooms, targetPortal }, 'destination room not found');
     throw new NotFoundError('destination room not found');
   }
 

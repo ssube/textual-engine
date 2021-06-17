@@ -118,7 +118,7 @@ worlds:
                   inventory: |-
                     You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
                   portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.groupSource}}.
+                    A {{portal.meta.name}} leads to the {{portal.groupSource}} ({{portal.meta.id}}).
                   dest: |-
                     You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
                 actor:
@@ -153,7 +153,7 @@ worlds:
                 missing: |-
                   {{command.target}} is not a portal!
                 portal: |-
-                  {{actor.meta.name}} moved through the {{portal.sourceGroup}} {{portal.name}}.
+                  {{actor.meta.name}} moved through the {{portal.groupSource}} {{portal.meta.name}}.
               take:
                 type: |-
                   {{command.target}} is not an item!

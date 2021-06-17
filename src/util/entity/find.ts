@@ -19,9 +19,6 @@ export interface SearchFilter<TType extends WorldEntityType> {
   meta?: Partial<Metadata>;
   room?: Partial<Metadata>;
 
-  /**
-   * @todo infer and specialize results
-   */
   type?: TType;
 
   matchers?: StateMatchers<TType>;
@@ -30,6 +27,7 @@ export interface SearchFilter<TType extends WorldEntityType> {
 /**
  * Search state for any matching entities, including actors and their inventories.
  */
+// eslint-disable-next-line complexity,sonarjs/cognitive-complexity
 export function findMatching<TType extends WorldEntityType>(state: WorldState, search: SearchFilter<TType>): Array<EntityForType<TType>> {
   const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
   const results: Array<EntityForType<TType>> = [];
@@ -77,8 +75,6 @@ export function findMatching<TType extends WorldEntityType>(state: WorldState, s
 
 /**
  * Find the room that contains a particular entity.
- *
- * @todo stop searching each room once it has been added
  */
 export function findRoom(state: WorldState, search: SearchFilter<RoomType>): Array<Room> {
   const results = findContainer(state, search);
@@ -88,8 +84,6 @@ export function findRoom(state: WorldState, search: SearchFilter<RoomType>): Arr
 
 /**
  * Find the room or actor that contains a particular item.
- *
- * @todo stop searching each room once it has been added
  */
 // eslint-disable-next-line complexity,sonarjs/cognitive-complexity
 export function findContainer<TType extends ActorType | RoomType>(state: WorldState, search: SearchFilter<TType>): Array<Actor | Room> {

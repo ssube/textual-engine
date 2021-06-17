@@ -118,12 +118,13 @@ export class PlayerActorService implements ActorService {
   }
 
   public onRoom(event: StateRoomEvent): void {
-    if (event.room.actors.find((it) => it.meta.id === this.pid)) {
+    const actor = event.room.actors.find((it) => it.meta.id === this.pid);
+    if (doesExist(actor)) {
       this.logger.debug({ event }, 'updating own room');
       this.room = event.room;
 
       this.event.emit(EVENT_ACTOR_ROOM, {
-        actor: mustExist(this.actor), // TODO: from this or event?
+        actor,
         pid: this.pid,
         room: event.room,
       });

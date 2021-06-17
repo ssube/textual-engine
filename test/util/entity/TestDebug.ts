@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { WorldState } from '../../../src/model/world/State';
 import { debugState, graphState } from '../../../src/util/entity/debug';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../entity';
 
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {
@@ -55,7 +55,16 @@ describe('state debug utils', () => {
         name: '',
         template: '',
       },
-      rooms: [], // TODO: add some rooms
+      rooms: [
+        // all IDs must be graphviz-safe, underscores rather than dashes
+        makeTestRoom('room_1', '', '', [
+          makeTestActor('actor_1', '', ''),
+        ], [
+          makeTestItem('item_1', '', ''),
+        ], [
+          makeTestPortal('portal_1', '', '', '', 'room_2'),
+        ]),
+      ],
       start: {
         room: '',
       },
@@ -74,7 +83,7 @@ describe('state debug utils', () => {
     expect(lines).to.include('strict digraph {');
 
     for (const room of state.rooms) {
-      expect(lines).to.include(room.meta.name);
+      expect(lines.some((it) => it.includes(room.meta.id)), `should include room ${room.meta.id}`).to.equal(true);
     }
   });
 });

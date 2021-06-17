@@ -299,7 +299,6 @@ export class StateEntityGenerator {
     for (const mod of selected) {
       await this.modifyMetadata(target.meta, mod.meta);
 
-      // TODO: target.portals
       target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
 
       const actors = await this.createActorList(mod.actors);
@@ -307,6 +306,9 @@ export class StateEntityGenerator {
 
       const items = await this.createItemList(mod.items);
       target.items.push(...items);
+
+      const portals = await this.createPortalList(mod.portals);
+      target.portals.push(...portals);
     }
   }
 

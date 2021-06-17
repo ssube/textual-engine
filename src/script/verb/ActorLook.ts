@@ -8,7 +8,7 @@ import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { getKey } from '../../util/collection/map';
 import { STAT_HEALTH } from '../../util/constants';
-import { createFuzzyMatcher } from '../../util/entity';
+import { createFuzzyMatcher } from '../../util/entity/match';
 
 export async function VerbActorLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

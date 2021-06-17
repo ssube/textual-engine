@@ -5,7 +5,7 @@ import { isActor } from '../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
 import { SIGNAL_HIT } from '../../util/constants';
-import { createFuzzyMatcher, indexEntity } from '../../util/entity';
+import { createFuzzyMatcher, indexEntity } from '../../util/entity/match';
 
 export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

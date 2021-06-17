@@ -2,7 +2,7 @@ import { doesExist, mustExist, NotImplementedError } from '@apextoaster/js-utils
 import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
-import { Command } from '../../model/Command';
+import { Command, makeCommand } from '../../model/Command';
 import { Actor, ActorSource } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module';
@@ -13,12 +13,7 @@ import { EventBus } from '../event';
 import { RandomGenerator } from '../random';
 import { StateRoomEvent } from '../state/events';
 
-const WAIT_CMD: Command = {
-  index: 0,
-  input: `${VERB_WAIT} turn`,
-  verb: VERB_WAIT,
-  target: 'turn',
-};
+const WAIT_CMD: Command = makeCommand(VERB_WAIT, 'turn');
 
 /**
  * Behavioral input generates commands based on the actor's current
@@ -64,12 +59,7 @@ export class BehaviorActorService implements ActorService {
     const player = event.room.actors.find((it) => it.source === ActorSource.PLAYER);
     if (doesExist(player)) {
       this.logger.debug({ event, player }, 'attacking visible player');
-      this.queue(event.room, event.actor, {
-        index: 0,
-        input: `${VERB_HIT} ${player.meta.id}`,
-        verb: VERB_HIT,
-        target: player.meta.id,
-      });
+      this.queue(event.room, event.actor, makeCommand(VERB_HIT, player.meta.id));
       return;
     }
 
@@ -83,12 +73,7 @@ export class BehaviorActorService implements ActorService {
         portalCount: portals.length,
       }, 'moving through random portal');
 
-      this.queue(event.room, event.actor, {
-        index: 0,
-        input: `${VERB_MOVE} ${portal.meta.id}`,
-        verb: VERB_MOVE,
-        target: portal.meta.id,
-      });
+      this.queue(event.room, event.actor, makeCommand(VERB_MOVE, portal.meta.id));
       return;
     }
 

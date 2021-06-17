@@ -1,7 +1,8 @@
 import { expect } from 'chai';
 
-import { WorldState } from '../../src/model/world/State';
-import { debugState, graphState } from '../../src/util/state/debug';
+import { WorldState } from '../../../src/model/world/State';
+import { debugState, graphState } from '../../../src/util/entity/debug';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity';
 
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {
@@ -12,7 +13,18 @@ describe('state debug utils', () => {
         name: '',
         template: '',
       },
-      rooms: [], // TODO: add some rooms
+      rooms: [
+        makeTestRoom('room-1', '', '', [
+          makeTestActor('actor-1', '', ''),
+        ], [
+          makeTestItem('item-1', '', ''),
+        ]),
+        makeTestRoom('room-2', '', '', [
+          makeTestActor('actor-2', '', ''),
+        ], [
+          makeTestItem('item-2', '', ''),
+        ]),
+      ],
       start: {
         room: '',
       },
@@ -31,7 +43,7 @@ describe('state debug utils', () => {
     expect(lines).to.include('state: ');
 
     for (const room of state.rooms) {
-      expect(lines).to.include(room.meta.name);
+      expect(lines.some((it) => it.includes(room.meta.id))).to.equal(true);
     }
   });
 

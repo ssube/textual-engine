@@ -19,3 +19,12 @@ export interface Command {
    */
   target: string;
 }
+
+export function makeCommand(verb: string, target: string, index = 0): Command {
+  return {
+    index,
+    input: `${verb} ${target}`,
+    target,
+    verb,
+  };
+}

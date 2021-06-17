@@ -3,13 +3,13 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { PORTAL_TYPE, PortalLinkage } from '../../../../src/model/entity/Portal';
+import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorLook } from '../../../../src/script/verb/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_LOOK } from '../../../../src/util/constants';
-import { makeTestActor, makeTestCommand, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
@@ -168,7 +168,7 @@ describe('actor look scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve([room]));
 
       const context: ScriptContext = {
-        command: makeTestCommand(VERB_LOOK, ''),
+        command: makeCommand(VERB_LOOK, ''),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

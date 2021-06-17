@@ -55,9 +55,9 @@ export function graphState(state: WorldState): Array<string> {
         `  ${sanitize(room.meta.id)} -> ${sanitize(portal.dest)}`,
         '[',
         `label="${portal.groupSource} ${portal.meta.name}"`,
+        '];'
       ];
 
-      segments.push('];');
       lines.push(segments.join(' '));
     }
   }

@@ -2,17 +2,7 @@ import { constructorName } from '@apextoaster/js-utils';
 import { createLogger, LoggerOptions, stdSerializers } from 'bunyan';
 import { Logger } from 'noicejs';
 
-import { isActor } from '../model/entity/Actor';
-import { isItem } from '../model/entity/Item';
-import { isRoom } from '../model/entity/Room';
-
-export function entityMeta(entity: any): object {
-  if (isActor(entity) || isItem(entity) || isRoom(entity)) {
-    return entity.meta;
-  } else {
-    return entity;
-  }
-}
+import { entityMeta } from '../util/logger';
 
 /**
  * Attach bunyan to the Logger. Does very little, since bunyan matches the Logger interface.

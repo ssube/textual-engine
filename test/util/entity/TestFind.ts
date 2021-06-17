@@ -1,31 +1,60 @@
 import { expect } from 'chai';
+import { ACTOR_TYPE, ITEM_TYPE } from '../../../src/lib';
+import { PORTAL_TYPE } from '../../../src/model/entity/Portal';
 
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { WorldState } from '../../../src/model/world/State';
-import { findContainer, findRoom, findMatching } from '../../../src/util/state/search';
-import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
+import { findContainer, findRoom, findMatching } from '../../../src/util/entity/find';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity';
 
 const TEST_STATE: WorldState = makeTestState('', [
   makeTestRoom('foo', 'foo', 'foo', [
     makeTestActor('bun', 'bun', 'bun', makeTestItem('bon', 'bon', 'bon'))
-  ], [/* no items */]),
+  ], [/* no items */], [
+    makeTestPortal('p', 'p', 'p', 'p', 'foo'),
+  ]),
   makeTestRoom('bar', 'bar', 'bar', [/* no actors */], [
     makeTestItem('bin', 'bin', 'bin'),
   ]),
 ]);
 
-describe('state search utils', () => {
-  describe('search state helper', () => {
+describe('entity find utils', () => {
+  describe('find matching helper', () => {
     it('should return matching entities', async () => {
-      const results = findMatching(TEST_STATE, {
+      expect(findMatching(TEST_STATE, {
         meta: {
           id: 'bar',
         },
         type: ROOM_TYPE,
-      });
-
-      expect(results).to.deep.equal([
+      }), 'find room').to.deep.equal([
         TEST_STATE.rooms[1],
+      ]);
+
+      expect(findMatching(TEST_STATE, {
+        meta: {
+          id: 'bun',
+        },
+        type: ACTOR_TYPE,
+      }), 'find actor').to.deep.equal([
+        TEST_STATE.rooms[0].actors[0],
+      ]);
+
+      expect(findMatching(TEST_STATE, {
+        meta: {
+          id: 'bin',
+        },
+        type: ITEM_TYPE,
+      }), 'find item').to.deep.equal([
+        TEST_STATE.rooms[1].items[0],
+      ]);
+
+      expect(findMatching(TEST_STATE, {
+        meta: {
+          id: 'p',
+        },
+        type: PORTAL_TYPE,
+      }), 'find portal').to.deep.equal([
+        TEST_STATE.rooms[0].portals[0],
       ]);
     });
 

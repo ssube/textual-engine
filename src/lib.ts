@@ -100,7 +100,7 @@ export { ShowVolume, StateSource, showCheck } from './util/actor/index';
 
 export { TEMPLATE_CHANCE, META_VERBS, COMMON_VERBS, EVENT_NAMES } from './util/constants';
 export { Singleton, SingletonConstructor } from './util/container';
-export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, createFuzzyMatcher, createStrictMatcher } from './util/entity';
+export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, createFuzzyMatcher, createStrictMatcher } from './util/entity/match';
 export { makeConstStringSchema } from './util/schema';
 export { hasText, matchIdSegments, splitPath } from './util/string';
 export { Immutable, KeyList, Filter, FilterBase, FilterKeys, Replace, ScriptData, ScriptMap, ScriptRef, StatMap } from './util/types';
@@ -118,9 +118,9 @@ export { getSignalScripts, getVerbScripts, mergeVerbScripts, VerbTarget } from '
 
 export { ServiceManager } from './util/service/ServiceManager';
 
-export { StateEntityGenerator } from './util/state/EntityGenerator';
-export { StateEntityTransfer, ActorTransfer, ItemTransfer } from './util/state/EntityTransfer';
-export { SearchFilter, StateMatchers, findContainer, findMatching, findRoom } from './util/state/search';
+export { StateEntityGenerator } from './util/entity/EntityGenerator';
+export { StateEntityTransfer, ActorTransfer, ItemTransfer } from './util/entity/EntityTransfer';
+export { SearchFilter, StateMatchers, findContainer, findMatching, findRoom } from './util/entity/find';
 
 export { JoinChain, JoinOptions } from './util/template/JoinChain';
 export { SplitOptions, splitChain } from './util/template/SplitChain';

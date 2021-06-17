@@ -5,7 +5,7 @@ import { Item } from '../../../src/model/entity/Item';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
-import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
+import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestItem } from '../../entity';
 import { getStubHelper, getTestContainer } from '../../helper';
 

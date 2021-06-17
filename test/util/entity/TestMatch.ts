@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 
-import { isActor } from '../../src/model/entity/Actor';
-import { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy } from '../../src/util/entity';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../entity';
+import { isActor } from '../../../src/model/entity/Actor';
+import { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy } from '../../../src/util/entity/match';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity';
 
-describe('entity utils', () => {
+describe('entity match utils', () => {
   describe('index entity helper', () => {
     it('should return the entity at the given index if it is the correct type', async () => {
       const actors = [

@@ -1,3 +1,4 @@
+import { NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { spy, stub } from 'sinon';
 
@@ -47,5 +48,19 @@ describe('page loader', () => {
 
     expect(buffer.length).to.equal(content.length);
     expect(contentSpy.get, 'content spy').to.have.callCount(1);
+  });
+
+  it('should not implement save', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const dom = {
+      getElementById: stub().returns({}),
+    };
+
+    const loader = await container.create(BrowserPageLoader, {}, dom);
+    const path = 'out/test.md';
+
+    await expect(loader.save(path, Buffer.from('foo'))).to.eventually.be.rejectedWith(NotImplementedError);
+    await expect(loader.saveStr(path, 'foo')).to.eventually.be.rejectedWith(NotImplementedError);
   });
 });

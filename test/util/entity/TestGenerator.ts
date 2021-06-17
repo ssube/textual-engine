@@ -11,7 +11,7 @@ import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { PORTAL_DEPTH, TEMPLATE_CHANCE } from '../../../src/util/constants';
-import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
+import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
 import { getTestContainer } from '../../helper';
 
 // #region fixtures
@@ -627,10 +627,7 @@ describe('state entity generator', () => {
 
   describe('populate portals', () => {
     it('should create destination rooms for unfilled portals', async () => {
-      const logger = ConsoleLogger.global;
-      const container = Container.from(new CoreModule());
-      await container.configure({ logger });
-
+      const container = await getTestContainer(new CoreModule());
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld({
         ...TEST_WORLD,

@@ -6,7 +6,7 @@ import { isPortal } from '../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../service/script';
 import { ShowVolume } from '../../util/actor';
-import { indexEntity } from '../../util/entity';
+import { indexEntity } from '../../util/entity/match';
 import { ActorLookTarget } from './ActorLook';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {

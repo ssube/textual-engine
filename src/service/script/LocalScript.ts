@@ -19,7 +19,7 @@ import { VerbActorUse } from '../../script/verb/ActorUse';
 import { VerbActorWait } from '../../script/verb/ActorWait';
 import { getSignalScripts, getVerbScripts } from '../../util/script';
 import { makeServiceLogger } from '../../util/service';
-import { SearchFilter } from '../../util/state/search';
+import { SearchFilter } from '../../util/entity/find';
 
 /**
  * Common scripts, built into the engine and always available.

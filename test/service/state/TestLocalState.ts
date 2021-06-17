@@ -6,7 +6,7 @@ import { createStubInstance, match, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
-import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorSource } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../../src/model/entity/Room';
@@ -18,7 +18,13 @@ import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
-import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent, StateStepEvent } from '../../../src/service/state/events';
+import {
+  StateJoinEvent,
+  StateLoadEvent,
+  StateOutputEvent,
+  StateRoomEvent,
+  StateStepEvent,
+} from '../../../src/service/state/events';
 import { LocalStateService } from '../../../src/service/state/LocalState';
 import { ShowVolume } from '../../../src/util/actor';
 import { onceEvent } from '../../../src/util/async/event';
@@ -47,8 +53,8 @@ import {
   TEMPLATE_CHANCE,
   VERB_WAIT,
 } from '../../../src/util/constants';
-import { StateEntityGenerator } from '../../../src/util/state/EntityGenerator';
-import { StateEntityTransfer } from '../../../src/util/state/EntityTransfer';
+import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
+import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
 import { getStubHelper, getTestContainer, getTestLogger } from '../../helper';
 
@@ -159,7 +165,7 @@ const TEST_ROOM: Template<Room> = {
     actors: [],
     items: [],
     meta: {
-      id: 'foo',
+      id: 'room-foo',
       name: {
         base: 'test',
         type: 'string',
@@ -218,7 +224,7 @@ const TEST_WORLD: WorldTemplate = {
   templates: {
     actors: [TEST_ACTOR],
     items: [TEST_ITEM],
-    portals: [],
+    portals: [TEST_PORTAL],
     rooms: [TEST_ROOM],
   },
 };
@@ -268,7 +274,42 @@ describe('local state service', () => {
       expect(room.room).to.equal(join.room);
     });
 
-    xit('should use an existing actor when a player rejoins');
+    it('should use an existing actor when a player rejoins', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await localState.doCreate(TEST_WORLD.meta.id, 1);
+
+      const actors = await localState.stepFind({
+        type: ACTOR_TYPE,
+      });
+      expect(actors).to.have.lengthOf(0);
+
+      const pid = 'player-0';
+      for (let i = 0; i < 3; i += 1) {
+        const pendingJoin = onceEvent<StateJoinEvent>(events, EVENT_STATE_JOIN);
+
+        events.emit(EVENT_ACTOR_JOIN, {
+          pid,
+        });
+
+        await pendingJoin;
+      }
+
+      const players = await localState.stepFind({
+        meta: {
+          id: pid,
+        },
+        type: ACTOR_TYPE,
+      });
+      expect(players).to.have.lengthOf(1); // still just 1
+    });
   });
 
   describe('world load event', () => {
@@ -762,6 +803,11 @@ describe('local state service', () => {
                 id: TEST_ITEM.base.meta.id,
                 type: 'id',
               }],
+              portals: [{
+                chance: TEMPLATE_CHANCE,
+                id: TEST_PORTAL.base.meta.id,
+                type: 'id',
+              }],
             },
             mods: TEST_ROOM.mods,
           }],
@@ -770,31 +816,42 @@ describe('local state service', () => {
       const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
       events.emit(EVENT_LOADER_WORLD, { world });
 
-      await state.doCreate(TEST_WORLD.meta.id, 1);
-      const results = await state.stepFind({
-        type: ACTOR_TYPE,
-      });
-      const actors = results.filter(isActor);
+      const pendingLoad = onceEvent<StateLoadEvent>(events, EVENT_STATE_LOAD);
+      await state.doCreate(TEST_WORLD.meta.id, 0);
+      await pendingLoad;
 
       const script = await container.create<LocalScriptService, BaseOptions>(INJECT_SCRIPT);
       const invokeStub = stub(script, 'invoke');
 
-      const pending = onceEvent<StateStepEvent>(events, EVENT_STATE_STEP);
-      for (const actor of actors) {
-        await state.onCommand({
-          actor,
-          command: {
-            index: 0,
-            input: '',
-            target: '',
-            verb: VERB_WAIT,
-          },
-        });
+      const pendingStep = onceEvent<StateStepEvent>(events, EVENT_STATE_STEP);
+
+      const rooms = await state.stepFind({
+        type: ROOM_TYPE,
+      });
+
+      let broadcast = true;
+      for (const room of rooms) {
+        for (const actor of room.actors) {
+          if (broadcast) {
+            broadcast = false;
+            await state.stepEnter({ room, actor });
+          }
+
+          await state.onCommand({
+            actor,
+            command: {
+              index: 0,
+              input: '',
+              target: '',
+              verb: VERB_WAIT,
+            },
+          });
+        }
       }
 
-      await pending;
+      await pendingStep;
 
-      expect(invokeStub).to.have.callCount(4); // one room, one actor, one item in each
+      expect(invokeStub).to.have.callCount(5); // one room, one actor, one item in each, one portal
       expect(invokeStub).to.have.been.calledWithMatch(
         match.object.and(match.has('type', match.string)),
         SIGNAL_STEP,

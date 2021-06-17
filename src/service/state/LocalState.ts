@@ -49,16 +49,16 @@ import {
 } from '../../util/constants';
 import { getVerbScripts } from '../../util/script';
 import { makeServiceLogger } from '../../util/service';
-import { debugState, graphState } from '../../util/state/debug';
-import { StateEntityGenerator } from '../../util/state/EntityGenerator';
+import { debugState, graphState } from '../../util/entity/debug';
+import { StateEntityGenerator } from '../../util/entity/EntityGenerator';
 import {
   ActorTransfer,
   isActorTransfer,
   isItemTransfer,
   ItemTransfer,
   StateEntityTransfer,
-} from '../../util/state/EntityTransfer';
-import { findMatching, findRoom, SearchFilter } from '../../util/state/search';
+} from '../../util/entity/EntityTransfer';
+import { findMatching, findRoom, SearchFilter } from '../../util/entity/find';
 import { findByBaseId } from '../../util/template';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
@@ -661,12 +661,13 @@ export class LocalStateService implements StateService {
 
     if (doesExist(target.actor) && target.actor.source === ActorSource.PLAYER) {
       const rooms = await generator.populateRoom(target.room, state.rooms, state.world.depth);
+      this.logger.debug({ rooms }, 'adding new rooms');
       if (rooms.length > 0) {
         state.rooms.push(...rooms);
       }
-
-      await this.broadcastChanges(state.rooms);
     }
+
+    await this.broadcastChanges(state.rooms);
   }
 
   public async stepFind<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>> {

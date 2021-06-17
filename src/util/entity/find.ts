@@ -6,7 +6,7 @@ import { Entity } from '../../model/entity/Base';
 import { isRoom, Room, RoomType } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
-import { createStrictMatcher } from '../entity';
+import { createStrictMatcher } from './match';
 import { Immutable } from '../types';
 
 export interface StateMatchers<TEntity extends WorldEntityType> {

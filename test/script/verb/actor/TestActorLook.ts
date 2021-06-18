@@ -102,12 +102,7 @@ describe('actor look scripts', () => {
 
       const actor = makeTestActor('', '', '');
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_LOOK,
-        },
+        command: makeCommand(VERB_LOOK, ''),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -132,12 +127,7 @@ describe('actor look scripts', () => {
 
       const item = makeTestItem('', '', '');
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_LOOK,
-        },
+        command: makeCommand(VERB_LOOK, ''),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

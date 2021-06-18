@@ -310,6 +310,9 @@ describe('local state service', () => {
       });
       expect(players).to.have.lengthOf(1); // still just 1
     });
+
+    xit('should handle world templates without starting actors');
+    xit('should handle world templates with invalid starting actors');
   });
 
   describe('world load event', () => {
@@ -868,6 +871,9 @@ describe('local state service', () => {
 
       return expect(state.step()).to.eventually.be.rejectedWith(NotInitializedError);
     });
+
+    xit('should error when some actors are missing commands');
+    xit('should only step entities once even when they move');
   });
 
   describe('step enter helper', () => {

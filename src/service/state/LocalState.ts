@@ -191,10 +191,6 @@ export class LocalStateService implements StateService {
         },
       });
 
-      if (!isRoom(room)) {
-        throw new ActorRoomError('room cannot be found for existing actor');
-      }
-
       this.event.emit(EVENT_STATE_JOIN, {
         actor: existingActor,
         pid: event.pid,

@@ -78,10 +78,6 @@ export class StateEntityGenerator {
         templateRef,
       }, 'create actor for list');
 
-      if (isNil(template)) {
-        throw new NotFoundError('invalid item in room');
-      }
-
       const item = await this.createActor(template);
       actors.push(item);
     }
@@ -116,10 +112,6 @@ export class StateEntityGenerator {
         template,
         templateRef,
       }, 'create item for list');
-
-      if (isNil(template)) {
-        throw new NotFoundError('invalid item in room');
-      }
 
       const item = await this.createItem(template);
       items.push(item);
@@ -169,10 +161,6 @@ export class StateEntityGenerator {
         templateRef,
       }, 'create portal for list');
 
-      if (isNil(template)) {
-        throw new NotFoundError('invalid portal in room');
-      }
-
       const portal = await this.createPortal(template);
       portals.push(portal);
     }
@@ -209,9 +197,6 @@ export class StateEntityGenerator {
     // pick a starting room and populate it
     const roomRef = randomItem(world.start.rooms, this.random);
     const roomTemplate = findByBaseId(world.templates.rooms, roomRef.id);
-    if (isNil(roomTemplate)) {
-      throw new NotFoundError('invalid start room');
-    }
 
     this.logger.debug({
       roomRef,
@@ -337,7 +322,7 @@ export class StateEntityGenerator {
   }
 
   public async populateRoom(firstRoom: Room, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
-    if (max < 0) {
+    if (max <= 0) {
       return [];
     }
 

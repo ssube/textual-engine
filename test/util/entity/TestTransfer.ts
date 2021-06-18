@@ -252,9 +252,78 @@ describe('state transfer utils', () => {
       expect(actor.items).to.have.lengthOf(0);
     });
 
-    xit('should not allow source items');
-    xit('should not allow target items');
-    xit('should only move items that are within the source entity');
+    it('should not allow source items', async () => {
+      const moving = makeTestItem('bun', 'bun', 'bun');
+      const source = makeTestItem('bar', 'bar', 'bar');
+      const room = makeTestRoom('foo', 'foo', 'foo', [], [moving]);
+
+      const container = await getTestContainer(new CoreModule());
+      const transfer = await container.create(StateEntityTransfer);
+
+      const context: ScriptContext = {
+        data: new Map(),
+        logger: getTestLogger(),
+        random: await container.create(MathRandomGenerator),
+        script: await container.create(LocalScriptService),
+        state: getStubHelper(),
+        transfer: await container.create(StateEntityTransfer),
+      };
+
+      return expect(transfer.moveItem({
+        moving,
+        source: source as any,
+        target: room,
+      }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
+    });
+
+    it('should not allow target items', async () => {
+      const moving = makeTestItem('bun', 'bun', 'bun');
+      const room = makeTestRoom('foo', 'foo', 'foo', [], [moving]);
+      const target = makeTestItem('bar', 'bar', 'bar');
+
+      const container = await getTestContainer(new CoreModule());
+      const transfer = await container.create(StateEntityTransfer);
+
+      const context: ScriptContext = {
+        data: new Map(),
+        logger: getTestLogger(),
+        random: await container.create(MathRandomGenerator),
+        script: await container.create(LocalScriptService),
+        state: getStubHelper(),
+        transfer: await container.create(StateEntityTransfer),
+      };
+
+      return expect(transfer.moveItem({
+        moving,
+        source: room,
+        target: target as any,
+      }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
+    });
+
+    it('should only move items that are within the source entity', async () => {
+      const item = makeTestItem('bun', 'bun', 'bun');
+      const actor = makeTestActor('bar', 'bar', 'bar');
+      const room = makeTestRoom('foo', 'foo', 'foo', [], []);
+
+      const container = await getTestContainer(new CoreModule());
+      const transfer = await container.create(StateEntityTransfer);
+
+      const context: ScriptContext = {
+        data: new Map(),
+        logger: getTestLogger(),
+        random: await container.create(MathRandomGenerator),
+        script: await container.create(LocalScriptService),
+        state: getStubHelper(),
+        transfer: await container.create(StateEntityTransfer),
+      };
+
+      return expect(transfer.moveItem({
+        moving: item,
+        source: room,
+        target: actor,
+      }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
+    });
+
     xit('should invoke the get script on the destination entity');
     xit('should not invoke scripts when the source and target are the same');
   });

@@ -50,6 +50,15 @@ describe('entity find utils', () => {
 
       expect(findMatching(TEST_STATE, {
         meta: {
+          id: 'bon',
+        },
+        type: ITEM_TYPE,
+      }), 'find inventory item').to.deep.equal([
+        TEST_STATE.rooms[0].actors[0].items[0],
+      ]);
+
+      expect(findMatching(TEST_STATE, {
+        meta: {
           id: 'p',
         },
         type: PORTAL_TYPE,
@@ -131,6 +140,43 @@ describe('entity find utils', () => {
       expect(results).to.deep.equal([
         TEST_STATE.rooms[1],
       ]);
+    });
+
+    it('should return the room containing a portal', async () => {
+      const results = findContainer(TEST_STATE, {
+        meta: {
+          id: 'p',
+        },
+      });
+      expect(results).to.deep.equal([
+        TEST_STATE.rooms[0],
+      ]);
+    });
+
+    it('should only check rooms matching the room filter', async () => {
+      const results = findContainer(TEST_STATE, {
+        meta: {
+          id: 'bun', // exists in foo
+        },
+        room: {
+          id: 'bar', // is not foo
+        }
+      });
+
+      expect(results).to.have.lengthOf(0);
+    });
+
+    it('should only check actors matching the actor filter', async () => {
+      const results = findContainer(TEST_STATE, {
+        meta: {
+          id: 'bon', // exists in bun
+        },
+        actor: {
+          id: 'bar', // not an actor
+        }
+      });
+
+      expect(results).to.have.lengthOf(0);
     });
   });
 });

@@ -1,10 +1,11 @@
 /* eslint-disable max-lines */
+import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { ConsoleLogger, Container, NullLogger } from 'noicejs';
+import { Container, NullLogger } from 'noicejs';
 
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
-import { Portal, PortalLinkage, PORTAL_TYPE } from '../../../src/model/entity/Portal';
+import { Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
 import { isRoom, Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Modifier } from '../../../src/model/mapped/Modifier';
 import { Template } from '../../../src/model/mapped/Template';
@@ -499,6 +500,112 @@ describe('state entity generator', () => {
     });
   });
 
+  describe('create state', () => {
+    it('should throw when the start room does not exist', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      return expect(generator.createState({
+        ...TEST_WORLD,
+        start: {
+          actors: TEST_WORLD.start.actors,
+          rooms: [{
+            chance: TEMPLATE_CHANCE,
+            id: 'foo',
+            type: 'id',
+          }],
+        },
+      }, {
+        depth: 0,
+        id: 'test',
+        seed: 'test',
+      })).to.eventually.be.rejectedWith(NotFoundError, 'value not found');
+    });
+  });
+
+  describe('create lists', () => {
+    it('should roll for each actor template', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const actors = await generator.createActorList([{
+        chance: 0,
+        id: 'foo',
+        type: 'id',
+      }]);
+
+      expect(actors).to.have.lengthOf(0);
+    });
+
+    xit('should throw when an actor template does not exist', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      return expect(generator.createActorList([{
+        chance: TEMPLATE_CHANCE,
+        id: 'foo',
+        type: 'id',
+      }])).to.eventually.be.rejectedWith();
+    });
+
+    it('should roll for each item template', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const items = await generator.createItemList([{
+        chance: 0,
+        id: 'foo',
+        type: 'id',
+      }]);
+
+      expect(items).to.have.lengthOf(0);
+
+    });
+
+    xit('should throw when an item template does not exist', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      return expect(generator.createItemList([{
+        chance: TEMPLATE_CHANCE,
+        id: 'foo',
+        type: 'id',
+      }])).to.eventually.be.rejectedWith();
+    });
+
+    it('should roll for each portal template', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const portals = await generator.createPortalList([{
+        chance: 0,
+        id: 'foo',
+        type: 'id',
+      }]);
+
+      expect(portals).to.have.lengthOf(0);
+
+    });
+
+    xit('should throw when an portal template does not exist', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      return expect(generator.createPortalList([{
+        chance: TEMPLATE_CHANCE,
+        id: 'foo',
+        type: 'id',
+      }])).to.eventually.be.rejectedWith();
+    });
+  });
+
   describe('modify actor', () => {
     it('should update meta fields', async () => {
       const container = await getTestContainer(new CoreModule());
@@ -539,6 +646,13 @@ describe('state entity generator', () => {
       await generator.modifyItem(item, TEST_ITEM_MODS);
       expect(original).not.to.equal(item.meta.name);
     });
+  });
+
+  describe('modify portal', () => {
+    xit('should update meta fields');
+    xit('should update group fields');
+    xit('should update link type');
+    xit('should update script map');
   });
 
   describe('modify room', () => {

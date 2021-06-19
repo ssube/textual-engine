@@ -1,4 +1,4 @@
-import { doesExist, isNil, mergeMap, mustExist, NotFoundError, setOrPush } from '@apextoaster/js-utils';
+import { doesExist, mergeMap, mustExist, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { WorldEntityType } from '../../model/entity';

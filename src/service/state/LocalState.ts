@@ -195,6 +195,11 @@ export class LocalStateService implements StateService {
         pid: event.pid,
         room,
       });
+
+      await this.stepEnter({
+        actor: existingActor,
+        room,
+      });
     } else {
       // pick a starting actor and create it
       const actorRef = randomItem(world.start.actors, this.random);

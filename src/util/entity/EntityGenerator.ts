@@ -416,7 +416,6 @@ export class StateEntityGenerator {
         // add room to queue
         addedRooms.push(destRoom);
         pendingRooms.push(destRoom);
-        // rooms.push(...await this.populateRoom(destRoom, depth - 1)); // TODO: TCO
       }
     }
 

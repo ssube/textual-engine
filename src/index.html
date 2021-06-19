@@ -53,10 +53,12 @@ services:
     - name: actor-enemy
       kind: core-behavior-actor
   loaders:
+    - name: fetch-loader
+      kind: browser-fetch-loader
+    - name: local-loader
+      kind: browser-local-loader
     - name: page-loader
       kind: browser-page-loader
-    - name: url-loader
-      kind: browser-fetch-loader
   renders:
     - name: local-render
       kind: browser-dom-render

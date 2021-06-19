@@ -33,7 +33,7 @@ export const EVENT_STATE_OUTPUT = 'state-output';
 export const EVENT_STATE_ROOM = 'state-room';
 export const EVENT_STATE_STEP = 'state-step';
 
-export const EVENT_NAMES = [
+export const EVENT_NAMES: ReadonlyArray<string> = [
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
@@ -85,7 +85,7 @@ export const META_QUIT = 'verbs.meta.quit';
 export const META_SAVE = 'verbs.meta.save';
 export const META_WORLDS = 'verbs.meta.worlds';
 
-export const META_VERBS = [
+export const META_VERBS: ReadonlyArray<string> = [
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -94,14 +94,14 @@ export const META_VERBS = [
   META_QUIT,
   META_SAVE,
   META_WORLDS,
-];
+] as const;
 
 /**
  * Common verbs and meta commands.
  *
  * Should include all `META_*` and `VERB_*` constants from this file.
  */
-export const COMMON_VERBS = [
+export const COMMON_VERBS: ReadonlyArray<string> = [
   ...META_VERBS,
   VERB_DROP,
   VERB_HIT,
@@ -116,7 +116,7 @@ export const COMMON_VERBS = [
 export const STAT_HEALTH = 'health';
 export const STAT_DAMAGE = 'damage';
 
-export const COMMON_STATS = [
+export const COMMON_STATS: ReadonlyArray<string> = [
   STAT_HEALTH,
   STAT_DAMAGE,
 ] as const;

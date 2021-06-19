@@ -8,8 +8,9 @@ import { ConfigError } from '../../../error/ConfigError';
 import { Entity } from '../../../model/entity/Base';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { onceEvent } from '../../../util/async/event';
-import { debounce, ClearResult } from '../../../util/async/Throttle';
+import { ClearResult, debounce } from '../../../util/async/Throttle';
 import {
+  COMMON_STATS,
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
@@ -171,7 +172,7 @@ export abstract class BaseReactRender implements RenderService {
     this.stats = Array.from(result.actor.stats.entries()).map((it) => ({
       name: it[0],
       value: it[1],
-    }));
+    })).filter((it) => COMMON_STATS.includes(it.name));
 
     this.setPrompt(`turn ${this.step.turn}`);
     this.queueUpdate.call();

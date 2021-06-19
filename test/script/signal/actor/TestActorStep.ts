@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { createStubInstance, SinonStub } from 'sinon';
+import { createStubInstance } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
@@ -8,7 +8,6 @@ import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Act
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
 import { CoreModule } from '../../../../src/module/CoreModule';
 import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
-import { ActorLookTarget } from '../../../../src/script/verb/actor/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
@@ -201,34 +200,6 @@ describe('actor step scripts', () => {
 
       expect(script.invoke).to.have.callCount(0);
       expect(state.show).to.have.callCount(1).and.have.been.calledWith('actor.step.command.unknown');
-    });
-  });
-
-  describe('actor step look with target', async () => {
-    it('should warn about missing target', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
-      const stateHelper = getStubHelper();
-      (stateHelper.find as SinonStub).returns(Promise.resolve([]));
-
-      const transfer = testTransfer();
-      await ActorLookTarget.call({
-        ...TEST_ACTOR,
-        source: ActorSource.PLAYER,
-      }, {
-        command: makeCommand(VERB_WAIT, ''),
-        data: new Map(),
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
-        script: createStubInstance(LocalScriptService),
-        state: stateHelper,
-        transfer,
-      }, '');
-
-      expect(stateHelper.show).to.have.callCount(1);
     });
   });
 });

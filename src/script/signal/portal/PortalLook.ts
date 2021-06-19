@@ -1,27 +1,24 @@
-import { mustExist } from '@apextoaster/js-utils';
-
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { WorldEntity } from '../../../model/entity';
-import { isActor } from '../../../model/entity/Actor';
+import { isPortal } from '../../../model/entity/Portal';
 import { ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext } from '../../../service/script';
 
 export async function SignalPortalLook(this: WorldEntity, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('target must be actor');
+  if (!isPortal(this)) {
+    throw new ScriptTargetError('target must be a portal');
   }
 
-  const portal = mustExist(context.portal);
-  await context.state.show('actor.step.look.room.portal', { portal });
+  await context.state.show('actor.step.look.room.portal', { portal: this });
 
-  if (portal.dest.length > 0) {
+  if (this.dest.length > 0) {
     const [room] = await context.state.find({
       meta: {
-        id: portal.dest,
+        id: this.dest,
       },
       type: ROOM_TYPE,
     });
 
-    await context.state.show('actor.step.look.room.dest', { portal, room });
+    await context.state.show('actor.step.look.room.dest', { portal: this, room });
   }
 }

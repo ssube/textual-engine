@@ -18,6 +18,10 @@ worlds:
             data: !map {}
             name:
               base: signal-actor-hit
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-actor-look
           signal.step:
             data: !map {}
             name:
@@ -62,7 +66,11 @@ worlds:
           desc:
             base: ''
         stats: !map {}
-        scripts: !map {}
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-item-look
       portal:
         meta:
           id: portal-none
@@ -80,7 +88,11 @@ worlds:
           base: ''
         groupTarget:
           base: ''
-        scripts: !map {}
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-portal-look
       room:
         meta:
           id: room-none
@@ -92,6 +104,10 @@ worlds:
         items: []
         portals: []
         scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-room-look
           signal.step:
             data: !map {}
             name:

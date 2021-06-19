@@ -1,68 +1,48 @@
-import { mustExist } from '@apextoaster/js-utils';
+import { doesExist, mustExist } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { Actor, isActor } from '../../../model/entity/Actor';
-import { isItem } from '../../../model/entity/Item';
-import { isPortal } from '../../../model/entity/Portal';
-import { isRoom } from '../../../model/entity/Room';
+import { isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { getKey } from '../../../util/collection/map';
+import { SIGNAL_LOOK, STAT_HEALTH } from '../../../util/constants';
 import { createFuzzyMatcher } from '../../../util/entity/match';
-import { SignalActorLook } from '../../signal/actor/ActorLook';
-import { SignalItemLook } from '../../signal/item/ItemLook';
-import { SignalPortalLook } from '../../signal/portal/PortalLook';
-import { SignalRoomLook } from '../../signal/room/RoomLook';
 
 export async function VerbActorLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
     throw new ScriptTargetError('script target must be an actor');
   }
 
+  const room = mustExist(context.room);
+  const sourceContext = {
+    ...context,
+    actor: this,
+  };
+
   const command = mustExist(context.command);
   if (command.target === '') {
-    return SignalRoomLook.call(this, context);
-  } else {
-    return ActorLookTarget.call(this, context, command.target);
-  }
-}
+    const health = getKey(this.stats, STAT_HEALTH, 0);
+    await context.state.show('actor.step.look.room.you', { actor: this });
+    await context.state.show('actor.step.look.room.health', { actor: this, health });
 
-export async function ActorLookTarget(this: Actor, context: ScriptContext, targetName: string): Promise<void> {
-  const command = mustExist(context.command);
+    for (const item of this.items) {
+      await context.script.invoke(item, SIGNAL_LOOK, sourceContext);
+    }
+
+    return context.script.invoke(room, SIGNAL_LOOK, sourceContext);
+  }
+
   const results = await context.state.find({
     meta: {
-      name: targetName,
+      name: command.target,
     },
     matchers: createFuzzyMatcher(),
   });
 
   const target = results[command.index];
 
-  if (isRoom(target)) {
-    return SignalRoomLook.call(this, {
-      ...context,
-      room: target,
-    });
+  if (doesExist(target)) {
+    return context.script.invoke(target, SIGNAL_LOOK, sourceContext);
   }
 
-  if (isActor(target)) {
-    return SignalActorLook.call(this, {
-      ...context,
-      actor: target,
-    });
-  }
-
-  if (isItem(target)) {
-    return SignalItemLook.call(this, {
-      ...context,
-      item: target,
-    });
-  }
-
-  if (isPortal(target)) {
-    return SignalPortalLook.call(this, {
-      ...context,
-      portal: target,
-    });
-  }
-
-  await context.state.show('actor.step.look.none');
+  return context.state.show('actor.step.look.none');
 }

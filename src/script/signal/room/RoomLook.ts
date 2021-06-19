@@ -1,52 +1,29 @@
-import { mustExist } from '@apextoaster/js-utils';
-
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { WorldEntity } from '../../../model/entity';
-import { isActor } from '../../../model/entity/Actor';
+import { isRoom } from '../../../model/entity/Room';
 import { ScriptContext } from '../../../service/script';
-import { getKey } from '../../../util/collection/map';
-import { STAT_HEALTH } from '../../../util/constants';
-import { SignalActorLook } from '../actor/ActorLook';
-import { SignalItemLook } from '../item/ItemLook';
-import { SignalPortalLook } from '../portal/PortalLook';
+import { SIGNAL_LOOK } from '../../../util/constants';
 
 export async function SignalRoomLook(this: WorldEntity, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('target must be actor');
+  if (!isRoom(this)) {
+    throw new ScriptTargetError('target must be a room');
   }
 
-  const room = mustExist(context.room);
-  const health = getKey(this.stats, STAT_HEALTH, 0);
-  await context.state.show('actor.step.look.room.you', { actor: this });
-  await context.state.show('actor.step.look.room.health', { actor: this, health });
-  await context.state.show('actor.step.look.room.seen', { room });
+  await context.state.show('actor.step.look.room.seen', { room: this });
 
-  for (const item of this.items) {
-    await context.state.show('actor.step.look.room.inventory', { item });
-  }
-
-  for (const actor of room.actors) {
-    if (actor === this) {
+  for (const actor of this.actors) {
+    if (actor === context.actor) {
       continue;
     }
 
-    await SignalActorLook.call(this, {
-      ...context,
-      actor,
-    });
+    await context.script.invoke(actor, SIGNAL_LOOK, context);
   }
 
-  for (const item of room.items) {
-    await SignalItemLook.call(this, {
-      ...context,
-      item,
-    });
+  for (const item of this.items) {
+    await context.script.invoke(item, SIGNAL_LOOK, context);
   }
 
-  for (const portal of room.portals) {
-    await SignalPortalLook.call(this, {
-      ...context,
-      portal,
-    });
+  for (const portal of this.portals) {
+    await context.script.invoke(portal, SIGNAL_LOOK, context);
   }
 }

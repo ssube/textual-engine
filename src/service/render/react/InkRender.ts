@@ -40,7 +40,9 @@ export class InkRender extends BaseReactRender implements RenderService {
       shortcuts: this.shortcuts,
       show: {
         shortcuts: this.config.shortcuts,
+        status: this.config.status,
       },
+      stats: this.stats,
       step: this.step,
     });
 

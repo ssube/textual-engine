@@ -219,6 +219,9 @@ worlds:
               health:
                 max: 50
                 min: 30
+              stamina:
+                max: 5
+                min: 1
             scripts: !map {}
           mods:
             - chance: 50
@@ -247,6 +250,9 @@ worlds:
               health:
                 max: 20
                 min: 14
+              stamina:
+                max: 5
+                min: 1
             scripts: !map {}
           mods:
             - chance: 50

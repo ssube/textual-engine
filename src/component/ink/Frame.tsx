@@ -7,6 +7,7 @@ import { Input } from './Input';
 import { Output } from './Output';
 import { Quit } from './Quit';
 import { Shortcuts } from './Shortcuts';
+import { Status } from './Status';
 
 const { useState } = React;
 
@@ -33,6 +34,9 @@ export const Frame = (props: FrameProps): JSX.Element => {
           onChange={setLine}
           onLine={sendLine}
         />}
+      </Box>
+      <Box height={1}>
+        <Status stats={props.stats} />
       </Box>
     </Box>
     <Box marginLeft={2}>

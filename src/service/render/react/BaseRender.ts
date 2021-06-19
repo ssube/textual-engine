@@ -3,7 +3,7 @@ import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
-import { ShortcutData, ShortcutItem } from '../../../component/shared';
+import { ShortcutData, ShortcutItem, StatusItem } from '../../../component/shared';
 import { ConfigError } from '../../../error/ConfigError';
 import { Entity } from '../../../model/entity/Base';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
@@ -28,12 +28,17 @@ import { StateStepEvent } from '../../state/events';
 
 export interface BaseRenderConfig {
   shortcuts: boolean;
+  status: boolean;
 }
 
 export const BASE_RENDER_SCHEMA: JSONSchemaType<BaseRenderConfig> = {
   type: 'object',
   properties: {
     shortcuts: {
+      type: 'boolean',
+      default: true,
+    },
+    status: {
       type: 'boolean',
       default: true,
     },
@@ -56,6 +61,7 @@ export abstract class BaseReactRender implements RenderService {
   protected quit: boolean;
   protected shortcuts: ShortcutData;
   protected step: StepResult;
+  protected stats: Array<StatusItem>;
 
   protected queueUpdate: ClearResult;
 
@@ -85,6 +91,7 @@ export abstract class BaseReactRender implements RenderService {
       portals: [],
       verbs: [],
     };
+    this.stats = [];
     this.step = {
       turn: 0,
       time: 0,
@@ -153,12 +160,17 @@ export abstract class BaseReactRender implements RenderService {
     this.shortcuts.actors = result.room.actors.filter((it) => it.meta.id !== result.pid).map(extractShortcut);
     this.shortcuts.items = result.room.items.map(extractShortcut);
     this.shortcuts.portals = result.room.portals.map((it) => ({
-      id: `${it.groupSource} ${it.meta.name}`,
+      id: it.meta.id,
       name: `${it.groupSource} ${it.meta.name}`,
     }));
     this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
       id: it,
       name: it,
+    }));
+
+    this.stats = Array.from(result.actor.stats.entries()).map((it) => ({
+      name: it[0],
+      value: it[1],
     }));
 
     this.setPrompt(`turn ${this.step.turn}`);

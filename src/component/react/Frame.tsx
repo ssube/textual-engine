@@ -4,6 +4,7 @@ import { HISTORY_SIZE } from '../../util/constants';
 import { FrameProps } from '../shared';
 import { Input } from './Input';
 import { Output } from './Output';
+import { Status } from './Status';
 import { Quit } from './Quit';
 import { Shortcuts } from './Shortcuts';
 
@@ -30,6 +31,7 @@ export const Frame = (props: FrameProps): JSX.Element => {
         onLine={sendLine}
       /> }
     </div>
+    {props.show.status && <Status stats={props.stats} />}
     {props.show.shortcuts && <Shortcuts {...props.shortcuts} onSelect={(id) => setLine(`${line} ${id}`)} />}
   </div>;
 };

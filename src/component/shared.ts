@@ -25,7 +25,9 @@ export interface FrameProps {
   shortcuts: ShortcutData;
   show: {
     shortcuts: boolean;
+    status: boolean;
   };
+  stats: Array<StatusItem>;
   step: StepResult;
 }
 
@@ -58,7 +60,7 @@ export type ShortcutKeys = FilterKeys<ShortcutProps, Array<unknown>>;
 
 export interface StatusItem {
   name: string;
-  value: string;
+  value: number;
 }
 
 export interface StatusProps {

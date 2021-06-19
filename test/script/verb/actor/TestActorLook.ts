@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { NullLogger } from 'noicejs';
-import { createStubInstance, match } from 'sinon';
+import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
@@ -88,8 +88,55 @@ describe('actor look scripts', () => {
   });
 
   describe('actor look command with target', () => {
-    xit('should describe the target actor');
-    xit('should describe the target item');
-    xit('should note when actors are dead');
+    it('should describe the target', async () => {
+      const script = createStubInstance(LocalScriptService);
+      const stateHelper = getStubHelper();
+      const transfer = testTransfer();
+
+      const actor = makeTestActor('bar', '', '');
+      const room = makeTestRoom('foo', '', '', [actor], []);
+      (stateHelper.find as SinonStub).returns(Promise.resolve([actor]));
+
+      const context: ScriptContext = {
+        command: makeCommand(VERB_LOOK, actor.meta.id),
+        data: new Map(),
+        logger: NullLogger.global,
+        random: createStubInstance(MathRandomGenerator),
+        room,
+        script,
+        state: stateHelper,
+        transfer,
+      };
+
+      await VerbActorLook.call(actor, context);
+
+      expect(script.invoke).to.have.been.calledWithMatch(actor, SIGNAL_LOOK, match.object);
+    });
+
+    it('should warn when the target does not exist', async () => {
+      const script = createStubInstance(LocalScriptService);
+      const stateHelper = getStubHelper();
+      const transfer = testTransfer();
+
+      const actor = makeTestActor('bar', '', '');
+      const room = makeTestRoom('foo', '', '', [actor], []);
+      (stateHelper.find as SinonStub).returns(Promise.resolve([]));
+
+      const context: ScriptContext = {
+        command: makeCommand(VERB_LOOK, 'none'),
+        data: new Map(),
+        logger: NullLogger.global,
+        random: createStubInstance(MathRandomGenerator),
+        room,
+        script,
+        state: stateHelper,
+        transfer,
+      };
+
+      await VerbActorLook.call(actor, context);
+
+      expect(stateHelper.show).to.have.been.calledWith('actor.step.look.none');
+      expect(script.invoke).to.have.callCount(0);
+    });
   });
 });

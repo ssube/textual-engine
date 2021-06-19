@@ -552,6 +552,7 @@ export class LocalStateService implements StateService {
   }
   // #endregion meta commands
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   public async step(): Promise<StepResult> {
     if (isNil(this.state)) {
       throw new NotInitializedError('state has not been initialized');

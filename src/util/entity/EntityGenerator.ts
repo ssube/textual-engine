@@ -321,6 +321,7 @@ export class StateEntityGenerator {
     return selected;
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   public async populateRoom(firstRoom: Room, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
     if (max <= 0) {
       return [];

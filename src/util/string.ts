@@ -1,5 +1,7 @@
 import { doesExist } from '@apextoaster/js-utils';
 
+import { SPLIT_HEAD_TAIL } from './constants';
+
 /**
  * String has non-whitespace characters.
  */
@@ -26,7 +28,7 @@ export function splitPath(path: string): {
     return { path };
   }
 
-  const [protocol, rest] = path.split('://', 2);
+  const [protocol, rest] = path.split('://', SPLIT_HEAD_TAIL);
   return {
     protocol,
     path: rest,

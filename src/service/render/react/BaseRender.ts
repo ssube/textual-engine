@@ -9,6 +9,7 @@ import { Entity } from '../../../model/entity/Base';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { onceEvent } from '../../../util/async/event';
 import { ClearResult, debounce } from '../../../util/async/Throttle';
+import { remove } from '../../../util/collection/array';
 import {
   COMMON_STATS,
   EVENT_ACTOR_OUTPUT,
@@ -158,7 +159,7 @@ export abstract class BaseReactRender implements RenderService {
       };
     }
 
-    this.shortcuts.actors = result.room.actors.filter((it) => it.meta.id !== result.pid).map(extractShortcut);
+    this.shortcuts.actors = remove(result.room.actors, (it) => it.meta.id === result.pid).map(extractShortcut);
     this.shortcuts.items = result.room.items.map(extractShortcut);
     this.shortcuts.portals = result.room.portals.map((it) => ({
       id: it.meta.id,

@@ -8,6 +8,8 @@ export interface JoinOptions {
   random: RandomGenerator;
 }
 
+const LEVEL_EVEN_ODD = 2;
+
 /**
  * A string building construct that:
  *
@@ -30,7 +32,7 @@ export class JoinChain {
 
   public render(chain: InputChain, depth = 0): string {
     if (Array.isArray(chain)) {
-      const level = depth % 2;
+      const level = depth % LEVEL_EVEN_ODD;
       if (level === 0) {
         return this.renderAnd(chain, depth);
       } else {

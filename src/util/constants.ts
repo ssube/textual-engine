@@ -5,6 +5,9 @@ export const PORTAL_DEPTH = 4;
 export const SPLIT_HEAD_TAIL = 2;
 export const TEMPLATE_CHANCE = 100;
 
+// behaviors
+export const BEHAVIOR_WANDER = 0.25;
+
 // render delays
 // TODO: should be config
 export const RENDER_DELAY = 50; // as long as possible to combine repeat renders

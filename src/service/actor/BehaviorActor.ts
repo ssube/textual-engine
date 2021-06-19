@@ -7,7 +7,14 @@ import { Actor, ActorSource } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module';
 import { randomItem } from '../../util/collection/array';
-import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
+import {
+  BEHAVIOR_WANDER,
+  EVENT_ACTOR_COMMAND,
+  EVENT_STATE_ROOM,
+  VERB_HIT,
+  VERB_MOVE,
+  VERB_WAIT,
+} from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
 import { EventBus } from '../event';
 import { RandomGenerator } from '../random';
@@ -65,7 +72,7 @@ export class BehaviorActorService implements ActorService {
 
     // 25% chance to move
     const portals = event.room.portals.filter((it) => it.dest.length > 0);
-    if (behavior < 0.25 && portals.length > 0) {
+    if (behavior < BEHAVIOR_WANDER && portals.length > 0) {
       const portal = randomItem(portals, this.random);
       this.logger.debug({
         event,

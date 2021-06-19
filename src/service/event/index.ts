@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/unified-signatures */
 import { EventEmitter } from 'events';
+import { Service } from '..';
 
 import { ErrorHandler, EventHandler } from '../../util/async/event';
 import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent, ActorRoomEvent } from '../actor/events';
@@ -8,10 +9,9 @@ import { LocaleBundleEvent } from '../locale/events';
 import { RenderOutputEvent } from '../render/events';
 import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent, StateStepEvent } from '../state/events';
 
-/**
- * @todo find a better type, probably `Service`, so the bus can reach out to groups and request they stop themselves
- */
-export type EventGroup = any;
+export type EventGroup = Service;
+
+export type AnyHandler = ErrorHandler | EventHandler<void> | EventHandler<unknown>;
 
 export interface EventBus extends EventEmitter {
   // global events

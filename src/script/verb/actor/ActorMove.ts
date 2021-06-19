@@ -6,7 +6,7 @@ import { isPortal } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { ShowVolume } from '../../../util/actor';
-import { VERB_LOOK } from '../../../util/constants';
+import { SIGNAL_LOOK, VERB_LOOK } from '../../../util/constants';
 import { indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -64,6 +64,6 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   if (this.source === ActorSource.PLAYER) {
     context.logger.debug({ actor: this, room: targetRoom }, 'player entered room');
     await context.state.enter({ actor: this, room: targetRoom });
-    await context.script.invoke(this, VERB_LOOK, context);
+    await context.script.invoke(targetRoom, SIGNAL_LOOK, context);
   }
 }

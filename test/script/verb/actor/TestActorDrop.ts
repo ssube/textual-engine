@@ -4,7 +4,7 @@ import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
-import { VerbActorDrop } from '../../../../src/script/verb/ActorDrop';
+import { VerbActorDrop } from '../../../../src/script/verb/actor/ActorDrop';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';

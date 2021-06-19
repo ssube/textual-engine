@@ -3,7 +3,7 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { VerbActorTake } from '../../../../src/script/verb/ActorTake';
+import { VerbActorTake } from '../../../../src/script/verb/actor/ActorTake';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';

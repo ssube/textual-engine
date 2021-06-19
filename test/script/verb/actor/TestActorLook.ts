@@ -4,7 +4,7 @@ import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
-import { VerbActorLook } from '../../../../src/script/verb/ActorLook';
+import { VerbActorLook } from '../../../../src/script/verb/actor/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';

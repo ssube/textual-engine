@@ -32,18 +32,19 @@ export { NodeModule } from './module/NodeModule';
 
 export { SignalActorGet } from './script/signal/actor/ActorGet';
 export { SignalActorHit } from './script/signal/actor/ActorHit';
+export { SignalActorLook } from './script/signal/actor/ActorLook';
 export { SignalActorStep } from './script/signal/actor/ActorStep';
 export { SignalItemStep } from './script/signal/item/ItemStep';
 export { SignalItemUse } from './script/signal/item/ItemUse';
 export { SignalRoomStep } from './script/signal/room/RoomStep';
 
-export { VerbActorDrop } from './script/verb/ActorDrop';
-export { VerbActorHit } from './script/verb/ActorHit';
-export { VerbActorLook } from './script/verb/ActorLook';
-export { VerbActorMove } from './script/verb/ActorMove';
-export { VerbActorTake } from './script/verb/ActorTake';
-export { VerbActorUse } from './script/verb/ActorUse';
-export { VerbActorWait } from './script/verb/ActorWait';
+export { VerbActorDrop } from './script/verb/actor/ActorDrop';
+export { VerbActorHit } from './script/verb/actor/ActorHit';
+export { VerbActorLook } from './script/verb/actor/ActorLook';
+export { VerbActorMove } from './script/verb/actor/ActorMove';
+export { VerbActorTake } from './script/verb/actor/ActorTake';
+export { VerbActorUse } from './script/verb/actor/ActorUse';
+export { VerbActorWait } from './script/verb/actor/ActorWait';
 
 export { Service } from './service/index';
 

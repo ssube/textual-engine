@@ -8,7 +8,7 @@ import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Act
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
 import { CoreModule } from '../../../../src/module/CoreModule';
 import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
-import { ActorLookTarget } from '../../../../src/script/verb/ActorLook';
+import { ActorLookTarget } from '../../../../src/script/verb/actor/ActorLook';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';

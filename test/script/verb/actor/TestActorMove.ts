@@ -7,7 +7,7 @@ import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { ActorSource } from '../../../../src/model/entity/Actor';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
-import { VerbActorMove } from '../../../../src/script/verb/ActorMove';
+import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';

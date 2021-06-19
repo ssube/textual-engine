@@ -13,47 +13,47 @@ worlds:
           signal.get:
             data: !map {}
             name:
-              base: actor-get
+              base: signal-actor-get
           signal.hit:
             data: !map {}
             name:
-              base: actor-hit
+              base: signal-actor-hit
           signal.step:
             data: !map {}
             name:
-              base: actor-step
+              base: signal-actor-step
           verbs.common.drop:
             data: !map {}
             name:
-              base: verb-drop
+              base: verb-actor-drop
           verbs.common.hit:
             data: !map {}
             name:
-              base: verb-hit
+              base: verb-actor-hit
           verbs.common.look:
             data: !map {}
             name:
-              base: verb-look
+              base: verb-actor-look
           verbs.common.move:
             data: !map {}
             name:
-              base: verb-move
+              base: verb-actor-move
           verbs.common.take:
             data: !map {}
             name:
-              base: verb-take
+              base: verb-actor-take
           verbs.common.use:
             data: !map {}
             name:
-              base: verb-use
+              base: verb-actor-use
           verbs.common.wait:
             data: !map {}
             name:
-              base: verb-wait
+              base: verb-actor-wait
           verbs.world.swing:
             data: !map {}
             name:
-              base: verb-hit
+              base: verb-actor-hit
       item:
         meta:
           id: item-none
@@ -91,7 +91,11 @@ worlds:
         actors: []
         items: []
         portals: []
-        scripts: !map {}
+        scripts: !map
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-room-step
     locale:
       bundles:
         en:
@@ -418,11 +422,7 @@ worlds:
             portals:
               - id: window-west
               - id: door-east
-            scripts: !map
-              signal.step:
-                data: !map {}
-                name:
-                  base: room-step
+            scripts: !map {}
         - base:
             meta:
               id: room-cave
@@ -439,11 +439,7 @@ worlds:
             portals:
               - id: door-west
               - id: window-east
-            scripts: !map
-              signal.step:
-                data: !map {}
-                name:
-                  base: room-step
+            scripts: !map {}
         - base:
             meta:
               id: room-marsh
@@ -458,10 +454,6 @@ worlds:
                 chance: 50
               - id: window-east
             scripts: !map
-              signal.step:
-                data: !map {}
-                name:
-                  base: room-step
               verbs.common.move:
                 data: !map {}
                 name:
@@ -469,4 +461,4 @@ worlds:
               verbs.world.slog:
                 data: !map {}
                 name:
-                  base: verb-move
+                  base: verb-actor-move

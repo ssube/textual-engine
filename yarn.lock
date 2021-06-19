@@ -1759,6 +1759,18 @@ component-emitter@^1.2.1:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/component-emitter/-/component-emitter-1.3.0.tgz#16e4070fba8ae29b679f2215853ee181ab2eabc0"
   integrity sha512-Rd3se6QB+sO1TwqZjscQrurpEPIfO0/yYnSin6Q/rD3mOutHvUrCAhJub3r90uNb+SESBuE0QYoB90YdfatsRg==
 
+compromise-numbers@^1.3.0:
+  version "1.3.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/compromise-numbers/-/compromise-numbers-1.3.0.tgz#6c6e7d771927ea66199ffe29b9afe4ad9817227a"
+  integrity sha512-YFlVCKy/vPQpHgW2eeZkS6I0JzAKXCJYs3zsaHyFN0oqjkTtio3oEmiFKZ/nhWJwRXnZvVYBu8nxWLi6wzSS4g==
+
+compromise@^13.11.2:
+  version "13.11.2"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/compromise/-/compromise-13.11.2.tgz#4bc2dbe615fbc6d5c9f3cafe61327c61f427e10a"
+  integrity sha512-sAASylAtghacJm3tTIF2AyekjxNMGyWaIsQ3sDdJT1UcIa6mC7VbNLQBI3eSBitf+LwrvZTgrY1nWOetY4SScw==
+  dependencies:
+    efrt-unpack "2.2.0"
+
 concat-map@0.0.1:
   version "0.0.1"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
@@ -2220,6 +2232,11 @@ dtrace-provider@~0.8:
   integrity sha512-b7Z7cNtHPhH9EJhNNbbeqTcXB8LGFFZhq1PGgEvpeHlzd36bhbdTWoE/Ba/YguqpBSlAPKnARWhVlhunCMwfxg==
   dependencies:
     nan "^2.14.0"
+
+efrt-unpack@2.2.0:
+  version "2.2.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/efrt-unpack/-/efrt-unpack-2.2.0.tgz#b05dbec0fb8cb346a27840e00c969df9c72fee52"
+  integrity sha512-9xUSSj7qcUxz+0r4X3+bwUNttEfGfK5AH+LVa1aTpqdAfrN5VhROYCfcF+up4hp5OL7IUKcZJJrzAGipQRDoiQ==
 
 electron-to-chromium@^1.3.723:
   version "1.3.728"

@@ -4,14 +4,15 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { makeCommand } from '../../../../src/model/Command';
 import { ActorSource } from '../../../../src/model/entity/Actor';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
-import { VerbActorMove } from '../../../../src/script/verb/ActorMove';
+import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestActor, makeTestCommand, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
@@ -23,7 +24,7 @@ describe('actor move scripts', () => {
       const transfer = testTransfer();
 
       const context: ScriptContext = {
-        command: makeTestCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT, ''),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -51,7 +52,7 @@ describe('actor move scripts', () => {
       room.portals.push(portal);
 
       const context: ScriptContext = {
-        command: makeTestCommand(VERB_MOVE, portal.meta.name),
+        command: makeCommand(VERB_MOVE, portal.meta.name),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -86,7 +87,7 @@ describe('actor move scripts', () => {
       const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
       room.portals.push(portal);
       const context: ScriptContext = {
-        command: makeTestCommand(VERB_MOVE, portal.groupSource),
+        command: makeCommand(VERB_MOVE, portal.groupSource),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -121,7 +122,7 @@ describe('actor move scripts', () => {
       const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
       room.portals.push(portal);
       const context: ScriptContext = {
-        command: makeTestCommand(VERB_MOVE, `${portal.groupSource} ${portal.meta.name}`),
+        command: makeCommand(VERB_MOVE, `${portal.groupSource} ${portal.meta.name}`),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -154,7 +155,7 @@ describe('actor move scripts', () => {
       const actor = makeTestActor('', '', '');
       const room = makeTestRoom('', '', '', [actor], []);
       const context: ScriptContext = {
-        command: makeTestCommand(VERB_MOVE, 'door'),
+        command: makeCommand(VERB_MOVE, 'door'),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -182,7 +183,7 @@ describe('actor move scripts', () => {
       room.portals.push(portal);
 
       const context: ScriptContext = {
-        command: makeTestCommand(VERB_MOVE, `${portal.groupSource} ${portal.meta.name}`),
+        command: makeCommand(VERB_MOVE, `${portal.groupSource} ${portal.meta.name}`),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -211,7 +212,7 @@ describe('actor move scripts', () => {
       room.portals.push(portal);
 
       const context: ScriptContext = {
-        command: makeTestCommand(VERB_MOVE, portal.meta.name),
+        command: makeCommand(VERB_MOVE, portal.meta.name),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

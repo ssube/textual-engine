@@ -3,8 +3,9 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { makeCommand } from '../../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
-import { VerbActorDrop } from '../../../../src/script/verb/ActorDrop';
+import { VerbActorDrop } from '../../../../src/script/verb/actor/ActorDrop';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
@@ -21,12 +22,7 @@ describe('actor drop scripts', () => {
       const transfer = testTransfer();
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_WAIT,
-        },
+        command: makeCommand(VERB_WAIT, ''),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -66,12 +62,7 @@ describe('actor drop scripts', () => {
         type: ACTOR_TYPE,
       };
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: 'foo',
-          verb: VERB_DROP,
-        },
+        command: makeCommand(VERB_DROP, ''),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -114,12 +105,7 @@ describe('actor drop scripts', () => {
         type: ACTOR_TYPE,
       };
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: 'bob',
-          verb: VERB_DROP,
-        },
+        command: makeCommand(VERB_DROP, 'bob'),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -162,12 +148,7 @@ describe('actor drop scripts', () => {
         type: ACTOR_TYPE,
       };
       const context: ScriptContext = {
-        command: {
-          index: 1,
-          input: '',
-          target: 'foo',
-          verb: VERB_DROP,
-        },
+        command: makeCommand(VERB_DROP, 'foo', 1),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -205,12 +186,7 @@ describe('actor drop scripts', () => {
         type: ACTOR_TYPE,
       };
       const context: ScriptContext = {
-        command: {
-          index: 1,
-          input: '',
-          target: 'foo',
-          verb: VERB_DROP,
-        },
+        command: makeCommand(VERB_DROP, 'foo', 1),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

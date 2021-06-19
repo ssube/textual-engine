@@ -1,11 +1,8 @@
 import { constructorName } from '@apextoaster/js-utils';
 import { createLogger, LoggerOptions, stdSerializers } from 'bunyan';
 import { Logger } from 'noicejs';
-import { Entity } from '../model/entity/Base';
 
-export function entityMeta(entity: Entity): string {
-  return `${entity.meta.id} - ${entity.meta.name}`;
-}
+import { entityMeta } from '../util/logger';
 
 /**
  * Attach bunyan to the Logger. Does very little, since bunyan matches the Logger interface.
@@ -16,12 +13,12 @@ export class BunyanLogger {
       ...options,
       serializers: {
         ...stdSerializers,
-        // actor: entityMeta,
+        actor: entityMeta,
         container: constructorName,
-        // item: entityMeta,
+        item: entityMeta,
         logger: constructorName,
         module: constructorName,
-        // room: entityMeta,
+        room: entityMeta,
       },
     });
   }

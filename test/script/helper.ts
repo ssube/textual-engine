@@ -1,6 +1,6 @@
 import { stub } from 'sinon';
 
-import { StateEntityTransfer } from '../../src/util/state/EntityTransfer';
+import { StateEntityTransfer } from '../../src/util/entity/EntityTransfer';
 
 export function testTransfer(): StateEntityTransfer {
   return {

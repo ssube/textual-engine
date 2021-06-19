@@ -32,18 +32,19 @@ export { NodeModule } from './module/NodeModule';
 
 export { SignalActorGet } from './script/signal/actor/ActorGet';
 export { SignalActorHit } from './script/signal/actor/ActorHit';
+export { SignalActorLook } from './script/signal/actor/ActorLook';
 export { SignalActorStep } from './script/signal/actor/ActorStep';
 export { SignalItemStep } from './script/signal/item/ItemStep';
 export { SignalItemUse } from './script/signal/item/ItemUse';
 export { SignalRoomStep } from './script/signal/room/RoomStep';
 
-export { VerbActorDrop } from './script/verb/ActorDrop';
-export { VerbActorHit } from './script/verb/ActorHit';
-export { VerbActorLook } from './script/verb/ActorLook';
-export { VerbActorMove } from './script/verb/ActorMove';
-export { VerbActorTake } from './script/verb/ActorTake';
-export { VerbActorUse } from './script/verb/ActorUse';
-export { VerbActorWait } from './script/verb/ActorWait';
+export { VerbActorDrop } from './script/verb/actor/ActorDrop';
+export { VerbActorHit } from './script/verb/actor/ActorHit';
+export { VerbActorLook } from './script/verb/actor/ActorLook';
+export { VerbActorMove } from './script/verb/actor/ActorMove';
+export { VerbActorTake } from './script/verb/actor/ActorTake';
+export { VerbActorUse } from './script/verb/actor/ActorUse';
+export { VerbActorWait } from './script/verb/actor/ActorWait';
 
 export { Service } from './service/index';
 
@@ -100,13 +101,13 @@ export { ShowVolume, StateSource, showCheck } from './util/actor/index';
 
 export { TEMPLATE_CHANCE, META_VERBS, COMMON_VERBS, EVENT_NAMES } from './util/constants';
 export { Singleton, SingletonConstructor } from './util/container';
-export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, createFuzzyMatcher, createStrictMatcher } from './util/entity';
+export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, createFuzzyMatcher, createStrictMatcher } from './util/entity/match';
 export { makeConstStringSchema } from './util/schema';
 export { hasText, matchIdSegments, splitPath } from './util/string';
 export { Immutable, KeyList, Filter, FilterBase, FilterKeys, Replace, ScriptData, ScriptMap, ScriptRef, StatMap } from './util/types';
 
 export { CompletionSet } from './util/async/CompletionSet';
-export { debounce } from './util/async/Debounce';
+export { debounce, throttle } from './util/async/Throttle';
 export { WatchableMap } from './util/async/WatchableMap';
 export { onceEvent, onceWithRemove, ErrorHandler, EventHandler, TypedEmitter, RemoveResult } from './util/async/event';
 
@@ -118,10 +119,10 @@ export { getSignalScripts, getVerbScripts, mergeVerbScripts, VerbTarget } from '
 
 export { ServiceManager } from './util/service/ServiceManager';
 
-export { StateEntityGenerator } from './util/state/EntityGenerator';
-export { StateEntityTransfer, ActorTransfer, ItemTransfer } from './util/state/EntityTransfer';
-export { SearchFilter, StateMatchers, findContainer, findMatching, findRoom } from './util/state/search';
+export { StateEntityGenerator } from './util/entity/EntityGenerator';
+export { StateEntityTransfer, ActorTransfer, ItemTransfer } from './util/entity/EntityTransfer';
+export { SearchFilter, StateMatchers, findContainer, findMatching, findRoom } from './util/entity/find';
 
 export { JoinChain, JoinOptions } from './util/template/JoinChain';
 export { SplitOptions, splitChain } from './util/template/SplitChain';
-export { findByBaseId as findByTemplateId, InputChain } from './util/template/index';
+export { findByBaseId, InputChain } from './util/template/index';

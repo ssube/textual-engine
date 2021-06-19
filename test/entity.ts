@@ -1,7 +1,6 @@
-import { Command, Portal } from '../src/lib';
 import { Actor, ACTOR_TYPE, ActorSource } from '../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../src/model/entity/Item';
-import { PortalLinkage, PORTAL_TYPE } from '../src/model/entity/Portal';
+import { PORTAL_TYPE, PortalLinkage, Portal } from '../src/model/entity/Portal';
 import { Room, ROOM_TYPE } from '../src/model/entity/Room';
 import { Template } from '../src/model/mapped/Template';
 import { Metadata } from '../src/model/Metadata';
@@ -9,14 +8,6 @@ import { WorldState } from '../src/model/world/State';
 import { WorldTemplate } from '../src/model/world/Template';
 import { TEMPLATE_CHANCE } from '../src/util/constants';
 
-export function makeTestCommand(verb: string, target: string, index = 0): Command {
-  return {
-    index,
-    input: `${verb} ${target}`,
-    target,
-    verb,
-  };
-}
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {
     source: ActorSource.BEHAVIOR,
@@ -47,7 +38,14 @@ export function makeTestItem(id: string, name: string, template: string): Item {
   };
 }
 
-export function makeTestRoom(id: string, name: string, template: string, actors: Array<Actor>, items: Array<Item>): Room {
+export function makeTestRoom(
+  id: string,
+  name: string,
+  template: string,
+  actors: Array<Actor> = [],
+  items: Array<Item> = [],
+  portals: Array<Portal> = []
+): Room {
   return {
     actors,
     items,
@@ -57,7 +55,7 @@ export function makeTestRoom(id: string, name: string, template: string, actors:
       name,
       template,
     },
-    portals: [],
+    portals,
     scripts: new Map(),
     type: ROOM_TYPE,
   };
@@ -76,6 +74,7 @@ export function makeTestPortal(id: string, name: string, source: string, target:
     groupKey: name,
     groupSource: source,
     groupTarget: target,
+    scripts: new Map(),
     type: PORTAL_TYPE,
   };
 }

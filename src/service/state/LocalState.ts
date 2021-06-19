@@ -1,15 +1,14 @@
 /* eslint-disable max-lines */
-import { doesExist, isNil, mustExist, mustFind, NotFoundError } from '@apextoaster/js-utils';
+import { doesExist, isNil, mustExist, mustFind } from '@apextoaster/js-utils';
 import { Container, Inject, Logger } from 'noicejs';
 
 import { StateService, StepResult } from '.';
-import { ActorRoomError } from '../../error/ActorRoomError';
 import { NotInitializedError } from '../../error/NotInitializedError';
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Command } from '../../model/Command';
 import { EntityForType, WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../model/entity/Actor';
-import { isRoom, Room } from '../../model/entity/Room';
+import { Room } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
@@ -47,18 +46,18 @@ import {
   SPLIT_HEAD_TAIL,
   VERB_PREFIX,
 } from '../../util/constants';
-import { getVerbScripts } from '../../util/script';
-import { makeServiceLogger } from '../../util/service';
-import { debugState, graphState } from '../../util/state/debug';
-import { StateEntityGenerator } from '../../util/state/EntityGenerator';
+import { debugState, graphState } from '../../util/entity/debug';
+import { StateEntityGenerator } from '../../util/entity/EntityGenerator';
 import {
   ActorTransfer,
   isActorTransfer,
   isItemTransfer,
   ItemTransfer,
   StateEntityTransfer,
-} from '../../util/state/EntityTransfer';
-import { findMatching, findRoom, SearchFilter } from '../../util/state/search';
+} from '../../util/entity/EntityTransfer';
+import { findMatching, findRoom, SearchFilter } from '../../util/entity/find';
+import { getVerbScripts } from '../../util/script';
+import { makeServiceLogger } from '../../util/service';
 import { findByBaseId } from '../../util/template';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
@@ -191,22 +190,20 @@ export class LocalStateService implements StateService {
         },
       });
 
-      if (!isRoom(room)) {
-        throw new ActorRoomError('room cannot be found for existing actor');
-      }
-
       this.event.emit(EVENT_STATE_JOIN, {
         actor: existingActor,
         pid: event.pid,
+        room,
+      });
+
+      await this.stepEnter({
+        actor: existingActor,
         room,
       });
     } else {
       // pick a starting actor and create it
       const actorRef = randomItem(world.start.actors, this.random);
       const actorTemplate = findByBaseId(world.templates.actors, actorRef.id);
-      if (isNil(actorTemplate)) {
-        throw new NotFoundError('invalid start actor');
-      }
 
       this.logger.debug({
         template: actorTemplate,
@@ -619,6 +616,17 @@ export class LocalStateService implements StateService {
               });
             }
           }
+
+          for (const portal of room.portals) {
+            if (seen.has(portal.meta.id) === false) {
+              seen.add(portal.meta.id);
+              await this.script.invoke(portal, SIGNAL_STEP, {
+                ...scope,
+                portal,
+                room,
+              });
+            }
+          }
         }
       }
     }
@@ -650,12 +658,13 @@ export class LocalStateService implements StateService {
 
     if (doesExist(target.actor) && target.actor.source === ActorSource.PLAYER) {
       const rooms = await generator.populateRoom(target.room, state.rooms, state.world.depth);
+      this.logger.debug({ rooms }, 'adding new rooms');
       if (rooms.length > 0) {
         state.rooms.push(...rooms);
       }
-
-      await this.broadcastChanges(state.rooms);
     }
+
+    await this.broadcastChanges(state.rooms);
   }
 
   public async stepFind<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>> {

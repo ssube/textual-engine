@@ -6,40 +6,48 @@ import { WorldEntity, WorldEntityType } from '../../model/entity';
 import { INJECT_LOGGER, InjectedOptions } from '../../module';
 import { SignalActorGet } from '../../script/signal/actor/ActorGet';
 import { SignalActorHit } from '../../script/signal/actor/ActorHit';
+import { SignalActorLook } from '../../script/signal/actor/ActorLook';
 import { SignalActorStep } from '../../script/signal/actor/ActorStep';
+import { SignalItemLook } from '../../script/signal/item/ItemLook';
 import { SignalItemStep } from '../../script/signal/item/ItemStep';
 import { SignalItemUse } from '../../script/signal/item/ItemUse';
+import { SignalPortalLook } from '../../script/signal/portal/PortalLook';
+import { SignalRoomLook } from '../../script/signal/room/RoomLook';
 import { SignalRoomStep } from '../../script/signal/room/RoomStep';
-import { VerbActorDrop } from '../../script/verb/ActorDrop';
-import { VerbActorHit } from '../../script/verb/ActorHit';
-import { VerbActorLook } from '../../script/verb/ActorLook';
-import { VerbActorMove } from '../../script/verb/ActorMove';
-import { VerbActorTake } from '../../script/verb/ActorTake';
-import { VerbActorUse } from '../../script/verb/ActorUse';
-import { VerbActorWait } from '../../script/verb/ActorWait';
+import { VerbActorDrop } from '../../script/verb/actor/ActorDrop';
+import { VerbActorHit } from '../../script/verb/actor/ActorHit';
+import { VerbActorLook } from '../../script/verb/actor/ActorLook';
+import { VerbActorMove } from '../../script/verb/actor/ActorMove';
+import { VerbActorTake } from '../../script/verb/actor/ActorTake';
+import { VerbActorUse } from '../../script/verb/actor/ActorUse';
+import { VerbActorWait } from '../../script/verb/actor/ActorWait';
+import { SearchFilter } from '../../util/entity/find';
 import { getSignalScripts, getVerbScripts } from '../../util/script';
 import { makeServiceLogger } from '../../util/service';
-import { SearchFilter } from '../../util/state/search';
 
 /**
  * Common scripts, built into the engine and always available.
  */
 const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   // signal scripts
-  ['actor-get', SignalActorGet],
-  ['actor-hit', SignalActorHit],
-  ['actor-step', SignalActorStep],
-  ['item-step', SignalItemStep],
-  ['item-use', SignalItemUse],
-  ['room-step', SignalRoomStep],
+  ['signal-actor-get', SignalActorGet],
+  ['signal-actor-hit', SignalActorHit],
+  ['signal-actor-look', SignalActorLook],
+  ['signal-actor-step', SignalActorStep],
+  ['signal-item-look', SignalItemLook],
+  ['signal-item-step', SignalItemStep],
+  ['signal-item-use', SignalItemUse],
+  ['signal-portal-look', SignalPortalLook],
+  ['signal-room-look', SignalRoomLook],
+  ['signal-room-step', SignalRoomStep],
   // verb scripts
-  ['verb-drop', VerbActorDrop],
-  ['verb-hit', VerbActorHit],
-  ['verb-look', VerbActorLook],
-  ['verb-move', VerbActorMove],
-  ['verb-take', VerbActorTake],
-  ['verb-use', VerbActorUse],
-  ['verb-wait', VerbActorWait],
+  ['verb-actor-drop', VerbActorDrop],
+  ['verb-actor-hit', VerbActorHit],
+  ['verb-actor-look', VerbActorLook],
+  ['verb-actor-move', VerbActorMove],
+  ['verb-actor-take', VerbActorTake],
+  ['verb-actor-use', VerbActorUse],
+  ['verb-actor-wait', VerbActorWait],
 ];
 
 @Inject(INJECT_LOGGER)

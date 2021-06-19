@@ -8,7 +8,7 @@ import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { Actor } from './Actor';
 import { Entity } from './Base';
 import { Item } from './Item';
-import { Portal, PORTAL_TEMPLATE_SCHEMA } from './Portal';
+import { Portal } from './Portal';
 
 export const ROOM_TYPE = 'room' as const;
 

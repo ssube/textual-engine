@@ -20,6 +20,7 @@
     "parsimmon": "^1.17.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-i18next": "^11.11.0",
     "seedrandom": "^3.0.5",
     "tslib": "^2.2.0",
     "yargs-parser": "^20.2.7"
@@ -39,6 +40,7 @@
     "@types/parsimmon": "^1.10.6",
     "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
+    "@types/react-test-renderer": "^17.0.1",
     "@types/seedrandom": "^3.0.0",
     "@types/sinon": "^10.0.2",
     "@types/sinon-chai": "^3.2.5",
@@ -58,8 +60,10 @@
     "eslint-plugin-mocha": "^9.0.0",
     "eslint-plugin-no-null": "^1.0.2",
     "eslint-plugin-sonarjs": "^0.8.0-125",
+    "ink-testing-library": "^2.1.0",
     "mocha": "^8.4.0",
     "nyc": "^15.1.0",
+    "react-test-renderer": "^17.0.2",
     "sinon": "^11.1.1",
     "sinon-chai": "^3.7.0",
     "source-map-support": "^0.5.19",
@@ -68,9 +72,9 @@
   },
   "nyc": {
     "cache": false,
-    "branches": 75,
-    "lines": 85,
-    "functions": 75,
-    "statements": 85
+    "branches": 80,
+    "lines": 90,
+    "functions": 85,
+    "statements": 90
   }
 }

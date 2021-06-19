@@ -13,47 +13,51 @@ worlds:
           signal.get:
             data: !map {}
             name:
-              base: actor-get
+              base: signal-actor-get
           signal.hit:
             data: !map {}
             name:
-              base: actor-hit
+              base: signal-actor-hit
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-actor-look
           signal.step:
             data: !map {}
             name:
-              base: actor-step
+              base: signal-actor-step
           verbs.common.drop:
             data: !map {}
             name:
-              base: verb-drop
+              base: verb-actor-drop
           verbs.common.hit:
             data: !map {}
             name:
-              base: verb-hit
+              base: verb-actor-hit
           verbs.common.look:
             data: !map {}
             name:
-              base: verb-look
+              base: verb-actor-look
           verbs.common.move:
             data: !map {}
             name:
-              base: verb-move
+              base: verb-actor-move
           verbs.common.take:
             data: !map {}
             name:
-              base: verb-take
+              base: verb-actor-take
           verbs.common.use:
             data: !map {}
             name:
-              base: verb-use
+              base: verb-actor-use
           verbs.common.wait:
             data: !map {}
             name:
-              base: verb-wait
+              base: verb-actor-wait
           verbs.world.swing:
             data: !map {}
             name:
-              base: verb-hit
+              base: verb-actor-hit
       item:
         meta:
           id: item-none
@@ -62,7 +66,11 @@ worlds:
           desc:
             base: ''
         stats: !map {}
-        scripts: !map {}
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-item-look
       portal:
         meta:
           id: portal-none
@@ -80,6 +88,11 @@ worlds:
           base: ''
         groupTarget:
           base: ''
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-portal-look
       room:
         meta:
           id: room-none
@@ -90,7 +103,15 @@ worlds:
         actors: []
         items: []
         portals: []
-        scripts: !map {}
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-room-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-room-step
     locale:
       bundles:
         en:
@@ -113,11 +134,13 @@ worlds:
                   health: |-
                     You have {{health}} health.
                   seen: |-
-                    You are in {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
+                    You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
                   inventory: |-
                     You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
                   portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.groupSource}} ({{portal.dest}}).
+                    A {{portal.meta.name}} leads to the {{portal.groupSource}} ({{portal.meta.id}}).
+                  dest: |-
+                    You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
                 actor:
                   seen: |-
                     A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
@@ -150,7 +173,7 @@ worlds:
                 missing: |-
                   {{command.target}} is not a portal!
                 portal: |-
-                  {{actor.meta.name}} moved through the {{portal.sourceGroup}} {{portal.name}}.
+                  {{actor.meta.name}} moved through the {{portal.groupSource}} {{portal.meta.name}}.
               take:
                 type: |-
                   {{command.target}} is not an item!
@@ -327,6 +350,7 @@ worlds:
               id: window-west
               name:
                 base: window
+            scripts: !map {}
           mods: []
         - base:
             dest:
@@ -343,6 +367,7 @@ worlds:
               id: door-east
               name:
                 base: door
+            scripts: !map {}
           mods: []
         - base:
             dest:
@@ -359,6 +384,7 @@ worlds:
               id: door-west
               name:
                 base: door
+            scripts: !map {}
           mods: []
         - base:
             dest:
@@ -375,6 +401,7 @@ worlds:
               id: window-east
               name:
                 base: window
+            scripts: !map {}
           mods: []
         - base:
             dest:
@@ -393,6 +420,7 @@ worlds:
               id: door-west-forward
               name:
                 base: locked door
+            scripts: !map {}
           mods: []
       rooms:
         - base:
@@ -410,11 +438,7 @@ worlds:
             portals:
               - id: window-west
               - id: door-east
-            scripts: !map
-              signal.step:
-                data: !map {}
-                name:
-                  base: room-step
+            scripts: !map {}
         - base:
             meta:
               id: room-cave
@@ -431,11 +455,7 @@ worlds:
             portals:
               - id: door-west
               - id: window-east
-            scripts: !map
-              signal.step:
-                data: !map {}
-                name:
-                  base: room-step
+            scripts: !map {}
         - base:
             meta:
               id: room-marsh
@@ -450,10 +470,6 @@ worlds:
                 chance: 50
               - id: window-east
             scripts: !map
-              signal.step:
-                data: !map {}
-                name:
-                  base: room-step
               verbs.common.move:
                 data: !map {}
                 name:
@@ -461,4 +477,4 @@ worlds:
               verbs.world.slog:
                 data: !map {}
                 name:
-                  base: verb-move
+                  base: verb-actor-move

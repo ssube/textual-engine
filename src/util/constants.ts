@@ -2,9 +2,13 @@
 export const BYTE_RANGE = 255;
 export const HISTORY_SIZE = 20;
 export const PORTAL_DEPTH = 4;
-export const RENDER_DELAY = 50;
 export const SPLIT_HEAD_TAIL = 2;
 export const TEMPLATE_CHANCE = 100;
+
+// render delays
+// TODO: should be config
+export const RENDER_DELAY = 50; // as long as possible to combine repeat renders
+export const LINE_DELAY = 10; // just enough to combine consecutive output
 
 // common events
 export const EVENT_COMMON_ERROR = 'error';
@@ -56,6 +60,7 @@ export const SIGNAL_PREFIX = 'signal.';
 export const SIGNAL_ENTER = 'signal.enter';
 export const SIGNAL_GET = 'signal.get';
 export const SIGNAL_HIT = 'signal.hit';
+export const SIGNAL_LOOK = 'signal.look';
 export const SIGNAL_STEP = 'signal.step';
 export const SIGNAL_USE = 'signal.use';
 

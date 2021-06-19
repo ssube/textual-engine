@@ -146,7 +146,7 @@ describe('behavior actor', () => {
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pendingCommand = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
-    const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
+    const portal = makeTestPortal('foo', 'door', 'west', 'east', 'foo');
     const room = makeTestRoom('', '', '', [], []);
     room.portals.push(portal);
 
@@ -158,8 +158,8 @@ describe('behavior actor', () => {
     return expect(pendingCommand).to.eventually.deep.include({
       command: {
         index: 0,
-        input: `${VERB_MOVE} ${portal.groupSource} ${portal.meta.name}`,
-        target: `${portal.groupSource} ${portal.meta.name}`, // should be specific
+        input: `${VERB_MOVE} ${portal.meta.id}`,
+        target: portal.meta.id,
         verb: VERB_MOVE,
       },
     });

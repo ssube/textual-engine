@@ -132,6 +132,33 @@ worlds:
               hit: |-
                 {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
             step:
+              command:
+                dead: |-
+                  You are dead!
+                player:
+                  verb: |-
+                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
+                  target: |-
+                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.target}}.
+                unknown: |-
+                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
+              drop:
+                type: |-
+                  {{command.target}} is not an item!
+              equip:
+                item: |-
+                  You equip the {{item.meta.name}} in your {{item.slot}}.
+                none: |-
+                  {{command.target}} is not an item!
+                slot: |-
+                  You are not able to equip {{item.meta.name}} in {{item.slot}}!
+              hit:
+                item: |-
+                  You cannot hit {{target.meta.name}}, you are not holding anything!
+                self: |-
+                  You cannot hit yourself!
+                type: |-
+                  {{command.target}} is not an actor!
               look:
                 none: |-
                   You see nothing.
@@ -156,33 +183,6 @@ worlds:
                 item:
                   seen: |-
                     You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-              hit:
-                item: |-
-                  You cannot hit {{target.meta.name}}, you are not holding anything!
-                self: |-
-                  You cannot hit yourself!
-                type: |-
-                  {{command.target}} is not an actor!
-              drop:
-                type: |-
-                  {{command.target}} is not an item!
-              equip:
-                item: |-
-                  You equip the {{item.meta.name}} in your {{item.slot}}.
-                none: |-
-                  {{command.target}} is not an item!
-                slot: |-
-                  You are not able to equip {{item.meta.name}} in {{item.slot}}!
-              command:
-                dead: |-
-                  You are dead!
-                player:
-                  verb: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
-                  target: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.target}}.
-                unknown: |-
-                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
               move:
                 missing: |-
                   {{command.target}} is not a portal!

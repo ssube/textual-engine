@@ -19,6 +19,7 @@ export const SHORTCUT_TABS = [{
 
 export interface FrameProps {
   onLine: (line: string) => void;
+
   output: Array<string>;
   prompt: string;
   quit: boolean;
@@ -34,6 +35,7 @@ export interface FrameProps {
 export interface InputProps {
   onChange: (line: string) => void;
   onLine: (line: string) => void;
+
   line: string;
   prompt: string;
 }
@@ -48,7 +50,9 @@ export interface ShortcutItem {
 }
 
 export interface ShortcutProps {
-  onSelect: (id: string) => void;
+  onTarget: (id: string) => void;
+  onVerb: (verb: string) => void;
+
   actors: Array<ShortcutItem>;
   items: Array<ShortcutItem>;
   portals: Array<ShortcutItem>;

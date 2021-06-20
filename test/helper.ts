@@ -1,3 +1,4 @@
+import { defer, doesExist } from '@apextoaster/js-utils';
 import { ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
 import { stub } from 'sinon';
 

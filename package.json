@@ -74,9 +74,9 @@
   },
   "nyc": {
     "cache": false,
-    "branches": 82,
+    "branches": 83,
     "lines": 92,
-    "functions": 86,
+    "functions": 88,
     "statements": 92
   }
 }

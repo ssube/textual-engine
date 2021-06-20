@@ -42,7 +42,8 @@ export const Frame = (props: FrameProps): JSX.Element => {
     <Box marginLeft={2}>
       {props.show.shortcuts && <Shortcuts
         {...props.shortcuts}
-        onSelect={(id) => setLine(`${line} ${id}`)}
+        onTarget={(id) => setLine(`${line} ${id}`)}
+        onVerb={(verb) => setLine(verb)}
       />}
     </Box>
   </Box>;

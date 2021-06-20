@@ -32,6 +32,10 @@ export const Frame = (props: FrameProps): JSX.Element => {
       /> }
     </div>
     {props.show.status && <Status stats={props.stats} />}
-    {props.show.shortcuts && <Shortcuts {...props.shortcuts} onSelect={(id) => setLine(`${line} ${id}`)} />}
+    {props.show.shortcuts && <Shortcuts
+      {...props.shortcuts}
+      onTarget={(id) => setLine(`${line} ${id}`)}
+      onVerb={(verb) => setLine(verb)}
+    />}
   </div>;
 };

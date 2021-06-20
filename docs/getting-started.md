@@ -287,19 +287,26 @@ Sword Goblin (actor-goblin-9) has hit player-0 (actor-goblin-11) with a Sword!
 player-0 has 15 health left.
 ```
 
-Your health, and that of enemies you attack, will be shown after each hit.
+Your health will be shown after each hit, and can be shown in the optional status bar. Enemy health will be shown
+after each hit.
 
-If you are holding an item capable of doing damage, you can `hit` them back:
+If you are holding an item capable of doing damage, you can `equip` it and `hit` them back:
 
 ```none
+turn 11 > equip cracked sword
+Sword Goblin will equip the Cracked Sword.
+You equip the Cracked Sword in your weapon-hand-left.
 turn 12 > hit sword goblin
 player-0 will hit the sword goblin.
 player-0 (actor-goblin-11) has hit Sword Goblin (actor-goblin-9) with a Cracked Sword!
 Sword Goblin has 12 health left.
 ```
 
-The maximum damage is based on your actor's damage plus your current item's damage, then a random number between 0
+The maximum damage is based on your actor's damage plus your current weapon's damage, then a random number between 0
 and that maximum is rolled.
+
+Some characters will have natural weapons like teeth, and may not be able to hold weapons in their hands - they may
+not even have hands.
 
 ### Saving and Loading Worlds
 

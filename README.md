@@ -1,6 +1,7 @@
 # Textual Engine
 
-This is a text adventure engine for the CLI and browsers.
+This is a text adventure engine for the CLI and browsers, supporting both narrative fiction and procedural dungeon
+crawlers, using an event and service architecture.
 
 See [the demo on Github Pages](https://ssube.github.io/textual-engine/) or [the getting started docs](docs/getting-started.md) for more info.
 
@@ -15,16 +16,18 @@ See [the demo on Github Pages](https://ssube.github.io/textual-engine/) or [the 
   - item modifiers
   - persistent rooms
   - procedural expansion
+  - geometric links
   - wandering monsters
-  - save and load
 - engine:
-  - entity scripts
-  - event broadcast
-  - localization of both input and output (with [i18next](https://github.com/i18next/i18next))
-  - multiple data loaders (fetch, file, and page elements)
-  - multiple rendering engines ([readline](https://nodejs.org/api/readline.html), [Ink](https://github.com/vadimdemedes/ink), and [React](https://github.com/facebook/react/))
+  - localization of both input and output with [i18next](https://github.com/i18next/i18next)
+  - structured logging with [bunyan](https://github.com/trentm/node-bunyan)
+  - multiple data loaders: fetch, file, local storage, and page elements
+  - multiple input parsers: simple word and natural language
+  - multiple rendering engines: [readline](https://nodejs.org/api/readline.html), [Ink](https://github.com/vadimdemedes/ink), and [React](https://github.com/facebook/react/)
+  - save and reload game state
+  - entity scripts for signals and verbs
 - planned:
-  - natural language processing for input
+  - chat client and network play
   - world editor for React browser UI
 
 ## Contents

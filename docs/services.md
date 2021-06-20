@@ -16,6 +16,7 @@ This guide describes what each service does.
     - [Node Event Bus](#node-event-bus)
   - [Loader Service](#loader-service)
     - [Browser Fetch Loader Service](#browser-fetch-loader-service)
+    - [Browser Local Loader Service](#browser-local-loader-service)
     - [Browser Page Loader Service](#browser-page-loader-service)
     - [Node Fetch Loader Service](#node-fetch-loader-service)
     - [Node File Loader Service](#node-file-loader-service)
@@ -51,6 +52,7 @@ This guide describes what each service does.
 | counter   | local         |          | used by state                  |
 | event     | node          | yes      |                                |
 | loader    | browser fetch | yes      |                                |
+| loader    | browser local | yes      |                                |
 | loader    | browser page  | yes      |                                |
 | loader    | node fetch    | yes      |                                |
 | loader    | node file     | yes      |                                |
@@ -113,6 +115,15 @@ Protocols:
 
 - `https`
 - `http`: use `https` whenever possible
+
+### Browser Local Loader Service
+
+Uses the `localStorage` interface in a browser.
+
+Protocols:
+
+- `local`
+- `session`: alias for `local`, does not use `sessionStorage`
 
 ### Browser Page Loader Service
 
@@ -215,8 +226,6 @@ Uses `(foo|bar)` chains for input and `AND/OR` chains for output.
 ## Tokenizer Service
 
 ### Natural Tokenizer
-
-**Not implemented yet.**
 
 Use natural language processing to tag parts of speech and build a command.
 

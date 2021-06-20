@@ -6,6 +6,10 @@ This guide covers the engine architecture in detail, describing entities and sho
 
 - [Architecture](#architecture)
   - [Contents](#contents)
+  - [Actors](#actors)
+    - [Behavior](#behavior)
+    - [Inventory](#inventory)
+    - [Equipment Slots](#equipment-slots)
   - [Config](#config)
     - [Locale Config](#locale-config)
     - [Logger Config](#logger-config)
@@ -14,12 +18,12 @@ This guide covers the engine architecture in detail, describing entities and sho
     - [Command Tokenization](#command-tokenization)
     - [Common Commands](#common-commands)
     - [Meta Commands](#meta-commands)
-    - [Custom Verb Commands](#custom-verb-commands)
+    - [World Commands](#world-commands)
   - [Entities](#entities)
     - [Actor Entity](#actor-entity)
     - [Item Entity](#item-entity)
+    - [Portal Entity](#portal-entity)
     - [Room Entity](#room-entity)
-      - [Room Portal Entity](#room-portal-entity)
   - [Events](#events)
     - [Event Flow: Creating a New World](#event-flow-creating-a-new-world)
     - [Event Flow: Loading an Existing World](#event-flow-loading-an-existing-world)
@@ -36,6 +40,24 @@ This guide covers the engine architecture in detail, describing entities and sho
       - [Scope Data](#scope-data)
     - [Signal Scripts](#signal-scripts)
     - [Verb Scripts](#verb-scripts)
+
+## Actors
+
+The service controller player and non-player characters. Unrelated to [the actor model](https://en.wikipedia.org/wiki/Actor_model).
+
+### Behavior
+
+Behavioral actors are controlled by the computer - NPCs.
+
+### Inventory
+
+Actors can carry items in their inventory. There is currently no inventory limit.
+
+### Equipment Slots
+
+Actors can equip items from their inventory into specific slots. The `weapon-*` slots are used to attack, for example.
+Only items with a corresponding slot can be equipped, limited what some actors can use (animals may have slots for claws
+and teeth instead of hands).
 
 ## Config
 
@@ -87,9 +109,9 @@ There are some meta commands that are handled by the state service, rather than 
   - save the world state to a path
 - `quit`
 
-### Custom Verb Commands
+### World Commands
 
-World entities may define their own verbs, which can be invoked normally through input.
+World entities may define their own contextual verbs, which can be invoked normally through input.
 
 ## Entities
 
@@ -101,13 +123,13 @@ TODO: explain actors
 
 TODO: explain items
 
+### Portal Entity
+
+TODO: explain portals
+
 ### Room Entity
 
 TODO: explain rooms
-
-#### Room Portal Entity
-
-TODO: explain portals
 
 ## Events
 

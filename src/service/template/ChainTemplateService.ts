@@ -8,12 +8,12 @@ import { INJECT_RANDOM, InjectedOptions } from '../../module';
 import { JoinChain } from '../../util/template/JoinChain';
 import { splitChain } from '../../util/template/SplitChain';
 import { ScriptMap, ScriptRef } from '../../util/types';
-import { RandomGenerator } from '../random';
+import { RandomService } from '../random';
 
 @Inject(INJECT_RANDOM)
 export class ChainTemplateService implements TemplateService {
   protected readonly joiner: JoinChain;
-  protected readonly random: RandomGenerator;
+  protected readonly random: RandomService;
 
   constructor(options: InjectedOptions) {
     this.random = mustExist(options[INJECT_RANDOM]);

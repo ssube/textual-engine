@@ -5,7 +5,7 @@ import { Counter } from '../service/counter';
 import { EventBus } from '../service/event';
 import { LocaleService } from '../service/locale';
 import { Parser } from '../service/parser';
-import { RandomGenerator } from '../service/random';
+import { RandomService } from '../service/random';
 import { ScriptService } from '../service/script';
 import { TemplateService } from '../service/template';
 import { TokenizerService } from '../service/tokenizer';
@@ -29,7 +29,7 @@ export interface InjectedOptions extends BaseOptions {
   [INJECT_LOCALE]?: LocaleService;
   [INJECT_LOGGER]?: Logger;
   [INJECT_PARSER]?: Parser;
-  [INJECT_RANDOM]?: RandomGenerator;
+  [INJECT_RANDOM]?: RandomService;
   [INJECT_SCRIPT]?: ScriptService;
   [INJECT_TEMPLATE]?: TemplateService;
   [INJECT_TOKENIZER]?: TokenizerService;

@@ -10,7 +10,7 @@ import { CoreModule } from '../../../src/module/CoreModule';
 import { BehaviorActorService } from '../../../src/service/actor/BehaviorActor';
 import { ActorCommandEvent } from '../../../src/service/actor/events';
 import { EventBus } from '../../../src/service/event';
-import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { onceEvent } from '../../../src/util/async/event';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../../src/util/constants';
 import { makeTestActor, makeTestPortal, makeTestRoom } from '../../entity';
@@ -125,7 +125,7 @@ describe('behavior actor', () => {
       logger: NullLogger.global,
     });
 
-    const random = createStubInstance(MathRandomGenerator);
+    const random = createStubInstance(MathRandomService);
     random.nextFloat.returns(0); // low roll should move
     random.nextInt.returns(0); // pick the first portal
 

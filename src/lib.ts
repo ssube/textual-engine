@@ -73,9 +73,9 @@ export { LocaleContext, LocaleService } from './service/locale/index';
 export { YamlParser } from './service/parser/YamlParser';
 export { Parser } from './service/parser/index';
 
-export { AleaRandomGenerator } from './service/random/AleaRandom';
-export { MathRandomGenerator } from './service/random/MathRandom';
-export { RandomGenerator } from './service/random/index';
+export { AleaRandomService } from './service/random/AleaRandom';
+export { MathRandomService } from './service/random/MathRandom';
+export { RandomService } from './service/random/index';
 
 export { LineRender } from './service/render/LineRender';
 export { RenderOutputEvent } from './service/render/events';

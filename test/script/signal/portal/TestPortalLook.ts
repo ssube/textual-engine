@@ -5,7 +5,7 @@ import { createStubInstance, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalPortalLook } from '../../../../src/script/signal/portal/PortalLook';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_LOOK } from '../../../../src/util/constants';
@@ -23,7 +23,7 @@ describe('portal look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state: stateHelper,
@@ -43,7 +43,7 @@ describe('portal look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state: stateHelper,
@@ -68,7 +68,7 @@ describe('portal look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room,
       script,
       state: stateHelper,

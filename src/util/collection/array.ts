@@ -1,7 +1,7 @@
 import { mustExist } from '@apextoaster/js-utils';
-import { RandomGenerator } from '../../service/random';
+import { RandomService } from '../../service/random';
 
-export function randomItem<TValue>(items: Array<TValue>, random: RandomGenerator): TValue {
+export function randomItem<TValue>(items: Array<TValue>, random: RandomService): TValue {
   return items[random.nextInt(items.length)];
 }
 

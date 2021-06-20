@@ -29,6 +29,9 @@ export class ServiceManager {
       this.add(loader.name, svc);
     }
 
+    // for (const locale of config.locales) {}
+    // for (const tokenizer of config.tokenizers) {}
+
     for (const actor of config.actors) {
       const svc = await this.container.create<LocaleService, BaseOptions>(actor.kind, {
         config: mustCoalesce(actor.data, {}),

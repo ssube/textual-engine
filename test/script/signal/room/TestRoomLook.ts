@@ -5,7 +5,7 @@ import { createStubInstance, match, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalRoomLook } from '../../../../src/script/signal/room/RoomLook';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
@@ -23,7 +23,7 @@ describe('room look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state: stateHelper,
@@ -44,7 +44,7 @@ describe('room look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room,
       script,
       state: stateHelper,
@@ -68,7 +68,7 @@ describe('room look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room,
       script,
       state: stateHelper,
@@ -92,7 +92,7 @@ describe('room look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room,
       script,
       state: stateHelper,
@@ -119,7 +119,7 @@ describe('room look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room,
       script,
       state: stateHelper,

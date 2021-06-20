@@ -17,7 +17,7 @@ import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
-import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import {
   StateJoinEvent,
@@ -882,7 +882,7 @@ describe('local state service', () => {
         logger: getTestLogger(),
         script: createStubInstance(LocalScriptService),
         data: new Map(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
       });
@@ -918,7 +918,7 @@ describe('local state service', () => {
         logger: getTestLogger(),
         script: createStubInstance(LocalScriptService),
         data: new Map(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
       });
@@ -954,7 +954,7 @@ describe('local state service', () => {
         logger: getTestLogger(),
         script: createStubInstance(LocalScriptService),
         data: new Map(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
       })).to.eventually.be.rejectedWith(ScriptTargetError);

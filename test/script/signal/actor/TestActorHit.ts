@@ -4,7 +4,7 @@ import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { SignalActorHit } from '../../../../src/script/signal/actor/ActorHit';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_DAMAGE, STAT_HEALTH } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
@@ -25,7 +25,7 @@ describe('actor hit scripts', () => {
       actor.stats.set(STAT_DAMAGE, 5);
       actor.stats.set(STAT_HEALTH, 10);
 
-      const random = createStubInstance(MathRandomGenerator);
+      const random = createStubInstance(MathRandomService);
       random.nextInt.returnsArg(0); // do max damage, 5 + 5
 
       await SignalActorHit.call(actor, {
@@ -56,7 +56,7 @@ describe('actor hit scripts', () => {
         data: new Map(),
         item,
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -81,7 +81,7 @@ describe('actor hit scripts', () => {
         data: new Map(),
         item,
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,

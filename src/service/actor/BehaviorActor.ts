@@ -17,7 +17,7 @@ import {
 } from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
 import { EventBus } from '../event';
-import { RandomGenerator } from '../random';
+import { RandomService } from '../random';
 import { StateRoomEvent } from '../state/events';
 
 const WAIT_CMD: Command = makeCommand(VERB_WAIT, 'turn');
@@ -30,7 +30,7 @@ const WAIT_CMD: Command = makeCommand(VERB_WAIT, 'turn');
 export class BehaviorActorService implements ActorService {
   protected event: EventBus;
   protected logger: Logger;
-  protected random: RandomGenerator;
+  protected random: RandomService;
 
   protected next: Map<string, Command>;
 

@@ -3,7 +3,7 @@ import { SinonStub, spy, stub } from 'sinon';
 
 import { Item } from '../../../src/model/entity/Item';
 import { CoreModule } from '../../../src/module/CoreModule';
-import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestItem } from '../../entity';
@@ -22,7 +22,7 @@ describe('local script service', () => {
     const script = await container.create(LocalScriptService, {}, new Map());
     await script.invoke(target, 'foo', {
       data: new Map(),
-      random: await container.create(MathRandomGenerator),
+      random: await container.create(MathRandomService),
       state: getStubHelper(),
       transfer: await container.create(StateEntityTransfer),
     });
@@ -44,7 +44,7 @@ describe('local script service', () => {
     await script.invoke(target, 'verbs.foo', {
       data: new Map(),
       item: target,
-      random: await container.create(MathRandomGenerator),
+      random: await container.create(MathRandomService),
       state: getStubHelper(),
       transfer: await container.create(StateEntityTransfer),
     });
@@ -67,7 +67,7 @@ describe('local script service', () => {
     ]));
     await script.invoke(target, 'verbs.bar', {
       data: new Map(),
-      random: await container.create(MathRandomGenerator),
+      random: await container.create(MathRandomService),
       state: getStubHelper(),
       transfer: await container.create(StateEntityTransfer),
     });
@@ -92,7 +92,7 @@ describe('local script service', () => {
 
     await script.broadcast(target, 'verbs.bar', {
       data: new Map(),
-      random: await container.create(MathRandomGenerator),
+      random: await container.create(MathRandomService),
       state,
       transfer: await container.create(StateEntityTransfer),
     });

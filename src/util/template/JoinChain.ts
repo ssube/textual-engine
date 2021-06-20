@@ -1,11 +1,11 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 
 import { InputChain } from '.';
-import { RandomGenerator } from '../../service/random';
+import { RandomService } from '../../service/random';
 
 export interface JoinOptions {
   joiners: Array<string>;
-  random: RandomGenerator;
+  random: RandomService;
 }
 
 const LEVEL_EVEN_ODD = 2;
@@ -23,7 +23,7 @@ const LEVEL_EVEN_ODD = 2;
  */
 export class JoinChain {
   protected joiners: Array<string>;
-  protected random: RandomGenerator;
+  protected random: RandomService;
 
   constructor(options: JoinOptions) {
     this.joiners = options.joiners;

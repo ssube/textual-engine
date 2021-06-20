@@ -5,7 +5,7 @@ import { createStubInstance } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalItemStep } from '../../../../src/script/signal/item/ItemStep';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestRoom } from '../../../entity';
@@ -23,7 +23,7 @@ describe('item step scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,

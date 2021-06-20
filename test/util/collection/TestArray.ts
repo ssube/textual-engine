@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 
-import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { groupOn, randomItem, remove } from '../../../src/util/collection/array';
 
 describe('array utils', () => {
   describe('random item helper', () => {
     it('should get a random item from the input', async () => {
       const data = ['a', 'b'];
-      const random = new MathRandomGenerator();
+      const random = new MathRandomService();
       expect(randomItem(data, random)).to.be.oneOf(data);
     });
   });

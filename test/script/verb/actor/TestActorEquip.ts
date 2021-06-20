@@ -5,7 +5,7 @@ import { createStubInstance, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorEquip } from '../../../../src/script/verb/actor/ActorEquip';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_EQUIP, VERB_WAIT } from '../../../../src/util/constants';
@@ -24,7 +24,7 @@ describe('actor equip scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -54,7 +54,7 @@ describe('actor equip scripts', () => {
         command: makeCommand(VERB_EQUIP, item.meta.id),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [actor], []),
         script,
         state: stateHelper,
@@ -75,7 +75,7 @@ describe('actor equip scripts', () => {
         command: makeCommand(VERB_EQUIP, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -105,7 +105,7 @@ describe('actor equip scripts', () => {
         command: makeCommand(VERB_EQUIP, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,

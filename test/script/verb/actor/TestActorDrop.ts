@@ -6,7 +6,7 @@ import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand, makeCommandIndex } from '../../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
 import { VerbActorDrop } from '../../../../src/script/verb/actor/ActorDrop';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_DROP, VERB_WAIT } from '../../../../src/util/constants';
@@ -25,7 +25,7 @@ describe('actor drop scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -66,7 +66,7 @@ describe('actor drop scripts', () => {
         command: makeCommand(VERB_DROP, items[0].meta.id),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -110,7 +110,7 @@ describe('actor drop scripts', () => {
         command: makeCommand(VERB_DROP, 'bob'),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -154,7 +154,7 @@ describe('actor drop scripts', () => {
         command: makeCommandIndex(VERB_DROP, 1, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -193,7 +193,7 @@ describe('actor drop scripts', () => {
         command: makeCommandIndex(VERB_DROP, 1, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,

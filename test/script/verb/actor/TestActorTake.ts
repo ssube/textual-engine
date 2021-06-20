@@ -5,7 +5,7 @@ import { createStubInstance, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorTake } from '../../../../src/script/verb/actor/ActorTake';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_TAKE } from '../../../../src/util/constants';
@@ -24,7 +24,7 @@ describe('actor take scripts', () => {
         command: makeCommand(VERB_TAKE),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -48,7 +48,7 @@ describe('actor take scripts', () => {
         command: makeCommand(VERB_TAKE, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -73,7 +73,7 @@ describe('actor take scripts', () => {
         command: makeCommand(VERB_TAKE, item.meta.id),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state: stateHelper,

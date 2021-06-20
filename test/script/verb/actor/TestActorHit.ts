@@ -6,7 +6,7 @@ import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { Actor } from '../../../../src/model/entity/Actor';
 import { VerbActorHit } from '../../../../src/script/verb/actor/ActorHit';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { SIGNAL_HIT, VERB_HIT, VERB_WAIT } from '../../../../src/util/constants';
@@ -25,7 +25,7 @@ describe('actor hit scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -48,7 +48,7 @@ describe('actor hit scripts', () => {
         command: makeCommand(VERB_HIT, target.meta.id),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -76,7 +76,7 @@ describe('actor hit scripts', () => {
         command: makeCommand(VERB_HIT, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -101,7 +101,7 @@ describe('actor hit scripts', () => {
         command: makeCommand(VERB_HIT, actor.meta.id),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -127,7 +127,7 @@ describe('actor hit scripts', () => {
         command: makeCommand(VERB_HIT, ''),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,

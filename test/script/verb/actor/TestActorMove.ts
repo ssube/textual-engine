@@ -8,7 +8,7 @@ import { makeCommand } from '../../../../src/model/Command';
 import { ActorSource } from '../../../../src/model/entity/Actor';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
 import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
@@ -27,7 +27,7 @@ describe('actor move scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -55,7 +55,7 @@ describe('actor move scripts', () => {
         command: makeCommand(VERB_MOVE, portal.meta.name),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state: stateHelper,
@@ -90,7 +90,7 @@ describe('actor move scripts', () => {
         command: makeCommand(VERB_MOVE, portal.groupSource),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state: stateHelper,
@@ -125,7 +125,7 @@ describe('actor move scripts', () => {
         command: makeCommand(VERB_MOVE, `${portal.groupSource} ${portal.meta.name}`),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state: stateHelper,
@@ -158,7 +158,7 @@ describe('actor move scripts', () => {
         command: makeCommand(VERB_MOVE, 'door'),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state: stateHelper,
@@ -186,7 +186,7 @@ describe('actor move scripts', () => {
         command: makeCommand(VERB_MOVE, `${portal.groupSource} ${portal.meta.name}`),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state: stateHelper,
@@ -215,7 +215,7 @@ describe('actor move scripts', () => {
         command: makeCommand(VERB_MOVE, portal.meta.name),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state: stateHelper,

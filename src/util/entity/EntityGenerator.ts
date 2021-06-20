@@ -14,7 +14,7 @@ import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE, InjectedOptions } from '../../module';
 import { Counter } from '../../service/counter';
-import { RandomGenerator } from '../../service/random';
+import { RandomService } from '../../service/random';
 import { CreateParams } from '../../service/state';
 import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
@@ -28,7 +28,7 @@ import { ScriptMap } from '../types';
 export class StateEntityGenerator {
   protected counter: Counter;
   protected logger: Logger;
-  protected random: RandomGenerator;
+  protected random: RandomService;
   protected template: TemplateService;
 
   protected world?: WorldTemplate;

@@ -1,9 +1,9 @@
 import { alea } from 'seedrandom';
 
-import { RandomGenerator } from '.';
+import { RandomService } from '.';
 import { BYTE_RANGE } from '../../util/constants';
 
-export class AleaRandomGenerator implements RandomGenerator {
+export class AleaRandomService implements RandomService {
   protected source: ReturnType<typeof alea>; // this should be imported above, but... that is an error, this works
 
   constructor() {

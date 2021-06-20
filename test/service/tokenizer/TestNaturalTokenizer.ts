@@ -35,13 +35,13 @@ describe('natural tokenizer', () => {
     const container = await getTestContainer(new CoreModule());
     const token = await container.create(NaturalTokenizer);
 
-    const input = 'test books go west help';
+    const input = 'test the books into the west and with help';
     return expect(token.parse(input)).to.eventually.deep.equal([{
       index: 0,
       input,
       targets: [
         'books',
-        'go west',
+        'west',
         'help',
       ],
       verb: 'test',

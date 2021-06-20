@@ -2,7 +2,7 @@ import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 
 import { CoreModule } from '../../../src/module/CoreModule';
-import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../src/service/script';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
@@ -26,7 +26,7 @@ describe('state transfer utils', () => {
       }, {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -50,7 +50,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -82,7 +82,7 @@ describe('state transfer utils', () => {
       }, {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -103,7 +103,7 @@ describe('state transfer utils', () => {
       }, {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -121,7 +121,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -144,7 +144,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -172,7 +172,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -199,7 +199,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -227,7 +227,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -263,7 +263,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -287,7 +287,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),
@@ -311,7 +311,7 @@ describe('state transfer utils', () => {
       const context: ScriptContext = {
         data: new Map(),
         logger: getTestLogger(),
-        random: await container.create(MathRandomGenerator),
+        random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
         state: getStubHelper(),
         transfer: await container.create(StateEntityTransfer),

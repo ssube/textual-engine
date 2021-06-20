@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 
-import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { JoinChain } from '../../../src/util/template/JoinChain';
 
 describe('string join chain util', () => {
   it('should AND the first level', async () => {
     const chain = new JoinChain({
       joiners: ['-'],
-      random: new MathRandomGenerator(),
+      random: new MathRandomService(),
     });
 
     const data = [
@@ -22,7 +22,7 @@ describe('string join chain util', () => {
   it('should OR the second level', async () => {
     const chain = new JoinChain({
       joiners: ['-'],
-      random: new MathRandomGenerator(),
+      random: new MathRandomService(),
     });
 
     const data = [
@@ -34,7 +34,7 @@ describe('string join chain util', () => {
   it('should select the joiner by depth', async () => {
     const chain = new JoinChain({
       joiners: ['1', '2', '3', '4'],
-      random: new MathRandomGenerator(),
+      random: new MathRandomService(),
     });
 
     const data = [

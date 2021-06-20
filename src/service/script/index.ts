@@ -11,7 +11,7 @@ import { ActorTransfer, ItemTransfer, StateEntityTransfer } from '../../util/ent
 import { SearchFilter } from '../../util/entity/find';
 import { ScriptData } from '../../util/types';
 import { LocaleContext } from '../locale';
-import { RandomGenerator } from '../random';
+import { RandomService } from '../random';
 
 export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
@@ -32,8 +32,7 @@ export interface SuppliedScope {
    * Assorted data, primitives only.
    */
   data: ScriptData;
-
-  random: RandomGenerator;
+  random: RandomService;
 
   /**
    * Safe access to search and modify state.

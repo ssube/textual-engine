@@ -8,7 +8,7 @@ import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Act
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
 import { CoreModule } from '../../../../src/module/CoreModule';
 import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestItem, makeTestRoom } from '../../../entity';
@@ -58,7 +58,7 @@ describe('actor step scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -78,7 +78,7 @@ describe('actor step scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
         state: stateHelper,
@@ -104,7 +104,7 @@ describe('actor step scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         script,
         state: stateHelper,
         transfer,
@@ -133,7 +133,7 @@ describe('actor step scripts', () => {
         command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script: createStubInstance(LocalScriptService),
         state: stateHelper,
@@ -162,7 +162,7 @@ describe('actor step scripts', () => {
         actor: player,
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state,
@@ -193,7 +193,7 @@ describe('actor step scripts', () => {
         command: makeCommand(VERB_MOVE), // must be a verb that does not exist
         data: new Map(),
         logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state,

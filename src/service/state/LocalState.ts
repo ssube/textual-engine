@@ -64,7 +64,7 @@ import { Counter } from '../counter';
 import { EventBus } from '../event';
 import { hasState, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleContext } from '../locale';
-import { RandomGenerator } from '../random';
+import { RandomService } from '../random';
 import { ScriptContext, ScriptService, SuppliedScope } from '../script';
 
 @Inject(
@@ -79,7 +79,7 @@ export class LocalStateService implements StateService {
   protected counter: Counter;
   protected event: EventBus;
   protected logger: Logger;
-  protected random: RandomGenerator;
+  protected random: RandomService;
   protected script: ScriptService;
 
   protected commandBuffer: StackMap<Actor, Command>;

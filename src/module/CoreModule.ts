@@ -24,14 +24,15 @@ import { LocaleService } from '../service/locale';
 import { NextLocaleService } from '../service/locale/NextLocale';
 import { Parser } from '../service/parser';
 import { YamlParser } from '../service/parser/YamlParser';
-import { RandomGenerator } from '../service/random';
-import { AleaRandomGenerator } from '../service/random/AleaRandom';
+import { RandomService } from '../service/random';
+import { AleaRandomService } from '../service/random/AleaRandom';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScript';
 import { LocalStateService } from '../service/state/LocalState';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
 import { TokenizerService } from '../service/tokenizer';
+import { NaturalTokenizer } from '../service/tokenizer/NaturalTokenizer';
 import { WordTokenizer } from '../service/tokenizer/WordTokenizer';
 import { Singleton } from '../util/container';
 
@@ -40,7 +41,7 @@ export class CoreModule extends Module {
   protected event: Singleton<EventBus>;
   protected locale: Singleton<LocaleService>;
   protected parser: Singleton<Parser>;
-  protected random: Singleton<RandomGenerator>;
+  protected random: Singleton<RandomService>;
   protected script: Singleton<ScriptService>;
   protected template: Singleton<TemplateService>;
   protected tokenizer: Singleton<TokenizerService>;
@@ -53,7 +54,7 @@ export class CoreModule extends Module {
     this.event = new Singleton(() => mustExist(this.container).create(NodeEventBus));
     this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
     this.parser = new Singleton(() => mustExist(this.container).create(YamlParser));
-    this.random = new Singleton(() => mustExist(this.container).create(AleaRandomGenerator));
+    this.random = new Singleton(() => mustExist(this.container).create(AleaRandomService));
     this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
     this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
     this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
@@ -101,7 +102,7 @@ export class CoreModule extends Module {
    * Singleton random number generator.
    */
   @Provides(INJECT_RANDOM)
-  protected async getRandom(): Promise<RandomGenerator> {
+  protected async getRandom(): Promise<RandomService> {
     return this.random.get();
   }
 

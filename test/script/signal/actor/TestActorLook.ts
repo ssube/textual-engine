@@ -5,7 +5,7 @@ import { createStubInstance } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { SignalActorLook } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_LOOK } from '../../../../src/util/constants';
@@ -23,7 +23,7 @@ describe('actor look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state: stateHelper,
@@ -43,7 +43,7 @@ describe('actor look scripts', () => {
       command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
-      random: createStubInstance(MathRandomGenerator),
+      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state: stateHelper,

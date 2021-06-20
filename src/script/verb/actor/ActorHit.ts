@@ -5,7 +5,7 @@ import { isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { ShowVolume } from '../../../util/actor';
 import { SIGNAL_HIT } from '../../../util/constants';
-import { findSlotItem, matchSlots } from '../../../util/entity/find';
+import { findActorSlots, findSlotItem } from '../../../util/entity/find';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -45,8 +45,8 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
     return;
   }
 
-  const slots = matchSlots(this, 'weapon');
-  const [item] = slots.map((it) => findSlotItem(actor, it));
+  const [slot] = findActorSlots(this, 'weapon');
+  const item = findSlotItem(actor, slot);
 
   if (isNil(item)) {
     await context.state.show('actor.step.hit.item', { target }, ShowVolume.SELF, {

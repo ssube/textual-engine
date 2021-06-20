@@ -45,8 +45,8 @@ describe('actor hit scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      const actor: Actor = makeTestActor('', '', '');
-      (stateHelper.find as SinonStub).returns(Promise.resolve([actor]));
+      const target: Actor = makeTestActor('', '', '');
+      (stateHelper.find as SinonStub).returns(Promise.resolve([target]));
 
       const context: ScriptContext = {
         command: {
@@ -64,9 +64,14 @@ describe('actor hit scripts', () => {
         transfer,
       };
 
-      await VerbActorHit.call(makeTestActor('', '', '', makeTestItem('', '', '')), context);
+      const weapon = makeTestItem('foo', '', '');
+      weapon.slot = 'weapon';
+      const actor = makeTestActor('bar', '', '', weapon);
+      actor.slots.set('weapon', 'foo');
 
-      expect(script.invoke).to.have.callCount(1).and.to.have.been.calledWithMatch(actor, SIGNAL_HIT, match.object);
+      await VerbActorHit.call(actor, context);
+
+      expect(script.invoke).to.have.callCount(1).and.to.have.been.calledWithMatch(target, SIGNAL_HIT, match.object);
     });
 
     it('should show an error if the target is not found', async () => {

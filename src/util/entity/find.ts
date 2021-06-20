@@ -141,6 +141,6 @@ export function findSlotItem(actor: Actor, slot: string): Optional<Item> {
   }
 }
 
-export function matchSlots(actor: Actor, filter: string): Array<string> {
+export function findActorSlots(actor: Actor, filter: string): Array<string> {
   return Array.from(actor.slots.keys()).filter((it) => matchIdSegments(it, filter));
 }

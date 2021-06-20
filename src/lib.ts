@@ -104,7 +104,7 @@ export { Singleton, SingletonConstructor } from './util/container';
 export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, createFuzzyMatcher, createStrictMatcher } from './util/entity/match';
 export { makeConstStringSchema } from './util/schema';
 export { hasText, matchIdSegments, splitPath } from './util/string';
-export { Immutable, KeyList, Filter, FilterBase, FilterKeys, Replace, ScriptData, ScriptMap, ScriptRef, StatMap } from './util/types';
+export { Immutable, KeyList, Filter, FilterBase, FilterKeys, Replace, ScriptData, ScriptMap, ScriptRef, NumberMap, StringMap } from './util/types';
 
 export { CompletionSet } from './util/async/CompletionSet';
 export { debounce, throttle } from './util/async/Throttle';

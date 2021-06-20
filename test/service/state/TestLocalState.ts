@@ -61,10 +61,6 @@ import { getStubHelper, getTestContainer, getTestLogger } from '../../helper';
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
-    source: {
-      base: ActorSource.BEHAVIOR,
-      type: 'string',
-    },
     items: [],
     meta: {
       id: 'bar',
@@ -77,7 +73,6 @@ const TEST_ACTOR: Template<Actor> = {
         type: 'string',
       },
     },
-    stats: new Map(),
     scripts: new Map([
       ['verbs.world.bar', {
         data: new Map(),
@@ -87,6 +82,12 @@ const TEST_ACTOR: Template<Actor> = {
         },
       }]
     ]),
+    slots: new Map(),
+    source: {
+      base: ActorSource.BEHAVIOR,
+      type: 'string',
+    },
+    stats: new Map(),
     type: {
       base: ACTOR_TYPE,
       type: 'string',
@@ -109,6 +110,10 @@ const TEST_ITEM: Template<Item> = {
       },
     },
     scripts: new Map(),
+    slot: {
+      base: '',
+      type: 'string',
+    },
     stats: new Map(),
     type: {
       base: ITEM_TYPE,

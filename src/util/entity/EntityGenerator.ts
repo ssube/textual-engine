@@ -1,5 +1,6 @@
 import { doesExist, mergeMap, mustExist, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
+import { equipItems } from '.';
 
 import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
@@ -49,16 +50,20 @@ export class StateEntityGenerator {
 
   // take ID and look up template?
   public async createActor(template: Template<Actor>, source = ActorSource.BEHAVIOR): Promise<Actor> {
+    const slots = this.template.renderStringMap(template.base.slots);
     const actor: Actor = {
-      type: 'actor',
-      source,
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
       scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
+      slots,
+      source,
       stats: this.template.renderNumberMap(template.base.stats),
+      type: 'actor',
     };
 
     await this.modifyActor(actor, template.mods);
+
+    equipItems(actor, slots);
 
     return actor;
   }
@@ -87,10 +92,11 @@ export class StateEntityGenerator {
 
   public async createItem(template: Template<Item>): Promise<Item> {
     const item: Item = {
-      type: ITEM_TYPE,
       meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
-      stats: this.template.renderNumberMap(template.base.stats),
       scripts: await this.createScripts(template.base.scripts, ITEM_TYPE),
+      slot: this.template.renderString(template.base.slot),
+      stats: this.template.renderNumberMap(template.base.stats),
+      type: ITEM_TYPE,
     };
 
     await this.modifyItem(item, template.mods);

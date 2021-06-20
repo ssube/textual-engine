@@ -40,4 +40,7 @@ export type ScriptMap = Map<string, ScriptRef>;
 /**
  * Map of stat names to their current value.
  */
-export type StatMap = Map<string, number>;
+export type NumberMap = Map<string, number>;
+
+export type StringMap = Map<string, string>;
+

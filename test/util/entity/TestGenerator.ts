@@ -18,10 +18,6 @@ import { getTestContainer } from '../../helper';
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
-    source: {
-      base: ActorSource.BEHAVIOR,
-      type: 'string',
-    },
     items: [{
       chance: TEMPLATE_CHANCE,
       id: 'item-foo',
@@ -39,6 +35,11 @@ const TEST_ACTOR: Template<Actor> = {
       },
     },
     scripts: new Map(),
+    slots: new Map(),
+    source: {
+      base: ActorSource.BEHAVIOR,
+      type: 'string',
+    },
     stats: new Map(),
     type: {
       base: ACTOR_TYPE,
@@ -62,6 +63,10 @@ const TEST_ITEM: Template<Item> = {
       },
     },
     scripts: new Map(),
+    slot: {
+      base: '',
+      type: 'string',
+    },
     stats: new Map([
       ['bar', {
         min: 0,
@@ -231,10 +236,6 @@ const TEST_ROOM_PORTALS: Template<Room> = {
 const TEST_WORLD: WorldTemplate = {
   defaults: {
     actor: {
-      source: {
-        base: '',
-        type: 'string',
-      },
       items: [],
       meta: {
         desc: {
@@ -248,6 +249,11 @@ const TEST_WORLD: WorldTemplate = {
         },
       },
       scripts: new Map(),
+      slots: new Map(),
+      source: {
+        base: '',
+        type: 'string',
+      },
       stats: new Map(),
       type: {
         base: ACTOR_TYPE,
@@ -267,6 +273,10 @@ const TEST_WORLD: WorldTemplate = {
         },
       },
       scripts: new Map(),
+      slot: {
+        base: '',
+        type: 'string',
+      },
       stats: new Map(),
       type: {
         base: ITEM_TYPE,
@@ -362,10 +372,6 @@ const TEST_WORLD: WorldTemplate = {
 
 const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
   base: {
-    source: {
-      base: 'default',
-      type: 'string',
-    },
     items: [{
       chance: TEMPLATE_CHANCE,
       id: TEST_ITEM.base.meta.id,
@@ -381,12 +387,17 @@ const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
         type: 'string',
       },
     },
+    scripts: new Map(),
+    slots: new Map(),
+    source: {
+      base: 'default',
+      type: 'string',
+    },
+    stats: new Map(),
     type: {
       base: 'actor',
       type: 'string',
     },
-    scripts: new Map(),
-    stats: new Map(),
   },
   chance: TEMPLATE_CHANCE,
   excludes: [],
@@ -405,12 +416,16 @@ const TEST_ITEM_MODS: Array<Modifier<Item>> = [{
         type: 'string',
       },
     },
+    scripts: new Map(),
+    slot: {
+      base: '',
+      type: 'string',
+    },
+    stats: new Map(),
     type: {
       base: 'actor',
       type: 'string',
     },
-    scripts: new Map(),
-    stats: new Map(),
   },
   chance: TEMPLATE_CHANCE,
   excludes: [],

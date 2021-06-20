@@ -2,7 +2,7 @@ import { getOrDefault, mustCoalesce } from '@apextoaster/js-utils';
 import nlp from 'compromise';
 
 import { TokenizerService } from '.';
-import { Command, makeCommand } from '../../model/Command';
+import { Command } from '../../model/Command';
 import { InjectedOptions } from '../../module';
 import { WordTokenizer } from './WordTokenizer';
 
@@ -29,7 +29,12 @@ export class NaturalTokenizer extends WordTokenizer implements TokenizerService 
     const index = parseInt(mustCoalesce(rawIndex, '0'), 10);
     const target = [...nouns, ...others].join(' ');
     const verb = getOrDefault(this.verbs, rawVerb, rawVerb);
-    const command = makeCommand(verb, target, index);
+    const command: Command = {
+      index,
+      input,
+      target,
+      verb,
+    };
 
     const terms = doc.termList();
     this.logger.debug({ command, terms }, 'built command from document');

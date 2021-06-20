@@ -52,10 +52,6 @@ describe('node fetch loader', () => {
     const state = makeTestState('', []);
     const world = makeTestWorld([{
       base: {
-        source: {
-          base: ActorSource.BEHAVIOR,
-          type: 'string',
-        },
         items: [],
         meta: {
           id: '',
@@ -69,6 +65,11 @@ describe('node fetch loader', () => {
           },
         },
         scripts: new Map(),
+        slots: new Map(),
+        source: {
+          base: ActorSource.BEHAVIOR,
+          type: 'string',
+        },
         stats: new Map(),
         type: {
           base: ACTOR_TYPE,
@@ -90,6 +91,10 @@ describe('node fetch loader', () => {
           },
         },
         scripts: new Map(),
+        slot: {
+          base: '',
+          type: 'string',
+        },
         stats: new Map(),
         type: {
           base: ITEM_TYPE,

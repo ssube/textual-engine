@@ -16,7 +16,6 @@ import { getStubHelper } from '../../../helper';
 import { testTransfer } from '../../helper';
 
 const TEST_ACTOR: Actor = {
-  source: ActorSource.BEHAVIOR,
   items: [{
     meta: {
       desc: 'bon',
@@ -25,6 +24,7 @@ const TEST_ACTOR: Actor = {
       template: 'bon',
     },
     scripts: new Map(),
+    slot: '',
     stats: new Map(),
     type: ITEM_TYPE,
   }],
@@ -40,6 +40,8 @@ const TEST_ACTOR: Actor = {
       name: 'verb-wait',
     }],
   ]),
+  slots: new Map(),
+  source: ActorSource.BEHAVIOR,
   stats: new Map([
     [STAT_HEALTH, 10],
   ]),

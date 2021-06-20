@@ -49,7 +49,6 @@ describe('actor drop scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve(items));
 
       const actor: Actor = {
-        source: ActorSource.BEHAVIOR,
         items: [items[0]],
         meta: {
           id: '',
@@ -58,6 +57,8 @@ describe('actor drop scripts', () => {
           template: '',
         },
         scripts: new Map(),
+        slots: new Map(),
+        source: ActorSource.BEHAVIOR,
         stats: new Map(),
         type: ACTOR_TYPE,
       };
@@ -92,7 +93,6 @@ describe('actor drop scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve(items));
 
       const actor: Actor = {
-        source: ActorSource.BEHAVIOR,
         items: [items[0]],
         meta: {
           id: '',
@@ -101,6 +101,8 @@ describe('actor drop scripts', () => {
           template: '',
         },
         scripts: new Map(),
+        slots: new Map(),
+        source: ActorSource.BEHAVIOR,
         stats: new Map(),
         type: ACTOR_TYPE,
       };
@@ -135,7 +137,6 @@ describe('actor drop scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve(items));
 
       const actor: Actor = {
-        source: ActorSource.BEHAVIOR,
         items: [items[0]],
         meta: {
           id: '',
@@ -144,6 +145,8 @@ describe('actor drop scripts', () => {
           template: '',
         },
         scripts: new Map(),
+        slots: new Map(),
+        source: ActorSource.BEHAVIOR,
         stats: new Map(),
         type: ACTOR_TYPE,
       };
@@ -173,7 +176,6 @@ describe('actor drop scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve([]));
 
       const actor: Actor = {
-        source: ActorSource.BEHAVIOR,
         items: [],
         meta: {
           id: '',
@@ -182,6 +184,8 @@ describe('actor drop scripts', () => {
           template: '',
         },
         scripts: new Map(),
+        slots: new Map(),
+        source: ActorSource.BEHAVIOR,
         stats: new Map(),
         type: ACTOR_TYPE,
       };

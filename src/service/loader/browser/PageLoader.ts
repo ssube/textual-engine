@@ -8,7 +8,7 @@ import { BaseLoader } from '../BaseLoader';
 export class BrowserPageLoader extends BaseLoader implements LoaderService {
   protected dom: Document;
 
-  constructor(options: InjectedOptions, dom = document) {
+  constructor(options: InjectedOptions, /* istanbul ignore next */ dom = document) {
     super(options, ['page']);
     this.dom = dom;
   }

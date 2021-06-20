@@ -5,11 +5,8 @@ export const PORTAL_DEPTH = 4;
 export const SPLIT_HEAD_TAIL = 2;
 export const TEMPLATE_CHANCE = 100;
 
-// behaviors
+// TODO: move to config
 export const BEHAVIOR_WANDER = 0.25;
-
-// render delays
-// TODO: should be config
 export const RENDER_DELAY = 50; // as long as possible to combine repeat renders
 export const LINE_DELAY = 10; // just enough to combine consecutive output
 
@@ -67,16 +64,8 @@ export const SIGNAL_LOOK = 'signal.look';
 export const SIGNAL_STEP = 'signal.step';
 export const SIGNAL_USE = 'signal.use';
 
-// common verbs
+// verbs
 export const VERB_PREFIX = 'verbs.';
-
-export const VERB_DROP = 'verbs.common.drop';
-export const VERB_HIT = 'verbs.common.hit';
-export const VERB_LOOK = 'verbs.common.look';
-export const VERB_MOVE = 'verbs.common.move';
-export const VERB_TAKE = 'verbs.common.take';
-export const VERB_USE = 'verbs.common.use';
-export const VERB_WAIT = 'verbs.common.wait';
 
 // meta commands
 export const META_CREATE = 'verbs.meta.create';
@@ -99,6 +88,16 @@ export const META_VERBS: ReadonlyArray<string> = [
   META_WORLDS,
 ] as const;
 
+// common verbs
+export const VERB_DROP = 'verbs.common.drop';
+export const VERB_EQUIP = 'verbs.common.equip';
+export const VERB_HIT = 'verbs.common.hit';
+export const VERB_LOOK = 'verbs.common.look';
+export const VERB_MOVE = 'verbs.common.move';
+export const VERB_TAKE = 'verbs.common.take';
+export const VERB_USE = 'verbs.common.use';
+export const VERB_WAIT = 'verbs.common.wait';
+
 /**
  * Common verbs and meta commands.
  *
@@ -107,6 +106,7 @@ export const META_VERBS: ReadonlyArray<string> = [
 export const COMMON_VERBS: ReadonlyArray<string> = [
   ...META_VERBS,
   VERB_DROP,
+  VERB_EQUIP,
   VERB_HIT,
   VERB_LOOK,
   VERB_MOVE,

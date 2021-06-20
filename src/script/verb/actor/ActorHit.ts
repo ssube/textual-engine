@@ -5,6 +5,7 @@ import { isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { ShowVolume } from '../../../util/actor';
 import { SIGNAL_HIT } from '../../../util/constants';
+import { findSlotItem, matchSlots } from '../../../util/entity/find';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -12,6 +13,8 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
     throw new ScriptTargetError('script target must be an actor');
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const actor = this;
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 
@@ -28,7 +31,7 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
 
   if (isNil(target)) {
     await context.state.show('actor.step.hit.type', { command }, ShowVolume.SELF, {
-      actor: this,
+      actor,
       room,
     });
     return;
@@ -36,15 +39,18 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
 
   if (this === target) {
     await context.state.show('actor.step.hit.self', { command }, ShowVolume.SELF, {
-      actor: this,
+      actor,
       room,
     });
     return;
   }
 
-  if (this.items.length === 0) {
+  const slots = matchSlots(this, 'weapon');
+  const [item] = slots.map((it) => findSlotItem(actor, it));
+
+  if (isNil(item)) {
     await context.state.show('actor.step.hit.item', { target }, ShowVolume.SELF, {
-      actor: this,
+      actor,
       room,
     });
     return;
@@ -52,7 +58,7 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
 
   await context.script.invoke(target, SIGNAL_HIT, {
     ...context,
-    actor: this,
-    item: this.items[0],
+    actor,
+    item,
   });
 }

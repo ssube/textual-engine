@@ -8,7 +8,6 @@ worlds:
           desc:
             base: ''
         items: []
-        stats: !map {}
         scripts: !map
           signal.get:
             data: !map {}
@@ -30,6 +29,10 @@ worlds:
             data: !map {}
             name:
               base: verb-actor-drop
+          verbs.common.equip:
+            data: !map {}
+            name:
+              base: verb-actor-equip
           verbs.common.hit:
             data: !map {}
             name:
@@ -58,6 +61,8 @@ worlds:
             data: !map {}
             name:
               base: verb-actor-hit
+        slots: !map {}
+        stats: !map {}
       item:
         meta:
           id: item-none
@@ -65,12 +70,14 @@ worlds:
             base: ''
           desc:
             base: ''
-        stats: !map {}
         scripts: !map
           signal.look:
             data: !map {}
             name:
               base: signal-item-look
+        slot:
+          base: ''
+        stats: !map {}
       portal:
         meta:
           id: portal-none
@@ -159,6 +166,13 @@ worlds:
               drop:
                 type: |-
                   {{command.target}} is not an item!
+              equip:
+                item: |-
+                  You equip the {{item.meta.name}} in your {{item.slot}}.
+                none: |-
+                  {{command.target}} is not an item!
+                slot: |-
+                  You are not able to equip {{item.meta.name}} in {{item.slot}}!
               command:
                 dead: |-
                   You are dead!
@@ -215,6 +229,10 @@ worlds:
                 base: flying bat
             items:
               - id: item-bat-teeth
+            scripts: !map {}
+            slots: !map
+              weapon-teeth:
+                base: bat-teeth
             stats: !map
               health:
                 max: 50
@@ -222,7 +240,6 @@ worlds:
               stamina:
                 max: 5
                 min: 1
-            scripts: !map {}
           mods:
             - chance: 50
               excludes: []
@@ -234,8 +251,9 @@ worlds:
                   name:
                     base: 'Vampire {{base}}'
                 items: []
-                stats: !map {}
                 scripts: !map {}
+                slots: !map {}
+                stats: !map {}
         - base:
             meta:
               id: actor-goblin
@@ -246,6 +264,12 @@ worlds:
             items:
               - id: item-sword
                 chance: 20
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: sword
+              weapon-hand-right:
+                base: sword
             stats: !map
               health:
                 max: 20
@@ -253,7 +277,6 @@ worlds:
               stamina:
                 max: 5
                 min: 1
-            scripts: !map {}
           mods:
             - chance: 50
               excludes: []
@@ -266,8 +289,9 @@ worlds:
                     base: 'Sword {{base}}'
                 items:
                   - id: item-sword
-                stats: !map {}
                 scripts: !map {}
+                slots: !map {}
+                stats: !map {}
       items:
         - base:
             meta:
@@ -277,6 +301,8 @@ worlds:
               desc:
                 base: bat teeth
             scripts: !map {}
+            slot:
+              base: weapon-teeth
             stats: !map
               damage:
                 min: 2
@@ -289,6 +315,8 @@ worlds:
               desc:
                 base: short sword
             scripts: !map {}
+            slot:
+              base: weapon-hand
             stats: !map
               damage:
                 min: 5

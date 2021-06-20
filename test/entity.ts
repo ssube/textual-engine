@@ -10,7 +10,6 @@ import { TEMPLATE_CHANCE } from '../src/util/constants';
 
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {
-    source: ActorSource.BEHAVIOR,
     items,
     meta: {
       desc: '',
@@ -19,6 +18,8 @@ export function makeTestActor(id: string, name: string, template: string, ...ite
       template,
     },
     scripts: new Map(),
+    slots: new Map(),
+    source: ActorSource.BEHAVIOR,
     stats: new Map(),
     type: ACTOR_TYPE,
   };
@@ -33,6 +34,7 @@ export function makeTestItem(id: string, name: string, template: string): Item {
       template,
     },
     scripts: new Map(),
+    slot: '',
     stats: new Map(),
     type: ITEM_TYPE,
   };

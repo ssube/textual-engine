@@ -2,8 +2,8 @@ import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
 import { makeConstStringSchema } from '../../util/schema';
-import { ScriptMap, StatMap } from '../../util/types';
-import { Template } from '../mapped/Template';
+import { NumberMap, ScriptMap } from '../../util/types';
+import { Template, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { Entity } from './Base';
 
@@ -12,10 +12,11 @@ export const ITEM_TYPE = 'item' as const;
 export type ItemType = typeof ITEM_TYPE;
 
 export interface Item {
-  type: ItemType;
   meta: Metadata;
   scripts: ScriptMap;
-  stats: StatMap;
+  slot: string;
+  stats: NumberMap;
+  type: ItemType;
 }
 
 export function isItem(entity: Optional<Entity>): entity is Item {
@@ -28,18 +29,19 @@ export const ITEM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Item>> = {
     base: {
       type: 'object',
       properties: {
-        type: makeConstStringSchema(ITEM_TYPE),
         meta: TEMPLATE_METADATA_SCHEMA,
         scripts: {
           type: 'object',
           required: [],
         },
+        slot: TEMPLATE_STRING_SCHEMA,
         stats: {
           type: 'object',
           required: [],
         },
+        type: makeConstStringSchema(ITEM_TYPE),
       },
-      required: ['meta', 'scripts', 'stats', 'type'],
+      required: ['meta', 'scripts', 'slot', 'stats', 'type'],
     },
     mods: {
       type: 'array',

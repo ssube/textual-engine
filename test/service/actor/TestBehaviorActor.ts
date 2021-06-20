@@ -4,7 +4,6 @@ import { BaseOptions, Container, NullLogger } from 'noicejs';
 import { createStubInstance } from 'sinon';
 
 import { Actor, ActorSource } from '../../../src/model/entity/Actor';
-import { Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
 import { Room } from '../../../src/model/entity/Room';
 import { INJECT_EVENT, INJECT_RANDOM } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
@@ -30,7 +29,6 @@ describe('behavior actor', () => {
     const pending = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
     const actor: Actor = {
-      source: ActorSource.BEHAVIOR,
       items: [],
       meta: {
         desc: '',
@@ -39,6 +37,8 @@ describe('behavior actor', () => {
         template: '',
       },
       scripts: new Map(),
+      slots: new Map(),
+      source: ActorSource.BEHAVIOR,
       stats: new Map(),
       type: 'actor',
     };

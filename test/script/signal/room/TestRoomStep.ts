@@ -20,7 +20,7 @@ describe('room step scripts', () => {
       const transfer = testTransfer();
 
       const context = {
-        command: makeCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -41,7 +41,7 @@ describe('room step scripts', () => {
       const transfer = testTransfer();
 
       const context = {
-        command: makeCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

@@ -139,26 +139,26 @@ worlds:
                   verb: |-
                     {{actor.meta.name}} will $t({{command.verb}}) the next turn.
                   target: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.target}}.
+                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
                 unknown: |-
                   {{actor.meta.name}} does not know how to $t({{command.verb}})!
               drop:
                 type: |-
-                  {{command.target}} is not an item!
+                  {{command.targets}} is not an item!
               equip:
                 item: |-
-                  You equip the {{item.meta.name}} in your {{item.slot}}.
+                  You equip the {{item.meta.name}} in your {{slot}}.
                 none: |-
-                  {{command.target}} is not an item!
+                  {{command.targets}} is not an item!
                 slot: |-
-                  You are not able to equip {{item.meta.name}} in {{item.slot}}!
+                  You are not able to equip {{item.meta.name}} in {{slot}}!
               hit:
                 item: |-
                   You cannot hit {{target.meta.name}}, you are not holding anything!
                 self: |-
                   You cannot hit yourself!
                 type: |-
-                  {{command.target}} is not an actor!
+                  {{command.targets}} is not an actor!
               look:
                 none: |-
                   You see nothing.
@@ -185,15 +185,15 @@ worlds:
                     You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
               move:
                 missing: |-
-                  {{command.target}} is not a portal!
+                  {{command.targets}} is not a portal!
                 portal: |-
                   {{actor.meta.name}} moved through the {{portal.groupSource}} {{portal.meta.name}}.
               take:
                 type: |-
-                  {{command.target}} is not an item!
+                  {{command.targets}} is not an item!
               use:
                 type: |-
-                  {{command.target}} is not a usable item!
+                  {{command.targets}} is not a usable item!
           item:
             use:
               any: |-

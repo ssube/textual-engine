@@ -65,7 +65,7 @@ release: node_modules
 
 RUN_ARGS ?= --config data/config.yml \
 	--data file://data/demo.yml \
-	--input 'create test test 20' \
+	--input 'create test with test and 20' \
 	--input help
 
 run: ## run app with demo data

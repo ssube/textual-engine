@@ -4,6 +4,7 @@ import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { head } from '../../../util/collection/array';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -19,7 +20,7 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
       id: this.meta.id,
     },
     meta: {
-      name: command.target,
+      name: head(command.targets),
     },
     room: {
       id: room.meta.id,

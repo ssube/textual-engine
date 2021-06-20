@@ -20,7 +20,7 @@ describe('room look scripts', () => {
     const transfer = testTransfer();
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),
@@ -41,7 +41,7 @@ describe('room look scripts', () => {
 
     const room = makeTestRoom('', '', '', [], []);
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),
@@ -65,7 +65,7 @@ describe('room look scripts', () => {
     const room = makeTestRoom('', '', '', [actor], []);
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),
@@ -89,7 +89,7 @@ describe('room look scripts', () => {
     const room = makeTestRoom('', '', '', [], [item]);
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),
@@ -116,7 +116,7 @@ describe('room look scripts', () => {
     (stateHelper.find as SinonStub).returns(Promise.resolve([room]));
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),

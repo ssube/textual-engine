@@ -4,6 +4,7 @@ import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { head } from '../../../util/collection/array';
 import { SIGNAL_USE } from '../../../util/constants';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
 
@@ -16,7 +17,7 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
   const room = mustExist(context.room);
   const results = await context.state.find({
     meta: {
-      name: command.target,
+      name: head(command.targets),
     },
     room: {
       id: room.meta.id,

@@ -13,7 +13,7 @@ describe('natural tokenizer', () => {
     return expect(token.parse(input)).to.eventually.deep.equal([{
       index: 0,
       input,
-      target: 'west window test',
+      targets: ['west window test'],
       verb: 'move',
     }]);
   });
@@ -26,7 +26,7 @@ describe('natural tokenizer', () => {
     return expect(token.parse(input)).to.eventually.deep.equal([{
       index: 2,
       input,
-      target: 'window',
+      targets: ['window'],
       verb: 'move',
     }]);
   });

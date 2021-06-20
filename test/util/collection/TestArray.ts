@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
 import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
-import { randomItem, remove } from '../../../src/util/collection/array';
+import { groupOn, randomItem, remove } from '../../../src/util/collection/array';
 
 describe('array utils', () => {
   describe('random item helper', () => {
@@ -18,6 +18,19 @@ describe('array utils', () => {
       const even = remove(data, (it) => (it % 2) === 0);
 
       expect(even).to.have.lengthOf(50);
+    });
+  });
+
+  describe('group on delimiter helper', () => {
+    it('should group items and remove delimiters', async () => {
+      const delimiters = new Set(['a', 'e', 'i', 'o', 'u']);
+      const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'];
+
+      expect(groupOn(alphabet, delimiters)).to.deep.equal([
+        ['b', 'c', 'd'],
+        ['f', 'g', 'h'],
+        ['j', 'k', 'l'],
+      ]);
     });
   });
 });

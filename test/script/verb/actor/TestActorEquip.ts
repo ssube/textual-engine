@@ -21,7 +21,7 @@ describe('actor equip scripts', () => {
       const transfer = testTransfer();
 
       const context: ScriptContext = {
-        command: makeCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

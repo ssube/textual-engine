@@ -3,6 +3,7 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorWait } from '../../../../src/script/verb/actor/ActorWait';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
@@ -20,12 +21,7 @@ describe('actor wait scripts', () => {
       const transfer = testTransfer();
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_WAIT,
-        },
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

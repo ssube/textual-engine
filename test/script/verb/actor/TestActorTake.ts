@@ -3,6 +3,7 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorTake } from '../../../../src/script/verb/actor/ActorTake';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
 import { ScriptContext } from '../../../../src/service/script';
@@ -20,12 +21,7 @@ describe('actor take scripts', () => {
       const transfer = testTransfer();
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_TAKE,
-        },
+        command: makeCommand(VERB_TAKE),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -49,12 +45,7 @@ describe('actor take scripts', () => {
       ]));
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_TAKE,
-        },
+        command: makeCommand(VERB_TAKE, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -74,17 +65,12 @@ describe('actor take scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      const item = makeTestItem('', '', '');
+      const item = makeTestItem('foo', '', '');
       (stateHelper.find as SinonStub).returns(Promise.resolve([item]));
 
       const room = makeTestRoom('', '', '', [], [item]);
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_TAKE,
-        },
+        command: makeCommand(VERB_TAKE, item.meta.id),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

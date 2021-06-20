@@ -3,7 +3,7 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
+import { makeCommand, makeCommandIndex } from '../../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
 import { VerbActorDrop } from '../../../../src/script/verb/actor/ActorDrop';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
@@ -22,7 +22,7 @@ describe('actor drop scripts', () => {
       const transfer = testTransfer();
 
       const context: ScriptContext = {
-        command: makeCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -63,7 +63,7 @@ describe('actor drop scripts', () => {
         type: ACTOR_TYPE,
       };
       const context: ScriptContext = {
-        command: makeCommand(VERB_DROP, ''),
+        command: makeCommand(VERB_DROP, items[0].meta.id),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -151,7 +151,7 @@ describe('actor drop scripts', () => {
         type: ACTOR_TYPE,
       };
       const context: ScriptContext = {
-        command: makeCommand(VERB_DROP, 'foo', 1),
+        command: makeCommandIndex(VERB_DROP, 1, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -190,7 +190,7 @@ describe('actor drop scripts', () => {
         type: ACTOR_TYPE,
       };
       const context: ScriptContext = {
-        command: makeCommand(VERB_DROP, 'foo', 1),
+        command: makeCommandIndex(VERB_DROP, 1, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

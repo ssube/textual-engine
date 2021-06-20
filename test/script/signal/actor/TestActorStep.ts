@@ -55,7 +55,7 @@ describe('actor step scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
       const context = {
-        command: makeCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -75,7 +75,7 @@ describe('actor step scripts', () => {
       const transfer = testTransfer();
 
       await SignalActorStep.call(TEST_ACTOR, {
-        command: makeCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -101,7 +101,7 @@ describe('actor step scripts', () => {
           [STAT_HEALTH, 0],
         ]),
       }, {
-        command: makeCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -130,7 +130,7 @@ describe('actor step scripts', () => {
       };
       await SignalActorStep.call(player, {
         actor: player,
-        command: makeCommand(VERB_WAIT, ''),
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -190,7 +190,7 @@ describe('actor step scripts', () => {
       };
       await SignalActorStep.call(player, {
         actor: player,
-        command: makeCommand(VERB_MOVE, ''), // must be a verb that does not exist
+        command: makeCommand(VERB_MOVE), // must be a verb that does not exist
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

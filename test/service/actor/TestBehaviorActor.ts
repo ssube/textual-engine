@@ -114,14 +114,9 @@ describe('behavior actor', () => {
       room: makeTestRoom('', '', '', [player], []),
     });
 
-    return expect(pendingCommand).to.eventually.deep.include({
-      command: {
-        index: 0,
-        input: `${VERB_HIT} ${player.meta.id}`,
-        target: player.meta.id,
-        verb: VERB_HIT,
-      },
-    });
+    const commandEvent = await pendingCommand;
+    expect(commandEvent.command.targets, 'targets').to.include(player.meta.id);
+    expect(commandEvent.command.verb, 'verb').to.equal(VERB_HIT);
   });
 
   it('should move into other rooms on a low roll', async () => {
@@ -156,13 +151,8 @@ describe('behavior actor', () => {
       room,
     });
 
-    return expect(pendingCommand).to.eventually.deep.include({
-      command: {
-        index: 0,
-        input: `${VERB_MOVE} ${portal.meta.id}`,
-        target: portal.meta.id,
-        verb: VERB_MOVE,
-      },
-    });
+    const commandEvent = await pendingCommand;
+    expect(commandEvent.command.targets, 'targets').to.include(portal.meta.id);
+    expect(commandEvent.command.verb).to.equal(VERB_MOVE);
   });
 });

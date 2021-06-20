@@ -52,7 +52,7 @@ export async function SignalActorStep(this: ScriptTarget, context: ScriptContext
   }
 
   if (this.source === ActorSource.PLAYER) {
-    if (command.target.length > 0) {
+    if (command.targets.length > 0) {
       await context.state.show('actor.step.command.player.target', showContext, ShowVolume.SELF, source);
     } else {
       await context.state.show('actor.step.command.player.verb', showContext, ShowVolume.SELF, source);

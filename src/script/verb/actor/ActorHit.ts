@@ -4,6 +4,7 @@ import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { ShowVolume } from '../../../util/actor';
+import { head } from '../../../util/collection/array';
 import { SIGNAL_HIT } from '../../../util/constants';
 import { findActorSlots, findSlotItem } from '../../../util/entity/find';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
@@ -20,7 +21,7 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
 
   const results = await context.state.find({
     meta: {
-      name: command.target,
+      name: head(command.targets),
     },
     room: {
       id: room.meta.id,

@@ -5,10 +5,60 @@ export const PORTAL_DEPTH = 4;
 export const SPLIT_HEAD_TAIL = 2;
 export const TEMPLATE_CHANCE = 100;
 
-// TODO: move to config
+// TODO: move to actor config
 export const BEHAVIOR_WANDER = 0.25;
+
+// TODO: move to render config
 export const RENDER_DELAY = 50; // as long as possible to combine repeat renders
 export const LINE_DELAY = 10; // just enough to combine consecutive output
+
+// TODO: move to locale data
+export const REMOVE_WORDS = new Set([
+  'a',
+  'an',
+  'and',
+  'as',
+  'but',
+  'for',
+  'nor',
+  'not',
+  'of',
+  'or',
+  'so',
+  'some',
+  'the',
+]);
+
+export const TARGET_WORDS = new Set([
+  'above',
+  'across',
+  'against',
+  'at',
+  'behind',
+  'below',
+  'beside',
+  'by',
+  'down',
+  'from',
+  'in',
+  'inside',
+  'into',
+  'on',
+  'onto',
+  'out',
+  'outside',
+  'over',
+  'through',
+  'to',
+  'toward',
+  'under',
+  'up',
+  'with',
+  'within',
+  'without',
+]);
+
+export const SPLIT_CHAR = ' ';
 
 // common events
 export const EVENT_COMMON_ERROR = 'error';

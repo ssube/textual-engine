@@ -12,7 +12,7 @@ describe('word tokenizer', () => {
     return expect(token.parse('foo')).to.eventually.deep.equal([{
       index: 0,
       input: 'foo',
-      target: '',
+      targets: [],
       verb: 'foo',
     }]);
   });
@@ -26,7 +26,7 @@ describe('word tokenizer', () => {
     return expect(token.parse(input)).to.eventually.deep.equal([{
       index,
       input,
-      target: 'bar',
+      targets: ['bar'],
       verb: 'foo',
     }]);
   });

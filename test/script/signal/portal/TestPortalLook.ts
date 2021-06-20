@@ -20,7 +20,7 @@ describe('portal look scripts', () => {
     const transfer = testTransfer();
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),
@@ -40,7 +40,7 @@ describe('portal look scripts', () => {
     const transfer = testTransfer();
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),
@@ -65,7 +65,7 @@ describe('portal look scripts', () => {
     (stateHelper.find as SinonStub).returns(Promise.resolve([room]));
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),

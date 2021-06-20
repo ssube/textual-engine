@@ -1,9 +1,10 @@
-import { isNil, mustExist } from '@apextoaster/js-utils';
+import { isNil, mustCoalesce, mustExist } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { findActorSlots } from '../../../util/entity/find';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -12,12 +13,14 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
   }
 
   const command = mustExist(context.command);
+  const [targetName, targetSlot] = command.targets;
+
   const results = await context.state.find({
     actor: {
       id: this.meta.id,
     },
     meta: {
-      name: command.target,
+      name: targetName,
     },
     matchers: createFuzzyMatcher(),
   });
@@ -28,12 +31,16 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
     return;
   }
 
-  if (this.slots.has(item.slot)) {
-    // TODO: should not be mutable
-    this.slots.set(item.slot, item.meta.id);
+  // use the requested slot or default to the item's preferred slot
+  const slotName = mustCoalesce(targetSlot, item.slot);
+  const [slot] = findActorSlots(this, slotName);
 
-    await context.state.show('actor.step.equip.item', { item });
+  if (this.slots.has(slot)) {
+    // TODO: should not be mutable
+    this.slots.set(slot, item.meta.id);
+
+    await context.state.show('actor.step.equip.item', { item, slot });
   } else {
-    await context.state.show('actor.step.equip.slot', { command, item });
+    await context.state.show('actor.step.equip.slot', { item, slot });
   }
 }

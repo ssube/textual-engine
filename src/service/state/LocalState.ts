@@ -140,25 +140,25 @@ export class LocalStateService implements StateService {
     // handle meta commands
     switch (command.verb) {
       case META_CREATE:
-        await this.doCreate(command.target, command.index);
+        await this.doCreate(event);
         break;
       case META_DEBUG:
         await this.doDebug();
         break;
       case META_GRAPH:
-        await this.doGraph(command.target);
+        await this.doGraph(event);
         break;
       case META_HELP:
         await this.doHelp(event);
         break;
       case META_LOAD:
-        await this.doLoad(command.target);
+        await this.doLoad(event);
         break;
       case META_QUIT:
         await this.doQuit();
         break;
       case META_SAVE:
-        await this.doSave(command.target);
+        await this.doSave(event);
         break;
       case META_WORLDS:
         await this.doWorlds();
@@ -249,10 +249,11 @@ export class LocalStateService implements StateService {
   /**
    * Create a new world and invite players to join.
    */
-  public async doCreate(target: string, depth: number): Promise<void> {
+  public async doCreate(event: ActorCommandEvent): Promise<void> {
     const generator = mustExist(this.generator);
 
-    const [id, seed] = target.split(' ', SPLIT_HEAD_TAIL);
+    const [id, seed] = event.command.targets;
+    const depth = event.command.index;
     this.logger.debug({
       depth,
       id,
@@ -328,7 +329,7 @@ export class LocalStateService implements StateService {
   /**
    * Print graphviz representation of the world state.
    */
-  public async doGraph(path: string): Promise<void> {
+  public async doGraph(event: ActorCommandEvent): Promise<void> {
     if (isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line: 'meta.graph.none',
@@ -341,8 +342,10 @@ export class LocalStateService implements StateService {
       return;
     }
 
+
     const lines = graphState(this.state);
     const data = lines.join('\n');
+    const [path] = event.command.targets;
 
     this.event.emit(EVENT_LOADER_SAVE, {
       data,
@@ -391,16 +394,18 @@ export class LocalStateService implements StateService {
   /**
    * Load world state and/or templates from path.
    */
-  public async doLoad(path: string): Promise<void> {
+  public async doLoad(event: ActorCommandEvent): Promise<void> {
+    const [path] = event.command.targets;
+
     const doneEvent = onceEvent<LoaderReadEvent>(this.event, EVENT_LOADER_DONE);
     const stateEvent = onceEvent<LoaderStateEvent>(this.event, EVENT_LOADER_STATE);
     this.event.emit(EVENT_LOADER_READ, {
       path,
     });
 
-    const event = await Promise.race([doneEvent, stateEvent]);
-    if (!hasState(event)) {
-      this.logger.debug({ event }, 'path read event received first');
+    const loadEvent = await Promise.race([doneEvent, stateEvent]);
+    if (!hasState(loadEvent)) {
+      this.logger.debug({ loadEvent }, 'path read event received first');
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
           path,
@@ -416,7 +421,7 @@ export class LocalStateService implements StateService {
     }
 
     // was a state event
-    const { state } = event;
+    const { state } = loadEvent;
     const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
     this.logger.debug({ bundle: world.locale }, 'loading world locale bundle');
@@ -452,7 +457,7 @@ export class LocalStateService implements StateService {
     this.event.emit(EVENT_COMMON_QUIT);
   }
 
-  public async doSave(path: string): Promise<void> {
+  public async doSave(event: ActorCommandEvent): Promise<void> {
     if (isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line: 'meta.save.none',
@@ -473,6 +478,7 @@ export class LocalStateService implements StateService {
       worlds: [world],
     };
 
+    const [path] = event.command.targets;
     const pendingSave = onceEvent<LoaderReadEvent>(this.event, EVENT_LOADER_DONE);
 
     this.event.emit(EVENT_LOADER_SAVE, {

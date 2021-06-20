@@ -4,21 +4,11 @@ import { Inject, Logger } from 'noicejs';
 import { TokenizerService } from '.';
 import { Command } from '../../model/Command';
 import { INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
+import { groupOn } from '../../util/collection/array';
+import { REMOVE_WORDS, SPLIT_CHAR, TARGET_WORDS } from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
+import { trim } from '../../util/string';
 import { LocaleService } from '../locale';
-
-const REMOVED_WORDS = new Set([
-  'a',
-  'an',
-  'at',
-  'on',
-  'the',
-  'to',
-  'toward',
-  'towards',
-]);
-
-const SPLIT_CHAR = ' ';
 
 @Inject(INJECT_LOCALE, INJECT_LOGGER)
 export class WordTokenizer implements TokenizerService {
@@ -38,7 +28,7 @@ export class WordTokenizer implements TokenizerService {
       .split(SPLIT_CHAR)
       .map(trim)
       .filter((it) => it.length > 0)
-      .filter((it) => REMOVED_WORDS.has(it) === false);
+      .filter((it) => REMOVE_WORDS.has(it) === false);
   }
 
   public async parse(input: string): Promise<Array<Command>> {
@@ -48,7 +38,7 @@ export class WordTokenizer implements TokenizerService {
       index: 0,
       input,
       verb,
-      target: '',
+      targets: [],
     };
 
     // 2+ segments and the last one is all digits
@@ -58,7 +48,7 @@ export class WordTokenizer implements TokenizerService {
       cmd.index = parseInt(last, 10);
     }
 
-    cmd.target = targets.join(SPLIT_CHAR);
+    cmd.targets = groupOn(targets, TARGET_WORDS).map((it) => it.join(SPLIT_CHAR));
 
     return [cmd];
   }
@@ -73,10 +63,4 @@ export class WordTokenizer implements TokenizerService {
       this.verbs.set(translated, verb); // trick i18next into translating them back
     }
   }
-}
-
-export function trim(str: string): string {
-  return str
-    .replace(/^\s+/, '')
-    .replace(/\s+$/, '');
 }

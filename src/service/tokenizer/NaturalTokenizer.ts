@@ -4,6 +4,8 @@ import nlp from 'compromise';
 import { TokenizerService } from '.';
 import { Command } from '../../model/Command';
 import { InjectedOptions } from '../../module';
+import { groupOn } from '../../util/collection/array';
+import { TARGET_WORDS } from '../../util/constants';
 import { WordTokenizer } from './WordTokenizer';
 
 export class NaturalTokenizer extends WordTokenizer implements TokenizerService {
@@ -27,12 +29,15 @@ export class NaturalTokenizer extends WordTokenizer implements TokenizerService 
     this.logger.debug({ nouns, others, rawIndex, rawVerb }, 'parsed parts of speech from document');
 
     const index = parseInt(mustCoalesce(rawIndex, '0'), 10);
-    const target = [...nouns, ...others].join(' ');
+    const targets = groupOn([
+      ...nouns,
+      ...others,
+    ], TARGET_WORDS).map((it) => it.join(' '));
     const verb = getOrDefault(this.verbs, rawVerb, rawVerb);
     const command: Command = {
       index,
       input,
-      target,
+      targets,
       verb,
     };
 

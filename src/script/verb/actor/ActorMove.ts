@@ -6,6 +6,7 @@ import { isPortal } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { ShowVolume } from '../../../util/actor';
+import { head } from '../../../util/collection/array';
 import { SIGNAL_LOOK } from '../../../util/constants';
 import { indexEntity } from '../../../util/entity/match';
 
@@ -16,7 +17,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
 
   // find the new room
   const command = mustExist(context.command);
-  const targetName = command.target;
+  const targetName = head(command.targets);
 
   const currentRoom = mustExist(context.room);
   const portals = currentRoom.portals.filter((it) => {

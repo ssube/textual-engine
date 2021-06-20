@@ -3,6 +3,7 @@ import { NullLogger } from 'noicejs';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { makeCommand } from '../../../../src/model/Command';
 import { Actor } from '../../../../src/model/entity/Actor';
 import { VerbActorHit } from '../../../../src/script/verb/actor/ActorHit';
 import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
@@ -21,12 +22,7 @@ describe('actor hit scripts', () => {
       const transfer = testTransfer();
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_WAIT,
-        },
+        command: makeCommand(VERB_WAIT),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -45,16 +41,11 @@ describe('actor hit scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      const target: Actor = makeTestActor('', '', '');
+      const target: Actor = makeTestActor('enemy', '', '');
       (stateHelper.find as SinonStub).returns(Promise.resolve([target]));
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_HIT,
-        },
+        command: makeCommand(VERB_HIT, target.meta.id),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -82,12 +73,7 @@ describe('actor hit scripts', () => {
       (stateHelper.find as SinonStub).returns(Promise.resolve([]));
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_HIT,
-        },
+        command: makeCommand(VERB_HIT, 'foo'),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -108,16 +94,11 @@ describe('actor hit scripts', () => {
       const stateHelper = getStubHelper();
       const transfer = testTransfer();
 
-      const actor: Actor = makeTestActor('', '', '', makeTestItem('', '', ''));
+      const actor: Actor = makeTestActor('foo', '', '', makeTestItem('', '', ''));
       (stateHelper.find as SinonStub).returns(Promise.resolve([actor]));
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_HIT,
-        },
+        command: makeCommand(VERB_HIT, actor.meta.id),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),
@@ -143,12 +124,7 @@ describe('actor hit scripts', () => {
       ]));
 
       const context: ScriptContext = {
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_HIT,
-        },
+        command: makeCommand(VERB_HIT, ''),
         data: new Map(),
         logger: NullLogger.global,
         random: createStubInstance(MathRandomGenerator),

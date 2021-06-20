@@ -20,7 +20,7 @@ describe('actor look scripts', () => {
     const transfer = testTransfer();
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),
@@ -40,7 +40,7 @@ describe('actor look scripts', () => {
     const transfer = testTransfer();
 
     const context: ScriptContext = {
-      command: makeCommand(VERB_LOOK, ''),
+      command: makeCommand(VERB_LOOK),
       data: new Map(),
       logger: NullLogger.global,
       random: createStubInstance(MathRandomGenerator),

@@ -3,6 +3,7 @@ import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { head } from '../../../util/collection/array';
 import { getKey } from '../../../util/collection/map';
 import { SIGNAL_LOOK, STAT_HEALTH } from '../../../util/constants';
 import { createFuzzyMatcher } from '../../../util/entity/match';
@@ -19,7 +20,7 @@ export async function VerbActorLook(this: ScriptTarget, context: ScriptContext):
   };
 
   const command = mustExist(context.command);
-  if (command.target === '') {
+  if (command.targets.length === 0) {
     const health = getKey(this.stats, STAT_HEALTH, 0);
     await context.state.show('actor.step.look.room.you', { actor: this });
     await context.state.show('actor.step.look.room.health', { actor: this, health });
@@ -33,7 +34,7 @@ export async function VerbActorLook(this: ScriptTarget, context: ScriptContext):
 
   const results = await context.state.find({
     meta: {
-      name: command.target,
+      name: head(command.targets),
     },
     matchers: createFuzzyMatcher(),
   });

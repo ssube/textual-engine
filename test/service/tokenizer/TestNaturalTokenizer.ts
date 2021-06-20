@@ -31,7 +31,7 @@ describe('natural tokenizer', () => {
     }]);
   });
 
-  xit('should merge nouns and other verbs in order', async () => {
+  it('should retain the original order for targets', async () => {
     const container = await getTestContainer(new CoreModule());
     const token = await container.create(NaturalTokenizer);
 
@@ -39,7 +39,11 @@ describe('natural tokenizer', () => {
     return expect(token.parse(input)).to.eventually.deep.equal([{
       index: 0,
       input,
-      target: 'books go west help',
+      targets: [
+        'books',
+        'go west',
+        'help',
+      ],
       verb: 'test',
     }]);
   });

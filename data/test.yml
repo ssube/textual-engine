@@ -14,6 +14,9 @@ services:
       kind: core-player-actor
     - name: actor-enemy
       kind: core-behavior-actor
+      data:
+        attack: 1.00
+        wander: 0.25
   loaders:
     - name: file-loader
       kind: node-file-loader

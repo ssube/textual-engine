@@ -14,15 +14,17 @@ import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { onceEvent } from '../../../src/util/async/event';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../../src/util/constants';
 import { makeTestActor, makeTestPortal, makeTestRoom } from '../../entity';
+import { getTestContainer } from '../../helper';
 
 describe('behavior actor', () => {
   it('should respond to room events for non-player actors with a command for the same actor', async () => {
-    const container = Container.from(new CoreModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
+    const container = await getTestContainer(new CoreModule());
 
-    const actorService = await container.create(BehaviorActorService);
+    const actorService = await container.create(BehaviorActorService, {
+      config: {
+        throttle: 10,
+      },
+    });
     await actorService.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
@@ -69,12 +71,13 @@ describe('behavior actor', () => {
   });
 
   it('should detach from events when stopped', async () => {
-    const container = Container.from(new CoreModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
+    const container = await getTestContainer(new CoreModule());
 
-    const actorService = await container.create(BehaviorActorService);
+    const actorService = await container.create(BehaviorActorService, {
+      config: {
+        throttle: 10,
+      },
+    });
     await actorService.start();
     await actorService.stop();
 
@@ -83,24 +86,26 @@ describe('behavior actor', () => {
   });
 
   it('should not implement the last command method', async () => {
-    const container = Container.from(new CoreModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
+    const container = await getTestContainer(new CoreModule());
 
-    const actorService = await container.create(BehaviorActorService);
+    const actorService = await container.create(BehaviorActorService, {
+      config: {
+        throttle: 10,
+      },
+    });
     await actorService.start();
 
     return expect(actorService.last()).to.eventually.be.rejectedWith(NotImplementedError);
   });
 
   it('should attack players in the same room', async () => {
-    const container = Container.from(new CoreModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
+    const container = await getTestContainer(new CoreModule());
 
-    const actorService = await container.create(BehaviorActorService);
+    const actorService = await container.create(BehaviorActorService, {
+      config: {
+        throttle: 10,
+      },
+    });
     await actorService.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
@@ -120,10 +125,7 @@ describe('behavior actor', () => {
   });
 
   it('should move into other rooms on a low roll', async () => {
-    const container = Container.from(new CoreModule());
-    await container.configure({
-      logger: NullLogger.global,
-    });
+    const container = await getTestContainer(new CoreModule());
 
     const random = createStubInstance(MathRandomService);
     random.nextFloat.returns(0); // low roll should move
@@ -131,6 +133,9 @@ describe('behavior actor', () => {
 
     const actorService = await container.create(BehaviorActorService, {
       [INJECT_RANDOM]: random,
+      config: {
+        throttle: 10,
+      },
     });
     await actorService.start();
 

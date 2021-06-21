@@ -5,13 +5,6 @@ export const PORTAL_DEPTH = 4;
 export const SPLIT_HEAD_TAIL = 2;
 export const TEMPLATE_CHANCE = 100;
 
-// TODO: move to actor config
-export const BEHAVIOR_WANDER = 0.25;
-
-// TODO: move to render config
-export const RENDER_DELAY = 50; // as long as possible to combine repeat renders
-export const LINE_DELAY = 10; // just enough to combine consecutive output
-
 // TODO: move to locale data
 export const REMOVE_WORDS = new Set([
   'a',

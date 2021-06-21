@@ -1,24 +1,40 @@
 import { doesExist, mustExist, NotImplementedError } from '@apextoaster/js-utils';
+import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
+import { ConfigError } from '../../error/ConfigError';
 import { Command, makeCommand } from '../../model/Command';
 import { Actor, ActorSource } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module';
 import { randomItem } from '../../util/collection/array';
-import {
-  BEHAVIOR_WANDER,
-  EVENT_ACTOR_COMMAND,
-  EVENT_STATE_ROOM,
-  VERB_HIT,
-  VERB_MOVE,
-  VERB_WAIT,
-} from '../../util/constants';
+import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
+import { makeSchema } from '../../util/schema';
 import { makeServiceLogger } from '../../util/service';
 import { EventBus } from '../event';
 import { RandomService } from '../random';
 import { StateRoomEvent } from '../state/events';
+
+export interface BehaviorActorConfig {
+  attack: number;
+  wander: number;
+}
+
+export const BEHAVIOR_ACTOR_SCHEMA: JSONSchemaType<BehaviorActorConfig> = {
+  type: 'object',
+  properties: {
+    attack: {
+      type: 'number',
+      default: 1.00,
+    },
+    wander: {
+      type: 'number',
+      default: 0.25,
+    },
+  },
+  required: [],
+};
 
 const WAIT_CMD: Command = makeCommand(VERB_WAIT, 'turn');
 
@@ -28,6 +44,7 @@ const WAIT_CMD: Command = makeCommand(VERB_WAIT, 'turn');
  */
 @Inject(INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM)
 export class BehaviorActorService implements ActorService {
+  protected config: BehaviorActorConfig;
   protected event: EventBus;
   protected logger: Logger;
   protected random: RandomService;
@@ -35,6 +52,13 @@ export class BehaviorActorService implements ActorService {
   protected next: Map<string, Command>;
 
   constructor(options: InjectedOptions) {
+    const config = mustExist(options.config);
+    const schema = makeSchema(BEHAVIOR_ACTOR_SCHEMA);
+    if (!schema(config)) {
+      throw new ConfigError('invalid service config');
+    }
+
+    this.config = config;
     this.event = mustExist(options[INJECT_EVENT]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.random = mustExist(options[INJECT_RANDOM]);
@@ -64,15 +88,15 @@ export class BehaviorActorService implements ActorService {
 
     // attack player if possible
     const player = event.room.actors.find((it) => it.source === ActorSource.PLAYER);
-    if (doesExist(player)) {
+    if (behavior < this.config.attack && doesExist(player)) {
       this.logger.debug({ event, player }, 'attacking visible player');
       this.queue(event.room, event.actor, makeCommand(VERB_HIT, player.meta.id));
       return;
     }
 
-    // 25% chance to move
+    // or randomly move
     const portals = event.room.portals.filter((it) => it.dest.length > 0);
-    if (behavior < BEHAVIOR_WANDER && portals.length > 0) {
+    if (behavior < this.config.wander && portals.length > 0) {
       const portal = randomItem(portals, this.random);
       this.logger.debug({
         event,

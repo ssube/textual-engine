@@ -56,6 +56,9 @@ services:
       kind: core-player-actor
     - name: enemy-actor
       kind: core-behavior-actor
+      data:
+        attack: 1.00
+        wander: 0.25
   loaders:
     - name: file-loader
       kind: node-file-loader
@@ -66,6 +69,7 @@ services:
       kind: node-ink-render
       data:
         shortcuts: true
+        throttle: 50
   states:
     - name: local-state
       kind: core-local-state

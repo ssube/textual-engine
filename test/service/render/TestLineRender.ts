@@ -8,6 +8,8 @@ import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } f
 import { getTestContainer } from '../../helper';
 import { TestReadLine } from './helper';
 
+const THROTTLE_TIME = 10;
+
 describe('readline render', () => {
   it('should show output', async () => {
     const instance = TestReadLine.createStub();
@@ -17,6 +19,7 @@ describe('readline render', () => {
     const render = await container.create(LineRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     }, readline);
     await render.start();
@@ -41,6 +44,7 @@ describe('readline render', () => {
     const render = await container.create(LineRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     }, readline);
     await render.start();
@@ -63,6 +67,7 @@ describe('readline render', () => {
     const render = await container.create(LineRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     }, readline);
     await render.start();
@@ -81,6 +86,7 @@ describe('readline render', () => {
     const render = await container.create(LineRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     }, readline);
     await render.start();

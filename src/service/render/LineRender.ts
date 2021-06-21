@@ -1,19 +1,36 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
+import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
 
 import { RenderService } from '.';
+import { ConfigError } from '../../error/ConfigError';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { onceEvent } from '../../util/async/event';
 import { ClearResult, debounce } from '../../util/async/Throttle';
-import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, LINE_DELAY, META_QUIT } from '../../util/constants';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../util/constants';
+import { makeSchema } from '../../util/schema';
 import { makeServiceLogger } from '../../util/service';
 import { ActorOutputEvent } from '../actor/events';
 import { EventBus } from '../event';
 import { LocaleService } from '../locale';
 import { StepResult } from '../state';
 import { StateStepEvent } from '../state/events';
+
+export interface LineRenderConfig {
+  throttle: number;
+}
+
+export const LINE_RENDER_SCHEMA: JSONSchemaType<LineRenderConfig> = {
+  type: 'object',
+  properties: {
+    throttle: {
+      type: 'number',
+    },
+  },
+  required: ['throttle'],
+};
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export class LineRender implements RenderService {
@@ -33,6 +50,12 @@ export class LineRender implements RenderService {
   protected queuePrompt: ClearResult;
 
   constructor(options: InjectedOptions, readline = createInterface) {
+    const config = mustExist(options.config);
+    const schema = makeSchema(LINE_RENDER_SCHEMA);
+    if (!schema(config)) {
+      throw new ConfigError('invalid service config');
+    }
+
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
@@ -46,7 +69,7 @@ export class LineRender implements RenderService {
     this.readline = readline;
     this.skipLine = false;
 
-    this.queuePrompt = debounce(LINE_DELAY, () => this.showPrompt());
+    this.queuePrompt = debounce(config.throttle, () => this.showPrompt());
   }
 
   public async read(): Promise<string> {

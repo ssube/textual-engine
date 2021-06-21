@@ -17,7 +17,6 @@ import {
   EVENT_COMMON_QUIT,
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
-  RENDER_DELAY,
 } from '../../../util/constants';
 import { makeSchema } from '../../../util/schema';
 import { getVerbScripts } from '../../../util/script';
@@ -31,6 +30,7 @@ import { StateStepEvent } from '../../state/events';
 export interface BaseRenderConfig {
   shortcuts: boolean;
   status: boolean;
+  throttle: number;
 }
 
 export const BASE_RENDER_SCHEMA: JSONSchemaType<BaseRenderConfig> = {
@@ -44,8 +44,11 @@ export const BASE_RENDER_SCHEMA: JSONSchemaType<BaseRenderConfig> = {
       type: 'boolean',
       default: true,
     },
+    throttle: {
+      type: 'number',
+    },
   },
-  required: [],
+  required: ['throttle'],
 };
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
@@ -81,7 +84,7 @@ export abstract class BaseReactRender implements RenderService {
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
 
-    this.queueUpdate = debounce(RENDER_DELAY, () => this.update());
+    this.queueUpdate = debounce(this.config.throttle, () => this.update());
 
     this.input = '';
     this.output = [];

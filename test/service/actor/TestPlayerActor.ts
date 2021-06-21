@@ -26,9 +26,6 @@ describe('player actor', () => {
   it('should parse render output into commands', async () => {
     const container = await getTestContainer(new CoreModule());
 
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
-
     const actor = await container.create(PlayerActorService);
     await actor.start();
 
@@ -48,7 +45,6 @@ describe('player actor', () => {
 
     const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
     await locale.start();
-
     locale.addBundle('world', {
       bundles: {
         en: {
@@ -79,9 +75,6 @@ describe('player actor', () => {
 
   it('should save the actor after joining and send it with output', async () => {
     const container = await getTestContainer(new CoreModule());
-
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
 
     const player = await container.create(PlayerActorService);
     await player.start();
@@ -115,9 +108,6 @@ describe('player actor', () => {
   it('should request to join worlds when they load', async () => {
     const container = await getTestContainer(new CoreModule());
 
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
-
     const player = await container.create(PlayerActorService);
     await player.start();
 
@@ -134,9 +124,6 @@ describe('player actor', () => {
 
   it('should start without an actor or room', async () => {
     const container = await getTestContainer(new CoreModule());
-
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
 
     const player = await container.create(PlayerActorService);
     await player.start();
@@ -161,9 +148,6 @@ describe('player actor', () => {
 
   it('should save the room after moving', async () => {
     const container = await getTestContainer(new CoreModule());
-
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
 
     const player = await container.create(PlayerActorService);
     await player.start();

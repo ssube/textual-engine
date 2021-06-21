@@ -1,8 +1,9 @@
 /* eslint-disable max-lines */
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { Container, NullLogger } from 'noicejs';
+import { BaseOptions } from 'noicejs';
 
+import { LocaleService } from '../../../src/lib';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
@@ -10,6 +11,7 @@ import { isRoom, Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Modifier } from '../../../src/model/mapped/Modifier';
 import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
+import { INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { PORTAL_DEPTH, TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
@@ -470,11 +472,7 @@ const TEST_ROOM_MODS: Array<Modifier<Room>> = [{
 describe('state entity generator', () => {
   describe('create actor', () => {
     it('should create actors with inventory', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -487,11 +485,7 @@ describe('state entity generator', () => {
 
   describe('create item', () => {
     it('should create items', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -624,6 +618,10 @@ describe('state entity generator', () => {
   describe('modify actor', () => {
     it('should update meta fields', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -637,6 +635,10 @@ describe('state entity generator', () => {
 
     it('should add inventory items', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -651,6 +653,10 @@ describe('state entity generator', () => {
   describe('modify item', () => {
     it('should update meta fields', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -673,6 +679,10 @@ describe('state entity generator', () => {
   describe('modify room', () => {
     it('should add actors', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -686,6 +696,10 @@ describe('state entity generator', () => {
 
     it('should add items', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -723,6 +737,10 @@ describe('state entity generator', () => {
 
     it('should not select excluded modifiers', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -757,6 +775,7 @@ describe('state entity generator', () => {
   describe('populate portals', () => {
     it('should create destination rooms for unfilled portals', async () => {
       const container = await getTestContainer(new CoreModule());
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld({
         ...TEST_WORLD,

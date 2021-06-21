@@ -1,9 +1,10 @@
 import { defer, doesExist } from '@apextoaster/js-utils';
-import { ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
+import { BaseOptions, ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
 import { stub } from 'sinon';
+import { LocaleService } from '../src/lib';
 
 import { ConfigFile } from '../src/model/file/Config';
-import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
+import { INJECT_CONFIG, INJECT_LOCALE, INJECT_LOGGER } from '../src/module';
 import { StateHelper } from '../src/service/script';
 
 export function getTestLogger(): Logger {

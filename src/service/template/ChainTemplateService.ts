@@ -32,8 +32,8 @@ export class ChainTemplateService implements TemplateService {
   }
 
   public modifyString(base: string, mod: TemplateString): string {
-    // TODO: use i18next
-    return mod.base.replace(/{{base}}/g, base);
+    const key = this.renderString(mod);
+    return this.locale.translate(key, { base });
   }
 
   public modifyNumberList(base: Array<number>, mod: Array<TemplateNumber>): Array<number> {

@@ -129,7 +129,11 @@ export function makeTestWorld(actors: Array<Template<Actor>>, items: Array<Templ
     },
     locale: {
       bundles: {},
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     },
     meta: {
       id: 'foo',

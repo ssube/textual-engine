@@ -202,9 +202,12 @@ worlds:
             world:
               slog: slog
               swing: swing
-      verbs:
-        - verbs.world.slog
-        - verbs.world.swing
+      words:
+        articles: []
+        prepositions: []
+        verbs:
+          - verbs.world.slog
+          - verbs.world.swing
     meta:
       id: test
       name:

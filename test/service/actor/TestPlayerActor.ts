@@ -51,7 +51,11 @@ describe('player actor', () => {
           'meta.help': 'foo',
         },
       },
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     });
 
     const actor = await container.create(PlayerActorService);

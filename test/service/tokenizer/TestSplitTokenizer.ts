@@ -4,7 +4,7 @@ import { CoreModule } from '../../../src/module/CoreModule';
 import { SplitTokenizer } from '../../../src/service/tokenizer/SplitTokenizer';
 import { getTestContainer } from '../../helper';
 
-describe('word tokenizer', () => {
+describe('split tokenizer', () => {
   it('should parse token lines', async () => {
     const container = await getTestContainer(new CoreModule());
     const token = await container.create(SplitTokenizer);

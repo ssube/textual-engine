@@ -25,7 +25,11 @@ export function getTestConfig(): ConfigFile {
     locale: {
       bundles: {},
       current: 'en',
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     },
     services: {
       actors: [],

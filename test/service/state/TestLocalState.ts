@@ -208,7 +208,11 @@ const TEST_WORLD: WorldTemplate = {
   },
   locale: {
     bundles: {},
-    verbs: [],
+    words: {
+      articles: [],
+      prepositions: [],
+      verbs: [],
+    },
   },
   meta: {
     id: 'foo',

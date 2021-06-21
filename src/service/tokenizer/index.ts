@@ -1,5 +1,6 @@
 import { Service } from '..';
 import { Command } from '../../model/Command';
+import { LocaleBundle } from '../../model/file/Locale';
 
 export interface TokenizerService extends Service {
   /**
@@ -14,5 +15,5 @@ export interface TokenizerService extends Service {
    */
   parse(input: string): Promise<Array<Command>>;
 
-  translate(verbs: ReadonlyArray<string>): Promise<void>;
+  translate(bundle: LocaleBundle): Promise<void>;
 }

@@ -3,6 +3,7 @@ import { Inject, Logger } from 'noicejs';
 
 import { TokenizerService } from '.';
 import { Command } from '../../model/Command';
+import { LocaleBundle } from '../../model/file/Locale';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import { groupOn } from '../../util/collection/array';
@@ -11,9 +12,7 @@ import {
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_INPUT,
   EVENT_TOKEN_COMMAND,
-  REMOVE_WORDS,
   SPLIT_CHAR,
-  TARGET_WORDS,
 } from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
 import { trim } from '../../util/string';
@@ -26,21 +25,25 @@ export class SplitTokenizer implements TokenizerService {
   protected event: EventBus;
   protected locale: LocaleService;
   protected logger: Logger;
+
+  // word lists
+  protected articles: Set<string>;
+  protected prepositions: Set<string>;
   protected verbs: Map<string, string>;
 
   constructor(options: InjectedOptions) {
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
+
+    this.articles = new Set();
+    this.prepositions = new Set();
     this.verbs = new Map();
   }
 
   public async start(): Promise<void> {
     this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
-      catchAndLog(this.translate([
-        ...COMMON_VERBS,
-        ...event.bundle.verbs,
-      ]), this.logger, 'error translating verbs');
+      catchAndLog(this.translate(event.bundle), this.logger, 'error translating verbs');
     }, this);
 
     this.event.on(EVENT_RENDER_INPUT, (event) => {
@@ -71,7 +74,7 @@ export class SplitTokenizer implements TokenizerService {
       .split(SPLIT_CHAR)
       .map(trim)
       .filter((it) => it.length > 0)
-      .filter((it) => REMOVE_WORDS.has(it) === false);
+      .filter((it) => this.articles.has(it) === false);
   }
 
   public async parse(input: string): Promise<Array<Command>> {
@@ -91,16 +94,30 @@ export class SplitTokenizer implements TokenizerService {
       cmd.index = parseInt(last, 10);
     }
 
-    cmd.targets = groupOn(targets, TARGET_WORDS).map((it) => it.join(SPLIT_CHAR));
+    cmd.targets = groupOn(targets, this.prepositions).map((it) => it.join(SPLIT_CHAR));
 
     return [cmd];
   }
 
-  public async translate(verbs: ReadonlyArray<string>): Promise<void> {
+  public async translate(bundle: LocaleBundle): Promise<void> {
+    // TODO: old world words should be removed, not config words
+    /*
+    this.articles.clear();
+    this.prepositions.clear();
     this.verbs.clear();
+    */
 
-    this.logger.debug({ verbs }, 'translating verbs');
+    this.logger.debug({ bundle }, 'translating bundle');
 
+    for (const article of bundle.words.articles) {
+      this.articles.add(article);
+    }
+
+    for (const preposition of bundle.words.prepositions) {
+      this.prepositions.add(preposition);
+    }
+
+    const verbs = [...COMMON_VERBS, ...bundle.words.verbs];
     for (const verb of verbs) {
       const translated = this.locale.translate(verb);
       this.verbs.set(translated, verb); // trick i18next into translating them back

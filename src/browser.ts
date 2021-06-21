@@ -12,7 +12,7 @@ main([
   '--module',
   'browser',
   '--input',
-  'create test with test and 5',
+  'create a test with test and with 20',
   '--input',
   'help',
 ]).then((exitCode) => {

@@ -49,7 +49,49 @@ locale:
           save: save
           worlds: worlds
   current: en
-  verbs: []
+  words:
+    articles:
+      - a
+      - an
+      - and
+      - as
+      - but
+      - for
+      - nor
+      - not
+      - of
+      - or
+      - so
+      - some
+      - the
+    prepositions:
+      - above
+      - across
+      - against
+      - at
+      - behind
+      - below
+      - beside
+      - by
+      - down
+      - from
+      - in
+      - inside
+      - into
+      - on
+      - onto
+      - out
+      - outside
+      - over
+      - through
+      - to
+      - toward
+      - under
+      - up
+      - with
+      - within
+      - without
+    verbs: []
 services:
   actors:
     - name: player-actor
@@ -76,3 +118,4 @@ services:
   tokenizers:
     - name: local-tokenizer
       kind: core-split-tokenizer
+      # kind: core-compromise-tokenizer

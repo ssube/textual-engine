@@ -6,51 +6,6 @@ export const SPLIT_HEAD_TAIL = 2;
 export const TEMPLATE_CHANCE = 100;
 
 // TODO: move to locale data
-export const REMOVE_WORDS = new Set([
-  'a',
-  'an',
-  'and',
-  'as',
-  'but',
-  'for',
-  'nor',
-  'not',
-  'of',
-  'or',
-  'so',
-  'some',
-  'the',
-]);
-
-export const TARGET_WORDS = new Set([
-  'above',
-  'across',
-  'against',
-  'at',
-  'behind',
-  'below',
-  'beside',
-  'by',
-  'down',
-  'from',
-  'in',
-  'inside',
-  'into',
-  'on',
-  'onto',
-  'out',
-  'outside',
-  'over',
-  'through',
-  'to',
-  'toward',
-  'under',
-  'up',
-  'with',
-  'within',
-  'without',
-]);
-
 export const SPLIT_CHAR = ' ';
 
 // common events

@@ -76,12 +76,13 @@ export const EVENT_LOADER_READ = 'loader-read';
 export const EVENT_LOADER_SAVE = 'loader-save';
 export const EVENT_LOADER_STATE = 'loader-state';
 export const EVENT_LOADER_WORLD = 'loader-world';
-export const EVENT_RENDER_OUTPUT = 'render-output';
+export const EVENT_RENDER_INPUT = 'render-input';
 export const EVENT_STATE_JOIN = 'state-join';
 export const EVENT_STATE_LOAD = 'state-load';
 export const EVENT_STATE_OUTPUT = 'state-output';
 export const EVENT_STATE_ROOM = 'state-room';
 export const EVENT_STATE_STEP = 'state-step';
+export const EVENT_TOKEN_COMMAND = 'token-command';
 
 export const EVENT_NAMES: ReadonlyArray<string> = [
   EVENT_ACTOR_COMMAND,
@@ -96,12 +97,13 @@ export const EVENT_NAMES: ReadonlyArray<string> = [
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
-  EVENT_RENDER_OUTPUT,
+  EVENT_RENDER_INPUT,
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
+  EVENT_TOKEN_COMMAND,
 ] as const;
 
 // script signals

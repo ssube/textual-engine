@@ -31,6 +31,7 @@ export function getTestConfig(): ConfigFile {
       loaders: [],
       renders: [],
       states: [],
+      tokenizers: [],
     },
   };
 }

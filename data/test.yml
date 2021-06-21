@@ -23,3 +23,6 @@ services:
   states:
     - name: local-state
       kind: core-local-state
+  tokenizers:
+    - name: local-tokenizer
+      kind: core-split-tokenizer # easier to test

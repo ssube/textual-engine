@@ -23,7 +23,8 @@ services:
   actors: []
   loaders: []
   renders: []
-  states: []`,
+  states: []
+  tokenizers: []`,
       }),
     } as any;
     const config = await loadConfig('foo', doc);
@@ -54,7 +55,8 @@ services:
   actors: []
   loaders: []
   renders: []
-  states: []`,
+  states: []
+  tokenizers: []`,
       }),
     } as any;
     return expect(loadConfig('foo', doc)).to.eventually.be.rejectedWith(ConfigError);

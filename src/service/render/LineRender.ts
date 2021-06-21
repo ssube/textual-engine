@@ -7,7 +7,7 @@ import { RenderService } from '.';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { onceEvent } from '../../util/async/event';
 import { ClearResult, debounce } from '../../util/async/Throttle';
-import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_STEP, LINE_DELAY, META_QUIT } from '../../util/constants';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, LINE_DELAY, META_QUIT } from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
 import { ActorOutputEvent } from '../actor/events';
 import { EventBus } from '../event';
@@ -103,7 +103,7 @@ export class LineRender implements RenderService {
     this.padPrompt = false;
 
     this.logger.debug({ line }, 'read line');
-    this.event.emit(EVENT_RENDER_OUTPUT, {
+    this.event.emit(EVENT_RENDER_INPUT, {
       line,
     });
 
@@ -112,7 +112,7 @@ export class LineRender implements RenderService {
 
   public onSignal(): void {
     this.logger.debug('sending interrupt as quit command');
-    this.event.emit(EVENT_RENDER_OUTPUT, {
+    this.event.emit(EVENT_RENDER_INPUT, {
       line: META_QUIT,
     });
   }

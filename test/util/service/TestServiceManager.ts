@@ -27,9 +27,10 @@ describe('service manager', () => {
       loaders: [serviceRef],
       renders: [serviceRef],
       states: [serviceRef],
+      tokenizers: [serviceRef],
     });
 
-    expect(service.start, 'start called').to.have.callCount(4);
+    expect(service.start, 'start called').to.have.callCount(5); // five kinds of managed services
     expect(service.stop, 'stop called').to.have.callCount(0);
   });
 
@@ -53,6 +54,7 @@ describe('service manager', () => {
       loaders: [serviceRef],
       renders: [],
       states: [],
+      tokenizers: [],
     });
     await manager.stop();
 

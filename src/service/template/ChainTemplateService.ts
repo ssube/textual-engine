@@ -4,18 +4,21 @@ import { Inject } from 'noicejs';
 import { TemplateService } from '.';
 import { ModifierPrimitive } from '../../model/mapped/Modifier';
 import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/mapped/Template';
-import { INJECT_RANDOM, InjectedOptions } from '../../module';
+import { INJECT_LOCALE, INJECT_RANDOM, InjectedOptions } from '../../module';
 import { JoinChain } from '../../util/template/JoinChain';
 import { splitChain } from '../../util/template/SplitChain';
 import { ScriptMap, ScriptRef } from '../../util/types';
+import { LocaleService } from '../locale';
 import { RandomService } from '../random';
 
-@Inject(INJECT_RANDOM)
+@Inject(INJECT_LOCALE, INJECT_RANDOM)
 export class ChainTemplateService implements TemplateService {
   protected readonly joiner: JoinChain;
+  protected readonly locale: LocaleService;
   protected readonly random: RandomService;
 
   constructor(options: InjectedOptions) {
+    this.locale = mustExist(options[INJECT_LOCALE]);
     this.random = mustExist(options[INJECT_RANDOM]);
     this.joiner = new JoinChain({
       joiners: [' '],

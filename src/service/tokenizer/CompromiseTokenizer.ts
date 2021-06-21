@@ -1,4 +1,4 @@
-import { defaultWhen, getOrDefault, mustCoalesce } from '@apextoaster/js-utils';
+import { defaultWhen, getOrDefault } from '@apextoaster/js-utils';
 import nlp from 'compromise';
 
 import { TokenizerService } from '.';
@@ -6,9 +6,9 @@ import { Command } from '../../model/Command';
 import { InjectedOptions } from '../../module';
 import { groupOn, remove } from '../../util/collection/array';
 import { REMOVE_WORDS, TARGET_WORDS } from '../../util/constants';
-import { WordTokenizer } from './WordTokenizer';
+import { SplitTokenizer } from './SplitTokenizer';
 
-export class NaturalTokenizer extends WordTokenizer implements TokenizerService {
+export class CompromiseTokenizer extends SplitTokenizer implements TokenizerService {
   protected nlp: typeof nlp;
 
   constructor(options: InjectedOptions) {

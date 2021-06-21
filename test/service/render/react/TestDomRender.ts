@@ -7,14 +7,14 @@ import { INJECT_EVENT } from '../../../../src/module';
 import { CoreModule } from '../../../../src/module/CoreModule';
 import { NodeModule } from '../../../../src/module/NodeModule';
 import { EventBus } from '../../../../src/service/event';
-import { RenderOutputEvent } from '../../../../src/service/render/events';
+import { RenderInputEvent } from '../../../../src/service/render/events';
 import { ReactDomRender } from '../../../../src/service/render/react/DomRender';
 import { onceEvent } from '../../../../src/util/async/event';
 import {
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
-  EVENT_RENDER_OUTPUT,
+  EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
   RENDER_DELAY,
 } from '../../../../src/util/constants';
@@ -167,7 +167,7 @@ describe('react dom render', () => {
     await render.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    const pendingOutput = onceEvent<RenderOutputEvent>(events, EVENT_RENDER_OUTPUT);
+    const pendingOutput = onceEvent<RenderInputEvent>(events, EVENT_RENDER_INPUT);
     const pendingRead = render.read();
 
     const line = 'foo';

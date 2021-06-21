@@ -134,11 +134,6 @@ describe('behavior actor', () => {
     });
     await actorService.start();
 
-    // TODO: find a better way to check/don't
-    if (Reflect.get(actorService, 'random') !== random) {
-      throw new Error('wrong random');
-    }
-
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pendingCommand = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 

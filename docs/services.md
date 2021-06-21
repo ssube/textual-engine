@@ -38,36 +38,36 @@ This guide describes what each service does.
   - [Template Service](#template-service)
     - [Chain Template](#chain-template)
   - [Tokenizer Service](#tokenizer-service)
-    - [Natural Tokenizer](#natural-tokenizer)
-    - [Word Tokenizer](#word-tokenizer)
+    - [Compromise Tokenizer](#compromise-tokenizer)
+    - [Split Tokenizer](#split-tokenizer)
   - [Service Utilities](#service-utilities)
     - [Service Manager](#service-manager)
 
 ## Summary
 
-| type      | name          | eventing | coupled                        |
-| --------- | ------------- | -------- | ------------------------------ |
-| actor     | behavior      | yes      | uses locale, tokenizer         |
-| actor     | player        | yes      | uses locale, tokenizer         |
-| counter   | local         |          | used by state                  |
-| event     | node          | yes      |                                |
-| loader    | browser fetch | yes      |                                |
-| loader    | browser local | yes      |                                |
-| loader    | browser page  | yes      |                                |
-| loader    | node fetch    | yes      |                                |
-| loader    | node file     | yes      |                                |
-| locale    | next          | yes      | used by actor                  |
-| parser    | yaml          |          | child of loader                |
-| random    | alea          |          | used by many                   |
-| random    | math          |          | used by many                   |
-| render    | browser DOM   | yes      |                                |
-| render    | node line     | yes      |                                |
-| render    | node Ink      | yes      |                                |
-| script    | local         | yes      |                                |
-| state     | local         | yes      | uses counter, random, template |
-| template  | chain         |          | child of state                 |
-| tokenizer | natural       | yes      | child of actor                 |
-| tokenizer | word          | yes      | child of actor                 |
+| type      | name          | eventing | coupled                          |
+| --------- | ------------- | -------- | -------------------------------- |
+| actor     | behavior      | yes      |                                  |
+| actor     | player        | yes      |                                  |
+| counter   | local         |          | used by state                    |
+| event     | node          | yes      |                                  |
+| loader    | browser fetch | yes      | uses a parser                    |
+| loader    | browser local | yes      | uses a parser                    |
+| loader    | browser page  | yes      | uses a parser                    |
+| loader    | node fetch    | yes      | uses a parser                    |
+| loader    | node file     | yes      | uses a parser                    |
+| locale    | next          | yes      | used by render, tokenizer        |
+| parser    | yaml          |          | used by loader                   |
+| random    | alea          |          | used by state                    |
+| random    | math          |          | used by state                    |
+| render    | browser DOM   | yes      | uses a locale                    |
+| render    | node line     | yes      | uses a locale                    |
+| render    | node Ink      | yes      | uses a locale                    |
+| script    | local         | yes      |                                  |
+| state     | local         | yes      | uses a counter, random, template |
+| template  | chain         |          | used by state                    |
+| tokenizer | compromise    | yes      | uses a locale                    |
+| tokenizer | split         | yes      | uses a locale                    |
 
 ## Actor Service
 
@@ -225,11 +225,11 @@ Uses `(foo|bar)` chains for input and `AND/OR` chains for output.
 
 ## Tokenizer Service
 
-### Natural Tokenizer
+### Compromise Tokenizer
 
 Use natural language processing to tag parts of speech and build a command.
 
-### Word Tokenizer
+### Split Tokenizer
 
 Simple positional arguments, split on whitespace and with articles removed.
 

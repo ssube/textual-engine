@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 
+import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent } from '../../../src/service/actor/events';
@@ -13,9 +14,9 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
-  EVENT_RENDER_OUTPUT,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_TOKEN_COMMAND,
   VERB_WAIT,
 } from '../../../src/util/constants';
 import { makeTestActor, makeTestRoom } from '../../entity';
@@ -31,14 +32,11 @@ describe('player actor', () => {
     const actor = await container.create(PlayerActorService);
     await actor.start();
 
-    const index = 13;
-    const line = `foo bar ${index}`;
-
     const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pending = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
 
-    event.emit(EVENT_RENDER_OUTPUT, {
-      line,
+    event.emit(EVENT_TOKEN_COMMAND, {
+      command: makeCommandIndex('foo', 10, 'bar'),
     });
 
     const cmd = await pending;
@@ -105,8 +103,8 @@ describe('player actor', () => {
     });
 
     const pendingCommand = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
-    event.emit(EVENT_RENDER_OUTPUT, {
-      line: VERB_WAIT,
+    event.emit(EVENT_TOKEN_COMMAND, {
+      command: makeCommand(VERB_WAIT),
     });
 
     const command = await pendingCommand;
@@ -152,8 +150,8 @@ describe('player actor', () => {
 
     const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pendingCommand = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
-    event.emit(EVENT_RENDER_OUTPUT, {
-      line: VERB_WAIT,
+    event.emit(EVENT_TOKEN_COMMAND, {
+      command: makeCommand(VERB_WAIT),
     });
 
     const command = await pendingCommand;
@@ -194,8 +192,8 @@ describe('player actor', () => {
     });
 
     const pendingCommand = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
-    event.emit(EVENT_RENDER_OUTPUT, {
-      line: VERB_WAIT,
+    event.emit(EVENT_TOKEN_COMMAND, {
+      command: makeCommand(VERB_WAIT),
     });
 
     const command = await pendingCommand;

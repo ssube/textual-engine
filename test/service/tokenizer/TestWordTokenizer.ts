@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 
 import { CoreModule } from '../../../src/module/CoreModule';
-import { WordTokenizer } from '../../../src/service/tokenizer/WordTokenizer';
+import { SplitTokenizer } from '../../../src/service/tokenizer/SplitTokenizer';
 import { getTestContainer } from '../../helper';
 
 describe('word tokenizer', () => {
   it('should parse token lines', async () => {
     const container = await getTestContainer(new CoreModule());
-    const token = await container.create(WordTokenizer);
+    const token = await container.create(SplitTokenizer);
 
     return expect(token.parse('foo')).to.eventually.deep.equal([{
       index: 0,
@@ -19,7 +19,7 @@ describe('word tokenizer', () => {
 
   it('should parse a final numeric segment as the command index', async () => {
     const container = await getTestContainer(new CoreModule());
-    const token = await container.create(WordTokenizer);
+    const token = await container.create(SplitTokenizer);
 
     const index = 13;
     const input = `foo bar ${index}`;

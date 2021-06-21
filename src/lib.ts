@@ -78,7 +78,7 @@ export { MathRandomService } from './service/random/MathRandom';
 export { RandomService } from './service/random/index';
 
 export { LineRender } from './service/render/LineRender';
-export { RenderOutputEvent } from './service/render/events';
+export { RenderInputEvent } from './service/render/events';
 export { RenderService } from './service/render/index';
 export { ReactDomRender } from './service/render/react/DomRender';
 export { InkRender } from './service/render/react/InkRender';
@@ -93,8 +93,8 @@ export { StateService, StepParams, StepResult, CreateParams } from './service/st
 export { ChainTemplateService } from './service/template/ChainTemplateService';
 export { TemplateService } from './service/template/index';
 
-export { NaturalTokenizer } from './service/tokenizer/NaturalTokenizer';
-export { WordTokenizer } from './service/tokenizer/WordTokenizer';
+export { CompromiseTokenizer } from './service/tokenizer/CompromiseTokenizer';
+export { SplitTokenizer } from './service/tokenizer/SplitTokenizer';
 export { TokenizerService } from './service/tokenizer/index';
 
 export { ShowVolume, StateSource, showCheck } from './util/actor/index';

@@ -68,6 +68,9 @@ services:
   states:
     - name: local-state
       kind: core-local-state
+  tokenizers:
+    - name: local-tokenizer
+      kind: core-split-tokenizer
   </script>
   <div id="app"></div>
   <script src="./bundle/browser.js">

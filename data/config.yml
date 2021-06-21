@@ -52,9 +52,9 @@ locale:
   verbs: []
 services:
   actors:
-    - name: actor-player
+    - name: player-actor
       kind: core-player-actor
-    - name: actor-enemy
+    - name: enemy-actor
       kind: core-behavior-actor
   loaders:
     - name: file-loader
@@ -69,3 +69,6 @@ services:
   states:
     - name: local-state
       kind: core-local-state
+  tokenizers:
+    - name: local-tokenizer
+      kind: core-split-tokenizer

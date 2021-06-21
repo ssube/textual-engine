@@ -3,23 +3,66 @@ import { Inject, Logger } from 'noicejs';
 
 import { TokenizerService } from '.';
 import { Command } from '../../model/Command';
-import { INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
+import { catchAndLog } from '../../util/async/event';
 import { groupOn } from '../../util/collection/array';
-import { REMOVE_WORDS, SPLIT_CHAR, TARGET_WORDS } from '../../util/constants';
+import {
+  COMMON_VERBS,
+  EVENT_LOCALE_BUNDLE,
+  EVENT_RENDER_INPUT,
+  EVENT_TOKEN_COMMAND,
+  REMOVE_WORDS,
+  SPLIT_CHAR,
+  TARGET_WORDS,
+} from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
 import { trim } from '../../util/string';
+import { EventBus } from '../event';
 import { LocaleService } from '../locale';
+import { RenderInputEvent } from '../render/events';
 
-@Inject(INJECT_LOCALE, INJECT_LOGGER)
-export class WordTokenizer implements TokenizerService {
+@Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
+export class SplitTokenizer implements TokenizerService {
+  protected event: EventBus;
   protected locale: LocaleService;
   protected logger: Logger;
   protected verbs: Map<string, string>;
 
   constructor(options: InjectedOptions) {
+    this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.verbs = new Map();
+  }
+
+  public async start(): Promise<void> {
+    this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
+      catchAndLog(this.translate([
+        ...COMMON_VERBS,
+        ...event.bundle.verbs,
+      ]), this.logger, 'error translating verbs');
+    }, this);
+
+    this.event.on(EVENT_RENDER_INPUT, (event) => {
+      catchAndLog(this.onRenderInput(event), this.logger, 'error during render output');
+    }, this);
+  }
+
+  public async onRenderInput(event: RenderInputEvent): Promise<void> {
+    this.logger.debug({ event }, 'parsing render input');
+
+    const commands = await this.parse(event.line);
+    this.logger.debug({ commands, event }, 'parsed input line');
+
+    for (const command of commands) {
+      this.event.emit(EVENT_TOKEN_COMMAND, {
+        command,
+      });
+    }
+  }
+
+  public async stop(): Promise<void> {
+    this.event.removeGroup(this);
   }
 
   public async split(input: string): Promise<Array<string>> {

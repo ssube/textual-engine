@@ -15,7 +15,7 @@ import {
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
-  EVENT_RENDER_OUTPUT,
+  EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
   RENDER_DELAY,
 } from '../../../util/constants';
@@ -120,7 +120,7 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   public async read(): Promise<string> {
-    const event = await onceEvent<ActorOutputEvent>(this.event, EVENT_RENDER_OUTPUT);
+    const event = await onceEvent<ActorOutputEvent>(this.event, EVENT_RENDER_INPUT);
     return event.line;
   }
 
@@ -201,7 +201,7 @@ export abstract class BaseReactRender implements RenderService {
 
     if (line.length > 0) {
       // forward event to state
-      this.event.emit(EVENT_RENDER_OUTPUT, {
+      this.event.emit(EVENT_RENDER_INPUT, {
         line,
       });
     }

@@ -1,6 +1,7 @@
+import { Service } from '..';
 import { Command } from '../../model/Command';
 
-export interface TokenizerService {
+export interface TokenizerService extends Service {
   /**
    * Split an input string into a series of tokens, without
    * fully parsing their intent.

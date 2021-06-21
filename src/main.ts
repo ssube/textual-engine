@@ -16,7 +16,7 @@ import {
   EVENT_LOADER_READ,
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
-  EVENT_RENDER_OUTPUT,
+  EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
 } from './util/constants';
 import { ServiceManager } from './util/service/ServiceManager';
@@ -96,7 +96,7 @@ export async function main(args: Array<string>): Promise<number> {
   for (const input of arg.input) {
     // await output before next command
     const pending = onceEvent(events, EVENT_ACTOR_OUTPUT);
-    events.emit(EVENT_RENDER_OUTPUT, {
+    events.emit(EVENT_RENDER_INPUT, {
       line: input,
     });
     await pending;

@@ -1,7 +1,7 @@
-import { mustExist } from '@apextoaster/js-utils';
+import { mustExist, Optional } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isActor } from '../../../model/entity/Actor';
+import { Actor, ACTOR_TYPE, isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { head } from '../../../util/collection/array';
@@ -15,7 +15,7 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
 
   const command = mustExist(context.command);
   const room = mustExist(context.room);
-  const results = await context.state.find({
+  const itemResults = await context.state.find({
     meta: {
       name: head(command.targets),
     },
@@ -24,15 +24,43 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
     },
     matchers: createFuzzyMatcher(),
   });
-  const target = indexEntity(results, command.index, isItem);
+  const item = indexEntity(itemResults, command.index, isItem);
 
-  if (!isItem(target)) {
+  if (!isItem(item)) {
     await context.state.show(context.source, 'actor.step.use.type', { command });
     return;
   }
 
-  await context.script.invoke(target, SIGNAL_USE, {
+  const actor = await getUseTarget(this, context);
+  if (!isActor(actor)) {
+    await context.state.show(context.source, 'actor.step.use.target', { command });
+    return;
+  }
+
+  await context.script.invoke(item, SIGNAL_USE, {
     ...context,
-    actor: this,
+    actor,
   });
+}
+
+export async function getUseTarget(actor: Actor, context: ScriptContext): Promise<Optional<Actor>> {
+  const command = mustExist(context.command);
+  const room = mustExist(context.room);
+
+  if (command.targets.length > 1) {
+    const actorResults = await context.state.find<typeof ACTOR_TYPE>({
+      matchers: createFuzzyMatcher(),
+      meta: {
+        name: head(command.targets),
+      },
+      room: {
+        id: room.meta.id,
+      },
+      type: ACTOR_TYPE,
+    });
+
+    return actorResults[0];
+  }
+
+  return actor;
 }

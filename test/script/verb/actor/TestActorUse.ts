@@ -39,7 +39,7 @@ describe('actor use scripts', () => {
       expect(stateHelper.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.use.type');
     });
 
-    it('should invoke the use signal on the target', async () => {
+    it('should invoke the use signal on the item', async () => {
       const script = createStubInstance(LocalScriptService);
       const state = getStubHelper();
 
@@ -58,6 +58,53 @@ describe('actor use scripts', () => {
       await VerbActorUse.call(actor, context);
 
       expect(script.invoke).to.have.been.calledWithMatch(item, SIGNAL_USE, match.has('actor', actor));
+    });
+
+    it('should target other actors', async () => {
+      const script = createStubInstance(LocalScriptService);
+      const state = getStubHelper();
+
+      const item = makeTestItem('foo', '', '');
+      (state.find as SinonStub).onFirstCall().resolves([item]);
+
+      const target = makeTestActor('bar', '', '');
+      (state.find as SinonStub).onSecondCall().resolves([target]);
+
+      const context = createTestContext({
+        command: makeCommand(VERB_USE, 'foo', 'bar'),
+        random: createStubInstance(MathRandomService),
+        room: makeTestRoom('', '', '', [], []),
+        script,
+        state,
+      });
+
+      const actor = makeTestActor('', '', '');
+      await VerbActorUse.call(actor, context);
+
+      expect(script.invoke).to.have.been.calledWithMatch(item, SIGNAL_USE, match.has('actor', target));
+    });
+
+    it('should show an error when the target cannot be found', async () => {
+      const script = createStubInstance(LocalScriptService);
+      const state = getStubHelper();
+
+      const item = makeTestItem('foo', '', '');
+      (state.find as SinonStub).onFirstCall().resolves([item]);
+
+      (state.find as SinonStub).onSecondCall().resolves([]);
+
+      const context = createTestContext({
+        command: makeCommand(VERB_USE, 'foo', 'bar'),
+        random: createStubInstance(MathRandomService),
+        room: makeTestRoom('', '', '', [], []),
+        script,
+        state,
+      });
+
+      const actor = makeTestActor('', '', '');
+      await VerbActorUse.call(actor, context);
+
+      expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.use.target');
     });
   });
 });

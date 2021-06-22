@@ -27,7 +27,7 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
 
   const item = indexEntity(results, command.index, isItem);
   if (isNil(item)) {
-    await context.state.show('actor.step.equip.none', { command });
+    await context.state.show(context.source, 'actor.step.equip.none', { command });
     return;
   }
 
@@ -39,8 +39,8 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
     // TODO: should not be mutable
     this.slots.set(slot, item.meta.id);
 
-    await context.state.show('actor.step.equip.item', { item, slot });
+    await context.state.show(context.source, 'actor.step.equip.item', { item, slot });
   } else {
-    await context.state.show('actor.step.equip.slot', { item, slot });
+    await context.state.show(context.source, 'actor.step.equip.slot', { item, slot });
   }
 }

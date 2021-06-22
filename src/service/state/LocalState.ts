@@ -567,7 +567,7 @@ export class LocalStateService implements StateService {
     const seen = new Set();
     const start = Date.now();
 
-    const scope: SuppliedScope = {
+    const scope: Omit<SuppliedScope, 'source'> = {
       data: new Map(),
       random: this.random,
       state: {
@@ -583,14 +583,25 @@ export class LocalStateService implements StateService {
     for (const room of this.state.rooms) {
       if (seen.has(room.meta.id) === false) {
         seen.add(room.meta.id);
+
+        const roomSource: StateSource = {
+          room,
+        };
+
         await this.script.invoke(room, SIGNAL_STEP, {
           ...scope,
           room,
+          source: roomSource,
         });
 
         for (const actor of room.actors) {
           if (seen.has(actor.meta.id) === false) {
             seen.add(actor.meta.id);
+
+            const actorSource: StateSource = {
+              actor,
+              room,
+            };
 
             const command = await this.getActorCommand(actor);
             await this.script.invoke(actor, SIGNAL_STEP, {
@@ -598,6 +609,7 @@ export class LocalStateService implements StateService {
               actor,
               command,
               room,
+              source: actorSource,
             });
 
             for (const item of actor.items) {
@@ -608,6 +620,7 @@ export class LocalStateService implements StateService {
                   actor,
                   item,
                   room,
+                  source: actorSource,
                 });
               }
             }
@@ -620,6 +633,7 @@ export class LocalStateService implements StateService {
                 ...scope,
                 item,
                 room,
+                source: roomSource,
               });
             }
           }
@@ -631,6 +645,7 @@ export class LocalStateService implements StateService {
                 ...scope,
                 portal,
                 room,
+                source: roomSource,
               });
             }
           }
@@ -694,8 +709,10 @@ export class LocalStateService implements StateService {
 
   /**
    * Handler for a line of input from the state helper.
+   *
+   * @todo change default to self?
    */
-  public async stepShow(line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.WORLD, source?: StateSource): Promise<void> {
+  public async stepShow(source: StateSource, line: string, context?: LocaleContext, volume: ShowVolume = ShowVolume.SELF): Promise<void> {
     this.event.emit(EVENT_STATE_OUTPUT, {
       line,
       context,
@@ -718,7 +735,10 @@ export class LocalStateService implements StateService {
     for (const room of rooms) {
       for (const actor of room.actors) {
         this.commandQueue.add(actor);
-        this.logger.debug({ actor: actor.meta.id, size: this.commandQueue.size }, 'adding actor to queue');
+        this.logger.debug({
+          actor,
+          size: this.commandQueue.size,
+        }, 'adding actor to queue');
       }
     }
 

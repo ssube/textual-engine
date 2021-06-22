@@ -22,8 +22,8 @@ export async function VerbActorLook(this: ScriptTarget, context: ScriptContext):
   const command = mustExist(context.command);
   if (command.targets.length === 0) {
     const health = getKey(this.stats, STAT_HEALTH, 0);
-    await context.state.show('actor.step.look.room.you', { actor: this });
-    await context.state.show('actor.step.look.room.health', { actor: this, health });
+    await context.state.show(context.source, 'actor.step.look.room.you', { actor: this });
+    await context.state.show(context.source, 'actor.step.look.room.health', { actor: this, health });
 
     for (const item of this.items) {
       await context.script.invoke(item, SIGNAL_LOOK, sourceContext);
@@ -45,5 +45,5 @@ export async function VerbActorLook(this: ScriptTarget, context: ScriptContext):
     return context.script.invoke(target, SIGNAL_LOOK, sourceContext);
   }
 
-  return context.state.show('actor.step.look.none');
+  return context.state.show(context.source, 'actor.step.look.none');
 }

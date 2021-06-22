@@ -57,7 +57,7 @@ import {
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
 import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
-import { getStubHelper, getTestContainer, getTestLogger } from '../../helper';
+import { createTestContext, getStubHelper, getTestContainer, getTestLogger } from '../../helper';
 
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
@@ -882,14 +882,7 @@ describe('local state service', () => {
         source: makeTestRoom('', '', '', [moving], []),
         target: makeTestRoom('', '', '', [], []),
       };
-      await state.stepMove(transfer, {
-        logger: getTestLogger(),
-        script: createStubInstance(LocalScriptService),
-        data: new Map(),
-        random: await container.create(MathRandomService),
-        state: getStubHelper(),
-        transfer: await container.create(StateEntityTransfer),
-      });
+      await state.stepMove(transfer, createTestContext());
 
       expect(transfer.source.actors, 'source actors').to.have.lengthOf(0);
       expect(transfer.target.actors, 'target actors').to.have.lengthOf(1);
@@ -918,14 +911,7 @@ describe('local state service', () => {
         source: makeTestRoom('', '', '', [], [moving]),
         target: makeTestRoom('', '', '', [], []),
       };
-      await state.stepMove(transfer, {
-        logger: getTestLogger(),
-        script: createStubInstance(LocalScriptService),
-        data: new Map(),
-        random: await container.create(MathRandomService),
-        state: getStubHelper(),
-        transfer: await container.create(StateEntityTransfer),
-      });
+      await state.stepMove(transfer, createTestContext());
 
       expect(transfer.source.items, 'source items').to.have.lengthOf(0);
       expect(transfer.target.items, 'target items').to.have.lengthOf(1);
@@ -954,14 +940,7 @@ describe('local state service', () => {
         target: makeTestRoom('', '', '', [], []),
       };
 
-      return expect(state.stepMove(transfer, {
-        logger: getTestLogger(),
-        script: createStubInstance(LocalScriptService),
-        data: new Map(),
-        random: await container.create(MathRandomService),
-        state: getStubHelper(),
-        transfer: await container.create(StateEntityTransfer),
-      })).to.eventually.be.rejectedWith(ScriptTargetError);
+      return expect(state.stepMove(transfer, createTestContext())).to.eventually.be.rejectedWith(ScriptTargetError);
     });
   });
 
@@ -984,7 +963,11 @@ describe('local state service', () => {
       });
 
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
-      await state.stepShow('foo', {}, ShowVolume.SELF);
+
+      const source = {
+        room: makeTestRoom('', '', ''),
+      };
+      await state.stepShow(source, 'foo', {}, ShowVolume.SELF);
 
       const output = await pending;
       expect(output.line).to.equal('foo');

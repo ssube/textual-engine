@@ -30,7 +30,7 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
 
   const moving = indexEntity(results, command.index, isItem);
   if (isNil(moving)) {
-    await context.state.show('actor.step.drop.type', { command });
+    await context.state.show(context.source, 'actor.step.drop.type', { command });
     return;
   }
 

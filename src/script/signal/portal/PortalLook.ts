@@ -9,7 +9,7 @@ export async function SignalPortalLook(this: WorldEntity, context: ScriptContext
     throw new ScriptTargetError('target must be a portal');
   }
 
-  await context.state.show('actor.step.look.room.portal', { portal: this });
+  await context.state.show(context.source, 'actor.step.look.room.portal', { portal: this });
 
   if (this.dest.length > 0) {
     const [room] = await context.state.find({
@@ -19,6 +19,6 @@ export async function SignalPortalLook(this: WorldEntity, context: ScriptContext
       type: ROOM_TYPE,
     });
 
-    await context.state.show('actor.step.look.room.dest', { portal: this, room });
+    await context.state.show(context.source, 'actor.step.look.room.dest', { portal: this, room });
   }
 }

@@ -8,5 +8,5 @@ export async function SignalItemLook(this: WorldEntity, context: ScriptContext):
     throw new ScriptTargetError('target must be an item');
   }
 
-  await context.state.show('actor.step.look.item.seen', { item: this });
+  await context.state.show(context.source, 'actor.step.look.item.seen', { item: this });
 }

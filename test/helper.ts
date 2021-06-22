@@ -1,11 +1,11 @@
-import { defer, doesExist } from '@apextoaster/js-utils';
-import { BaseOptions, ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
-import { stub } from 'sinon';
-import { LocaleService } from '../src/lib';
+import { ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
+import { createStubInstance, stub } from 'sinon';
 
+import { LocalScriptService, MathRandomService, StateEntityTransfer } from '../src/lib';
 import { ConfigFile } from '../src/model/file/Config';
-import { INJECT_CONFIG, INJECT_LOCALE, INJECT_LOGGER } from '../src/module';
-import { StateHelper } from '../src/service/script';
+import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
+import { ScriptContext, StateHelper } from '../src/service/script';
+import { makeTestRoom } from './entity';
 
 export function getTestLogger(): Logger {
   if (process.env.DEBUG === 'TRUE') {
@@ -63,5 +63,27 @@ export function getStubHelper(): StateHelper {
     move: stub(),
     quit: stub(),
     show: stub(),
+  };
+}
+
+export function createTestTransfer(): StateEntityTransfer {
+  return {
+    moveActor: stub(),
+    moveItem: stub(),
+  } as any;
+}
+
+export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptContext {
+  return {
+    data: new Map(),
+    logger: getTestLogger(),
+    random: createStubInstance(MathRandomService),
+    script: createStubInstance(LocalScriptService),
+    source: {
+      room: makeTestRoom('', '', ''),
+    },
+    state: getStubHelper(),
+    transfer: createTestTransfer(),
+    ...parts,
   };
 }

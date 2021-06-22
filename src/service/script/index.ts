@@ -20,7 +20,7 @@ export interface StateHelper {
   enter(target: StateSource): Promise<void>;
   find<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>>;
   move(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void>; // replaces transfer
-  show(msg: string, context?: LocaleContext, volume?: ShowVolume, source?: StateSource): Promise<void>;
+  show(source: StateSource, msg: string, context?: LocaleContext, volume?: ShowVolume): Promise<void>;
   quit(): Promise<void>;
 }
 
@@ -38,6 +38,8 @@ export interface SuppliedScope {
    * Safe access to search and modify state.
    */
   state: StateHelper;
+
+  source: StateSource;
 
   /**
    * Entity transfer helper.

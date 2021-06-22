@@ -3,7 +3,6 @@ import { isNil, mustExist } from '@apextoaster/js-utils';
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { ShowVolume } from '../../../util/actor';
 import { head } from '../../../util/collection/array';
 import { SIGNAL_HIT } from '../../../util/constants';
 import { findActorSlots, findSlotItem } from '../../../util/entity/find';
@@ -31,18 +30,12 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
   const target = indexEntity(results, command.index, isActor);
 
   if (isNil(target)) {
-    await context.state.show('actor.step.hit.type', { command }, ShowVolume.SELF, {
-      actor,
-      room,
-    });
+    await context.state.show(context.source, 'actor.step.hit.type', { command });
     return;
   }
 
   if (this === target) {
-    await context.state.show('actor.step.hit.self', { command }, ShowVolume.SELF, {
-      actor,
-      room,
-    });
+    await context.state.show(context.source, 'actor.step.hit.self', { command });
     return;
   }
 
@@ -50,10 +43,7 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
   const item = findSlotItem(actor, slot);
 
   if (isNil(item)) {
-    await context.state.show('actor.step.hit.item', { target }, ShowVolume.SELF, {
-      actor,
-      room,
-    });
+    await context.state.show(context.source, 'actor.step.hit.item', { target });
     return;
   }
 

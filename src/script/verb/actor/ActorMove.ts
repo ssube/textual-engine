@@ -5,7 +5,6 @@ import { ActorSource, isActor } from '../../../model/entity/Actor';
 import { isPortal } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { ShowVolume } from '../../../util/actor';
 import { head } from '../../../util/collection/array';
 import { SIGNAL_LOOK } from '../../../util/constants';
 import { indexEntity } from '../../../util/entity/match';
@@ -30,7 +29,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetPortal = indexEntity(portals, command.index, isPortal);
 
   if (isNil(targetPortal)) {
-    await context.state.show('actor.step.move.missing', { command });
+    await context.state.show(context.source, 'actor.step.move.missing', { command });
     return;
   }
 
@@ -54,12 +53,9 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     target: targetRoom,
   }, context);
 
-  await context.state.show('actor.step.move.portal', {
+  await context.state.show(context.source, 'actor.step.move.portal', {
     actor: this,
     portal: targetPortal,
-  }, ShowVolume.SELF, {
-    actor: this,
-    room: currentRoom,
   });
 
   if (this.source === ActorSource.PLAYER) {

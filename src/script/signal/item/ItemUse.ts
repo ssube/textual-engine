@@ -11,5 +11,5 @@ export async function SignalItemUse(this: ScriptTarget, context: ScriptContext):
 
   const actor = mustExist(context.actor);
 
-  await context.state.show('item.use.any', { actor, item: this });
+  await context.state.show(context.source, 'item.use.any', { actor, item: this });
 }

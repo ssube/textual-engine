@@ -1,83 +1,58 @@
 import { expect } from 'chai';
-import { NullLogger } from 'noicejs';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorUse } from '../../../../src/script/verb/actor/ActorUse';
 import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { ScriptContext } from '../../../../src/service/script';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { SIGNAL_USE, VERB_USE } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { getStubHelper } from '../../../helper';
-import { testTransfer } from '../../helper';
+import { createTestContext, getStubHelper } from '../../../helper';
 
 describe('actor use scripts', () => {
   describe('actor use command', () => {
     it('should require the script target be an actor', async () => {
-      const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
-
-      const context: ScriptContext = {
+      const context = createTestContext({
         command: makeCommand(VERB_USE),
-        data: new Map(),
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomService),
-        room: makeTestRoom('', '', '', [], []),
-        script,
-        state: stateHelper,
-        transfer,
-      };
+      });
 
       await expect(VerbActorUse.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
       await expect(VerbActorUse.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
     });
 
     it('should show an error if the target is not an item', async () => {
-      const script = createStubInstance(LocalScriptService);
       const stateHelper = getStubHelper();
-      const transfer = testTransfer();
-
       (stateHelper.find as SinonStub).returns(Promise.resolve([
         makeTestActor('', '', ''),
       ]));
 
-      const context: ScriptContext = {
+      const context = createTestContext({
         command: makeCommand(VERB_USE, 'foo'),
-        data: new Map(),
-        logger: NullLogger.global,
         random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
-        script,
         state: stateHelper,
-        transfer,
-      };
+      });
 
       await VerbActorUse.call(makeTestActor('', '', ''), context);
 
-      expect(stateHelper.show).to.have.callCount(1).and.been.calledWith('actor.step.use.type');
+      expect(stateHelper.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.use.type');
     });
 
     it('should invoke the use signal on the target', async () => {
       const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
+      const state = getStubHelper();
 
       const item = makeTestItem('foo', '', '');
-      (stateHelper.find as SinonStub).returns(Promise.resolve([item]));
+      (state.find as SinonStub).returns(Promise.resolve([item]));
 
-      const context: ScriptContext = {
+      const context = createTestContext({
         command: makeCommand(VERB_USE, 'foo'),
-        data: new Map(),
-        logger: NullLogger.global,
         random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
-        state: stateHelper,
-        transfer,
-      };
+        state,
+      });
 
       const actor = makeTestActor('', '', '');
       await VerbActorUse.call(actor, context);

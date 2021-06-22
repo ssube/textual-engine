@@ -97,7 +97,7 @@ export { CompromiseTokenizer } from './service/tokenizer/CompromiseTokenizer';
 export { SplitTokenizer } from './service/tokenizer/SplitTokenizer';
 export { TokenizerService } from './service/tokenizer/index';
 
-export { ShowVolume, StateSource, showCheck } from './util/actor/index';
+export { ShowVolume, StateSource, checkVolume } from './util/actor/index';
 
 export { TEMPLATE_CHANCE, META_VERBS, COMMON_VERBS, EVENT_NAMES } from './util/constants';
 export { Singleton, SingletonConstructor } from './util/container';

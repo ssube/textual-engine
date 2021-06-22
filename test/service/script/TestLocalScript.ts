@@ -3,11 +3,9 @@ import { SinonStub, spy, stub } from 'sinon';
 
 import { Item } from '../../../src/model/entity/Item';
 import { CoreModule } from '../../../src/module/CoreModule';
-import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
-import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestItem } from '../../entity';
-import { getStubHelper, getTestContainer } from '../../helper';
+import { createTestContext, getStubHelper, getTestContainer } from '../../helper';
 
 describe('local script service', () => {
   it('should gracefully skip unknown scripts', async () => {
@@ -20,12 +18,9 @@ describe('local script service', () => {
     });
 
     const script = await container.create(LocalScriptService, {}, new Map());
-    await script.invoke(target, 'foo', {
-      data: new Map(),
-      random: await container.create(MathRandomService),
-      state: getStubHelper(),
-      transfer: await container.create(StateEntityTransfer),
-    });
+    await script.invoke(target, 'foo', createTestContext());
+
+    // TODO: assert something
   });
 
   it('should invoke scripts with target', async () => {
@@ -41,13 +36,9 @@ describe('local script service', () => {
     const script = await container.create(LocalScriptService, {}, new Map([
       ['bar', scriptSpy],
     ]));
-    await script.invoke(target, 'verbs.foo', {
-      data: new Map(),
+    await script.invoke(target, 'verbs.foo', createTestContext({
       item: target,
-      random: await container.create(MathRandomService),
-      state: getStubHelper(),
-      transfer: await container.create(StateEntityTransfer),
-    });
+    }));
 
     expect(scriptSpy).to.have.callCount(1);
   });
@@ -65,12 +56,7 @@ describe('local script service', () => {
     const script = await container.create(LocalScriptService, {}, new Map([
       ['bar', scriptSpy],
     ]));
-    await script.invoke(target, 'verbs.bar', {
-      data: new Map(),
-      random: await container.create(MathRandomService),
-      state: getStubHelper(),
-      transfer: await container.create(StateEntityTransfer),
-    });
+    await script.invoke(target, 'verbs.bar', createTestContext());
 
     expect(scriptSpy).to.have.callCount(0);
   });
@@ -90,12 +76,10 @@ describe('local script service', () => {
     ];
     (state.find as SinonStub).returns(Promise.resolve(results));
 
-    await script.broadcast(target, 'verbs.bar', {
-      data: new Map(),
-      random: await container.create(MathRandomService),
+    await script.broadcast(target, 'verbs.bar', createTestContext({
+      script,
       state,
-      transfer: await container.create(StateEntityTransfer),
-    });
+    }));
 
     expect(invokeStub).to.have.callCount(results.length);
   });

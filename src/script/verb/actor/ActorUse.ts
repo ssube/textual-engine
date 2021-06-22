@@ -27,7 +27,7 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
   const target = indexEntity(results, command.index, isItem);
 
   if (!isItem(target)) {
-    await context.state.show('actor.step.use.type', { command });
+    await context.state.show(context.source, 'actor.step.use.type', { command });
     return;
   }
 

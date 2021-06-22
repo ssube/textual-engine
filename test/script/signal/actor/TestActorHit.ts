@@ -1,23 +1,16 @@
 import { expect } from 'chai';
-import { NullLogger } from 'noicejs';
-import { createStubInstance, SinonStub } from 'sinon';
+import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { SignalActorHit } from '../../../../src/script/signal/actor/ActorHit';
 import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_DAMAGE, STAT_HEALTH } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { getStubHelper } from '../../../helper';
-import { testTransfer } from '../../helper';
+import { createTestContext, getStubHelper } from '../../../helper';
 
 describe('actor hit scripts', () => {
   describe('actor hit signal', () => {
     it('should remove some health', async () => {
-      const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
-
       const item = makeTestItem('', '', '');
       item.stats.set(STAT_DAMAGE, 5);
 
@@ -28,69 +21,49 @@ describe('actor hit scripts', () => {
       const random = createStubInstance(MathRandomService);
       random.nextInt.returnsArg(0); // do max damage, 5 + 5
 
-      await SignalActorHit.call(actor, {
+      const context = createTestContext({
         actor,
-        data: new Map(),
         item,
-        logger: NullLogger.global,
         random,
-        room: makeTestRoom('', '', '', [], []),
-        script,
-        state: stateHelper,
-        transfer,
+        room: makeTestRoom('', '', ''),
       });
+
+      await SignalActorHit.call(actor, context);
 
       expect(actor.stats.get(STAT_HEALTH)).to.equal(0);
     });
 
     it('should require the script target be an actor', async () => {
-      const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
-
       const item = makeTestItem('', '', '');
       const actor = makeTestActor('', '', '', item);
 
-      const context = {
+      const context = createTestContext({
         actor,
-        data: new Map(),
         item,
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomService),
-        room: makeTestRoom('', '', '', [], []),
-        script,
-        state: stateHelper,
-        transfer,
-      };
+      });
 
       await expect(SignalActorHit.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
       await expect(SignalActorHit.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
     });
 
     it('should note when the target dies', async () => {
-      const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
-
       const item = makeTestItem('', '', '');
       const actor = makeTestActor('', '', '', item);
       actor.stats.set(STAT_HEALTH, 0);
 
-      await SignalActorHit.call(actor, {
+      const stateHelper = getStubHelper();
+      const context = createTestContext({
         actor,
-        data: new Map(),
         item,
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
-        script,
         state: stateHelper,
-        transfer,
       });
 
+      await SignalActorHit.call(actor, context);
+
       const showStub = stateHelper.show as SinonStub;
-      expect(showStub.getCall(0)).to.have.been.calledWith('actor.hit.hit');
-      expect(showStub.getCall(1)).to.have.been.calledWith('actor.hit.dead');
+      expect(showStub.getCall(0)).to.have.been.calledWithMatch(match.object, 'actor.hit.hit');
+      expect(showStub.getCall(1)).to.have.been.calledWithMatch(match.object, 'actor.hit.dead');
     });
   });
 });

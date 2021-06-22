@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
+import { stub } from 'sinon';
 
 import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
@@ -14,8 +15,11 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_ROOM,
+  EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_ROOM,
   EVENT_TOKEN_COMMAND,
   VERB_WAIT,
 } from '../../../src/util/constants';
@@ -174,10 +178,14 @@ describe('player actor', () => {
       room: sourceRoom,
     });
 
-    player.onRoom({
+    const pendingRoom = onceEvent(event, EVENT_ACTOR_ROOM);
+
+    event.emit(EVENT_STATE_ROOM, {
       actor,
       room: targetRoom,
     });
+
+    await pendingRoom;
 
     const pendingCommand = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
     event.emit(EVENT_TOKEN_COMMAND, {
@@ -189,6 +197,39 @@ describe('player actor', () => {
     expect(command.room, 'command room').to.equal(targetRoom);
   });
 
+  it('should filter join events by pid', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const player = await container.create(PlayerActorService);
+    await player.start();
+
+    const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    const actorRoomStub = stub();
+    event.on(EVENT_ACTOR_ROOM, actorRoomStub);
+
+    const pendingJoin = onceEvent<ActorJoinEvent>(event, EVENT_ACTOR_JOIN);
+    event.emit(EVENT_STATE_LOAD, {
+      state: '',
+      world: '',
+    });
+    const { pid } = await pendingJoin;
+
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [], []);
+    event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid: 'false',
+      room,
+    });
+
+    event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid,
+      room,
+    });
+
+    expect(actorRoomStub).to.have.callCount(1);
+  });
+
   xit('should test output volume when source is set');
-  xit('should translate and cache verbs');
 });

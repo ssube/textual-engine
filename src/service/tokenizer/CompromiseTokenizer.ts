@@ -4,8 +4,6 @@ import nlp from 'compromise';
 import { TokenizerService } from '.';
 import { Command } from '../../model/Command';
 import { InjectedOptions } from '../../module';
-import { groupOn, remove } from '../../util/collection/array';
-import { SPLIT_CHAR } from '../../util/constants';
 import { SplitTokenizer } from './SplitTokenizer';
 
 export class CompromiseTokenizer extends SplitTokenizer implements TokenizerService {

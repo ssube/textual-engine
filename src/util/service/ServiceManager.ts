@@ -5,7 +5,6 @@ import { ConfigServices } from '../../model/file/Config';
 import { Service } from '../../service';
 import { ActorService } from '../../service/actor';
 import { LoaderService } from '../../service/loader';
-import { LocaleService } from '../../service/locale';
 import { RenderService } from '../../service/render';
 import { StateService } from '../../service/state';
 import { TokenizerService } from '../../service/tokenizer';

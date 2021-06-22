@@ -68,6 +68,8 @@ export async function main(args: Array<string>): Promise<number> {
 
   // start svc mgr
   const services = await container.create(ServiceManager);
+  services.add('locale', locale);
+
   await services.create(config.services);
 
   // load common locale
@@ -113,9 +115,6 @@ export async function main(args: Array<string>): Promise<number> {
   // wait for something to quit
   await quit;
   await services.stop();
-
-  // TODO: clean up with other services
-  await locale.stop();
 
   // eventDebug(events);
   // events.removeAllListeners();

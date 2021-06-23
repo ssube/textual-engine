@@ -51,6 +51,7 @@ export function checkMap<TKey, TValue>(
   for (const [key, value] of data) {
     if (keySchema(key) === false) {
       pass = false;
+      /* istanbul ignore else */
       if (doesExist(keySchema.errors)) {
         outErrors.push(...keySchema.errors);
       }
@@ -58,6 +59,7 @@ export function checkMap<TKey, TValue>(
 
     if (valueSchema(value) === false) {
       pass = false;
+      /* istanbul ignore else */
       if (doesExist(valueSchema.errors)) {
         outErrors.push(...valueSchema.errors);
       }

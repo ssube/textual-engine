@@ -11,7 +11,6 @@ import {
   INJECT_RANDOM,
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
-  INJECT_TOKENIZER,
 } from '.';
 import { ConfigFile } from '../model/file/Config';
 import { BehaviorActorService } from '../service/actor/BehaviorActor';
@@ -24,15 +23,15 @@ import { LocaleService } from '../service/locale';
 import { NextLocaleService } from '../service/locale/NextLocale';
 import { Parser } from '../service/parser';
 import { YamlParser } from '../service/parser/YamlParser';
-import { RandomGenerator } from '../service/random';
-import { AleaRandomGenerator } from '../service/random/AleaRandom';
+import { RandomService } from '../service/random';
+import { AleaRandomService } from '../service/random/AleaRandom';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScript';
 import { LocalStateService } from '../service/state/LocalState';
 import { TemplateService } from '../service/template';
 import { ChainTemplateService } from '../service/template/ChainTemplateService';
-import { TokenizerService } from '../service/tokenizer';
-import { WordTokenizer } from '../service/tokenizer/WordTokenizer';
+import { CompromiseTokenizer } from '../service/tokenizer/CompromiseTokenizer';
+import { SplitTokenizer } from '../service/tokenizer/SplitTokenizer';
 import { Singleton } from '../util/container';
 
 export class CoreModule extends Module {
@@ -40,10 +39,9 @@ export class CoreModule extends Module {
   protected event: Singleton<EventBus>;
   protected locale: Singleton<LocaleService>;
   protected parser: Singleton<Parser>;
-  protected random: Singleton<RandomGenerator>;
+  protected random: Singleton<RandomService>;
   protected script: Singleton<ScriptService>;
   protected template: Singleton<TemplateService>;
-  protected tokenizer: Singleton<TokenizerService>;
 
   constructor() {
     super();
@@ -53,10 +51,9 @@ export class CoreModule extends Module {
     this.event = new Singleton(() => mustExist(this.container).create(NodeEventBus));
     this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
     this.parser = new Singleton(() => mustExist(this.container).create(YamlParser));
-    this.random = new Singleton(() => mustExist(this.container).create(AleaRandomGenerator));
+    this.random = new Singleton(() => mustExist(this.container).create(AleaRandomService));
     this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
     this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
-    this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
   }
 
   public async configure(options: ModuleOptions): Promise<void> {
@@ -64,12 +61,14 @@ export class CoreModule extends Module {
 
     this.bind(INJECT_EVENT).toFactory(() => this.event.get());
     this.bind(INJECT_PARSER).toFactory(() => this.parser.get());
-    this.bind(INJECT_TOKENIZER).toFactory(() => this.tokenizer.get());
 
     this.bind('core-behavior-actor').toConstructor(BehaviorActorService);
     this.bind('core-player-actor').toConstructor(PlayerActorService);
 
     this.bind('core-local-state').toConstructor(LocalStateService);
+
+    this.bind('core-compromise-tokenizer').toConstructor(CompromiseTokenizer);
+    this.bind('core-split-tokenizer').toConstructor(SplitTokenizer);
   }
 
   public setConfig(config: ConfigFile): void {
@@ -101,7 +100,7 @@ export class CoreModule extends Module {
    * Singleton random number generator.
    */
   @Provides(INJECT_RANDOM)
-  protected async getRandom(): Promise<RandomGenerator> {
+  protected async getRandom(): Promise<RandomService> {
     return this.random.get();
   }
 

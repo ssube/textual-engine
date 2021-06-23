@@ -2,14 +2,14 @@ import { doesExist, getOrDefault } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { Inject, Logger } from 'noicejs';
 
-import { EventBus, EventGroup } from '.';
+import { AnyHandler, EventBus, EventGroup } from '.';
 import { INJECT_LOGGER, InjectedOptions } from '../../module';
-import { EventHandler } from '../../util/async/event';
+import { ErrorHandler, EventHandler } from '../../util/async/event';
 import { makeServiceLogger } from '../../util/service';
 
 @Inject(INJECT_LOGGER)
 export class NodeEventBus extends EventEmitter implements EventBus {
-  protected handlers: Map<EventGroup, Array<[string, EventHandler<unknown>]>>;
+  protected handlers: Map<EventGroup, Array<[string, AnyHandler]>>;
   protected logger: Logger;
 
   constructor(options: InjectedOptions) {
@@ -25,12 +25,16 @@ export class NodeEventBus extends EventEmitter implements EventBus {
         args,
         name,
       },
-    }, 'bus proxying event');
+    }, 'bus emitting event');
 
     return super.emit(name, ...args);
   }
 
-  public on(name: string, handler: EventHandler<any>, group?: EventGroup): this {
+  public on(name: 'error', handler: ErrorHandler, group?: EventGroup): this;
+  public on(name: 'quit', handler: EventHandler<void>, group?: EventGroup): this;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public on(name: string, handler: EventHandler<any>, group?: EventGroup): this;
+  public on(name: string, handler: AnyHandler, group?: EventGroup): this {
     if (doesExist(group)) {
       const existing = getOrDefault(this.handlers, group, []);
       existing.push([name, handler]);

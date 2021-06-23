@@ -1,12 +1,13 @@
 import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
-import { EntityForType, WorldEntityType } from '../../model/entity';
 
+import { EntityForType, WorldEntityType } from '../../model/entity';
+import { Actor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
 import { isPortal } from '../../model/entity/Portal';
 import { Metadata } from '../../model/Metadata';
-import { SearchFilter, StateMatchers } from './find';
 import { matchIdSegments } from '../string';
 import { Immutable } from '../types';
+import { SearchFilter, StateMatchers } from './find';
 
 export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<Entity>>, index: number, guard: (it: Optional<Entity>) => it is TEntity): Optional<TEntity> {
   if (entities.length <= index) {
@@ -77,7 +78,7 @@ export function matchMetadataFuzzy(entity: Immutable<Entity>, filter: Partial<Me
     // TODO: extract into helper
     if (isPortal(entity)) {
       const sourceName = [
-        entity.groupSource.toLocaleLowerCase(),
+        entity.group.source.toLocaleLowerCase(),
         name,
       ].join(' ');
       matched.name = matched.name || sourceName.includes(filter.name);

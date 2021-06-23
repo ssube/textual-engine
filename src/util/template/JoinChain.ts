@@ -1,12 +1,14 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 
 import { InputChain } from '.';
-import { RandomGenerator } from '../../service/random';
+import { RandomService } from '../../service/random';
 
 export interface JoinOptions {
   joiners: Array<string>;
-  random: RandomGenerator;
+  random: RandomService;
 }
+
+const LEVEL_EVEN_ODD = 2;
 
 /**
  * A string building construct that:
@@ -21,7 +23,7 @@ export interface JoinOptions {
  */
 export class JoinChain {
   protected joiners: Array<string>;
-  protected random: RandomGenerator;
+  protected random: RandomService;
 
   constructor(options: JoinOptions) {
     this.joiners = options.joiners;
@@ -30,7 +32,7 @@ export class JoinChain {
 
   public render(chain: InputChain, depth = 0): string {
     if (Array.isArray(chain)) {
-      const level = depth % 2;
+      const level = depth % LEVEL_EVEN_ODD;
       if (level === 0) {
         return this.renderAnd(chain, depth);
       } else {

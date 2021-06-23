@@ -11,7 +11,7 @@ This guide covers a little bit of everything in light detail.
     - [Where Can I Play?](#where-can-i-play)
     - [Notable Features](#notable-features)
       - [For Dungeon Crawlers](#for-dungeon-crawlers)
-      - [For Interactive Fiction](#for-interactive-fiction)
+      - [For Narrative Fiction](#for-narrative-fiction)
   - [Concepts](#concepts)
     - [Command Structure](#command-structure)
     - [Entity Types](#entity-types)
@@ -81,23 +81,20 @@ the game engine invoke a named script on the target entity, and can be extended 
 
 #### For Dungeon Crawlers
 
-TODO:
+`textual-engine` can be used for procedural dungeon crawlers: the world is generated from a starting room and series
+of templates, following the portals between rooms. With a wide variety of rooms and enemies, the player can explore
+sprawling worlds, limited only by memory and processing power. Non-player actors can interact with items and each
+other, and wander between rooms. The world will continue to expand as the player moves between rooms, until all
+available portals have been connected.
 
-- procedural dungeon crawlers
-- templates and layered modifiers
-- expanding as player moves
-- limited by memory and time
-  - pruning old rooms
+Pruning old rooms to allow infinite exploration is a planned feature: https://github.com/ssube/textual-engine/issues/13
 
-#### For Interactive Fiction
+#### For Narrative Fiction
 
-TODO:
-
-- story-based text adventures may not want or need randomization
-- fixed structure
-  - no template strings
-  - 100% chance on all template refs
-  - no procedural rooms, all portals match
+`textual-engine` can also be used for narrative fiction: predictable and guided worlds can be created by linking a
+single starting room with a single destination for each portal. Using the template system, you can add slight
+variations to flavor text, while keeping room and character names constant. Some stories do not need random worlds,
+and the procedural creation can be disabled.
 
 ## Concepts
 
@@ -134,8 +131,6 @@ The valid targets include:
 
 When multiple entities match the `target`, the `index` can be used to differentiate.
 
-A natural-language processing command mode is planned (https://github.com/ssube/textual-engine/issues/94).
-
 ### Entity Types
 
 The commands shown above often require a target, the game entity with which you want to interact. There are a few
@@ -154,11 +149,9 @@ The portals that lead into other rooms are also valid targets, but are not prope
 
 ### Worlds and Templates
 
-TODO:
-
-- loading games, templates
-- saved game state
-- world templates
+The game world is created from a template, when the demo loads or using the `create` command. Once a game world
+has been created, it can be saved and reloaded later, resuming from the last turn with the same player character.
+Templates can be loaded directly from Github or another `https` source using the `load` command.
 
 ## Playing The Game
 
@@ -177,12 +170,16 @@ available verbs: create, debug, graph, help, load, quit, save, drop, hit, look, 
 
 These verbs are split into two groups: commands to the game world and meta-commands to the game itself.
 
-Additional room and item-specific verbs are planned (https://github.com/ssube/textual-engine/issues/78).
+The current world and room can provide verbs of their own, or remove some of the common verbs. If you find
+yourself unable to `move`, check the `help` for a list of available verbs.
 
 ### World Commands
 
 - `drop <item>`
-  - drop an item from your inventory
+  - drop an item from your inventora list of y
+- `equip <item>`
+  - equip an item from your inventory
+  - your equipped weapon will be used to hit
 - `hit <actor>`
   - hit an enemy actor
 - `look [entity]`
@@ -198,7 +195,7 @@ Additional room and item-specific verbs are planned (https://github.com/ssube/te
   - take an item from the current room
 - `use <item>`
   - use an item on yourself
-  - (using items on other actors is a planned feature)
+  - using items on other actors is a planned feature: https://github.com/ssube/textual-engine/issues/102
 - `wait`
   - skip your turn
 
@@ -290,19 +287,26 @@ Sword Goblin (actor-goblin-9) has hit player-0 (actor-goblin-11) with a Sword!
 player-0 has 15 health left.
 ```
 
-Your health, and that of enemies you attack, will be shown after each hit.
+Your health will be shown after each hit, and can be shown in the optional status bar. Enemy health will be shown
+after each hit.
 
-If you are holding an item capable of doing damage, you can `hit` them back:
+If you are holding an item capable of doing damage, you can `equip` it and `hit` them back:
 
 ```none
+turn 11 > equip cracked sword
+Sword Goblin will equip the Cracked Sword.
+You equip the Cracked Sword in your weapon-hand-left.
 turn 12 > hit sword goblin
 player-0 will hit the sword goblin.
 player-0 (actor-goblin-11) has hit Sword Goblin (actor-goblin-9) with a Cracked Sword!
 Sword Goblin has 12 health left.
 ```
 
-The maximum damage is based on your actor's damage plus your current item's damage, then a random number between 0
+The maximum damage is based on your actor's damage plus your current weapon's damage, then a random number between 0
 and that maximum is rolled.
+
+Some characters will have natural weapons like teeth, and may not be able to hold weapons in their hands - they may
+not even have hands.
 
 ### Saving and Loading Worlds
 
@@ -334,7 +338,7 @@ A new world can be created at any point with the `create` command: `create templ
 The `depth` parameter controls the initial size of the world and the number of rooms that will be generated before
 the game loads, but it does not control the final size of the world.
 
-A command to list available world templates is planned (https://github.com/ssube/textual-engine/issues/104).
+The available worlds can be listed with the `worlds` command.
 
 ## Further Reading
 

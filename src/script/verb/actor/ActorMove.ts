@@ -5,8 +5,8 @@ import { ActorSource, isActor } from '../../../model/entity/Actor';
 import { isPortal } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { ShowVolume } from '../../../util/actor';
-import { VERB_LOOK } from '../../../util/constants';
+import { head } from '../../../util/collection/array';
+import { SIGNAL_LOOK } from '../../../util/constants';
 import { indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -16,12 +16,12 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
 
   // find the new room
   const command = mustExist(context.command);
-  const targetName = command.target;
+  const targetName = head(command.targets);
 
   const currentRoom = mustExist(context.room);
   const portals = currentRoom.portals.filter((it) => {
     // TODO: use entity search helper
-    const group = it.groupSource.toLocaleLowerCase();
+    const group = it.group.source.toLocaleLowerCase();
     const name = it.meta.name.toLocaleLowerCase();
     // portals in the same group usually lead to the same place, but name and group can both be ambiguous
     return (it.meta.id === targetName || name === targetName || group === targetName || `${group} ${name}` === targetName);
@@ -29,7 +29,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetPortal = indexEntity(portals, command.index, isPortal);
 
   if (isNil(targetPortal)) {
-    await context.state.show('actor.step.move.missing', { command });
+    await context.state.show(context.source, 'actor.step.move.missing', { command });
     return;
   }
 
@@ -53,17 +53,14 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     target: targetRoom,
   }, context);
 
-  await context.state.show('actor.step.move.portal', {
+  await context.state.show(context.source, 'actor.step.move.portal', {
     actor: this,
     portal: targetPortal,
-  }, ShowVolume.SELF, {
-    actor: this,
-    room: currentRoom,
   });
 
   if (this.source === ActorSource.PLAYER) {
     context.logger.debug({ actor: this, room: targetRoom }, 'player entered room');
     await context.state.enter({ actor: this, room: targetRoom });
-    await context.script.invoke(this, VERB_LOOK, context);
+    await context.script.invoke(targetRoom, SIGNAL_LOOK, context);
   }
 }

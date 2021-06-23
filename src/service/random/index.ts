@@ -1,7 +1,7 @@
 /**
  * Random number generator.
  */
-export interface RandomGenerator {
+export interface RandomService {
   /**
    * Generate a float greater than 0.
    */

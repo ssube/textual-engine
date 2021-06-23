@@ -8,7 +8,7 @@ export class BrowserFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;
   protected scope: typeof window;
 
-  constructor(options: InjectedOptions, w = window) {
+  constructor(options: InjectedOptions, /* istanbul ignore next */ w = window) {
     super(options, ['http', 'https']);
     this.fetch = w.fetch;
     this.scope = w;

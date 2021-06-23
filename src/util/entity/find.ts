@@ -1,13 +1,15 @@
-import { doesExist, mustCoalesce } from '@apextoaster/js-utils';
+import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
 
 import { EntityForType, WorldEntityType } from '../../model/entity';
 import { Actor, ActorType } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
+import { Item } from '../../model/entity/Item';
 import { isRoom, Room, RoomType } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
-import { createStrictMatcher } from './match';
+import { hasText, matchIdSegments } from '../string';
 import { Immutable } from '../types';
+import { createStrictMatcher } from './match';
 
 export interface StateMatchers<TEntity extends WorldEntityType> {
   entity: (entity: Immutable<Entity>, search: SearchFilter<TEntity>) => entity is EntityForType<TEntity>;
@@ -125,4 +127,20 @@ export function findContainer<TType extends ActorType | RoomType>(state: WorldSt
   }
 
   return Array.from(results);
+}
+
+/**
+ * Find the item equipped in a particular slot.
+ */
+export function findSlotItem(actor: Actor, slot: string): Optional<Item> {
+  const id = actor.slots.get(slot);
+  if (doesExist(id) && hasText(id)) {
+    return actor.items.find((it) => it.meta.id === id);
+  } else {
+    return undefined;
+  }
+}
+
+export function findActorSlots(actor: Actor, filter: string): Array<string> {
+  return Array.from(actor.slots.keys()).filter((it) => matchIdSegments(it, filter));
 }

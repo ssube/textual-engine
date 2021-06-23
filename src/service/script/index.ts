@@ -6,12 +6,12 @@ import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Portal } from '../../model/entity/Portal';
 import { Room } from '../../model/entity/Room';
+import { ScriptData } from '../../model/Script';
 import { ShowVolume, StateSource } from '../../util/actor';
 import { ActorTransfer, ItemTransfer, StateEntityTransfer } from '../../util/entity/EntityTransfer';
 import { SearchFilter } from '../../util/entity/find';
-import { ScriptData } from '../../util/types';
 import { LocaleContext } from '../locale';
-import { RandomGenerator } from '../random';
+import { RandomService } from '../random';
 
 export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
@@ -20,7 +20,7 @@ export interface StateHelper {
   enter(target: StateSource): Promise<void>;
   find<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>>;
   move(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void>; // replaces transfer
-  show(msg: string, context?: LocaleContext, volume?: ShowVolume, source?: StateSource): Promise<void>;
+  show(source: StateSource, msg: string, context?: LocaleContext, volume?: ShowVolume): Promise<void>;
   quit(): Promise<void>;
 }
 
@@ -32,13 +32,14 @@ export interface SuppliedScope {
    * Assorted data, primitives only.
    */
   data: ScriptData;
-
-  random: RandomGenerator;
+  random: RandomService;
 
   /**
    * Safe access to search and modify state.
    */
   state: StateHelper;
+
+  source: StateSource;
 
   /**
    * Entity transfer helper.

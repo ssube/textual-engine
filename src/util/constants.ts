@@ -5,10 +5,8 @@ export const PORTAL_DEPTH = 4;
 export const SPLIT_HEAD_TAIL = 2;
 export const TEMPLATE_CHANCE = 100;
 
-// render delays
-// TODO: should be config
-export const RENDER_DELAY = 50; // as long as possible to combine repeat renders
-export const LINE_DELAY = 10; // just enough to combine consecutive output
+// TODO: move to locale data
+export const SPLIT_CHAR = ' ';
 
 // common events
 export const EVENT_COMMON_ERROR = 'error';
@@ -26,14 +24,15 @@ export const EVENT_LOADER_READ = 'loader-read';
 export const EVENT_LOADER_SAVE = 'loader-save';
 export const EVENT_LOADER_STATE = 'loader-state';
 export const EVENT_LOADER_WORLD = 'loader-world';
-export const EVENT_RENDER_OUTPUT = 'render-output';
+export const EVENT_RENDER_INPUT = 'render-input';
 export const EVENT_STATE_JOIN = 'state-join';
 export const EVENT_STATE_LOAD = 'state-load';
 export const EVENT_STATE_OUTPUT = 'state-output';
 export const EVENT_STATE_ROOM = 'state-room';
 export const EVENT_STATE_STEP = 'state-step';
+export const EVENT_TOKEN_COMMAND = 'token-command';
 
-export const EVENT_NAMES = [
+export const EVENT_NAMES: ReadonlyArray<string> = [
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
@@ -46,12 +45,13 @@ export const EVENT_NAMES = [
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
-  EVENT_RENDER_OUTPUT,
+  EVENT_RENDER_INPUT,
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
+  EVENT_TOKEN_COMMAND,
 ] as const;
 
 // script signals
@@ -64,16 +64,8 @@ export const SIGNAL_LOOK = 'signal.look';
 export const SIGNAL_STEP = 'signal.step';
 export const SIGNAL_USE = 'signal.use';
 
-// common verbs
+// verbs
 export const VERB_PREFIX = 'verbs.';
-
-export const VERB_DROP = 'verbs.common.drop';
-export const VERB_HIT = 'verbs.common.hit';
-export const VERB_LOOK = 'verbs.common.look';
-export const VERB_MOVE = 'verbs.common.move';
-export const VERB_TAKE = 'verbs.common.take';
-export const VERB_USE = 'verbs.common.use';
-export const VERB_WAIT = 'verbs.common.wait';
 
 // meta commands
 export const META_CREATE = 'verbs.meta.create';
@@ -85,7 +77,7 @@ export const META_QUIT = 'verbs.meta.quit';
 export const META_SAVE = 'verbs.meta.save';
 export const META_WORLDS = 'verbs.meta.worlds';
 
-export const META_VERBS = [
+export const META_VERBS: ReadonlyArray<string> = [
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -94,16 +86,27 @@ export const META_VERBS = [
   META_QUIT,
   META_SAVE,
   META_WORLDS,
-];
+] as const;
+
+// common verbs
+export const VERB_DROP = 'verbs.common.drop';
+export const VERB_EQUIP = 'verbs.common.equip';
+export const VERB_HIT = 'verbs.common.hit';
+export const VERB_LOOK = 'verbs.common.look';
+export const VERB_MOVE = 'verbs.common.move';
+export const VERB_TAKE = 'verbs.common.take';
+export const VERB_USE = 'verbs.common.use';
+export const VERB_WAIT = 'verbs.common.wait';
 
 /**
  * Common verbs and meta commands.
  *
  * Should include all `META_*` and `VERB_*` constants from this file.
  */
-export const COMMON_VERBS = [
+export const COMMON_VERBS: ReadonlyArray<string> = [
   ...META_VERBS,
   VERB_DROP,
+  VERB_EQUIP,
   VERB_HIT,
   VERB_LOOK,
   VERB_MOVE,
@@ -116,7 +119,7 @@ export const COMMON_VERBS = [
 export const STAT_HEALTH = 'health';
 export const STAT_DAMAGE = 'damage';
 
-export const COMMON_STATS = [
+export const COMMON_STATS: ReadonlyArray<string> = [
   STAT_HEALTH,
   STAT_DAMAGE,
 ] as const;

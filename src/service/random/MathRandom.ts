@@ -1,7 +1,7 @@
-import { RandomGenerator } from '.';
+import { RandomService } from '.';
 import { BYTE_RANGE } from '../../util/constants';
 
-export class MathRandomGenerator implements RandomGenerator {
+export class MathRandomService implements RandomService {
   public nextFloat(): number {
     return Math.random();
   }

@@ -8,7 +8,7 @@ import { BaseLoader } from '../BaseLoader';
 export class BrowserLocalLoader extends BaseLoader implements LoaderService {
   protected local: Storage;
 
-  constructor(options: InjectedOptions, w = window) {
+  constructor(options: InjectedOptions, /* istanbul ignore next */ w = window) {
     super(options, ['local', 'session']);
     this.local = w.localStorage;
   }

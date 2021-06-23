@@ -1,6 +1,7 @@
 import { doesExist, mergeMap, mustExist, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
+import { equipItems } from '.';
 import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
@@ -9,11 +10,12 @@ import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
 import { Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
+import { ScriptMap } from '../../model/Script';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE, InjectedOptions } from '../../module';
 import { Counter } from '../../service/counter';
-import { RandomGenerator } from '../../service/random';
+import { RandomService } from '../../service/random';
 import { CreateParams } from '../../service/state';
 import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
@@ -21,13 +23,12 @@ import { TEMPLATE_CHANCE } from '../constants';
 import { makeServiceLogger } from '../service';
 import { matchIdSegments } from '../string';
 import { findByBaseId } from '../template';
-import { ScriptMap } from '../types';
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
 export class StateEntityGenerator {
   protected counter: Counter;
   protected logger: Logger;
-  protected random: RandomGenerator;
+  protected random: RandomService;
   protected template: TemplateService;
 
   protected world?: WorldTemplate;
@@ -49,16 +50,20 @@ export class StateEntityGenerator {
 
   // take ID and look up template?
   public async createActor(template: Template<Actor>, source = ActorSource.BEHAVIOR): Promise<Actor> {
+    const slots = this.template.renderStringMap(template.base.slots);
     const actor: Actor = {
-      type: 'actor',
-      source,
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
       scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
+      slots,
+      source,
       stats: this.template.renderNumberMap(template.base.stats),
+      type: 'actor',
     };
 
     await this.modifyActor(actor, template.mods);
+
+    equipItems(actor, slots);
 
     return actor;
   }
@@ -87,10 +92,11 @@ export class StateEntityGenerator {
 
   public async createItem(template: Template<Item>): Promise<Item> {
     const item: Item = {
-      type: ITEM_TYPE,
       meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
-      stats: this.template.renderNumberMap(template.base.stats),
       scripts: await this.createScripts(template.base.scripts, ITEM_TYPE),
+      slot: this.template.renderString(template.base.slot),
+      stats: this.template.renderNumberMap(template.base.stats),
+      type: ITEM_TYPE,
     };
 
     await this.modifyItem(item, template.mods);
@@ -132,9 +138,11 @@ export class StateEntityGenerator {
   public async createPortal(template: Template<Portal>): Promise<Portal> {
     const portal: Portal = {
       dest: '',
-      groupKey: this.template.renderString(template.base.groupKey),
-      groupSource: this.template.renderString(template.base.groupSource),
-      groupTarget: this.template.renderString(template.base.groupTarget),
+      group: {
+        key: this.template.renderString(template.base.group.key),
+        source: this.template.renderString(template.base.group.source),
+        target: this.template.renderString(template.base.group.target),
+      },
       link: this.template.renderString(template.base.link) as PortalLinkage,
       meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
       scripts: await this.createScripts(template.base.scripts, PORTAL_TYPE),
@@ -267,9 +275,9 @@ export class StateEntityGenerator {
     for (const mod of selected) {
       await this.modifyMetadata(target.meta, mod.meta);
 
-      target.groupKey = this.template.modifyString(target.groupKey, mod.groupKey);
-      target.groupSource = this.template.modifyString(target.groupSource, mod.groupSource);
-      target.groupTarget = this.template.modifyString(target.groupTarget, mod.groupTarget);
+      target.group.key = this.template.modifyString(target.group.key, mod.group.key);
+      target.group.source = this.template.modifyString(target.group.source, mod.group.source);
+      target.group.target = this.template.modifyString(target.group.target, mod.group.target);
       target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
       target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
     }
@@ -321,6 +329,7 @@ export class StateEntityGenerator {
     return selected;
   }
 
+  // eslint-disable-next-line sonarjs/cognitive-complexity
   public async populateRoom(firstRoom: Room, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
     if (max <= 0) {
       return [];
@@ -339,7 +348,7 @@ export class StateEntityGenerator {
       const sourceGroups = new Map<string, Array<Portal>>();
       for (const portal of room.portals) {
         if (portal.dest === '') {
-          setOrPush(sourceGroups, portal.groupSource, portal);
+          setOrPush(sourceGroups, portal.group.source, portal);
         }
       }
 
@@ -373,7 +382,7 @@ export class StateEntityGenerator {
           // if room is a valid dest
           if (matchIdSegments(it.meta.id, destId)) {
             // find unlinked portal in opposing group
-            return it.portals.some((p) => p.dest === '' && p.groupTarget === group);
+            return it.portals.some((p) => p.dest === '' && p.group.target === group);
           } else {
             return false;
           }
@@ -425,8 +434,11 @@ export class StateEntityGenerator {
   public async reversePortal(portal: Portal): Promise<Portal> {
     return {
       ...portal,
-      groupSource: portal.groupTarget,
-      groupTarget: portal.groupSource,
+      group: {
+        key: portal.group.key,
+        source: portal.group.target,
+        target: portal.group.source,
+      },
       meta: {
         desc: portal.meta.desc,
         id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,

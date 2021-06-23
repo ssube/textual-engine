@@ -14,6 +14,9 @@ services:
       kind: core-player-actor
     - name: actor-enemy
       kind: core-behavior-actor
+      data:
+        attack: 1.00
+        wander: 0.25
   loaders:
     - name: file-loader
       kind: node-file-loader
@@ -23,3 +26,6 @@ services:
   states:
     - name: local-state
       kind: core-local-state
+  tokenizers:
+    - name: local-tokenizer
+      kind: core-split-tokenizer # easier to test

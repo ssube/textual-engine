@@ -1,6 +1,8 @@
 import { expect } from 'chai';
+import { stub } from 'sinon';
 
 import { CoreModule } from '../../../src/module/CoreModule';
+import { Service } from '../../../src/service';
 import { NodeEventBus } from '../../../src/service/event/NodeEventBus';
 import { onceEvent } from '../../../src/util/async/event';
 import { getTestContainer } from '../../helper';
@@ -26,10 +28,10 @@ describe('node event bus', () => {
     const container = await getTestContainer(new CoreModule());
     const events = await container.create(NodeEventBus);
 
-    const group = {};
+    const group = {} as Service;
 
-    events.on('foo', () => {}, group);
-    events.on('bar', () => {}, group);
+    events.on('foo', stub(), group);
+    events.on('bar', stub(), group);
 
     expect(events.listenerCount('foo')).to.equal(1);
     expect(events.listenerCount('bar')).to.equal(1);

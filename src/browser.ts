@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { main } from './main';
 
 main([
@@ -10,7 +12,7 @@ main([
   '--module',
   'browser',
   '--input',
-  'create test test 5',
+  'create a test with test and with 20',
   '--input',
   'help',
 ]).then((exitCode) => {

@@ -5,43 +5,39 @@ import { ActorService } from '.';
 import { Command } from '../../model/Command';
 import { Actor } from '../../model/entity/Actor';
 import { Room } from '../../model/entity/Room';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER, InjectedOptions } from '../../module';
-import { showCheck, StateSource } from '../../util/actor';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
+import { checkVolume, StateSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
 import {
-  COMMON_VERBS,
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
-  EVENT_LOCALE_BUNDLE,
-  EVENT_RENDER_OUTPUT,
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
+  EVENT_TOKEN_COMMAND,
 } from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
-import { RenderOutputEvent } from '../render/events';
 import { StepResult } from '../state';
 import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
-import { TokenizerService } from '../tokenizer';
+import { TokenCommandEvent } from '../tokenizer/events';
 
 /**
  * Behavioral input generates commands based on the actor's current
  * state (room, inventory, etc).
  */
-@Inject(INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER)
+@Inject(INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export class PlayerActorService implements ActorService {
   protected counter: Counter;
   protected event: EventBus;
   protected locale: LocaleService;
   protected logger: Logger;
-  protected tokenizer: TokenizerService;
 
   // old focus
   protected actor?: Actor;
@@ -58,20 +54,13 @@ export class PlayerActorService implements ActorService {
     this.event = mustExist(options[INJECT_EVENT]);
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
-    this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
 
     this.history = [];
     this.pid = `player-${this.counter.next('player')}`;
   }
 
   public async start(): Promise<void> {
-    this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
-      catchAndLog(this.tokenizer.translate([
-        ...COMMON_VERBS,
-        ...event.bundle.verbs,
-      ]), this.logger, 'error translating verbs');
-    }, this);
-    this.event.on(EVENT_RENDER_OUTPUT, (event) => {
+    this.event.on(EVENT_TOKEN_COMMAND, (event) => {
       catchAndLog(this.onRenderOutput(event), this.logger, 'error during render output');
     }, this);
     this.event.on(EVENT_STATE_JOIN, (event) => {
@@ -131,32 +120,27 @@ export class PlayerActorService implements ActorService {
     }
   }
 
-  public async onRenderOutput(event: RenderOutputEvent): Promise<void> {
-    this.logger.debug({ event }, 'tokenizing input');
+  public async onRenderOutput(event: TokenCommandEvent): Promise<void> {
+    this.logger.debug({ event }, 'sending input as actor command');
 
-    const commands = await this.tokenizer.parse(event.line);
-    this.logger.debug({ commands, event }, 'parsed input line');
-
-    this.history.push(...commands);
-    for (const command of commands) {
-      this.event.emit(EVENT_ACTOR_COMMAND, {
-        actor: this.actor,
-        command,
-        room: this.room,
-      });
-    }
+    this.history.push(event.command);
+    this.event.emit(EVENT_ACTOR_COMMAND, {
+      actor: this.actor,
+      command: event.command,
+      room: this.room,
+    });
   }
 
   public async onStateOutput(event: StateOutputEvent): Promise<void> {
     this.logger.debug({ event }, 'filtering output');
 
-    if (doesExist(this.actor) && doesExist(this.room) && doesExist(event.source)) {
+    if (doesExist(this.room) && doesExist(event.source)) {
       const target: StateSource = {
         actor: this.actor,
         room: this.room,
       };
 
-      if (showCheck(event.source, target, event.volume) === false) {
+      if (checkVolume(event.source, target, event.volume) === false) {
         return;
       }
     }

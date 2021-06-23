@@ -2,11 +2,13 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { stub } from 'sinon';
 
-import { CoreModule, EventBus, LineRender, NodeModule, onceEvent, RenderOutputEvent } from '../../../src/lib';
+import { CoreModule, EventBus, LineRender, NodeModule, onceEvent, RenderInputEvent } from '../../../src/lib';
 import { INJECT_EVENT } from '../../../src/module';
-import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_OUTPUT, EVENT_STATE_STEP, META_QUIT } from '../../../src/util/constants';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../../src/util/constants';
 import { getTestContainer } from '../../helper';
 import { TestReadLine } from './helper';
+
+const THROTTLE_TIME = 10;
 
 describe('readline render', () => {
   it('should show output', async () => {
@@ -17,6 +19,7 @@ describe('readline render', () => {
     const render = await container.create(LineRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     }, readline);
     await render.start();
@@ -41,12 +44,13 @@ describe('readline render', () => {
     const render = await container.create(LineRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     }, readline);
     await render.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    const pending = onceEvent<RenderOutputEvent>(events, EVENT_RENDER_OUTPUT);
+    const pending = onceEvent<RenderInputEvent>(events, EVENT_RENDER_INPUT);
 
     instance.emit('SIGINT');
 
@@ -63,6 +67,7 @@ describe('readline render', () => {
     const render = await container.create(LineRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     }, readline);
     await render.start();
@@ -81,6 +86,7 @@ describe('readline render', () => {
     const render = await container.create(LineRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     }, readline);
     await render.start();

@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { createStubInstance } from 'sinon';
+import { createStubInstance, match } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
@@ -8,15 +8,13 @@ import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Act
 import { ITEM_TYPE } from '../../../../src/model/entity/Item';
 import { CoreModule } from '../../../../src/module/CoreModule';
 import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestItem, makeTestRoom } from '../../../entity';
-import { getStubHelper } from '../../../helper';
-import { testTransfer } from '../../helper';
+import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
 
 const TEST_ACTOR: Actor = {
-  source: ActorSource.BEHAVIOR,
   items: [{
     meta: {
       desc: 'bon',
@@ -25,6 +23,7 @@ const TEST_ACTOR: Actor = {
       template: 'bon',
     },
     scripts: new Map(),
+    slot: '',
     stats: new Map(),
     type: ITEM_TYPE,
   }],
@@ -40,6 +39,8 @@ const TEST_ACTOR: Actor = {
       name: 'verb-wait',
     }],
   ]),
+  slots: new Map(),
+  source: ActorSource.BEHAVIOR,
   stats: new Map([
     [STAT_HEALTH, 10],
   ]),
@@ -49,19 +50,13 @@ const TEST_ACTOR: Actor = {
 describe('actor step scripts', () => {
   describe('actor step command', () => {
     it('should require the script target be an actor', async () => {
-      const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
-      const context = {
-        command: makeCommand(VERB_WAIT, ''),
-        data: new Map(),
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+      const state = getStubHelper();
+      const context = createTestContext({
+        command: makeCommand(VERB_WAIT),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
-        script,
-        state: stateHelper,
-        transfer,
-      };
+        state,
+      });
 
       await expect(SignalActorStep.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
       await expect(SignalActorStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
@@ -69,28 +64,34 @@ describe('actor step scripts', () => {
 
     it('should invoke the command verb script', async () => {
       const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
+      const state = getStubHelper();
 
-      await SignalActorStep.call(TEST_ACTOR, {
-        command: makeCommand(VERB_WAIT, ''),
-        data: new Map(),
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+      const context = createTestContext({
+        command: makeCommand(VERB_WAIT),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
-        state: stateHelper,
-        transfer,
+        state,
       });
 
+      await SignalActorStep.call(TEST_ACTOR, context);
+
       expect(script.invoke, 'wait script').to.have.callCount(1).and.been.calledWith(TEST_ACTOR, VERB_WAIT);
-      expect(stateHelper.show, 'focus show').to.have.callCount(0);
+      expect(state.show, 'focus show').to.have.callCount(0);
     });
 
     it('should not invoke scripts on dead actors', async () => {
       const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
+      const state = getStubHelper();
+      const transfer = createTestTransfer();
+
+      const context = createTestContext({
+        command: makeCommand(VERB_WAIT),
+        random: createStubInstance(MathRandomService),
+        script,
+        state,
+        transfer,
+      });
 
       await SignalActorStep.call({
         ...TEST_ACTOR,
@@ -98,18 +99,10 @@ describe('actor step scripts', () => {
         stats: new Map([
           [STAT_HEALTH, 0],
         ]),
-      }, {
-        command: makeCommand(VERB_WAIT, ''),
-        data: new Map(),
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
-        script,
-        state: stateHelper,
-        transfer,
-      });
+      }, context);
 
       expect(script.invoke).to.have.callCount(0);
-      expect(stateHelper.show).to.have.callCount(1);
+      expect(state.show).to.have.callCount(1);
     });
 
     it('should show messages to player actors', async () => {
@@ -119,26 +112,24 @@ describe('actor step scripts', () => {
       });
 
       const stateHelper = getStubHelper();
-      const transfer = testTransfer();
+      const transfer = createTestTransfer();
 
       const room = makeTestRoom('', '', '', [], []);
       const player = {
         ...TEST_ACTOR,
         source: ActorSource.PLAYER,
       };
-      await SignalActorStep.call(player, {
+      const context = createTestContext({
         actor: player,
-        command: makeCommand(VERB_WAIT, ''),
-        data: new Map(),
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        command: makeCommand(VERB_WAIT),
+        random: createStubInstance(MathRandomService),
         room,
-        script: createStubInstance(LocalScriptService),
         state: stateHelper,
         transfer,
       });
+      await SignalActorStep.call(player, context);
 
-      expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWith('actor.step.command.player.verb');
+      expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWithMatch(match.object, 'actor.step.command.player.verb');
     });
 
     it('should not invoke any scripts without a command', async () => {
@@ -149,23 +140,23 @@ describe('actor step scripts', () => {
 
       const script = createStubInstance(LocalScriptService);
       const state = getStubHelper();
-      const transfer = testTransfer();
+      const transfer = createTestTransfer();
 
       const room = makeTestRoom('', '', '', [], []);
       const player = {
         ...TEST_ACTOR,
         source: ActorSource.PLAYER,
       };
-      await SignalActorStep.call(player, {
+      const context = createTestContext({
         actor: player,
-        data: new Map(),
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state,
         transfer,
       });
+
+      await SignalActorStep.call(player, context);
 
       expect(script.invoke).to.have.callCount(0);
       expect(state.show).to.have.callCount(0);
@@ -179,27 +170,26 @@ describe('actor step scripts', () => {
 
       const script = createStubInstance(LocalScriptService);
       const state = getStubHelper();
-      const transfer = testTransfer();
+      const transfer = createTestTransfer();
 
       const room = makeTestRoom('', '', '', [], []);
       const player = {
         ...TEST_ACTOR,
         source: ActorSource.PLAYER,
       };
-      await SignalActorStep.call(player, {
+      const context = createTestContext({
         actor: player,
-        command: makeCommand(VERB_MOVE, ''), // must be a verb that does not exist
-        data: new Map(),
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        command: makeCommand(VERB_MOVE), // must be a verb that does not exist
+        random: createStubInstance(MathRandomService),
         room,
         script,
         state,
         transfer,
       });
+      await SignalActorStep.call(player, context);
 
       expect(script.invoke).to.have.callCount(0);
-      expect(state.show).to.have.callCount(1).and.have.been.calledWith('actor.step.command.unknown');
+      expect(state.show).to.have.callCount(1).and.have.been.calledWithMatch(match.object, 'actor.step.command.unknown');
     });
   });
 });

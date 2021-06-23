@@ -1,8 +1,9 @@
 /* eslint-disable max-lines */
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { Container, NullLogger } from 'noicejs';
+import { BaseOptions } from 'noicejs';
 
+import { LocaleService } from '../../../src/lib';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
@@ -10,6 +11,7 @@ import { isRoom, Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Modifier } from '../../../src/model/mapped/Modifier';
 import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
+import { INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { PORTAL_DEPTH, TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
@@ -18,10 +20,6 @@ import { getTestContainer } from '../../helper';
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
-    source: {
-      base: ActorSource.BEHAVIOR,
-      type: 'string',
-    },
     items: [{
       chance: TEMPLATE_CHANCE,
       id: 'item-foo',
@@ -39,6 +37,11 @@ const TEST_ACTOR: Template<Actor> = {
       },
     },
     scripts: new Map(),
+    slots: new Map(),
+    source: {
+      base: ActorSource.BEHAVIOR,
+      type: 'string',
+    },
     stats: new Map(),
     type: {
       base: ACTOR_TYPE,
@@ -62,6 +65,10 @@ const TEST_ITEM: Template<Item> = {
       },
     },
     scripts: new Map(),
+    slot: {
+      base: '',
+      type: 'string',
+    },
     stats: new Map([
       ['bar', {
         min: 0,
@@ -113,6 +120,20 @@ const TEST_PORTAL_EAST: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    group: {
+      key: {
+        base: 'door',
+        type: 'string',
+      },
+      source: {
+        base: 'east',
+        type: 'string',
+      },
+      target: {
+        base: 'west',
+        type: 'string',
+      },
+    },
     link: {
       base: 'both',
       type: 'string',
@@ -127,18 +148,6 @@ const TEST_PORTAL_EAST: Template<Portal> = {
         base: 'door',
         type: 'string',
       },
-    },
-    groupKey: {
-      base: 'door',
-      type: 'string',
-    },
-    groupSource: {
-      base: 'east',
-      type: 'string',
-    },
-    groupTarget: {
-      base: 'west',
-      type: 'string',
     },
     scripts: new Map(),
     type: {
@@ -155,6 +164,20 @@ const TEST_PORTAL_WEST: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    group: {
+      key: {
+        base: 'door',
+        type: 'string',
+      },
+      source: {
+        base: 'west',
+        type: 'string',
+      },
+      target: {
+        base: 'east',
+        type: 'string',
+      },
+    },
     link: {
       base: 'both',
       type: 'string',
@@ -169,18 +192,6 @@ const TEST_PORTAL_WEST: Template<Portal> = {
         base: 'door',
         type: 'string',
       },
-    },
-    groupKey: {
-      base: 'door',
-      type: 'string',
-    },
-    groupSource: {
-      base: 'west',
-      type: 'string',
-    },
-    groupTarget: {
-      base: 'east',
-      type: 'string',
     },
     scripts: new Map(),
     type: {
@@ -231,10 +242,6 @@ const TEST_ROOM_PORTALS: Template<Room> = {
 const TEST_WORLD: WorldTemplate = {
   defaults: {
     actor: {
-      source: {
-        base: '',
-        type: 'string',
-      },
       items: [],
       meta: {
         desc: {
@@ -248,6 +255,11 @@ const TEST_WORLD: WorldTemplate = {
         },
       },
       scripts: new Map(),
+      slots: new Map(),
+      source: {
+        base: '',
+        type: 'string',
+      },
       stats: new Map(),
       type: {
         base: ACTOR_TYPE,
@@ -267,6 +279,10 @@ const TEST_WORLD: WorldTemplate = {
         },
       },
       scripts: new Map(),
+      slot: {
+        base: '',
+        type: 'string',
+      },
       stats: new Map(),
       type: {
         base: ITEM_TYPE,
@@ -293,17 +309,19 @@ const TEST_WORLD: WorldTemplate = {
           type: 'string',
         },
       },
-      groupKey: {
-        base: '',
-        type: 'string',
-      },
-      groupSource: {
-        base: '',
-        type: 'string',
-      },
-      groupTarget: {
-        base: '',
-        type: 'string',
+      group: {
+        key: {
+          base: '',
+          type: 'string',
+        },
+        source: {
+          base: '',
+          type: 'string',
+        },
+        target: {
+          base: '',
+          type: 'string',
+        },
       },
       scripts: new Map(),
       type: {
@@ -335,7 +353,11 @@ const TEST_WORLD: WorldTemplate = {
   },
   locale: {
     bundles: {},
-    verbs: [],
+    words: {
+      articles: [],
+      prepositions: [],
+      verbs: [],
+    },
   },
   meta: {
     desc: {
@@ -362,10 +384,6 @@ const TEST_WORLD: WorldTemplate = {
 
 const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
   base: {
-    source: {
-      base: 'default',
-      type: 'string',
-    },
     items: [{
       chance: TEMPLATE_CHANCE,
       id: TEST_ITEM.base.meta.id,
@@ -381,12 +399,17 @@ const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
         type: 'string',
       },
     },
+    scripts: new Map(),
+    slots: new Map(),
+    source: {
+      base: 'default',
+      type: 'string',
+    },
+    stats: new Map(),
     type: {
       base: 'actor',
       type: 'string',
     },
-    scripts: new Map(),
-    stats: new Map(),
   },
   chance: TEMPLATE_CHANCE,
   excludes: [],
@@ -405,12 +428,16 @@ const TEST_ITEM_MODS: Array<Modifier<Item>> = [{
         type: 'string',
       },
     },
+    scripts: new Map(),
+    slot: {
+      base: '',
+      type: 'string',
+    },
+    stats: new Map(),
     type: {
       base: 'actor',
       type: 'string',
     },
-    scripts: new Map(),
-    stats: new Map(),
   },
   chance: TEMPLATE_CHANCE,
   excludes: [],
@@ -455,11 +482,7 @@ const TEST_ROOM_MODS: Array<Modifier<Room>> = [{
 describe('state entity generator', () => {
   describe('create actor', () => {
     it('should create actors with inventory', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -472,11 +495,7 @@ describe('state entity generator', () => {
 
   describe('create item', () => {
     it('should create items', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -609,6 +628,10 @@ describe('state entity generator', () => {
   describe('modify actor', () => {
     it('should update meta fields', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -622,6 +645,10 @@ describe('state entity generator', () => {
 
     it('should add inventory items', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -636,6 +663,10 @@ describe('state entity generator', () => {
   describe('modify item', () => {
     it('should update meta fields', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -658,6 +689,10 @@ describe('state entity generator', () => {
   describe('modify room', () => {
     it('should add actors', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -671,6 +706,10 @@ describe('state entity generator', () => {
 
     it('should add items', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -708,6 +747,10 @@ describe('state entity generator', () => {
 
     it('should not select excluded modifiers', async () => {
       const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld(TEST_WORLD);
 
@@ -742,6 +785,7 @@ describe('state entity generator', () => {
   describe('populate portals', () => {
     it('should create destination rooms for unfilled portals', async () => {
       const container = await getTestContainer(new CoreModule());
+
       const generator = await container.create(StateEntityGenerator);
       generator.setWorld({
         ...TEST_WORLD,

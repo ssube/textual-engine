@@ -10,9 +10,9 @@ export async function SignalActorLook(this: WorldEntity, context: ScriptContext)
     throw new ScriptTargetError('target must be an actor');
   }
 
-  await context.state.show('actor.step.look.actor.seen', { actor: this });
+  await context.state.show(context.source, 'actor.step.look.actor.seen', { actor: this });
   const health = getKey(this.stats, STAT_HEALTH, 0);
   if (health <= 0) {
-    await context.state.show('actor.step.look.actor.dead', { actor: this });
+    await context.state.show(context.source, 'actor.step.look.actor.dead', { actor: this });
   }
 }

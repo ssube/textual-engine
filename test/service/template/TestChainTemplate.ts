@@ -1,10 +1,13 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { Container, NullLogger } from 'noicejs';
+import { BaseOptions } from 'noicejs';
 
 import { TemplateNumber, TemplateString } from '../../../src/model/mapped/Template';
+import { INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { LocaleService } from '../../../src/service/locale';
 import { ChainTemplateService } from '../../../src/service/template/ChainTemplateService';
+import { getTestContainer } from '../../helper';
 
 const DEFAULT_NUMBER: TemplateNumber = {
   min: 0,
@@ -21,11 +24,7 @@ const DEFAULT_STRING: TemplateString = {
 describe('chain template service', () => {
   describe('modify number', () => {
     it('should increment the value', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       expect(template.modifyNumber(0, {
         min: 5,
@@ -36,11 +35,7 @@ describe('chain template service', () => {
     });
 
     it('should increment the value with negative modifiers', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       expect(template.modifyNumber(0, {
         min: -5,
@@ -53,10 +48,10 @@ describe('chain template service', () => {
 
   describe('modify string', () => {
     it('should prepend the prefix', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
+      const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
 
       const template = await container.create(ChainTemplateService);
       expect(template.modifyString('foo', {
@@ -66,10 +61,10 @@ describe('chain template service', () => {
     });
 
     it('should append the suffix', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
+      const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
 
       const template = await container.create(ChainTemplateService);
       expect(template.modifyString('foo', {
@@ -84,11 +79,7 @@ describe('chain template service', () => {
 
   describe('modify number maps', () => {
     it('should modify keys that exist in the modifier', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       const result = template.modifyNumberMap(new Map([
         ['foo', 1],
@@ -114,11 +105,7 @@ describe('chain template service', () => {
     });
 
     it('should not modify keys that do not exist in the modifier', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       const result = template.modifyNumberMap(new Map([
         ['foo', 1],
@@ -144,10 +131,10 @@ describe('chain template service', () => {
 
   describe('modify string maps', () => {
     it('should modify keys that exist in the modifier', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
+      const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
 
       const template = await container.create(ChainTemplateService);
       const result = template.modifyStringMap(new Map([
@@ -170,11 +157,7 @@ describe('chain template service', () => {
     });
 
     it('should not modify keys that do not exist in the modifier', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       const result = template.modifyStringMap(new Map([
         ['foo', 'hello'],
@@ -196,21 +179,13 @@ describe('chain template service', () => {
 
   describe('render template number', () => {
     it('should render numbers', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       expect(template.renderNumber(DEFAULT_NUMBER)).to.be.greaterThan(DEFAULT_NUMBER.min).and.lessThan(DEFAULT_NUMBER.max);
     });
 
     it('should render numbers with step < 1', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
 
       const value = template.renderNumber({
@@ -222,11 +197,7 @@ describe('chain template service', () => {
     });
 
     it('should throw if step is < 0', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       expect(() => template.renderNumber({
         ...DEFAULT_NUMBER,
@@ -237,11 +208,7 @@ describe('chain template service', () => {
 
   describe('render template string', () => {
     it('should render strings', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       expect(template.renderString(DEFAULT_STRING)).to.equal('foo bar'); // first level is AND
     });
@@ -249,11 +216,7 @@ describe('chain template service', () => {
 
   describe('render template list', () => {
     it('should render many numbers', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
 
       expect(template.renderNumberList([{
@@ -267,11 +230,7 @@ describe('chain template service', () => {
     });
 
     it('should render many strings', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
 
       expect(template.renderStringList([{
@@ -287,11 +246,7 @@ describe('chain template service', () => {
 
   describe('render template maps', () => {
     it('should render many number values', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       const map = new Map<string, TemplateNumber>([
         ['foo', DEFAULT_NUMBER],
@@ -303,11 +258,7 @@ describe('chain template service', () => {
     });
 
     it('should render many string values', async () => {
-      const container = Container.from(new CoreModule());
-      await container.configure({
-        logger: NullLogger.global,
-      });
-
+      const container = await getTestContainer(new CoreModule());
       const template = await container.create(ChainTemplateService);
       const map = new Map<string, TemplateString>([
         ['foo', DEFAULT_STRING],

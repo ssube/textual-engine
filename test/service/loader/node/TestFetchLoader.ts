@@ -11,6 +11,7 @@ import { INJECT_EVENT } from '../../../../src/module';
 import { CoreModule } from '../../../../src/module/CoreModule';
 import { EventBus } from '../../../../src/service/event';
 import { NodeFetchLoader } from '../../../../src/service/loader/node/FetchLoader';
+import { YamlParser } from '../../../../src/service/parser/YamlParser';
 import { onceEvent } from '../../../../src/util/async/event';
 import {
   EVENT_LOADER_DONE,
@@ -52,10 +53,6 @@ describe('node fetch loader', () => {
     const state = makeTestState('', []);
     const world = makeTestWorld([{
       base: {
-        source: {
-          base: ActorSource.BEHAVIOR,
-          type: 'string',
-        },
         items: [],
         meta: {
           id: '',
@@ -69,6 +66,11 @@ describe('node fetch loader', () => {
           },
         },
         scripts: new Map(),
+        slots: new Map(),
+        source: {
+          base: ActorSource.BEHAVIOR,
+          type: 'string',
+        },
         stats: new Map(),
         type: {
           base: ACTOR_TYPE,
@@ -90,6 +92,10 @@ describe('node fetch loader', () => {
           },
         },
         scripts: new Map(),
+        slot: {
+          base: '',
+          type: 'string',
+        },
         stats: new Map(),
         type: {
           base: ITEM_TYPE,
@@ -107,17 +113,19 @@ describe('node fetch loader', () => {
           base: '',
           type: 'string',
         },
-        groupKey: {
-          base: '',
-          type: 'string',
-        },
-        groupSource: {
-          base: '',
-          type: 'string',
-        },
-        groupTarget: {
-          base: '',
-          type: 'string',
+        group: {
+          key: {
+            base: '',
+            type: 'string',
+          },
+          source: {
+            base: '',
+            type: 'string',
+          },
+          target: {
+            base: '',
+            type: 'string',
+          },
         },
         meta: {
           desc: {
@@ -161,7 +169,14 @@ describe('node fetch loader', () => {
       },
       mods: [],
     }]);
-    const payload = `{state: ${JSON.stringify(state)}, worlds: [${JSON.stringify(world)}]}`;
+
+    const parser = await container.create(YamlParser);
+    const payload = parser.save({
+      state,
+      worlds: [world]
+    });
+    console.log(payload);
+
     const fetch = stub().returns({
       text: () => Promise.resolve(payload),
     });

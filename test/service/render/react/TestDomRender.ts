@@ -7,21 +7,21 @@ import { INJECT_EVENT } from '../../../../src/module';
 import { CoreModule } from '../../../../src/module/CoreModule';
 import { NodeModule } from '../../../../src/module/NodeModule';
 import { EventBus } from '../../../../src/service/event';
-import { RenderOutputEvent } from '../../../../src/service/render/events';
+import { RenderInputEvent } from '../../../../src/service/render/events';
 import { ReactDomRender } from '../../../../src/service/render/react/DomRender';
 import { onceEvent } from '../../../../src/util/async/event';
 import {
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
-  EVENT_RENDER_OUTPUT,
+  EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
-  RENDER_DELAY,
 } from '../../../../src/util/constants';
 import { makeTestActor, makeTestRoom } from '../../../entity';
 import { getTestContainer } from '../../../helper';
 
-const DEBOUNCE_WAIT = RENDER_DELAY * 2;
+const THROTTLE_TIME = 10;
+const THROTTLE_WAIT = THROTTLE_TIME * 2;
 
 describe('react dom render', () => {
   let clock: Optional<SinonFakeTimers>;
@@ -41,6 +41,7 @@ describe('react dom render', () => {
     const render = await container.create(ReactDomRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     });
     const update = stub(render, 'update');
@@ -56,7 +57,7 @@ describe('react dom render', () => {
       },
     });
 
-    await mustExist(clock).tickAsync(DEBOUNCE_WAIT);
+    await mustExist(clock).tickAsync(THROTTLE_WAIT);
     expect(update).to.have.callCount(2); // once at start, once on output
   });
 
@@ -66,6 +67,7 @@ describe('react dom render', () => {
     const render = await container.create(ReactDomRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     });
     const update = stub(render, 'update');
@@ -79,7 +81,7 @@ describe('react dom render', () => {
       room: makeTestRoom('', '', '', [], []),
     });
 
-    await mustExist(clock).tickAsync(DEBOUNCE_WAIT);
+    await mustExist(clock).tickAsync(THROTTLE_WAIT);
     expect(update).to.have.callCount(2); // once at start, once on room
   });
 
@@ -88,6 +90,7 @@ describe('react dom render', () => {
     const render = await container.create(ReactDomRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     });
     const update = stub(render, 'update');
@@ -110,6 +113,7 @@ describe('react dom render', () => {
     const render = await container.create(ReactDomRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     });
     const update = stub(render, 'update');
@@ -127,6 +131,7 @@ describe('react dom render', () => {
     const render = await container.create(ReactDomRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     });
     const update = stub(render, 'update');
@@ -145,6 +150,7 @@ describe('react dom render', () => {
     const render = await container.create(ReactDomRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     });
     const update = stub(render, 'update');
@@ -160,6 +166,7 @@ describe('react dom render', () => {
     const render = await container.create(ReactDomRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     });
     const update = stub(render, 'update');
@@ -167,7 +174,7 @@ describe('react dom render', () => {
     await render.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    const pendingOutput = onceEvent<RenderOutputEvent>(events, EVENT_RENDER_OUTPUT);
+    const pendingOutput = onceEvent<RenderInputEvent>(events, EVENT_RENDER_INPUT);
     const pendingRead = render.read();
 
     const line = 'foo';
@@ -184,6 +191,7 @@ describe('react dom render', () => {
     const render = await container.create(ReactDomRender, {
       config: {
         shortcuts: true,
+        throttle: THROTTLE_TIME,
       },
     });
     const update = stub(render, 'update');

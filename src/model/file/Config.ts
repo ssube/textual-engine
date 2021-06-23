@@ -28,6 +28,7 @@ export interface ConfigServices {
   loaders: Array<ConfigServiceRef>;
   renders: Array<ConfigServiceRef>;
   states: Array<ConfigServiceRef>;
+  tokenizers: Array<ConfigServiceRef>;
 }
 
 export interface ConfigFile {
@@ -127,9 +128,12 @@ export const CONFIG_SCHEMA: JSONSchemaType<ConfigFile> = {
           type: 'array',
           items: CONFIG_SERVICE_SCHEMA,
         },
-
+        tokenizers: {
+          type: 'array',
+          items: CONFIG_SERVICE_SCHEMA,
+        },
       },
-      required: ['actors', 'loaders', 'renders', 'states'],
+      required: ['actors', 'loaders', 'renders', 'states', 'tokenizers'],
     },
   },
   required: [

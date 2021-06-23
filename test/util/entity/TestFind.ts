@@ -4,7 +4,7 @@ import { PORTAL_TYPE } from '../../../src/model/entity/Portal';
 
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { WorldState } from '../../../src/model/world/State';
-import { findContainer, findRoom, findMatching } from '../../../src/util/entity/find';
+import { findContainer, findRoom, findMatching, findSlotItem } from '../../../src/util/entity/find';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity';
 
 const TEST_STATE: WorldState = makeTestState('', [
@@ -177,6 +177,48 @@ describe('entity find utils', () => {
       });
 
       expect(results).to.have.lengthOf(0);
+    });
+  });
+
+  describe('find equipped item helper', () => {
+    it('should find the item in the slot', async () => {
+      const item = makeTestItem('bar', '', '');
+      const actor = makeTestActor('', '', '',
+        makeTestItem('foo', '', ''),
+        item
+      );
+
+      const slot = 'test';
+      actor.slots.set(slot, 'bar');
+
+      const result = findSlotItem(actor, slot);
+      expect(result).to.equal(item);
+    });
+
+    it('should handle missing slots', async () => {
+      const item = makeTestItem('bar', '', '');
+      const actor = makeTestActor('', '', '',
+        makeTestItem('foo', '', ''),
+        item
+      );
+
+      const slot = 'test';
+      const result = findSlotItem(actor, slot);
+      expect(result).to.equal(undefined);
+    });
+
+    it('should handle empty slots', async () => {
+      const item = makeTestItem('bar', '', '');
+      const actor = makeTestActor('', '', '',
+        makeTestItem('foo', '', ''),
+        item
+      );
+
+      const slot = 'test';
+      actor.slots.set(slot, '');
+
+      const result = findSlotItem(actor, slot);
+      expect(result).to.equal(undefined);
     });
   });
 });

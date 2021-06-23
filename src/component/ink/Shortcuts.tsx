@@ -10,17 +10,21 @@ const { useState } = React;
 
 export const Shortcuts = (props: ShortcutProps): JSX.Element => {
   const { t } = useTranslation();
-  const [selected, setSelected] = useState<ShortcutKeys>('actors');
+  const [tab, setTab] = useState<ShortcutKeys>('actors');
   const { isFocused: tabFocus } = useFocus();
   const { isFocused: itemFocus } = useFocus();
 
   function selectItem(item: Optional<{ label: string; value: string }>) {
     if (doesExist(item)) {
-      props.onSelect(item.value);
+      if (tab === 'verbs') {
+        props.onVerb(item.value);
+      } else {
+        props.onTarget(item.value);
+      }
     }
   }
 
-  const items = props[selected].map((it) => ({
+  const items = props[tab].map((it) => ({
     label: t(it.name),
     value: it.id,
   }));
@@ -31,7 +35,7 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
         indicatorComponent={tabFocus ? FocusedIndicator : UnfocusedIndicator}
         isFocused={tabFocus}
         items={SHORTCUT_TABS}
-        onSelect={(it) => setSelected(it.value as ShortcutKeys)}
+        onSelect={(it) => setTab(it.value as ShortcutKeys)}
       />
     </Box>
     <Box>

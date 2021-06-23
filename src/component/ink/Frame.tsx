@@ -7,6 +7,7 @@ import { Input } from './Input';
 import { Output } from './Output';
 import { Quit } from './Quit';
 import { Shortcuts } from './Shortcuts';
+import { Status } from './Status';
 
 const { useState } = React;
 
@@ -34,11 +35,15 @@ export const Frame = (props: FrameProps): JSX.Element => {
           onLine={sendLine}
         />}
       </Box>
+      <Box height={1}>
+        <Status stats={props.stats} />
+      </Box>
     </Box>
     <Box marginLeft={2}>
       {props.show.shortcuts && <Shortcuts
         {...props.shortcuts}
-        onSelect={(id) => setLine(`${line} ${id}`)}
+        onTarget={(id) => setLine(`${line} ${id}`)}
+        onVerb={(verb) => setLine(verb)}
       />}
     </Box>
   </Box>;

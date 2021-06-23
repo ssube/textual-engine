@@ -5,6 +5,7 @@ import { TEMPLATE_CHANCE } from '../../util/constants';
 import { Replace } from '../../util/types';
 import { Entity } from '../entity/Base';
 import { Metadata } from '../Metadata';
+import { ScriptRef } from '../Script';
 import { Modifier } from './Modifier';
 
 export interface TemplateNumber {
@@ -105,4 +106,22 @@ export const TEMPLATE_REF_SCHEMA: JSONSchemaType<TemplateRef> = {
     },
   },
   required: ['id'],
+};
+
+export const TEMPLATE_SCRIPT_SCHEMA: JSONSchemaType<BaseTemplate<ScriptRef>> = {
+  type: 'object',
+  properties: {
+    data: {
+      type: 'object',
+      map: {
+        keys: {
+          type: 'string',
+        },
+        values: TEMPLATE_STRING_SCHEMA, // TODO: should be number | string, but ajv cannot do defaults on oneOf
+      },
+      required: [],
+    },
+    name: TEMPLATE_STRING_SCHEMA,
+  },
+  required: ['data', 'name'],
 };

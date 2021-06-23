@@ -8,7 +8,6 @@ worlds:
           desc:
             base: ''
         items: []
-        stats: !map {}
         scripts: !map
           signal.get:
             data: !map {}
@@ -30,6 +29,10 @@ worlds:
             data: !map {}
             name:
               base: verb-actor-drop
+          verbs.common.equip:
+            data: !map {}
+            name:
+              base: verb-actor-equip
           verbs.common.hit:
             data: !map {}
             name:
@@ -58,6 +61,8 @@ worlds:
             data: !map {}
             name:
               base: verb-actor-hit
+        slots: !map {}
+        stats: !map {}
       item:
         meta:
           id: item-none
@@ -65,12 +70,14 @@ worlds:
             base: ''
           desc:
             base: ''
-        stats: !map {}
         scripts: !map
           signal.look:
             data: !map {}
             name:
               base: signal-item-look
+        slot:
+          base: ''
+        stats: !map {}
       portal:
         meta:
           id: portal-none
@@ -82,12 +89,13 @@ worlds:
           base: room-none
         link:
           base: both
-        groupKey:
-          base: ''
-        groupSource:
-          base: ''
-        groupTarget:
-          base: ''
+        group:
+          key:
+            base: ''
+          source:
+            base: ''
+          target:
+            base: ''
         scripts: !map
           signal.look:
             data: !map {}
@@ -125,6 +133,33 @@ worlds:
               hit: |-
                 {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
             step:
+              command:
+                dead: |-
+                  You are dead!
+                player:
+                  verb: |-
+                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
+                  target: |-
+                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+                unknown: |-
+                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
+              drop:
+                type: |-
+                  {{command.targets}} is not an item!
+              equip:
+                item: |-
+                  You equip the {{item.meta.name}} in your {{slot}}.
+                none: |-
+                  {{command.targets}} is not an item!
+                slot: |-
+                  You are not able to equip {{item.meta.name}} in {{slot}}!
+              hit:
+                item: |-
+                  You cannot hit {{target.meta.name}}, you are not holding anything!
+                self: |-
+                  You cannot hit yourself!
+                type: |-
+                  {{command.targets}} is not an actor!
               look:
                 none: |-
                   You see nothing.
@@ -138,7 +173,7 @@ worlds:
                   inventory: |-
                     You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
                   portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.groupSource}} ({{portal.meta.id}}).
+                    A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
                   dest: |-
                     You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
                 actor:
@@ -149,37 +184,17 @@ worlds:
                 item:
                   seen: |-
                     You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-              hit:
-                item: |-
-                  You cannot hit {{target.meta.name}}, you are not holding anything!
-                self: |-
-                  You cannot hit yourself!
-                type: |-
-                  {{command.target}} is not an actor!
-              drop:
-                type: |-
-                  {{command.target}} is not an item!
-              command:
-                dead: |-
-                  You are dead!
-                player:
-                  verb: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
-                  target: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.target}}.
-                unknown: |-
-                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
               move:
                 missing: |-
-                  {{command.target}} is not a portal!
+                  {{command.targets}} is not a portal!
                 portal: |-
-                  {{actor.meta.name}} moved through the {{portal.groupSource}} {{portal.meta.name}}.
+                  {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
               take:
                 type: |-
-                  {{command.target}} is not an item!
+                  {{command.targets}} is not an item!
               use:
                 type: |-
-                  {{command.target}} is not a usable item!
+                  {{command.targets}} is not a usable item!
           item:
             use:
               any: |-
@@ -188,9 +203,12 @@ worlds:
             world:
               slog: slog
               swing: swing
-      verbs:
-        - verbs.world.slog
-        - verbs.world.swing
+      words:
+        articles: []
+        prepositions: []
+        verbs:
+          - verbs.world.slog
+          - verbs.world.swing
     meta:
       id: test
       name:
@@ -215,11 +233,17 @@ worlds:
                 base: flying bat
             items:
               - id: item-bat-teeth
+            scripts: !map {}
+            slots: !map
+              weapon-teeth:
+                base: bat-teeth
             stats: !map
               health:
                 max: 50
                 min: 30
-            scripts: !map {}
+              stamina:
+                max: 5
+                min: 1
           mods:
             - chance: 50
               excludes: []
@@ -231,8 +255,9 @@ worlds:
                   name:
                     base: 'Vampire {{base}}'
                 items: []
-                stats: !map {}
                 scripts: !map {}
+                slots: !map {}
+                stats: !map {}
         - base:
             meta:
               id: actor-goblin
@@ -243,11 +268,19 @@ worlds:
             items:
               - id: item-sword
                 chance: 20
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: sword
+              weapon-hand-right:
+                base: sword
             stats: !map
               health:
                 max: 20
                 min: 14
-            scripts: !map {}
+              stamina:
+                max: 5
+                min: 1
           mods:
             - chance: 50
               excludes: []
@@ -260,8 +293,9 @@ worlds:
                     base: 'Sword {{base}}'
                 items:
                   - id: item-sword
-                stats: !map {}
                 scripts: !map {}
+                slots: !map {}
+                stats: !map {}
       items:
         - base:
             meta:
@@ -271,6 +305,8 @@ worlds:
               desc:
                 base: bat teeth
             scripts: !map {}
+            slot:
+              base: weapon-teeth
             stats: !map
               damage:
                 min: 2
@@ -283,6 +319,8 @@ worlds:
               desc:
                 base: short sword
             scripts: !map {}
+            slot:
+              base: weapon-hand
             stats: !map
               damage:
                 min: 5
@@ -299,6 +337,8 @@ worlds:
                   name:
                     base: 'Cracked {{base}}'
                 scripts: !map {}
+                slot:
+                  base: '{{base}}'
                 stats: !map
                   damage:
                     min: -4
@@ -314,6 +354,8 @@ worlds:
                   name:
                     base: 'Rusty {{base}}'
                 scripts: !map {}
+                slot:
+                  base: '{{base}}'
                 stats: !map
                   damage:
                     min: -5
@@ -330,6 +372,8 @@ worlds:
                   name:
                     base: 'Shiny {{base}}'
                 scripts: !map {}
+                slot:
+                  base: '{{base}}'
                 stats: !map
                   damage:
                     min: 5
@@ -338,12 +382,13 @@ worlds:
         - base:
             dest:
               base: ((room-cave|room-cave|room-marsh))
-            groupKey:
-              base: window
-            groupSource:
-              base: west
-            groupTarget:
-              base: east
+            group:
+              key:
+                base: window
+              source:
+                base: west
+              target:
+                base: east
             meta:
               desc:
                 base: ''
@@ -355,12 +400,13 @@ worlds:
         - base:
             dest:
               base: ((room-cave|room-cave|room-marsh))
-            groupKey:
-              base: door
-            groupSource:
-              base: east
-            groupTarget:
-              base: west
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target:
+                base: west
             meta:
               desc:
                 base: ''
@@ -372,12 +418,13 @@ worlds:
         - base:
             dest:
               base: ((room-cave|room-marsh))
-            groupKey:
-              base: door
-            groupSource:
-              base: west
-            groupTarget:
-              base: east
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
             meta:
               desc:
                 base: ''
@@ -389,12 +436,13 @@ worlds:
         - base:
             dest:
               base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
-            groupKey:
-              base: window
-            groupSource:
-              base: east
-            groupTarget:
-              base: west
+            group:
+              key:
+                base: window
+              source:
+                base: east
+              target:
+                base: west
             meta:
               desc:
                 base: ''
@@ -406,12 +454,13 @@ worlds:
         - base:
             dest:
               base: ((room-cave|room-cave|room-marsh))
-            groupKey:
-              base: door
-            groupSource:
-              base: west
-            groupTarget:
-              base: east
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
             link:
               base: forward
             meta:

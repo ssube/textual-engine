@@ -73,12 +73,12 @@ export { LocaleContext, LocaleService } from './service/locale/index';
 export { YamlParser } from './service/parser/YamlParser';
 export { Parser } from './service/parser/index';
 
-export { AleaRandomGenerator } from './service/random/AleaRandom';
-export { MathRandomGenerator } from './service/random/MathRandom';
-export { RandomGenerator } from './service/random/index';
+export { AleaRandomService } from './service/random/AleaRandom';
+export { MathRandomService } from './service/random/MathRandom';
+export { RandomService } from './service/random/index';
 
 export { LineRender } from './service/render/LineRender';
-export { RenderOutputEvent } from './service/render/events';
+export { RenderInputEvent } from './service/render/events';
 export { RenderService } from './service/render/index';
 export { ReactDomRender } from './service/render/react/DomRender';
 export { InkRender } from './service/render/react/InkRender';
@@ -93,18 +93,18 @@ export { StateService, StepParams, StepResult, CreateParams } from './service/st
 export { ChainTemplateService } from './service/template/ChainTemplateService';
 export { TemplateService } from './service/template/index';
 
-export { NaturalTokenizer } from './service/tokenizer/NaturalTokenizer';
-export { WordTokenizer } from './service/tokenizer/WordTokenizer';
+export { CompromiseTokenizer } from './service/tokenizer/CompromiseTokenizer';
+export { SplitTokenizer } from './service/tokenizer/SplitTokenizer';
 export { TokenizerService } from './service/tokenizer/index';
 
-export { ShowVolume, StateSource, showCheck } from './util/actor/index';
+export { ShowVolume, StateSource, checkVolume } from './util/actor/index';
 
 export { TEMPLATE_CHANCE, META_VERBS, COMMON_VERBS, EVENT_NAMES } from './util/constants';
 export { Singleton, SingletonConstructor } from './util/container';
 export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, createFuzzyMatcher, createStrictMatcher } from './util/entity/match';
-export { makeConstStringSchema } from './util/schema';
+export { makeConstStringSchema, makeSchema } from './util/schema';
 export { hasText, matchIdSegments, splitPath } from './util/string';
-export { Immutable, KeyList, Filter, FilterBase, FilterKeys, Replace, ScriptData, ScriptMap, ScriptRef, StatMap } from './util/types';
+export { Immutable, KeyList, Filter, FilterBase, FilterKeys, Replace, NumberMap, StringMap } from './util/types';
 
 export { CompletionSet } from './util/async/CompletionSet';
 export { debounce, throttle } from './util/async/Throttle';

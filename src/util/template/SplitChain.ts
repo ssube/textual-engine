@@ -22,7 +22,7 @@ export function splitChain(input: string, options: SplitOptions): InputChain {
   }>({
     Empty: () => regexp(/^$/),
     List: (r) => string(options.group.start).then(r.Value.sepBy(string(options.split))).skip(string(options.group.end)),
-    Token: () => regexp(/[-a-zA-Z ]+/),
+    Token: () => regexp(/[-a-zA-Z {}]+/),
     Top: (r) => alt(r.Value, r.Empty),
     Value: (r) => alt(r.List, r.Token),
   });

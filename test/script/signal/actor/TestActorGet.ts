@@ -1,37 +1,31 @@
 import { expect } from 'chai';
-import { NullLogger } from 'noicejs';
-import { createStubInstance } from 'sinon';
+import { createStubInstance, match } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { ActorSource } from '../../../../src/model/entity/Actor';
 import { SignalActorGet } from '../../../../src/script/signal/actor/ActorGet';
-import { MathRandomGenerator } from '../../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { getStubHelper } from '../../../helper';
-import { testTransfer } from '../../helper';
+import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
 
 describe('actor get scripts', () => {
   describe('actor get signal', () => {
     it('should require the script target be an actor', async () => {
       const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
+      const state = getStubHelper();
 
       const item = makeTestItem('', '', '');
       const actor = makeTestActor('', '', '', item);
 
-      const context = {
+      const context = createTestContext({
         actor,
-        data: new Map(),
         item,
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
-        state: stateHelper,
-        transfer,
-      };
+        state,
+      });
 
       await expect(SignalActorGet.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
       await expect(SignalActorGet.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
@@ -39,26 +33,25 @@ describe('actor get scripts', () => {
 
     it('should show the received item', async () => {
       const script = createStubInstance(LocalScriptService);
-      const stateHelper = getStubHelper();
-      const transfer = testTransfer();
+      const state = getStubHelper();
+      const transfer = createTestTransfer();
 
       const item = makeTestItem('', '', '');
       const actor = makeTestActor('', '', '');
       actor.source = ActorSource.PLAYER;
 
-      await SignalActorGet.call(actor, {
+      const context = createTestContext({
         actor,
-        data: new Map(),
         item,
-        logger: NullLogger.global,
-        random: createStubInstance(MathRandomGenerator),
+        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [], []),
         script,
-        state: stateHelper,
+        state,
         transfer,
       });
+      await SignalActorGet.call(actor, context);
 
-      expect(stateHelper.show).to.have.been.calledWith('actor.get.player');
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.get.player');
     });
   });
 });

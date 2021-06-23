@@ -16,7 +16,7 @@ import {
   EVENT_LOADER_READ,
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
-  EVENT_RENDER_OUTPUT,
+  EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
 } from './util/constants';
 import { ServiceManager } from './util/service/ServiceManager';
@@ -68,6 +68,8 @@ export async function main(args: Array<string>): Promise<number> {
 
   // start svc mgr
   const services = await container.create(ServiceManager);
+  services.add('locale', locale);
+
   await services.create(config.services);
 
   // load common locale
@@ -96,7 +98,7 @@ export async function main(args: Array<string>): Promise<number> {
   for (const input of arg.input) {
     // await output before next command
     const pending = onceEvent(events, EVENT_ACTOR_OUTPUT);
-    events.emit(EVENT_RENDER_OUTPUT, {
+    events.emit(EVENT_RENDER_INPUT, {
       line: input,
     });
     await pending;
@@ -113,9 +115,6 @@ export async function main(args: Array<string>): Promise<number> {
   // wait for something to quit
   await quit;
   await services.stop();
-
-  // TODO: clean up with other services
-  await locale.stop();
 
   // eventDebug(events);
   // events.removeAllListeners();

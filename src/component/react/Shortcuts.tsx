@@ -7,21 +7,36 @@ const { useState } = React;
 
 export const Shortcuts = (props: ShortcutProps): JSX.Element => {
   const { t } = useTranslation();
-  const [selected, setSelected] = useState<ShortcutKeys>('actors');
+  const [tab, setTab] = useState<ShortcutKeys>('actors');
+
+  function selectItem(value: string) {
+    if (tab === 'verbs') {
+      props.onVerb(value);
+    } else {
+      props.onTarget(value);
+    }
+  }
 
   return <div>
     <div>
-      {SHORTCUT_TABS.map((it) => <button
-        key={it.value}
-        onClick={() => setSelected(it.value as ShortcutKeys)}
-      >
-        {t(it.label)}
-      </button>)}
+      <ol>
+        {SHORTCUT_TABS.map((it) => <li key={it.value}>
+          <button
+            id={`tab-${it.value}`}
+            onClick={() => setTab(it.value as ShortcutKeys)}
+          >
+            {t(it.label)}
+          </button>
+        </li>)}
+      </ol>
     </div>
     <div>
       <ol>
-        {props[selected].map((it) => <li key={it.id}>
-          <a onClick={() => props.onSelect(it.id)}>
+        {props[tab].map((it) => <li key={it.id}>
+          <a
+            id={`item-${it.id}`}
+            onClick={() => selectItem(it.id)}
+          >
             {t(it.name)}
           </a>
         </li>)}

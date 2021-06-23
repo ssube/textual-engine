@@ -1,6 +1,8 @@
+import { Service } from '..';
 import { Command } from '../../model/Command';
+import { LocaleBundle } from '../../model/file/Locale';
 
-export interface TokenizerService {
+export interface TokenizerService extends Service {
   /**
    * Split an input string into a series of tokens, without
    * fully parsing their intent.
@@ -13,5 +15,5 @@ export interface TokenizerService {
    */
   parse(input: string): Promise<Array<Command>>;
 
-  translate(verbs: ReadonlyArray<string>): Promise<void>;
+  translate(bundle: LocaleBundle): Promise<void>;
 }

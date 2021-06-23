@@ -15,6 +15,7 @@ import { SignalPortalLook } from '../../script/signal/portal/PortalLook';
 import { SignalRoomLook } from '../../script/signal/room/RoomLook';
 import { SignalRoomStep } from '../../script/signal/room/RoomStep';
 import { VerbActorDrop } from '../../script/verb/actor/ActorDrop';
+import { VerbActorEquip } from '../../script/verb/actor/ActorEquip';
 import { VerbActorHit } from '../../script/verb/actor/ActorHit';
 import { VerbActorLook } from '../../script/verb/actor/ActorLook';
 import { VerbActorMove } from '../../script/verb/actor/ActorMove';
@@ -42,6 +43,7 @@ const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['signal-room-step', SignalRoomStep],
   // verb scripts
   ['verb-actor-drop', VerbActorDrop],
+  ['verb-actor-equip', VerbActorEquip],
   ['verb-actor-hit', VerbActorHit],
   ['verb-actor-look', VerbActorLook],
   ['verb-actor-move', VerbActorMove],

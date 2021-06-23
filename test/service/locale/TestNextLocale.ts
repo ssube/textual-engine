@@ -28,7 +28,11 @@ describe('next locale service', () => {
           foo: 'bar',
         },
       },
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     });
     locale.addBundle('world', {
       bundles: {
@@ -36,7 +40,11 @@ describe('next locale service', () => {
           foo: 'bin',
         },
       },
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     });
 
     expect(locale.translate('foo')).to.equal('bin');
@@ -53,7 +61,11 @@ describe('next locale service', () => {
           foo: '{{size}} bar',
         },
       },
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     });
 
     expect(locale.translate('foo', { size: 4 })).to.equal('4 bar');
@@ -70,7 +82,11 @@ describe('next locale service', () => {
           foo: '{{size}} bar',
         },
       },
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     });
     locale.deleteBundle('common');
 

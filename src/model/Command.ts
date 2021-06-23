@@ -15,16 +15,21 @@ export interface Command {
   verb: string;
 
   /**
-   * Parsed target.
+   * Parsed targets.
    */
-  target: string;
+  targets: Array<string>;
 }
 
-export function makeCommand(verb: string, target: string, index = 0): Command {
+export function makeCommand(verb: string, ...targets: Array<string>): Command {
+  return makeCommandIndex(verb, 0, ...targets);
+}
+
+export function makeCommandIndex(verb: string, index = 0, ...targets: Array<string>): Command {
+  const input = [verb, ...targets].join(' ');
   return {
     index,
-    input: `${verb} ${target}`,
-    target,
+    input,
+    targets,
     verb,
   };
 }

@@ -19,19 +19,23 @@ export const SHORTCUT_TABS = [{
 
 export interface FrameProps {
   onLine: (line: string) => void;
+
   output: Array<string>;
   prompt: string;
   quit: boolean;
   shortcuts: ShortcutData;
   show: {
     shortcuts: boolean;
+    status: boolean;
   };
+  stats: Array<StatusItem>;
   step: StepResult;
 }
 
 export interface InputProps {
   onChange: (line: string) => void;
   onLine: (line: string) => void;
+
   line: string;
   prompt: string;
 }
@@ -46,7 +50,9 @@ export interface ShortcutItem {
 }
 
 export interface ShortcutProps {
-  onSelect: (id: string) => void;
+  onTarget: (id: string) => void;
+  onVerb: (verb: string) => void;
+
   actors: Array<ShortcutItem>;
   items: Array<ShortcutItem>;
   portals: Array<ShortcutItem>;
@@ -58,7 +64,7 @@ export type ShortcutKeys = FilterKeys<ShortcutProps, Array<unknown>>;
 
 export interface StatusItem {
   name: string;
-  value: string;
+  value: number;
 }
 
 export interface StatusProps {

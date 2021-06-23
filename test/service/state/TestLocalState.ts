@@ -6,6 +6,7 @@ import { createStubInstance, match, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
+import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal';
@@ -16,7 +17,7 @@ import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
-import { MathRandomGenerator } from '../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import {
   StateJoinEvent,
@@ -56,15 +57,11 @@ import {
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
 import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
-import { getStubHelper, getTestContainer, getTestLogger } from '../../helper';
+import { createTestContext, getStubHelper, getTestContainer, getTestLogger } from '../../helper';
 
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
-    source: {
-      base: ActorSource.BEHAVIOR,
-      type: 'string',
-    },
     items: [],
     meta: {
       id: 'bar',
@@ -77,7 +74,6 @@ const TEST_ACTOR: Template<Actor> = {
         type: 'string',
       },
     },
-    stats: new Map(),
     scripts: new Map([
       ['verbs.world.bar', {
         data: new Map(),
@@ -87,6 +83,12 @@ const TEST_ACTOR: Template<Actor> = {
         },
       }]
     ]),
+    slots: new Map(),
+    source: {
+      base: ActorSource.BEHAVIOR,
+      type: 'string',
+    },
+    stats: new Map(),
     type: {
       base: ACTOR_TYPE,
       type: 'string',
@@ -109,6 +111,10 @@ const TEST_ITEM: Template<Item> = {
       },
     },
     scripts: new Map(),
+    slot: {
+      base: '',
+      type: 'string',
+    },
     stats: new Map(),
     type: {
       base: ITEM_TYPE,
@@ -123,6 +129,20 @@ const TEST_PORTAL: Template<Portal> = {
     dest: {
       base: 'room-foo',
       type: 'string',
+    },
+    group: {
+      key: {
+        base: 'door',
+        type: 'string',
+      },
+      source: {
+        base: 'west',
+        type: 'string',
+      },
+      target: {
+        base: 'east',
+        type: 'string',
+      },
     },
     link: {
       base: 'both',
@@ -139,18 +159,7 @@ const TEST_PORTAL: Template<Portal> = {
         type: 'string',
       },
     },
-    groupKey: {
-      base: 'door',
-      type: 'string',
-    },
-    groupSource: {
-      base: 'west',
-      type: 'string',
-    },
-    groupTarget: {
-      base: 'east',
-      type: 'string',
-    },
+
     scripts: new Map(),
     type: {
       base: PORTAL_TYPE,
@@ -202,7 +211,11 @@ const TEST_WORLD: WorldTemplate = {
   },
   locale: {
     bundles: {},
-    verbs: [],
+    words: {
+      articles: [],
+      prepositions: [],
+      verbs: [],
+    },
   },
   meta: {
     id: 'foo',
@@ -242,7 +255,10 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await localState.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await localState.doCreate({
+        command,
+      });
 
       const actors = await localState.stepFind({
         type: ACTOR_TYPE,
@@ -284,7 +300,10 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await localState.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await localState.doCreate({
+        command,
+      });
 
       const actors = await localState.stepFind({
         type: ACTOR_TYPE,
@@ -334,12 +353,7 @@ describe('local state service', () => {
       });
 
       await localState.onCommand({
-        command: {
-          index: 1,
-          input: '',
-          target: TEST_WORLD.meta.id,
-          verb: META_CREATE,
-        },
+        command: makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id),
       });
 
       const rooms = await localState.stepFind({
@@ -361,15 +375,14 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await localState.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await localState.doCreate({
+        command,
+      });
+
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: META_DEBUG,
-        },
+        command: makeCommand(META_DEBUG),
       });
 
       const output = await pending;
@@ -388,12 +401,7 @@ describe('local state service', () => {
 
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: META_DEBUG,
-        },
+        command: makeCommand(META_DEBUG),
       });
       const output = await pending;
 
@@ -412,15 +420,14 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await localState.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await localState.doCreate({
+        command,
+      });
+
       const pending = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
       await localState.onCommand({
-        command: {
-          index: 0,
-          input: '',
-          target: 'test://url',
-          verb: META_GRAPH,
-        },
+        command: makeCommand(META_GRAPH, 'test://url'),
       });
 
       const output = await pending;
@@ -436,12 +443,7 @@ describe('local state service', () => {
       const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
-        command: {
-          index: 0,
-          input: '',
-          target: 'test://url',
-          verb: META_GRAPH,
-        },
+        command: makeCommand(META_GRAPH, 'test://url'),
       });
 
       const output = await pending;
@@ -458,12 +460,7 @@ describe('local state service', () => {
       const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: META_HELP,
-        },
+        command: makeCommand(META_HELP),
       });
 
       const output = await pending;
@@ -491,16 +488,15 @@ describe('local state service', () => {
       const actor = await generator.createActor(TEST_ACTOR);
       const room = await generator.createRoom(TEST_ROOM);
 
-      await localState.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await localState.doCreate({
+        command,
+      });
+
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
         actor,
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: META_HELP,
-        },
+        command: makeCommand(META_HELP),
         room,
       });
 
@@ -537,12 +533,7 @@ describe('local state service', () => {
       const pendingOutput = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       const pendingLoad = onceEvent<StateLoadEvent>(events, EVENT_STATE_LOAD);
       await localState.onCommand({
-        command: {
-          index: 1,
-          input: '',
-          target: 'test://url',
-          verb: META_LOAD,
-        },
+        command: makeCommandIndex(META_LOAD, 1, 'test://url'),
       });
 
       await expect(pendingOutput).to.eventually.deep.include({
@@ -573,12 +564,7 @@ describe('local state service', () => {
 
       const pendingOutput = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
-        command: {
-          index: 1,
-          input: '',
-          target: 'test://url',
-          verb: META_LOAD,
-        },
+        command: makeCommandIndex(META_LOAD, 1, 'test://url'),
       });
 
       const output = await pendingOutput;
@@ -595,12 +581,7 @@ describe('local state service', () => {
 
       const pending = localState.stop();
       await localState.onCommand({
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: META_QUIT,
-        },
+        command: makeCommand(META_QUIT),
       });
 
       return expect(pending).to.eventually.equal(undefined);
@@ -620,12 +601,7 @@ describe('local state service', () => {
 
       // generate a world
       await localState.onCommand({
-        command: {
-          index: 1,
-          input: '',
-          target: TEST_WORLD.meta.id,
-          verb: META_CREATE,
-        },
+        command: makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id),
       });
 
       // respond to reads with state
@@ -639,12 +615,7 @@ describe('local state service', () => {
 
       const pendingOutput = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
-        command: {
-          index: 1,
-          input: '',
-          target: 'test://url',
-          verb: META_SAVE,
-        },
+        command: makeCommandIndex(META_SAVE, 1, 'test://url'),
       });
 
       await expect(pendingOutput).to.eventually.deep.include({
@@ -673,12 +644,7 @@ describe('local state service', () => {
 
       const pendingOutput = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
-        command: {
-          index: 1,
-          input: '',
-          target: 'test://url',
-          verb: META_SAVE,
-        },
+        command: makeCommandIndex(META_SAVE, 1, 'test://url'),
       });
 
       await expect(pendingOutput).to.eventually.deep.include({
@@ -700,12 +666,7 @@ describe('local state service', () => {
 
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await localState.onCommand({
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: META_WORLDS,
-        },
+        command: makeCommand(META_WORLDS),
       });
 
       const output = await pending;
@@ -727,16 +688,14 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await state.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
 
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await state.onCommand({
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_WAIT,
-        },
+        command: makeCommand(VERB_WAIT),
       });
 
       const output = await pending;
@@ -753,13 +712,8 @@ describe('local state service', () => {
       const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
       await state.onCommand({
-        actor: {} as Actor,
-        command: {
-          index: 0,
-          input: '',
-          target: '',
-          verb: VERB_WAIT,
-        },
+        actor: makeTestActor('', '', ''),
+        command: makeCommand(VERB_WAIT),
       });
 
       const output = await pending;
@@ -820,7 +774,12 @@ describe('local state service', () => {
       events.emit(EVENT_LOADER_WORLD, { world });
 
       const pendingLoad = onceEvent<StateLoadEvent>(events, EVENT_STATE_LOAD);
-      await state.doCreate(TEST_WORLD.meta.id, 0);
+
+      const command = makeCommand(META_CREATE, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
+
       await pendingLoad;
 
       const script = await container.create<LocalScriptService, BaseOptions>(INJECT_SCRIPT);
@@ -842,12 +801,7 @@ describe('local state service', () => {
 
           await state.onCommand({
             actor,
-            command: {
-              index: 0,
-              input: '',
-              target: '',
-              verb: VERB_WAIT,
-            },
+            command: makeCommand(VERB_WAIT),
           });
         }
       }
@@ -894,7 +848,10 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await state.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
 
       const results = await state.stepFind({
         type: ROOM_TYPE,
@@ -917,7 +874,10 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await state.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
 
       const moving = makeTestActor('', '', '');
       const transfer = {
@@ -925,14 +885,7 @@ describe('local state service', () => {
         source: makeTestRoom('', '', '', [moving], []),
         target: makeTestRoom('', '', '', [], []),
       };
-      await state.stepMove(transfer, {
-        logger: getTestLogger(),
-        script: createStubInstance(LocalScriptService),
-        data: new Map(),
-        random: await container.create(MathRandomGenerator),
-        state: getStubHelper(),
-        transfer: await container.create(StateEntityTransfer),
-      });
+      await state.stepMove(transfer, createTestContext());
 
       expect(transfer.source.actors, 'source actors').to.have.lengthOf(0);
       expect(transfer.target.actors, 'target actors').to.have.lengthOf(1);
@@ -950,7 +903,10 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await state.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
 
       const moving = makeTestItem('', '', '');
       const transfer = {
@@ -958,14 +914,7 @@ describe('local state service', () => {
         source: makeTestRoom('', '', '', [], [moving]),
         target: makeTestRoom('', '', '', [], []),
       };
-      await state.stepMove(transfer, {
-        logger: getTestLogger(),
-        script: createStubInstance(LocalScriptService),
-        data: new Map(),
-        random: await container.create(MathRandomGenerator),
-        state: getStubHelper(),
-        transfer: await container.create(StateEntityTransfer),
-      });
+      await state.stepMove(transfer, createTestContext());
 
       expect(transfer.source.items, 'source items').to.have.lengthOf(0);
       expect(transfer.target.items, 'target items').to.have.lengthOf(1);
@@ -983,7 +932,10 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await state.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
 
       const transfer = {
         moving: makeTestRoom('', '', '', [], []) as any,
@@ -991,14 +943,7 @@ describe('local state service', () => {
         target: makeTestRoom('', '', '', [], []),
       };
 
-      return expect(state.stepMove(transfer, {
-        logger: getTestLogger(),
-        script: createStubInstance(LocalScriptService),
-        data: new Map(),
-        random: await container.create(MathRandomGenerator),
-        state: getStubHelper(),
-        transfer: await container.create(StateEntityTransfer),
-      })).to.eventually.be.rejectedWith(ScriptTargetError);
+      return expect(state.stepMove(transfer, createTestContext())).to.eventually.be.rejectedWith(ScriptTargetError);
     });
   });
 
@@ -1015,10 +960,17 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      await state.doCreate(TEST_WORLD.meta.id, 1);
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
 
       const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
-      await state.stepShow('foo', {}, ShowVolume.SELF);
+
+      const source = {
+        room: makeTestRoom('', '', ''),
+      };
+      await state.stepShow(source, 'foo', {}, ShowVolume.SELF);
 
       const output = await pending;
       expect(output.line).to.equal('foo');

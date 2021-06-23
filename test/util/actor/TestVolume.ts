@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { showCheck, ShowVolume } from '../../../src/util/actor';
+import { checkVolume, ShowVolume } from '../../../src/util/actor';
 import { makeTestActor, makeTestRoom } from '../../entity';
 
 describe('actor utils', () => {
@@ -10,7 +10,7 @@ describe('actor utils', () => {
       const targetActor = makeTestActor('bar', 'bar', 'bar');
       const room = makeTestRoom('room-foo', 'foo', 'foo', [sourceActor, targetActor], []);
 
-      expect(showCheck({
+      expect(checkVolume({
         actor: sourceActor,
         room,
       }, {
@@ -18,7 +18,7 @@ describe('actor utils', () => {
         room,
       }, ShowVolume.SELF), 'same actor in the same room').to.equal(true);
 
-      expect(showCheck({
+      expect(checkVolume({
         actor: sourceActor,
         room,
       }, {
@@ -36,7 +36,7 @@ describe('actor utils', () => {
       const targetActor = makeTestActor('bar', 'bar', 'bar');
       const targetRoom = makeTestRoom('room-bar', 'bar', 'bar', [targetActor], []);
 
-      expect(showCheck({
+      expect(checkVolume({
         actor: sourceActor,
         room: sourceRoom,
       }, {
@@ -44,7 +44,7 @@ describe('actor utils', () => {
         room: sourceRoom,
       }, ShowVolume.ROOM), 'different actor in the same room').to.equal(true);
 
-      expect(showCheck({
+      expect(checkVolume({
         actor: sourceActor,
         room: sourceRoom,
       }, {
@@ -60,7 +60,7 @@ describe('actor utils', () => {
       const targetActor = makeTestActor('bar', 'bar', 'bar');
       const targetRoom = makeTestRoom('room-bar', 'bar', 'bar', [targetActor], []);
 
-      expect(showCheck({
+      expect(checkVolume({
         actor: sourceActor,
         room: sourceRoom,
       }, {

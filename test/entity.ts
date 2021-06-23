@@ -10,7 +10,6 @@ import { TEMPLATE_CHANCE } from '../src/util/constants';
 
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {
-    source: ActorSource.BEHAVIOR,
     items,
     meta: {
       desc: '',
@@ -19,6 +18,8 @@ export function makeTestActor(id: string, name: string, template: string, ...ite
       template,
     },
     scripts: new Map(),
+    slots: new Map(),
+    source: ActorSource.BEHAVIOR,
     stats: new Map(),
     type: ACTOR_TYPE,
   };
@@ -33,6 +34,7 @@ export function makeTestItem(id: string, name: string, template: string): Item {
       template,
     },
     scripts: new Map(),
+    slot: '',
     stats: new Map(),
     type: ITEM_TYPE,
   };
@@ -64,6 +66,11 @@ export function makeTestRoom(
 export function makeTestPortal(id: string, name: string, source: string, target: string, dest: string): Portal {
   return {
     dest,
+    group: {
+      key: name,
+      source: source,
+      target: target,
+    },
     link: PortalLinkage.BOTH,
     meta: {
       desc: '',
@@ -71,9 +78,6 @@ export function makeTestPortal(id: string, name: string, source: string, target:
       name,
       template: '',
     },
-    groupKey: name,
-    groupSource: source,
-    groupTarget: target,
     scripts: new Map(),
     type: PORTAL_TYPE,
   };
@@ -127,7 +131,11 @@ export function makeTestWorld(actors: Array<Template<Actor>>, items: Array<Templ
     },
     locale: {
       bundles: {},
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     },
     meta: {
       id: 'foo',

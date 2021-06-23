@@ -4,7 +4,11 @@ export type LocaleLanguage = Record<string, Record<string, string>>;
 
 export interface LocaleBundle {
   bundles: LocaleLanguage;
-  verbs: Array<string>;
+  words: {
+    articles: Array<string>;
+    prepositions: Array<string>;
+    verbs: Array<string>;
+  };
 }
 
 export const LOCALE_SCHEMA: JSONSchemaType<LocaleBundle> = {
@@ -21,12 +25,30 @@ export const LOCALE_SCHEMA: JSONSchemaType<LocaleBundle> = {
         },
       },
     },
-    verbs: {
-      type: 'array',
-      items: {
-        type: 'string',
+    words: {
+      type: 'object',
+      properties: {
+        articles: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        prepositions: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        verbs: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
       },
+      required: ['articles', 'prepositions', 'verbs'],
     },
   },
-  required: ['bundles', 'verbs'],
+  required: ['bundles', 'words'],
 };

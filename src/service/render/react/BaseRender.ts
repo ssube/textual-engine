@@ -3,19 +3,20 @@ import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
-import { ShortcutData, ShortcutItem } from '../../../component/shared';
+import { ShortcutData, ShortcutItem, StatusItem } from '../../../component/shared';
 import { ConfigError } from '../../../error/ConfigError';
 import { Entity } from '../../../model/entity/Base';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { onceEvent } from '../../../util/async/event';
-import { debounce, ClearResult } from '../../../util/async/Throttle';
+import { ClearResult, debounce } from '../../../util/async/Throttle';
+import { remove } from '../../../util/collection/array';
 import {
+  COMMON_STATS,
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
-  EVENT_RENDER_OUTPUT,
+  EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
-  RENDER_DELAY,
 } from '../../../util/constants';
 import { makeSchema } from '../../../util/schema';
 import { getVerbScripts } from '../../../util/script';
@@ -28,6 +29,8 @@ import { StateStepEvent } from '../../state/events';
 
 export interface BaseRenderConfig {
   shortcuts: boolean;
+  status: boolean;
+  throttle: number;
 }
 
 export const BASE_RENDER_SCHEMA: JSONSchemaType<BaseRenderConfig> = {
@@ -37,8 +40,15 @@ export const BASE_RENDER_SCHEMA: JSONSchemaType<BaseRenderConfig> = {
       type: 'boolean',
       default: true,
     },
+    status: {
+      type: 'boolean',
+      default: true,
+    },
+    throttle: {
+      type: 'number',
+    },
   },
-  required: [],
+  required: ['throttle'],
 };
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
@@ -56,6 +66,7 @@ export abstract class BaseReactRender implements RenderService {
   protected quit: boolean;
   protected shortcuts: ShortcutData;
   protected step: StepResult;
+  protected stats: Array<StatusItem>;
 
   protected queueUpdate: ClearResult;
 
@@ -73,7 +84,7 @@ export abstract class BaseReactRender implements RenderService {
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
 
-    this.queueUpdate = debounce(RENDER_DELAY, () => this.update());
+    this.queueUpdate = debounce(this.config.throttle, () => this.update());
 
     this.input = '';
     this.output = [];
@@ -85,6 +96,7 @@ export abstract class BaseReactRender implements RenderService {
       portals: [],
       verbs: [],
     };
+    this.stats = [];
     this.step = {
       turn: 0,
       time: 0,
@@ -111,7 +123,7 @@ export abstract class BaseReactRender implements RenderService {
   }
 
   public async read(): Promise<string> {
-    const event = await onceEvent<ActorOutputEvent>(this.event, EVENT_RENDER_OUTPUT);
+    const event = await onceEvent<ActorOutputEvent>(this.event, EVENT_RENDER_INPUT);
     return event.line;
   }
 
@@ -150,16 +162,21 @@ export abstract class BaseReactRender implements RenderService {
       };
     }
 
-    this.shortcuts.actors = result.room.actors.filter((it) => it.meta.id !== result.pid).map(extractShortcut);
+    this.shortcuts.actors = remove(result.room.actors, (it) => it.meta.id === result.pid).map(extractShortcut);
     this.shortcuts.items = result.room.items.map(extractShortcut);
     this.shortcuts.portals = result.room.portals.map((it) => ({
-      id: `${it.groupSource} ${it.meta.name}`,
-      name: `${it.groupSource} ${it.meta.name}`,
+      id: it.meta.id,
+      name: `${it.group.source} ${it.meta.name}`,
     }));
     this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
       id: it,
       name: it,
     }));
+
+    this.stats = Array.from(result.actor.stats.entries()).map((it) => ({
+      name: it[0],
+      value: it[1],
+    })).filter((it) => COMMON_STATS.includes(it.name));
 
     this.setPrompt(`turn ${this.step.turn}`);
     this.queueUpdate.call();
@@ -187,7 +204,7 @@ export abstract class BaseReactRender implements RenderService {
 
     if (line.length > 0) {
       // forward event to state
-      this.event.emit(EVENT_RENDER_OUTPUT, {
+      this.event.emit(EVENT_RENDER_INPUT, {
         line,
       });
     }

@@ -1,35 +1,36 @@
 import { expect } from 'chai';
 
-import { decrementKey, getKey, incrementKey } from '../../../src/util/collection/map';
+import { MathRandomService } from '../../../src/service/random/MathRandom';
+import { groupOn, randomItem, remove } from '../../../src/util/collection/array';
 
-describe('map utils', () => {
-  describe('decrement key helper', () => {
-    it('should decrement existing keys', async () => {
-      const data = new Map([['a', 1]]);
-      expect(decrementKey(data, 'a')).to.equal(0);
+describe('array utils', () => {
+  describe('random item helper', () => {
+    it('should get a random item from the input', async () => {
+      const data = ['a', 'b'];
+      const random = new MathRandomService();
+      expect(randomItem(data, random)).to.be.oneOf(data);
     });
-
-    xit('should return the default value on missing keys');
   });
 
-  describe('increment key helper', () => {
-    it('should increment existing keys', async () => {
-      const data = new Map([['a', 1]]);
-      expect(incrementKey(data, 'a')).to.equal(2);
-    });
+  describe('remove filter', () => {
+    it('should remove items that do not match', async () => {
+      const data = new Array(100).fill(0).map((it, idx) => idx);
+      const even = remove(data, (it) => (it % 2) === 0);
 
-    xit('should return the default value on missing keys');
+      expect(even).to.have.lengthOf(50);
+    });
   });
 
-  describe('get key helper', async () => {
-    it('should get existing keys', async () => {
-      const data = new Map([['a', 1]]);
-      expect(getKey(data, 'a', 0)).to.equal(1);
-    });
+  describe('group on delimiter helper', () => {
+    it('should group items and remove delimiters', async () => {
+      const delimiters = new Set(['a', 'e', 'i', 'o', 'u']);
+      const alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l'];
 
-    it('should return the default value on missing keys', async () => {
-      const data = new Map([['a', 1]]);
-      expect(getKey(data, 'b', 0)).to.equal(0);
+      expect(groupOn(alphabet, delimiters)).to.deep.equal([
+        ['b', 'c', 'd'],
+        ['f', 'g', 'h'],
+        ['j', 'k', 'l'],
+      ]);
     });
   });
 });

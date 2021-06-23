@@ -1,6 +1,8 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
+import { stub } from 'sinon';
 
+import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent } from '../../../src/service/actor/events';
@@ -13,9 +15,12 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
-  EVENT_RENDER_OUTPUT,
+  EVENT_ACTOR_ROOM,
+  EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_ROOM,
+  EVENT_TOKEN_COMMAND,
   VERB_WAIT,
 } from '../../../src/util/constants';
 import { makeTestActor, makeTestRoom } from '../../entity';
@@ -25,20 +30,14 @@ describe('player actor', () => {
   it('should parse render output into commands', async () => {
     const container = await getTestContainer(new CoreModule());
 
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
-
     const actor = await container.create(PlayerActorService);
     await actor.start();
-
-    const index = 13;
-    const line = `foo bar ${index}`;
 
     const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pending = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
 
-    event.emit(EVENT_RENDER_OUTPUT, {
-      line,
+    event.emit(EVENT_TOKEN_COMMAND, {
+      command: makeCommandIndex('foo', 10, 'bar'),
     });
 
     const cmd = await pending;
@@ -50,14 +49,17 @@ describe('player actor', () => {
 
     const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
     await locale.start();
-
     locale.addBundle('world', {
       bundles: {
         en: {
           'meta.help': 'foo',
         },
       },
-      verbs: [],
+      words: {
+        articles: [],
+        prepositions: [],
+        verbs: [],
+      },
     });
 
     const actor = await container.create(PlayerActorService);
@@ -82,9 +84,6 @@ describe('player actor', () => {
   it('should save the actor after joining and send it with output', async () => {
     const container = await getTestContainer(new CoreModule());
 
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
-
     const player = await container.create(PlayerActorService);
     await player.start();
 
@@ -105,8 +104,8 @@ describe('player actor', () => {
     });
 
     const pendingCommand = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
-    event.emit(EVENT_RENDER_OUTPUT, {
-      line: VERB_WAIT,
+    event.emit(EVENT_TOKEN_COMMAND, {
+      command: makeCommand(VERB_WAIT),
     });
 
     const command = await pendingCommand;
@@ -116,9 +115,6 @@ describe('player actor', () => {
 
   it('should request to join worlds when they load', async () => {
     const container = await getTestContainer(new CoreModule());
-
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
 
     const player = await container.create(PlayerActorService);
     await player.start();
@@ -137,9 +133,6 @@ describe('player actor', () => {
   it('should start without an actor or room', async () => {
     const container = await getTestContainer(new CoreModule());
 
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
-
     const player = await container.create(PlayerActorService);
     await player.start();
 
@@ -152,8 +145,8 @@ describe('player actor', () => {
 
     const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pendingCommand = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
-    event.emit(EVENT_RENDER_OUTPUT, {
-      line: VERB_WAIT,
+    event.emit(EVENT_TOKEN_COMMAND, {
+      command: makeCommand(VERB_WAIT),
     });
 
     const command = await pendingCommand;
@@ -163,9 +156,6 @@ describe('player actor', () => {
 
   it('should save the room after moving', async () => {
     const container = await getTestContainer(new CoreModule());
-
-    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
-    await locale.start();
 
     const player = await container.create(PlayerActorService);
     await player.start();
@@ -188,14 +178,18 @@ describe('player actor', () => {
       room: sourceRoom,
     });
 
-    player.onRoom({
+    const pendingRoom = onceEvent(event, EVENT_ACTOR_ROOM);
+
+    event.emit(EVENT_STATE_ROOM, {
       actor,
       room: targetRoom,
     });
 
+    await pendingRoom;
+
     const pendingCommand = onceEvent<ActorCommandEvent>(event, EVENT_ACTOR_COMMAND);
-    event.emit(EVENT_RENDER_OUTPUT, {
-      line: VERB_WAIT,
+    event.emit(EVENT_TOKEN_COMMAND, {
+      command: makeCommand(VERB_WAIT),
     });
 
     const command = await pendingCommand;
@@ -203,6 +197,39 @@ describe('player actor', () => {
     expect(command.room, 'command room').to.equal(targetRoom);
   });
 
+  it('should filter join events by pid', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const player = await container.create(PlayerActorService);
+    await player.start();
+
+    const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    const actorRoomStub = stub();
+    event.on(EVENT_ACTOR_ROOM, actorRoomStub);
+
+    const pendingJoin = onceEvent<ActorJoinEvent>(event, EVENT_ACTOR_JOIN);
+    event.emit(EVENT_STATE_LOAD, {
+      state: '',
+      world: '',
+    });
+    const { pid } = await pendingJoin;
+
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [], []);
+    event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid: 'false',
+      room,
+    });
+
+    event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid,
+      room,
+    });
+
+    expect(actorRoomStub).to.have.callCount(1);
+  });
+
   xit('should test output volume when source is set');
-  xit('should translate and cache verbs');
 });

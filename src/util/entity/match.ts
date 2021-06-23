@@ -78,7 +78,7 @@ export function matchMetadataFuzzy(entity: Immutable<Entity>, filter: Partial<Me
     // TODO: extract into helper
     if (isPortal(entity)) {
       const sourceName = [
-        entity.groupSource.toLocaleLowerCase(),
+        entity.group.source.toLocaleLowerCase(),
         name,
       ].join(' ');
       matched.name = matched.name || sourceName.includes(filter.name);

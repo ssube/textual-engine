@@ -138,9 +138,11 @@ export class StateEntityGenerator {
   public async createPortal(template: Template<Portal>): Promise<Portal> {
     const portal: Portal = {
       dest: '',
-      groupKey: this.template.renderString(template.base.groupKey),
-      groupSource: this.template.renderString(template.base.groupSource),
-      groupTarget: this.template.renderString(template.base.groupTarget),
+      group: {
+        key: this.template.renderString(template.base.group.key),
+        source: this.template.renderString(template.base.group.source),
+        target: this.template.renderString(template.base.group.target),
+      },
       link: this.template.renderString(template.base.link) as PortalLinkage,
       meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
       scripts: await this.createScripts(template.base.scripts, PORTAL_TYPE),
@@ -273,9 +275,9 @@ export class StateEntityGenerator {
     for (const mod of selected) {
       await this.modifyMetadata(target.meta, mod.meta);
 
-      target.groupKey = this.template.modifyString(target.groupKey, mod.groupKey);
-      target.groupSource = this.template.modifyString(target.groupSource, mod.groupSource);
-      target.groupTarget = this.template.modifyString(target.groupTarget, mod.groupTarget);
+      target.group.key = this.template.modifyString(target.group.key, mod.group.key);
+      target.group.source = this.template.modifyString(target.group.source, mod.group.source);
+      target.group.target = this.template.modifyString(target.group.target, mod.group.target);
       target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
       target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
     }
@@ -346,7 +348,7 @@ export class StateEntityGenerator {
       const sourceGroups = new Map<string, Array<Portal>>();
       for (const portal of room.portals) {
         if (portal.dest === '') {
-          setOrPush(sourceGroups, portal.groupSource, portal);
+          setOrPush(sourceGroups, portal.group.source, portal);
         }
       }
 
@@ -380,7 +382,7 @@ export class StateEntityGenerator {
           // if room is a valid dest
           if (matchIdSegments(it.meta.id, destId)) {
             // find unlinked portal in opposing group
-            return it.portals.some((p) => p.dest === '' && p.groupTarget === group);
+            return it.portals.some((p) => p.dest === '' && p.group.target === group);
           } else {
             return false;
           }
@@ -432,8 +434,11 @@ export class StateEntityGenerator {
   public async reversePortal(portal: Portal): Promise<Portal> {
     return {
       ...portal,
-      groupSource: portal.groupTarget,
-      groupTarget: portal.groupSource,
+      group: {
+        key: portal.group.key,
+        source: portal.group.target,
+        target: portal.group.source,
+      },
       meta: {
         desc: portal.meta.desc,
         id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,

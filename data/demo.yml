@@ -89,12 +89,13 @@ worlds:
           base: room-none
         link:
           base: both
-        groupKey:
-          base: ''
-        groupSource:
-          base: ''
-        groupTarget:
-          base: ''
+        group:
+          key:
+            base: ''
+          source:
+            base: ''
+          target:
+            base: ''
         scripts: !map
           signal.look:
             data: !map {}
@@ -172,7 +173,7 @@ worlds:
                   inventory: |-
                     You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
                   portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.groupSource}} ({{portal.meta.id}}).
+                    A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
                   dest: |-
                     You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
                 actor:
@@ -187,7 +188,7 @@ worlds:
                 missing: |-
                   {{command.targets}} is not a portal!
                 portal: |-
-                  {{actor.meta.name}} moved through the {{portal.groupSource}} {{portal.meta.name}}.
+                  {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
               take:
                 type: |-
                   {{command.targets}} is not an item!
@@ -381,12 +382,13 @@ worlds:
         - base:
             dest:
               base: ((room-cave|room-cave|room-marsh))
-            groupKey:
-              base: window
-            groupSource:
-              base: west
-            groupTarget:
-              base: east
+            group:
+              key:
+                base: window
+              source:
+                base: west
+              target:
+                base: east
             meta:
               desc:
                 base: ''
@@ -398,12 +400,13 @@ worlds:
         - base:
             dest:
               base: ((room-cave|room-cave|room-marsh))
-            groupKey:
-              base: door
-            groupSource:
-              base: east
-            groupTarget:
-              base: west
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target:
+                base: west
             meta:
               desc:
                 base: ''
@@ -415,12 +418,13 @@ worlds:
         - base:
             dest:
               base: ((room-cave|room-marsh))
-            groupKey:
-              base: door
-            groupSource:
-              base: west
-            groupTarget:
-              base: east
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
             meta:
               desc:
                 base: ''
@@ -432,12 +436,13 @@ worlds:
         - base:
             dest:
               base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
-            groupKey:
-              base: window
-            groupSource:
-              base: east
-            groupTarget:
-              base: west
+            group:
+              key:
+                base: window
+              source:
+                base: east
+              target:
+                base: west
             meta:
               desc:
                 base: ''
@@ -449,12 +454,13 @@ worlds:
         - base:
             dest:
               base: ((room-cave|room-cave|room-marsh))
-            groupKey:
-              base: door
-            groupSource:
-              base: west
-            groupTarget:
-              base: east
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
             link:
               base: forward
             meta:

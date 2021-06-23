@@ -23,17 +23,11 @@ export interface Portal {
    */
   dest: string;
 
-  groupKey: string;
-
-  /**
-   * The source portal's group.
-   */
-  groupSource: string;
-
-  /**
-   * The target group in the destination room.
-   */
-  groupTarget: string;
+  group: {
+    key: string;
+    source: string;
+    target: string;
+  };
 
   link: PortalLinkage;
 
@@ -60,9 +54,15 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
       type: 'object',
       properties: {
         dest: TEMPLATE_STRING_SCHEMA,
-        groupKey: TEMPLATE_STRING_SCHEMA,
-        groupSource: TEMPLATE_STRING_SCHEMA,
-        groupTarget: TEMPLATE_STRING_SCHEMA,
+        group: {
+          type: 'object',
+          properties: {
+            key: TEMPLATE_STRING_SCHEMA,
+            source: TEMPLATE_STRING_SCHEMA,
+            target: TEMPLATE_STRING_SCHEMA,
+          },
+          required: ['key', 'source', 'target'],
+        },
         link: {
           ...TEMPLATE_STRING_SCHEMA,
           default: {
@@ -96,7 +96,7 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
           required: ['base', 'type'],
         },
       },
-      required: ['dest', 'groupKey', 'groupSource', 'groupTarget', 'meta', 'scripts'],
+      required: ['dest', 'group', 'meta', 'scripts'],
     },
     chance: {
       type: 'number',
@@ -123,9 +123,15 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
       type: 'object',
       properties: {
         dest: TEMPLATE_STRING_SCHEMA,
-        groupKey: TEMPLATE_STRING_SCHEMA,
-        groupSource: TEMPLATE_STRING_SCHEMA,
-        groupTarget: TEMPLATE_STRING_SCHEMA,
+        group: {
+          type: 'object',
+          properties: {
+            key: TEMPLATE_STRING_SCHEMA,
+            source: TEMPLATE_STRING_SCHEMA,
+            target: TEMPLATE_STRING_SCHEMA,
+          },
+          required: ['key', 'source', 'target'],
+        },
         link: {
           ...TEMPLATE_STRING_SCHEMA,
           default: {
@@ -159,7 +165,7 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
           required: ['base', 'type'],
         },
       },
-      required: ['dest', 'groupKey', 'groupSource', 'groupTarget', 'meta', 'scripts'],
+      required: ['dest', 'group', 'meta', 'scripts'],
     },
     mods: {
       type: 'array',

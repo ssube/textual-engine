@@ -63,7 +63,7 @@ describe('actor move scripts', () => {
       const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
       room.portals.push(portal);
       const context = createTestContext({
-        command: makeCommand(VERB_MOVE, portal.groupSource),
+        command: makeCommand(VERB_MOVE, portal.group.source),
         random: createStubInstance(MathRandomService),
         room,
         state,
@@ -91,7 +91,7 @@ describe('actor move scripts', () => {
       const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
       room.portals.push(portal);
       const context = createTestContext({
-        command: makeCommand(VERB_MOVE, `${portal.groupSource} ${portal.meta.name}`),
+        command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
         random: createStubInstance(MathRandomService),
         room,
         state,
@@ -138,7 +138,7 @@ describe('actor move scripts', () => {
       room.portals.push(portal);
 
       const context = createTestContext({
-        command: makeCommand(VERB_MOVE, `${portal.groupSource} ${portal.meta.name}`),
+        command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
         random: createStubInstance(MathRandomService),
         room,
         state,

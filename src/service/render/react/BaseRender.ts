@@ -166,7 +166,7 @@ export abstract class BaseReactRender implements RenderService {
     this.shortcuts.items = result.room.items.map(extractShortcut);
     this.shortcuts.portals = result.room.portals.map((it) => ({
       id: it.meta.id,
-      name: `${it.groupSource} ${it.meta.name}`,
+      name: `${it.group.source} ${it.meta.name}`,
     }));
     this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
       id: it,

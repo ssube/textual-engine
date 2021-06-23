@@ -130,6 +130,20 @@ const TEST_PORTAL: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    group: {
+      key: {
+        base: 'door',
+        type: 'string',
+      },
+      source: {
+        base: 'west',
+        type: 'string',
+      },
+      target: {
+        base: 'east',
+        type: 'string',
+      },
+    },
     link: {
       base: 'both',
       type: 'string',
@@ -145,18 +159,7 @@ const TEST_PORTAL: Template<Portal> = {
         type: 'string',
       },
     },
-    groupKey: {
-      base: 'door',
-      type: 'string',
-    },
-    groupSource: {
-      base: 'west',
-      type: 'string',
-    },
-    groupTarget: {
-      base: 'east',
-      type: 'string',
-    },
+
     scripts: new Map(),
     type: {
       base: PORTAL_TYPE,

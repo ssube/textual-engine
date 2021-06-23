@@ -113,17 +113,19 @@ describe('node fetch loader', () => {
           base: '',
           type: 'string',
         },
-        groupKey: {
-          base: '',
-          type: 'string',
-        },
-        groupSource: {
-          base: '',
-          type: 'string',
-        },
-        groupTarget: {
-          base: '',
-          type: 'string',
+        group: {
+          key: {
+            base: '',
+            type: 'string',
+          },
+          source: {
+            base: '',
+            type: 'string',
+          },
+          target: {
+            base: '',
+            type: 'string',
+          },
         },
         meta: {
           desc: {

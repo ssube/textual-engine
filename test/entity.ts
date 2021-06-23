@@ -66,6 +66,11 @@ export function makeTestRoom(
 export function makeTestPortal(id: string, name: string, source: string, target: string, dest: string): Portal {
   return {
     dest,
+    group: {
+      key: name,
+      source: source,
+      target: target,
+    },
     link: PortalLinkage.BOTH,
     meta: {
       desc: '',
@@ -73,9 +78,6 @@ export function makeTestPortal(id: string, name: string, source: string, target:
       name,
       template: '',
     },
-    groupKey: name,
-    groupSource: source,
-    groupTarget: target,
     scripts: new Map(),
     type: PORTAL_TYPE,
   };

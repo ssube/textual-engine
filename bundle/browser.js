@@ -7,8 +7,8 @@
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
   var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-  var __esm = (fn, res) => function __init() {
-    return fn && (res = (0, fn[Object.keys(fn)[0]])(fn = 0)), res;
+  var __esm = (fn2, res) => function __init() {
+    return fn2 && (res = (0, fn2[Object.keys(fn2)[0]])(fn2 = 0)), res;
   };
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[Object.keys(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
@@ -47,10 +47,10 @@
     }
     try {
       return cachedSetTimeout(fun, 0);
-    } catch (e) {
+    } catch (e3) {
       try {
         return cachedSetTimeout.call(null, fun, 0);
-      } catch (e2) {
+      } catch (e4) {
         return cachedSetTimeout.call(this, fun, 0);
       }
     }
@@ -65,10 +65,10 @@
     }
     try {
       return cachedClearTimeout(marker);
-    } catch (e) {
+    } catch (e3) {
       try {
         return cachedClearTimeout.call(null, marker);
-      } catch (e2) {
+      } catch (e4) {
         return cachedClearTimeout.call(this, marker);
       }
     }
@@ -112,8 +112,8 @@
   function nextTick(fun) {
     var args = new Array(arguments.length - 1);
     if (arguments.length > 1) {
-      for (var i = 1; i < arguments.length; i++) {
-        args[i - 1] = arguments[i];
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        args[i2 - 1] = arguments[i2];
       }
     }
     queue.push(new Item(fun, args));
@@ -240,9 +240,9 @@
       Object.keys(defines).forEach((key) => {
         const segs = key.split(".");
         let target = process;
-        for (let i = 0; i < segs.length; i++) {
-          const seg = segs[i];
-          if (i === segs.length - 1) {
+        for (let i2 = 0; i2 < segs.length; i2++) {
+          const seg = segs[i2];
+          if (i2 === segs.length - 1) {
             target[seg] = defines[key];
           } else {
             target = target[seg] || (target[seg] = {});
@@ -256,9 +256,9 @@
   function init() {
     inited = true;
     var code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    for (var i = 0, len = code.length; i < len; ++i) {
-      lookup[i] = code[i];
-      revLookup[code.charCodeAt(i)] = i;
+    for (var i2 = 0, len = code.length; i2 < len; ++i2) {
+      lookup[i2] = code[i2];
+      revLookup[code.charCodeAt(i2)] = i2;
     }
     revLookup["-".charCodeAt(0)] = 62;
     revLookup["_".charCodeAt(0)] = 63;
@@ -267,28 +267,28 @@
     if (!inited) {
       init();
     }
-    var i, j, l, tmp, placeHolders, arr;
+    var i2, j2, l2, tmp, placeHolders, arr;
     var len = b64.length;
     if (len % 4 > 0) {
       throw new Error("Invalid string. Length must be a multiple of 4");
     }
     placeHolders = b64[len - 2] === "=" ? 2 : b64[len - 1] === "=" ? 1 : 0;
     arr = new Arr(len * 3 / 4 - placeHolders);
-    l = placeHolders > 0 ? len - 4 : len;
-    var L = 0;
-    for (i = 0, j = 0; i < l; i += 4, j += 3) {
-      tmp = revLookup[b64.charCodeAt(i)] << 18 | revLookup[b64.charCodeAt(i + 1)] << 12 | revLookup[b64.charCodeAt(i + 2)] << 6 | revLookup[b64.charCodeAt(i + 3)];
-      arr[L++] = tmp >> 16 & 255;
-      arr[L++] = tmp >> 8 & 255;
-      arr[L++] = tmp & 255;
+    l2 = placeHolders > 0 ? len - 4 : len;
+    var L2 = 0;
+    for (i2 = 0, j2 = 0; i2 < l2; i2 += 4, j2 += 3) {
+      tmp = revLookup[b64.charCodeAt(i2)] << 18 | revLookup[b64.charCodeAt(i2 + 1)] << 12 | revLookup[b64.charCodeAt(i2 + 2)] << 6 | revLookup[b64.charCodeAt(i2 + 3)];
+      arr[L2++] = tmp >> 16 & 255;
+      arr[L2++] = tmp >> 8 & 255;
+      arr[L2++] = tmp & 255;
     }
     if (placeHolders === 2) {
-      tmp = revLookup[b64.charCodeAt(i)] << 2 | revLookup[b64.charCodeAt(i + 1)] >> 4;
-      arr[L++] = tmp & 255;
+      tmp = revLookup[b64.charCodeAt(i2)] << 2 | revLookup[b64.charCodeAt(i2 + 1)] >> 4;
+      arr[L2++] = tmp & 255;
     } else if (placeHolders === 1) {
-      tmp = revLookup[b64.charCodeAt(i)] << 10 | revLookup[b64.charCodeAt(i + 1)] << 4 | revLookup[b64.charCodeAt(i + 2)] >> 2;
-      arr[L++] = tmp >> 8 & 255;
-      arr[L++] = tmp & 255;
+      tmp = revLookup[b64.charCodeAt(i2)] << 10 | revLookup[b64.charCodeAt(i2 + 1)] << 4 | revLookup[b64.charCodeAt(i2 + 2)] >> 2;
+      arr[L2++] = tmp >> 8 & 255;
+      arr[L2++] = tmp & 255;
     }
     return arr;
   }
@@ -355,8 +355,8 @@
     assertSize(size);
     that = createBuffer(that, size < 0 ? 0 : checked(size) | 0);
     if (!Buffer2.TYPED_ARRAY_SUPPORT) {
-      for (var i = 0; i < size; ++i) {
-        that[i] = 0;
+      for (var i2 = 0; i2 < size; ++i2) {
+        that[i2] = 0;
       }
     }
     return that;
@@ -379,8 +379,8 @@
   function fromArrayLike(that, array) {
     var length = array.length < 0 ? 0 : checked(array.length) | 0;
     that = createBuffer(that, length);
-    for (var i = 0; i < length; i += 1) {
-      that[i] = array[i] & 255;
+    for (var i2 = 0; i2 < length; i2 += 1) {
+      that[i2] = array[i2] & 255;
     }
     return that;
   }
@@ -436,8 +436,8 @@
     }
     return length | 0;
   }
-  function internalIsBuffer(b) {
-    return !!(b != null && b._isBuffer);
+  function internalIsBuffer(b2) {
+    return !!(b2 != null && b2._isBuffer);
   }
   function byteLength(string2, encoding) {
     if (internalIsBuffer(string2)) {
@@ -528,10 +528,10 @@
       }
     }
   }
-  function swap(b, n, m) {
-    var i = b[n];
-    b[n] = b[m];
-    b[m] = i;
+  function swap(b2, n2, m2) {
+    var i2 = b2[n2];
+    b2[n2] = b2[m2];
+    b2[m2] = i2;
   }
   function bidirectionalIndexOf(buffer, val, byteOffset, encoding, dir) {
     if (buffer.length === 0)
@@ -598,42 +598,42 @@
         byteOffset /= 2;
       }
     }
-    function read2(buf, i2) {
+    function read2(buf, i3) {
       if (indexSize === 1) {
-        return buf[i2];
+        return buf[i3];
       } else {
-        return buf.readUInt16BE(i2 * indexSize);
+        return buf.readUInt16BE(i3 * indexSize);
       }
     }
     __name(read2, "read");
-    var i;
+    var i2;
     if (dir) {
       var foundIndex = -1;
-      for (i = byteOffset; i < arrLength; i++) {
-        if (read2(arr, i) === read2(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+      for (i2 = byteOffset; i2 < arrLength; i2++) {
+        if (read2(arr, i2) === read2(val, foundIndex === -1 ? 0 : i2 - foundIndex)) {
           if (foundIndex === -1)
-            foundIndex = i;
-          if (i - foundIndex + 1 === valLength)
+            foundIndex = i2;
+          if (i2 - foundIndex + 1 === valLength)
             return foundIndex * indexSize;
         } else {
           if (foundIndex !== -1)
-            i -= i - foundIndex;
+            i2 -= i2 - foundIndex;
           foundIndex = -1;
         }
       }
     } else {
       if (byteOffset + valLength > arrLength)
         byteOffset = arrLength - valLength;
-      for (i = byteOffset; i >= 0; i--) {
+      for (i2 = byteOffset; i2 >= 0; i2--) {
         var found = true;
-        for (var j = 0; j < valLength; j++) {
-          if (read2(arr, i + j) !== read2(val, j)) {
+        for (var j2 = 0; j2 < valLength; j2++) {
+          if (read2(arr, i2 + j2) !== read2(val, j2)) {
             found = false;
             break;
           }
         }
         if (found)
-          return i;
+          return i2;
       }
     }
     return -1;
@@ -655,13 +655,13 @@
     if (length > strLen / 2) {
       length = strLen / 2;
     }
-    for (var i = 0; i < length; ++i) {
-      var parsed = parseInt(string2.substr(i * 2, 2), 16);
+    for (var i2 = 0; i2 < length; ++i2) {
+      var parsed = parseInt(string2.substr(i2 * 2, 2), 16);
       if (isNaN(parsed))
-        return i;
-      buf[offset + i] = parsed;
+        return i2;
+      buf[offset + i2] = parsed;
     }
-    return i;
+    return i2;
   }
   function utf8Write(buf, string2, offset, length) {
     return blitBuffer(utf8ToBytes(string2, buf.length - offset), buf, offset, length);
@@ -688,12 +688,12 @@
   function utf8Slice(buf, start, end) {
     end = Math.min(buf.length, end);
     var res = [];
-    var i = start;
-    while (i < end) {
-      var firstByte = buf[i];
+    var i2 = start;
+    while (i2 < end) {
+      var firstByte = buf[i2];
       var codePoint = null;
       var bytesPerSequence = firstByte > 239 ? 4 : firstByte > 223 ? 3 : firstByte > 191 ? 2 : 1;
-      if (i + bytesPerSequence <= end) {
+      if (i2 + bytesPerSequence <= end) {
         var secondByte, thirdByte, fourthByte, tempCodePoint;
         switch (bytesPerSequence) {
           case 1:
@@ -702,7 +702,7 @@
             }
             break;
           case 2:
-            secondByte = buf[i + 1];
+            secondByte = buf[i2 + 1];
             if ((secondByte & 192) === 128) {
               tempCodePoint = (firstByte & 31) << 6 | secondByte & 63;
               if (tempCodePoint > 127) {
@@ -711,8 +711,8 @@
             }
             break;
           case 3:
-            secondByte = buf[i + 1];
-            thirdByte = buf[i + 2];
+            secondByte = buf[i2 + 1];
+            thirdByte = buf[i2 + 2];
             if ((secondByte & 192) === 128 && (thirdByte & 192) === 128) {
               tempCodePoint = (firstByte & 15) << 12 | (secondByte & 63) << 6 | thirdByte & 63;
               if (tempCodePoint > 2047 && (tempCodePoint < 55296 || tempCodePoint > 57343)) {
@@ -721,9 +721,9 @@
             }
             break;
           case 4:
-            secondByte = buf[i + 1];
-            thirdByte = buf[i + 2];
-            fourthByte = buf[i + 3];
+            secondByte = buf[i2 + 1];
+            thirdByte = buf[i2 + 2];
+            fourthByte = buf[i2 + 3];
             if ((secondByte & 192) === 128 && (thirdByte & 192) === 128 && (fourthByte & 192) === 128) {
               tempCodePoint = (firstByte & 15) << 18 | (secondByte & 63) << 12 | (thirdByte & 63) << 6 | fourthByte & 63;
               if (tempCodePoint > 65535 && tempCodePoint < 1114112) {
@@ -741,7 +741,7 @@
         codePoint = 56320 | codePoint & 1023;
       }
       res.push(codePoint);
-      i += bytesPerSequence;
+      i2 += bytesPerSequence;
     }
     return decodeCodePointsArray(res);
   }
@@ -751,25 +751,25 @@
       return String.fromCharCode.apply(String, codePoints);
     }
     var res = "";
-    var i = 0;
-    while (i < len) {
-      res += String.fromCharCode.apply(String, codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH));
+    var i2 = 0;
+    while (i2 < len) {
+      res += String.fromCharCode.apply(String, codePoints.slice(i2, i2 += MAX_ARGUMENTS_LENGTH));
     }
     return res;
   }
   function asciiSlice(buf, start, end) {
     var ret = "";
     end = Math.min(buf.length, end);
-    for (var i = start; i < end; ++i) {
-      ret += String.fromCharCode(buf[i] & 127);
+    for (var i2 = start; i2 < end; ++i2) {
+      ret += String.fromCharCode(buf[i2] & 127);
     }
     return ret;
   }
   function latin1Slice(buf, start, end) {
     var ret = "";
     end = Math.min(buf.length, end);
-    for (var i = start; i < end; ++i) {
-      ret += String.fromCharCode(buf[i]);
+    for (var i2 = start; i2 < end; ++i2) {
+      ret += String.fromCharCode(buf[i2]);
     }
     return ret;
   }
@@ -780,16 +780,16 @@
     if (!end || end < 0 || end > len)
       end = len;
     var out = "";
-    for (var i = start; i < end; ++i) {
-      out += toHex(buf[i]);
+    for (var i2 = start; i2 < end; ++i2) {
+      out += toHex(buf[i2]);
     }
     return out;
   }
   function utf16leSlice(buf, start, end) {
     var bytes = buf.slice(start, end);
     var res = "";
-    for (var i = 0; i < bytes.length; i += 2) {
-      res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256);
+    for (var i2 = 0; i2 < bytes.length; i2 += 2) {
+      res += String.fromCharCode(bytes[i2] + bytes[i2 + 1] * 256);
     }
     return res;
   }
@@ -810,15 +810,15 @@
   function objectWriteUInt16(buf, value, offset, littleEndian) {
     if (value < 0)
       value = 65535 + value + 1;
-    for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
-      buf[offset + i] = (value & 255 << 8 * (littleEndian ? i : 1 - i)) >>> (littleEndian ? i : 1 - i) * 8;
+    for (var i2 = 0, j2 = Math.min(buf.length - offset, 2); i2 < j2; ++i2) {
+      buf[offset + i2] = (value & 255 << 8 * (littleEndian ? i2 : 1 - i2)) >>> (littleEndian ? i2 : 1 - i2) * 8;
     }
   }
   function objectWriteUInt32(buf, value, offset, littleEndian) {
     if (value < 0)
       value = 4294967295 + value + 1;
-    for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
-      buf[offset + i] = value >>> (littleEndian ? i : 3 - i) * 8 & 255;
+    for (var i2 = 0, j2 = Math.min(buf.length - offset, 4); i2 < j2; ++i2) {
+      buf[offset + i2] = value >>> (littleEndian ? i2 : 3 - i2) * 8 & 255;
     }
   }
   function checkIEEE754(buf, value, offset, ext, max, min) {
@@ -855,10 +855,10 @@
       return str2.trim();
     return str2.replace(/^\s+|\s+$/g, "");
   }
-  function toHex(n) {
-    if (n < 16)
-      return "0" + n.toString(16);
-    return n.toString(16);
+  function toHex(n2) {
+    if (n2 < 16)
+      return "0" + n2.toString(16);
+    return n2.toString(16);
   }
   function utf8ToBytes(string2, units) {
     units = units || Infinity;
@@ -866,15 +866,15 @@
     var length = string2.length;
     var leadSurrogate = null;
     var bytes = [];
-    for (var i = 0; i < length; ++i) {
-      codePoint = string2.charCodeAt(i);
+    for (var i2 = 0; i2 < length; ++i2) {
+      codePoint = string2.charCodeAt(i2);
       if (codePoint > 55295 && codePoint < 57344) {
         if (!leadSurrogate) {
           if (codePoint > 56319) {
             if ((units -= 3) > -1)
               bytes.push(239, 191, 189);
             continue;
-          } else if (i + 1 === length) {
+          } else if (i2 + 1 === length) {
             if ((units -= 3) > -1)
               bytes.push(239, 191, 189);
             continue;
@@ -918,22 +918,22 @@
   }
   function asciiToBytes(str2) {
     var byteArray = [];
-    for (var i = 0; i < str2.length; ++i) {
-      byteArray.push(str2.charCodeAt(i) & 255);
+    for (var i2 = 0; i2 < str2.length; ++i2) {
+      byteArray.push(str2.charCodeAt(i2) & 255);
     }
     return byteArray;
   }
   function utf16leToBytes(str2, units) {
-    var c, hi, lo;
+    var c2, hi2, lo;
     var byteArray = [];
-    for (var i = 0; i < str2.length; ++i) {
+    for (var i2 = 0; i2 < str2.length; ++i2) {
       if ((units -= 2) < 0)
         break;
-      c = str2.charCodeAt(i);
-      hi = c >> 8;
-      lo = c % 256;
+      c2 = str2.charCodeAt(i2);
+      hi2 = c2 >> 8;
+      lo = c2 % 256;
       byteArray.push(lo);
-      byteArray.push(hi);
+      byteArray.push(hi2);
     }
     return byteArray;
   }
@@ -941,12 +941,12 @@
     return base64toByteArray(base64clean(str2));
   }
   function blitBuffer(src, dst, offset, length) {
-    for (var i = 0; i < length; ++i) {
-      if (i + offset >= dst.length || i >= src.length)
+    for (var i2 = 0; i2 < length; ++i2) {
+      if (i2 + offset >= dst.length || i2 >= src.length)
         break;
-      dst[i + offset] = src[i];
+      dst[i2 + offset] = src[i2];
     }
-    return i;
+    return i2;
   }
   function isnan(val) {
     return val !== val;
@@ -961,81 +961,81 @@
     return typeof obj.readFloatLE === "function" && typeof obj.slice === "function" && isFastBuffer(obj.slice(0, 0));
   }
   function ieee754read(buffer, offset, isLE, mLen, nBytes) {
-    var e, m;
+    var e3, m2;
     var eLen = nBytes * 8 - mLen - 1;
     var eMax = (1 << eLen) - 1;
     var eBias = eMax >> 1;
     var nBits = -7;
-    var i = isLE ? nBytes - 1 : 0;
-    var d = isLE ? -1 : 1;
-    var s = buffer[offset + i];
-    i += d;
-    e = s & (1 << -nBits) - 1;
-    s >>= -nBits;
+    var i2 = isLE ? nBytes - 1 : 0;
+    var d2 = isLE ? -1 : 1;
+    var s2 = buffer[offset + i2];
+    i2 += d2;
+    e3 = s2 & (1 << -nBits) - 1;
+    s2 >>= -nBits;
     nBits += eLen;
-    for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {
+    for (; nBits > 0; e3 = e3 * 256 + buffer[offset + i2], i2 += d2, nBits -= 8) {
     }
-    m = e & (1 << -nBits) - 1;
-    e >>= -nBits;
+    m2 = e3 & (1 << -nBits) - 1;
+    e3 >>= -nBits;
     nBits += mLen;
-    for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {
+    for (; nBits > 0; m2 = m2 * 256 + buffer[offset + i2], i2 += d2, nBits -= 8) {
     }
-    if (e === 0) {
-      e = 1 - eBias;
-    } else if (e === eMax) {
-      return m ? NaN : (s ? -1 : 1) * Infinity;
+    if (e3 === 0) {
+      e3 = 1 - eBias;
+    } else if (e3 === eMax) {
+      return m2 ? NaN : (s2 ? -1 : 1) * Infinity;
     } else {
-      m = m + Math.pow(2, mLen);
-      e = e - eBias;
+      m2 = m2 + Math.pow(2, mLen);
+      e3 = e3 - eBias;
     }
-    return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
+    return (s2 ? -1 : 1) * m2 * Math.pow(2, e3 - mLen);
   }
   function ieee754write(buffer, value, offset, isLE, mLen, nBytes) {
-    var e, m, c;
+    var e3, m2, c2;
     var eLen = nBytes * 8 - mLen - 1;
     var eMax = (1 << eLen) - 1;
     var eBias = eMax >> 1;
-    var rt = mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0;
-    var i = isLE ? 0 : nBytes - 1;
-    var d = isLE ? 1 : -1;
-    var s = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0;
+    var rt2 = mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0;
+    var i2 = isLE ? 0 : nBytes - 1;
+    var d2 = isLE ? 1 : -1;
+    var s2 = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0;
     value = Math.abs(value);
     if (isNaN(value) || value === Infinity) {
-      m = isNaN(value) ? 1 : 0;
-      e = eMax;
+      m2 = isNaN(value) ? 1 : 0;
+      e3 = eMax;
     } else {
-      e = Math.floor(Math.log(value) / Math.LN2);
-      if (value * (c = Math.pow(2, -e)) < 1) {
-        e--;
-        c *= 2;
+      e3 = Math.floor(Math.log(value) / Math.LN2);
+      if (value * (c2 = Math.pow(2, -e3)) < 1) {
+        e3--;
+        c2 *= 2;
       }
-      if (e + eBias >= 1) {
-        value += rt / c;
+      if (e3 + eBias >= 1) {
+        value += rt2 / c2;
       } else {
-        value += rt * Math.pow(2, 1 - eBias);
+        value += rt2 * Math.pow(2, 1 - eBias);
       }
-      if (value * c >= 2) {
-        e++;
-        c /= 2;
+      if (value * c2 >= 2) {
+        e3++;
+        c2 /= 2;
       }
-      if (e + eBias >= eMax) {
-        m = 0;
-        e = eMax;
-      } else if (e + eBias >= 1) {
-        m = (value * c - 1) * Math.pow(2, mLen);
-        e = e + eBias;
+      if (e3 + eBias >= eMax) {
+        m2 = 0;
+        e3 = eMax;
+      } else if (e3 + eBias >= 1) {
+        m2 = (value * c2 - 1) * Math.pow(2, mLen);
+        e3 = e3 + eBias;
       } else {
-        m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
-        e = 0;
+        m2 = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
+        e3 = 0;
       }
     }
-    for (; mLen >= 8; buffer[offset + i] = m & 255, i += d, m /= 256, mLen -= 8) {
+    for (; mLen >= 8; buffer[offset + i2] = m2 & 255, i2 += d2, m2 /= 256, mLen -= 8) {
     }
-    e = e << mLen | m;
+    e3 = e3 << mLen | m2;
     eLen += mLen;
-    for (; eLen > 0; buffer[offset + i] = e & 255, i += d, e /= 256, eLen -= 8) {
+    for (; eLen > 0; buffer[offset + i2] = e3 & 255, i2 += d2, e3 /= 256, eLen -= 8) {
     }
-    buffer[offset + i - d] |= s * 128;
+    buffer[offset + i2 - d2] |= s2 * 128;
   }
   var lookup, revLookup, Arr, inited, MAX_ARGUMENTS_LENGTH, INVALID_BASE64_RE;
   var init_Buffer = __esm({
@@ -1087,24 +1087,24 @@
       __name(checked, "checked");
       Buffer2.isBuffer = isBuffer;
       __name(internalIsBuffer, "internalIsBuffer");
-      Buffer2.compare = /* @__PURE__ */ __name(function compare(a, b) {
-        if (!internalIsBuffer(a) || !internalIsBuffer(b)) {
+      Buffer2.compare = /* @__PURE__ */ __name(function compare(a2, b2) {
+        if (!internalIsBuffer(a2) || !internalIsBuffer(b2)) {
           throw new TypeError("Arguments must be Buffers");
         }
-        if (a === b)
+        if (a2 === b2)
           return 0;
-        var x = a.length;
-        var y = b.length;
-        for (var i = 0, len = Math.min(x, y); i < len; ++i) {
-          if (a[i] !== b[i]) {
-            x = a[i];
-            y = b[i];
+        var x2 = a2.length;
+        var y2 = b2.length;
+        for (var i2 = 0, len = Math.min(x2, y2); i2 < len; ++i2) {
+          if (a2[i2] !== b2[i2]) {
+            x2 = a2[i2];
+            y2 = b2[i2];
             break;
           }
         }
-        if (x < y)
+        if (x2 < y2)
           return -1;
-        if (y < x)
+        if (y2 < x2)
           return 1;
         return 0;
       }, "compare");
@@ -1133,17 +1133,17 @@
         if (list.length === 0) {
           return Buffer2.alloc(0);
         }
-        var i;
+        var i2;
         if (length === void 0) {
           length = 0;
-          for (i = 0; i < list.length; ++i) {
-            length += list[i].length;
+          for (i2 = 0; i2 < list.length; ++i2) {
+            length += list[i2].length;
           }
         }
         var buffer = Buffer2.allocUnsafe(length);
         var pos = 0;
-        for (i = 0; i < list.length; ++i) {
-          var buf = list[i];
+        for (i2 = 0; i2 < list.length; ++i2) {
+          var buf = list[i2];
           if (!internalIsBuffer(buf)) {
             throw new TypeError('"list" argument must be an Array of Buffers');
           }
@@ -1162,8 +1162,8 @@
         if (len % 2 !== 0) {
           throw new RangeError("Buffer size must be a multiple of 16-bits");
         }
-        for (var i = 0; i < len; i += 2) {
-          swap(this, i, i + 1);
+        for (var i2 = 0; i2 < len; i2 += 2) {
+          swap(this, i2, i2 + 1);
         }
         return this;
       }, "swap16");
@@ -1172,9 +1172,9 @@
         if (len % 4 !== 0) {
           throw new RangeError("Buffer size must be a multiple of 32-bits");
         }
-        for (var i = 0; i < len; i += 4) {
-          swap(this, i, i + 3);
-          swap(this, i + 1, i + 2);
+        for (var i2 = 0; i2 < len; i2 += 4) {
+          swap(this, i2, i2 + 3);
+          swap(this, i2 + 1, i2 + 2);
         }
         return this;
       }, "swap32");
@@ -1183,11 +1183,11 @@
         if (len % 8 !== 0) {
           throw new RangeError("Buffer size must be a multiple of 64-bits");
         }
-        for (var i = 0; i < len; i += 8) {
-          swap(this, i, i + 7);
-          swap(this, i + 1, i + 6);
-          swap(this, i + 2, i + 5);
-          swap(this, i + 3, i + 4);
+        for (var i2 = 0; i2 < len; i2 += 8) {
+          swap(this, i2, i2 + 7);
+          swap(this, i2 + 1, i2 + 6);
+          swap(this, i2 + 2, i2 + 5);
+          swap(this, i2 + 3, i2 + 4);
         }
         return this;
       }, "swap64");
@@ -1199,12 +1199,12 @@
           return utf8Slice(this, 0, length);
         return slowToString.apply(this, arguments);
       }, "toString");
-      Buffer2.prototype.equals = /* @__PURE__ */ __name(function equals(b) {
-        if (!internalIsBuffer(b))
+      Buffer2.prototype.equals = /* @__PURE__ */ __name(function equals(b2) {
+        if (!internalIsBuffer(b2))
           throw new TypeError("Argument must be a Buffer");
-        if (this === b)
+        if (this === b2)
           return true;
-        return Buffer2.compare(this, b) === 0;
+        return Buffer2.compare(this, b2) === 0;
       }, "equals");
       Buffer2.prototype.compare = /* @__PURE__ */ __name(function compare2(target, start, end, thisStart, thisEnd) {
         if (!internalIsBuffer(target)) {
@@ -1240,21 +1240,21 @@
         thisEnd >>>= 0;
         if (this === target)
           return 0;
-        var x = thisEnd - thisStart;
-        var y = end - start;
-        var len = Math.min(x, y);
+        var x2 = thisEnd - thisStart;
+        var y2 = end - start;
+        var len = Math.min(x2, y2);
         var thisCopy = this.slice(thisStart, thisEnd);
         var targetCopy = target.slice(start, end);
-        for (var i = 0; i < len; ++i) {
-          if (thisCopy[i] !== targetCopy[i]) {
-            x = thisCopy[i];
-            y = targetCopy[i];
+        for (var i2 = 0; i2 < len; ++i2) {
+          if (thisCopy[i2] !== targetCopy[i2]) {
+            x2 = thisCopy[i2];
+            y2 = targetCopy[i2];
             break;
           }
         }
-        if (x < y)
+        if (x2 < y2)
           return -1;
-        if (y < x)
+        if (y2 < x2)
           return 1;
         return 0;
       }, "compare");
@@ -1374,8 +1374,8 @@
         } else {
           var sliceLen = end - start;
           newBuf = new Buffer2(sliceLen, void 0);
-          for (var i = 0; i < sliceLen; ++i) {
-            newBuf[i] = this[i + start];
+          for (var i2 = 0; i2 < sliceLen; ++i2) {
+            newBuf[i2] = this[i2 + start];
           }
         }
         return newBuf;
@@ -1388,9 +1388,9 @@
           checkOffset(offset, byteLength3, this.length);
         var val = this[offset];
         var mul = 1;
-        var i = 0;
-        while (++i < byteLength3 && (mul *= 256)) {
-          val += this[offset + i] * mul;
+        var i2 = 0;
+        while (++i2 < byteLength3 && (mul *= 256)) {
+          val += this[offset + i2] * mul;
         }
         return val;
       }, "readUIntLE");
@@ -1439,9 +1439,9 @@
           checkOffset(offset, byteLength3, this.length);
         var val = this[offset];
         var mul = 1;
-        var i = 0;
-        while (++i < byteLength3 && (mul *= 256)) {
-          val += this[offset + i] * mul;
+        var i2 = 0;
+        while (++i2 < byteLength3 && (mul *= 256)) {
+          val += this[offset + i2] * mul;
         }
         mul *= 128;
         if (val >= mul)
@@ -1453,11 +1453,11 @@
         byteLength3 = byteLength3 | 0;
         if (!noAssert)
           checkOffset(offset, byteLength3, this.length);
-        var i = byteLength3;
+        var i2 = byteLength3;
         var mul = 1;
-        var val = this[offset + --i];
-        while (i > 0 && (mul *= 256)) {
-          val += this[offset + --i] * mul;
+        var val = this[offset + --i2];
+        while (i2 > 0 && (mul *= 256)) {
+          val += this[offset + --i2] * mul;
         }
         mul *= 128;
         if (val >= mul)
@@ -1523,10 +1523,10 @@
           checkInt(this, value, offset, byteLength3, maxBytes, 0);
         }
         var mul = 1;
-        var i = 0;
+        var i2 = 0;
         this[offset] = value & 255;
-        while (++i < byteLength3 && (mul *= 256)) {
-          this[offset + i] = value / mul & 255;
+        while (++i2 < byteLength3 && (mul *= 256)) {
+          this[offset + i2] = value / mul & 255;
         }
         return offset + byteLength3;
       }, "writeUIntLE");
@@ -1538,11 +1538,11 @@
           var maxBytes = Math.pow(2, 8 * byteLength3) - 1;
           checkInt(this, value, offset, byteLength3, maxBytes, 0);
         }
-        var i = byteLength3 - 1;
+        var i2 = byteLength3 - 1;
         var mul = 1;
-        this[offset + i] = value & 255;
-        while (--i >= 0 && (mul *= 256)) {
-          this[offset + i] = value / mul & 255;
+        this[offset + i2] = value & 255;
+        while (--i2 >= 0 && (mul *= 256)) {
+          this[offset + i2] = value / mul & 255;
         }
         return offset + byteLength3;
       }, "writeUIntBE");
@@ -1621,15 +1621,15 @@
           var limit = Math.pow(2, 8 * byteLength3 - 1);
           checkInt(this, value, offset, byteLength3, limit - 1, -limit);
         }
-        var i = 0;
+        var i2 = 0;
         var mul = 1;
         var sub = 0;
         this[offset] = value & 255;
-        while (++i < byteLength3 && (mul *= 256)) {
-          if (value < 0 && sub === 0 && this[offset + i - 1] !== 0) {
+        while (++i2 < byteLength3 && (mul *= 256)) {
+          if (value < 0 && sub === 0 && this[offset + i2 - 1] !== 0) {
             sub = 1;
           }
-          this[offset + i] = (value / mul >> 0) - sub & 255;
+          this[offset + i2] = (value / mul >> 0) - sub & 255;
         }
         return offset + byteLength3;
       }, "writeIntLE");
@@ -1640,15 +1640,15 @@
           var limit = Math.pow(2, 8 * byteLength3 - 1);
           checkInt(this, value, offset, byteLength3, limit - 1, -limit);
         }
-        var i = byteLength3 - 1;
+        var i2 = byteLength3 - 1;
         var mul = 1;
         var sub = 0;
-        this[offset + i] = value & 255;
-        while (--i >= 0 && (mul *= 256)) {
-          if (value < 0 && sub === 0 && this[offset + i + 1] !== 0) {
+        this[offset + i2] = value & 255;
+        while (--i2 >= 0 && (mul *= 256)) {
+          if (value < 0 && sub === 0 && this[offset + i2 + 1] !== 0) {
             sub = 1;
           }
-          this[offset + i] = (value / mul >> 0) - sub & 255;
+          this[offset + i2] = (value / mul >> 0) - sub & 255;
         }
         return offset + byteLength3;
       }, "writeIntBE");
@@ -1765,14 +1765,14 @@
           end = target.length - targetStart + start;
         }
         var len = end - start;
-        var i;
+        var i2;
         if (this === target && start < targetStart && targetStart < end) {
-          for (i = len - 1; i >= 0; --i) {
-            target[i + targetStart] = this[i + start];
+          for (i2 = len - 1; i2 >= 0; --i2) {
+            target[i2 + targetStart] = this[i2 + start];
           }
         } else if (len < 1e3 || !Buffer2.TYPED_ARRAY_SUPPORT) {
-          for (i = 0; i < len; ++i) {
-            target[i + targetStart] = this[i + start];
+          for (i2 = 0; i2 < len; ++i2) {
+            target[i2 + targetStart] = this[i2 + start];
           }
         } else {
           Uint8Array.prototype.set.call(target, this.subarray(start, start + len), targetStart);
@@ -1814,16 +1814,16 @@
         end = end === void 0 ? this.length : end >>> 0;
         if (!val)
           val = 0;
-        var i;
+        var i2;
         if (typeof val === "number") {
-          for (i = start; i < end; ++i) {
-            this[i] = val;
+          for (i2 = start; i2 < end; ++i2) {
+            this[i2] = val;
           }
         } else {
           var bytes = internalIsBuffer(val) ? val : utf8ToBytes(new Buffer2(val, encoding).toString());
           var len = bytes.length;
-          for (i = 0; i < end - start; ++i) {
-            this[i + start] = bytes[i % len];
+          for (i2 = 0; i2 < end - start; ++i2) {
+            this[i2 + start] = bytes[i2 % len];
           }
         }
         return this;
@@ -2097,10 +2097,10 @@
             this.logger.debug({ module: module2, provider }, "module provides contract");
           }
         }
-        bindFunction(fn) {
-          const provides = getProvides(fn);
-          for (const p of provides) {
-            this.bindTo(p.contract, exports.ProviderType.Factory, fn);
+        bindFunction(fn2) {
+          const provides = getProvides(fn2);
+          for (const p2 of provides) {
+            this.bindTo(p2.contract, exports.ProviderType.Factory, fn2);
           }
         }
         bindPrototype(proto) {
@@ -2131,16 +2131,16 @@
           version: "3.1.0"
         }
       };
-      function contractName(c) {
-        if (typeof c === "function") {
-          return c.name;
+      function contractName(c2) {
+        if (typeof c2 === "function") {
+          return c2.name;
         } else {
-          return c;
+          return c2;
         }
       }
       __name(contractName, "contractName");
-      function isConstructor(it) {
-        return typeof it === "function";
+      function isConstructor(it2) {
+        return typeof it2 === "function";
       }
       __name(isConstructor, "isConstructor");
       var Container2 = class {
@@ -2192,8 +2192,8 @@
             throw new LoggerNotFoundError("container has no logger");
           }
           this.logger.debug({ version: VERSION_INFO }, "container debug");
-          for (const m of this.modules) {
-            m.debug();
+          for (const m2 of this.modules) {
+            m2.debug();
           }
         }
         getModules() {
@@ -2413,14 +2413,14 @@
   });
   function endianness() {
     if (typeof _endianness === "undefined") {
-      var a = new ArrayBuffer(2);
-      var b = new Uint8Array(a);
-      var c = new Uint16Array(a);
-      b[0] = 1;
-      b[1] = 2;
-      if (c[0] === 258) {
+      var a2 = new ArrayBuffer(2);
+      var b2 = new Uint8Array(a2);
+      var c2 = new Uint16Array(a2);
+      b2[0] = 1;
+      b2[1] = 2;
+      if (c2[0] === 258) {
         _endianness = "BE";
-      } else if (c[0] === 513) {
+      } else if (c2[0] === 513) {
         _endianness = "LE";
       } else {
         throw new Error("unable to figure out endianess");
@@ -2523,8 +2523,8 @@
         module.exports = polyfill;
       }
       if (polyfill) {
-        for (let k in polyfill) {
-          module.exports[k] = polyfill[k];
+        for (let k2 in polyfill) {
+          module.exports[k2] = polyfill[k2];
         }
       }
     }
@@ -2556,8 +2556,8 @@
         module.exports = polyfill;
       }
       if (polyfill) {
-        for (let k in polyfill) {
-          module.exports[k] = polyfill[k];
+        for (let k2 in polyfill) {
+          module.exports[k2] = polyfill[k2];
         }
       }
     }
@@ -2588,10 +2588,10 @@
     }
     try {
       return cachedSetTimeout2(fun, 0);
-    } catch (e) {
+    } catch (e3) {
       try {
         return cachedSetTimeout2.call(null, fun, 0);
-      } catch (e2) {
+      } catch (e4) {
         return cachedSetTimeout2.call(this, fun, 0);
       }
     }
@@ -2606,10 +2606,10 @@
     }
     try {
       return cachedClearTimeout2(marker);
-    } catch (e) {
+    } catch (e3) {
       try {
         return cachedClearTimeout2.call(null, marker);
-      } catch (e2) {
+      } catch (e4) {
         return cachedClearTimeout2.call(this, marker);
       }
     }
@@ -2653,8 +2653,8 @@
   function nextTick2(fun) {
     var args = new Array(arguments.length - 1);
     if (arguments.length > 1) {
-      for (var i = 1; i < arguments.length; i++) {
-        args[i - 1] = arguments[i];
+      for (var i2 = 1; i2 < arguments.length; i2++) {
+        args[i2 - 1] = arguments[i2];
       }
     }
     queue2.push(new Item2(fun, args));
@@ -2842,54 +2842,54 @@
     isUndefined: () => isUndefined,
     log: () => log
   });
-  function format(f) {
-    if (!isString(f)) {
+  function format(f2) {
+    if (!isString(f2)) {
       var objects = [];
-      for (var i = 0; i < arguments.length; i++) {
-        objects.push(inspect(arguments[i]));
+      for (var i2 = 0; i2 < arguments.length; i2++) {
+        objects.push(inspect(arguments[i2]));
       }
       return objects.join(" ");
     }
-    var i = 1;
+    var i2 = 1;
     var args = arguments;
     var len = args.length;
-    var str2 = String(f).replace(formatRegExp, function(x2) {
-      if (x2 === "%%")
+    var str2 = String(f2).replace(formatRegExp, function(x3) {
+      if (x3 === "%%")
         return "%";
-      if (i >= len)
-        return x2;
-      switch (x2) {
+      if (i2 >= len)
+        return x3;
+      switch (x3) {
         case "%s":
-          return String(args[i++]);
+          return String(args[i2++]);
         case "%d":
-          return Number(args[i++]);
+          return Number(args[i2++]);
         case "%j":
           try {
-            return JSON.stringify(args[i++]);
-          } catch (_23) {
+            return JSON.stringify(args[i2++]);
+          } catch (_24) {
             return "[Circular]";
           }
         default:
-          return x2;
+          return x3;
       }
     });
-    for (var x = args[i]; i < len; x = args[++i]) {
-      if (isNull(x) || !isObject(x)) {
-        str2 += " " + x;
+    for (var x2 = args[i2]; i2 < len; x2 = args[++i2]) {
+      if (isNull(x2) || !isObject(x2)) {
+        str2 += " " + x2;
       } else {
-        str2 += " " + inspect(x);
+        str2 += " " + inspect(x2);
       }
     }
     return str2;
   }
-  function deprecate(fn, msg) {
+  function deprecate(fn2, msg) {
     if (isUndefined(window.process)) {
       return function() {
-        return deprecate(fn, msg).apply(this, arguments);
+        return deprecate(fn2, msg).apply(this, arguments);
       };
     }
     if (process_default.noDeprecation === true) {
-      return fn;
+      return fn2;
     }
     var warned = false;
     function deprecated() {
@@ -2903,7 +2903,7 @@
         }
         warned = true;
       }
-      return fn.apply(this, arguments);
+      return fn2.apply(this, arguments);
     }
     __name(deprecated, "deprecated");
     return deprecated;
@@ -3011,8 +3011,8 @@
       braces = ["[", "]"];
     }
     if (isFunction(value)) {
-      var n = value.name ? ": " + value.name : "";
-      base = " [Function" + n + "]";
+      var n2 = value.name ? ": " + value.name : "";
+      base = " [Function" + n2 + "]";
     }
     if (isRegExp(value)) {
       base = " " + RegExp.prototype.toString.call(value);
@@ -3064,9 +3064,9 @@
   }
   function formatArray(ctx, value, recurseTimes, visibleKeys, keys2) {
     var output2 = [];
-    for (var i = 0, l = value.length; i < l; ++i) {
-      if (hasOwnProperty(value, String(i))) {
-        output2.push(formatProperty(ctx, value, recurseTimes, visibleKeys, String(i), true));
+    for (var i2 = 0, l2 = value.length; i2 < l2; ++i2) {
+      if (hasOwnProperty(value, String(i2))) {
+        output2.push(formatProperty(ctx, value, recurseTimes, visibleKeys, String(i2), true));
       } else {
         output2.push("");
       }
@@ -3145,8 +3145,8 @@
     }
     return braces[0] + base + " " + output2.join(", ") + " " + braces[1];
   }
-  function isArray(ar) {
-    return Array.isArray(ar);
+  function isArray(ar2) {
+    return Array.isArray(ar2);
   }
   function isBoolean(arg) {
     return typeof arg === "boolean";
@@ -3169,17 +3169,17 @@
   function isUndefined(arg) {
     return arg === void 0;
   }
-  function isRegExp(re) {
-    return isObject(re) && objectToString(re) === "[object RegExp]";
+  function isRegExp(re2) {
+    return isObject(re2) && objectToString(re2) === "[object RegExp]";
   }
   function isObject(arg) {
     return typeof arg === "object" && arg !== null;
   }
-  function isDate(d) {
-    return isObject(d) && objectToString(d) === "[object Date]";
+  function isDate(d2) {
+    return isObject(d2) && objectToString(d2) === "[object Date]";
   }
-  function isError(e) {
-    return isObject(e) && (objectToString(e) === "[object Error]" || e instanceof Error);
+  function isError(e3) {
+    return isObject(e3) && (objectToString(e3) === "[object Error]" || e3 instanceof Error);
   }
   function isFunction(arg) {
     return typeof arg === "function";
@@ -3190,20 +3190,20 @@
   function isBuffer2(maybeBuf) {
     return Buffer2.isBuffer(maybeBuf);
   }
-  function objectToString(o) {
-    return Object.prototype.toString.call(o);
+  function objectToString(o2) {
+    return Object.prototype.toString.call(o2);
   }
-  function pad(n) {
-    return n < 10 ? "0" + n.toString(10) : n.toString(10);
+  function pad(n2) {
+    return n2 < 10 ? "0" + n2.toString(10) : n2.toString(10);
   }
   function timestamp() {
-    var d = new Date();
+    var d2 = new Date();
     var time = [
-      pad(d.getHours()),
-      pad(d.getMinutes()),
-      pad(d.getSeconds())
+      pad(d2.getHours()),
+      pad(d2.getMinutes()),
+      pad(d2.getSeconds())
     ].join(":");
-    return [d.getDate(), months[d.getMonth()], time].join(" ");
+    return [d2.getDate(), months[d2.getMonth()], time].join(" ");
   }
   function log() {
     console.log("%s - %s", timestamp(), format.apply(null, arguments));
@@ -3212,9 +3212,9 @@
     if (!add || !isObject(add))
       return origin;
     var keys2 = Object.keys(add);
-    var i = keys2.length;
-    while (i--) {
-      origin[keys2[i]] = add[keys2[i]];
+    var i2 = keys2.length;
+    while (i2--) {
+      origin[keys2[i2]] = add[keys2[i2]];
     }
     return origin;
   }
@@ -3342,8 +3342,8 @@
         module.exports = polyfill;
       }
       if (polyfill) {
-        for (let k in polyfill) {
-          module.exports[k] = polyfill[k];
+        for (let k2 in polyfill) {
+          module.exports[k2] = polyfill[k2];
         }
       }
     }
@@ -3353,9 +3353,9 @@
   function init2() {
     inited2 = true;
     var code = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    for (var i = 0, len = code.length; i < len; ++i) {
-      lookup2[i] = code[i];
-      revLookup2[code.charCodeAt(i)] = i;
+    for (var i2 = 0, len = code.length; i2 < len; ++i2) {
+      lookup2[i2] = code[i2];
+      revLookup2[code.charCodeAt(i2)] = i2;
     }
     revLookup2["-".charCodeAt(0)] = 62;
     revLookup2["_".charCodeAt(0)] = 63;
@@ -3364,28 +3364,28 @@
     if (!inited2) {
       init2();
     }
-    var i, j, l, tmp, placeHolders, arr;
+    var i2, j2, l2, tmp, placeHolders, arr;
     var len = b64.length;
     if (len % 4 > 0) {
       throw new Error("Invalid string. Length must be a multiple of 4");
     }
     placeHolders = b64[len - 2] === "=" ? 2 : b64[len - 1] === "=" ? 1 : 0;
     arr = new Arr2(len * 3 / 4 - placeHolders);
-    l = placeHolders > 0 ? len - 4 : len;
-    var L = 0;
-    for (i = 0, j = 0; i < l; i += 4, j += 3) {
-      tmp = revLookup2[b64.charCodeAt(i)] << 18 | revLookup2[b64.charCodeAt(i + 1)] << 12 | revLookup2[b64.charCodeAt(i + 2)] << 6 | revLookup2[b64.charCodeAt(i + 3)];
-      arr[L++] = tmp >> 16 & 255;
-      arr[L++] = tmp >> 8 & 255;
-      arr[L++] = tmp & 255;
+    l2 = placeHolders > 0 ? len - 4 : len;
+    var L2 = 0;
+    for (i2 = 0, j2 = 0; i2 < l2; i2 += 4, j2 += 3) {
+      tmp = revLookup2[b64.charCodeAt(i2)] << 18 | revLookup2[b64.charCodeAt(i2 + 1)] << 12 | revLookup2[b64.charCodeAt(i2 + 2)] << 6 | revLookup2[b64.charCodeAt(i2 + 3)];
+      arr[L2++] = tmp >> 16 & 255;
+      arr[L2++] = tmp >> 8 & 255;
+      arr[L2++] = tmp & 255;
     }
     if (placeHolders === 2) {
-      tmp = revLookup2[b64.charCodeAt(i)] << 2 | revLookup2[b64.charCodeAt(i + 1)] >> 4;
-      arr[L++] = tmp & 255;
+      tmp = revLookup2[b64.charCodeAt(i2)] << 2 | revLookup2[b64.charCodeAt(i2 + 1)] >> 4;
+      arr[L2++] = tmp & 255;
     } else if (placeHolders === 1) {
-      tmp = revLookup2[b64.charCodeAt(i)] << 10 | revLookup2[b64.charCodeAt(i + 1)] << 4 | revLookup2[b64.charCodeAt(i + 2)] >> 2;
-      arr[L++] = tmp >> 8 & 255;
-      arr[L++] = tmp & 255;
+      tmp = revLookup2[b64.charCodeAt(i2)] << 10 | revLookup2[b64.charCodeAt(i2 + 1)] << 4 | revLookup2[b64.charCodeAt(i2 + 2)] >> 2;
+      arr[L2++] = tmp >> 8 & 255;
+      arr[L2++] = tmp & 255;
     }
     return arr;
   }
@@ -3395,8 +3395,8 @@
   function encodeChunk(uint8, start, end) {
     var tmp;
     var output2 = [];
-    for (var i = start; i < end; i += 3) {
-      tmp = (uint8[i] << 16) + (uint8[i + 1] << 8) + uint8[i + 2];
+    for (var i2 = start; i2 < end; i2 += 3) {
+      tmp = (uint8[i2] << 16) + (uint8[i2 + 1] << 8) + uint8[i2 + 2];
       output2.push(tripletToBase64(tmp));
     }
     return output2.join("");
@@ -3411,8 +3411,8 @@
     var output2 = "";
     var parts = [];
     var maxChunkLength = 16383;
-    for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
-      parts.push(encodeChunk(uint8, i, i + maxChunkLength > len2 ? len2 : i + maxChunkLength));
+    for (var i2 = 0, len2 = len - extraBytes; i2 < len2; i2 += maxChunkLength) {
+      parts.push(encodeChunk(uint8, i2, i2 + maxChunkLength > len2 ? len2 : i2 + maxChunkLength));
     }
     if (extraBytes === 1) {
       tmp = uint8[len - 1];
@@ -3430,81 +3430,81 @@
     return parts.join("");
   }
   function read(buffer, offset, isLE, mLen, nBytes) {
-    var e, m;
+    var e3, m2;
     var eLen = nBytes * 8 - mLen - 1;
     var eMax = (1 << eLen) - 1;
     var eBias = eMax >> 1;
     var nBits = -7;
-    var i = isLE ? nBytes - 1 : 0;
-    var d = isLE ? -1 : 1;
-    var s = buffer[offset + i];
-    i += d;
-    e = s & (1 << -nBits) - 1;
-    s >>= -nBits;
+    var i2 = isLE ? nBytes - 1 : 0;
+    var d2 = isLE ? -1 : 1;
+    var s2 = buffer[offset + i2];
+    i2 += d2;
+    e3 = s2 & (1 << -nBits) - 1;
+    s2 >>= -nBits;
     nBits += eLen;
-    for (; nBits > 0; e = e * 256 + buffer[offset + i], i += d, nBits -= 8) {
+    for (; nBits > 0; e3 = e3 * 256 + buffer[offset + i2], i2 += d2, nBits -= 8) {
     }
-    m = e & (1 << -nBits) - 1;
-    e >>= -nBits;
+    m2 = e3 & (1 << -nBits) - 1;
+    e3 >>= -nBits;
     nBits += mLen;
-    for (; nBits > 0; m = m * 256 + buffer[offset + i], i += d, nBits -= 8) {
+    for (; nBits > 0; m2 = m2 * 256 + buffer[offset + i2], i2 += d2, nBits -= 8) {
     }
-    if (e === 0) {
-      e = 1 - eBias;
-    } else if (e === eMax) {
-      return m ? NaN : (s ? -1 : 1) * Infinity;
+    if (e3 === 0) {
+      e3 = 1 - eBias;
+    } else if (e3 === eMax) {
+      return m2 ? NaN : (s2 ? -1 : 1) * Infinity;
     } else {
-      m = m + Math.pow(2, mLen);
-      e = e - eBias;
+      m2 = m2 + Math.pow(2, mLen);
+      e3 = e3 - eBias;
     }
-    return (s ? -1 : 1) * m * Math.pow(2, e - mLen);
+    return (s2 ? -1 : 1) * m2 * Math.pow(2, e3 - mLen);
   }
   function write2(buffer, value, offset, isLE, mLen, nBytes) {
-    var e, m, c;
+    var e3, m2, c2;
     var eLen = nBytes * 8 - mLen - 1;
     var eMax = (1 << eLen) - 1;
     var eBias = eMax >> 1;
-    var rt = mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0;
-    var i = isLE ? 0 : nBytes - 1;
-    var d = isLE ? 1 : -1;
-    var s = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0;
+    var rt2 = mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0;
+    var i2 = isLE ? 0 : nBytes - 1;
+    var d2 = isLE ? 1 : -1;
+    var s2 = value < 0 || value === 0 && 1 / value < 0 ? 1 : 0;
     value = Math.abs(value);
     if (isNaN(value) || value === Infinity) {
-      m = isNaN(value) ? 1 : 0;
-      e = eMax;
+      m2 = isNaN(value) ? 1 : 0;
+      e3 = eMax;
     } else {
-      e = Math.floor(Math.log(value) / Math.LN2);
-      if (value * (c = Math.pow(2, -e)) < 1) {
-        e--;
-        c *= 2;
+      e3 = Math.floor(Math.log(value) / Math.LN2);
+      if (value * (c2 = Math.pow(2, -e3)) < 1) {
+        e3--;
+        c2 *= 2;
       }
-      if (e + eBias >= 1) {
-        value += rt / c;
+      if (e3 + eBias >= 1) {
+        value += rt2 / c2;
       } else {
-        value += rt * Math.pow(2, 1 - eBias);
+        value += rt2 * Math.pow(2, 1 - eBias);
       }
-      if (value * c >= 2) {
-        e++;
-        c /= 2;
+      if (value * c2 >= 2) {
+        e3++;
+        c2 /= 2;
       }
-      if (e + eBias >= eMax) {
-        m = 0;
-        e = eMax;
-      } else if (e + eBias >= 1) {
-        m = (value * c - 1) * Math.pow(2, mLen);
-        e = e + eBias;
+      if (e3 + eBias >= eMax) {
+        m2 = 0;
+        e3 = eMax;
+      } else if (e3 + eBias >= 1) {
+        m2 = (value * c2 - 1) * Math.pow(2, mLen);
+        e3 = e3 + eBias;
       } else {
-        m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
-        e = 0;
+        m2 = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
+        e3 = 0;
       }
     }
-    for (; mLen >= 8; buffer[offset + i] = m & 255, i += d, m /= 256, mLen -= 8) {
+    for (; mLen >= 8; buffer[offset + i2] = m2 & 255, i2 += d2, m2 /= 256, mLen -= 8) {
     }
-    e = e << mLen | m;
+    e3 = e3 << mLen | m2;
     eLen += mLen;
-    for (; eLen > 0; buffer[offset + i] = e & 255, i += d, e /= 256, eLen -= 8) {
+    for (; eLen > 0; buffer[offset + i2] = e3 & 255, i2 += d2, e3 /= 256, eLen -= 8) {
     }
-    buffer[offset + i - d] |= s * 128;
+    buffer[offset + i2 - d2] |= s2 * 128;
   }
   function kMaxLength2() {
     return Buffer3.TYPED_ARRAY_SUPPORT ? 2147483647 : 1073741823;
@@ -3569,8 +3569,8 @@
     assertSize2(size);
     that = createBuffer2(that, size < 0 ? 0 : checked2(size) | 0);
     if (!Buffer3.TYPED_ARRAY_SUPPORT) {
-      for (var i = 0; i < size; ++i) {
-        that[i] = 0;
+      for (var i2 = 0; i2 < size; ++i2) {
+        that[i2] = 0;
       }
     }
     return that;
@@ -3593,8 +3593,8 @@
   function fromArrayLike2(that, array) {
     var length = array.length < 0 ? 0 : checked2(array.length) | 0;
     that = createBuffer2(that, length);
-    for (var i = 0; i < length; i += 1) {
-      that[i] = array[i] & 255;
+    for (var i2 = 0; i2 < length; i2 += 1) {
+      that[i2] = array[i2] & 255;
     }
     return that;
   }
@@ -3650,8 +3650,8 @@
     }
     return length | 0;
   }
-  function internalIsBuffer2(b) {
-    return !!(b != null && b._isBuffer);
+  function internalIsBuffer2(b2) {
+    return !!(b2 != null && b2._isBuffer);
   }
   function byteLength2(string2, encoding) {
     if (internalIsBuffer2(string2)) {
@@ -3742,10 +3742,10 @@
       }
     }
   }
-  function swap2(b, n, m) {
-    var i = b[n];
-    b[n] = b[m];
-    b[m] = i;
+  function swap2(b2, n2, m2) {
+    var i2 = b2[n2];
+    b2[n2] = b2[m2];
+    b2[m2] = i2;
   }
   function bidirectionalIndexOf2(buffer, val, byteOffset, encoding, dir) {
     if (buffer.length === 0)
@@ -3812,42 +3812,42 @@
         byteOffset /= 2;
       }
     }
-    function read2(buf, i2) {
+    function read2(buf, i3) {
       if (indexSize === 1) {
-        return buf[i2];
+        return buf[i3];
       } else {
-        return buf.readUInt16BE(i2 * indexSize);
+        return buf.readUInt16BE(i3 * indexSize);
       }
     }
     __name(read2, "read");
-    var i;
+    var i2;
     if (dir) {
       var foundIndex = -1;
-      for (i = byteOffset; i < arrLength; i++) {
-        if (read2(arr, i) === read2(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+      for (i2 = byteOffset; i2 < arrLength; i2++) {
+        if (read2(arr, i2) === read2(val, foundIndex === -1 ? 0 : i2 - foundIndex)) {
           if (foundIndex === -1)
-            foundIndex = i;
-          if (i - foundIndex + 1 === valLength)
+            foundIndex = i2;
+          if (i2 - foundIndex + 1 === valLength)
             return foundIndex * indexSize;
         } else {
           if (foundIndex !== -1)
-            i -= i - foundIndex;
+            i2 -= i2 - foundIndex;
           foundIndex = -1;
         }
       }
     } else {
       if (byteOffset + valLength > arrLength)
         byteOffset = arrLength - valLength;
-      for (i = byteOffset; i >= 0; i--) {
+      for (i2 = byteOffset; i2 >= 0; i2--) {
         var found = true;
-        for (var j = 0; j < valLength; j++) {
-          if (read2(arr, i + j) !== read2(val, j)) {
+        for (var j2 = 0; j2 < valLength; j2++) {
+          if (read2(arr, i2 + j2) !== read2(val, j2)) {
             found = false;
             break;
           }
         }
         if (found)
-          return i;
+          return i2;
       }
     }
     return -1;
@@ -3869,13 +3869,13 @@
     if (length > strLen / 2) {
       length = strLen / 2;
     }
-    for (var i = 0; i < length; ++i) {
-      var parsed = parseInt(string2.substr(i * 2, 2), 16);
+    for (var i2 = 0; i2 < length; ++i2) {
+      var parsed = parseInt(string2.substr(i2 * 2, 2), 16);
       if (isNaN(parsed))
-        return i;
-      buf[offset + i] = parsed;
+        return i2;
+      buf[offset + i2] = parsed;
     }
-    return i;
+    return i2;
   }
   function utf8Write2(buf, string2, offset, length) {
     return blitBuffer2(utf8ToBytes2(string2, buf.length - offset), buf, offset, length);
@@ -3902,12 +3902,12 @@
   function utf8Slice2(buf, start, end) {
     end = Math.min(buf.length, end);
     var res = [];
-    var i = start;
-    while (i < end) {
-      var firstByte = buf[i];
+    var i2 = start;
+    while (i2 < end) {
+      var firstByte = buf[i2];
       var codePoint = null;
       var bytesPerSequence = firstByte > 239 ? 4 : firstByte > 223 ? 3 : firstByte > 191 ? 2 : 1;
-      if (i + bytesPerSequence <= end) {
+      if (i2 + bytesPerSequence <= end) {
         var secondByte, thirdByte, fourthByte, tempCodePoint;
         switch (bytesPerSequence) {
           case 1:
@@ -3916,7 +3916,7 @@
             }
             break;
           case 2:
-            secondByte = buf[i + 1];
+            secondByte = buf[i2 + 1];
             if ((secondByte & 192) === 128) {
               tempCodePoint = (firstByte & 31) << 6 | secondByte & 63;
               if (tempCodePoint > 127) {
@@ -3925,8 +3925,8 @@
             }
             break;
           case 3:
-            secondByte = buf[i + 1];
-            thirdByte = buf[i + 2];
+            secondByte = buf[i2 + 1];
+            thirdByte = buf[i2 + 2];
             if ((secondByte & 192) === 128 && (thirdByte & 192) === 128) {
               tempCodePoint = (firstByte & 15) << 12 | (secondByte & 63) << 6 | thirdByte & 63;
               if (tempCodePoint > 2047 && (tempCodePoint < 55296 || tempCodePoint > 57343)) {
@@ -3935,9 +3935,9 @@
             }
             break;
           case 4:
-            secondByte = buf[i + 1];
-            thirdByte = buf[i + 2];
-            fourthByte = buf[i + 3];
+            secondByte = buf[i2 + 1];
+            thirdByte = buf[i2 + 2];
+            fourthByte = buf[i2 + 3];
             if ((secondByte & 192) === 128 && (thirdByte & 192) === 128 && (fourthByte & 192) === 128) {
               tempCodePoint = (firstByte & 15) << 18 | (secondByte & 63) << 12 | (thirdByte & 63) << 6 | fourthByte & 63;
               if (tempCodePoint > 65535 && tempCodePoint < 1114112) {
@@ -3955,7 +3955,7 @@
         codePoint = 56320 | codePoint & 1023;
       }
       res.push(codePoint);
-      i += bytesPerSequence;
+      i2 += bytesPerSequence;
     }
     return decodeCodePointsArray2(res);
   }
@@ -3965,25 +3965,25 @@
       return String.fromCharCode.apply(String, codePoints);
     }
     var res = "";
-    var i = 0;
-    while (i < len) {
-      res += String.fromCharCode.apply(String, codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH2));
+    var i2 = 0;
+    while (i2 < len) {
+      res += String.fromCharCode.apply(String, codePoints.slice(i2, i2 += MAX_ARGUMENTS_LENGTH2));
     }
     return res;
   }
   function asciiSlice2(buf, start, end) {
     var ret = "";
     end = Math.min(buf.length, end);
-    for (var i = start; i < end; ++i) {
-      ret += String.fromCharCode(buf[i] & 127);
+    for (var i2 = start; i2 < end; ++i2) {
+      ret += String.fromCharCode(buf[i2] & 127);
     }
     return ret;
   }
   function latin1Slice2(buf, start, end) {
     var ret = "";
     end = Math.min(buf.length, end);
-    for (var i = start; i < end; ++i) {
-      ret += String.fromCharCode(buf[i]);
+    for (var i2 = start; i2 < end; ++i2) {
+      ret += String.fromCharCode(buf[i2]);
     }
     return ret;
   }
@@ -3994,16 +3994,16 @@
     if (!end || end < 0 || end > len)
       end = len;
     var out = "";
-    for (var i = start; i < end; ++i) {
-      out += toHex2(buf[i]);
+    for (var i2 = start; i2 < end; ++i2) {
+      out += toHex2(buf[i2]);
     }
     return out;
   }
   function utf16leSlice2(buf, start, end) {
     var bytes = buf.slice(start, end);
     var res = "";
-    for (var i = 0; i < bytes.length; i += 2) {
-      res += String.fromCharCode(bytes[i] + bytes[i + 1] * 256);
+    for (var i2 = 0; i2 < bytes.length; i2 += 2) {
+      res += String.fromCharCode(bytes[i2] + bytes[i2 + 1] * 256);
     }
     return res;
   }
@@ -4024,15 +4024,15 @@
   function objectWriteUInt162(buf, value, offset, littleEndian) {
     if (value < 0)
       value = 65535 + value + 1;
-    for (var i = 0, j = Math.min(buf.length - offset, 2); i < j; ++i) {
-      buf[offset + i] = (value & 255 << 8 * (littleEndian ? i : 1 - i)) >>> (littleEndian ? i : 1 - i) * 8;
+    for (var i2 = 0, j2 = Math.min(buf.length - offset, 2); i2 < j2; ++i2) {
+      buf[offset + i2] = (value & 255 << 8 * (littleEndian ? i2 : 1 - i2)) >>> (littleEndian ? i2 : 1 - i2) * 8;
     }
   }
   function objectWriteUInt322(buf, value, offset, littleEndian) {
     if (value < 0)
       value = 4294967295 + value + 1;
-    for (var i = 0, j = Math.min(buf.length - offset, 4); i < j; ++i) {
-      buf[offset + i] = value >>> (littleEndian ? i : 3 - i) * 8 & 255;
+    for (var i2 = 0, j2 = Math.min(buf.length - offset, 4); i2 < j2; ++i2) {
+      buf[offset + i2] = value >>> (littleEndian ? i2 : 3 - i2) * 8 & 255;
     }
   }
   function checkIEEE7542(buf, value, offset, ext, max, min) {
@@ -4069,10 +4069,10 @@
       return str2.trim();
     return str2.replace(/^\s+|\s+$/g, "");
   }
-  function toHex2(n) {
-    if (n < 16)
-      return "0" + n.toString(16);
-    return n.toString(16);
+  function toHex2(n2) {
+    if (n2 < 16)
+      return "0" + n2.toString(16);
+    return n2.toString(16);
   }
   function utf8ToBytes2(string2, units) {
     units = units || Infinity;
@@ -4080,15 +4080,15 @@
     var length = string2.length;
     var leadSurrogate = null;
     var bytes = [];
-    for (var i = 0; i < length; ++i) {
-      codePoint = string2.charCodeAt(i);
+    for (var i2 = 0; i2 < length; ++i2) {
+      codePoint = string2.charCodeAt(i2);
       if (codePoint > 55295 && codePoint < 57344) {
         if (!leadSurrogate) {
           if (codePoint > 56319) {
             if ((units -= 3) > -1)
               bytes.push(239, 191, 189);
             continue;
-          } else if (i + 1 === length) {
+          } else if (i2 + 1 === length) {
             if ((units -= 3) > -1)
               bytes.push(239, 191, 189);
             continue;
@@ -4132,22 +4132,22 @@
   }
   function asciiToBytes2(str2) {
     var byteArray = [];
-    for (var i = 0; i < str2.length; ++i) {
-      byteArray.push(str2.charCodeAt(i) & 255);
+    for (var i2 = 0; i2 < str2.length; ++i2) {
+      byteArray.push(str2.charCodeAt(i2) & 255);
     }
     return byteArray;
   }
   function utf16leToBytes2(str2, units) {
-    var c, hi, lo;
+    var c2, hi2, lo;
     var byteArray = [];
-    for (var i = 0; i < str2.length; ++i) {
+    for (var i2 = 0; i2 < str2.length; ++i2) {
       if ((units -= 2) < 0)
         break;
-      c = str2.charCodeAt(i);
-      hi = c >> 8;
-      lo = c % 256;
+      c2 = str2.charCodeAt(i2);
+      hi2 = c2 >> 8;
+      lo = c2 % 256;
       byteArray.push(lo);
-      byteArray.push(hi);
+      byteArray.push(hi2);
     }
     return byteArray;
   }
@@ -4155,12 +4155,12 @@
     return toByteArray(base64clean2(str2));
   }
   function blitBuffer2(src, dst, offset, length) {
-    for (var i = 0; i < length; ++i) {
-      if (i + offset >= dst.length || i >= src.length)
+    for (var i2 = 0; i2 < length; ++i2) {
+      if (i2 + offset >= dst.length || i2 >= src.length)
         break;
-      dst[i + offset] = src[i];
+      dst[i2 + offset] = src[i2];
     }
-    return i;
+    return i2;
   }
   function isnan2(val) {
     return val !== val;
@@ -4232,24 +4232,24 @@
       __name(checked2, "checked");
       Buffer3.isBuffer = isBuffer3;
       __name(internalIsBuffer2, "internalIsBuffer");
-      Buffer3.compare = /* @__PURE__ */ __name(function compare3(a, b) {
-        if (!internalIsBuffer2(a) || !internalIsBuffer2(b)) {
+      Buffer3.compare = /* @__PURE__ */ __name(function compare3(a2, b2) {
+        if (!internalIsBuffer2(a2) || !internalIsBuffer2(b2)) {
           throw new TypeError("Arguments must be Buffers");
         }
-        if (a === b)
+        if (a2 === b2)
           return 0;
-        var x = a.length;
-        var y = b.length;
-        for (var i = 0, len = Math.min(x, y); i < len; ++i) {
-          if (a[i] !== b[i]) {
-            x = a[i];
-            y = b[i];
+        var x2 = a2.length;
+        var y2 = b2.length;
+        for (var i2 = 0, len = Math.min(x2, y2); i2 < len; ++i2) {
+          if (a2[i2] !== b2[i2]) {
+            x2 = a2[i2];
+            y2 = b2[i2];
             break;
           }
         }
-        if (x < y)
+        if (x2 < y2)
           return -1;
-        if (y < x)
+        if (y2 < x2)
           return 1;
         return 0;
       }, "compare");
@@ -4278,17 +4278,17 @@
         if (list.length === 0) {
           return Buffer3.alloc(0);
         }
-        var i;
+        var i2;
         if (length === void 0) {
           length = 0;
-          for (i = 0; i < list.length; ++i) {
-            length += list[i].length;
+          for (i2 = 0; i2 < list.length; ++i2) {
+            length += list[i2].length;
           }
         }
         var buffer = Buffer3.allocUnsafe(length);
         var pos = 0;
-        for (i = 0; i < list.length; ++i) {
-          var buf = list[i];
+        for (i2 = 0; i2 < list.length; ++i2) {
+          var buf = list[i2];
           if (!internalIsBuffer2(buf)) {
             throw new TypeError('"list" argument must be an Array of Buffers');
           }
@@ -4307,8 +4307,8 @@
         if (len % 2 !== 0) {
           throw new RangeError("Buffer size must be a multiple of 16-bits");
         }
-        for (var i = 0; i < len; i += 2) {
-          swap2(this, i, i + 1);
+        for (var i2 = 0; i2 < len; i2 += 2) {
+          swap2(this, i2, i2 + 1);
         }
         return this;
       }, "swap16");
@@ -4317,9 +4317,9 @@
         if (len % 4 !== 0) {
           throw new RangeError("Buffer size must be a multiple of 32-bits");
         }
-        for (var i = 0; i < len; i += 4) {
-          swap2(this, i, i + 3);
-          swap2(this, i + 1, i + 2);
+        for (var i2 = 0; i2 < len; i2 += 4) {
+          swap2(this, i2, i2 + 3);
+          swap2(this, i2 + 1, i2 + 2);
         }
         return this;
       }, "swap32");
@@ -4328,11 +4328,11 @@
         if (len % 8 !== 0) {
           throw new RangeError("Buffer size must be a multiple of 64-bits");
         }
-        for (var i = 0; i < len; i += 8) {
-          swap2(this, i, i + 7);
-          swap2(this, i + 1, i + 6);
-          swap2(this, i + 2, i + 5);
-          swap2(this, i + 3, i + 4);
+        for (var i2 = 0; i2 < len; i2 += 8) {
+          swap2(this, i2, i2 + 7);
+          swap2(this, i2 + 1, i2 + 6);
+          swap2(this, i2 + 2, i2 + 5);
+          swap2(this, i2 + 3, i2 + 4);
         }
         return this;
       }, "swap64");
@@ -4344,12 +4344,12 @@
           return utf8Slice2(this, 0, length);
         return slowToString2.apply(this, arguments);
       }, "toString");
-      Buffer3.prototype.equals = /* @__PURE__ */ __name(function equals2(b) {
-        if (!internalIsBuffer2(b))
+      Buffer3.prototype.equals = /* @__PURE__ */ __name(function equals2(b2) {
+        if (!internalIsBuffer2(b2))
           throw new TypeError("Argument must be a Buffer");
-        if (this === b)
+        if (this === b2)
           return true;
-        return Buffer3.compare(this, b) === 0;
+        return Buffer3.compare(this, b2) === 0;
       }, "equals");
       Buffer3.prototype.inspect = /* @__PURE__ */ __name(function inspect2() {
         var str2 = "";
@@ -4395,21 +4395,21 @@
         thisEnd >>>= 0;
         if (this === target)
           return 0;
-        var x = thisEnd - thisStart;
-        var y = end - start;
-        var len = Math.min(x, y);
+        var x2 = thisEnd - thisStart;
+        var y2 = end - start;
+        var len = Math.min(x2, y2);
         var thisCopy = this.slice(thisStart, thisEnd);
         var targetCopy = target.slice(start, end);
-        for (var i = 0; i < len; ++i) {
-          if (thisCopy[i] !== targetCopy[i]) {
-            x = thisCopy[i];
-            y = targetCopy[i];
+        for (var i2 = 0; i2 < len; ++i2) {
+          if (thisCopy[i2] !== targetCopy[i2]) {
+            x2 = thisCopy[i2];
+            y2 = targetCopy[i2];
             break;
           }
         }
-        if (x < y)
+        if (x2 < y2)
           return -1;
-        if (y < x)
+        if (y2 < x2)
           return 1;
         return 0;
       }, "compare");
@@ -4529,8 +4529,8 @@
         } else {
           var sliceLen = end - start;
           newBuf = new Buffer3(sliceLen, void 0);
-          for (var i = 0; i < sliceLen; ++i) {
-            newBuf[i] = this[i + start];
+          for (var i2 = 0; i2 < sliceLen; ++i2) {
+            newBuf[i2] = this[i2 + start];
           }
         }
         return newBuf;
@@ -4543,9 +4543,9 @@
           checkOffset2(offset, byteLength3, this.length);
         var val = this[offset];
         var mul = 1;
-        var i = 0;
-        while (++i < byteLength3 && (mul *= 256)) {
-          val += this[offset + i] * mul;
+        var i2 = 0;
+        while (++i2 < byteLength3 && (mul *= 256)) {
+          val += this[offset + i2] * mul;
         }
         return val;
       }, "readUIntLE");
@@ -4594,9 +4594,9 @@
           checkOffset2(offset, byteLength3, this.length);
         var val = this[offset];
         var mul = 1;
-        var i = 0;
-        while (++i < byteLength3 && (mul *= 256)) {
-          val += this[offset + i] * mul;
+        var i2 = 0;
+        while (++i2 < byteLength3 && (mul *= 256)) {
+          val += this[offset + i2] * mul;
         }
         mul *= 128;
         if (val >= mul)
@@ -4608,11 +4608,11 @@
         byteLength3 = byteLength3 | 0;
         if (!noAssert)
           checkOffset2(offset, byteLength3, this.length);
-        var i = byteLength3;
+        var i2 = byteLength3;
         var mul = 1;
-        var val = this[offset + --i];
-        while (i > 0 && (mul *= 256)) {
-          val += this[offset + --i] * mul;
+        var val = this[offset + --i2];
+        while (i2 > 0 && (mul *= 256)) {
+          val += this[offset + --i2] * mul;
         }
         mul *= 128;
         if (val >= mul)
@@ -4678,10 +4678,10 @@
           checkInt2(this, value, offset, byteLength3, maxBytes, 0);
         }
         var mul = 1;
-        var i = 0;
+        var i2 = 0;
         this[offset] = value & 255;
-        while (++i < byteLength3 && (mul *= 256)) {
-          this[offset + i] = value / mul & 255;
+        while (++i2 < byteLength3 && (mul *= 256)) {
+          this[offset + i2] = value / mul & 255;
         }
         return offset + byteLength3;
       }, "writeUIntLE");
@@ -4693,11 +4693,11 @@
           var maxBytes = Math.pow(2, 8 * byteLength3) - 1;
           checkInt2(this, value, offset, byteLength3, maxBytes, 0);
         }
-        var i = byteLength3 - 1;
+        var i2 = byteLength3 - 1;
         var mul = 1;
-        this[offset + i] = value & 255;
-        while (--i >= 0 && (mul *= 256)) {
-          this[offset + i] = value / mul & 255;
+        this[offset + i2] = value & 255;
+        while (--i2 >= 0 && (mul *= 256)) {
+          this[offset + i2] = value / mul & 255;
         }
         return offset + byteLength3;
       }, "writeUIntBE");
@@ -4776,15 +4776,15 @@
           var limit = Math.pow(2, 8 * byteLength3 - 1);
           checkInt2(this, value, offset, byteLength3, limit - 1, -limit);
         }
-        var i = 0;
+        var i2 = 0;
         var mul = 1;
         var sub = 0;
         this[offset] = value & 255;
-        while (++i < byteLength3 && (mul *= 256)) {
-          if (value < 0 && sub === 0 && this[offset + i - 1] !== 0) {
+        while (++i2 < byteLength3 && (mul *= 256)) {
+          if (value < 0 && sub === 0 && this[offset + i2 - 1] !== 0) {
             sub = 1;
           }
-          this[offset + i] = (value / mul >> 0) - sub & 255;
+          this[offset + i2] = (value / mul >> 0) - sub & 255;
         }
         return offset + byteLength3;
       }, "writeIntLE");
@@ -4795,15 +4795,15 @@
           var limit = Math.pow(2, 8 * byteLength3 - 1);
           checkInt2(this, value, offset, byteLength3, limit - 1, -limit);
         }
-        var i = byteLength3 - 1;
+        var i2 = byteLength3 - 1;
         var mul = 1;
         var sub = 0;
-        this[offset + i] = value & 255;
-        while (--i >= 0 && (mul *= 256)) {
-          if (value < 0 && sub === 0 && this[offset + i + 1] !== 0) {
+        this[offset + i2] = value & 255;
+        while (--i2 >= 0 && (mul *= 256)) {
+          if (value < 0 && sub === 0 && this[offset + i2 + 1] !== 0) {
             sub = 1;
           }
-          this[offset + i] = (value / mul >> 0) - sub & 255;
+          this[offset + i2] = (value / mul >> 0) - sub & 255;
         }
         return offset + byteLength3;
       }, "writeIntBE");
@@ -4920,14 +4920,14 @@
           end = target.length - targetStart + start;
         }
         var len = end - start;
-        var i;
+        var i2;
         if (this === target && start < targetStart && targetStart < end) {
-          for (i = len - 1; i >= 0; --i) {
-            target[i + targetStart] = this[i + start];
+          for (i2 = len - 1; i2 >= 0; --i2) {
+            target[i2 + targetStart] = this[i2 + start];
           }
         } else if (len < 1e3 || !Buffer3.TYPED_ARRAY_SUPPORT) {
-          for (i = 0; i < len; ++i) {
-            target[i + targetStart] = this[i + start];
+          for (i2 = 0; i2 < len; ++i2) {
+            target[i2 + targetStart] = this[i2 + start];
           }
         } else {
           Uint8Array.prototype.set.call(target, this.subarray(start, start + len), targetStart);
@@ -4969,16 +4969,16 @@
         end = end === void 0 ? this.length : end >>> 0;
         if (!val)
           val = 0;
-        var i;
+        var i2;
         if (typeof val === "number") {
-          for (i = start; i < end; ++i) {
-            this[i] = val;
+          for (i2 = start; i2 < end; ++i2) {
+            this[i2] = val;
           }
         } else {
           var bytes = internalIsBuffer2(val) ? val : utf8ToBytes2(new Buffer3(val, encoding).toString());
           var len = bytes.length;
-          for (i = 0; i < end - start; ++i) {
-            this[i + start] = bytes[i % len];
+          for (i2 = 0; i2 < end - start; ++i2) {
+            this[i2 + start] = bytes[i2 % len];
           }
         }
         return this;
@@ -5019,23 +5019,23 @@
     strictEqual: () => strictEqual,
     throws: () => throws
   });
-  function compare5(a, b) {
-    if (a === b) {
+  function compare5(a2, b2) {
+    if (a2 === b2) {
       return 0;
     }
-    var x = a.length;
-    var y = b.length;
-    for (var i = 0, len = Math.min(x, y); i < len; ++i) {
-      if (a[i] !== b[i]) {
-        x = a[i];
-        y = b[i];
+    var x2 = a2.length;
+    var y2 = b2.length;
+    for (var i2 = 0, len = Math.min(x2, y2); i2 < len; ++i2) {
+      if (a2[i2] !== b2[i2]) {
+        x2 = a2[i2];
+        y2 = b2[i2];
         break;
       }
     }
-    if (x < y) {
+    if (x2 < y2) {
       return -1;
     }
-    if (y < x) {
+    if (y2 < x2) {
       return 1;
     }
     return 0;
@@ -5117,11 +5117,11 @@
       }
     }
   }
-  function truncate(s, n) {
-    if (typeof s === "string") {
-      return s.length < n ? s : s.slice(0, n);
+  function truncate(s2, n2) {
+    if (typeof s2 === "string") {
+      return s2.length < n2 ? s2 : s2.slice(0, n2);
     } else {
-      return s;
+      return s2;
     }
   }
   function inspect3(something) {
@@ -5198,36 +5198,36 @@
   function isArguments(object) {
     return Object.prototype.toString.call(object) == "[object Arguments]";
   }
-  function objEquiv(a, b, strict, actualVisitedObjects) {
-    if (a === null || a === void 0 || b === null || b === void 0)
+  function objEquiv(a2, b2, strict, actualVisitedObjects) {
+    if (a2 === null || a2 === void 0 || b2 === null || b2 === void 0)
       return false;
-    if (isPrimitive(a) || isPrimitive(b))
-      return a === b;
-    if (strict && Object.getPrototypeOf(a) !== Object.getPrototypeOf(b))
+    if (isPrimitive(a2) || isPrimitive(b2))
+      return a2 === b2;
+    if (strict && Object.getPrototypeOf(a2) !== Object.getPrototypeOf(b2))
       return false;
-    var aIsArgs = isArguments(a);
-    var bIsArgs = isArguments(b);
+    var aIsArgs = isArguments(a2);
+    var bIsArgs = isArguments(b2);
     if (aIsArgs && !bIsArgs || !aIsArgs && bIsArgs)
       return false;
     if (aIsArgs) {
-      a = pSlice.call(a);
-      b = pSlice.call(b);
-      return _deepEqual(a, b, strict);
+      a2 = pSlice.call(a2);
+      b2 = pSlice.call(b2);
+      return _deepEqual(a2, b2, strict);
     }
-    var ka = objectKeys(a);
-    var kb = objectKeys(b);
-    var key, i;
-    if (ka.length !== kb.length)
+    var ka2 = objectKeys(a2);
+    var kb = objectKeys(b2);
+    var key, i2;
+    if (ka2.length !== kb.length)
       return false;
-    ka.sort();
+    ka2.sort();
     kb.sort();
-    for (i = ka.length - 1; i >= 0; i--) {
-      if (ka[i] !== kb[i])
+    for (i2 = ka2.length - 1; i2 >= 0; i2--) {
+      if (ka2[i2] !== kb[i2])
         return false;
     }
-    for (i = ka.length - 1; i >= 0; i--) {
-      key = ka[i];
-      if (!_deepEqual(a[key], b[key], strict, actualVisitedObjects))
+    for (i2 = ka2.length - 1; i2 >= 0; i2--) {
+      key = ka2[i2];
+      if (!_deepEqual(a2[key], b2[key], strict, actualVisitedObjects))
         return false;
     }
     return true;
@@ -5263,7 +5263,7 @@
       if (actual instanceof expected) {
         return true;
       }
-    } catch (e) {
+    } catch (e3) {
     }
     if (Error.isPrototypeOf(expected)) {
       return false;
@@ -5274,8 +5274,8 @@
     var error2;
     try {
       block();
-    } catch (e) {
-      error2 = e;
+    } catch (e3) {
+      error2 = e3;
     }
     return error2;
   }
@@ -5391,8 +5391,8 @@
         module.exports = polyfill;
       }
       if (polyfill) {
-        for (let k in polyfill) {
-          module.exports[k] = polyfill[k];
+        for (let k2 in polyfill) {
+          module.exports[k2] = polyfill[k2];
         }
       }
     }
@@ -5420,8 +5420,8 @@
     else {
       var len = handler.length;
       var listeners2 = arrayClone(handler, len);
-      for (var i = 0; i < len; ++i)
-        listeners2[i].call(self2);
+      for (var i2 = 0; i2 < len; ++i2)
+        listeners2[i2].call(self2);
     }
   }
   function emitOne(handler, isFn, self2, arg1) {
@@ -5430,8 +5430,8 @@
     else {
       var len = handler.length;
       var listeners2 = arrayClone(handler, len);
-      for (var i = 0; i < len; ++i)
-        listeners2[i].call(self2, arg1);
+      for (var i2 = 0; i2 < len; ++i2)
+        listeners2[i2].call(self2, arg1);
     }
   }
   function emitTwo(handler, isFn, self2, arg1, arg2) {
@@ -5440,8 +5440,8 @@
     else {
       var len = handler.length;
       var listeners2 = arrayClone(handler, len);
-      for (var i = 0; i < len; ++i)
-        listeners2[i].call(self2, arg1, arg2);
+      for (var i2 = 0; i2 < len; ++i2)
+        listeners2[i2].call(self2, arg1, arg2);
     }
   }
   function emitThree(handler, isFn, self2, arg1, arg2, arg3) {
@@ -5450,8 +5450,8 @@
     else {
       var len = handler.length;
       var listeners2 = arrayClone(handler, len);
-      for (var i = 0; i < len; ++i)
-        listeners2[i].call(self2, arg1, arg2, arg3);
+      for (var i2 = 0; i2 < len; ++i2)
+        listeners2[i2].call(self2, arg1, arg2, arg3);
     }
   }
   function emitMany(handler, isFn, self2, args) {
@@ -5460,12 +5460,12 @@
     else {
       var len = handler.length;
       var listeners2 = arrayClone(handler, len);
-      for (var i = 0; i < len; ++i)
-        listeners2[i].apply(self2, args);
+      for (var i2 = 0; i2 < len; ++i2)
+        listeners2[i2].apply(self2, args);
     }
   }
   function _addListener(target, type3, listener, prepend) {
-    var m;
+    var m2;
     var events;
     var existing;
     if (typeof listener !== "function")
@@ -5495,35 +5495,35 @@
         }
       }
       if (!existing.warned) {
-        m = $getMaxListeners(target);
-        if (m && m > 0 && existing.length > m) {
+        m2 = $getMaxListeners(target);
+        if (m2 && m2 > 0 && existing.length > m2) {
           existing.warned = true;
-          var w = new Error("Possible EventEmitter memory leak detected. " + existing.length + " " + type3 + " listeners added. Use emitter.setMaxListeners() to increase limit");
-          w.name = "MaxListenersExceededWarning";
-          w.emitter = target;
-          w.type = type3;
-          w.count = existing.length;
-          emitWarning(w);
+          var w2 = new Error("Possible EventEmitter memory leak detected. " + existing.length + " " + type3 + " listeners added. Use emitter.setMaxListeners() to increase limit");
+          w2.name = "MaxListenersExceededWarning";
+          w2.emitter = target;
+          w2.type = type3;
+          w2.count = existing.length;
+          emitWarning(w2);
         }
       }
     }
     return target;
   }
-  function emitWarning(e) {
-    typeof console.warn === "function" ? console.warn(e) : console.log(e);
+  function emitWarning(e3) {
+    typeof console.warn === "function" ? console.warn(e3) : console.log(e3);
   }
   function _onceWrap(target, type3, listener) {
     var fired = false;
-    function g() {
-      target.removeListener(type3, g);
+    function g2() {
+      target.removeListener(type3, g2);
       if (!fired) {
         fired = true;
         listener.apply(target, arguments);
       }
     }
-    __name(g, "g");
-    g.listener = listener;
-    return g;
+    __name(g2, "g");
+    g2.listener = listener;
+    return g2;
   }
   function listenerCount(type3) {
     var events = this._events;
@@ -5538,20 +5538,20 @@
     return 0;
   }
   function spliceOne(list, index) {
-    for (var i = index, k = i + 1, n = list.length; k < n; i += 1, k += 1)
-      list[i] = list[k];
+    for (var i2 = index, k2 = i2 + 1, n2 = list.length; k2 < n2; i2 += 1, k2 += 1)
+      list[i2] = list[k2];
     list.pop();
   }
-  function arrayClone(arr, i) {
-    var copy4 = new Array(i);
-    while (i--)
-      copy4[i] = arr[i];
+  function arrayClone(arr, i2) {
+    var copy4 = new Array(i2);
+    while (i2--)
+      copy4[i2] = arr[i2];
     return copy4;
   }
   function unwrapListeners(arr) {
     var ret = new Array(arr.length);
-    for (var i = 0; i < ret.length; ++i) {
-      ret[i] = arr[i].listener || arr[i];
+    for (var i2 = 0; i2 < ret.length; ++i2) {
+      ret[i2] = arr[i2].listener || arr[i2];
     }
     return ret;
   }
@@ -5584,10 +5584,10 @@
         }
         this._maxListeners = this._maxListeners || void 0;
       };
-      EventEmitter.prototype.setMaxListeners = /* @__PURE__ */ __name(function setMaxListeners(n) {
-        if (typeof n !== "number" || n < 0 || isNaN(n))
+      EventEmitter.prototype.setMaxListeners = /* @__PURE__ */ __name(function setMaxListeners(n2) {
+        if (typeof n2 !== "number" || n2 < 0 || isNaN(n2))
           throw new TypeError('"n" argument must be a positive number');
-        this._maxListeners = n;
+        this._maxListeners = n2;
         return this;
       }, "setMaxListeners");
       __name($getMaxListeners, "$getMaxListeners");
@@ -5600,7 +5600,7 @@
       __name(emitThree, "emitThree");
       __name(emitMany, "emitMany");
       EventEmitter.prototype.emit = /* @__PURE__ */ __name(function emit3(type3) {
-        var er, handler, len, args, i, events, domain2;
+        var er2, handler, len, args, i2, events, domain2;
         var needDomainExit = false;
         var doError = type3 === "error";
         events = this._events;
@@ -5610,19 +5610,19 @@
           return false;
         domain2 = this.domain;
         if (doError) {
-          er = arguments[1];
+          er2 = arguments[1];
           if (domain2) {
-            if (!er)
-              er = new Error('Uncaught, unspecified "error" event');
-            er.domainEmitter = this;
-            er.domain = domain2;
-            er.domainThrown = false;
-            domain2.emit("error", er);
-          } else if (er instanceof Error) {
-            throw er;
+            if (!er2)
+              er2 = new Error('Uncaught, unspecified "error" event');
+            er2.domainEmitter = this;
+            er2.domain = domain2;
+            er2.domainThrown = false;
+            domain2.emit("error", er2);
+          } else if (er2 instanceof Error) {
+            throw er2;
           } else {
-            var err = new Error('Uncaught, unspecified "error" event. (' + er + ")");
-            err.context = er;
+            var err = new Error('Uncaught, unspecified "error" event. (' + er2 + ")");
+            err.context = er2;
             throw err;
           }
           return false;
@@ -5647,8 +5647,8 @@
             break;
           default:
             args = new Array(len - 1);
-            for (i = 1; i < len; i++)
-              args[i - 1] = arguments[i];
+            for (i2 = 1; i2 < len; i2++)
+              args[i2 - 1] = arguments[i2];
             emitMany(handler, isFn, this, args);
         }
         if (needDomainExit)
@@ -5678,7 +5678,7 @@
         return this;
       }, "prependOnceListener");
       EventEmitter.prototype.removeListener = /* @__PURE__ */ __name(function removeListener3(type3, listener) {
-        var list, events, position, i, originalListener;
+        var list, events, position, i2, originalListener;
         if (typeof listener !== "function")
           throw new TypeError('"listener" argument must be a function');
         events = this._events;
@@ -5697,10 +5697,10 @@
           }
         } else if (typeof list !== "function") {
           position = -1;
-          for (i = list.length; i-- > 0; ) {
-            if (list[i] === listener || list[i].listener && list[i].listener === listener) {
-              originalListener = list[i].listener;
-              position = i;
+          for (i2 = list.length; i2-- > 0; ) {
+            if (list[i2] === listener || list[i2].listener && list[i2].listener === listener) {
+              originalListener = list[i2].listener;
+              position = i2;
               break;
             }
           }
@@ -5741,8 +5741,8 @@
         }
         if (arguments.length === 0) {
           var keys2 = Object.keys(events);
-          for (var i = 0, key; i < keys2.length; ++i) {
-            key = keys2[i];
+          for (var i2 = 0, key; i2 < keys2.length; ++i2) {
+            key = keys2[i2];
             if (key === "removeListener")
               continue;
             this.removeAllListeners(key);
@@ -5809,8 +5809,8 @@
         module.exports = polyfill;
       }
       if (polyfill) {
-        for (let k in polyfill) {
-          module.exports[k] = polyfill[k];
+        for (let k2 in polyfill) {
+          module.exports[k2] = polyfill[k2];
         }
       }
     }
@@ -5830,8 +5830,8 @@
       init_buffer2();
       buffer_list_default = BufferList;
       __name(BufferList, "BufferList");
-      BufferList.prototype.push = function(v) {
-        var entry = { data: v, next: null };
+      BufferList.prototype.push = function(v2) {
+        var entry = { data: v2, next: null };
         if (this.length > 0)
           this.tail.next = entry;
         else
@@ -5839,8 +5839,8 @@
         this.tail = entry;
         ++this.length;
       };
-      BufferList.prototype.unshift = function(v) {
-        var entry = { data: v, next: this.head };
+      BufferList.prototype.unshift = function(v2) {
+        var entry = { data: v2, next: this.head };
         if (this.length === 0)
           this.tail = entry;
         this.head = entry;
@@ -5861,28 +5861,28 @@
         this.head = this.tail = null;
         this.length = 0;
       };
-      BufferList.prototype.join = function(s) {
+      BufferList.prototype.join = function(s2) {
         if (this.length === 0)
           return "";
-        var p = this.head;
-        var ret = "" + p.data;
-        while (p = p.next) {
-          ret += s + p.data;
+        var p2 = this.head;
+        var ret = "" + p2.data;
+        while (p2 = p2.next) {
+          ret += s2 + p2.data;
         }
         return ret;
       };
-      BufferList.prototype.concat = function(n) {
+      BufferList.prototype.concat = function(n2) {
         if (this.length === 0)
           return Buffer3.alloc(0);
         if (this.length === 1)
           return this.head.data;
-        var ret = Buffer3.allocUnsafe(n >>> 0);
-        var p = this.head;
-        var i = 0;
-        while (p) {
-          p.data.copy(ret, i);
-          i += p.data.length;
-          p = p.next;
+        var ret = Buffer3.allocUnsafe(n2 >>> 0);
+        var p2 = this.head;
+        var i2 = 0;
+        while (p2) {
+          p2.data.copy(ret, i2);
+          i2 += p2.data.length;
+          p2 = p2.next;
         }
         return ret;
       };
@@ -5999,33 +5999,33 @@
         return charStr;
       };
       StringDecoder.prototype.detectIncompleteChar = function(buffer) {
-        var i = buffer.length >= 3 ? 3 : buffer.length;
-        for (; i > 0; i--) {
-          var c = buffer[buffer.length - i];
-          if (i == 1 && c >> 5 == 6) {
+        var i2 = buffer.length >= 3 ? 3 : buffer.length;
+        for (; i2 > 0; i2--) {
+          var c2 = buffer[buffer.length - i2];
+          if (i2 == 1 && c2 >> 5 == 6) {
             this.charLength = 2;
             break;
           }
-          if (i <= 2 && c >> 4 == 14) {
+          if (i2 <= 2 && c2 >> 4 == 14) {
             this.charLength = 3;
             break;
           }
-          if (i <= 3 && c >> 3 == 30) {
+          if (i2 <= 3 && c2 >> 3 == 30) {
             this.charLength = 4;
             break;
           }
         }
-        this.charReceived = i;
+        this.charReceived = i2;
       };
       StringDecoder.prototype.end = function(buffer) {
         var res = "";
         if (buffer && buffer.length)
           res = this.write(buffer);
         if (this.charReceived) {
-          var cr = this.charReceived;
+          var cr2 = this.charReceived;
           var buf = this.charBuffer;
           var enc = this.encoding;
-          res += buf.slice(0, cr).toString(enc);
+          res += buf.slice(0, cr2).toString(enc);
         }
         return res;
       };
@@ -6036,16 +6036,16 @@
   });
 
   // node_modules/rollup-plugin-node-polyfills/polyfills/readable-stream/readable.js
-  function prependListener2(emitter, event, fn) {
+  function prependListener2(emitter, event, fn2) {
     if (typeof emitter.prependListener === "function") {
-      return emitter.prependListener(event, fn);
+      return emitter.prependListener(event, fn2);
     } else {
       if (!emitter._events || !emitter._events[event])
-        emitter.on(event, fn);
+        emitter.on(event, fn2);
       else if (Array.isArray(emitter._events[event]))
-        emitter._events[event].unshift(fn);
+        emitter._events[event].unshift(fn2);
       else
-        emitter._events[event] = [fn, emitter._events[event]];
+        emitter._events[event] = [fn2, emitter._events[event]];
     }
   }
   function listenerCount2(emitter, type3) {
@@ -6094,19 +6094,19 @@
     events_default.call(this);
   }
   function readableAddChunk(stream, state, chunk, encoding, addToFront) {
-    var er = chunkInvalid(state, chunk);
-    if (er) {
-      stream.emit("error", er);
+    var er2 = chunkInvalid(state, chunk);
+    if (er2) {
+      stream.emit("error", er2);
     } else if (chunk === null) {
       state.reading = false;
       onEofChunk(stream, state);
     } else if (state.objectMode || chunk && chunk.length > 0) {
       if (state.ended && !addToFront) {
-        var e = new Error("stream.push() after EOF");
-        stream.emit("error", e);
+        var e3 = new Error("stream.push() after EOF");
+        stream.emit("error", e3);
       } else if (state.endEmitted && addToFront) {
-        var _e = new Error("stream.unshift() after end event");
-        stream.emit("error", _e);
+        var _e2 = new Error("stream.unshift() after end event");
+        stream.emit("error", _e2);
       } else {
         var skipAdd;
         if (state.decoder && !addToFront && !encoding) {
@@ -6139,35 +6139,35 @@
   function needMoreData(state) {
     return !state.ended && (state.needReadable || state.length < state.highWaterMark || state.length === 0);
   }
-  function computeNewHighWaterMark(n) {
-    if (n >= MAX_HWM) {
-      n = MAX_HWM;
+  function computeNewHighWaterMark(n2) {
+    if (n2 >= MAX_HWM) {
+      n2 = MAX_HWM;
     } else {
-      n--;
-      n |= n >>> 1;
-      n |= n >>> 2;
-      n |= n >>> 4;
-      n |= n >>> 8;
-      n |= n >>> 16;
-      n++;
+      n2--;
+      n2 |= n2 >>> 1;
+      n2 |= n2 >>> 2;
+      n2 |= n2 >>> 4;
+      n2 |= n2 >>> 8;
+      n2 |= n2 >>> 16;
+      n2++;
     }
-    return n;
+    return n2;
   }
-  function howMuchToRead(n, state) {
-    if (n <= 0 || state.length === 0 && state.ended)
+  function howMuchToRead(n2, state) {
+    if (n2 <= 0 || state.length === 0 && state.ended)
       return 0;
     if (state.objectMode)
       return 1;
-    if (n !== n) {
+    if (n2 !== n2) {
       if (state.flowing && state.length)
         return state.buffer.head.data.length;
       else
         return state.length;
     }
-    if (n > state.highWaterMark)
-      state.highWaterMark = computeNewHighWaterMark(n);
-    if (n <= state.length)
-      return n;
+    if (n2 > state.highWaterMark)
+      state.highWaterMark = computeNewHighWaterMark(n2);
+    if (n2 <= state.length)
+      return n2;
     if (!state.ended) {
       state.needReadable = true;
       return 0;
@@ -6175,11 +6175,11 @@
     return state.length;
   }
   function chunkInvalid(state, chunk) {
-    var er = null;
+    var er2 = null;
     if (!Buffer2.isBuffer(chunk) && typeof chunk !== "string" && chunk !== null && chunk !== void 0 && !state.objectMode) {
-      er = new TypeError("Invalid non-string/buffer chunk");
+      er2 = new TypeError("Invalid non-string/buffer chunk");
     }
-    return er;
+    return er2;
   }
   function onEofChunk(stream, state) {
     if (state.ended)
@@ -6269,13 +6269,13 @@
     while (state.flowing && stream.read() !== null) {
     }
   }
-  function fromList(n, state) {
+  function fromList(n2, state) {
     if (state.length === 0)
       return null;
     var ret;
     if (state.objectMode)
       ret = state.buffer.shift();
-    else if (!n || n >= state.length) {
+    else if (!n2 || n2 >= state.length) {
       if (state.decoder)
         ret = state.buffer.join("");
       else if (state.buffer.length === 1)
@@ -6284,80 +6284,80 @@
         ret = state.buffer.concat(state.length);
       state.buffer.clear();
     } else {
-      ret = fromListPartial(n, state.buffer, state.decoder);
+      ret = fromListPartial(n2, state.buffer, state.decoder);
     }
     return ret;
   }
-  function fromListPartial(n, list, hasStrings) {
+  function fromListPartial(n2, list, hasStrings) {
     var ret;
-    if (n < list.head.data.length) {
-      ret = list.head.data.slice(0, n);
-      list.head.data = list.head.data.slice(n);
-    } else if (n === list.head.data.length) {
+    if (n2 < list.head.data.length) {
+      ret = list.head.data.slice(0, n2);
+      list.head.data = list.head.data.slice(n2);
+    } else if (n2 === list.head.data.length) {
       ret = list.shift();
     } else {
-      ret = hasStrings ? copyFromBufferString(n, list) : copyFromBuffer(n, list);
+      ret = hasStrings ? copyFromBufferString(n2, list) : copyFromBuffer(n2, list);
     }
     return ret;
   }
-  function copyFromBufferString(n, list) {
-    var p = list.head;
-    var c = 1;
-    var ret = p.data;
-    n -= ret.length;
-    while (p = p.next) {
-      var str2 = p.data;
-      var nb = n > str2.length ? str2.length : n;
+  function copyFromBufferString(n2, list) {
+    var p2 = list.head;
+    var c2 = 1;
+    var ret = p2.data;
+    n2 -= ret.length;
+    while (p2 = p2.next) {
+      var str2 = p2.data;
+      var nb = n2 > str2.length ? str2.length : n2;
       if (nb === str2.length)
         ret += str2;
       else
-        ret += str2.slice(0, n);
-      n -= nb;
-      if (n === 0) {
+        ret += str2.slice(0, n2);
+      n2 -= nb;
+      if (n2 === 0) {
         if (nb === str2.length) {
-          ++c;
-          if (p.next)
-            list.head = p.next;
+          ++c2;
+          if (p2.next)
+            list.head = p2.next;
           else
             list.head = list.tail = null;
         } else {
-          list.head = p;
-          p.data = str2.slice(nb);
+          list.head = p2;
+          p2.data = str2.slice(nb);
         }
         break;
       }
-      ++c;
+      ++c2;
     }
-    list.length -= c;
+    list.length -= c2;
     return ret;
   }
-  function copyFromBuffer(n, list) {
-    var ret = Buffer2.allocUnsafe(n);
-    var p = list.head;
-    var c = 1;
-    p.data.copy(ret);
-    n -= p.data.length;
-    while (p = p.next) {
-      var buf = p.data;
-      var nb = n > buf.length ? buf.length : n;
-      buf.copy(ret, ret.length - n, 0, nb);
-      n -= nb;
-      if (n === 0) {
+  function copyFromBuffer(n2, list) {
+    var ret = Buffer2.allocUnsafe(n2);
+    var p2 = list.head;
+    var c2 = 1;
+    p2.data.copy(ret);
+    n2 -= p2.data.length;
+    while (p2 = p2.next) {
+      var buf = p2.data;
+      var nb = n2 > buf.length ? buf.length : n2;
+      buf.copy(ret, ret.length - n2, 0, nb);
+      n2 -= nb;
+      if (n2 === 0) {
         if (nb === buf.length) {
-          ++c;
-          if (p.next)
-            list.head = p.next;
+          ++c2;
+          if (p2.next)
+            list.head = p2.next;
           else
             list.head = list.tail = null;
         } else {
-          list.head = p;
-          p.data = buf.slice(nb);
+          list.head = p2;
+          p2.data = buf.slice(nb);
         }
         break;
       }
-      ++c;
+      ++c2;
     }
-    list.length -= c;
+    list.length -= c2;
     return ret;
   }
   function endReadable(stream) {
@@ -6376,15 +6376,15 @@
       stream.emit("end");
     }
   }
-  function forEach(xs, f) {
-    for (var i = 0, l = xs.length; i < l; i++) {
-      f(xs[i], i);
+  function forEach(xs, f2) {
+    for (var i2 = 0, l2 = xs.length; i2 < l2; i2++) {
+      f2(xs[i2], i2);
     }
   }
-  function indexOf3(xs, x) {
-    for (var i = 0, l = xs.length; i < l; i++) {
-      if (xs[i] === x)
-        return i;
+  function indexOf3(xs, x2) {
+    for (var i2 = 0, l2 = xs.length; i2 < l2; i2++) {
+      if (xs[i2] === x2)
+        return i2;
     }
     return -1;
   }
@@ -6435,14 +6435,14 @@
       MAX_HWM = 8388608;
       __name(computeNewHighWaterMark, "computeNewHighWaterMark");
       __name(howMuchToRead, "howMuchToRead");
-      Readable.prototype.read = function(n) {
-        debug("read", n);
-        n = parseInt(n, 10);
+      Readable.prototype.read = function(n2) {
+        debug("read", n2);
+        n2 = parseInt(n2, 10);
         var state = this._readableState;
-        var nOrig = n;
-        if (n !== 0)
+        var nOrig = n2;
+        if (n2 !== 0)
           state.emittedReadable = false;
-        if (n === 0 && state.needReadable && (state.length >= state.highWaterMark || state.ended)) {
+        if (n2 === 0 && state.needReadable && (state.length >= state.highWaterMark || state.ended)) {
           debug("read: emitReadable", state.length, state.ended);
           if (state.length === 0 && state.ended)
             endReadable(this);
@@ -6450,15 +6450,15 @@
             emitReadable(this);
           return null;
         }
-        n = howMuchToRead(n, state);
-        if (n === 0 && state.ended) {
+        n2 = howMuchToRead(n2, state);
+        if (n2 === 0 && state.ended) {
           if (state.length === 0)
             endReadable(this);
           return null;
         }
         var doRead = state.needReadable;
         debug("need readable", doRead);
-        if (state.length === 0 || state.length - n < state.highWaterMark) {
+        if (state.length === 0 || state.length - n2 < state.highWaterMark) {
           doRead = true;
           debug("length less than watermark", doRead);
         }
@@ -6474,23 +6474,23 @@
           this._read(state.highWaterMark);
           state.sync = false;
           if (!state.reading)
-            n = howMuchToRead(nOrig, state);
+            n2 = howMuchToRead(nOrig, state);
         }
         var ret;
-        if (n > 0)
-          ret = fromList(n, state);
+        if (n2 > 0)
+          ret = fromList(n2, state);
         else
           ret = null;
         if (ret === null) {
           state.needReadable = true;
-          n = 0;
+          n2 = 0;
         } else {
-          state.length -= n;
+          state.length -= n2;
         }
         if (state.length === 0) {
           if (!state.ended)
             state.needReadable = true;
-          if (nOrig !== n && state.ended)
+          if (nOrig !== n2 && state.ended)
             endReadable(this);
         }
         if (ret !== null)
@@ -6503,7 +6503,7 @@
       __name(emitReadable_, "emitReadable_");
       __name(maybeReadMore, "maybeReadMore");
       __name(maybeReadMore_, "maybeReadMore_");
-      Readable.prototype._read = function(n) {
+      Readable.prototype._read = function(n2) {
         this.emit("error", new Error("not implemented"));
       };
       Readable.prototype.pipe = function(dest, pipeOpts) {
@@ -6575,12 +6575,12 @@
           }
         }
         __name(ondata, "ondata");
-        function onerror(er) {
-          debug("onerror", er);
+        function onerror(er2) {
+          debug("onerror", er2);
           unpipe();
           dest.removeListener("error", onerror);
           if (listenerCount2(dest, "error") === 0)
-            dest.emit("error", er);
+            dest.emit("error", er2);
         }
         __name(onerror, "onerror");
         prependListener2(dest, "error", onerror);
@@ -6637,18 +6637,18 @@
           }
           return this;
         }
-        var i = indexOf3(state.pipes, dest);
-        if (i === -1)
+        var i2 = indexOf3(state.pipes, dest);
+        if (i2 === -1)
           return this;
-        state.pipes.splice(i, 1);
+        state.pipes.splice(i2, 1);
         state.pipesCount -= 1;
         if (state.pipesCount === 1)
           state.pipes = state.pipes[0];
         dest.emit("unpipe", this);
         return this;
       };
-      Readable.prototype.on = function(ev, fn) {
-        var res = events_default.prototype.on.call(this, ev, fn);
+      Readable.prototype.on = function(ev, fn2) {
+        var res = events_default.prototype.on.call(this, ev, fn2);
         if (ev === "data") {
           if (this._readableState.flowing !== false)
             this.resume();
@@ -6716,21 +6716,21 @@
             stream.pause();
           }
         });
-        for (var i in stream) {
-          if (this[i] === void 0 && typeof stream[i] === "function") {
-            this[i] = function(method) {
+        for (var i2 in stream) {
+          if (this[i2] === void 0 && typeof stream[i2] === "function") {
+            this[i2] = function(method) {
               return function() {
                 return stream[method].apply(stream, arguments);
               };
-            }(i);
+            }(i2);
           }
         }
         var events = ["error", "close", "destroy", "pause", "resume"];
         forEach(events, function(ev) {
           stream.on(ev, self2.emit.bind(self2, ev));
         });
-        self2._read = function(n) {
-          debug("wrapped _read", n);
+        self2._read = function(n2) {
+          debug("wrapped _read", n2);
           if (paused) {
             paused = false;
             stream.resume();
@@ -6785,8 +6785,8 @@
     this.corked = 0;
     this.sync = true;
     this.bufferProcessing = false;
-    this.onwrite = function(er) {
-      onwrite(stream, er);
+    this.onwrite = function(er2) {
+      onwrite(stream, er2);
     };
     this.writecb = null;
     this.writelen = 0;
@@ -6812,21 +6812,21 @@
     EventEmitter.call(this);
   }
   function writeAfterEnd(stream, cb) {
-    var er = new Error("write after end");
-    stream.emit("error", er);
-    nextTick2(cb, er);
+    var er2 = new Error("write after end");
+    stream.emit("error", er2);
+    nextTick2(cb, er2);
   }
   function validChunk(stream, state, chunk, cb) {
     var valid = true;
-    var er = false;
+    var er2 = false;
     if (chunk === null) {
-      er = new TypeError("May not write null values to stream");
+      er2 = new TypeError("May not write null values to stream");
     } else if (!Buffer3.isBuffer(chunk) && typeof chunk !== "string" && chunk !== void 0 && !state.objectMode) {
-      er = new TypeError("Invalid non-string/buffer chunk");
+      er2 = new TypeError("Invalid non-string/buffer chunk");
     }
-    if (er) {
-      stream.emit("error", er);
-      nextTick2(cb, er);
+    if (er2) {
+      stream.emit("error", er2);
+      nextTick2(cb, er2);
       valid = false;
     }
     return valid;
@@ -6871,14 +6871,14 @@
       stream._write(chunk, encoding, state.onwrite);
     state.sync = false;
   }
-  function onwriteError(stream, state, sync, er, cb) {
+  function onwriteError(stream, state, sync, er2, cb) {
     --state.pendingcb;
     if (sync)
-      nextTick2(cb, er);
+      nextTick2(cb, er2);
     else
-      cb(er);
+      cb(er2);
     stream._writableState.errorEmitted = true;
-    stream.emit("error", er);
+    stream.emit("error", er2);
   }
   function onwriteStateUpdate(state) {
     state.writing = false;
@@ -6886,13 +6886,13 @@
     state.length -= state.writelen;
     state.writelen = 0;
   }
-  function onwrite(stream, er) {
+  function onwrite(stream, er2) {
     var state = stream._writableState;
     var sync = state.sync;
     var cb = state.writecb;
     onwriteStateUpdate(state);
-    if (er)
-      onwriteError(stream, state, sync, er, cb);
+    if (er2)
+      onwriteError(stream, state, sync, er2, cb);
     else {
       var finished = needFinish(state);
       if (!finished && !state.corked && !state.bufferProcessing && state.bufferedRequest) {
@@ -6922,8 +6922,8 @@
     state.bufferProcessing = true;
     var entry = state.bufferedRequest;
     if (stream._writev && entry && entry.next) {
-      var l = state.bufferedRequestCount;
-      var buffer = new Array(l);
+      var l2 = state.bufferedRequestCount;
+      var buffer = new Array(l2);
       var holder = state.corkedRequestsFree;
       holder.entry = entry;
       var count = 0;
@@ -7158,8 +7158,8 @@
       init_writable();
       inherits_default(Duplex, Readable);
       keys = Object.keys(Writable.prototype);
-      for (var v = 0; v < keys.length; v++) {
-        method = keys[v];
+      for (var v2 = 0; v2 < keys.length; v2++) {
+        method = keys[v2];
         if (!Duplex.prototype[method])
           Duplex.prototype[method] = Writable.prototype[method];
       }
@@ -7171,8 +7171,8 @@
 
   // node_modules/rollup-plugin-node-polyfills/polyfills/readable-stream/transform.js
   function TransformState(stream) {
-    this.afterTransform = function(er, data) {
-      return afterTransform(stream, er, data);
+    this.afterTransform = function(er2, data) {
+      return afterTransform(stream, er2, data);
     };
     this.needTransform = false;
     this.transforming = false;
@@ -7180,7 +7180,7 @@
     this.writechunk = null;
     this.writeencoding = null;
   }
-  function afterTransform(stream, er, data) {
+  function afterTransform(stream, er2, data) {
     var ts = stream._transformState;
     ts.transforming = false;
     var cb = ts.writecb;
@@ -7190,7 +7190,7 @@
     ts.writecb = null;
     if (data !== null && data !== void 0)
       stream.push(data);
-    cb(er);
+    cb(er2);
     var rs = stream._readableState;
     rs.reading = false;
     if (rs.needReadable || rs.length < rs.highWaterMark) {
@@ -7213,16 +7213,16 @@
     }
     this.once("prefinish", function() {
       if (typeof this._flush === "function")
-        this._flush(function(er) {
-          done(stream, er);
+        this._flush(function(er2) {
+          done(stream, er2);
         });
       else
         done(stream);
     });
   }
-  function done(stream, er) {
-    if (er)
-      return stream.emit("error", er);
+  function done(stream, er2) {
+    if (er2)
+      return stream.emit("error", er2);
     var ws = stream._writableState;
     var ts = stream._transformState;
     if (ws.length)
@@ -7259,7 +7259,7 @@
             this._read(rs.highWaterMark);
         }
       };
-      Transform.prototype._read = function(n) {
+      Transform.prototype._read = function(n2) {
         var ts = this._transformState;
         if (ts.writechunk !== null && ts.writecb && !ts.transforming) {
           ts.transforming = true;
@@ -7365,10 +7365,10 @@
             dest.destroy();
         }
         __name(onclose, "onclose");
-        function onerror(er) {
+        function onerror(er2) {
           cleanup();
           if (events_default.listenerCount(this, "error") === 0) {
-            throw er;
+            throw er2;
           }
         }
         __name(onerror, "onerror");
@@ -7407,8 +7407,8 @@
         module.exports = polyfill;
       }
       if (polyfill) {
-        for (let k in polyfill) {
-          module.exports[k] = polyfill[k];
+        for (let k2 in polyfill) {
+          module.exports[k2] = polyfill[k2];
         }
       }
     }
@@ -7653,18 +7653,18 @@
         }
         var isAbsolute2 = exports.isAbsolute(path);
         var parts = path.split(/\/+/);
-        for (var part, up = 0, i = parts.length - 1; i >= 0; i--) {
-          part = parts[i];
+        for (var part, up = 0, i2 = parts.length - 1; i2 >= 0; i2--) {
+          part = parts[i2];
           if (part === ".") {
-            parts.splice(i, 1);
+            parts.splice(i2, 1);
           } else if (part === "..") {
             up++;
           } else if (up > 0) {
             if (part === "") {
-              parts.splice(i + 1, up);
+              parts.splice(i2 + 1, up);
               up = 0;
             } else {
-              parts.splice(i, 2);
+              parts.splice(i2, 2);
               up--;
             }
           }
@@ -7743,8 +7743,8 @@
         var obj = Object.create(null);
         return !("__proto__" in obj);
       }();
-      function identity(s) {
-        return s;
+      function identity(s2) {
+        return s2;
       }
       __name(identity, "identity");
       function toSetString(aStr) {
@@ -7763,19 +7763,19 @@
       }
       __name(fromSetString, "fromSetString");
       exports.fromSetString = supportsNullProto ? identity : fromSetString;
-      function isProtoString(s) {
-        if (!s) {
+      function isProtoString(s2) {
+        if (!s2) {
           return false;
         }
-        var length = s.length;
+        var length = s2.length;
         if (length < 9) {
           return false;
         }
-        if (s.charCodeAt(length - 1) !== 95 || s.charCodeAt(length - 2) !== 95 || s.charCodeAt(length - 3) !== 111 || s.charCodeAt(length - 4) !== 116 || s.charCodeAt(length - 5) !== 111 || s.charCodeAt(length - 6) !== 114 || s.charCodeAt(length - 7) !== 112 || s.charCodeAt(length - 8) !== 95 || s.charCodeAt(length - 9) !== 95) {
+        if (s2.charCodeAt(length - 1) !== 95 || s2.charCodeAt(length - 2) !== 95 || s2.charCodeAt(length - 3) !== 111 || s2.charCodeAt(length - 4) !== 116 || s2.charCodeAt(length - 5) !== 111 || s2.charCodeAt(length - 6) !== 114 || s2.charCodeAt(length - 7) !== 112 || s2.charCodeAt(length - 8) !== 95 || s2.charCodeAt(length - 9) !== 95) {
           return false;
         }
-        for (var i = length - 10; i >= 0; i--) {
-          if (s.charCodeAt(i) !== 36) {
+        for (var i2 = length - 10; i2 >= 0; i2--) {
+          if (s2.charCodeAt(i2) !== 36) {
             return false;
           }
         }
@@ -7921,8 +7921,8 @@
       __name(ArraySet, "ArraySet");
       ArraySet.fromArray = /* @__PURE__ */ __name(function ArraySet_fromArray(aArray, aAllowDuplicates) {
         var set2 = new ArraySet();
-        for (var i = 0, len = aArray.length; i < len; i++) {
-          set2.add(aArray[i], aAllowDuplicates);
+        for (var i2 = 0, len = aArray.length; i2 < len; i2++) {
+          set2.add(aArray[i2], aAllowDuplicates);
         }
         return set2;
       }, "ArraySet_fromArray");
@@ -8223,8 +8223,8 @@
         var nameIdx;
         var sourceIdx;
         var mappings = this._mappings.toArray();
-        for (var i = 0, len = mappings.length; i < len; i++) {
-          mapping = mappings[i];
+        for (var i2 = 0, len = mappings.length; i2 < len; i2++) {
+          mapping = mappings[i2];
           next = "";
           if (mapping.generatedLine !== previousGeneratedLine) {
             previousGeneratedColumn = 0;
@@ -8233,8 +8233,8 @@
               previousGeneratedLine++;
             }
           } else {
-            if (i > 0) {
-              if (!util.compareByGeneratedPositionsInflated(mapping, mappings[i - 1])) {
+            if (i2 > 0) {
+              if (!util.compareByGeneratedPositionsInflated(mapping, mappings[i2 - 1])) {
                 continue;
               }
               next += ",";
@@ -8354,32 +8354,32 @@
     "node_modules/source-map/lib/quick-sort.js"(exports) {
       init_virtual_process_polyfill();
       init_buffer();
-      function swap3(ary, x, y) {
-        var temp = ary[x];
-        ary[x] = ary[y];
-        ary[y] = temp;
+      function swap3(ary, x2, y2) {
+        var temp = ary[x2];
+        ary[x2] = ary[y2];
+        ary[y2] = temp;
       }
       __name(swap3, "swap");
       function randomIntInRange(low, high) {
         return Math.round(low + Math.random() * (high - low));
       }
       __name(randomIntInRange, "randomIntInRange");
-      function doQuickSort(ary, comparator, p, r) {
-        if (p < r) {
-          var pivotIndex = randomIntInRange(p, r);
-          var i = p - 1;
-          swap3(ary, pivotIndex, r);
-          var pivot = ary[r];
-          for (var j = p; j < r; j++) {
-            if (comparator(ary[j], pivot) <= 0) {
-              i += 1;
-              swap3(ary, i, j);
+      function doQuickSort(ary, comparator, p2, r2) {
+        if (p2 < r2) {
+          var pivotIndex = randomIntInRange(p2, r2);
+          var i2 = p2 - 1;
+          swap3(ary, pivotIndex, r2);
+          var pivot = ary[r2];
+          for (var j2 = p2; j2 < r2; j2++) {
+            if (comparator(ary[j2], pivot) <= 0) {
+              i2 += 1;
+              swap3(ary, i2, j2);
             }
           }
-          swap3(ary, i + 1, j);
-          var q = i + 1;
-          doQuickSort(ary, comparator, p, q - 1);
-          doQuickSort(ary, comparator, q + 1, r);
+          swap3(ary, i2 + 1, j2);
+          var q2 = i2 + 1;
+          doQuickSort(ary, comparator, p2, q2 - 1);
+          doQuickSort(ary, comparator, q2 + 1, r2);
         }
       }
       __name(doQuickSort, "doQuickSort");
@@ -8434,8 +8434,8 @@
         }
       });
       SourceMapConsumer.prototype._charIsMappingSeparator = /* @__PURE__ */ __name(function SourceMapConsumer_charIsMappingSeparator(aStr, index) {
-        var c = aStr.charAt(index);
-        return c === ";" || c === ",";
+        var c2 = aStr.charAt(index);
+        return c2 === ";" || c2 === ",";
       }, "SourceMapConsumer_charIsMappingSeparator");
       SourceMapConsumer.prototype._parseMappings = /* @__PURE__ */ __name(function SourceMapConsumer_parseMappings(aStr, aSourceRoot) {
         throw new Error("Subclasses must implement _parseMappings");
@@ -8535,8 +8535,8 @@
         });
         this._names = ArraySet.fromArray(names.map(String), true);
         this._sources = ArraySet.fromArray(sources, true);
-        this._absoluteSources = this._sources.toArray().map(function(s) {
-          return util.computeSourceURL(sourceRoot, s, aSourceMapURL);
+        this._absoluteSources = this._sources.toArray().map(function(s2) {
+          return util.computeSourceURL(sourceRoot, s2, aSourceMapURL);
         });
         this.sourceRoot = sourceRoot;
         this.sourcesContent = sourcesContent;
@@ -8555,10 +8555,10 @@
         if (this._sources.has(relativeSource)) {
           return this._sources.indexOf(relativeSource);
         }
-        var i;
-        for (i = 0; i < this._absoluteSources.length; ++i) {
-          if (this._absoluteSources[i] == aSource) {
-            return i;
+        var i2;
+        for (i2 = 0; i2 < this._absoluteSources.length; ++i2) {
+          if (this._absoluteSources[i2] == aSource) {
+            return i2;
           }
         }
         return -1;
@@ -8571,14 +8571,14 @@
         smc.sourcesContent = aSourceMap._generateSourcesContent(smc._sources.toArray(), smc.sourceRoot);
         smc.file = aSourceMap._file;
         smc._sourceMapURL = aSourceMapURL;
-        smc._absoluteSources = smc._sources.toArray().map(function(s) {
-          return util.computeSourceURL(smc.sourceRoot, s, aSourceMapURL);
+        smc._absoluteSources = smc._sources.toArray().map(function(s2) {
+          return util.computeSourceURL(smc.sourceRoot, s2, aSourceMapURL);
         });
         var generatedMappings = aSourceMap._mappings.toArray().slice();
         var destGeneratedMappings = smc.__generatedMappings = [];
         var destOriginalMappings = smc.__originalMappings = [];
-        for (var i = 0, length = generatedMappings.length; i < length; i++) {
-          var srcMapping = generatedMappings[i];
+        for (var i2 = 0, length = generatedMappings.length; i2 < length; i2++) {
+          var srcMapping = generatedMappings[i2];
           var destMapping = new Mapping();
           destMapping.generatedLine = srcMapping.generatedLine;
           destMapping.generatedColumn = srcMapping.generatedColumn;
@@ -8826,11 +8826,11 @@
           line: -1,
           column: 0
         };
-        this._sections = sections.map(function(s) {
-          if (s.url) {
+        this._sections = sections.map(function(s2) {
+          if (s2.url) {
             throw new Error("Support for url field in sections not implemented.");
           }
-          var offset = util.getArg(s, "offset");
+          var offset = util.getArg(s2, "offset");
           var offsetLine = util.getArg(offset, "line");
           var offsetColumn = util.getArg(offset, "column");
           if (offsetLine < lastOffset.line || offsetLine === lastOffset.line && offsetColumn < lastOffset.column) {
@@ -8842,7 +8842,7 @@
               generatedLine: offsetLine + 1,
               generatedColumn: offsetColumn + 1
             },
-            consumer: new SourceMapConsumer(util.getArg(s, "map"), aSourceMapURL)
+            consumer: new SourceMapConsumer(util.getArg(s2, "map"), aSourceMapURL)
           };
         });
       }
@@ -8853,9 +8853,9 @@
       Object.defineProperty(IndexedSourceMapConsumer.prototype, "sources", {
         get: function() {
           var sources = [];
-          for (var i = 0; i < this._sections.length; i++) {
-            for (var j = 0; j < this._sections[i].consumer.sources.length; j++) {
-              sources.push(this._sections[i].consumer.sources[j]);
+          for (var i2 = 0; i2 < this._sections.length; i2++) {
+            for (var j2 = 0; j2 < this._sections[i2].consumer.sources.length; j2++) {
+              sources.push(this._sections[i2].consumer.sources[j2]);
             }
           }
           return sources;
@@ -8889,13 +8889,13 @@
         });
       }, "IndexedSourceMapConsumer_originalPositionFor");
       IndexedSourceMapConsumer.prototype.hasContentsOfAllSources = /* @__PURE__ */ __name(function IndexedSourceMapConsumer_hasContentsOfAllSources() {
-        return this._sections.every(function(s) {
-          return s.consumer.hasContentsOfAllSources();
+        return this._sections.every(function(s2) {
+          return s2.consumer.hasContentsOfAllSources();
         });
       }, "IndexedSourceMapConsumer_hasContentsOfAllSources");
       IndexedSourceMapConsumer.prototype.sourceContentFor = /* @__PURE__ */ __name(function IndexedSourceMapConsumer_sourceContentFor(aSource, nullOnMissing) {
-        for (var i = 0; i < this._sections.length; i++) {
-          var section = this._sections[i];
+        for (var i2 = 0; i2 < this._sections.length; i2++) {
+          var section = this._sections[i2];
           var content = section.consumer.sourceContentFor(aSource, true);
           if (content) {
             return content;
@@ -8908,8 +8908,8 @@
         }
       }, "IndexedSourceMapConsumer_sourceContentFor");
       IndexedSourceMapConsumer.prototype.generatedPositionFor = /* @__PURE__ */ __name(function IndexedSourceMapConsumer_generatedPositionFor(aArgs) {
-        for (var i = 0; i < this._sections.length; i++) {
-          var section = this._sections[i];
+        for (var i2 = 0; i2 < this._sections.length; i2++) {
+          var section = this._sections[i2];
           if (section.consumer._findSourceIndex(util.getArg(aArgs, "source")) === -1) {
             continue;
           }
@@ -8930,11 +8930,11 @@
       IndexedSourceMapConsumer.prototype._parseMappings = /* @__PURE__ */ __name(function IndexedSourceMapConsumer_parseMappings(aStr, aSourceRoot) {
         this.__generatedMappings = [];
         this.__originalMappings = [];
-        for (var i = 0; i < this._sections.length; i++) {
-          var section = this._sections[i];
+        for (var i2 = 0; i2 < this._sections.length; i2++) {
+          var section = this._sections[i2];
           var sectionMappings = section.consumer._generatedMappings;
-          for (var j = 0; j < sectionMappings.length; j++) {
-            var mapping = sectionMappings[j];
+          for (var j2 = 0; j2 < sectionMappings.length; j2++) {
+            var mapping = sectionMappings[j2];
             var source = section.consumer._sources.at(mapping.source);
             source = util.computeSourceURL(section.consumer.sourceRoot, source, this._sourceMapURL);
             this._sources.add(source);
@@ -9073,8 +9073,8 @@
       }, "SourceNode_add");
       SourceNode.prototype.prepend = /* @__PURE__ */ __name(function SourceNode_prepend(aChunk) {
         if (Array.isArray(aChunk)) {
-          for (var i = aChunk.length - 1; i >= 0; i--) {
-            this.prepend(aChunk[i]);
+          for (var i2 = aChunk.length - 1; i2 >= 0; i2--) {
+            this.prepend(aChunk[i2]);
           }
         } else if (aChunk[isSourceNode] || typeof aChunk === "string") {
           this.children.unshift(aChunk);
@@ -9085,8 +9085,8 @@
       }, "SourceNode_prepend");
       SourceNode.prototype.walk = /* @__PURE__ */ __name(function SourceNode_walk(aFn) {
         var chunk;
-        for (var i = 0, len = this.children.length; i < len; i++) {
-          chunk = this.children[i];
+        for (var i2 = 0, len = this.children.length; i2 < len; i2++) {
+          chunk = this.children[i2];
           if (chunk[isSourceNode]) {
             chunk.walk(aFn);
           } else {
@@ -9103,15 +9103,15 @@
       }, "SourceNode_walk");
       SourceNode.prototype.join = /* @__PURE__ */ __name(function SourceNode_join(aSep) {
         var newChildren;
-        var i;
+        var i2;
         var len = this.children.length;
         if (len > 0) {
           newChildren = [];
-          for (i = 0; i < len - 1; i++) {
-            newChildren.push(this.children[i]);
+          for (i2 = 0; i2 < len - 1; i2++) {
+            newChildren.push(this.children[i2]);
             newChildren.push(aSep);
           }
-          newChildren.push(this.children[i]);
+          newChildren.push(this.children[i2]);
           this.children = newChildren;
         }
         return this;
@@ -9131,14 +9131,14 @@
         this.sourceContents[util.toSetString(aSourceFile)] = aSourceContent;
       }, "SourceNode_setSourceContent");
       SourceNode.prototype.walkSourceContents = /* @__PURE__ */ __name(function SourceNode_walkSourceContents(aFn) {
-        for (var i = 0, len = this.children.length; i < len; i++) {
-          if (this.children[i][isSourceNode]) {
-            this.children[i].walkSourceContents(aFn);
+        for (var i2 = 0, len = this.children.length; i2 < len; i2++) {
+          if (this.children[i2][isSourceNode]) {
+            this.children[i2].walkSourceContents(aFn);
           }
         }
         var sources = Object.keys(this.sourceContents);
-        for (var i = 0, len = sources.length; i < len; i++) {
-          aFn(util.fromSetString(sources[i]), this.sourceContents[sources[i]]);
+        for (var i2 = 0, len = sources.length; i2 < len; i2++) {
+          aFn(util.fromSetString(sources[i2]), this.sourceContents[sources[i2]]);
         }
       }, "SourceNode_walkSourceContents");
       SourceNode.prototype.toString = /* @__PURE__ */ __name(function SourceNode_toString() {
@@ -9255,15 +9255,15 @@
   });
   function normalizeArray(parts, allowAboveRoot) {
     var up = 0;
-    for (var i = parts.length - 1; i >= 0; i--) {
-      var last = parts[i];
+    for (var i2 = parts.length - 1; i2 >= 0; i2--) {
+      var last = parts[i2];
       if (last === ".") {
-        parts.splice(i, 1);
+        parts.splice(i2, 1);
       } else if (last === "..") {
-        parts.splice(i, 1);
+        parts.splice(i2, 1);
         up++;
       } else if (up) {
-        parts.splice(i, 1);
+        parts.splice(i2, 1);
         up--;
       }
     }
@@ -9276,8 +9276,8 @@
   }
   function resolve() {
     var resolvedPath = "", resolvedAbsolute = false;
-    for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-      var path = i >= 0 ? arguments[i] : "/";
+    for (var i2 = arguments.length - 1; i2 >= -1 && !resolvedAbsolute; i2--) {
+      var path = i2 >= 0 ? arguments[i2] : "/";
       if (typeof path !== "string") {
         throw new TypeError("Arguments to path.resolve must be strings");
       } else if (!path) {
@@ -9286,15 +9286,15 @@
       resolvedPath = path + "/" + resolvedPath;
       resolvedAbsolute = path.charAt(0) === "/";
     }
-    resolvedPath = normalizeArray(filter(resolvedPath.split("/"), function(p) {
-      return !!p;
+    resolvedPath = normalizeArray(filter(resolvedPath.split("/"), function(p2) {
+      return !!p2;
     }), !resolvedAbsolute).join("/");
     return (resolvedAbsolute ? "/" : "") + resolvedPath || ".";
   }
   function normalize(path) {
     var isPathAbsolute = isAbsolute(path), trailingSlash = substr(path, -1) === "/";
-    path = normalizeArray(filter(path.split("/"), function(p) {
-      return !!p;
+    path = normalizeArray(filter(path.split("/"), function(p2) {
+      return !!p2;
     }), !isPathAbsolute).join("/");
     if (!path && !isPathAbsolute) {
       path = ".";
@@ -9309,11 +9309,11 @@
   }
   function join() {
     var paths = Array.prototype.slice.call(arguments, 0);
-    return normalize(filter(paths, function(p, index) {
-      if (typeof p !== "string") {
+    return normalize(filter(paths, function(p2, index) {
+      if (typeof p2 !== "string") {
         throw new TypeError("Arguments to path.join must be strings");
       }
-      return p;
+      return p2;
     }).join("/"));
   }
   function relative(from3, to) {
@@ -9339,14 +9339,14 @@
     var toParts = trim2(to.split("/"));
     var length = Math.min(fromParts.length, toParts.length);
     var samePartsLength = length;
-    for (var i = 0; i < length; i++) {
-      if (fromParts[i] !== toParts[i]) {
-        samePartsLength = i;
+    for (var i2 = 0; i2 < length; i2++) {
+      if (fromParts[i2] !== toParts[i2]) {
+        samePartsLength = i2;
         break;
       }
     }
     var outputParts = [];
-    for (var i = samePartsLength; i < fromParts.length; i++) {
+    for (var i2 = samePartsLength; i2 < fromParts.length; i2++) {
       outputParts.push("..");
     }
     outputParts = outputParts.concat(toParts.slice(samePartsLength));
@@ -9363,22 +9363,22 @@
     return root + dir;
   }
   function basename(path, ext) {
-    var f = splitPath(path)[2];
-    if (ext && f.substr(-1 * ext.length) === ext) {
-      f = f.substr(0, f.length - ext.length);
+    var f2 = splitPath(path)[2];
+    if (ext && f2.substr(-1 * ext.length) === ext) {
+      f2 = f2.substr(0, f2.length - ext.length);
     }
-    return f;
+    return f2;
   }
   function extname(path) {
     return splitPath(path)[3];
   }
-  function filter(xs, f) {
+  function filter(xs, f2) {
     if (xs.filter)
-      return xs.filter(f);
+      return xs.filter(f2);
     var res = [];
-    for (var i = 0; i < xs.length; i++) {
-      if (f(xs[i], i, xs))
-        res.push(xs[i]);
+    for (var i2 = 0; i2 < xs.length; i2++) {
+      if (f2(xs[i2], i2, xs))
+        res.push(xs[i2]);
     }
     return res;
   }
@@ -9437,8 +9437,8 @@
         module.exports = polyfill;
       }
       if (polyfill) {
-        for (let k in polyfill) {
-          module.exports[k] = polyfill[k];
+        for (let k2 in polyfill) {
+          module.exports[k2] = polyfill[k2];
         }
       }
     }
@@ -9542,8 +9542,8 @@
       __name(hasGlobalProcessEventEmitter, "hasGlobalProcessEventEmitter");
       function handlerExec(list) {
         return function(arg) {
-          for (var i = 0; i < list.length; i++) {
-            var ret = list[i](arg);
+          for (var i2 = 0; i2 < list.length; i2++) {
+            var ret = list[i2](arg);
             if (ret) {
               return ret;
             }
@@ -9575,7 +9575,7 @@
           } else if (fs.existsSync(path2)) {
             contents = fs.readFileSync(path2, "utf8");
           }
-        } catch (er) {
+        } catch (er2) {
         }
         return fileContentsCache[path2] = contents;
       });
@@ -9605,13 +9605,13 @@
             if (sourceMapHeader) {
               return sourceMapHeader;
             }
-          } catch (e) {
+          } catch (e3) {
           }
         }
         fileData = retrieveFile(source);
-        var re = /(?:\/\/[@#][\s]*sourceMappingURL=([^\s'"]+)[\s]*$)|(?:\/\*[@#][\s]*sourceMappingURL=([^\s*'"]+)[\s]*(?:\*\/)[\s]*$)/mg;
+        var re2 = /(?:\/\/[@#][\s]*sourceMappingURL=([^\s'"]+)[\s]*$)|(?:\/\*[@#][\s]*sourceMappingURL=([^\s*'"]+)[\s]*(?:\*\/)[\s]*$)/mg;
         var lastMatch, match;
-        while (match = re.exec(fileData))
+        while (match = re2.exec(fileData))
           lastMatch = match;
         if (!lastMatch)
           return null;
@@ -9650,8 +9650,8 @@
               map: new SourceMapConsumer(urlAndMap.map)
             };
             if (sourceMap.map.sourcesContent) {
-              sourceMap.map.sources.forEach(function(source, i) {
-                var contents = sourceMap.map.sourcesContent[i];
+              sourceMap.map.sources.forEach(function(source, i2) {
+                var contents = sourceMap.map.sourcesContent[i2];
                 if (contents) {
                   var url = supportRelativeURL(sourceMap.url, source);
                   fileContentsCache[url] = contents;
@@ -9831,8 +9831,8 @@
         var errorString = name + ": " + message;
         var state = { nextPosition: null, curPosition: null };
         var processedStack = [];
-        for (var i = stack.length - 1; i >= 0; i--) {
-          processedStack.push("\n    at " + wrapCallSite(stack[i], state));
+        for (var i2 = stack.length - 1; i2 >= 0; i2--) {
+          processedStack.push("\n    at " + wrapCallSite(stack[i2], state));
           state.nextPosition = state.curPosition;
         }
         state.curPosition = state.nextPosition = null;
@@ -9849,7 +9849,7 @@
           if (!contents && fs && fs.existsSync(source)) {
             try {
               contents = fs.readFileSync(source, "utf8");
-            } catch (er) {
+            } catch (er2) {
               contents = "";
             }
           }
@@ -9942,7 +9942,7 @@
             if (worker_threads.isMainThread === false) {
               installHandler = false;
             }
-          } catch (e) {
+          } catch (e3) {
           }
           if (installHandler && hasGlobalProcessEventEmitter()) {
             uncaughtShimInstalled = true;
@@ -9968,8 +9968,8 @@
       init_buffer();
       var VERSION = "1.8.15";
       var LOG_VERSION = 0;
-      var xxx = /* @__PURE__ */ __name(function xxx2(s) {
-        var args = ["XXX: " + s].concat(Array.prototype.slice.call(arguments, 1));
+      var xxx = /* @__PURE__ */ __name(function xxx2(s2) {
+        var args = ["XXX: " + s2].concat(Array.prototype.slice.call(arguments, 1));
         console.error.apply(this, args);
       }, "xxx");
       var xxx = /* @__PURE__ */ __name(function xxx2() {
@@ -10004,7 +10004,7 @@
         fs = require_fs();
         try {
           dtrace = require_dtrace_provider();
-        } catch (e) {
+        } catch (e3) {
           dtrace = null;
         }
       }
@@ -10014,7 +10014,7 @@
       var stream = require_stream();
       try {
         safeJsonStringify = require_safe_json_stringify();
-      } catch (e) {
+      } catch (e3) {
         safeJsonStringify = null;
       }
       var safeJsonStringify;
@@ -10023,13 +10023,13 @@
       }
       try {
         mv = require_mv();
-      } catch (e) {
+      } catch (e3) {
         mv = null;
       }
       var mv;
       try {
         sourceMapSupport = require_source_map_support();
-      } catch (_23) {
+      } catch (_24) {
         sourceMapSupport = null;
       }
       var sourceMapSupport;
@@ -10040,8 +10040,8 @@
           return obj.slice();
         } else if (typeof obj === "object") {
           var copy4 = {};
-          Object.keys(obj).forEach(function(k) {
-            copy4[k] = obj[k];
+          Object.keys(obj).forEach(function(k2) {
+            copy4[k2] = obj[k2];
           });
           return copy4;
         } else {
@@ -10053,38 +10053,38 @@
       if (!format2) {
         inspect4 = util.inspect;
         formatRegExp2 = /%[sdj%]/g;
-        format2 = /* @__PURE__ */ __name(function format3(f) {
-          if (typeof f !== "string") {
+        format2 = /* @__PURE__ */ __name(function format3(f2) {
+          if (typeof f2 !== "string") {
             var objects = [];
-            for (var i = 0; i < arguments.length; i++) {
-              objects.push(inspect4(arguments[i]));
+            for (var i2 = 0; i2 < arguments.length; i2++) {
+              objects.push(inspect4(arguments[i2]));
             }
             return objects.join(" ");
           }
-          var i = 1;
+          var i2 = 1;
           var args = arguments;
           var len = args.length;
-          var str2 = String(f).replace(formatRegExp2, function(x2) {
-            if (i >= len)
-              return x2;
-            switch (x2) {
+          var str2 = String(f2).replace(formatRegExp2, function(x3) {
+            if (i2 >= len)
+              return x3;
+            switch (x3) {
               case "%s":
-                return String(args[i++]);
+                return String(args[i2++]);
               case "%d":
-                return Number(args[i++]);
+                return Number(args[i2++]);
               case "%j":
-                return fastAndSafeJsonStringify(args[i++]);
+                return fastAndSafeJsonStringify(args[i2++]);
               case "%%":
                 return "%";
               default:
-                return x2;
+                return x3;
             }
           });
-          for (var x = args[i]; i < len; x = args[++i]) {
-            if (x === null || typeof x !== "object") {
-              str2 += " " + x;
+          for (var x2 = args[i2]; i2 < len; x2 = args[++i2]) {
+            if (x2 === null || typeof x2 !== "object") {
+              str2 += " " + x2;
             } else {
-              str2 += " " + inspect4(x);
+              str2 += " " + inspect4(x2);
             }
           }
           return str2;
@@ -10100,7 +10100,7 @@
         var saveLimit = Error.stackTraceLimit;
         var savePrepare = Error.prepareStackTrace;
         Error.stackTraceLimit = 3;
-        Error.prepareStackTrace = function(_23, stack) {
+        Error.prepareStackTrace = function(_24, stack) {
           var caller = stack[2];
           if (sourceMapSupport) {
             caller = sourceMapSupport.wrapCallSite(caller);
@@ -10118,10 +10118,10 @@
         return obj;
       }
       __name(getCaller3Info, "getCaller3Info");
-      function _indent(s, indent) {
+      function _indent(s2, indent) {
         if (!indent)
           indent = "    ";
-        var lines = s.split(/\r?\n/g);
+        var lines = s2.split(/\r?\n/g);
         return indent + lines.join("\n" + indent);
       }
       __name(_indent, "_indent");
@@ -10243,13 +10243,13 @@
           this.src = parent.src;
           var fields = this.fields = {};
           var parentFieldNames = Object.keys(parent.fields);
-          for (var i = 0; i < parentFieldNames.length; i++) {
-            var name = parentFieldNames[i];
+          for (var i2 = 0; i2 < parentFieldNames.length; i2++) {
+            var name = parentFieldNames[i2];
             fields[name] = parent.fields[name];
           }
           var names = Object.keys(options);
-          for (var i = 0; i < names.length; i++) {
-            var name = names[i];
+          for (var i2 = 0; i2 < names.length; i2++) {
+            var name = names[i2];
             fields[name] = options[name];
           }
           return;
@@ -10258,10 +10258,10 @@
         if (parent) {
           this._level = parent._level;
           this.streams = [];
-          for (var i = 0; i < parent.streams.length; i++) {
-            var s = objCopy(parent.streams[i]);
-            s.closeOnExit = false;
-            this.streams.push(s);
+          for (var i2 = 0; i2 < parent.streams.length; i2++) {
+            var s2 = objCopy(parent.streams[i2]);
+            s2.closeOnExit = false;
+            this.streams.push(s2);
           }
           this.serializers = objCopy(parent.serializers);
           this.src = parent.src;
@@ -10293,8 +10293,8 @@
             level: options.level
           });
         } else if (options.streams) {
-          options.streams.forEach(function(s2) {
-            self2.addStream(s2, options.level);
+          options.streams.forEach(function(s3) {
+            self2.addStream(s3, options.level);
           });
         } else if (parent && options.level) {
           this.level(options.level);
@@ -10337,79 +10337,79 @@
         if (!fields.pid) {
           fields.pid = process.pid;
         }
-        Object.keys(fields).forEach(function(k) {
-          self2.fields[k] = fields[k];
+        Object.keys(fields).forEach(function(k2) {
+          self2.fields[k2] = fields[k2];
         });
       }
       __name(Logger2, "Logger");
       util.inherits(Logger2, EventEmitter3);
-      Logger2.prototype.addStream = /* @__PURE__ */ __name(function addStream(s, defaultLevel) {
+      Logger2.prototype.addStream = /* @__PURE__ */ __name(function addStream(s2, defaultLevel) {
         var self2 = this;
         if (defaultLevel === null || defaultLevel === void 0) {
           defaultLevel = INFO;
         }
-        s = objCopy(s);
-        if (!s.type) {
-          if (s.stream) {
-            s.type = "stream";
-          } else if (s.path) {
-            s.type = "file";
+        s2 = objCopy(s2);
+        if (!s2.type) {
+          if (s2.stream) {
+            s2.type = "stream";
+          } else if (s2.path) {
+            s2.type = "file";
           }
         }
-        s.raw = s.type === "raw";
-        if (s.level !== void 0) {
-          s.level = resolveLevel(s.level);
+        s2.raw = s2.type === "raw";
+        if (s2.level !== void 0) {
+          s2.level = resolveLevel(s2.level);
         } else {
-          s.level = resolveLevel(defaultLevel);
+          s2.level = resolveLevel(defaultLevel);
         }
-        if (s.level < self2._level) {
-          self2._level = s.level;
+        if (s2.level < self2._level) {
+          self2._level = s2.level;
         }
-        switch (s.type) {
+        switch (s2.type) {
           case "stream":
-            assert2.ok(isWritable(s.stream), '"stream" stream is not writable: ' + util.inspect(s.stream));
-            if (!s.closeOnExit) {
-              s.closeOnExit = false;
+            assert2.ok(isWritable(s2.stream), '"stream" stream is not writable: ' + util.inspect(s2.stream));
+            if (!s2.closeOnExit) {
+              s2.closeOnExit = false;
             }
             break;
           case "file":
-            if (s.reemitErrorEvents === void 0) {
-              s.reemitErrorEvents = true;
+            if (s2.reemitErrorEvents === void 0) {
+              s2.reemitErrorEvents = true;
             }
-            if (!s.stream) {
-              s.stream = fs.createWriteStream(s.path, { flags: "a", encoding: "utf8" });
-              if (!s.closeOnExit) {
-                s.closeOnExit = true;
+            if (!s2.stream) {
+              s2.stream = fs.createWriteStream(s2.path, { flags: "a", encoding: "utf8" });
+              if (!s2.closeOnExit) {
+                s2.closeOnExit = true;
               }
             } else {
-              if (!s.closeOnExit) {
-                s.closeOnExit = false;
+              if (!s2.closeOnExit) {
+                s2.closeOnExit = false;
               }
             }
             break;
           case "rotating-file":
-            assert2.ok(!s.stream, '"rotating-file" stream should not give a "stream"');
-            assert2.ok(s.path);
+            assert2.ok(!s2.stream, '"rotating-file" stream should not give a "stream"');
+            assert2.ok(s2.path);
             assert2.ok(mv, '"rotating-file" stream type is not supported: missing "mv" module');
-            s.stream = new RotatingFileStream(s);
-            if (!s.closeOnExit) {
-              s.closeOnExit = true;
+            s2.stream = new RotatingFileStream(s2);
+            if (!s2.closeOnExit) {
+              s2.closeOnExit = true;
             }
             break;
           case "raw":
-            if (!s.closeOnExit) {
-              s.closeOnExit = false;
+            if (!s2.closeOnExit) {
+              s2.closeOnExit = false;
             }
             break;
           default:
-            throw new TypeError('unknown stream type "' + s.type + '"');
+            throw new TypeError('unknown stream type "' + s2.type + '"');
         }
-        if (s.reemitErrorEvents && typeof s.stream.on === "function") {
-          s.stream.on("error", /* @__PURE__ */ __name(function onStreamError(err) {
-            self2.emit("error", err, s);
+        if (s2.reemitErrorEvents && typeof s2.stream.on === "function") {
+          s2.stream.on("error", /* @__PURE__ */ __name(function onStreamError(err) {
+            self2.emit("error", err, s2);
           }, "onStreamError"));
         }
-        self2.streams.push(s);
+        self2.streams.push(s2);
         delete self2.haveNonRawStreams;
       }, "addStream");
       Logger2.prototype.addSerializers = /* @__PURE__ */ __name(function addSerializers(serializers) {
@@ -10431,16 +10431,16 @@
       };
       Logger2.prototype.reopenFileStreams = function() {
         var self2 = this;
-        self2.streams.forEach(function(s) {
-          if (s.type === "file") {
-            if (s.stream) {
-              s.stream.end();
-              s.stream.destroySoon();
-              delete s.stream;
+        self2.streams.forEach(function(s2) {
+          if (s2.type === "file") {
+            if (s2.stream) {
+              s2.stream.end();
+              s2.stream.destroySoon();
+              delete s2.stream;
             }
-            s.stream = fs.createWriteStream(s.path, { flags: "a", encoding: "utf8" });
-            s.stream.on("error", function(err) {
-              self2.emit("error", err, s);
+            s2.stream = fs.createWriteStream(s2.path, { flags: "a", encoding: "utf8" });
+            s2.stream.on("error", function(err) {
+              self2.emit("error", err, s2);
             });
           }
         });
@@ -10451,16 +10451,16 @@
         }
         var newLevel = resolveLevel(value);
         var len = this.streams.length;
-        for (var i = 0; i < len; i++) {
-          this.streams[i].level = newLevel;
+        for (var i2 = 0; i2 < len; i2++) {
+          this.streams[i2].level = newLevel;
         }
         this._level = newLevel;
       }, "level");
       Logger2.prototype.levels = /* @__PURE__ */ __name(function levels(name, value) {
         if (name === void 0) {
           assert2.equal(value, void 0);
-          return this.streams.map(function(s2) {
-            return s2.level;
+          return this.streams.map(function(s3) {
+            return s3.level;
           });
         }
         var stream2;
@@ -10471,10 +10471,10 @@
           }
         } else {
           var len = this.streams.length;
-          for (var i = 0; i < len; i++) {
-            var s = this.streams[i];
-            if (s.name === name) {
-              stream2 = s;
+          for (var i2 = 0; i2 < len; i2++) {
+            var s2 = this.streams[i2];
+            if (s2.name === name) {
+              stream2 = s2;
               break;
             }
           }
@@ -10509,11 +10509,11 @@
         });
       };
       Logger2.prototype._emit = function(rec, noemit) {
-        var i;
+        var i2;
         if (this.haveNonRawStreams === void 0) {
           this.haveNonRawStreams = false;
-          for (i = 0; i < this.streams.length; i++) {
-            if (!this.streams[i].raw) {
+          for (i2 = 0; i2 < this.streams.length; i2++) {
+            if (!this.streams[i2].raw) {
               this.haveNonRawStreams = true;
               break;
             }
@@ -10526,11 +10526,11 @@
         if (noemit)
           return str2;
         var level = rec.level;
-        for (i = 0; i < this.streams.length; i++) {
-          var s = this.streams[i];
-          if (s.level <= level) {
-            xxx('writing log rec "%s" to "%s" stream (%d <= %d): %j', rec.msg, s.type, s.level, level, rec);
-            s.stream.write(s.raw ? rec : str2);
+        for (i2 = 0; i2 < this.streams.length; i2++) {
+          var s2 = this.streams[i2];
+          if (s2.level <= level) {
+            xxx('writing log rec "%s" to "%s" stream (%d <= %d): %j', rec.msg, s2.type, s2.level, level, rec);
+            s2.stream.write(s2.raw ? rec : str2);
           }
         }
         ;
@@ -10570,8 +10570,8 @@
           if (log3.serializers) {
             log3._applySerializers(recFields, excludeFields);
           }
-          Object.keys(recFields).forEach(function(k) {
-            rec[k] = recFields[k];
+          Object.keys(recFields).forEach(function(k2) {
+            rec[k2] = recFields[k2];
           });
         }
         rec.msg = format2.apply(log3, msgArgs);
@@ -10605,8 +10605,8 @@
             return this._level <= minLevel;
           }
           var msgArgs = new Array(arguments.length);
-          for (var i = 0; i < msgArgs.length; ++i) {
-            msgArgs[i] = arguments[i];
+          for (var i2 = 0; i2 < msgArgs.length; ++i2) {
+            msgArgs[i2] = arguments[i2];
           }
           if (this._level <= minLevel) {
             rec = mkRecord(log3, minLevel, msgArgs);
@@ -10702,13 +10702,13 @@
         } catch (ex) {
           try {
             return JSON.stringify(rec, safeCycles());
-          } catch (e) {
+          } catch (e3) {
             if (safeJsonStringify) {
               return safeJsonStringify(rec);
             } else {
-              var dedupKey = e.stack.split(/\n/g, 3).join("\n");
-              _warn('bunyan: ERROR: Exception in `JSON.stringify(rec)`. You can install the "safe-json-stringify" module to have Bunyan fallback to safer stringification. Record:\n' + _indent(format2("%s\n%s", util.inspect(rec), e.stack)), dedupKey);
-              return format2("(Exception in JSON.stringify(rec): %j. See stderr for details.)", e.message);
+              var dedupKey = e3.stack.split(/\n/g, 3).join("\n");
+              _warn('bunyan: ERROR: Exception in `JSON.stringify(rec)`. You can install the "safe-json-stringify" module to have Bunyan fallback to safer stringification. Record:\n' + _indent(format2("%s\n%s", util.inspect(rec), e3.stack)), dedupKey);
+              return format2("(Exception in JSON.stringify(rec): %j. See stderr for details.)", e3.message);
             }
           }
         }
@@ -10729,12 +10729,12 @@
               "monthly": "1m",
               "yearly": "1y"
             }[options.period] || options.period;
-            var m = /^([1-9][0-9]*)([hdwmy]|ms)$/.exec(period);
-            if (!m) {
+            var m2 = /^([1-9][0-9]*)([hdwmy]|ms)$/.exec(period);
+            if (!m2) {
               throw new Error(format2('invalid period: "%s"', options.period));
             }
-            this.periodNum = Number(m[1]);
-            this.periodScope = m[2];
+            this.periodNum = Number(m2[1]);
+            this.periodScope = m2[2];
           } else {
             this.periodNum = 1;
             this.periodScope = "d";
@@ -10796,9 +10796,9 @@
         };
         RotatingFileStream.prototype._calcRotTime = /* @__PURE__ */ __name(function _calcRotTime(periodOffset) {
           this._debug("_calcRotTime: %s%s", this.periodNum, this.periodScope);
-          var d = new Date();
-          this._debug("  now local: %s", d);
-          this._debug("    now utc: %s", d.toISOString());
+          var d2 = new Date();
+          this._debug("  now local: %s", d2);
+          this._debug("    now utc: %s", d2.toISOString());
           var rotAt;
           switch (this.periodScope) {
             case "ms":
@@ -10812,42 +10812,42 @@
               if (this.rotAt) {
                 rotAt = this.rotAt + this.periodNum * 60 * 60 * 1e3 * periodOffset;
               } else {
-                rotAt = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), d.getUTCHours() + periodOffset);
+                rotAt = Date.UTC(d2.getUTCFullYear(), d2.getUTCMonth(), d2.getUTCDate(), d2.getUTCHours() + periodOffset);
               }
               break;
             case "d":
               if (this.rotAt) {
                 rotAt = this.rotAt + this.periodNum * 24 * 60 * 60 * 1e3 * periodOffset;
               } else {
-                rotAt = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + periodOffset);
+                rotAt = Date.UTC(d2.getUTCFullYear(), d2.getUTCMonth(), d2.getUTCDate() + periodOffset);
               }
               break;
             case "w":
               if (this.rotAt) {
                 rotAt = this.rotAt + this.periodNum * 7 * 24 * 60 * 60 * 1e3 * periodOffset;
               } else {
-                var dayOffset = 7 - d.getUTCDay();
+                var dayOffset = 7 - d2.getUTCDay();
                 if (periodOffset < 1) {
-                  dayOffset = -d.getUTCDay();
+                  dayOffset = -d2.getUTCDay();
                 }
                 if (periodOffset > 1 || periodOffset < -1) {
                   dayOffset += 7 * periodOffset;
                 }
-                rotAt = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + dayOffset);
+                rotAt = Date.UTC(d2.getUTCFullYear(), d2.getUTCMonth(), d2.getUTCDate() + dayOffset);
               }
               break;
             case "m":
               if (this.rotAt) {
-                rotAt = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + this.periodNum * periodOffset, 1);
+                rotAt = Date.UTC(d2.getUTCFullYear(), d2.getUTCMonth() + this.periodNum * periodOffset, 1);
               } else {
-                rotAt = Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + periodOffset, 1);
+                rotAt = Date.UTC(d2.getUTCFullYear(), d2.getUTCMonth() + periodOffset, 1);
               }
               break;
             case "y":
               if (this.rotAt) {
-                rotAt = Date.UTC(d.getUTCFullYear() + this.periodNum * periodOffset, 0, 1);
+                rotAt = Date.UTC(d2.getUTCFullYear() + this.periodNum * periodOffset, 0, 1);
               } else {
-                rotAt = Date.UTC(d.getUTCFullYear() + periodOffset, 0, 1);
+                rotAt = Date.UTC(d2.getUTCFullYear() + periodOffset, 0, 1);
               }
               break;
             default:
@@ -10872,11 +10872,11 @@
           self2.rotating = true;
           self2.stream.end();
           function del() {
-            var toDel = self2.path + "." + String(n - 1);
-            if (n === 0) {
+            var toDel = self2.path + "." + String(n2 - 1);
+            if (n2 === 0) {
               toDel = self2.path;
             }
-            n -= 1;
+            n2 -= 1;
             self2._debug("  rm %s", toDel);
             fs.unlink(toDel, function(delErr) {
               moves();
@@ -10884,15 +10884,15 @@
           }
           __name(del, "del");
           function moves() {
-            if (self2.count === 0 || n < 0) {
+            if (self2.count === 0 || n2 < 0) {
               return finish();
             }
             var before = self2.path;
-            var after = self2.path + "." + String(n);
-            if (n > 0) {
-              before += "." + String(n - 1);
+            var after = self2.path + "." + String(n2);
+            if (n2 > 0) {
+              before += "." + String(n2 - 1);
             }
-            n -= 1;
+            n2 -= 1;
             fs.exists(before, function(exists) {
               if (!exists) {
                 moves();
@@ -10913,9 +10913,9 @@
           function finish() {
             self2._debug("  open %s", self2.path);
             self2.stream = fs.createWriteStream(self2.path, { flags: "a", encoding: "utf8" });
-            var q = self2.rotQueue, len = q.length;
-            for (var i = 0; i < len; i++) {
-              self2.stream.write(q[i]);
+            var q2 = self2.rotQueue, len = q2.length;
+            for (var i2 = 0; i2 < len; i2++) {
+              self2.stream.write(q2[i2]);
             }
             self2.rotQueue = [];
             self2.rotating = false;
@@ -10923,24 +10923,24 @@
             self2._setupNextRot();
           }
           __name(finish, "finish");
-          var n = this.count;
+          var n2 = this.count;
           del();
         }, "rotate");
-        RotatingFileStream.prototype.write = /* @__PURE__ */ __name(function write4(s) {
+        RotatingFileStream.prototype.write = /* @__PURE__ */ __name(function write4(s2) {
           if (this.rotating) {
-            this.rotQueue.push(s);
+            this.rotQueue.push(s2);
             return false;
           } else {
-            return this.stream.write(s);
+            return this.stream.write(s2);
           }
         }, "write");
-        RotatingFileStream.prototype.end = /* @__PURE__ */ __name(function end(s) {
+        RotatingFileStream.prototype.end = /* @__PURE__ */ __name(function end(s2) {
           this.stream.end();
         }, "end");
-        RotatingFileStream.prototype.destroy = /* @__PURE__ */ __name(function destroy(s) {
+        RotatingFileStream.prototype.destroy = /* @__PURE__ */ __name(function destroy(s2) {
           this.stream.destroy();
         }, "destroy");
-        RotatingFileStream.prototype.destroySoon = /* @__PURE__ */ __name(function destroySoon(s) {
+        RotatingFileStream.prototype.destroySoon = /* @__PURE__ */ __name(function destroySoon(s2) {
           this.stream.destroySoon();
         }, "destroySoon");
       }
@@ -11007,11 +11007,11 @@
       exports._CodeOrName = _CodeOrName;
       exports.IDENTIFIER = /^[a-z$_][a-z$_0-9]*$/i;
       var Name = class extends _CodeOrName {
-        constructor(s) {
+        constructor(s2) {
           super();
-          if (!exports.IDENTIFIER.test(s))
+          if (!exports.IDENTIFIER.test(s2))
             throw new Error("CodeGen: name must be a valid identifier");
-          this.str = s;
+          this.str = s2;
         }
         toString() {
           return this.str;
@@ -11040,14 +11040,14 @@
           return item === "" || item === '""';
         }
         get str() {
-          var _a;
-          return (_a = this._str) !== null && _a !== void 0 ? _a : this._str = this._items.reduce((s, c) => `${s}${c}`, "");
+          var _a2;
+          return (_a2 = this._str) !== null && _a2 !== void 0 ? _a2 : this._str = this._items.reduce((s2, c2) => `${s2}${c2}`, "");
         }
         get names() {
-          var _a;
-          return (_a = this._names) !== null && _a !== void 0 ? _a : this._names = this._items.reduce((names, c) => {
-            if (c instanceof Name)
-              names[c.str] = (names[c.str] || 0) + 1;
+          var _a2;
+          return (_a2 = this._names) !== null && _a2 !== void 0 ? _a2 : this._names = this._items.reduce((names, c2) => {
+            if (c2 instanceof Name)
+              names[c2.str] = (names[c2.str] || 0) + 1;
             return names;
           }, {});
         }
@@ -11055,25 +11055,25 @@
       __name(_Code, "_Code");
       exports._Code = _Code;
       exports.nil = new _Code("");
-      function _23(strs, ...args) {
+      function _24(strs, ...args) {
         const code = [strs[0]];
-        let i = 0;
-        while (i < args.length) {
-          addCodeArg(code, args[i]);
-          code.push(strs[++i]);
+        let i2 = 0;
+        while (i2 < args.length) {
+          addCodeArg(code, args[i2]);
+          code.push(strs[++i2]);
         }
         return new _Code(code);
       }
-      __name(_23, "_");
-      exports._ = _23;
+      __name(_24, "_");
+      exports._ = _24;
       var plus = new _Code("+");
       function str2(strs, ...args) {
         const expr = [safeStringify(strs[0])];
-        let i = 0;
-        while (i < args.length) {
+        let i2 = 0;
+        while (i2 < args.length) {
           expr.push(plus);
-          addCodeArg(expr, args[i]);
-          expr.push(plus, safeStringify(strs[++i]));
+          addCodeArg(expr, args[i2]);
+          expr.push(plus, safeStringify(strs[++i2]));
         }
         optimize(expr);
         return new _Code(expr);
@@ -11091,36 +11091,36 @@
       __name(addCodeArg, "addCodeArg");
       exports.addCodeArg = addCodeArg;
       function optimize(expr) {
-        let i = 1;
-        while (i < expr.length - 1) {
-          if (expr[i] === plus) {
-            const res = mergeExprItems(expr[i - 1], expr[i + 1]);
+        let i2 = 1;
+        while (i2 < expr.length - 1) {
+          if (expr[i2] === plus) {
+            const res = mergeExprItems(expr[i2 - 1], expr[i2 + 1]);
             if (res !== void 0) {
-              expr.splice(i - 1, 3, res);
+              expr.splice(i2 - 1, 3, res);
               continue;
             }
-            expr[i++] = "+";
+            expr[i2++] = "+";
           }
-          i++;
+          i2++;
         }
       }
       __name(optimize, "optimize");
-      function mergeExprItems(a, b) {
-        if (b === '""')
-          return a;
-        if (a === '""')
-          return b;
-        if (typeof a == "string") {
-          if (b instanceof Name || a[a.length - 1] !== '"')
+      function mergeExprItems(a2, b2) {
+        if (b2 === '""')
+          return a2;
+        if (a2 === '""')
+          return b2;
+        if (typeof a2 == "string") {
+          if (b2 instanceof Name || a2[a2.length - 1] !== '"')
             return;
-          if (typeof b != "string")
-            return `${a.slice(0, -1)}${b}"`;
-          if (b[0] === '"')
-            return a.slice(0, -1) + b.slice(1);
+          if (typeof b2 != "string")
+            return `${a2.slice(0, -1)}${b2}"`;
+          if (b2[0] === '"')
+            return a2.slice(0, -1) + b2.slice(1);
           return;
         }
-        if (typeof b == "string" && b[0] === '"' && !(a instanceof Name))
-          return `"${a}${b.slice(1)}`;
+        if (typeof b2 == "string" && b2[0] === '"' && !(a2 instanceof Name))
+          return `"${a2}${b2.slice(1)}`;
         return;
       }
       __name(mergeExprItems, "mergeExprItems");
@@ -11129,22 +11129,22 @@
       }
       __name(strConcat, "strConcat");
       exports.strConcat = strConcat;
-      function interpolate(x) {
-        return typeof x == "number" || typeof x == "boolean" || x === null ? x : safeStringify(Array.isArray(x) ? x.join(",") : x);
+      function interpolate(x2) {
+        return typeof x2 == "number" || typeof x2 == "boolean" || x2 === null ? x2 : safeStringify(Array.isArray(x2) ? x2.join(",") : x2);
       }
       __name(interpolate, "interpolate");
-      function stringify(x) {
-        return new _Code(safeStringify(x));
+      function stringify(x2) {
+        return new _Code(safeStringify(x2));
       }
       __name(stringify, "stringify");
       exports.stringify = stringify;
-      function safeStringify(x) {
-        return JSON.stringify(x).replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
+      function safeStringify(x2) {
+        return JSON.stringify(x2).replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029");
       }
       __name(safeStringify, "safeStringify");
       exports.safeStringify = safeStringify;
       function getProperty(key) {
-        return typeof key == "string" && exports.IDENTIFIER.test(key) ? new _Code(`.${key}`) : _23`[${key}]`;
+        return typeof key == "string" && exports.IDENTIFIER.test(key) ? new _Code(`.${key}`) : _24`[${key}]`;
       }
       __name(getProperty, "getProperty");
       exports.getProperty = getProperty;
@@ -11199,8 +11199,8 @@
           return `${prefix}${ng.index++}`;
         }
         _nameGroup(prefix) {
-          var _a, _b;
-          if (((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._prefixes) === null || _b === void 0 ? void 0 : _b.has(prefix)) || this._prefixes && !this._prefixes.has(prefix)) {
+          var _a2, _b;
+          if (((_b = (_a2 = this._parent) === null || _a2 === void 0 ? void 0 : _a2._prefixes) === null || _b === void 0 ? void 0 : _b.has(prefix)) || this._prefixes && !this._prefixes.has(prefix)) {
             throw new Error(`CodeGen: prefix "${prefix}" is not allowed in this scope`);
           }
           return this._names[prefix] = { prefix, index: 0 };
@@ -11235,12 +11235,12 @@
           return new ValueScopeName(prefix, this._newName(prefix));
         }
         value(nameOrPrefix, value) {
-          var _a;
+          var _a2;
           if (value.ref === void 0)
             throw new Error("CodeGen: ref must be passed in value");
           const name = this.toName(nameOrPrefix);
           const { prefix } = name;
-          const valueKey = (_a = value.key) !== null && _a !== void 0 ? _a : value.ref;
+          const valueKey = (_a2 = value.key) !== null && _a2 !== void 0 ? _a2 : value.ref;
           let vs = this._values[prefix];
           if (vs) {
             const _name = vs.get(valueKey);
@@ -11250,9 +11250,9 @@
             vs = this._values[prefix] = new Map();
           }
           vs.set(valueKey, name);
-          const s = this._scope[prefix] || (this._scope[prefix] = []);
-          const itemIndex = s.length;
-          s[itemIndex] = value.ref;
+          const s2 = this._scope[prefix] || (this._scope[prefix] = []);
+          const itemIndex = s2.length;
+          s2[itemIndex] = value.ref;
           name.setValue(value, { property: prefix, itemIndex });
           return name;
         }
@@ -11287,12 +11287,12 @@
               if (nameSet.has(name))
                 return;
               nameSet.set(name, UsedValueState.Started);
-              let c = valueCode(name);
-              if (c) {
+              let c2 = valueCode(name);
+              if (c2) {
                 const def = this.opts.es5 ? exports.varKinds.var : exports.varKinds.const;
-                code = code_1._`${code}${def} ${name} = ${c};${this.opts._n}`;
-              } else if (c = getCode === null || getCode === void 0 ? void 0 : getCode(name)) {
-                code = code_1._`${code}${c}${this.opts._n}`;
+                code = code_1._`${code}${def} ${name} = ${c2};${this.opts._n}`;
+              } else if (c2 = getCode === null || getCode === void 0 ? void 0 : getCode(name)) {
+                code = code_1._`${code}${c2}${this.opts._n}`;
               } else {
                 throw new ValueError(name);
               }
@@ -11383,10 +11383,10 @@
           this.name = name;
           this.rhs = rhs;
         }
-        render({ es5, _n }) {
+        render({ es5, _n: _n2 }) {
           const varKind = es5 ? scope_1.varKinds.var : this.varKind;
           const rhs = this.rhs === void 0 ? "" : ` = ${this.rhs}`;
-          return `${varKind} ${this.name}${rhs};` + _n;
+          return `${varKind} ${this.name}${rhs};` + _n2;
         }
         optimizeNames(names, constants) {
           if (!names[this.name.str])
@@ -11407,8 +11407,8 @@
           this.rhs = rhs;
           this.sideEffects = sideEffects;
         }
-        render({ _n }) {
-          return `${this.lhs} = ${this.rhs};` + _n;
+        render({ _n: _n2 }) {
+          return `${this.lhs} = ${this.rhs};` + _n2;
         }
         optimizeNames(names, constants) {
           if (this.lhs instanceof code_1.Name && !names[this.lhs.str] && !this.sideEffects)
@@ -11427,8 +11427,8 @@
           super(lhs, rhs, sideEffects);
           this.op = op;
         }
-        render({ _n }) {
-          return `${this.lhs} ${this.op}= ${this.rhs};` + _n;
+        render({ _n: _n2 }) {
+          return `${this.lhs} ${this.op}= ${this.rhs};` + _n2;
         }
       };
       __name(AssignOp, "AssignOp");
@@ -11438,8 +11438,8 @@
           this.label = label;
           this.names = {};
         }
-        render({ _n }) {
-          return `${this.label}:` + _n;
+        render({ _n: _n2 }) {
+          return `${this.label}:` + _n2;
         }
       };
       __name(Label, "Label");
@@ -11449,9 +11449,9 @@
           this.label = label;
           this.names = {};
         }
-        render({ _n }) {
+        render({ _n: _n2 }) {
           const label = this.label ? ` ${this.label}` : "";
-          return `break${label};` + _n;
+          return `break${label};` + _n2;
         }
       };
       __name(Break, "Break");
@@ -11460,8 +11460,8 @@
           super();
           this.error = error2;
         }
-        render({ _n }) {
-          return `throw ${this.error};` + _n;
+        render({ _n: _n2 }) {
+          return `throw ${this.error};` + _n2;
         }
         get names() {
           return this.error.names;
@@ -11473,8 +11473,8 @@
           super();
           this.code = code;
         }
-        render({ _n }) {
-          return `${this.code};` + _n;
+        render({ _n: _n2 }) {
+          return `${this.code};` + _n2;
         }
         optimizeNodes() {
           return `${this.code}` ? this : void 0;
@@ -11494,36 +11494,36 @@
           this.nodes = nodes;
         }
         render(opts) {
-          return this.nodes.reduce((code, n) => code + n.render(opts), "");
+          return this.nodes.reduce((code, n2) => code + n2.render(opts), "");
         }
         optimizeNodes() {
           const { nodes } = this;
-          let i = nodes.length;
-          while (i--) {
-            const n = nodes[i].optimizeNodes();
-            if (Array.isArray(n))
-              nodes.splice(i, 1, ...n);
-            else if (n)
-              nodes[i] = n;
+          let i2 = nodes.length;
+          while (i2--) {
+            const n2 = nodes[i2].optimizeNodes();
+            if (Array.isArray(n2))
+              nodes.splice(i2, 1, ...n2);
+            else if (n2)
+              nodes[i2] = n2;
             else
-              nodes.splice(i, 1);
+              nodes.splice(i2, 1);
           }
           return nodes.length > 0 ? this : void 0;
         }
         optimizeNames(names, constants) {
           const { nodes } = this;
-          let i = nodes.length;
-          while (i--) {
-            const n = nodes[i];
-            if (n.optimizeNames(names, constants))
+          let i2 = nodes.length;
+          while (i2--) {
+            const n2 = nodes[i2];
+            if (n2.optimizeNames(names, constants))
               continue;
-            subtractNames(names, n.names);
-            nodes.splice(i, 1);
+            subtractNames(names, n2.names);
+            nodes.splice(i2, 1);
           }
           return nodes.length > 0 ? this : void 0;
         }
         get names() {
-          return this.nodes.reduce((names, n) => addNames(names, n.names), {});
+          return this.nodes.reduce((names, n2) => addNames(names, n2.names), {});
         }
       };
       __name(ParentNode, "ParentNode");
@@ -11556,25 +11556,25 @@
           const cond = this.condition;
           if (cond === true)
             return this.nodes;
-          let e = this.else;
-          if (e) {
-            const ns = e.optimizeNodes();
-            e = this.else = Array.isArray(ns) ? new Else(ns) : ns;
+          let e3 = this.else;
+          if (e3) {
+            const ns = e3.optimizeNodes();
+            e3 = this.else = Array.isArray(ns) ? new Else(ns) : ns;
           }
-          if (e) {
+          if (e3) {
             if (cond === false)
-              return e instanceof If ? e : e.nodes;
+              return e3 instanceof If ? e3 : e3.nodes;
             if (this.nodes.length)
               return this;
-            return new If(not(cond), e instanceof If ? [e] : e.nodes);
+            return new If(not(cond), e3 instanceof If ? [e3] : e3.nodes);
           }
           if (cond === false || !this.nodes.length)
             return void 0;
           return this;
         }
         optimizeNames(names, constants) {
-          var _a;
-          this.else = (_a = this.else) === null || _a === void 0 ? void 0 : _a.optimizeNames(names, constants);
+          var _a2;
+          this.else = (_a2 = this.else) === null || _a2 === void 0 ? void 0 : _a2.optimizeNames(names, constants);
           if (!(super.optimizeNames(names, constants) || this.else))
             return;
           this.condition = optimizeExpr(this.condition, names, constants);
@@ -11685,16 +11685,16 @@
           return code;
         }
         optimizeNodes() {
-          var _a, _b;
+          var _a2, _b;
           super.optimizeNodes();
-          (_a = this.catch) === null || _a === void 0 ? void 0 : _a.optimizeNodes();
+          (_a2 = this.catch) === null || _a2 === void 0 ? void 0 : _a2.optimizeNodes();
           (_b = this.finally) === null || _b === void 0 ? void 0 : _b.optimizeNodes();
           return this;
         }
         optimizeNames(names, constants) {
-          var _a, _b;
+          var _a2, _b;
           super.optimizeNames(names, constants);
-          (_a = this.catch) === null || _a === void 0 ? void 0 : _a.optimizeNames(names, constants);
+          (_a2 = this.catch) === null || _a2 === void 0 ? void 0 : _a2.optimizeNames(names, constants);
           (_b = this.finally) === null || _b === void 0 ? void 0 : _b.optimizeNames(names, constants);
           return this;
         }
@@ -11782,11 +11782,11 @@
         add(lhs, rhs) {
           return this._leafNode(new AssignOp(lhs, exports.operators.ADD, rhs));
         }
-        code(c) {
-          if (typeof c == "function")
-            c();
-          else if (c !== code_1.nil)
-            this._leafNode(new AnyCode(c));
+        code(c2) {
+          if (typeof c2 == "function")
+            c2();
+          else if (c2 !== code_1.nil)
+            this._leafNode(new AnyCode(c2));
           return this;
         }
         object(...keyValues) {
@@ -11840,8 +11840,8 @@
           const name = this._scope.toName(nameOrPrefix);
           if (this.opts.es5) {
             const arr = iterable instanceof code_1.Name ? iterable : this.var("_arr", iterable);
-            return this.forRange("_i", 0, code_1._`${arr}.length`, (i) => {
-              this.var(name, code_1._`${arr}[${i}]`);
+            return this.forRange("_i", 0, code_1._`${arr}.length`, (i2) => {
+              this.var(name, code_1._`${arr}[${i2}]`);
               forBody(name);
             });
           }
@@ -11917,8 +11917,8 @@
         endFunc() {
           return this._endBlockNode(Func);
         }
-        optimize(n = 1) {
-          while (n-- > 0) {
+        optimize(n2 = 1) {
+          while (n2-- > 0) {
             this._root.optimizeNodes();
             this._root.optimizeNames(this._root.names, this._constants);
           }
@@ -11932,19 +11932,19 @@
           this._nodes.push(node);
         }
         _endBlockNode(N1, N2) {
-          const n = this._currNode;
-          if (n instanceof N1 || N2 && n instanceof N2) {
+          const n2 = this._currNode;
+          if (n2 instanceof N1 || N2 && n2 instanceof N2) {
             this._nodes.pop();
             return this;
           }
           throw new Error(`CodeGen: not in block "${N2 ? `${N1.kind}/${N2.kind}` : N1.kind}"`);
         }
         _elseNode(node) {
-          const n = this._currNode;
-          if (!(n instanceof If)) {
+          const n2 = this._currNode;
+          if (!(n2 instanceof If)) {
             throw new Error('CodeGen: "else" without "if"');
           }
-          this._currNode = n.else = node;
+          this._currNode = n2.else = node;
           return this;
         }
         get _root() {
@@ -11962,8 +11962,8 @@
       __name(CodeGen, "CodeGen");
       exports.CodeGen = CodeGen;
       function addNames(names, from3) {
-        for (const n in from3)
-          names[n] = (names[n] || 0) + (from3[n] || 0);
+        for (const n2 in from3)
+          names[n2] = (names[n2] || 0) + (from3[n2] || 0);
         return names;
       }
       __name(addNames, "addNames");
@@ -11976,36 +11976,36 @@
           return replaceName(expr);
         if (!canOptimize(expr))
           return expr;
-        return new code_1._Code(expr._items.reduce((items, c) => {
-          if (c instanceof code_1.Name)
-            c = replaceName(c);
-          if (c instanceof code_1._Code)
-            items.push(...c._items);
+        return new code_1._Code(expr._items.reduce((items, c2) => {
+          if (c2 instanceof code_1.Name)
+            c2 = replaceName(c2);
+          if (c2 instanceof code_1._Code)
+            items.push(...c2._items);
           else
-            items.push(c);
+            items.push(c2);
           return items;
         }, []));
-        function replaceName(n) {
-          const c = constants[n.str];
-          if (c === void 0 || names[n.str] !== 1)
-            return n;
-          delete names[n.str];
-          return c;
+        function replaceName(n2) {
+          const c2 = constants[n2.str];
+          if (c2 === void 0 || names[n2.str] !== 1)
+            return n2;
+          delete names[n2.str];
+          return c2;
         }
         __name(replaceName, "replaceName");
-        function canOptimize(e) {
-          return e instanceof code_1._Code && e._items.some((c) => c instanceof code_1.Name && names[c.str] === 1 && constants[c.str] !== void 0);
+        function canOptimize(e3) {
+          return e3 instanceof code_1._Code && e3._items.some((c2) => c2 instanceof code_1.Name && names[c2.str] === 1 && constants[c2.str] !== void 0);
         }
         __name(canOptimize, "canOptimize");
       }
       __name(optimizeExpr, "optimizeExpr");
       function subtractNames(names, from3) {
-        for (const n in from3)
-          names[n] = (names[n] || 0) - (from3[n] || 0);
+        for (const n2 in from3)
+          names[n2] = (names[n2] || 0) - (from3[n2] || 0);
       }
       __name(subtractNames, "subtractNames");
-      function not(x) {
-        return typeof x == "boolean" || typeof x == "number" || x === null ? !x : code_1._`!${par(x)}`;
+      function not(x2) {
+        return typeof x2 == "boolean" || typeof x2 == "number" || x2 === null ? !x2 : code_1._`!${par(x2)}`;
       }
       __name(not, "not");
       exports.not = not;
@@ -12016,17 +12016,17 @@
       __name(and, "and");
       exports.and = and;
       var orCode = mappend(exports.operators.OR);
-      function or(...args) {
+      function or2(...args) {
         return args.reduce(orCode);
       }
-      __name(or, "or");
-      exports.or = or;
+      __name(or2, "or");
+      exports.or = or2;
       function mappend(op) {
-        return (x, y) => x === code_1.nil ? y : y === code_1.nil ? x : code_1._`${par(x)} ${op} ${par(y)}`;
+        return (x2, y2) => x2 === code_1.nil ? y2 : y2 === code_1.nil ? x2 : code_1._`${par(x2)} ${op} ${par(y2)}`;
       }
       __name(mappend, "mappend");
-      function par(x) {
-        return x instanceof code_1.Name ? x : code_1._`(${x})`;
+      function par(x2) {
+        return x2 instanceof code_1.Name ? x2 : code_1._`(${x2})`;
       }
       __name(par, "par");
     }
@@ -12050,18 +12050,18 @@
       }
       __name(toHash, "toHash");
       exports.toHash = toHash;
-      function alwaysValidSchema(it, schema2) {
+      function alwaysValidSchema(it2, schema2) {
         if (typeof schema2 == "boolean")
           return schema2;
         if (Object.keys(schema2).length === 0)
           return true;
-        checkUnknownRules(it, schema2);
-        return !schemaHasRules(schema2, it.self.RULES.all);
+        checkUnknownRules(it2, schema2);
+        return !schemaHasRules(schema2, it2.self.RULES.all);
       }
       __name(alwaysValidSchema, "alwaysValidSchema");
       exports.alwaysValidSchema = alwaysValidSchema;
-      function checkUnknownRules(it, schema2 = it.schema) {
-        const { opts, self: self2 } = it;
+      function checkUnknownRules(it2, schema2 = it2.schema) {
+        const { opts, self: self2 } = it2;
         if (!opts.strictSchema)
           return;
         if (typeof schema2 === "boolean")
@@ -12069,7 +12069,7 @@
         const rules = self2.RULES.keywords;
         for (const key in schema2) {
           if (!rules[key])
-            checkStrictMode(it, `unknown keyword: "${key}"`);
+            checkStrictMode(it2, `unknown keyword: "${key}"`);
         }
       }
       __name(checkUnknownRules, "checkUnknownRules");
@@ -12127,12 +12127,12 @@
       }
       __name(unescapeJsonPointer, "unescapeJsonPointer");
       exports.unescapeJsonPointer = unescapeJsonPointer;
-      function eachItem(xs, f) {
+      function eachItem(xs, f2) {
         if (Array.isArray(xs)) {
-          for (const x of xs)
-            f(x);
+          for (const x2 of xs)
+            f2(x2);
         } else {
-          f(xs);
+          f2(xs);
         }
       }
       __name(eachItem, "eachItem");
@@ -12178,15 +12178,15 @@
       __name(evaluatedPropsToName, "evaluatedPropsToName");
       exports.evaluatedPropsToName = evaluatedPropsToName;
       function setEvaluated(gen, props, ps) {
-        Object.keys(ps).forEach((p) => gen.assign(codegen_1._`${props}${codegen_1.getProperty(p)}`, true));
+        Object.keys(ps).forEach((p2) => gen.assign(codegen_1._`${props}${codegen_1.getProperty(p2)}`, true));
       }
       __name(setEvaluated, "setEvaluated");
       exports.setEvaluated = setEvaluated;
       var snippets = {};
-      function useFunc(gen, f) {
+      function useFunc(gen, f2) {
         return gen.scopeValue("func", {
-          ref: f,
-          code: snippets[f.code] || (snippets[f.code] = new code_1._Code(f.code))
+          ref: f2,
+          code: snippets[f2.code] || (snippets[f2.code] = new code_1._Code(f2.code))
         });
       }
       __name(useFunc, "useFunc");
@@ -12205,13 +12205,13 @@
       }
       __name(getErrorPath, "getErrorPath");
       exports.getErrorPath = getErrorPath;
-      function checkStrictMode(it, msg, mode = it.opts.strictSchema) {
+      function checkStrictMode(it2, msg, mode = it2.opts.strictSchema) {
         if (!mode)
           return;
         msg = `strict mode: ${msg}`;
         if (mode === true)
           throw new Error(msg);
-        it.self.logger.warn(msg);
+        it2.self.logger.warn(msg);
       }
       __name(checkStrictMode, "checkStrictMode");
       exports.checkStrictMode = checkStrictMode;
@@ -12266,24 +12266,24 @@
         message: ({ keyword, schemaType }) => schemaType ? codegen_1.str`"${keyword}" keyword must be ${schemaType} ($data)` : codegen_1.str`"${keyword}" keyword is invalid ($data)`
       };
       function reportError(cxt, error2 = exports.keywordError, errorPaths, overrideAllErrors) {
-        const { it } = cxt;
-        const { gen, compositeRule, allErrors } = it;
+        const { it: it2 } = cxt;
+        const { gen, compositeRule, allErrors } = it2;
         const errObj = errorObjectCode(cxt, error2, errorPaths);
         if (overrideAllErrors !== null && overrideAllErrors !== void 0 ? overrideAllErrors : compositeRule || allErrors) {
           addError(gen, errObj);
         } else {
-          returnErrors(it, codegen_1._`[${errObj}]`);
+          returnErrors(it2, codegen_1._`[${errObj}]`);
         }
       }
       __name(reportError, "reportError");
       exports.reportError = reportError;
       function reportExtraError(cxt, error2 = exports.keywordError, errorPaths) {
-        const { it } = cxt;
-        const { gen, compositeRule, allErrors } = it;
+        const { it: it2 } = cxt;
+        const { gen, compositeRule, allErrors } = it2;
         const errObj = errorObjectCode(cxt, error2, errorPaths);
         addError(gen, errObj);
         if (!(compositeRule || allErrors)) {
-          returnErrors(it, names_1.default.vErrors);
+          returnErrors(it2, names_1.default.vErrors);
         }
       }
       __name(reportExtraError, "reportExtraError");
@@ -12294,15 +12294,15 @@
       }
       __name(resetErrorsCount, "resetErrorsCount");
       exports.resetErrorsCount = resetErrorsCount;
-      function extendErrors({ gen, keyword, schemaValue, data, errsCount, it }) {
+      function extendErrors({ gen, keyword, schemaValue, data, errsCount, it: it2 }) {
         if (errsCount === void 0)
           throw new Error("ajv implementation error");
         const err = gen.name("err");
-        gen.forRange("i", errsCount, names_1.default.errors, (i) => {
-          gen.const(err, codegen_1._`${names_1.default.vErrors}[${i}]`);
-          gen.if(codegen_1._`${err}.instancePath === undefined`, () => gen.assign(codegen_1._`${err}.instancePath`, codegen_1.strConcat(names_1.default.instancePath, it.errorPath)));
-          gen.assign(codegen_1._`${err}.schemaPath`, codegen_1.str`${it.errSchemaPath}/${keyword}`);
-          if (it.opts.verbose) {
+        gen.forRange("i", errsCount, names_1.default.errors, (i2) => {
+          gen.const(err, codegen_1._`${names_1.default.vErrors}[${i2}]`);
+          gen.if(codegen_1._`${err}.instancePath === undefined`, () => gen.assign(codegen_1._`${err}.instancePath`, codegen_1.strConcat(names_1.default.instancePath, it2.errorPath)));
+          gen.assign(codegen_1._`${err}.schemaPath`, codegen_1.str`${it2.errSchemaPath}/${keyword}`);
+          if (it2.opts.verbose) {
             gen.assign(codegen_1._`${err}.schema`, schemaValue);
             gen.assign(codegen_1._`${err}.data`, data);
           }
@@ -12316,17 +12316,17 @@
         gen.code(codegen_1._`${names_1.default.errors}++`);
       }
       __name(addError, "addError");
-      function returnErrors(it, errs) {
-        const { gen, validateName, schemaEnv } = it;
+      function returnErrors(it2, errs) {
+        const { gen, validateName, schemaEnv } = it2;
         if (schemaEnv.$async) {
-          gen.throw(codegen_1._`new ${it.ValidationError}(${errs})`);
+          gen.throw(codegen_1._`new ${it2.ValidationError}(${errs})`);
         } else {
           gen.assign(codegen_1._`${validateName}.errors`, errs);
           gen.return(false);
         }
       }
       __name(returnErrors, "returnErrors");
-      var E = {
+      var E2 = {
         keyword: new codegen_1.Name("keyword"),
         schemaPath: new codegen_1.Name("schemaPath"),
         params: new codegen_1.Name("params"),
@@ -12343,9 +12343,9 @@
       }
       __name(errorObjectCode, "errorObjectCode");
       function errorObject(cxt, error2, errorPaths = {}) {
-        const { gen, it } = cxt;
+        const { gen, it: it2 } = cxt;
         const keyValues = [
-          errorInstancePath(it, errorPaths),
+          errorInstancePath(it2, errorPaths),
           errorSchemaPath(cxt, errorPaths)
         ];
         extraErrorProps(cxt, error2, keyValues);
@@ -12362,21 +12362,21 @@
         if (schemaPath) {
           schPath = codegen_1.str`${schPath}${util_1.getErrorPath(schemaPath, util_1.Type.Str)}`;
         }
-        return [E.schemaPath, schPath];
+        return [E2.schemaPath, schPath];
       }
       __name(errorSchemaPath, "errorSchemaPath");
       function extraErrorProps(cxt, { params, message }, keyValues) {
-        const { keyword, data, schemaValue, it } = cxt;
-        const { opts, propertyName, topSchemaRef, schemaPath } = it;
-        keyValues.push([E.keyword, keyword], [E.params, typeof params == "function" ? params(cxt) : params || codegen_1._`{}`]);
+        const { keyword, data, schemaValue, it: it2 } = cxt;
+        const { opts, propertyName, topSchemaRef, schemaPath } = it2;
+        keyValues.push([E2.keyword, keyword], [E2.params, typeof params == "function" ? params(cxt) : params || codegen_1._`{}`]);
         if (opts.messages) {
-          keyValues.push([E.message, typeof message == "function" ? message(cxt) : message]);
+          keyValues.push([E2.message, typeof message == "function" ? message(cxt) : message]);
         }
         if (opts.verbose) {
-          keyValues.push([E.schema, schemaValue], [E.parentSchema, codegen_1._`${topSchemaRef}${schemaPath}`], [names_1.default.data, data]);
+          keyValues.push([E2.schema, schemaValue], [E2.parentSchema, codegen_1._`${topSchemaRef}${schemaPath}`], [names_1.default.data, data]);
         }
         if (propertyName)
-          keyValues.push([E.propertyName, propertyName]);
+          keyValues.push([E2.propertyName, propertyName]);
       }
       __name(extraErrorProps, "extraErrorProps");
     }
@@ -12396,10 +12396,10 @@
       var boolError = {
         message: "boolean schema is false"
       };
-      function topBoolOrEmptySchema(it) {
-        const { gen, schema: schema2, validateName } = it;
+      function topBoolOrEmptySchema(it2) {
+        const { gen, schema: schema2, validateName } = it2;
         if (schema2 === false) {
-          falseSchemaError(it, false);
+          falseSchemaError(it2, false);
         } else if (typeof schema2 == "object" && schema2.$async === true) {
           gen.return(names_1.default.data);
         } else {
@@ -12409,19 +12409,19 @@
       }
       __name(topBoolOrEmptySchema, "topBoolOrEmptySchema");
       exports.topBoolOrEmptySchema = topBoolOrEmptySchema;
-      function boolOrEmptySchema(it, valid) {
-        const { gen, schema: schema2 } = it;
+      function boolOrEmptySchema(it2, valid) {
+        const { gen, schema: schema2 } = it2;
         if (schema2 === false) {
           gen.var(valid, false);
-          falseSchemaError(it);
+          falseSchemaError(it2);
         } else {
           gen.var(valid, true);
         }
       }
       __name(boolOrEmptySchema, "boolOrEmptySchema");
       exports.boolOrEmptySchema = boolOrEmptySchema;
-      function falseSchemaError(it, overrideAllErrors) {
-        const { gen, data } = it;
+      function falseSchemaError(it2, overrideAllErrors) {
+        const { gen, data } = it2;
         const cxt = {
           gen,
           keyword: "false schema",
@@ -12430,7 +12430,7 @@
           schemaCode: false,
           schemaValue: false,
           params: {},
-          it
+          it: it2
         };
         errors_1.reportError(cxt, boolError, void 0, overrideAllErrors);
       }
@@ -12448,8 +12448,8 @@
       exports.getRules = exports.isJSONType = void 0;
       var _jsonTypes = ["string", "number", "integer", "boolean", "null", "object", "array"];
       var jsonTypes = new Set(_jsonTypes);
-      function isJSONType(x) {
-        return typeof x == "string" && jsonTypes.has(x);
+      function isJSONType(x2) {
+        return typeof x2 == "string" && jsonTypes.has(x2);
       }
       __name(isJSONType, "isJSONType");
       exports.isJSONType = isJSONType;
@@ -12493,8 +12493,8 @@
       __name(shouldUseGroup, "shouldUseGroup");
       exports.shouldUseGroup = shouldUseGroup;
       function shouldUseRule(schema2, rule) {
-        var _a;
-        return schema2[rule.keyword] !== void 0 || ((_a = rule.definition.implements) === null || _a === void 0 ? void 0 : _a.some((kwd) => schema2[kwd] !== void 0));
+        var _a2;
+        return schema2[rule.keyword] !== void 0 || ((_a2 = rule.definition.implements) === null || _a2 === void 0 ? void 0 : _a2.some((kwd) => schema2[kwd] !== void 0));
       }
       __name(shouldUseRule, "shouldUseRule");
       exports.shouldUseRule = shouldUseRule;
@@ -12544,17 +12544,17 @@
       }
       __name(getJSONTypes, "getJSONTypes");
       exports.getJSONTypes = getJSONTypes;
-      function coerceAndCheckDataType(it, types) {
-        const { gen, data, opts } = it;
+      function coerceAndCheckDataType(it2, types) {
+        const { gen, data, opts } = it2;
         const coerceTo = coerceToTypes(types, opts.coerceTypes);
-        const checkTypes = types.length > 0 && !(coerceTo.length === 0 && types.length === 1 && applicability_1.schemaHasRulesForType(it, types[0]));
+        const checkTypes = types.length > 0 && !(coerceTo.length === 0 && types.length === 1 && applicability_1.schemaHasRulesForType(it2, types[0]));
         if (checkTypes) {
           const wrongType = checkDataTypes(types, data, opts.strictNumbers, DataType.Wrong);
           gen.if(wrongType, () => {
             if (coerceTo.length)
-              coerceData(it, types, coerceTo);
+              coerceData(it2, types, coerceTo);
             else
-              reportTypeError(it);
+              reportTypeError(it2);
           });
         }
         return checkTypes;
@@ -12563,31 +12563,31 @@
       exports.coerceAndCheckDataType = coerceAndCheckDataType;
       var COERCIBLE = new Set(["string", "number", "integer", "boolean", "null"]);
       function coerceToTypes(types, coerceTypes) {
-        return coerceTypes ? types.filter((t) => COERCIBLE.has(t) || coerceTypes === "array" && t === "array") : [];
+        return coerceTypes ? types.filter((t2) => COERCIBLE.has(t2) || coerceTypes === "array" && t2 === "array") : [];
       }
       __name(coerceToTypes, "coerceToTypes");
-      function coerceData(it, types, coerceTo) {
-        const { gen, data, opts } = it;
+      function coerceData(it2, types, coerceTo) {
+        const { gen, data, opts } = it2;
         const dataType = gen.let("dataType", codegen_1._`typeof ${data}`);
         const coerced = gen.let("coerced", codegen_1._`undefined`);
         if (opts.coerceTypes === "array") {
           gen.if(codegen_1._`${dataType} == 'object' && Array.isArray(${data}) && ${data}.length == 1`, () => gen.assign(data, codegen_1._`${data}[0]`).assign(dataType, codegen_1._`typeof ${data}`).if(checkDataTypes(types, data, opts.strictNumbers), () => gen.assign(coerced, data)));
         }
         gen.if(codegen_1._`${coerced} !== undefined`);
-        for (const t of coerceTo) {
-          if (COERCIBLE.has(t) || t === "array" && opts.coerceTypes === "array") {
-            coerceSpecificType(t);
+        for (const t2 of coerceTo) {
+          if (COERCIBLE.has(t2) || t2 === "array" && opts.coerceTypes === "array") {
+            coerceSpecificType(t2);
           }
         }
         gen.else();
-        reportTypeError(it);
+        reportTypeError(it2);
         gen.endIf();
         gen.if(codegen_1._`${coerced} !== undefined`, () => {
           gen.assign(data, coerced);
-          assignParentData(it, coerced);
+          assignParentData(it2, coerced);
         });
-        function coerceSpecificType(t) {
-          switch (t) {
+        function coerceSpecificType(t2) {
+          switch (t2) {
             case "string":
               gen.elseIf(codegen_1._`${dataType} == "number" || ${dataType} == "boolean"`).assign(coerced, codegen_1._`"" + ${data}`).elseIf(codegen_1._`${data} === null`).assign(coerced, codegen_1._`""`);
               return;
@@ -12664,8 +12664,8 @@
         }
         if (types.number)
           delete types.integer;
-        for (const t in types)
-          cond = codegen_1.and(cond, checkDataType(t, data, strictNums, correct));
+        for (const t2 in types)
+          cond = codegen_1.and(cond, checkDataType(t2, data, strictNums, correct));
         return cond;
       }
       __name(checkDataTypes, "checkDataTypes");
@@ -12674,15 +12674,15 @@
         message: ({ schema: schema2 }) => `must be ${schema2}`,
         params: ({ schema: schema2, schemaValue }) => typeof schema2 == "string" ? codegen_1._`{type: ${schema2}}` : codegen_1._`{type: ${schemaValue}}`
       };
-      function reportTypeError(it) {
-        const cxt = getTypeErrorContext(it);
+      function reportTypeError(it2) {
+        const cxt = getTypeErrorContext(it2);
         errors_1.reportError(cxt, typeError);
       }
       __name(reportTypeError, "reportTypeError");
       exports.reportTypeError = reportTypeError;
-      function getTypeErrorContext(it) {
-        const { gen, data, schema: schema2 } = it;
-        const schemaCode = util_1.schemaRefOrVal(it, schema2, "type");
+      function getTypeErrorContext(it2) {
+        const { gen, data, schema: schema2 } = it2;
+        const schemaCode = util_1.schemaRefOrVal(it2, schema2, "type");
         return {
           gen,
           keyword: "type",
@@ -12692,7 +12692,7 @@
           schemaValue: schemaCode,
           parentSchema: schema2,
           params: {},
-          it
+          it: it2
         };
       }
       __name(getTypeErrorContext, "getTypeErrorContext");
@@ -12709,25 +12709,25 @@
       exports.assignDefaults = void 0;
       var codegen_1 = require_codegen();
       var util_1 = require_util3();
-      function assignDefaults(it, ty) {
-        const { properties, items } = it.schema;
+      function assignDefaults(it2, ty) {
+        const { properties, items } = it2.schema;
         if (ty === "object" && properties) {
           for (const key in properties) {
-            assignDefault(it, key, properties[key].default);
+            assignDefault(it2, key, properties[key].default);
           }
         } else if (ty === "array" && Array.isArray(items)) {
-          items.forEach((sch, i) => assignDefault(it, i, sch.default));
+          items.forEach((sch, i2) => assignDefault(it2, i2, sch.default));
         }
       }
       __name(assignDefaults, "assignDefaults");
       exports.assignDefaults = assignDefaults;
-      function assignDefault(it, prop, defaultValue) {
-        const { gen, compositeRule, data, opts } = it;
+      function assignDefault(it2, prop, defaultValue) {
+        const { gen, compositeRule, data, opts } = it2;
         if (defaultValue === void 0)
           return;
         const childData = codegen_1._`${data}${codegen_1.getProperty(prop)}`;
         if (compositeRule) {
-          util_1.checkStrictMode(it, `default is ignored for: ${childData}`);
+          util_1.checkStrictMode(it2, `default is ignored for: ${childData}`);
           return;
         }
         let condition = codegen_1._`${childData} === undefined`;
@@ -12752,8 +12752,8 @@
       var util_1 = require_util3();
       var names_1 = require_names();
       function checkReportMissingProp(cxt, prop) {
-        const { gen, data, it } = cxt;
-        gen.if(noPropertyInData(gen, data, prop, it.opts.ownProperties), () => {
+        const { gen, data, it: it2 } = cxt;
+        gen.if(noPropertyInData(gen, data, prop, it2.opts.ownProperties), () => {
           cxt.setParams({ missingProperty: codegen_1._`${prop}` }, true);
           cxt.error();
         });
@@ -12797,24 +12797,24 @@
       __name(noPropertyInData, "noPropertyInData");
       exports.noPropertyInData = noPropertyInData;
       function allSchemaProperties(schemaMap) {
-        return schemaMap ? Object.keys(schemaMap).filter((p) => p !== "__proto__") : [];
+        return schemaMap ? Object.keys(schemaMap).filter((p2) => p2 !== "__proto__") : [];
       }
       __name(allSchemaProperties, "allSchemaProperties");
       exports.allSchemaProperties = allSchemaProperties;
-      function schemaProperties(it, schemaMap) {
-        return allSchemaProperties(schemaMap).filter((p) => !util_1.alwaysValidSchema(it, schemaMap[p]));
+      function schemaProperties(it2, schemaMap) {
+        return allSchemaProperties(schemaMap).filter((p2) => !util_1.alwaysValidSchema(it2, schemaMap[p2]));
       }
       __name(schemaProperties, "schemaProperties");
       exports.schemaProperties = schemaProperties;
-      function callValidateCode({ schemaCode, data, it: { gen, topSchemaRef, schemaPath, errorPath }, it }, func, context, passSchema) {
+      function callValidateCode({ schemaCode, data, it: { gen, topSchemaRef, schemaPath, errorPath }, it: it2 }, func, context, passSchema) {
         const dataAndSchema = passSchema ? codegen_1._`${schemaCode}, ${data}, ${topSchemaRef}${schemaPath}` : data;
         const valCxt = [
           [names_1.default.instancePath, codegen_1.strConcat(names_1.default.instancePath, errorPath)],
-          [names_1.default.parentData, it.parentData],
-          [names_1.default.parentDataProperty, it.parentDataProperty],
+          [names_1.default.parentData, it2.parentData],
+          [names_1.default.parentDataProperty, it2.parentDataProperty],
           [names_1.default.rootData, names_1.default.rootData]
         ];
-        if (it.opts.dynamicRef)
+        if (it2.opts.dynamicRef)
           valCxt.push([names_1.default.dynamicAnchors, names_1.default.dynamicAnchors]);
         const args = codegen_1._`${dataAndSchema}, ${gen.object(...valCxt)}`;
         return context !== codegen_1.nil ? codegen_1._`${func}.call(${context}, ${args})` : codegen_1._`${func}(${args})`;
@@ -12822,19 +12822,19 @@
       __name(callValidateCode, "callValidateCode");
       exports.callValidateCode = callValidateCode;
       function usePattern({ gen, it: { opts } }, pattern) {
-        const u = opts.unicodeRegExp ? "u" : "";
+        const u2 = opts.unicodeRegExp ? "u" : "";
         return gen.scopeValue("pattern", {
           key: pattern,
-          ref: new RegExp(pattern, u),
-          code: codegen_1._`new RegExp(${pattern}, ${u})`
+          ref: new RegExp(pattern, u2),
+          code: codegen_1._`new RegExp(${pattern}, ${u2})`
         });
       }
       __name(usePattern, "usePattern");
       exports.usePattern = usePattern;
       function validateArray(cxt) {
-        const { gen, data, keyword, it } = cxt;
+        const { gen, data, keyword, it: it2 } = cxt;
         const valid = gen.name("valid");
-        if (it.allErrors) {
+        if (it2.allErrors) {
           const validArr = gen.let("valid", true);
           validateItems(() => gen.assign(validArr, false));
           return validArr;
@@ -12844,10 +12844,10 @@
         return valid;
         function validateItems(notValid) {
           const len = gen.const("len", codegen_1._`${data}.length`);
-          gen.forRange("i", 0, len, (i) => {
+          gen.forRange("i", 0, len, (i2) => {
             cxt.subschema({
               keyword,
-              dataProp: i,
+              dataProp: i2,
               dataPropType: util_1.Type.Num
             }, valid);
             gen.if(codegen_1.not(valid), notValid);
@@ -12858,18 +12858,18 @@
       __name(validateArray, "validateArray");
       exports.validateArray = validateArray;
       function validateUnion(cxt) {
-        const { gen, schema: schema2, keyword, it } = cxt;
+        const { gen, schema: schema2, keyword, it: it2 } = cxt;
         if (!Array.isArray(schema2))
           throw new Error("ajv implementation error");
-        const alwaysValid = schema2.some((sch) => util_1.alwaysValidSchema(it, sch));
-        if (alwaysValid && !it.opts.unevaluated)
+        const alwaysValid = schema2.some((sch) => util_1.alwaysValidSchema(it2, sch));
+        if (alwaysValid && !it2.opts.unevaluated)
           return;
         const valid = gen.let("valid", false);
         const schValid = gen.name("_valid");
-        gen.block(() => schema2.forEach((_sch, i) => {
+        gen.block(() => schema2.forEach((_sch, i2) => {
           const schCxt = cxt.subschema({
             keyword,
-            schemaProp: i,
+            schemaProp: i2,
             compositeRule: true
           }, schValid);
           gen.assign(valid, codegen_1._`${valid} || ${schValid}`);
@@ -12897,16 +12897,16 @@
       var code_1 = require_code2();
       var errors_1 = require_errors();
       function macroKeywordCode(cxt, def) {
-        const { gen, keyword, schema: schema2, parentSchema, it } = cxt;
-        const macroSchema = def.macro.call(it.self, schema2, parentSchema, it);
+        const { gen, keyword, schema: schema2, parentSchema, it: it2 } = cxt;
+        const macroSchema = def.macro.call(it2.self, schema2, parentSchema, it2);
         const schemaRef = useKeyword(gen, keyword, macroSchema);
-        if (it.opts.validateSchema !== false)
-          it.self.validateSchema(macroSchema, true);
+        if (it2.opts.validateSchema !== false)
+          it2.self.validateSchema(macroSchema, true);
         const valid = gen.name("valid");
         cxt.subschema({
           schema: macroSchema,
           schemaPath: codegen_1.nil,
-          errSchemaPath: `${it.errSchemaPath}/${keyword}`,
+          errSchemaPath: `${it2.errSchemaPath}/${keyword}`,
           topSchemaRef: schemaRef,
           compositeRule: true
         }, valid);
@@ -12915,14 +12915,14 @@
       __name(macroKeywordCode, "macroKeywordCode");
       exports.macroKeywordCode = macroKeywordCode;
       function funcKeywordCode(cxt, def) {
-        var _a;
-        const { gen, keyword, schema: schema2, parentSchema, $data, it } = cxt;
-        checkAsyncKeyword(it, def);
-        const validate = !$data && def.compile ? def.compile.call(it.self, schema2, parentSchema, it) : def.validate;
+        var _a2;
+        const { gen, keyword, schema: schema2, parentSchema, $data, it: it2 } = cxt;
+        checkAsyncKeyword(it2, def);
+        const validate = !$data && def.compile ? def.compile.call(it2.self, schema2, parentSchema, it2) : def.validate;
         const validateRef = useKeyword(gen, keyword, validate);
         const valid = gen.let("valid");
         cxt.block$data(valid, validateKeyword);
-        cxt.ok((_a = def.valid) !== null && _a !== void 0 ? _a : valid);
+        cxt.ok((_a2 = def.valid) !== null && _a2 !== void 0 ? _a2 : valid);
         function validateKeyword() {
           if (def.errors === false) {
             assignValid();
@@ -12939,7 +12939,7 @@
         __name(validateKeyword, "validateKeyword");
         function validateAsync() {
           const ruleErrs = gen.let("ruleErrs", null);
-          gen.try(() => assignValid(codegen_1._`await `), (e) => gen.assign(valid, false).if(codegen_1._`${e} instanceof ${it.ValidationError}`, () => gen.assign(ruleErrs, codegen_1._`${e}.errors`), () => gen.throw(e)));
+          gen.try(() => assignValid(codegen_1._`await `), (e3) => gen.assign(valid, false).if(codegen_1._`${e3} instanceof ${it2.ValidationError}`, () => gen.assign(ruleErrs, codegen_1._`${e3}.errors`), () => gen.throw(e3)));
           return ruleErrs;
         }
         __name(validateAsync, "validateAsync");
@@ -12951,22 +12951,22 @@
         }
         __name(validateSync, "validateSync");
         function assignValid(_await = def.async ? codegen_1._`await ` : codegen_1.nil) {
-          const passCxt = it.opts.passContext ? names_1.default.this : names_1.default.self;
+          const passCxt = it2.opts.passContext ? names_1.default.this : names_1.default.self;
           const passSchema = !("compile" in def && !$data || def.schema === false);
           gen.assign(valid, codegen_1._`${_await}${code_1.callValidateCode(cxt, validateRef, passCxt, passSchema)}`, def.modifying);
         }
         __name(assignValid, "assignValid");
         function reportErrs(errors) {
-          var _a2;
-          gen.if(codegen_1.not((_a2 = def.valid) !== null && _a2 !== void 0 ? _a2 : valid), errors);
+          var _a3;
+          gen.if(codegen_1.not((_a3 = def.valid) !== null && _a3 !== void 0 ? _a3 : valid), errors);
         }
         __name(reportErrs, "reportErrs");
       }
       __name(funcKeywordCode, "funcKeywordCode");
       exports.funcKeywordCode = funcKeywordCode;
       function modifyData(cxt) {
-        const { gen, data, it } = cxt;
-        gen.if(it.parentData, () => gen.assign(data, codegen_1._`${it.parentData}[${it.parentDataProperty}]`));
+        const { gen, data, it: it2 } = cxt;
+        gen.if(it2.parentData, () => gen.assign(data, codegen_1._`${it2.parentData}[${it2.parentDataProperty}]`));
       }
       __name(modifyData, "modifyData");
       function addErrs(cxt, errs) {
@@ -12989,7 +12989,7 @@
       }
       __name(useKeyword, "useKeyword");
       function validSchemaType(schema2, schemaType, allowUndefined = false) {
-        return !schemaType.length || schemaType.some((st) => st === "array" ? Array.isArray(schema2) : st === "object" ? schema2 && typeof schema2 == "object" && !Array.isArray(schema2) : typeof schema2 == st || allowUndefined && typeof schema2 == "undefined");
+        return !schemaType.length || schemaType.some((st2) => st2 === "array" ? Array.isArray(schema2) : st2 === "object" ? schema2 && typeof schema2 == "object" && !Array.isArray(schema2) : typeof schema2 == st2 || allowUndefined && typeof schema2 == "undefined");
       }
       __name(validSchemaType, "validSchemaType");
       exports.validSchemaType = validSchemaType;
@@ -13027,20 +13027,20 @@
       exports.extendSubschemaMode = exports.extendSubschemaData = exports.getSubschema = void 0;
       var codegen_1 = require_codegen();
       var util_1 = require_util3();
-      function getSubschema(it, { keyword, schemaProp, schema: schema2, schemaPath, errSchemaPath, topSchemaRef }) {
+      function getSubschema(it2, { keyword, schemaProp, schema: schema2, schemaPath, errSchemaPath, topSchemaRef }) {
         if (keyword !== void 0 && schema2 !== void 0) {
           throw new Error('both "keyword" and "schema" passed, only one allowed');
         }
         if (keyword !== void 0) {
-          const sch = it.schema[keyword];
+          const sch = it2.schema[keyword];
           return schemaProp === void 0 ? {
             schema: sch,
-            schemaPath: codegen_1._`${it.schemaPath}${codegen_1.getProperty(keyword)}`,
-            errSchemaPath: `${it.errSchemaPath}/${keyword}`
+            schemaPath: codegen_1._`${it2.schemaPath}${codegen_1.getProperty(keyword)}`,
+            errSchemaPath: `${it2.errSchemaPath}/${keyword}`
           } : {
             schema: sch[schemaProp],
-            schemaPath: codegen_1._`${it.schemaPath}${codegen_1.getProperty(keyword)}${codegen_1.getProperty(schemaProp)}`,
-            errSchemaPath: `${it.errSchemaPath}/${keyword}/${util_1.escapeFragment(schemaProp)}`
+            schemaPath: codegen_1._`${it2.schemaPath}${codegen_1.getProperty(keyword)}${codegen_1.getProperty(schemaProp)}`,
+            errSchemaPath: `${it2.errSchemaPath}/${keyword}/${util_1.escapeFragment(schemaProp)}`
           };
         }
         if (schema2 !== void 0) {
@@ -13058,14 +13058,14 @@
       }
       __name(getSubschema, "getSubschema");
       exports.getSubschema = getSubschema;
-      function extendSubschemaData(subschema, it, { dataProp, dataPropType: dpType, data, dataTypes, propertyName }) {
+      function extendSubschemaData(subschema, it2, { dataProp, dataPropType: dpType, data, dataTypes, propertyName }) {
         if (data !== void 0 && dataProp !== void 0) {
           throw new Error('both "data" and "dataProp" passed, only one allowed');
         }
-        const { gen } = it;
+        const { gen } = it2;
         if (dataProp !== void 0) {
-          const { errorPath, dataPathArr, opts } = it;
-          const nextData = gen.let("data", codegen_1._`${it.data}${codegen_1.getProperty(dataProp)}`, true);
+          const { errorPath, dataPathArr, opts } = it2;
+          const nextData = gen.let("data", codegen_1._`${it2.data}${codegen_1.getProperty(dataProp)}`, true);
           dataContextProps(nextData);
           subschema.errorPath = codegen_1.str`${errorPath}${util_1.getErrorPath(dataProp, dpType, opts.jsPropertySyntax)}`;
           subschema.parentDataProperty = codegen_1._`${dataProp}`;
@@ -13081,11 +13081,11 @@
           subschema.dataTypes = dataTypes;
         function dataContextProps(_nextData) {
           subschema.data = _nextData;
-          subschema.dataLevel = it.dataLevel + 1;
+          subschema.dataLevel = it2.dataLevel + 1;
           subschema.dataTypes = [];
-          it.definedProperties = new Set();
-          subschema.parentData = it.data;
-          subschema.dataNames = [...it.dataNames, _nextData];
+          it2.definedProperties = new Set();
+          subschema.parentData = it2.data;
+          subschema.dataNames = [...it2.dataNames, _nextData];
         }
         __name(dataContextProps, "dataContextProps");
       }
@@ -13112,43 +13112,43 @@
       init_virtual_process_polyfill();
       init_buffer();
       "use strict";
-      module.exports = /* @__PURE__ */ __name(function equal2(a, b) {
-        if (a === b)
+      module.exports = /* @__PURE__ */ __name(function equal2(a2, b2) {
+        if (a2 === b2)
           return true;
-        if (a && b && typeof a == "object" && typeof b == "object") {
-          if (a.constructor !== b.constructor)
+        if (a2 && b2 && typeof a2 == "object" && typeof b2 == "object") {
+          if (a2.constructor !== b2.constructor)
             return false;
-          var length, i, keys2;
-          if (Array.isArray(a)) {
-            length = a.length;
-            if (length != b.length)
+          var length, i2, keys2;
+          if (Array.isArray(a2)) {
+            length = a2.length;
+            if (length != b2.length)
               return false;
-            for (i = length; i-- !== 0; )
-              if (!equal2(a[i], b[i]))
+            for (i2 = length; i2-- !== 0; )
+              if (!equal2(a2[i2], b2[i2]))
                 return false;
             return true;
           }
-          if (a.constructor === RegExp)
-            return a.source === b.source && a.flags === b.flags;
-          if (a.valueOf !== Object.prototype.valueOf)
-            return a.valueOf() === b.valueOf();
-          if (a.toString !== Object.prototype.toString)
-            return a.toString() === b.toString();
-          keys2 = Object.keys(a);
+          if (a2.constructor === RegExp)
+            return a2.source === b2.source && a2.flags === b2.flags;
+          if (a2.valueOf !== Object.prototype.valueOf)
+            return a2.valueOf() === b2.valueOf();
+          if (a2.toString !== Object.prototype.toString)
+            return a2.toString() === b2.toString();
+          keys2 = Object.keys(a2);
           length = keys2.length;
-          if (length !== Object.keys(b).length)
+          if (length !== Object.keys(b2).length)
             return false;
-          for (i = length; i-- !== 0; )
-            if (!Object.prototype.hasOwnProperty.call(b, keys2[i]))
+          for (i2 = length; i2-- !== 0; )
+            if (!Object.prototype.hasOwnProperty.call(b2, keys2[i2]))
               return false;
-          for (i = length; i-- !== 0; ) {
-            var key = keys2[i];
-            if (!equal2(a[key], b[key]))
+          for (i2 = length; i2-- !== 0; ) {
+            var key = keys2[i2];
+            if (!equal2(a2[key], b2[key]))
               return false;
           }
           return true;
         }
-        return a !== a && b !== b;
+        return a2 !== a2 && b2 !== b2;
       }, "equal");
     }
   });
@@ -13222,8 +13222,8 @@
             var sch = schema2[key];
             if (Array.isArray(sch)) {
               if (key in traverse.arrayKeywords) {
-                for (var i = 0; i < sch.length; i++)
-                  _traverse(opts, pre, post, sch[i], jsonPtr + "/" + key + "/" + i, rootSchema, jsonPtr, key, schema2, i);
+                for (var i2 = 0; i2 < sch.length; i2++)
+                  _traverse(opts, pre, post, sch[i2], jsonPtr + "/" + key + "/" + i2, rootSchema, jsonPtr, key, schema2, i2);
               }
             } else if (key in traverse.propsKeywords) {
               if (sch && typeof sch == "object") {
@@ -13261,8 +13261,8 @@
           if (sets2.length > 1) {
             sets2[0] = sets2[0].slice(0, -1);
             var xl = sets2.length - 1;
-            for (var x = 1; x < xl; ++x) {
-              sets2[x] = sets2[x].slice(1, -1);
+            for (var x2 = 1; x2 < xl; ++x2) {
+              sets2[x2] = sets2[x2].slice(1, -1);
             }
             sets2[xl] = sets2[xl].slice(1);
             return sets2.join("");
@@ -13275,8 +13275,8 @@
           return "(?:" + str2 + ")";
         }
         __name(subexp, "subexp");
-        function typeOf(o) {
-          return o === void 0 ? "undefined" : o === null ? "null" : Object.prototype.toString.call(o).split(" ").pop().split("]").shift().toLowerCase();
+        function typeOf(o2) {
+          return o2 === void 0 ? "undefined" : o2 === null ? "null" : Object.prototype.toString.call(o2).split(" ").pop().split("]").shift().toLowerCase();
         }
         __name(typeOf, "typeOf");
         function toUpperCase(str2) {
@@ -13319,37 +13319,37 @@
         var URI_PROTOCOL = buildExps(false);
         var IRI_PROTOCOL = buildExps(true);
         var slicedToArray = function() {
-          function sliceIterator(arr, i) {
+          function sliceIterator(arr, i2) {
             var _arr = [];
-            var _n = true;
+            var _n2 = true;
             var _d = false;
-            var _e = void 0;
+            var _e2 = void 0;
             try {
-              for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+              for (var _i = arr[Symbol.iterator](), _s; !(_n2 = (_s = _i.next()).done); _n2 = true) {
                 _arr.push(_s.value);
-                if (i && _arr.length === i)
+                if (i2 && _arr.length === i2)
                   break;
               }
             } catch (err) {
               _d = true;
-              _e = err;
+              _e2 = err;
             } finally {
               try {
-                if (!_n && _i["return"])
+                if (!_n2 && _i["return"])
                   _i["return"]();
               } finally {
                 if (_d)
-                  throw _e;
+                  throw _e2;
               }
             }
             return _arr;
           }
           __name(sliceIterator, "sliceIterator");
-          return function(arr, i) {
+          return function(arr, i2) {
             if (Array.isArray(arr)) {
               return arr;
             } else if (Symbol.iterator in Object(arr)) {
-              return sliceIterator(arr, i);
+              return sliceIterator(arr, i2);
             } else {
               throw new TypeError("Invalid attempt to destructure non-iterable instance");
             }
@@ -13357,8 +13357,8 @@
         }();
         var toConsumableArray = /* @__PURE__ */ __name(function(arr) {
           if (Array.isArray(arr)) {
-            for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++)
-              arr2[i] = arr[i];
+            for (var i2 = 0, arr2 = Array(arr.length); i2 < arr.length; i2++)
+              arr2[i2] = arr[i2];
             return arr2;
           } else {
             return Array.from(arr);
@@ -13388,16 +13388,16 @@
           throw new RangeError(errors[type3]);
         }
         __name(error$1, "error$1");
-        function map2(array, fn) {
+        function map2(array, fn2) {
           var result = [];
           var length = array.length;
           while (length--) {
-            result[length] = fn(array[length]);
+            result[length] = fn2(array[length]);
           }
           return result;
         }
         __name(map2, "map");
-        function mapDomain(string2, fn) {
+        function mapDomain(string2, fn2) {
           var parts = string2.split("@");
           var result = "";
           if (parts.length > 1) {
@@ -13406,7 +13406,7 @@
           }
           string2 = string2.replace(regexSeparators, ".");
           var labels = string2.split(".");
-          var encoded = map2(labels, fn).join(".");
+          var encoded = map2(labels, fn2).join(".");
           return result + encoded;
         }
         __name(mapDomain, "mapDomain");
@@ -13450,59 +13450,59 @@
           return digit + 22 + 75 * (digit < 26) - ((flag != 0) << 5);
         }, "digitToBasic");
         var adapt = /* @__PURE__ */ __name(function adapt2(delta, numPoints, firstTime) {
-          var k = 0;
+          var k2 = 0;
           delta = firstTime ? floor(delta / damp) : delta >> 1;
           delta += floor(delta / numPoints);
-          for (; delta > baseMinusTMin * tMax >> 1; k += base) {
+          for (; delta > baseMinusTMin * tMax >> 1; k2 += base) {
             delta = floor(delta / baseMinusTMin);
           }
-          return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
+          return floor(k2 + (baseMinusTMin + 1) * delta / (delta + skew));
         }, "adapt");
         var decode = /* @__PURE__ */ __name(function decode2(input) {
           var output2 = [];
           var inputLength = input.length;
-          var i = 0;
-          var n = initialN;
+          var i2 = 0;
+          var n2 = initialN;
           var bias = initialBias;
           var basic = input.lastIndexOf(delimiter2);
           if (basic < 0) {
             basic = 0;
           }
-          for (var j = 0; j < basic; ++j) {
-            if (input.charCodeAt(j) >= 128) {
+          for (var j2 = 0; j2 < basic; ++j2) {
+            if (input.charCodeAt(j2) >= 128) {
               error$1("not-basic");
             }
-            output2.push(input.charCodeAt(j));
+            output2.push(input.charCodeAt(j2));
           }
           for (var index = basic > 0 ? basic + 1 : 0; index < inputLength; ) {
-            var oldi = i;
-            for (var w = 1, k = base; ; k += base) {
+            var oldi = i2;
+            for (var w2 = 1, k2 = base; ; k2 += base) {
               if (index >= inputLength) {
                 error$1("invalid-input");
               }
               var digit = basicToDigit(input.charCodeAt(index++));
-              if (digit >= base || digit > floor((maxInt - i) / w)) {
+              if (digit >= base || digit > floor((maxInt - i2) / w2)) {
                 error$1("overflow");
               }
-              i += digit * w;
-              var t = k <= bias ? tMin : k >= bias + tMax ? tMax : k - bias;
-              if (digit < t) {
+              i2 += digit * w2;
+              var t2 = k2 <= bias ? tMin : k2 >= bias + tMax ? tMax : k2 - bias;
+              if (digit < t2) {
                 break;
               }
-              var baseMinusT = base - t;
-              if (w > floor(maxInt / baseMinusT)) {
+              var baseMinusT = base - t2;
+              if (w2 > floor(maxInt / baseMinusT)) {
                 error$1("overflow");
               }
-              w *= baseMinusT;
+              w2 *= baseMinusT;
             }
             var out = output2.length + 1;
-            bias = adapt(i - oldi, out, oldi == 0);
-            if (floor(i / out) > maxInt - n) {
+            bias = adapt(i2 - oldi, out, oldi == 0);
+            if (floor(i2 / out) > maxInt - n2) {
               error$1("overflow");
             }
-            n += floor(i / out);
-            i %= out;
-            output2.splice(i++, 0, n);
+            n2 += floor(i2 / out);
+            i2 %= out;
+            output2.splice(i2++, 0, n2);
           }
           return String.fromCodePoint.apply(String, output2);
         }, "decode");
@@ -13510,7 +13510,7 @@
           var output2 = [];
           input = ucs2decode(input);
           var inputLength = input.length;
-          var n = initialN;
+          var n2 = initialN;
           var delta = 0;
           var bias = initialBias;
           var _iteratorNormalCompletion = true;
@@ -13543,15 +13543,15 @@
             output2.push(delimiter2);
           }
           while (handledCPCount < inputLength) {
-            var m = maxInt;
+            var m2 = maxInt;
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
             var _iteratorError2 = void 0;
             try {
               for (var _iterator2 = input[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                 var currentValue = _step2.value;
-                if (currentValue >= n && currentValue < m) {
-                  m = currentValue;
+                if (currentValue >= n2 && currentValue < m2) {
+                  m2 = currentValue;
                 }
               }
             } catch (err) {
@@ -13569,33 +13569,33 @@
               }
             }
             var handledCPCountPlusOne = handledCPCount + 1;
-            if (m - n > floor((maxInt - delta) / handledCPCountPlusOne)) {
+            if (m2 - n2 > floor((maxInt - delta) / handledCPCountPlusOne)) {
               error$1("overflow");
             }
-            delta += (m - n) * handledCPCountPlusOne;
-            n = m;
+            delta += (m2 - n2) * handledCPCountPlusOne;
+            n2 = m2;
             var _iteratorNormalCompletion3 = true;
             var _didIteratorError3 = false;
             var _iteratorError3 = void 0;
             try {
               for (var _iterator3 = input[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                 var _currentValue = _step3.value;
-                if (_currentValue < n && ++delta > maxInt) {
+                if (_currentValue < n2 && ++delta > maxInt) {
                   error$1("overflow");
                 }
-                if (_currentValue == n) {
-                  var q = delta;
-                  for (var k = base; ; k += base) {
-                    var t = k <= bias ? tMin : k >= bias + tMax ? tMax : k - bias;
-                    if (q < t) {
+                if (_currentValue == n2) {
+                  var q2 = delta;
+                  for (var k2 = base; ; k2 += base) {
+                    var t2 = k2 <= bias ? tMin : k2 >= bias + tMax ? tMax : k2 - bias;
+                    if (q2 < t2) {
                       break;
                     }
-                    var qMinusT = q - t;
-                    var baseMinusT = base - t;
-                    output2.push(stringFromCharCode(digitToBasic(t + qMinusT % baseMinusT, 0)));
-                    q = floor(qMinusT / baseMinusT);
+                    var qMinusT = q2 - t2;
+                    var baseMinusT = base - t2;
+                    output2.push(stringFromCharCode(digitToBasic(t2 + qMinusT % baseMinusT, 0)));
+                    q2 = floor(qMinusT / baseMinusT);
                   }
-                  output2.push(stringFromCharCode(digitToBasic(q, 0)));
+                  output2.push(stringFromCharCode(digitToBasic(q2, 0)));
                   bias = adapt(delta, handledCPCountPlusOne, handledCPCount == basicLength);
                   delta = 0;
                   ++handledCPCount;
@@ -13616,7 +13616,7 @@
               }
             }
             ++delta;
-            ++n;
+            ++n2;
           }
           return output2.join("");
         }, "encode");
@@ -13643,48 +13643,48 @@
         };
         var SCHEMES = {};
         function pctEncChar(chr) {
-          var c = chr.charCodeAt(0);
-          var e = void 0;
-          if (c < 16)
-            e = "%0" + c.toString(16).toUpperCase();
-          else if (c < 128)
-            e = "%" + c.toString(16).toUpperCase();
-          else if (c < 2048)
-            e = "%" + (c >> 6 | 192).toString(16).toUpperCase() + "%" + (c & 63 | 128).toString(16).toUpperCase();
+          var c2 = chr.charCodeAt(0);
+          var e3 = void 0;
+          if (c2 < 16)
+            e3 = "%0" + c2.toString(16).toUpperCase();
+          else if (c2 < 128)
+            e3 = "%" + c2.toString(16).toUpperCase();
+          else if (c2 < 2048)
+            e3 = "%" + (c2 >> 6 | 192).toString(16).toUpperCase() + "%" + (c2 & 63 | 128).toString(16).toUpperCase();
           else
-            e = "%" + (c >> 12 | 224).toString(16).toUpperCase() + "%" + (c >> 6 & 63 | 128).toString(16).toUpperCase() + "%" + (c & 63 | 128).toString(16).toUpperCase();
-          return e;
+            e3 = "%" + (c2 >> 12 | 224).toString(16).toUpperCase() + "%" + (c2 >> 6 & 63 | 128).toString(16).toUpperCase() + "%" + (c2 & 63 | 128).toString(16).toUpperCase();
+          return e3;
         }
         __name(pctEncChar, "pctEncChar");
         function pctDecChars(str2) {
           var newStr = "";
-          var i = 0;
+          var i2 = 0;
           var il = str2.length;
-          while (i < il) {
-            var c = parseInt(str2.substr(i + 1, 2), 16);
-            if (c < 128) {
-              newStr += String.fromCharCode(c);
-              i += 3;
-            } else if (c >= 194 && c < 224) {
-              if (il - i >= 6) {
-                var c2 = parseInt(str2.substr(i + 4, 2), 16);
-                newStr += String.fromCharCode((c & 31) << 6 | c2 & 63);
+          while (i2 < il) {
+            var c2 = parseInt(str2.substr(i2 + 1, 2), 16);
+            if (c2 < 128) {
+              newStr += String.fromCharCode(c2);
+              i2 += 3;
+            } else if (c2 >= 194 && c2 < 224) {
+              if (il - i2 >= 6) {
+                var c22 = parseInt(str2.substr(i2 + 4, 2), 16);
+                newStr += String.fromCharCode((c2 & 31) << 6 | c22 & 63);
               } else {
-                newStr += str2.substr(i, 6);
+                newStr += str2.substr(i2, 6);
               }
-              i += 6;
-            } else if (c >= 224) {
-              if (il - i >= 9) {
-                var _c = parseInt(str2.substr(i + 4, 2), 16);
-                var c3 = parseInt(str2.substr(i + 7, 2), 16);
-                newStr += String.fromCharCode((c & 15) << 12 | (_c & 63) << 6 | c3 & 63);
+              i2 += 6;
+            } else if (c2 >= 224) {
+              if (il - i2 >= 9) {
+                var _c = parseInt(str2.substr(i2 + 4, 2), 16);
+                var c3 = parseInt(str2.substr(i2 + 7, 2), 16);
+                newStr += String.fromCharCode((c2 & 15) << 12 | (_c & 63) << 6 | c3 & 63);
               } else {
-                newStr += str2.substr(i, 9);
+                newStr += str2.substr(i2, 9);
               }
-              i += 9;
+              i2 += 9;
             } else {
-              newStr += str2.substr(i, 3);
-              i += 3;
+              newStr += str2.substr(i2, 3);
+              i2 += 3;
             }
           }
           return newStr;
@@ -13736,8 +13736,8 @@
             var fieldCount = isLastFieldIPv4Address ? 7 : 8;
             var lastFieldsStart = lastFields.length - fieldCount;
             var fields = Array(fieldCount);
-            for (var x = 0; x < fieldCount; ++x) {
-              fields[x] = firstFields[x] || lastFields[lastFieldsStart + x] || "";
+            for (var x2 = 0; x2 < fieldCount; ++x2) {
+              fields[x2] = firstFields[x2] || lastFields[lastFieldsStart + x2] || "";
             }
             if (isLastFieldIPv4Address) {
               fields[fieldCount - 1] = _normalizeIPv4(fields[fieldCount - 1], protocol);
@@ -13753,8 +13753,8 @@
               }
               return acc;
             }, []);
-            var longestZeroFields = allZeroFields.sort(function(a, b) {
-              return b.length - a.length;
+            var longestZeroFields = allZeroFields.sort(function(a2, b2) {
+              return b2.length - a2.length;
             })[0];
             var newHost = void 0;
             if (longestZeroFields && longestZeroFields.length > 1) {
@@ -13826,8 +13826,8 @@
               if (components.host && (options.domainHost || schemeHandler && schemeHandler.domainHost)) {
                 try {
                   components.host = punycode.toASCII(components.host.replace(protocol.PCT_ENCODED, pctDecChars).toLowerCase());
-                } catch (e) {
-                  components.error = components.error || "Host's domain name can not be converted to ASCII via punycode: " + e;
+                } catch (e3) {
+                  components.error = components.error || "Host's domain name can not be converted to ASCII via punycode: " + e3;
                 }
               }
               _normalizeComponentEncoding(components, URI_PROTOCOL);
@@ -13851,7 +13851,7 @@
             uriTokens.push("@");
           }
           if (components.host !== void 0) {
-            uriTokens.push(_normalizeIPv6(_normalizeIPv4(String(components.host), protocol), protocol).replace(protocol.IPV6ADDRESS, function(_23, $1, $2) {
+            uriTokens.push(_normalizeIPv6(_normalizeIPv4(String(components.host), protocol), protocol).replace(protocol.IPV6ADDRESS, function(_24, $1, $2) {
               return "[" + $1 + ($2 ? "%25" + $2 : "") + "]";
             }));
           }
@@ -13881,9 +13881,9 @@
             } else {
               var im = input.match(RDS5);
               if (im) {
-                var s = im[0];
-                input = input.slice(s.length);
-                output2.push(s);
+                var s2 = im[0];
+                input = input.slice(s2.length);
+                output2.push(s2);
               } else {
                 throw new Error("Unexpected dot segment condition");
               }
@@ -13904,8 +13904,8 @@
             } else if (options.domainHost || schemeHandler && schemeHandler.domainHost) {
               try {
                 components.host = !options.iri ? punycode.toASCII(components.host.replace(protocol.PCT_ENCODED, pctDecChars).toLowerCase()) : punycode.toUnicode(components.host);
-              } catch (e) {
-                components.error = components.error || "Host's domain name can not be converted to " + (!options.iri ? "ASCII" : "Unicode") + " via punycode: " + e;
+              } catch (e3) {
+                components.error = components.error || "Host's domain name can not be converted to " + (!options.iri ? "ASCII" : "Unicode") + " via punycode: " + e3;
               }
             }
           }
@@ -13925,14 +13925,14 @@
             }
           }
           if (components.path !== void 0) {
-            var s = components.path;
+            var s2 = components.path;
             if (!options.absolutePath && (!schemeHandler || !schemeHandler.absolutePath)) {
-              s = removeDotSegments(s);
+              s2 = removeDotSegments(s2);
             }
             if (authority === void 0) {
-              s = s.replace(/^\/\//, "/%2F");
+              s2 = s2.replace(/^\/\//, "/%2F");
             }
-            uriTokens.push(s);
+            uriTokens.push(s2);
           }
           if (components.query !== void 0) {
             uriTokens.push("?");
@@ -14102,7 +14102,7 @@
           parse: handler$2.parse,
           serialize: handler$2.serialize
         };
-        var O = {};
+        var O2 = {};
         var isIRI = true;
         var UNRESERVED$$ = "[A-Za-z0-9\\-\\.\\_\\~" + (isIRI ? "\\xA0-\\u200D\\u2010-\\u2029\\u202F-\\uD7FF\\uF900-\\uFDCF\\uFDF0-\\uFFEF" : "") + "]";
         var HEXDIG$$ = "[0-9A-Fa-f]";
@@ -14131,8 +14131,8 @@
               var unknownHeaders = false;
               var headers = {};
               var hfields = mailtoComponents.query.split("&");
-              for (var x = 0, xl = hfields.length; x < xl; ++x) {
-                var hfield = hfields[x].split("=");
+              for (var x2 = 0, xl = hfields.length; x2 < xl; ++x2) {
+                var hfield = hfields[x2].split("=");
                 switch (hfield[0]) {
                   case "to":
                     var toAddrs = hfield[1].split(",");
@@ -14162,8 +14162,8 @@
               if (!options.unicodeSupport) {
                 try {
                   addr[1] = punycode.toASCII(unescapeComponent(addr[1], options).toLowerCase());
-                } catch (e) {
-                  mailtoComponents.error = mailtoComponents.error || "Email address's domain name can not be converted to ASCII via punycode: " + e;
+                } catch (e3) {
+                  mailtoComponents.error = mailtoComponents.error || "Email address's domain name can not be converted to ASCII via punycode: " + e3;
                 }
               } else {
                 addr[1] = unescapeComponent(addr[1], options).toLowerCase();
@@ -14176,17 +14176,17 @@
             var components = mailtoComponents;
             var to = toArray2(mailtoComponents.to);
             if (to) {
-              for (var x = 0, xl = to.length; x < xl; ++x) {
-                var toAddr = String(to[x]);
+              for (var x2 = 0, xl = to.length; x2 < xl; ++x2) {
+                var toAddr = String(to[x2]);
                 var atIdx = toAddr.lastIndexOf("@");
                 var localPart = toAddr.slice(0, atIdx).replace(PCT_ENCODED, decodeUnreserved).replace(PCT_ENCODED, toUpperCase).replace(NOT_LOCAL_PART, pctEncChar);
                 var domain2 = toAddr.slice(atIdx + 1);
                 try {
                   domain2 = !options.iri ? punycode.toASCII(unescapeComponent(domain2, options).toLowerCase()) : punycode.toUnicode(domain2);
-                } catch (e) {
-                  components.error = components.error || "Email address's domain name can not be converted to " + (!options.iri ? "ASCII" : "Unicode") + " via punycode: " + e;
+                } catch (e3) {
+                  components.error = components.error || "Email address's domain name can not be converted to " + (!options.iri ? "ASCII" : "Unicode") + " via punycode: " + e3;
                 }
-                to[x] = localPart + "@" + domain2;
+                to[x2] = localPart + "@" + domain2;
               }
               components.path = to.join(",");
             }
@@ -14197,7 +14197,7 @@
               headers["body"] = mailtoComponents.body;
             var fields = [];
             for (var name in headers) {
-              if (headers[name] !== O[name]) {
+              if (headers[name] !== O2[name]) {
                 fields.push(name.replace(PCT_ENCODED, decodeUnreserved).replace(PCT_ENCODED, toUpperCase).replace(NOT_HFNAME, pctEncChar) + "=" + headers[name].replace(PCT_ENCODED, decodeUnreserved).replace(PCT_ENCODED, toUpperCase).replace(NOT_HFVALUE, pctEncChar));
               }
             }
@@ -14367,13 +14367,13 @@
       function getFullPath(id = "", normalize2) {
         if (normalize2 !== false)
           id = normalizeId(id);
-        const p = URI.parse(id);
-        return _getFullPath(p);
+        const p2 = URI.parse(id);
+        return _getFullPath(p2);
       }
       __name(getFullPath, "getFullPath");
       exports.getFullPath = getFullPath;
-      function _getFullPath(p) {
-        return URI.serialize(p).split("#")[0] + "#";
+      function _getFullPath(p2) {
+        return URI.serialize(p2).split("#")[0] + "#";
       }
       __name(_getFullPath, "_getFullPath");
       exports._getFullPath = _getFullPath;
@@ -14399,7 +14399,7 @@
         const pathPrefix = getFullPath(schId, false);
         const localRefs = {};
         const schemaRefs = new Set();
-        traverse(schema2, { allKeys: true }, (sch, jsonPtr, _23, parentJsonPtr) => {
+        traverse(schema2, { allKeys: true }, (sch, jsonPtr, _24, parentJsonPtr) => {
           if (parentJsonPtr === void 0)
             return;
           const fullPath = pathPrefix + jsonPtr;
@@ -14475,15 +14475,15 @@
       var resolve_1 = require_resolve();
       var util_1 = require_util3();
       var errors_1 = require_errors();
-      function validateFunctionCode(it) {
-        if (isSchemaObj(it)) {
-          checkKeywords(it);
-          if (schemaCxtHasRules(it)) {
-            topSchemaObjCode(it);
+      function validateFunctionCode(it2) {
+        if (isSchemaObj(it2)) {
+          checkKeywords(it2);
+          if (schemaCxtHasRules(it2)) {
+            topSchemaObjCode(it2);
             return;
           }
         }
-        validateFunction(it, () => boolSchema_1.topBoolOrEmptySchema(it));
+        validateFunction(it2, () => boolSchema_1.topBoolOrEmptySchema(it2));
       }
       __name(validateFunctionCode, "validateFunctionCode");
       exports.validateFunctionCode = validateFunctionCode;
@@ -14521,27 +14521,27 @@
         });
       }
       __name(destructureValCxtES5, "destructureValCxtES5");
-      function topSchemaObjCode(it) {
-        const { schema: schema2, opts, gen } = it;
-        validateFunction(it, () => {
+      function topSchemaObjCode(it2) {
+        const { schema: schema2, opts, gen } = it2;
+        validateFunction(it2, () => {
           if (opts.$comment && schema2.$comment)
-            commentKeyword(it);
-          checkNoDefault(it);
+            commentKeyword(it2);
+          checkNoDefault(it2);
           gen.let(names_1.default.vErrors, null);
           gen.let(names_1.default.errors, 0);
           if (opts.unevaluated)
-            resetEvaluated(it);
-          typeAndKeywords(it);
-          returnResults(it);
+            resetEvaluated(it2);
+          typeAndKeywords(it2);
+          returnResults(it2);
         });
         return;
       }
       __name(topSchemaObjCode, "topSchemaObjCode");
-      function resetEvaluated(it) {
-        const { gen, validateName } = it;
-        it.evaluated = gen.const("evaluated", codegen_1._`${validateName}.evaluated`);
-        gen.if(codegen_1._`${it.evaluated}.dynamicProps`, () => gen.assign(codegen_1._`${it.evaluated}.props`, codegen_1._`undefined`));
-        gen.if(codegen_1._`${it.evaluated}.dynamicItems`, () => gen.assign(codegen_1._`${it.evaluated}.items`, codegen_1._`undefined`));
+      function resetEvaluated(it2) {
+        const { gen, validateName } = it2;
+        it2.evaluated = gen.const("evaluated", codegen_1._`${validateName}.evaluated`);
+        gen.if(codegen_1._`${it2.evaluated}.dynamicProps`, () => gen.assign(codegen_1._`${it2.evaluated}.props`, codegen_1._`undefined`));
+        gen.if(codegen_1._`${it2.evaluated}.dynamicItems`, () => gen.assign(codegen_1._`${it2.evaluated}.items`, codegen_1._`undefined`));
       }
       __name(resetEvaluated, "resetEvaluated");
       function funcSourceUrl(schema2, opts) {
@@ -14549,15 +14549,15 @@
         return schId && (opts.code.source || opts.code.process) ? codegen_1._`/*# sourceURL=${schId} */` : codegen_1.nil;
       }
       __name(funcSourceUrl, "funcSourceUrl");
-      function subschemaCode(it, valid) {
-        if (isSchemaObj(it)) {
-          checkKeywords(it);
-          if (schemaCxtHasRules(it)) {
-            subSchemaObjCode(it, valid);
+      function subschemaCode(it2, valid) {
+        if (isSchemaObj(it2)) {
+          checkKeywords(it2);
+          if (schemaCxtHasRules(it2)) {
+            subSchemaObjCode(it2, valid);
             return;
           }
         }
-        boolSchema_1.boolOrEmptySchema(it, valid);
+        boolSchema_1.boolOrEmptySchema(it2, valid);
       }
       __name(subschemaCode, "subschemaCode");
       function schemaCxtHasRules({ schema: schema2, self: self2 }) {
@@ -14569,56 +14569,56 @@
         return false;
       }
       __name(schemaCxtHasRules, "schemaCxtHasRules");
-      function isSchemaObj(it) {
-        return typeof it.schema != "boolean";
+      function isSchemaObj(it2) {
+        return typeof it2.schema != "boolean";
       }
       __name(isSchemaObj, "isSchemaObj");
-      function subSchemaObjCode(it, valid) {
-        const { schema: schema2, gen, opts } = it;
+      function subSchemaObjCode(it2, valid) {
+        const { schema: schema2, gen, opts } = it2;
         if (opts.$comment && schema2.$comment)
-          commentKeyword(it);
-        updateContext(it);
-        checkAsyncSchema(it);
+          commentKeyword(it2);
+        updateContext(it2);
+        checkAsyncSchema(it2);
         const errsCount = gen.const("_errs", names_1.default.errors);
-        typeAndKeywords(it, errsCount);
+        typeAndKeywords(it2, errsCount);
         gen.var(valid, codegen_1._`${errsCount} === ${names_1.default.errors}`);
       }
       __name(subSchemaObjCode, "subSchemaObjCode");
-      function checkKeywords(it) {
-        util_1.checkUnknownRules(it);
-        checkRefsAndKeywords(it);
+      function checkKeywords(it2) {
+        util_1.checkUnknownRules(it2);
+        checkRefsAndKeywords(it2);
       }
       __name(checkKeywords, "checkKeywords");
-      function typeAndKeywords(it, errsCount) {
-        if (it.opts.jtd)
-          return schemaKeywords(it, [], false, errsCount);
-        const types = dataType_1.getSchemaTypes(it.schema);
-        const checkedTypes = dataType_1.coerceAndCheckDataType(it, types);
-        schemaKeywords(it, types, !checkedTypes, errsCount);
+      function typeAndKeywords(it2, errsCount) {
+        if (it2.opts.jtd)
+          return schemaKeywords(it2, [], false, errsCount);
+        const types = dataType_1.getSchemaTypes(it2.schema);
+        const checkedTypes = dataType_1.coerceAndCheckDataType(it2, types);
+        schemaKeywords(it2, types, !checkedTypes, errsCount);
       }
       __name(typeAndKeywords, "typeAndKeywords");
-      function checkRefsAndKeywords(it) {
-        const { schema: schema2, errSchemaPath, opts, self: self2 } = it;
+      function checkRefsAndKeywords(it2) {
+        const { schema: schema2, errSchemaPath, opts, self: self2 } = it2;
         if (schema2.$ref && opts.ignoreKeywordsWithRef && util_1.schemaHasRulesButRef(schema2, self2.RULES)) {
           self2.logger.warn(`$ref: keywords ignored in schema at path "${errSchemaPath}"`);
         }
       }
       __name(checkRefsAndKeywords, "checkRefsAndKeywords");
-      function checkNoDefault(it) {
-        const { schema: schema2, opts } = it;
+      function checkNoDefault(it2) {
+        const { schema: schema2, opts } = it2;
         if (schema2.default !== void 0 && opts.useDefaults && opts.strictSchema) {
-          util_1.checkStrictMode(it, "default is ignored in the schema root");
+          util_1.checkStrictMode(it2, "default is ignored in the schema root");
         }
       }
       __name(checkNoDefault, "checkNoDefault");
-      function updateContext(it) {
-        const schId = it.schema[it.opts.schemaId];
+      function updateContext(it2) {
+        const schId = it2.schema[it2.opts.schemaId];
         if (schId)
-          it.baseId = resolve_1.resolveUrl(it.baseId, schId);
+          it2.baseId = resolve_1.resolveUrl(it2.baseId, schId);
       }
       __name(updateContext, "updateContext");
-      function checkAsyncSchema(it) {
-        if (it.schema.$async && !it.schemaEnv.$async)
+      function checkAsyncSchema(it2) {
+        if (it2.schema.$async && !it2.schemaEnv.$async)
           throw new Error("async schema in sync schema");
       }
       __name(checkAsyncSchema, "checkAsyncSchema");
@@ -14633,14 +14633,14 @@
         }
       }
       __name(commentKeyword, "commentKeyword");
-      function returnResults(it) {
-        const { gen, schemaEnv, validateName, ValidationError, opts } = it;
+      function returnResults(it2) {
+        const { gen, schemaEnv, validateName, ValidationError, opts } = it2;
         if (schemaEnv.$async) {
           gen.if(codegen_1._`${names_1.default.errors} === 0`, () => gen.return(names_1.default.data), () => gen.throw(codegen_1._`new ${ValidationError}(${names_1.default.vErrors})`));
         } else {
           gen.assign(codegen_1._`${validateName}.errors`, names_1.default.vErrors);
           if (opts.unevaluated)
-            assignEvaluated(it);
+            assignEvaluated(it2);
           gen.return(codegen_1._`${names_1.default.errors} === 0`);
         }
       }
@@ -14652,15 +14652,15 @@
           gen.assign(codegen_1._`${evaluated}.items`, items);
       }
       __name(assignEvaluated, "assignEvaluated");
-      function schemaKeywords(it, types, typeErrors, errsCount) {
-        const { gen, schema: schema2, data, allErrors, opts, self: self2 } = it;
+      function schemaKeywords(it2, types, typeErrors, errsCount) {
+        const { gen, schema: schema2, data, allErrors, opts, self: self2 } = it2;
         const { RULES } = self2;
         if (schema2.$ref && (opts.ignoreKeywordsWithRef || !util_1.schemaHasRulesButRef(schema2, RULES))) {
-          gen.block(() => keywordCode(it, "$ref", RULES.all.$ref.definition));
+          gen.block(() => keywordCode(it2, "$ref", RULES.all.$ref.definition));
           return;
         }
         if (!opts.jtd)
-          checkStrictTypes(it, types);
+          checkStrictTypes(it2, types);
         gen.block(() => {
           for (const group of RULES.rules)
             groupKeywords(group);
@@ -14671,14 +14671,14 @@
             return;
           if (group.type) {
             gen.if(dataType_2.checkDataType(group.type, data, opts.strictNumbers));
-            iterateKeywords(it, group);
+            iterateKeywords(it2, group);
             if (types.length === 1 && types[0] === group.type && typeErrors) {
               gen.else();
-              dataType_2.reportTypeError(it);
+              dataType_2.reportTypeError(it2);
             }
             gen.endIf();
           } else {
-            iterateKeywords(it, group);
+            iterateKeywords(it2, group);
           }
           if (!allErrors)
             gen.if(codegen_1._`${names_1.default.errors} === ${errsCount || 0}`);
@@ -14686,57 +14686,57 @@
         __name(groupKeywords, "groupKeywords");
       }
       __name(schemaKeywords, "schemaKeywords");
-      function iterateKeywords(it, group) {
-        const { gen, schema: schema2, opts: { useDefaults } } = it;
+      function iterateKeywords(it2, group) {
+        const { gen, schema: schema2, opts: { useDefaults } } = it2;
         if (useDefaults)
-          defaults_1.assignDefaults(it, group.type);
+          defaults_1.assignDefaults(it2, group.type);
         gen.block(() => {
           for (const rule of group.rules) {
             if (applicability_1.shouldUseRule(schema2, rule)) {
-              keywordCode(it, rule.keyword, rule.definition, group.type);
+              keywordCode(it2, rule.keyword, rule.definition, group.type);
             }
           }
         });
       }
       __name(iterateKeywords, "iterateKeywords");
-      function checkStrictTypes(it, types) {
-        if (it.schemaEnv.meta || !it.opts.strictTypes)
+      function checkStrictTypes(it2, types) {
+        if (it2.schemaEnv.meta || !it2.opts.strictTypes)
           return;
-        checkContextTypes(it, types);
-        if (!it.opts.allowUnionTypes)
-          checkMultipleTypes(it, types);
-        checkKeywordTypes(it, it.dataTypes);
+        checkContextTypes(it2, types);
+        if (!it2.opts.allowUnionTypes)
+          checkMultipleTypes(it2, types);
+        checkKeywordTypes(it2, it2.dataTypes);
       }
       __name(checkStrictTypes, "checkStrictTypes");
-      function checkContextTypes(it, types) {
+      function checkContextTypes(it2, types) {
         if (!types.length)
           return;
-        if (!it.dataTypes.length) {
-          it.dataTypes = types;
+        if (!it2.dataTypes.length) {
+          it2.dataTypes = types;
           return;
         }
-        types.forEach((t) => {
-          if (!includesType(it.dataTypes, t)) {
-            strictTypesError(it, `type "${t}" not allowed by context "${it.dataTypes.join(",")}"`);
+        types.forEach((t2) => {
+          if (!includesType(it2.dataTypes, t2)) {
+            strictTypesError(it2, `type "${t2}" not allowed by context "${it2.dataTypes.join(",")}"`);
           }
         });
-        it.dataTypes = it.dataTypes.filter((t) => includesType(types, t));
+        it2.dataTypes = it2.dataTypes.filter((t2) => includesType(types, t2));
       }
       __name(checkContextTypes, "checkContextTypes");
-      function checkMultipleTypes(it, ts) {
+      function checkMultipleTypes(it2, ts) {
         if (ts.length > 1 && !(ts.length === 2 && ts.includes("null"))) {
-          strictTypesError(it, "use allowUnionTypes to allow union type keyword");
+          strictTypesError(it2, "use allowUnionTypes to allow union type keyword");
         }
       }
       __name(checkMultipleTypes, "checkMultipleTypes");
-      function checkKeywordTypes(it, ts) {
-        const rules = it.self.RULES.all;
+      function checkKeywordTypes(it2, ts) {
+        const rules = it2.self.RULES.all;
         for (const keyword in rules) {
           const rule = rules[keyword];
-          if (typeof rule == "object" && applicability_1.shouldUseRule(it.schema, rule)) {
+          if (typeof rule == "object" && applicability_1.shouldUseRule(it2.schema, rule)) {
             const { type: type3 } = rule.definition;
-            if (type3.length && !type3.some((t) => hasApplicableType(ts, t))) {
-              strictTypesError(it, `missing type "${type3.join(",")}" for keyword "${keyword}"`);
+            if (type3.length && !type3.some((t2) => hasApplicableType(ts, t2))) {
+              strictTypesError(it2, `missing type "${type3.join(",")}" for keyword "${keyword}"`);
             }
           }
         }
@@ -14746,33 +14746,33 @@
         return schTs.includes(kwdT) || kwdT === "number" && schTs.includes("integer");
       }
       __name(hasApplicableType, "hasApplicableType");
-      function includesType(ts, t) {
-        return ts.includes(t) || t === "integer" && ts.includes("number");
+      function includesType(ts, t2) {
+        return ts.includes(t2) || t2 === "integer" && ts.includes("number");
       }
       __name(includesType, "includesType");
-      function strictTypesError(it, msg) {
-        const schemaPath = it.schemaEnv.baseId + it.errSchemaPath;
+      function strictTypesError(it2, msg) {
+        const schemaPath = it2.schemaEnv.baseId + it2.errSchemaPath;
         msg += ` at "${schemaPath}" (strictTypes)`;
-        util_1.checkStrictMode(it, msg, it.opts.strictTypes);
+        util_1.checkStrictMode(it2, msg, it2.opts.strictTypes);
       }
       __name(strictTypesError, "strictTypesError");
       var KeywordCxt = class {
-        constructor(it, def, keyword) {
-          keyword_1.validateKeywordUsage(it, def, keyword);
-          this.gen = it.gen;
-          this.allErrors = it.allErrors;
+        constructor(it2, def, keyword) {
+          keyword_1.validateKeywordUsage(it2, def, keyword);
+          this.gen = it2.gen;
+          this.allErrors = it2.allErrors;
           this.keyword = keyword;
-          this.data = it.data;
-          this.schema = it.schema[keyword];
-          this.$data = def.$data && it.opts.$data && this.schema && this.schema.$data;
-          this.schemaValue = util_1.schemaRefOrVal(it, this.schema, keyword, this.$data);
+          this.data = it2.data;
+          this.schema = it2.schema[keyword];
+          this.$data = def.$data && it2.opts.$data && this.schema && this.schema.$data;
+          this.schemaValue = util_1.schemaRefOrVal(it2, this.schema, keyword, this.$data);
           this.schemaType = def.schemaType;
-          this.parentSchema = it.schema;
+          this.parentSchema = it2.schema;
           this.params = {};
-          this.it = it;
+          this.it = it2;
           this.def = def;
           if (this.$data) {
-            this.schemaCode = it.gen.const("vSchema", getData(this.$data, it));
+            this.schemaCode = it2.gen.const("vSchema", getData(this.$data, it2));
           } else {
             this.schemaCode = this.schemaValue;
             if (!keyword_1.validSchemaType(this.schema, def.schemaType, def.allowUndefined)) {
@@ -14780,7 +14780,7 @@
             }
           }
           if ("code" in def ? def.trackErrors : def.errors !== false) {
-            this.errsCount = it.gen.const("_errs", names_1.default.errors);
+            this.errsCount = it2.gen.const("_errs", names_1.default.errors);
           }
         }
         result(condition, successAction, failAction) {
@@ -14877,14 +14877,14 @@
           gen.else();
         }
         invalid$data() {
-          const { gen, schemaCode, schemaType, def, it } = this;
+          const { gen, schemaCode, schemaType, def, it: it2 } = this;
           return codegen_1.or(wrong$DataType(), invalid$DataSchema());
           function wrong$DataType() {
             if (schemaType.length) {
               if (!(schemaCode instanceof codegen_1.Name))
                 throw new Error("ajv implementation error");
-              const st = Array.isArray(schemaType) ? schemaType : [schemaType];
-              return codegen_1._`${dataType_2.checkDataTypes(st, schemaCode, it.opts.strictNumbers, dataType_2.DataType.Wrong)}`;
+              const st2 = Array.isArray(schemaType) ? schemaType : [schemaType];
+              return codegen_1._`${dataType_2.checkDataTypes(st2, schemaCode, it2.opts.strictNumbers, dataType_2.DataType.Wrong)}`;
             }
             return codegen_1.nil;
           }
@@ -14907,19 +14907,19 @@
           return nextContext;
         }
         mergeEvaluated(schemaCxt, toName) {
-          const { it, gen } = this;
-          if (!it.opts.unevaluated)
+          const { it: it2, gen } = this;
+          if (!it2.opts.unevaluated)
             return;
-          if (it.props !== true && schemaCxt.props !== void 0) {
-            it.props = util_1.mergeEvaluated.props(gen, schemaCxt.props, it.props, toName);
+          if (it2.props !== true && schemaCxt.props !== void 0) {
+            it2.props = util_1.mergeEvaluated.props(gen, schemaCxt.props, it2.props, toName);
           }
-          if (it.items !== true && schemaCxt.items !== void 0) {
-            it.items = util_1.mergeEvaluated.items(gen, schemaCxt.items, it.items, toName);
+          if (it2.items !== true && schemaCxt.items !== void 0) {
+            it2.items = util_1.mergeEvaluated.items(gen, schemaCxt.items, it2.items, toName);
           }
         }
         mergeValidEvaluated(schemaCxt, valid) {
-          const { it, gen } = this;
-          if (it.opts.unevaluated && (it.props !== true || it.items !== true)) {
+          const { it: it2, gen } = this;
+          if (it2.opts.unevaluated && (it2.props !== true || it2.items !== true)) {
             gen.if(valid, () => this.mergeEvaluated(schemaCxt, codegen_1.Name));
             return true;
           }
@@ -14927,8 +14927,8 @@
       };
       __name(KeywordCxt, "KeywordCxt");
       exports.KeywordCxt = KeywordCxt;
-      function keywordCode(it, keyword, def, ruleType) {
-        const cxt = new KeywordCxt(it, def, keyword);
+      function keywordCode(it2, keyword, def, ruleType) {
+        const cxt = new KeywordCxt(it2, def, keyword);
         if ("code" in def) {
           def.code(cxt, ruleType);
         } else if (cxt.$data && def.validate) {
@@ -15044,7 +15044,7 @@
       var URI = require_uri_all();
       var SchemaEnv = class {
         constructor(env3) {
-          var _a;
+          var _a2;
           this.refs = {};
           this.dynamicAnchors = {};
           let schema2;
@@ -15053,7 +15053,7 @@
           this.schema = env3.schema;
           this.schemaId = env3.schemaId;
           this.root = env3.root || this;
-          this.baseId = (_a = env3.baseId) !== null && _a !== void 0 ? _a : resolve_1.normalizeId(schema2 === null || schema2 === void 0 ? void 0 : schema2[env3.schemaId || "$id"]);
+          this.baseId = (_a2 = env3.baseId) !== null && _a2 !== void 0 ? _a2 : resolve_1.normalizeId(schema2 === null || schema2 === void 0 ? void 0 : schema2[env3.schemaId || "$id"]);
           this.schemaPath = env3.schemaPath;
           this.localRefs = env3.localRefs;
           this.meta = env3.meta;
@@ -15137,12 +15137,12 @@
           }
           sch.validate = validate;
           return sch;
-        } catch (e) {
+        } catch (e3) {
           delete sch.validate;
           delete sch.validateName;
           if (sourceCode)
             this.logger.error("Error compiling schema, function code:", sourceCode);
-          throw e;
+          throw e3;
         } finally {
           this._compilations.delete(sch);
         }
@@ -15150,14 +15150,14 @@
       __name(compileSchema, "compileSchema");
       exports.compileSchema = compileSchema;
       function resolveRef(root, baseId, ref) {
-        var _a;
+        var _a2;
         ref = resolve_1.resolveUrl(baseId, ref);
         const schOrFunc = root.refs[ref];
         if (schOrFunc)
           return schOrFunc;
         let _sch = resolve2.call(this, root, ref);
         if (_sch === void 0) {
-          const schema2 = (_a = root.localRefs) === null || _a === void 0 ? void 0 : _a[ref];
+          const schema2 = (_a2 = root.localRefs) === null || _a2 === void 0 ? void 0 : _a2[ref];
           const { schemaId } = this.opts;
           if (schema2)
             _sch = new SchemaEnv({ schema: schema2, schemaId, root, baseId });
@@ -15194,11 +15194,11 @@
       }
       __name(resolve2, "resolve");
       function resolveSchema(root, ref) {
-        const p = URI.parse(ref);
-        const refPath = resolve_1._getFullPath(p);
+        const p2 = URI.parse(ref);
+        const refPath = resolve_1._getFullPath(p2);
         let baseId = resolve_1.getFullPath(root.baseId);
         if (Object.keys(root.schema).length > 0 && refPath === baseId) {
-          return getJsonPointer.call(this, p, root);
+          return getJsonPointer.call(this, p2, root);
         }
         const id = resolve_1.normalizeId(refPath);
         const schOrRef = this.refs[id] || this.schemas[id];
@@ -15206,7 +15206,7 @@
           const sch = resolveSchema.call(this, root, schOrRef);
           if (typeof (sch === null || sch === void 0 ? void 0 : sch.schema) !== "object")
             return;
-          return getJsonPointer.call(this, p, sch);
+          return getJsonPointer.call(this, p2, sch);
         }
         if (typeof (schOrRef === null || schOrRef === void 0 ? void 0 : schOrRef.schema) !== "object")
           return;
@@ -15220,7 +15220,7 @@
             baseId = resolve_1.resolveUrl(baseId, schId);
           return new SchemaEnv({ schema: schema2, schemaId, root, baseId });
         }
-        return getJsonPointer.call(this, p, schOrRef);
+        return getJsonPointer.call(this, p2, schOrRef);
       }
       __name(resolveSchema, "resolveSchema");
       exports.resolveSchema = resolveSchema;
@@ -15232,8 +15232,8 @@
         "definitions"
       ]);
       function getJsonPointer(parsedRef, { baseId, schema: schema2, root }) {
-        var _a;
-        if (((_a = parsedRef.fragment) === null || _a === void 0 ? void 0 : _a[0]) !== "/")
+        var _a2;
+        if (((_a2 = parsedRef.fragment) === null || _a2 === void 0 ? void 0 : _a2[0]) !== "/")
           return;
         for (const part of parsedRef.fragment.slice(1).split("/")) {
           if (typeof schema2 == "boolean")
@@ -15359,29 +15359,29 @@
         unicode: '"minLength"/"maxLength" account for unicode characters by default.'
       };
       var MAX_EXPRESSION = 200;
-      function requiredOptions(o) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x;
-        const s = o.strict;
-        const _optz = (_a = o.code) === null || _a === void 0 ? void 0 : _a.optimize;
+      function requiredOptions(o2) {
+        var _a2, _b, _c, _d, _e2, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r2, _s, _t2, _u, _v, _w, _x;
+        const s2 = o2.strict;
+        const _optz = (_a2 = o2.code) === null || _a2 === void 0 ? void 0 : _a2.optimize;
         const optimize = _optz === true || _optz === void 0 ? 1 : _optz || 0;
         return {
-          strictSchema: (_c = (_b = o.strictSchema) !== null && _b !== void 0 ? _b : s) !== null && _c !== void 0 ? _c : true,
-          strictNumbers: (_e = (_d = o.strictNumbers) !== null && _d !== void 0 ? _d : s) !== null && _e !== void 0 ? _e : true,
-          strictTypes: (_g = (_f = o.strictTypes) !== null && _f !== void 0 ? _f : s) !== null && _g !== void 0 ? _g : "log",
-          strictTuples: (_j = (_h = o.strictTuples) !== null && _h !== void 0 ? _h : s) !== null && _j !== void 0 ? _j : "log",
-          strictRequired: (_l = (_k = o.strictRequired) !== null && _k !== void 0 ? _k : s) !== null && _l !== void 0 ? _l : false,
-          code: o.code ? { ...o.code, optimize } : { optimize },
-          loopRequired: (_m = o.loopRequired) !== null && _m !== void 0 ? _m : MAX_EXPRESSION,
-          loopEnum: (_o = o.loopEnum) !== null && _o !== void 0 ? _o : MAX_EXPRESSION,
-          meta: (_p = o.meta) !== null && _p !== void 0 ? _p : true,
-          messages: (_q = o.messages) !== null && _q !== void 0 ? _q : true,
-          inlineRefs: (_r = o.inlineRefs) !== null && _r !== void 0 ? _r : true,
-          schemaId: (_s = o.schemaId) !== null && _s !== void 0 ? _s : "$id",
-          addUsedSchema: (_t = o.addUsedSchema) !== null && _t !== void 0 ? _t : true,
-          validateSchema: (_u = o.validateSchema) !== null && _u !== void 0 ? _u : true,
-          validateFormats: (_v = o.validateFormats) !== null && _v !== void 0 ? _v : true,
-          unicodeRegExp: (_w = o.unicodeRegExp) !== null && _w !== void 0 ? _w : true,
-          int32range: (_x = o.int32range) !== null && _x !== void 0 ? _x : true
+          strictSchema: (_c = (_b = o2.strictSchema) !== null && _b !== void 0 ? _b : s2) !== null && _c !== void 0 ? _c : true,
+          strictNumbers: (_e2 = (_d = o2.strictNumbers) !== null && _d !== void 0 ? _d : s2) !== null && _e2 !== void 0 ? _e2 : true,
+          strictTypes: (_g = (_f = o2.strictTypes) !== null && _f !== void 0 ? _f : s2) !== null && _g !== void 0 ? _g : "log",
+          strictTuples: (_j = (_h = o2.strictTuples) !== null && _h !== void 0 ? _h : s2) !== null && _j !== void 0 ? _j : "log",
+          strictRequired: (_l = (_k = o2.strictRequired) !== null && _k !== void 0 ? _k : s2) !== null && _l !== void 0 ? _l : false,
+          code: o2.code ? { ...o2.code, optimize } : { optimize },
+          loopRequired: (_m = o2.loopRequired) !== null && _m !== void 0 ? _m : MAX_EXPRESSION,
+          loopEnum: (_o = o2.loopEnum) !== null && _o !== void 0 ? _o : MAX_EXPRESSION,
+          meta: (_p = o2.meta) !== null && _p !== void 0 ? _p : true,
+          messages: (_q = o2.messages) !== null && _q !== void 0 ? _q : true,
+          inlineRefs: (_r2 = o2.inlineRefs) !== null && _r2 !== void 0 ? _r2 : true,
+          schemaId: (_s = o2.schemaId) !== null && _s !== void 0 ? _s : "$id",
+          addUsedSchema: (_t2 = o2.addUsedSchema) !== null && _t2 !== void 0 ? _t2 : true,
+          validateSchema: (_u = o2.validateSchema) !== null && _u !== void 0 ? _u : true,
+          validateFormats: (_v = o2.validateFormats) !== null && _v !== void 0 ? _v : true,
+          unicodeRegExp: (_w = o2.unicodeRegExp) !== null && _w !== void 0 ? _w : true,
+          int32range: (_x = o2.int32range) !== null && _x !== void 0 ? _x : true
         };
       }
       __name(requiredOptions, "requiredOptions");
@@ -15433,17 +15433,17 @@
           return this.opts.defaultMeta = typeof meta == "object" ? meta[schemaId] || meta : void 0;
         }
         validate(schemaKeyRef, data) {
-          let v;
+          let v2;
           if (typeof schemaKeyRef == "string") {
-            v = this.getSchema(schemaKeyRef);
-            if (!v)
+            v2 = this.getSchema(schemaKeyRef);
+            if (!v2)
               throw new Error(`no schema with key or ref "${schemaKeyRef}"`);
           } else {
-            v = this.compile(schemaKeyRef);
+            v2 = this.compile(schemaKeyRef);
           }
-          const valid = v(data);
-          if (!("$async" in v))
-            this.errors = v.errors;
+          const valid = v2(data);
+          if (!("$async" in v2))
+            this.errors = v2.errors;
           return valid;
         }
         compile(schema2, _meta) {
@@ -15471,11 +15471,11 @@
           async function _compileAsync(sch) {
             try {
               return this._compileSchemaEnv(sch);
-            } catch (e) {
-              if (!(e instanceof ref_error_1.default))
-                throw e;
-              checkLoaded.call(this, e);
-              await loadMissingSchema.call(this, e.missingSchema);
+            } catch (e3) {
+              if (!(e3 instanceof ref_error_1.default))
+                throw e3;
+              checkLoaded.call(this, e3);
+              await loadMissingSchema.call(this, e3.missingSchema);
               return _compileAsync.call(this, sch);
             }
           }
@@ -15495,9 +15495,9 @@
           }
           __name(loadMissingSchema, "loadMissingSchema");
           async function _loadSchema(ref) {
-            const p = this._loading[ref];
-            if (p)
-              return p;
+            const p2 = this._loading[ref];
+            if (p2)
+              return p2;
             try {
               return await (this._loading[ref] = loadSchema(ref));
             } finally {
@@ -15635,7 +15635,7 @@
             type: dataType_1.getJSONTypes(def.type),
             schemaType: dataType_1.getJSONTypes(def.schemaType)
           };
-          util_1.eachItem(keyword, definition.type.length === 0 ? (k) => addRule.call(this, k, definition) : (k) => definition.type.forEach((t) => addRule.call(this, k, definition, t)));
+          util_1.eachItem(keyword, definition.type.length === 0 ? (k2) => addRule.call(this, k2, definition) : (k2) => definition.type.forEach((t2) => addRule.call(this, k2, definition, t2)));
           return this;
         }
         getKeyword(keyword) {
@@ -15647,9 +15647,9 @@
           delete RULES.keywords[keyword];
           delete RULES.all[keyword];
           for (const group of RULES.rules) {
-            const i = group.rules.findIndex((rule) => rule.keyword === keyword);
-            if (i >= 0)
-              group.rules.splice(i, 1);
+            const i2 = group.rules.findIndex((rule) => rule.keyword === keyword);
+            if (i2 >= 0)
+              group.rules.splice(i2, 1);
           }
           return this;
         }
@@ -15662,7 +15662,7 @@
         errorsText(errors = this.errors, { separator = ", ", dataVar = "data" } = {}) {
           if (!errors || errors.length === 0)
             return "No errors";
-          return errors.map((e) => `${dataVar}${e.instancePath} ${e.message}`).reduce((text, msg) => text + separator + msg);
+          return errors.map((e3) => `${dataVar}${e3.instancePath} ${e3.message}`).reduce((text, msg) => text + separator + msg);
         }
         $dataMetaSchema(metaSchema, keywordsJsonPointers) {
           const rules = this.RULES.all;
@@ -15836,12 +15836,12 @@
       }
       __name(checkKeyword, "checkKeyword");
       function addRule(keyword, definition, dataType) {
-        var _a;
+        var _a2;
         const post = definition === null || definition === void 0 ? void 0 : definition.post;
         if (dataType && post)
           throw new Error('keyword with "post" flag cannot have "type"');
         const { RULES } = this;
-        let ruleGroup = post ? RULES.post : RULES.rules.find(({ type: t }) => t === dataType);
+        let ruleGroup = post ? RULES.post : RULES.rules.find(({ type: t2 }) => t2 === dataType);
         if (!ruleGroup) {
           ruleGroup = { type: dataType, rules: [] };
           RULES.rules.push(ruleGroup);
@@ -15862,13 +15862,13 @@
         else
           ruleGroup.rules.push(rule);
         RULES.all[keyword] = rule;
-        (_a = definition.implements) === null || _a === void 0 ? void 0 : _a.forEach((kwd) => this.addKeyword(kwd));
+        (_a2 = definition.implements) === null || _a2 === void 0 ? void 0 : _a2.forEach((kwd) => this.addKeyword(kwd));
       }
       __name(addRule, "addRule");
       function addBeforeRule(ruleGroup, rule, before) {
-        const i = ruleGroup.rules.findIndex((_rule) => _rule.keyword === before);
-        if (i >= 0) {
-          ruleGroup.rules.splice(i, 0, rule);
+        const i2 = ruleGroup.rules.findIndex((_rule) => _rule.keyword === before);
+        if (i2 >= 0) {
+          ruleGroup.rules.splice(i2, 0, rule);
         } else {
           ruleGroup.rules.push(rule);
           this.logger.warn(`rule ${before} is not defined`);
@@ -15929,8 +15929,8 @@
         keyword: "$ref",
         schemaType: "string",
         code(cxt) {
-          const { gen, schema: $ref, it } = cxt;
-          const { baseId, schemaEnv: env3, validateName, opts, self: self2 } = it;
+          const { gen, schema: $ref, it: it2 } = cxt;
+          const { baseId, schemaEnv: env3, validateName, opts, self: self2 } = it2;
           const { root } = env3;
           if (($ref === "#" || $ref === "#/") && baseId === root.baseId)
             return callRootRef();
@@ -15948,8 +15948,8 @@
           }
           __name(callRootRef, "callRootRef");
           function callValidate(sch) {
-            const v = getValidate(cxt, sch);
-            callRef(cxt, v, sch, sch.$async);
+            const v2 = getValidate(cxt, sch);
+            callRef(cxt, v2, sch, sch.$async);
           }
           __name(callValidate, "callValidate");
           function inlineRefSchema(sch) {
@@ -15974,9 +15974,9 @@
       }
       __name(getValidate, "getValidate");
       exports.getValidate = getValidate;
-      function callRef(cxt, v, sch, $async) {
-        const { gen, it } = cxt;
-        const { allErrors, schemaEnv: env3, opts } = it;
+      function callRef(cxt, v2, sch, $async) {
+        const { gen, it: it2 } = cxt;
+        const { allErrors, schemaEnv: env3, opts } = it2;
         const passCxt = opts.passContext ? names_1.default.this : codegen_1.nil;
         if ($async)
           callAsyncRef();
@@ -15987,13 +15987,13 @@
             throw new Error("async schema referenced by sync schema");
           const valid = gen.let("valid");
           gen.try(() => {
-            gen.code(codegen_1._`await ${code_1.callValidateCode(cxt, v, passCxt)}`);
-            addEvaluatedFrom(v);
+            gen.code(codegen_1._`await ${code_1.callValidateCode(cxt, v2, passCxt)}`);
+            addEvaluatedFrom(v2);
             if (!allErrors)
               gen.assign(valid, true);
-          }, (e) => {
-            gen.if(codegen_1._`!(${e} instanceof ${it.ValidationError})`, () => gen.throw(e));
-            addErrorsFrom(e);
+          }, (e3) => {
+            gen.if(codegen_1._`!(${e3} instanceof ${it2.ValidationError})`, () => gen.throw(e3));
+            addErrorsFrom(e3);
             if (!allErrors)
               gen.assign(valid, false);
           });
@@ -16001,7 +16001,7 @@
         }
         __name(callAsyncRef, "callAsyncRef");
         function callSyncRef() {
-          cxt.result(code_1.callValidateCode(cxt, v, passCxt), () => addEvaluatedFrom(v), () => addErrorsFrom(v));
+          cxt.result(code_1.callValidateCode(cxt, v2, passCxt), () => addEvaluatedFrom(v2), () => addErrorsFrom(v2));
         }
         __name(callSyncRef, "callSyncRef");
         function addErrorsFrom(source) {
@@ -16011,28 +16011,28 @@
         }
         __name(addErrorsFrom, "addErrorsFrom");
         function addEvaluatedFrom(source) {
-          var _a;
-          if (!it.opts.unevaluated)
+          var _a2;
+          if (!it2.opts.unevaluated)
             return;
-          const schEvaluated = (_a = sch === null || sch === void 0 ? void 0 : sch.validate) === null || _a === void 0 ? void 0 : _a.evaluated;
-          if (it.props !== true) {
+          const schEvaluated = (_a2 = sch === null || sch === void 0 ? void 0 : sch.validate) === null || _a2 === void 0 ? void 0 : _a2.evaluated;
+          if (it2.props !== true) {
             if (schEvaluated && !schEvaluated.dynamicProps) {
               if (schEvaluated.props !== void 0) {
-                it.props = util_1.mergeEvaluated.props(gen, schEvaluated.props, it.props);
+                it2.props = util_1.mergeEvaluated.props(gen, schEvaluated.props, it2.props);
               }
             } else {
               const props = gen.var("props", codegen_1._`${source}.evaluated.props`);
-              it.props = util_1.mergeEvaluated.props(gen, props, it.props, codegen_1.Name);
+              it2.props = util_1.mergeEvaluated.props(gen, props, it2.props, codegen_1.Name);
             }
           }
-          if (it.items !== true) {
+          if (it2.items !== true) {
             if (schEvaluated && !schEvaluated.dynamicItems) {
               if (schEvaluated.items !== void 0) {
-                it.items = util_1.mergeEvaluated.items(gen, schEvaluated.items, it.items);
+                it2.items = util_1.mergeEvaluated.items(gen, schEvaluated.items, it2.items);
               }
             } else {
               const items = gen.var("items", codegen_1._`${source}.evaluated.items`);
-              it.items = util_1.mergeEvaluated.items(gen, items, it.items, codegen_1.Name);
+              it2.items = util_1.mergeEvaluated.items(gen, items, it2.items, codegen_1.Name);
             }
           }
         }
@@ -16120,8 +16120,8 @@
         $data: true,
         error: error2,
         code(cxt) {
-          const { gen, data, schemaCode, it } = cxt;
-          const prec = it.opts.multipleOfPrecision;
+          const { gen, data, schemaCode, it: it2 } = cxt;
+          const prec = it2.opts.multipleOfPrecision;
           const res = gen.let("res");
           const invalid = prec ? codegen_1._`Math.abs(Math.round(${res}) - ${res}) > 1e-${prec}` : codegen_1._`${res} !== parseInt(${res})`;
           cxt.fail$data(codegen_1._`(${schemaCode} === 0 || (${res} = ${data}/${schemaCode}, ${invalid}))`);
@@ -16184,9 +16184,9 @@
         $data: true,
         error: error2,
         code(cxt) {
-          const { keyword, data, schemaCode, it } = cxt;
+          const { keyword, data, schemaCode, it: it2 } = cxt;
           const op = keyword === "maxLength" ? codegen_1.operators.GT : codegen_1.operators.LT;
-          const len = it.opts.unicode === false ? codegen_1._`${data}.length` : codegen_1._`${util_1.useFunc(cxt.gen, ucs2length_1.default)}(${data})`;
+          const len = it2.opts.unicode === false ? codegen_1._`${data}.length` : codegen_1._`${util_1.useFunc(cxt.gen, ucs2length_1.default)}(${data})`;
           cxt.fail$data(codegen_1._`${len} ${op} ${schemaCode}`);
         }
       };
@@ -16214,9 +16214,9 @@
         $data: true,
         error: error2,
         code(cxt) {
-          const { data, $data, schema: schema2, schemaCode, it } = cxt;
-          const u = it.opts.unicodeRegExp ? "u" : "";
-          const regExp = $data ? codegen_1._`(new RegExp(${schemaCode}, ${u}))` : code_1.usePattern(cxt, schema2);
+          const { data, $data, schema: schema2, schemaCode, it: it2 } = cxt;
+          const u2 = it2.opts.unicodeRegExp ? "u" : "";
+          const regExp = $data ? codegen_1._`(new RegExp(${schemaCode}, ${u2}))` : code_1.usePattern(cxt, schema2);
           cxt.fail$data(codegen_1._`!${regExp}.test(${data})`);
         }
       };
@@ -16276,12 +16276,12 @@
         $data: true,
         error: error2,
         code(cxt) {
-          const { gen, schema: schema2, schemaCode, data, $data, it } = cxt;
-          const { opts } = it;
+          const { gen, schema: schema2, schemaCode, data, $data, it: it2 } = cxt;
+          const { opts } = it2;
           if (!$data && schema2.length === 0)
             return;
           const useLoop = schema2.length >= opts.loopRequired;
-          if (it.allErrors)
+          if (it2.allErrors)
             allErrorsMode();
           else
             exitOnErrorMode();
@@ -16290,9 +16290,9 @@
             const { definedProperties } = cxt.it;
             for (const requiredKey of schema2) {
               if ((props === null || props === void 0 ? void 0 : props[requiredKey]) === void 0 && !definedProperties.has(requiredKey)) {
-                const schemaPath = it.schemaEnv.baseId + it.errSchemaPath;
+                const schemaPath = it2.schemaEnv.baseId + it2.errSchemaPath;
                 const msg = `required property "${requiredKey}" is not defined at "${schemaPath}" (strictRequired)`;
-                util_1.checkStrictMode(it, msg, it.opts.strictRequired);
+                util_1.checkStrictMode(it2, msg, it2.opts.strictRequired);
               }
             }
           }
@@ -16399,8 +16399,8 @@
       var util_1 = require_util3();
       var equal_1 = require_equal();
       var error2 = {
-        message: ({ params: { i, j } }) => codegen_1.str`must NOT have duplicate items (items ## ${j} and ${i} are identical)`,
-        params: ({ params: { i, j } }) => codegen_1._`{i: ${i}, j: ${j}}`
+        message: ({ params: { i: i2, j: j2 } }) => codegen_1.str`must NOT have duplicate items (items ## ${j2} and ${i2} are identical)`,
+        params: ({ params: { i: i2, j: j2 } }) => codegen_1._`{i: ${i2}, j: ${j2}}`
       };
       var def = {
         keyword: "uniqueItems",
@@ -16409,7 +16409,7 @@
         $data: true,
         error: error2,
         code(cxt) {
-          const { gen, data, $data, schema: schema2, parentSchema, schemaCode, it } = cxt;
+          const { gen, data, $data, schema: schema2, parentSchema, schemaCode, it: it2 } = cxt;
           if (!$data && !schema2)
             return;
           const valid = gen.let("valid");
@@ -16417,38 +16417,38 @@
           cxt.block$data(valid, validateUniqueItems, codegen_1._`${schemaCode} === false`);
           cxt.ok(valid);
           function validateUniqueItems() {
-            const i = gen.let("i", codegen_1._`${data}.length`);
-            const j = gen.let("j");
-            cxt.setParams({ i, j });
+            const i2 = gen.let("i", codegen_1._`${data}.length`);
+            const j2 = gen.let("j");
+            cxt.setParams({ i: i2, j: j2 });
             gen.assign(valid, true);
-            gen.if(codegen_1._`${i} > 1`, () => (canOptimize() ? loopN : loopN2)(i, j));
+            gen.if(codegen_1._`${i2} > 1`, () => (canOptimize() ? loopN : loopN2)(i2, j2));
           }
           __name(validateUniqueItems, "validateUniqueItems");
           function canOptimize() {
-            return itemTypes.length > 0 && !itemTypes.some((t) => t === "object" || t === "array");
+            return itemTypes.length > 0 && !itemTypes.some((t2) => t2 === "object" || t2 === "array");
           }
           __name(canOptimize, "canOptimize");
-          function loopN(i, j) {
+          function loopN(i2, j2) {
             const item = gen.name("item");
-            const wrongType = dataType_1.checkDataTypes(itemTypes, item, it.opts.strictNumbers, dataType_1.DataType.Wrong);
+            const wrongType = dataType_1.checkDataTypes(itemTypes, item, it2.opts.strictNumbers, dataType_1.DataType.Wrong);
             const indices = gen.const("indices", codegen_1._`{}`);
-            gen.for(codegen_1._`;${i}--;`, () => {
-              gen.let(item, codegen_1._`${data}[${i}]`);
+            gen.for(codegen_1._`;${i2}--;`, () => {
+              gen.let(item, codegen_1._`${data}[${i2}]`);
               gen.if(wrongType, codegen_1._`continue`);
               if (itemTypes.length > 1)
                 gen.if(codegen_1._`typeof ${item} == "string"`, codegen_1._`${item} += "_"`);
               gen.if(codegen_1._`typeof ${indices}[${item}] == "number"`, () => {
-                gen.assign(j, codegen_1._`${indices}[${item}]`);
+                gen.assign(j2, codegen_1._`${indices}[${item}]`);
                 cxt.error();
                 gen.assign(valid, false).break();
-              }).code(codegen_1._`${indices}[${item}] = ${i}`);
+              }).code(codegen_1._`${indices}[${item}] = ${i2}`);
             });
           }
           __name(loopN, "loopN");
-          function loopN2(i, j) {
+          function loopN2(i2, j2) {
             const eql = util_1.useFunc(gen, equal_1.default);
             const outer = gen.name("outer");
-            gen.label(outer).for(codegen_1._`;${i}--;`, () => gen.for(codegen_1._`${j} = ${i}; ${j}--;`, () => gen.if(codegen_1._`${eql}(${data}[${i}], ${data}[${j}])`, () => {
+            gen.label(outer).for(codegen_1._`;${i2}--;`, () => gen.for(codegen_1._`${j2} = ${i2}; ${j2}--;`, () => gen.if(codegen_1._`${eql}(${data}[${i2}], ${data}[${j2}])`, () => {
               cxt.error();
               gen.assign(valid, false).break(outer);
             })));
@@ -16511,10 +16511,10 @@
         $data: true,
         error: error2,
         code(cxt) {
-          const { gen, data, $data, schema: schema2, schemaCode, it } = cxt;
+          const { gen, data, $data, schema: schema2, schemaCode, it: it2 } = cxt;
           if (!$data && schema2.length === 0)
             throw new Error("enum must have non-empty array");
-          const useLoop = schema2.length >= it.opts.loopEnum;
+          const useLoop = schema2.length >= it2.opts.loopEnum;
           const eql = util_1.useFunc(gen, equal_1.default);
           let valid;
           if (useLoop || $data) {
@@ -16524,17 +16524,17 @@
             if (!Array.isArray(schema2))
               throw new Error("ajv implementation error");
             const vSchema = gen.const("vSchema", schemaCode);
-            valid = codegen_1.or(...schema2.map((_x, i) => equalCode(vSchema, i)));
+            valid = codegen_1.or(...schema2.map((_x, i2) => equalCode(vSchema, i2)));
           }
           cxt.pass(valid);
           function loopEnum() {
             gen.assign(valid, false);
-            gen.forOf("v", schemaCode, (v) => gen.if(codegen_1._`${eql}(${data}, ${v})`, () => gen.assign(valid, true).break()));
+            gen.forOf("v", schemaCode, (v2) => gen.if(codegen_1._`${eql}(${data}, ${v2})`, () => gen.assign(valid, true).break()));
           }
           __name(loopEnum, "loopEnum");
-          function equalCode(vSchema, i) {
-            const sch = schema2[i];
-            return typeof sch === "object" && sch !== null ? codegen_1._`${eql}(${data}, ${vSchema}[${i}])` : codegen_1._`${data} === ${sch}`;
+          function equalCode(vSchema, i2) {
+            const sch = schema2[i2];
+            return typeof sch === "object" && sch !== null ? codegen_1._`${eql}(${data}, ${vSchema}[${i2}])` : codegen_1._`${data} === ${sch}`;
           }
           __name(equalCode, "equalCode");
         }
@@ -16599,31 +16599,31 @@
         before: "uniqueItems",
         error: error2,
         code(cxt) {
-          const { parentSchema, it } = cxt;
+          const { parentSchema, it: it2 } = cxt;
           const { items } = parentSchema;
           if (!Array.isArray(items)) {
-            util_1.checkStrictMode(it, '"additionalItems" is ignored when "items" is not an array of schemas');
+            util_1.checkStrictMode(it2, '"additionalItems" is ignored when "items" is not an array of schemas');
             return;
           }
           validateAdditionalItems(cxt, items);
         }
       };
       function validateAdditionalItems(cxt, items) {
-        const { gen, schema: schema2, data, keyword, it } = cxt;
-        it.items = true;
+        const { gen, schema: schema2, data, keyword, it: it2 } = cxt;
+        it2.items = true;
         const len = gen.const("len", codegen_1._`${data}.length`);
         if (schema2 === false) {
           cxt.setParams({ len: items.length });
           cxt.pass(codegen_1._`${len} <= ${items.length}`);
-        } else if (typeof schema2 == "object" && !util_1.alwaysValidSchema(it, schema2)) {
+        } else if (typeof schema2 == "object" && !util_1.alwaysValidSchema(it2, schema2)) {
           const valid = gen.var("valid", codegen_1._`${len} <= ${items.length}`);
           gen.if(codegen_1.not(valid), () => validateItems(valid));
           cxt.ok(valid);
         }
         function validateItems(valid) {
-          gen.forRange("i", items.length, len, (i) => {
-            cxt.subschema({ keyword, dataProp: i, dataPropType: util_1.Type.Num }, valid);
-            if (!it.allErrors)
+          gen.forRange("i", items.length, len, (i2) => {
+            cxt.subschema({ keyword, dataProp: i2, dataPropType: util_1.Type.Num }, valid);
+            if (!it2.allErrors)
               gen.if(codegen_1.not(valid), () => gen.break());
           });
         }
@@ -16652,40 +16652,40 @@
         schemaType: ["object", "array", "boolean"],
         before: "uniqueItems",
         code(cxt) {
-          const { schema: schema2, it } = cxt;
+          const { schema: schema2, it: it2 } = cxt;
           if (Array.isArray(schema2))
             return validateTuple(cxt, "additionalItems", schema2);
-          it.items = true;
-          if (util_1.alwaysValidSchema(it, schema2))
+          it2.items = true;
+          if (util_1.alwaysValidSchema(it2, schema2))
             return;
           cxt.ok(code_1.validateArray(cxt));
         }
       };
       function validateTuple(cxt, extraItems, schArr = cxt.schema) {
-        const { gen, parentSchema, data, keyword, it } = cxt;
+        const { gen, parentSchema, data, keyword, it: it2 } = cxt;
         checkStrictTuple(parentSchema);
-        if (it.opts.unevaluated && schArr.length && it.items !== true) {
-          it.items = util_1.mergeEvaluated.items(gen, schArr.length, it.items);
+        if (it2.opts.unevaluated && schArr.length && it2.items !== true) {
+          it2.items = util_1.mergeEvaluated.items(gen, schArr.length, it2.items);
         }
         const valid = gen.name("valid");
         const len = gen.const("len", codegen_1._`${data}.length`);
-        schArr.forEach((sch, i) => {
-          if (util_1.alwaysValidSchema(it, sch))
+        schArr.forEach((sch, i2) => {
+          if (util_1.alwaysValidSchema(it2, sch))
             return;
-          gen.if(codegen_1._`${len} > ${i}`, () => cxt.subschema({
+          gen.if(codegen_1._`${len} > ${i2}`, () => cxt.subschema({
             keyword,
-            schemaProp: i,
-            dataProp: i
+            schemaProp: i2,
+            dataProp: i2
           }, valid));
           cxt.ok(valid);
         });
         function checkStrictTuple(sch) {
-          const { opts, errSchemaPath } = it;
-          const l = schArr.length;
-          const fullTuple = l === sch.minItems && (l === sch.maxItems || sch[extraItems] === false);
+          const { opts, errSchemaPath } = it2;
+          const l2 = schArr.length;
+          const fullTuple = l2 === sch.minItems && (l2 === sch.maxItems || sch[extraItems] === false);
           if (opts.strictTuples && !fullTuple) {
-            const msg = `"${keyword}" is ${l}-tuple, but minItems or maxItems/${extraItems} are not specified or different at path "${errSchemaPath}"`;
-            util_1.checkStrictMode(it, msg, opts.strictTuples);
+            const msg = `"${keyword}" is ${l2}-tuple, but minItems or maxItems/${extraItems} are not specified or different at path "${errSchemaPath}"`;
+            util_1.checkStrictMode(it2, msg, opts.strictTuples);
           }
         }
         __name(checkStrictTuple, "checkStrictTuple");
@@ -16737,10 +16737,10 @@
         before: "uniqueItems",
         error: error2,
         code(cxt) {
-          const { schema: schema2, parentSchema, it } = cxt;
+          const { schema: schema2, parentSchema, it: it2 } = cxt;
           const { prefixItems } = parentSchema;
-          it.items = true;
-          if (util_1.alwaysValidSchema(it, schema2))
+          it2.items = true;
+          if (util_1.alwaysValidSchema(it2, schema2))
             return;
           if (prefixItems)
             additionalItems_1.validateAdditionalItems(cxt, prefixItems);
@@ -16773,11 +16773,11 @@
         trackErrors: true,
         error: error2,
         code(cxt) {
-          const { gen, schema: schema2, parentSchema, data, it } = cxt;
+          const { gen, schema: schema2, parentSchema, data, it: it2 } = cxt;
           let min;
           let max;
           const { minContains, maxContains } = parentSchema;
-          if (it.opts.next) {
+          if (it2.opts.next) {
             min = minContains === void 0 ? 1 : minContains;
             max = maxContains;
           } else {
@@ -16786,22 +16786,22 @@
           const len = gen.const("len", codegen_1._`${data}.length`);
           cxt.setParams({ min, max });
           if (max === void 0 && min === 0) {
-            util_1.checkStrictMode(it, `"minContains" == 0 without "maxContains": "contains" keyword ignored`);
+            util_1.checkStrictMode(it2, `"minContains" == 0 without "maxContains": "contains" keyword ignored`);
             return;
           }
           if (max !== void 0 && min > max) {
-            util_1.checkStrictMode(it, `"minContains" > "maxContains" is always invalid`);
+            util_1.checkStrictMode(it2, `"minContains" > "maxContains" is always invalid`);
             cxt.fail();
             return;
           }
-          if (util_1.alwaysValidSchema(it, schema2)) {
+          if (util_1.alwaysValidSchema(it2, schema2)) {
             let cond = codegen_1._`${len} >= ${min}`;
             if (max !== void 0)
               cond = codegen_1._`${cond} && ${len} <= ${max}`;
             cxt.pass(cond);
             return;
           }
-          it.items = true;
+          it2.items = true;
           const valid = gen.name("valid");
           if (max === void 0 && min === 1) {
             validateItems(valid, () => gen.if(valid, () => gen.break()));
@@ -16813,10 +16813,10 @@
           }
           cxt.result(valid, () => cxt.reset());
           function validateItems(_valid, block) {
-            gen.forRange("i", 0, len, (i) => {
+            gen.forRange("i", 0, len, (i2) => {
               cxt.subschema({
                 keyword: "contains",
-                dataProp: i,
+                dataProp: i2,
                 dataPropType: util_1.Type.Num,
                 compositeRule: true
               }, _valid);
@@ -16888,7 +16888,7 @@
       }
       __name(splitDependencies, "splitDependencies");
       function validatePropertyDeps(cxt, propertyDeps = cxt.schema) {
-        const { gen, data, it } = cxt;
+        const { gen, data, it: it2 } = cxt;
         if (Object.keys(propertyDeps).length === 0)
           return;
         const missing = gen.let("missing");
@@ -16896,13 +16896,13 @@
           const deps = propertyDeps[prop];
           if (deps.length === 0)
             continue;
-          const hasProperty = code_1.propertyInData(gen, data, prop, it.opts.ownProperties);
+          const hasProperty = code_1.propertyInData(gen, data, prop, it2.opts.ownProperties);
           cxt.setParams({
             property: prop,
             depsCount: deps.length,
             deps: deps.join(", ")
           });
-          if (it.allErrors) {
+          if (it2.allErrors) {
             gen.if(hasProperty, () => {
               for (const depProp of deps) {
                 code_1.checkReportMissingProp(cxt, depProp);
@@ -16918,12 +16918,12 @@
       __name(validatePropertyDeps, "validatePropertyDeps");
       exports.validatePropertyDeps = validatePropertyDeps;
       function validateSchemaDeps(cxt, schemaDeps = cxt.schema) {
-        const { gen, data, keyword, it } = cxt;
+        const { gen, data, keyword, it: it2 } = cxt;
         const valid = gen.name("valid");
         for (const prop in schemaDeps) {
-          if (util_1.alwaysValidSchema(it, schemaDeps[prop]))
+          if (util_1.alwaysValidSchema(it2, schemaDeps[prop]))
             continue;
-          gen.if(code_1.propertyInData(gen, data, prop, it.opts.ownProperties), () => {
+          gen.if(code_1.propertyInData(gen, data, prop, it2.opts.ownProperties), () => {
             const schCxt = cxt.subschema({ keyword, schemaProp: prop }, valid);
             cxt.mergeValidEvaluated(schCxt, valid);
           }, () => gen.var(valid, true));
@@ -16955,8 +16955,8 @@
         schemaType: ["object", "boolean"],
         error: error2,
         code(cxt) {
-          const { gen, schema: schema2, data, it } = cxt;
-          if (util_1.alwaysValidSchema(it, schema2))
+          const { gen, schema: schema2, data, it: it2 } = cxt;
+          if (util_1.alwaysValidSchema(it2, schema2))
             return;
           const valid = gen.name("valid");
           gen.forIn("key", data, (key) => {
@@ -16970,7 +16970,7 @@
             }, valid);
             gen.if(codegen_1.not(valid), () => {
               cxt.error(true);
-              if (!it.allErrors)
+              if (!it2.allErrors)
                 gen.break();
             });
           });
@@ -17004,12 +17004,12 @@
         trackErrors: true,
         error: error2,
         code(cxt) {
-          const { gen, schema: schema2, parentSchema, data, errsCount, it } = cxt;
+          const { gen, schema: schema2, parentSchema, data, errsCount, it: it2 } = cxt;
           if (!errsCount)
             throw new Error("ajv implementation error");
-          const { allErrors, opts } = it;
-          it.props = true;
-          if (opts.removeAdditional !== "all" && util_1.alwaysValidSchema(it, schema2))
+          const { allErrors, opts } = it2;
+          it2.props = true;
+          if (opts.removeAdditional !== "all" && util_1.alwaysValidSchema(it2, schema2))
             return;
           const props = code_1.allSchemaProperties(parentSchema.properties);
           const patProps = code_1.allSchemaProperties(parentSchema.patternProperties);
@@ -17027,15 +17027,15 @@
           function isAdditional(key) {
             let definedProp;
             if (props.length > 8) {
-              const propsSchema = util_1.schemaRefOrVal(it, parentSchema.properties, "properties");
+              const propsSchema = util_1.schemaRefOrVal(it2, parentSchema.properties, "properties");
               definedProp = code_1.isOwnProperty(gen, propsSchema, key);
             } else if (props.length) {
-              definedProp = codegen_1.or(...props.map((p) => codegen_1._`${key} === ${p}`));
+              definedProp = codegen_1.or(...props.map((p2) => codegen_1._`${key} === ${p2}`));
             } else {
               definedProp = codegen_1.nil;
             }
             if (patProps.length) {
-              definedProp = codegen_1.or(definedProp, ...patProps.map((p) => codegen_1._`${code_1.usePattern(cxt, p)}.test(${key})`));
+              definedProp = codegen_1.or(definedProp, ...patProps.map((p2) => codegen_1._`${code_1.usePattern(cxt, p2)}.test(${key})`));
             }
             return codegen_1.not(definedProp);
           }
@@ -17056,7 +17056,7 @@
                 gen.break();
               return;
             }
-            if (typeof schema2 == "object" && !util_1.alwaysValidSchema(it, schema2)) {
+            if (typeof schema2 == "object" && !util_1.alwaysValidSchema(it2, schema2)) {
               const valid = gen.name("valid");
               if (opts.removeAdditional === "failing") {
                 applyAdditionalSchema(key, valid, false);
@@ -17110,18 +17110,18 @@
         type: "object",
         schemaType: "object",
         code(cxt) {
-          const { gen, schema: schema2, parentSchema, data, it } = cxt;
-          if (it.opts.removeAdditional === "all" && parentSchema.additionalProperties === void 0) {
-            additionalProperties_1.default.code(new validate_1.KeywordCxt(it, additionalProperties_1.default, "additionalProperties"));
+          const { gen, schema: schema2, parentSchema, data, it: it2 } = cxt;
+          if (it2.opts.removeAdditional === "all" && parentSchema.additionalProperties === void 0) {
+            additionalProperties_1.default.code(new validate_1.KeywordCxt(it2, additionalProperties_1.default, "additionalProperties"));
           }
           const allProps = code_1.allSchemaProperties(schema2);
           for (const prop of allProps) {
-            it.definedProperties.add(prop);
+            it2.definedProperties.add(prop);
           }
-          if (it.opts.unevaluated && allProps.length && it.props !== true) {
-            it.props = util_1.mergeEvaluated.props(gen, util_1.toHash(allProps), it.props);
+          if (it2.opts.unevaluated && allProps.length && it2.props !== true) {
+            it2.props = util_1.mergeEvaluated.props(gen, util_1.toHash(allProps), it2.props);
           }
-          const properties = allProps.filter((p) => !util_1.alwaysValidSchema(it, schema2[p]));
+          const properties = allProps.filter((p2) => !util_1.alwaysValidSchema(it2, schema2[p2]));
           if (properties.length === 0)
             return;
           const valid = gen.name("valid");
@@ -17129,9 +17129,9 @@
             if (hasDefault(prop)) {
               applyPropertySchema(prop);
             } else {
-              gen.if(code_1.propertyInData(gen, data, prop, it.opts.ownProperties));
+              gen.if(code_1.propertyInData(gen, data, prop, it2.opts.ownProperties));
               applyPropertySchema(prop);
-              if (!it.allErrors)
+              if (!it2.allErrors)
                 gen.else().var(valid, true);
               gen.endIf();
             }
@@ -17139,7 +17139,7 @@
             cxt.ok(valid);
           }
           function hasDefault(prop) {
-            return it.opts.useDefaults && !it.compositeRule && schema2[prop].default !== void 0;
+            return it2.opts.useDefaults && !it2.compositeRule && schema2[prop].default !== void 0;
           }
           __name(hasDefault, "hasDefault");
           function applyPropertySchema(prop) {
@@ -17172,25 +17172,25 @@
         type: "object",
         schemaType: "object",
         code(cxt) {
-          const { gen, schema: schema2, data, parentSchema, it } = cxt;
-          const { opts } = it;
+          const { gen, schema: schema2, data, parentSchema, it: it2 } = cxt;
+          const { opts } = it2;
           const patterns = code_1.allSchemaProperties(schema2);
-          const alwaysValidPatterns = patterns.filter((p) => util_1.alwaysValidSchema(it, schema2[p]));
-          if (patterns.length === 0 || alwaysValidPatterns.length === patterns.length && (!it.opts.unevaluated || it.props === true)) {
+          const alwaysValidPatterns = patterns.filter((p2) => util_1.alwaysValidSchema(it2, schema2[p2]));
+          if (patterns.length === 0 || alwaysValidPatterns.length === patterns.length && (!it2.opts.unevaluated || it2.props === true)) {
             return;
           }
           const checkProperties = opts.strictSchema && !opts.allowMatchingProperties && parentSchema.properties;
           const valid = gen.name("valid");
-          if (it.props !== true && !(it.props instanceof codegen_1.Name)) {
-            it.props = util_2.evaluatedPropsToName(gen, it.props);
+          if (it2.props !== true && !(it2.props instanceof codegen_1.Name)) {
+            it2.props = util_2.evaluatedPropsToName(gen, it2.props);
           }
-          const { props } = it;
+          const { props } = it2;
           validatePatternProperties();
           function validatePatternProperties() {
             for (const pat of patterns) {
               if (checkProperties)
                 checkMatchingProperties(pat);
-              if (it.allErrors) {
+              if (it2.allErrors) {
                 validateProperties(pat);
               } else {
                 gen.var(valid, true);
@@ -17203,7 +17203,7 @@
           function checkMatchingProperties(pat) {
             for (const prop in checkProperties) {
               if (new RegExp(pat).test(prop)) {
-                util_1.checkStrictMode(it, `property ${prop} matches pattern ${pat} (use allowMatchingProperties)`);
+                util_1.checkStrictMode(it2, `property ${prop} matches pattern ${pat} (use allowMatchingProperties)`);
               }
             }
           }
@@ -17220,9 +17220,9 @@
                     dataPropType: util_2.Type.Str
                   }, valid);
                 }
-                if (it.opts.unevaluated && props !== true) {
+                if (it2.opts.unevaluated && props !== true) {
                   gen.assign(codegen_1._`${props}[${key}]`, true);
-                } else if (!alwaysValid && !it.allErrors) {
+                } else if (!alwaysValid && !it2.allErrors) {
                   gen.if(codegen_1.not(valid), () => gen.break());
                 }
               });
@@ -17248,8 +17248,8 @@
         schemaType: ["object", "boolean"],
         trackErrors: true,
         code(cxt) {
-          const { gen, schema: schema2, it } = cxt;
-          if (util_1.alwaysValidSchema(it, schema2)) {
+          const { gen, schema: schema2, it: it2 } = cxt;
+          if (util_1.alwaysValidSchema(it2, schema2)) {
             cxt.fail();
             return;
           }
@@ -17306,10 +17306,10 @@
         trackErrors: true,
         error: error2,
         code(cxt) {
-          const { gen, schema: schema2, parentSchema, it } = cxt;
+          const { gen, schema: schema2, parentSchema, it: it2 } = cxt;
           if (!Array.isArray(schema2))
             throw new Error("ajv implementation error");
-          if (it.opts.discriminator && parentSchema.discriminator)
+          if (it2.opts.discriminator && parentSchema.discriminator)
             return;
           const schArr = schema2;
           const valid = gen.let("valid", false);
@@ -17319,23 +17319,23 @@
           gen.block(validateOneOf);
           cxt.result(valid, () => cxt.reset(), () => cxt.error(true));
           function validateOneOf() {
-            schArr.forEach((sch, i) => {
+            schArr.forEach((sch, i2) => {
               let schCxt;
-              if (util_1.alwaysValidSchema(it, sch)) {
+              if (util_1.alwaysValidSchema(it2, sch)) {
                 gen.var(schValid, true);
               } else {
                 schCxt = cxt.subschema({
                   keyword: "oneOf",
-                  schemaProp: i,
+                  schemaProp: i2,
                   compositeRule: true
                 }, schValid);
               }
-              if (i > 0) {
-                gen.if(codegen_1._`${schValid} && ${valid}`).assign(valid, false).assign(passing, codegen_1._`[${passing}, ${i}]`).else();
+              if (i2 > 0) {
+                gen.if(codegen_1._`${schValid} && ${valid}`).assign(valid, false).assign(passing, codegen_1._`[${passing}, ${i2}]`).else();
               }
               gen.if(schValid, () => {
                 gen.assign(valid, true);
-                gen.assign(passing, i);
+                gen.assign(passing, i2);
                 if (schCxt)
                   cxt.mergeEvaluated(schCxt, codegen_1.Name);
               });
@@ -17360,14 +17360,14 @@
         keyword: "allOf",
         schemaType: "array",
         code(cxt) {
-          const { gen, schema: schema2, it } = cxt;
+          const { gen, schema: schema2, it: it2 } = cxt;
           if (!Array.isArray(schema2))
             throw new Error("ajv implementation error");
           const valid = gen.name("valid");
-          schema2.forEach((sch, i) => {
-            if (util_1.alwaysValidSchema(it, sch))
+          schema2.forEach((sch, i2) => {
+            if (util_1.alwaysValidSchema(it2, sch))
               return;
-            const schCxt = cxt.subschema({ keyword: "allOf", schemaProp: i }, valid);
+            const schCxt = cxt.subschema({ keyword: "allOf", schemaProp: i2 }, valid);
             cxt.ok(valid);
             cxt.mergeEvaluated(schCxt);
           });
@@ -17396,12 +17396,12 @@
         trackErrors: true,
         error: error2,
         code(cxt) {
-          const { gen, parentSchema, it } = cxt;
+          const { gen, parentSchema, it: it2 } = cxt;
           if (parentSchema.then === void 0 && parentSchema.else === void 0) {
-            util_1.checkStrictMode(it, '"if" without "then" and "else" is ignored');
+            util_1.checkStrictMode(it2, '"if" without "then" and "else" is ignored');
           }
-          const hasThen = hasSchema(it, "then");
-          const hasElse = hasSchema(it, "else");
+          const hasThen = hasSchema(it2, "then");
+          const hasElse = hasSchema(it2, "else");
           if (!hasThen && !hasElse)
             return;
           const valid = gen.let("valid", true);
@@ -17442,9 +17442,9 @@
           __name(validateClause, "validateClause");
         }
       };
-      function hasSchema(it, keyword) {
-        const schema2 = it.schema[keyword];
-        return schema2 !== void 0 && !util_1.alwaysValidSchema(it, schema2);
+      function hasSchema(it2, keyword) {
+        const schema2 = it2.schema[keyword];
+        return schema2 !== void 0 && !util_1.alwaysValidSchema(it2, schema2);
       }
       __name(hasSchema, "hasSchema");
       exports.default = def;
@@ -17462,9 +17462,9 @@
       var def = {
         keyword: ["then", "else"],
         schemaType: ["object", "boolean"],
-        code({ keyword, parentSchema, it }) {
+        code({ keyword, parentSchema, it: it2 }) {
           if (parentSchema.if === void 0)
-            util_1.checkStrictMode(it, `"${keyword}" without "if" is ignored`);
+            util_1.checkStrictMode(it2, `"${keyword}" without "if" is ignored`);
         }
       };
       exports.default = def;
@@ -17539,8 +17539,8 @@
         $data: true,
         error: error2,
         code(cxt, ruleType) {
-          const { gen, data, $data, schema: schema2, schemaCode, it } = cxt;
-          const { opts, errSchemaPath, schemaEnv, self: self2 } = it;
+          const { gen, data, $data, schema: schema2, schemaCode, it: it2 } = cxt;
+          const { opts, errSchemaPath, schemaEnv, self: self2 } = it2;
           if (!opts.validateFormats)
             return;
           if ($data)
@@ -17717,9 +17717,9 @@
         schemaType: "object",
         error: error2,
         code(cxt) {
-          const { gen, data, schema: schema2, parentSchema, it } = cxt;
+          const { gen, data, schema: schema2, parentSchema, it: it2 } = cxt;
           const { oneOf } = parentSchema;
-          if (!it.opts.discriminator) {
+          if (!it2.opts.discriminator) {
             throw new Error("discriminator: requires discriminator option");
           }
           const tagName = schema2.propertyName;
@@ -17753,18 +17753,18 @@
           }
           __name(applyTagSchema, "applyTagSchema");
           function getMapping() {
-            var _a;
+            var _a2;
             const oneOfMapping = {};
             const topRequired = hasRequired(parentSchema);
             let tagRequired = true;
-            for (let i = 0; i < oneOf.length; i++) {
-              const sch = oneOf[i];
-              const propSch = (_a = sch.properties) === null || _a === void 0 ? void 0 : _a[tagName];
+            for (let i2 = 0; i2 < oneOf.length; i2++) {
+              const sch = oneOf[i2];
+              const propSch = (_a2 = sch.properties) === null || _a2 === void 0 ? void 0 : _a2[tagName];
               if (typeof propSch != "object") {
                 throw new Error(`discriminator: oneOf schemas must have "properties/${tagName}"`);
               }
               tagRequired = tagRequired && (topRequired || hasRequired(sch));
-              addMappings(propSch, i);
+              addMappings(propSch, i2);
             }
             if (!tagRequired)
               throw new Error(`discriminator: "${tagName}" must be required`);
@@ -17773,23 +17773,23 @@
               return Array.isArray(required) && required.includes(tagName);
             }
             __name(hasRequired, "hasRequired");
-            function addMappings(sch, i) {
+            function addMappings(sch, i2) {
               if (sch.const) {
-                addMapping(sch.const, i);
+                addMapping(sch.const, i2);
               } else if (sch.enum) {
                 for (const tagValue of sch.enum) {
-                  addMapping(tagValue, i);
+                  addMapping(tagValue, i2);
                 }
               } else {
                 throw new Error(`discriminator: "properties/${tagName}" must have "const" or "enum"`);
               }
             }
             __name(addMappings, "addMappings");
-            function addMapping(tagValue, i) {
+            function addMapping(tagValue, i2) {
               if (typeof tagValue != "string" || tagValue in oneOfMapping) {
                 throw new Error(`discriminator: "${tagName}" values must be unique strings`);
               }
-              oneOfMapping[tagValue] = i;
+              oneOfMapping[tagValue] = i2;
             }
             __name(addMapping, "addMapping");
           }
@@ -17974,7 +17974,7 @@
       var Ajv2 = class extends core_1.default {
         _addVocabularies() {
           super._addVocabularies();
-          draft7_1.default.forEach((v) => this.addVocabulary(v));
+          draft7_1.default.forEach((v2) => this.addVocabulary(v2));
           if (this.opts.discriminator)
             this.addKeyword(discriminator_1.default);
         }
@@ -18068,59 +18068,59 @@
               exports2.__esModule = true;
             }
           }
-          return function(id, v) {
-            return exports2[id] = previous ? previous(id, v) : v;
+          return function(id, v2) {
+            return exports2[id] = previous ? previous(id, v2) : v2;
           };
         }
         __name(createExporter, "createExporter");
       })(function(exporter) {
-        var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d, b) {
-          d.__proto__ = b;
-        } || function(d, b) {
-          for (var p in b)
-            if (Object.prototype.hasOwnProperty.call(b, p))
-              d[p] = b[p];
+        var extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
+          d2.__proto__ = b2;
+        } || function(d2, b2) {
+          for (var p2 in b2)
+            if (Object.prototype.hasOwnProperty.call(b2, p2))
+              d2[p2] = b2[p2];
         };
-        __extends2 = /* @__PURE__ */ __name(function(d, b) {
-          if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-          extendStatics(d, b);
+        __extends2 = /* @__PURE__ */ __name(function(d2, b2) {
+          if (typeof b2 !== "function" && b2 !== null)
+            throw new TypeError("Class extends value " + String(b2) + " is not a constructor or null");
+          extendStatics(d2, b2);
           function __() {
-            this.constructor = d;
+            this.constructor = d2;
           }
           __name(__, "__");
-          d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+          d2.prototype = b2 === null ? Object.create(b2) : (__.prototype = b2.prototype, new __());
         }, "__extends");
-        __assign2 = Object.assign || function(t) {
-          for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s)
-              if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
+        __assign2 = Object.assign || function(t2) {
+          for (var s2, i2 = 1, n2 = arguments.length; i2 < n2; i2++) {
+            s2 = arguments[i2];
+            for (var p2 in s2)
+              if (Object.prototype.hasOwnProperty.call(s2, p2))
+                t2[p2] = s2[p2];
           }
-          return t;
+          return t2;
         };
-        __rest2 = /* @__PURE__ */ __name(function(s, e) {
-          var t = {};
-          for (var p in s)
-            if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-              t[p] = s[p];
-          if (s != null && typeof Object.getOwnPropertySymbols === "function")
-            for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-              if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
+        __rest2 = /* @__PURE__ */ __name(function(s2, e3) {
+          var t2 = {};
+          for (var p2 in s2)
+            if (Object.prototype.hasOwnProperty.call(s2, p2) && e3.indexOf(p2) < 0)
+              t2[p2] = s2[p2];
+          if (s2 != null && typeof Object.getOwnPropertySymbols === "function")
+            for (var i2 = 0, p2 = Object.getOwnPropertySymbols(s2); i2 < p2.length; i2++) {
+              if (e3.indexOf(p2[i2]) < 0 && Object.prototype.propertyIsEnumerable.call(s2, p2[i2]))
+                t2[p2[i2]] = s2[p2[i2]];
             }
-          return t;
+          return t2;
         }, "__rest");
         __decorate2 = /* @__PURE__ */ __name(function(decorators, target, key, desc) {
-          var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+          var c2 = arguments.length, r2 = c2 < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d2;
           if (typeof Reflect === "object" && typeof Reflect.decorate === "function")
-            r = Reflect.decorate(decorators, target, key, desc);
+            r2 = Reflect.decorate(decorators, target, key, desc);
           else
-            for (var i = decorators.length - 1; i >= 0; i--)
-              if (d = decorators[i])
-                r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-          return c > 3 && r && Object.defineProperty(target, key, r), r;
+            for (var i2 = decorators.length - 1; i2 >= 0; i2--)
+              if (d2 = decorators[i2])
+                r2 = (c2 < 3 ? d2(r2) : c2 > 3 ? d2(target, key, r2) : d2(target, key)) || r2;
+          return c2 > 3 && r2 && Object.defineProperty(target, key, r2), r2;
         }, "__decorate");
         __param2 = /* @__PURE__ */ __name(function(paramIndex, decorator) {
           return function(target, key) {
@@ -18131,27 +18131,27 @@
           if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
             return Reflect.metadata(metadataKey, metadataValue);
         }, "__metadata");
-        __awaiter2 = /* @__PURE__ */ __name(function(thisArg, _arguments, P, generator) {
+        __awaiter2 = /* @__PURE__ */ __name(function(thisArg, _arguments, P2, generator) {
           function adopt(value) {
-            return value instanceof P ? value : new P(function(resolve2) {
+            return value instanceof P2 ? value : new P2(function(resolve2) {
               resolve2(value);
             });
           }
           __name(adopt, "adopt");
-          return new (P || (P = Promise))(function(resolve2, reject) {
+          return new (P2 || (P2 = Promise))(function(resolve2, reject) {
             function fulfilled(value) {
               try {
                 step(generator.next(value));
-              } catch (e) {
-                reject(e);
+              } catch (e3) {
+                reject(e3);
               }
             }
             __name(fulfilled, "fulfilled");
             function rejected(value) {
               try {
                 step(generator["throw"](value));
-              } catch (e) {
-                reject(e);
+              } catch (e3) {
+                reject(e3);
               }
             }
             __name(rejected, "rejected");
@@ -18163,76 +18163,76 @@
           });
         }, "__awaiter");
         __generator2 = /* @__PURE__ */ __name(function(thisArg, body) {
-          var _23 = { label: 0, sent: function() {
-            if (t[0] & 1)
-              throw t[1];
-            return t[1];
-          }, trys: [], ops: [] }, f, y, t, g;
-          return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
+          var _24 = { label: 0, sent: function() {
+            if (t2[0] & 1)
+              throw t2[1];
+            return t2[1];
+          }, trys: [], ops: [] }, f2, y2, t2, g2;
+          return g2 = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g2[Symbol.iterator] = function() {
             return this;
-          }), g;
-          function verb(n) {
-            return function(v) {
-              return step([n, v]);
+          }), g2;
+          function verb(n2) {
+            return function(v2) {
+              return step([n2, v2]);
             };
           }
           __name(verb, "verb");
           function step(op) {
-            if (f)
+            if (f2)
               throw new TypeError("Generator is already executing.");
-            while (_23)
+            while (_24)
               try {
-                if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
-                  return t;
-                if (y = 0, t)
-                  op = [op[0] & 2, t.value];
+                if (f2 = 1, y2 && (t2 = op[0] & 2 ? y2["return"] : op[0] ? y2["throw"] || ((t2 = y2["return"]) && t2.call(y2), 0) : y2.next) && !(t2 = t2.call(y2, op[1])).done)
+                  return t2;
+                if (y2 = 0, t2)
+                  op = [op[0] & 2, t2.value];
                 switch (op[0]) {
                   case 0:
                   case 1:
-                    t = op;
+                    t2 = op;
                     break;
                   case 4:
-                    _23.label++;
+                    _24.label++;
                     return { value: op[1], done: false };
                   case 5:
-                    _23.label++;
-                    y = op[1];
+                    _24.label++;
+                    y2 = op[1];
                     op = [0];
                     continue;
                   case 7:
-                    op = _23.ops.pop();
-                    _23.trys.pop();
+                    op = _24.ops.pop();
+                    _24.trys.pop();
                     continue;
                   default:
-                    if (!(t = _23.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                      _23 = 0;
+                    if (!(t2 = _24.trys, t2 = t2.length > 0 && t2[t2.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+                      _24 = 0;
                       continue;
                     }
-                    if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-                      _23.label = op[1];
+                    if (op[0] === 3 && (!t2 || op[1] > t2[0] && op[1] < t2[3])) {
+                      _24.label = op[1];
                       break;
                     }
-                    if (op[0] === 6 && _23.label < t[1]) {
-                      _23.label = t[1];
-                      t = op;
+                    if (op[0] === 6 && _24.label < t2[1]) {
+                      _24.label = t2[1];
+                      t2 = op;
                       break;
                     }
-                    if (t && _23.label < t[2]) {
-                      _23.label = t[2];
-                      _23.ops.push(op);
+                    if (t2 && _24.label < t2[2]) {
+                      _24.label = t2[2];
+                      _24.ops.push(op);
                       break;
                     }
-                    if (t[2])
-                      _23.ops.pop();
-                    _23.trys.pop();
+                    if (t2[2])
+                      _24.ops.pop();
+                    _24.trys.pop();
                     continue;
                 }
-                op = body.call(thisArg, _23);
-              } catch (e) {
-                op = [6, e];
-                y = 0;
+                op = body.call(thisArg, _24);
+              } catch (e3) {
+                op = [6, e3];
+                y2 = 0;
               } finally {
-                f = t = 0;
+                f2 = t2 = 0;
               }
             if (op[0] & 5)
               throw op[1];
@@ -18240,104 +18240,104 @@
           }
           __name(step, "step");
         }, "__generator");
-        __exportStar2 = /* @__PURE__ */ __name(function(m, o) {
-          for (var p in m)
-            if (p !== "default" && !Object.prototype.hasOwnProperty.call(o, p))
-              __createBinding2(o, m, p);
+        __exportStar2 = /* @__PURE__ */ __name(function(m2, o2) {
+          for (var p2 in m2)
+            if (p2 !== "default" && !Object.prototype.hasOwnProperty.call(o2, p2))
+              __createBinding2(o2, m2, p2);
         }, "__exportStar");
-        __createBinding2 = Object.create ? function(o, m, k, k2) {
-          if (k2 === void 0)
-            k2 = k;
-          Object.defineProperty(o, k2, { enumerable: true, get: function() {
-            return m[k];
+        __createBinding2 = Object.create ? function(o2, m2, k2, k22) {
+          if (k22 === void 0)
+            k22 = k2;
+          Object.defineProperty(o2, k22, { enumerable: true, get: function() {
+            return m2[k2];
           } });
-        } : function(o, m, k, k2) {
-          if (k2 === void 0)
-            k2 = k;
-          o[k2] = m[k];
+        } : function(o2, m2, k2, k22) {
+          if (k22 === void 0)
+            k22 = k2;
+          o2[k22] = m2[k2];
         };
-        __values2 = /* @__PURE__ */ __name(function(o) {
-          var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-          if (m)
-            return m.call(o);
-          if (o && typeof o.length === "number")
+        __values2 = /* @__PURE__ */ __name(function(o2) {
+          var s2 = typeof Symbol === "function" && Symbol.iterator, m2 = s2 && o2[s2], i2 = 0;
+          if (m2)
+            return m2.call(o2);
+          if (o2 && typeof o2.length === "number")
             return {
               next: function() {
-                if (o && i >= o.length)
-                  o = void 0;
-                return { value: o && o[i++], done: !o };
+                if (o2 && i2 >= o2.length)
+                  o2 = void 0;
+                return { value: o2 && o2[i2++], done: !o2 };
               }
             };
-          throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+          throw new TypeError(s2 ? "Object is not iterable." : "Symbol.iterator is not defined.");
         }, "__values");
-        __read2 = /* @__PURE__ */ __name(function(o, n) {
-          var m = typeof Symbol === "function" && o[Symbol.iterator];
-          if (!m)
-            return o;
-          var i = m.call(o), r, ar = [], e;
+        __read2 = /* @__PURE__ */ __name(function(o2, n2) {
+          var m2 = typeof Symbol === "function" && o2[Symbol.iterator];
+          if (!m2)
+            return o2;
+          var i2 = m2.call(o2), r2, ar2 = [], e3;
           try {
-            while ((n === void 0 || n-- > 0) && !(r = i.next()).done)
-              ar.push(r.value);
+            while ((n2 === void 0 || n2-- > 0) && !(r2 = i2.next()).done)
+              ar2.push(r2.value);
           } catch (error2) {
-            e = { error: error2 };
+            e3 = { error: error2 };
           } finally {
             try {
-              if (r && !r.done && (m = i["return"]))
-                m.call(i);
+              if (r2 && !r2.done && (m2 = i2["return"]))
+                m2.call(i2);
             } finally {
-              if (e)
-                throw e.error;
+              if (e3)
+                throw e3.error;
             }
           }
-          return ar;
+          return ar2;
         }, "__read");
         __spread2 = /* @__PURE__ */ __name(function() {
-          for (var ar = [], i = 0; i < arguments.length; i++)
-            ar = ar.concat(__read2(arguments[i]));
-          return ar;
+          for (var ar2 = [], i2 = 0; i2 < arguments.length; i2++)
+            ar2 = ar2.concat(__read2(arguments[i2]));
+          return ar2;
         }, "__spread");
         __spreadArrays2 = /* @__PURE__ */ __name(function() {
-          for (var s = 0, i = 0, il = arguments.length; i < il; i++)
-            s += arguments[i].length;
-          for (var r = Array(s), k = 0, i = 0; i < il; i++)
-            for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-              r[k] = a[j];
-          return r;
+          for (var s2 = 0, i2 = 0, il = arguments.length; i2 < il; i2++)
+            s2 += arguments[i2].length;
+          for (var r2 = Array(s2), k2 = 0, i2 = 0; i2 < il; i2++)
+            for (var a2 = arguments[i2], j2 = 0, jl = a2.length; j2 < jl; j2++, k2++)
+              r2[k2] = a2[j2];
+          return r2;
         }, "__spreadArrays");
         __spreadArray2 = /* @__PURE__ */ __name(function(to, from3) {
-          for (var i = 0, il = from3.length, j = to.length; i < il; i++, j++)
-            to[j] = from3[i];
+          for (var i2 = 0, il = from3.length, j2 = to.length; i2 < il; i2++, j2++)
+            to[j2] = from3[i2];
           return to;
         }, "__spreadArray");
-        __await2 = /* @__PURE__ */ __name(function(v) {
-          return this instanceof __await2 ? (this.v = v, this) : new __await2(v);
+        __await2 = /* @__PURE__ */ __name(function(v2) {
+          return this instanceof __await2 ? (this.v = v2, this) : new __await2(v2);
         }, "__await");
         __asyncGenerator2 = /* @__PURE__ */ __name(function(thisArg, _arguments, generator) {
           if (!Symbol.asyncIterator)
             throw new TypeError("Symbol.asyncIterator is not defined.");
-          var g = generator.apply(thisArg, _arguments || []), i, q = [];
-          return i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
+          var g2 = generator.apply(thisArg, _arguments || []), i2, q2 = [];
+          return i2 = {}, verb("next"), verb("throw"), verb("return"), i2[Symbol.asyncIterator] = function() {
             return this;
-          }, i;
-          function verb(n) {
-            if (g[n])
-              i[n] = function(v) {
-                return new Promise(function(a, b) {
-                  q.push([n, v, a, b]) > 1 || resume2(n, v);
+          }, i2;
+          function verb(n2) {
+            if (g2[n2])
+              i2[n2] = function(v2) {
+                return new Promise(function(a2, b2) {
+                  q2.push([n2, v2, a2, b2]) > 1 || resume2(n2, v2);
                 });
               };
           }
           __name(verb, "verb");
-          function resume2(n, v) {
+          function resume2(n2, v2) {
             try {
-              step(g[n](v));
-            } catch (e) {
-              settle(q[0][3], e);
+              step(g2[n2](v2));
+            } catch (e3) {
+              settle(q2[0][3], e3);
             }
           }
           __name(resume2, "resume");
-          function step(r) {
-            r.value instanceof __await2 ? Promise.resolve(r.value.v).then(fulfill, reject) : settle(q[0][2], r);
+          function step(r2) {
+            r2.value instanceof __await2 ? Promise.resolve(r2.value.v).then(fulfill, reject) : settle(q2[0][2], r2);
           }
           __name(step, "step");
           function fulfill(value) {
@@ -18348,44 +18348,44 @@
             resume2("throw", value);
           }
           __name(reject, "reject");
-          function settle(f, v) {
-            if (f(v), q.shift(), q.length)
-              resume2(q[0][0], q[0][1]);
+          function settle(f2, v2) {
+            if (f2(v2), q2.shift(), q2.length)
+              resume2(q2[0][0], q2[0][1]);
           }
           __name(settle, "settle");
         }, "__asyncGenerator");
-        __asyncDelegator2 = /* @__PURE__ */ __name(function(o) {
-          var i, p;
-          return i = {}, verb("next"), verb("throw", function(e) {
-            throw e;
-          }), verb("return"), i[Symbol.iterator] = function() {
+        __asyncDelegator2 = /* @__PURE__ */ __name(function(o2) {
+          var i2, p2;
+          return i2 = {}, verb("next"), verb("throw", function(e3) {
+            throw e3;
+          }), verb("return"), i2[Symbol.iterator] = function() {
             return this;
-          }, i;
-          function verb(n, f) {
-            i[n] = o[n] ? function(v) {
-              return (p = !p) ? { value: __await2(o[n](v)), done: n === "return" } : f ? f(v) : v;
-            } : f;
+          }, i2;
+          function verb(n2, f2) {
+            i2[n2] = o2[n2] ? function(v2) {
+              return (p2 = !p2) ? { value: __await2(o2[n2](v2)), done: n2 === "return" } : f2 ? f2(v2) : v2;
+            } : f2;
           }
           __name(verb, "verb");
         }, "__asyncDelegator");
-        __asyncValues2 = /* @__PURE__ */ __name(function(o) {
+        __asyncValues2 = /* @__PURE__ */ __name(function(o2) {
           if (!Symbol.asyncIterator)
             throw new TypeError("Symbol.asyncIterator is not defined.");
-          var m = o[Symbol.asyncIterator], i;
-          return m ? m.call(o) : (o = typeof __values2 === "function" ? __values2(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function() {
+          var m2 = o2[Symbol.asyncIterator], i2;
+          return m2 ? m2.call(o2) : (o2 = typeof __values2 === "function" ? __values2(o2) : o2[Symbol.iterator](), i2 = {}, verb("next"), verb("throw"), verb("return"), i2[Symbol.asyncIterator] = function() {
             return this;
-          }, i);
-          function verb(n) {
-            i[n] = o[n] && function(v) {
+          }, i2);
+          function verb(n2) {
+            i2[n2] = o2[n2] && function(v2) {
               return new Promise(function(resolve2, reject) {
-                v = o[n](v), settle(resolve2, reject, v.done, v.value);
+                v2 = o2[n2](v2), settle(resolve2, reject, v2.done, v2.value);
               });
             };
           }
           __name(verb, "verb");
-          function settle(resolve2, reject, d, v) {
-            Promise.resolve(v).then(function(v2) {
-              resolve2({ value: v2, done: d });
+          function settle(resolve2, reject, d2, v2) {
+            Promise.resolve(v2).then(function(v3) {
+              resolve2({ value: v3, done: d2 });
             }, reject);
           }
           __name(settle, "settle");
@@ -18398,19 +18398,19 @@
           }
           return cooked;
         }, "__makeTemplateObject");
-        var __setModuleDefault = Object.create ? function(o, v) {
-          Object.defineProperty(o, "default", { enumerable: true, value: v });
-        } : function(o, v) {
-          o["default"] = v;
+        var __setModuleDefault = Object.create ? function(o2, v2) {
+          Object.defineProperty(o2, "default", { enumerable: true, value: v2 });
+        } : function(o2, v2) {
+          o2["default"] = v2;
         };
         __importStar2 = /* @__PURE__ */ __name(function(mod) {
           if (mod && mod.__esModule)
             return mod;
           var result = {};
           if (mod != null) {
-            for (var k in mod)
-              if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-                __createBinding2(result, mod, k);
+            for (var k2 in mod)
+              if (k2 !== "default" && Object.prototype.hasOwnProperty.call(mod, k2))
+                __createBinding2(result, mod, k2);
           }
           __setModuleDefault(result, mod);
           return result;
@@ -18418,21 +18418,21 @@
         __importDefault2 = /* @__PURE__ */ __name(function(mod) {
           return mod && mod.__esModule ? mod : { "default": mod };
         }, "__importDefault");
-        __classPrivateFieldGet2 = /* @__PURE__ */ __name(function(receiver, state, kind, f) {
-          if (kind === "a" && !f)
+        __classPrivateFieldGet2 = /* @__PURE__ */ __name(function(receiver, state, kind, f2) {
+          if (kind === "a" && !f2)
             throw new TypeError("Private accessor was defined without a getter");
-          if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+          if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver))
             throw new TypeError("Cannot read private member from an object whose class did not declare it");
-          return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
+          return kind === "m" ? f2 : kind === "a" ? f2.call(receiver) : f2 ? f2.value : state.get(receiver);
         }, "__classPrivateFieldGet");
-        __classPrivateFieldSet2 = /* @__PURE__ */ __name(function(receiver, state, value, kind, f) {
+        __classPrivateFieldSet2 = /* @__PURE__ */ __name(function(receiver, state, value, kind, f2) {
           if (kind === "m")
             throw new TypeError("Private method is not writable");
-          if (kind === "a" && !f)
+          if (kind === "a" && !f2)
             throw new TypeError("Private accessor was defined without a setter");
-          if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver))
+          if (typeof state === "function" ? receiver !== state || !f2 : !state.has(receiver))
             throw new TypeError("Cannot write private member to an object whose class did not declare it");
-          return kind === "a" ? f.call(receiver, value) : f ? f.value = value : state.set(receiver, value), value;
+          return kind === "a" ? f2.call(receiver, value) : f2 ? f2.value = value : state.set(receiver, value), value;
         }, "__classPrivateFieldSet");
         exporter("__extends", __extends2);
         exporter("__assign", __assign2);
@@ -18489,11 +18489,11 @@
             return false;
           }
           var test2 = {};
-          for (var i = 0; i < 10; i++) {
-            test2["_" + String.fromCharCode(i)] = i;
+          for (var i2 = 0; i2 < 10; i2++) {
+            test2["_" + String.fromCharCode(i2)] = i2;
           }
-          var order2 = Object.getOwnPropertyNames(test2).map(function(n) {
-            return test2[n];
+          var order2 = Object.getOwnPropertyNames(test2).map(function(n2) {
+            return test2[n2];
           });
           if (order2.join("") !== "0123456789") {
             return false;
@@ -18515,8 +18515,8 @@
         var from3;
         var to = toObject(target);
         var symbols;
-        for (var s = 1; s < arguments.length; s++) {
-          from3 = Object(arguments[s]);
+        for (var s2 = 1; s2 < arguments.length; s2++) {
+          from3 = Object(arguments[s2]);
           for (var key in from3) {
             if (hasOwnProperty2.call(from3, key)) {
               to[key] = from3[key];
@@ -18524,9 +18524,9 @@
           }
           if (getOwnPropertySymbols) {
             symbols = getOwnPropertySymbols(from3);
-            for (var i = 0; i < symbols.length; i++) {
-              if (propIsEnumerable.call(from3, symbols[i])) {
-                to[symbols[i]] = from3[symbols[i]];
+            for (var i2 = 0; i2 < symbols.length; i2++) {
+              if (propIsEnumerable.call(from3, symbols[i2])) {
+                to[symbols[i2]] = from3[symbols[i2]];
               }
             }
           }
@@ -18839,7 +18839,7 @@
                   var init3 = lazyComponent._init;
                   try {
                     return getComponentName(init3(payload));
-                  } catch (x) {
+                  } catch (x2) {
                     return null;
                   }
                 }
@@ -18963,7 +18963,7 @@
             }
             return element;
           }, "ReactElement");
-          function createElement6(type3, config3, children) {
+          function createElement7(type3, config3, children) {
             var propName;
             var props = {};
             var key = null;
@@ -18993,8 +18993,8 @@
               props.children = children;
             } else if (childrenLength > 1) {
               var childArray = Array(childrenLength);
-              for (var i = 0; i < childrenLength; i++) {
-                childArray[i] = arguments[i + 2];
+              for (var i2 = 0; i2 < childrenLength; i2++) {
+                childArray[i2] = arguments[i2 + 2];
               }
               {
                 if (Object.freeze) {
@@ -19024,7 +19024,7 @@
             }
             return ReactElement(type3, key, ref, self2, source, ReactCurrentOwner.current, props);
           }
-          __name(createElement6, "createElement");
+          __name(createElement7, "createElement");
           function cloneAndReplaceKey(oldElement, newKey) {
             var newElement = ReactElement(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
             return newElement;
@@ -19070,8 +19070,8 @@
               props.children = children;
             } else if (childrenLength > 1) {
               var childArray = Array(childrenLength);
-              for (var i = 0; i < childrenLength; i++) {
-                childArray[i] = arguments[i + 2];
+              for (var i2 = 0; i2 < childrenLength; i2++) {
+                childArray[i2] = arguments[i2 + 2];
               }
               props.children = childArray;
             }
@@ -19140,8 +19140,8 @@
                 if (childKey != null) {
                   escapedChildKey = escapeUserProvidedKey(childKey) + "/";
                 }
-                mapIntoArray(mappedChild, array, escapedChildKey, "", function(c) {
-                  return c;
+                mapIntoArray(mappedChild, array, escapedChildKey, "", function(c2) {
+                  return c2;
                 });
               } else if (mappedChild != null) {
                 if (isValidElement(mappedChild)) {
@@ -19156,9 +19156,9 @@
             var subtreeCount = 0;
             var nextNamePrefix = nameSoFar === "" ? SEPARATOR : nameSoFar + SUBSEPARATOR;
             if (Array.isArray(children)) {
-              for (var i = 0; i < children.length; i++) {
-                child = children[i];
-                nextName = nextNamePrefix + getElementKey(child, i);
+              for (var i2 = 0; i2 < children.length; i2++) {
+                child = children[i2];
+                nextName = nextNamePrefix + getElementKey(child, i2);
                 subtreeCount += mapIntoArray(child, array, escapedPrefix, nextName, callback);
               }
             } else {
@@ -19175,10 +19175,10 @@
                 }
                 var iterator = iteratorFn.call(iterableChildren);
                 var step;
-                var ii = 0;
+                var ii2 = 0;
                 while (!(step = iterator.next()).done) {
                   child = step.value;
-                  nextName = nextNamePrefix + getElementKey(child, ii++);
+                  nextName = nextNamePrefix + getElementKey(child, ii2++);
                   subtreeCount += mapIntoArray(child, array, escapedPrefix, nextName, callback);
                 }
               } else if (type3 === "object") {
@@ -19206,11 +19206,11 @@
           }
           __name(mapChildren, "mapChildren");
           function countChildren(children) {
-            var n = 0;
+            var n2 = 0;
             mapChildren(children, function() {
-              n++;
+              n2++;
             });
-            return n;
+            return n2;
           }
           __name(countChildren, "countChildren");
           function forEachChildren(children, forEachFunc, forEachContext) {
@@ -19665,8 +19665,8 @@
               if (prefix === void 0) {
                 try {
                   throw Error();
-                } catch (x) {
-                  var match = x.stack.trim().match(/\n( *(at )?)/);
+                } catch (x2) {
+                  var match = x2.stack.trim().match(/\n( *(at )?)/);
                   prefix = match && match[1] || "";
                 }
               }
@@ -19680,12 +19680,12 @@
             var PossiblyWeakMap = typeof WeakMap === "function" ? WeakMap : Map;
             componentFrameCache = new PossiblyWeakMap();
           }
-          function describeNativeComponentFrame(fn, construct) {
-            if (!fn || reentry) {
+          function describeNativeComponentFrame(fn2, construct) {
+            if (!fn2 || reentry) {
               return "";
             }
             {
-              var frame = componentFrameCache.get(fn);
+              var frame = componentFrameCache.get(fn2);
               if (frame !== void 0) {
                 return frame;
               }
@@ -19713,51 +19713,51 @@
                 if (typeof Reflect === "object" && Reflect.construct) {
                   try {
                     Reflect.construct(Fake, []);
-                  } catch (x) {
-                    control = x;
+                  } catch (x2) {
+                    control = x2;
                   }
-                  Reflect.construct(fn, [], Fake);
+                  Reflect.construct(fn2, [], Fake);
                 } else {
                   try {
                     Fake.call();
-                  } catch (x) {
-                    control = x;
+                  } catch (x2) {
+                    control = x2;
                   }
-                  fn.call(Fake.prototype);
+                  fn2.call(Fake.prototype);
                 }
               } else {
                 try {
                   throw Error();
-                } catch (x) {
-                  control = x;
+                } catch (x2) {
+                  control = x2;
                 }
-                fn();
+                fn2();
               }
             } catch (sample) {
               if (sample && control && typeof sample.stack === "string") {
                 var sampleLines = sample.stack.split("\n");
                 var controlLines = control.stack.split("\n");
-                var s = sampleLines.length - 1;
-                var c = controlLines.length - 1;
-                while (s >= 1 && c >= 0 && sampleLines[s] !== controlLines[c]) {
-                  c--;
+                var s2 = sampleLines.length - 1;
+                var c2 = controlLines.length - 1;
+                while (s2 >= 1 && c2 >= 0 && sampleLines[s2] !== controlLines[c2]) {
+                  c2--;
                 }
-                for (; s >= 1 && c >= 0; s--, c--) {
-                  if (sampleLines[s] !== controlLines[c]) {
-                    if (s !== 1 || c !== 1) {
+                for (; s2 >= 1 && c2 >= 0; s2--, c2--) {
+                  if (sampleLines[s2] !== controlLines[c2]) {
+                    if (s2 !== 1 || c2 !== 1) {
                       do {
-                        s--;
-                        c--;
-                        if (c < 0 || sampleLines[s] !== controlLines[c]) {
-                          var _frame = "\n" + sampleLines[s].replace(" at new ", " at ");
+                        s2--;
+                        c2--;
+                        if (c2 < 0 || sampleLines[s2] !== controlLines[c2]) {
+                          var _frame = "\n" + sampleLines[s2].replace(" at new ", " at ");
                           {
-                            if (typeof fn === "function") {
-                              componentFrameCache.set(fn, _frame);
+                            if (typeof fn2 === "function") {
+                              componentFrameCache.set(fn2, _frame);
                             }
                           }
                           return _frame;
                         }
-                      } while (s >= 1 && c >= 0);
+                      } while (s2 >= 1 && c2 >= 0);
                     }
                     break;
                   }
@@ -19771,19 +19771,19 @@
               }
               Error.prepareStackTrace = previousPrepareStackTrace;
             }
-            var name = fn ? fn.displayName || fn.name : "";
+            var name = fn2 ? fn2.displayName || fn2.name : "";
             var syntheticFrame = name ? describeBuiltInComponentFrame(name) : "";
             {
-              if (typeof fn === "function") {
-                componentFrameCache.set(fn, syntheticFrame);
+              if (typeof fn2 === "function") {
+                componentFrameCache.set(fn2, syntheticFrame);
               }
             }
             return syntheticFrame;
           }
           __name(describeNativeComponentFrame, "describeNativeComponentFrame");
-          function describeFunctionComponentFrame(fn, source, ownerFn) {
+          function describeFunctionComponentFrame(fn2, source, ownerFn) {
             {
-              return describeNativeComponentFrame(fn, false);
+              return describeNativeComponentFrame(fn2, false);
             }
           }
           __name(describeFunctionComponentFrame, "describeFunctionComponentFrame");
@@ -19824,7 +19824,7 @@
                   var init3 = lazyComponent._init;
                   try {
                     return describeUnknownElementTypeFrameInDEV(init3(payload), source, ownerFn);
-                  } catch (x) {
+                  } catch (x2) {
                   }
                 }
               }
@@ -19958,8 +19958,8 @@
               return;
             }
             if (Array.isArray(node)) {
-              for (var i = 0; i < node.length; i++) {
-                var child = node[i];
+              for (var i2 = 0; i2 < node.length; i2++) {
+                var child = node[i2];
                 if (isValidElement(child)) {
                   validateExplicitKey(child, parentType);
                 }
@@ -20015,8 +20015,8 @@
           function validateFragmentProps(fragment) {
             {
               var keys2 = Object.keys(fragment.props);
-              for (var i = 0; i < keys2.length; i++) {
-                var key = keys2[i];
+              for (var i2 = 0; i2 < keys2.length; i2++) {
+                var key = keys2[i2];
                 if (key !== "children" && key !== "key") {
                   setCurrentlyValidatingElement$1(fragment);
                   error2("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", key);
@@ -20060,13 +20060,13 @@
                 error2("React.createElement: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
               }
             }
-            var element = createElement6.apply(this, arguments);
+            var element = createElement7.apply(this, arguments);
             if (element == null) {
               return element;
             }
             if (validType) {
-              for (var i = 2; i < arguments.length; i++) {
-                validateChildKeys(arguments[i], type3);
+              for (var i2 = 2; i2 < arguments.length; i2++) {
+                validateChildKeys(arguments[i2], type3);
               }
             }
             if (type3 === exports.Fragment) {
@@ -20102,8 +20102,8 @@
           __name(createFactoryWithValidation, "createFactoryWithValidation");
           function cloneElementWithValidation(element, props, children) {
             var newElement = cloneElement.apply(this, arguments);
-            for (var i = 2; i < arguments.length; i++) {
-              validateChildKeys(arguments[i], newElement.type);
+            for (var i2 = 2; i2 < arguments.length; i2++) {
+              validateChildKeys(arguments[i2], newElement.type);
             }
             validatePropTypes(newElement);
             return newElement;
@@ -20114,7 +20114,7 @@
               var frozenObject = Object.freeze({});
               new Map([[frozenObject, null]]);
               new Set([frozenObject]);
-            } catch (e) {
+            } catch (e3) {
             }
           }
           var createElement$1 = createElementWithValidation;
@@ -20208,9 +20208,9 @@
                   var hasRemainingTime = true;
                   _callback(hasRemainingTime, currentTime);
                   _callback = null;
-                } catch (e) {
+                } catch (e3) {
                   setTimeout(_flushCallback, 0);
-                  throw e;
+                  throw e3;
                 }
               }
             }, "_flushCallback");
@@ -20335,8 +20335,8 @@
             }
           }
           __name(pop, "pop");
-          function siftUp(heap, node, i) {
-            var index = i;
+          function siftUp(heap, node, i2) {
+            var index = i2;
             while (true) {
               var parentIndex = index - 1 >>> 1;
               var parent = heap[parentIndex];
@@ -20350,8 +20350,8 @@
             }
           }
           __name(siftUp, "siftUp");
-          function siftDown(heap, node, i) {
-            var index = i;
+          function siftDown(heap, node, i2) {
+            var index = i2;
             var length = heap.length;
             while (index < length) {
               var leftIndex = (index + 1) * 2 - 1;
@@ -20378,9 +20378,9 @@
             }
           }
           __name(siftDown, "siftDown");
-          function compare6(a, b) {
-            var diff = a.sortIndex - b.sortIndex;
-            return diff !== 0 ? diff : a.id - b.id;
+          function compare6(a2, b2) {
+            var diff = a2.sortIndex - b2.sortIndex;
+            return diff !== 0 ? diff : a2.id - b2.id;
           }
           __name(compare6, "compare");
           var ImmediatePriority = 1;
@@ -21003,11 +21003,11 @@
       if (true) {
         (function() {
           "use strict";
-          var React8 = require_react();
+          var React9 = require_react();
           var _assign = require_object_assign();
           var Scheduler = require_scheduler();
           var tracing = require_tracing();
-          var ReactSharedInternals = React8.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          var ReactSharedInternals = React9.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
           function warn3(format2) {
             {
               for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -21042,7 +21042,7 @@
             }
           }
           __name(printWarning, "printWarning");
-          if (!React8) {
+          if (!React9) {
             {
               throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
             }
@@ -21098,8 +21098,8 @@
                 possibleRegistrationNames.ondblclick = registrationName;
               }
             }
-            for (var i = 0; i < dependencies.length; i++) {
-              allNativeEvents.add(dependencies[i]);
+            for (var i2 = 0; i2 < dependencies.length; i2++) {
+              allNativeEvents.add(dependencies[i2]);
             }
           }
           __name(registerDirectEvent, "registerDirectEvent");
@@ -21671,8 +21671,8 @@
               if (prefix === void 0) {
                 try {
                   throw Error();
-                } catch (x) {
-                  var match = x.stack.trim().match(/\n( *(at )?)/);
+                } catch (x2) {
+                  var match = x2.stack.trim().match(/\n( *(at )?)/);
                   prefix = match && match[1] || "";
                 }
               }
@@ -21686,12 +21686,12 @@
             var PossiblyWeakMap = typeof WeakMap === "function" ? WeakMap : Map;
             componentFrameCache = new PossiblyWeakMap();
           }
-          function describeNativeComponentFrame(fn, construct) {
-            if (!fn || reentry) {
+          function describeNativeComponentFrame(fn2, construct) {
+            if (!fn2 || reentry) {
               return "";
             }
             {
-              var frame = componentFrameCache.get(fn);
+              var frame = componentFrameCache.get(fn2);
               if (frame !== void 0) {
                 return frame;
               }
@@ -21719,51 +21719,51 @@
                 if (typeof Reflect === "object" && Reflect.construct) {
                   try {
                     Reflect.construct(Fake, []);
-                  } catch (x) {
-                    control = x;
+                  } catch (x2) {
+                    control = x2;
                   }
-                  Reflect.construct(fn, [], Fake);
+                  Reflect.construct(fn2, [], Fake);
                 } else {
                   try {
                     Fake.call();
-                  } catch (x) {
-                    control = x;
+                  } catch (x2) {
+                    control = x2;
                   }
-                  fn.call(Fake.prototype);
+                  fn2.call(Fake.prototype);
                 }
               } else {
                 try {
                   throw Error();
-                } catch (x) {
-                  control = x;
+                } catch (x2) {
+                  control = x2;
                 }
-                fn();
+                fn2();
               }
             } catch (sample) {
               if (sample && control && typeof sample.stack === "string") {
                 var sampleLines = sample.stack.split("\n");
                 var controlLines = control.stack.split("\n");
-                var s = sampleLines.length - 1;
-                var c = controlLines.length - 1;
-                while (s >= 1 && c >= 0 && sampleLines[s] !== controlLines[c]) {
-                  c--;
+                var s2 = sampleLines.length - 1;
+                var c2 = controlLines.length - 1;
+                while (s2 >= 1 && c2 >= 0 && sampleLines[s2] !== controlLines[c2]) {
+                  c2--;
                 }
-                for (; s >= 1 && c >= 0; s--, c--) {
-                  if (sampleLines[s] !== controlLines[c]) {
-                    if (s !== 1 || c !== 1) {
+                for (; s2 >= 1 && c2 >= 0; s2--, c2--) {
+                  if (sampleLines[s2] !== controlLines[c2]) {
+                    if (s2 !== 1 || c2 !== 1) {
                       do {
-                        s--;
-                        c--;
-                        if (c < 0 || sampleLines[s] !== controlLines[c]) {
-                          var _frame = "\n" + sampleLines[s].replace(" at new ", " at ");
+                        s2--;
+                        c2--;
+                        if (c2 < 0 || sampleLines[s2] !== controlLines[c2]) {
+                          var _frame = "\n" + sampleLines[s2].replace(" at new ", " at ");
                           {
-                            if (typeof fn === "function") {
-                              componentFrameCache.set(fn, _frame);
+                            if (typeof fn2 === "function") {
+                              componentFrameCache.set(fn2, _frame);
                             }
                           }
                           return _frame;
                         }
-                      } while (s >= 1 && c >= 0);
+                      } while (s2 >= 1 && c2 >= 0);
                     }
                     break;
                   }
@@ -21777,11 +21777,11 @@
               }
               Error.prepareStackTrace = previousPrepareStackTrace;
             }
-            var name = fn ? fn.displayName || fn.name : "";
+            var name = fn2 ? fn2.displayName || fn2.name : "";
             var syntheticFrame = name ? describeBuiltInComponentFrame(name) : "";
             {
-              if (typeof fn === "function") {
-                componentFrameCache.set(fn, syntheticFrame);
+              if (typeof fn2 === "function") {
+                componentFrameCache.set(fn2, syntheticFrame);
               }
             }
             return syntheticFrame;
@@ -21793,9 +21793,9 @@
             }
           }
           __name(describeClassComponentFrame, "describeClassComponentFrame");
-          function describeFunctionComponentFrame(fn, source, ownerFn) {
+          function describeFunctionComponentFrame(fn2, source, ownerFn) {
             {
-              return describeNativeComponentFrame(fn, false);
+              return describeNativeComponentFrame(fn2, false);
             }
           }
           __name(describeFunctionComponentFrame, "describeFunctionComponentFrame");
@@ -21836,7 +21836,7 @@
                   var init3 = lazyComponent._init;
                   try {
                     return describeUnknownElementTypeFrameInDEV(init3(payload), source, ownerFn);
-                  } catch (x) {
+                  } catch (x2) {
                   }
                 }
               }
@@ -21880,8 +21880,8 @@
                 node = node.return;
               } while (node);
               return info;
-            } catch (x) {
-              return "\nError generating stack: " + x.message + "\n" + x.stack;
+            } catch (x2) {
+              return "\nError generating stack: " + x2.message + "\n" + x2.stack;
             }
           }
           __name(getStackByFiberInDevAndProd, "getStackByFiberInDevAndProd");
@@ -21943,7 +21943,7 @@
                   var init3 = lazyComponent._init;
                   try {
                     return getComponentName(init3(payload));
-                  } catch (x) {
+                  } catch (x2) {
                     return null;
                   }
                 }
@@ -22136,7 +22136,7 @@
             }
             try {
               return doc.activeElement || doc.body;
-            } catch (e) {
+            } catch (e3) {
               return doc.body;
             }
           }
@@ -22280,8 +22280,8 @@
                 queryRoot = queryRoot.parentNode;
               }
               var group = queryRoot.querySelectorAll("input[name=" + JSON.stringify("" + name) + '][type="radio"]');
-              for (var i = 0; i < group.length; i++) {
-                var otherNode = group[i];
+              for (var i2 = 0; i2 < group.length; i2++) {
+                var otherNode = group[i2];
                 if (otherNode === rootNode || otherNode.form !== rootNode.form) {
                   continue;
                 }
@@ -22311,7 +22311,7 @@
           var didWarnInvalidChild = false;
           function flattenChildren(children) {
             var content = "";
-            React8.Children.forEach(children, function(child) {
+            React9.Children.forEach(children, function(child) {
               if (child == null) {
                 return;
               }
@@ -22323,7 +22323,7 @@
           function validateProps(element, props) {
             {
               if (typeof props.children === "object" && props.children !== null) {
-                React8.Children.forEach(props.children, function(child) {
+                React9.Children.forEach(props.children, function(child) {
                   if (child == null) {
                     return;
                   }
@@ -22379,8 +22379,8 @@
           function checkSelectPropTypes(props) {
             {
               checkControlledValueProps("select", props);
-              for (var i = 0; i < valuePropNames.length; i++) {
-                var propName = valuePropNames[i];
+              for (var i2 = 0; i2 < valuePropNames.length; i2++) {
+                var propName = valuePropNames[i2];
                 if (props[propName] == null) {
                   continue;
                 }
@@ -22399,8 +22399,8 @@
             if (multiple) {
               var selectedValues = propValue;
               var selectedValue = {};
-              for (var i = 0; i < selectedValues.length; i++) {
-                selectedValue["$" + selectedValues[i]] = true;
+              for (var i2 = 0; i2 < selectedValues.length; i2++) {
+                selectedValue["$" + selectedValues[i2]] = true;
               }
               for (var _i = 0; _i < options2.length; _i++) {
                 var selected = selectedValue.hasOwnProperty("$" + options2[_i].value);
@@ -22785,7 +22785,7 @@
             var warnedForNaNValue = false;
             var warnedForInfinityValue = false;
             var camelize = /* @__PURE__ */ __name(function(string2) {
-              return string2.replace(hyphenPattern, function(_23, character) {
+              return string2.replace(hyphenPattern, function(_24, character) {
                 return character.toUpperCase();
               });
             }, "camelize");
@@ -22894,8 +22894,8 @@
             var expanded = {};
             for (var key in styles) {
               var longhands = shorthandToLonghand[key] || [key];
-              for (var i = 0; i < longhands.length; i++) {
-                expanded[longhands[i]] = key;
+              for (var i2 = 0; i2 < longhands.length; i2++) {
+                expanded[longhands[i2]] = key;
               }
             }
             return expanded;
@@ -23810,17 +23810,17 @@
             restoreQueue = null;
             restoreStateOfTarget(target);
             if (queuedTargets) {
-              for (var i = 0; i < queuedTargets.length; i++) {
-                restoreStateOfTarget(queuedTargets[i]);
+              for (var i2 = 0; i2 < queuedTargets.length; i2++) {
+                restoreStateOfTarget(queuedTargets[i2]);
               }
             }
           }
           __name(restoreStateIfNeeded, "restoreStateIfNeeded");
-          var batchedUpdatesImpl = /* @__PURE__ */ __name(function(fn, bookkeeping) {
-            return fn(bookkeeping);
+          var batchedUpdatesImpl = /* @__PURE__ */ __name(function(fn2, bookkeeping) {
+            return fn2(bookkeeping);
           }, "batchedUpdatesImpl");
-          var discreteUpdatesImpl = /* @__PURE__ */ __name(function(fn, a, b, c, d) {
-            return fn(a, b, c, d);
+          var discreteUpdatesImpl = /* @__PURE__ */ __name(function(fn2, a2, b2, c2, d2) {
+            return fn2(a2, b2, c2, d2);
           }, "discreteUpdatesImpl");
           var flushDiscreteUpdatesImpl = /* @__PURE__ */ __name(function() {
           }, "flushDiscreteUpdatesImpl");
@@ -23835,37 +23835,37 @@
             }
           }
           __name(finishEventHandler, "finishEventHandler");
-          function batchedUpdates(fn, bookkeeping) {
+          function batchedUpdates(fn2, bookkeeping) {
             if (isInsideEventHandler) {
-              return fn(bookkeeping);
+              return fn2(bookkeeping);
             }
             isInsideEventHandler = true;
             try {
-              return batchedUpdatesImpl(fn, bookkeeping);
+              return batchedUpdatesImpl(fn2, bookkeeping);
             } finally {
               isInsideEventHandler = false;
               finishEventHandler();
             }
           }
           __name(batchedUpdates, "batchedUpdates");
-          function batchedEventUpdates(fn, a, b) {
+          function batchedEventUpdates(fn2, a2, b2) {
             if (isBatchingEventUpdates) {
-              return fn(a, b);
+              return fn2(a2, b2);
             }
             isBatchingEventUpdates = true;
             try {
-              return batchedEventUpdatesImpl(fn, a, b);
+              return batchedEventUpdatesImpl(fn2, a2, b2);
             } finally {
               isBatchingEventUpdates = false;
               finishEventHandler();
             }
           }
           __name(batchedEventUpdates, "batchedEventUpdates");
-          function discreteUpdates(fn, a, b, c, d) {
+          function discreteUpdates(fn2, a2, b2, c2, d2) {
             var prevIsInsideEventHandler = isInsideEventHandler;
             isInsideEventHandler = true;
             try {
-              return discreteUpdatesImpl(fn, a, b, c, d);
+              return discreteUpdatesImpl(fn2, a2, b2, c2, d2);
             } finally {
               isInsideEventHandler = prevIsInsideEventHandler;
               if (!isInsideEventHandler) {
@@ -23944,11 +23944,11 @@
               });
               window.addEventListener("test", options, options);
               window.removeEventListener("test", options, options);
-            } catch (e) {
+            } catch (e3) {
               passiveBrowserEventsSupported = false;
             }
           }
-          function invokeGuardedCallbackProd(name, func, context, a, b, c, d, e, f) {
+          function invokeGuardedCallbackProd(name, func, context, a2, b2, c2, d2, e3, f2) {
             var funcArgs = Array.prototype.slice.call(arguments, 3);
             try {
               func.apply(context, funcArgs);
@@ -23961,7 +23961,7 @@
           {
             if (typeof window !== "undefined" && typeof window.dispatchEvent === "function" && typeof document !== "undefined" && typeof document.createEvent === "function") {
               var fakeNode = document.createElement("react");
-              invokeGuardedCallbackImpl = /* @__PURE__ */ __name(function invokeGuardedCallbackDev(name, func, context, a, b, c, d, e, f) {
+              invokeGuardedCallbackImpl = /* @__PURE__ */ __name(function invokeGuardedCallbackDev(name, func, context, a2, b2, c2, d2, e3, f2) {
                 if (!(typeof document !== "undefined")) {
                   {
                     throw Error("The `document` global was defined when React was initialized, but is not defined anymore. This can happen in a test environment if a component schedules an update from an asynchronous callback, but the test has already finished running. To solve this, you can either unmount the component at the end of your test (and ensure that any asynchronous operations get canceled in `componentWillUnmount`), or you can change the test itself to be asynchronous.");
@@ -24041,13 +24041,13 @@
               caughtError = error3;
             }
           };
-          function invokeGuardedCallback(name, func, context, a, b, c, d, e, f) {
+          function invokeGuardedCallback(name, func, context, a2, b2, c2, d2, e3, f2) {
             hasError = false;
             caughtError = null;
             invokeGuardedCallbackImpl$1.apply(reporter, arguments);
           }
           __name(invokeGuardedCallback, "invokeGuardedCallback");
-          function invokeGuardedCallbackAndCatchFirstError(name, func, context, a, b, c, d, e, f) {
+          function invokeGuardedCallbackAndCatchFirstError(name, func, context, a2, b2, c2, d2, e3, f2) {
             invokeGuardedCallback.apply(this, arguments);
             if (hasError) {
               var error3 = clearCaughtError();
@@ -24207,10 +24207,10 @@
               }
               return fiber;
             }
-            var a = fiber;
-            var b = alternate;
+            var a2 = fiber;
+            var b2 = alternate;
             while (true) {
-              var parentA = a.return;
+              var parentA = a2.return;
               if (parentA === null) {
                 break;
               }
@@ -24218,7 +24218,7 @@
               if (parentB === null) {
                 var nextParent = parentA.return;
                 if (nextParent !== null) {
-                  a = b = nextParent;
+                  a2 = b2 = nextParent;
                   continue;
                 }
                 break;
@@ -24226,11 +24226,11 @@
               if (parentA.child === parentB.child) {
                 var child = parentA.child;
                 while (child) {
-                  if (child === a) {
+                  if (child === a2) {
                     assertIsMounted(parentA);
                     return fiber;
                   }
-                  if (child === b) {
+                  if (child === b2) {
                     assertIsMounted(parentA);
                     return alternate;
                   }
@@ -24242,23 +24242,23 @@
                   }
                 }
               }
-              if (a.return !== b.return) {
-                a = parentA;
-                b = parentB;
+              if (a2.return !== b2.return) {
+                a2 = parentA;
+                b2 = parentB;
               } else {
                 var didFindChild = false;
                 var _child = parentA.child;
                 while (_child) {
-                  if (_child === a) {
+                  if (_child === a2) {
                     didFindChild = true;
-                    a = parentA;
-                    b = parentB;
+                    a2 = parentA;
+                    b2 = parentB;
                     break;
                   }
-                  if (_child === b) {
+                  if (_child === b2) {
                     didFindChild = true;
-                    b = parentA;
-                    a = parentB;
+                    b2 = parentA;
+                    a2 = parentB;
                     break;
                   }
                   _child = _child.sibling;
@@ -24266,16 +24266,16 @@
                 if (!didFindChild) {
                   _child = parentB.child;
                   while (_child) {
-                    if (_child === a) {
+                    if (_child === a2) {
                       didFindChild = true;
-                      a = parentB;
-                      b = parentA;
+                      a2 = parentB;
+                      b2 = parentA;
                       break;
                     }
-                    if (_child === b) {
+                    if (_child === b2) {
                       didFindChild = true;
-                      b = parentB;
-                      a = parentA;
+                      b2 = parentB;
+                      a2 = parentA;
                       break;
                     }
                     _child = _child.sibling;
@@ -24287,18 +24287,18 @@
                   }
                 }
               }
-              if (!(a.alternate === b)) {
+              if (!(a2.alternate === b2)) {
                 {
                   throw Error("Return fibers should always be each others' alternates. This error is likely caused by a bug in React. Please file an issue.");
                 }
               }
             }
-            if (!(a.tag === HostRoot)) {
+            if (!(a2.tag === HostRoot)) {
               {
                 throw Error("Unable to find node on an unmounted component.");
               }
             }
-            if (a.stateNode.current === a) {
+            if (a2.stateNode.current === a2) {
               return fiber;
             }
             return alternate;
@@ -24375,23 +24375,23 @@
           }
           __name(doesFiberContain, "doesFiberContain");
           var attemptUserBlockingHydration;
-          function setAttemptUserBlockingHydration(fn) {
-            attemptUserBlockingHydration = fn;
+          function setAttemptUserBlockingHydration(fn2) {
+            attemptUserBlockingHydration = fn2;
           }
           __name(setAttemptUserBlockingHydration, "setAttemptUserBlockingHydration");
           var attemptContinuousHydration;
-          function setAttemptContinuousHydration(fn) {
-            attemptContinuousHydration = fn;
+          function setAttemptContinuousHydration(fn2) {
+            attemptContinuousHydration = fn2;
           }
           __name(setAttemptContinuousHydration, "setAttemptContinuousHydration");
           var attemptHydrationAtCurrentPriority;
-          function setAttemptHydrationAtCurrentPriority(fn) {
-            attemptHydrationAtCurrentPriority = fn;
+          function setAttemptHydrationAtCurrentPriority(fn2) {
+            attemptHydrationAtCurrentPriority = fn2;
           }
           __name(setAttemptHydrationAtCurrentPriority, "setAttemptHydrationAtCurrentPriority");
           var attemptHydrationAtPriority;
-          function setAttemptHydrationAtPriority(fn) {
-            attemptHydrationAtPriority = fn;
+          function setAttemptHydrationAtPriority(fn2) {
+            attemptHydrationAtPriority = fn2;
           }
           __name(setAttemptHydrationAtPriority, "setAttemptHydrationAtPriority");
           var hasScheduledReplayAttempt = false;
@@ -24643,8 +24643,8 @@
           function retryIfBlockedOn(unblocked) {
             if (queuedDiscreteEvents.length > 0) {
               scheduleCallbackIfUnblocked(queuedDiscreteEvents[0], unblocked);
-              for (var i = 1; i < queuedDiscreteEvents.length; i++) {
-                var queuedEvent = queuedDiscreteEvents[i];
+              for (var i2 = 1; i2 < queuedDiscreteEvents.length; i2++) {
+                var queuedEvent = queuedDiscreteEvents[i2];
                 if (queuedEvent.blockedOn === unblocked) {
                   queuedEvent.blockedOn = null;
                 }
@@ -24808,9 +24808,9 @@
           var userBlockingPairsForSimpleEventPlugin = ["drag", "drag", "dragenter", "dragEnter", "dragexit", "dragExit", "dragleave", "dragLeave", "dragover", "dragOver", "mousemove", "mouseMove", "mouseout", "mouseOut", "mouseover", "mouseOver", "pointermove", "pointerMove", "pointerout", "pointerOut", "pointerover", "pointerOver", "scroll", "scroll", "toggle", "toggle", "touchmove", "touchMove", "wheel", "wheel"];
           var continuousPairsForSimpleEventPlugin = ["abort", "abort", ANIMATION_END, "animationEnd", ANIMATION_ITERATION, "animationIteration", ANIMATION_START, "animationStart", "canplay", "canPlay", "canplaythrough", "canPlayThrough", "durationchange", "durationChange", "emptied", "emptied", "encrypted", "encrypted", "ended", "ended", "error", "error", "gotpointercapture", "gotPointerCapture", "load", "load", "loadeddata", "loadedData", "loadedmetadata", "loadedMetadata", "loadstart", "loadStart", "lostpointercapture", "lostPointerCapture", "playing", "playing", "progress", "progress", "seeking", "seeking", "stalled", "stalled", "suspend", "suspend", "timeupdate", "timeUpdate", TRANSITION_END, "transitionEnd", "waiting", "waiting"];
           function registerSimplePluginEventsAndSetTheirPriorities(eventTypes, priority) {
-            for (var i = 0; i < eventTypes.length; i += 2) {
-              var topEvent = eventTypes[i];
-              var event = eventTypes[i + 1];
+            for (var i2 = 0; i2 < eventTypes.length; i2 += 2) {
+              var topEvent = eventTypes[i2];
+              var event = eventTypes[i2 + 1];
               var capitalizedEvent = event[0].toUpperCase() + event.slice(1);
               var reactName = "on" + capitalizedEvent;
               eventPriorities.set(topEvent, priority);
@@ -24820,8 +24820,8 @@
           }
           __name(registerSimplePluginEventsAndSetTheirPriorities, "registerSimplePluginEventsAndSetTheirPriorities");
           function setEventPriorities(eventTypes, priority) {
-            for (var i = 0; i < eventTypes.length; i++) {
-              eventPriorities.set(eventTypes[i], priority);
+            for (var i2 = 0; i2 < eventTypes.length; i2++) {
+              eventPriorities.set(eventTypes[i2], priority);
             }
           }
           __name(setEventPriorities, "setEventPriorities");
@@ -25250,16 +25250,16 @@
             return pickArbitraryLaneIndex(lane);
           }
           __name(laneToIndex, "laneToIndex");
-          function includesSomeLane(a, b) {
-            return (a & b) !== NoLanes;
+          function includesSomeLane(a2, b2) {
+            return (a2 & b2) !== NoLanes;
           }
           __name(includesSomeLane, "includesSomeLane");
           function isSubsetOfLanes(set3, subset) {
             return (set3 & subset) === subset;
           }
           __name(isSubsetOfLanes, "isSubsetOfLanes");
-          function mergeLanes(a, b) {
-            return a | b;
+          function mergeLanes(a2, b2) {
+            return a2 | b2;
           }
           __name(mergeLanes, "mergeLanes");
           function removeLanes(set3, subset) {
@@ -25270,13 +25270,13 @@
             return lane;
           }
           __name(laneToLanes, "laneToLanes");
-          function higherPriorityLane(a, b) {
-            return a !== NoLane && a < b ? a : b;
+          function higherPriorityLane(a2, b2) {
+            return a2 !== NoLane && a2 < b2 ? a2 : b2;
           }
           __name(higherPriorityLane, "higherPriorityLane");
           function createLaneMap(initial) {
             var laneMap = [];
-            for (var i = 0; i < TotalLanes; i++) {
+            for (var i2 = 0; i2 < TotalLanes; i2++) {
               laneMap.push(initial);
             }
             return laneMap;
@@ -26336,8 +26336,8 @@
             accumulateEnterLeaveTwoPhaseListeners(dispatchQueue, leave, enter, from3, to);
           }
           __name(extractEvents$2, "extractEvents$2");
-          function is(x, y) {
-            return x === y && (x !== 0 || 1 / x === 1 / y) || x !== x && y !== y;
+          function is(x2, y2) {
+            return x2 === y2 && (x2 !== 0 || 1 / x2 === 1 / y2) || x2 !== x2 && y2 !== y2;
           }
           __name(is, "is");
           var objectIs = typeof Object.is === "function" ? Object.is : is;
@@ -26354,8 +26354,8 @@
             if (keysA.length !== keysB.length) {
               return false;
             }
-            for (var i = 0; i < keysA.length; i++) {
-              if (!hasOwnProperty$2.call(objB, keysA[i]) || !objectIs(objA[keysA[i]], objB[keysA[i]])) {
+            for (var i2 = 0; i2 < keysA.length; i2++) {
+              if (!hasOwnProperty$2.call(objB, keysA[i2]) || !objectIs(objA[keysA[i2]], objB[keysA[i2]])) {
                 return false;
               }
             }
@@ -26408,7 +26408,7 @@
             try {
               anchorNode.nodeType;
               focusNode.nodeType;
-            } catch (e) {
+            } catch (e3) {
               return null;
             }
             return getModernOffsetsFromPoints(outerNode, anchorNode, anchorOffset, focusNode, focusOffset);
@@ -26585,8 +26585,8 @@
               if (typeof priorFocusedElem.focus === "function") {
                 priorFocusedElem.focus();
               }
-              for (var i = 0; i < ancestors.length; i++) {
-                var info = ancestors[i];
+              for (var i2 = 0; i2 < ancestors.length; i2++) {
+                var info = ancestors[i2];
                 info.element.scrollLeft = info.left;
                 info.element.scrollTop = info.top;
               }
@@ -26838,8 +26838,8 @@
           function processDispatchQueueItemsInOrder(event, dispatchListeners, inCapturePhase) {
             var previousInstance;
             if (inCapturePhase) {
-              for (var i = dispatchListeners.length - 1; i >= 0; i--) {
-                var _dispatchListeners$i = dispatchListeners[i], instance = _dispatchListeners$i.instance, currentTarget = _dispatchListeners$i.currentTarget, listener = _dispatchListeners$i.listener;
+              for (var i2 = dispatchListeners.length - 1; i2 >= 0; i2--) {
+                var _dispatchListeners$i = dispatchListeners[i2], instance = _dispatchListeners$i.instance, currentTarget = _dispatchListeners$i.currentTarget, listener = _dispatchListeners$i.listener;
                 if (instance !== previousInstance && event.isPropagationStopped()) {
                   return;
                 }
@@ -26860,8 +26860,8 @@
           __name(processDispatchQueueItemsInOrder, "processDispatchQueueItemsInOrder");
           function processDispatchQueue(dispatchQueue, eventSystemFlags) {
             var inCapturePhase = (eventSystemFlags & IS_CAPTURE_PHASE) !== 0;
-            for (var i = 0; i < dispatchQueue.length; i++) {
-              var _dispatchQueue$i = dispatchQueue[i], event = _dispatchQueue$i.event, listeners2 = _dispatchQueue$i.listeners;
+            for (var i2 = 0; i2 < dispatchQueue.length; i2++) {
+              var _dispatchQueue$i = dispatchQueue[i2], event = _dispatchQueue$i.event, listeners2 = _dispatchQueue$i.listeners;
               processDispatchQueueItemsInOrder(event, listeners2, inCapturePhase);
             }
             rethrowCaughtError();
@@ -27298,9 +27298,9 @@
           }
           __name(setInitialDOMProperties, "setInitialDOMProperties");
           function updateDOMProperties(domElement, updatePayload, wasCustomComponentTag, isCustomComponentTag) {
-            for (var i = 0; i < updatePayload.length; i += 2) {
-              var propKey = updatePayload[i];
-              var propValue = updatePayload[i + 1];
+            for (var i2 = 0; i2 < updatePayload.length; i2 += 2) {
+              var propKey = updatePayload[i2];
+              var propValue = updatePayload[i2 + 1];
               if (propKey === STYLE) {
                 setValueForStyles(domElement, propValue);
               } else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
@@ -27313,7 +27313,7 @@
             }
           }
           __name(updateDOMProperties, "updateDOMProperties");
-          function createElement6(type3, props, rootContainerElement, parentNamespace) {
+          function createElement7(type3, props, rootContainerElement, parentNamespace) {
             var isCustomComponentTag;
             var ownerDocument = getOwnerDocumentFromRootContainer(rootContainerElement);
             var domElement;
@@ -27361,7 +27361,7 @@
             }
             return domElement;
           }
-          __name(createElement6, "createElement");
+          __name(createElement7, "createElement");
           function createTextNode(text, rootContainerElement) {
             return getOwnerDocumentFromRootContainer(rootContainerElement).createTextNode(text);
           }
@@ -27386,8 +27386,8 @@
                 break;
               case "video":
               case "audio":
-                for (var i = 0; i < mediaEventTypes.length; i++) {
-                  listenToNonDelegatedEvent(mediaEventTypes[i], domElement);
+                for (var i2 = 0; i2 < mediaEventTypes.length; i2++) {
+                  listenToNonDelegatedEvent(mediaEventTypes[i2], domElement);
                 }
                 props = rawProps;
                 break;
@@ -27650,8 +27650,8 @@
                 break;
               case "video":
               case "audio":
-                for (var i = 0; i < mediaEventTypes.length; i++) {
-                  listenToNonDelegatedEvent(mediaEventTypes[i], domElement);
+                for (var i2 = 0; i2 < mediaEventTypes.length; i2++) {
+                  listenToNonDelegatedEvent(mediaEventTypes[i2], domElement);
                 }
                 break;
               case "source":
@@ -28210,7 +28210,7 @@
               }
               parentNamespace = hostContextDev.namespace;
             }
-            var domElement = createElement6(type3, props, rootContainerInstance, parentNamespace);
+            var domElement = createElement7(type3, props, rootContainerInstance, parentNamespace);
             precacheFiberNode(internalInstanceHandle, domElement);
             updateFiberProps(domElement, props);
             return domElement;
@@ -29064,9 +29064,9 @@
             }
           }
           __name(reactPriorityToSchedulerPriority, "reactPriorityToSchedulerPriority");
-          function runWithPriority$1(reactPriorityLevel, fn) {
+          function runWithPriority$1(reactPriorityLevel, fn2) {
             var priorityLevel = reactPriorityToSchedulerPriority(reactPriorityLevel);
-            return Scheduler_runWithPriority(priorityLevel, fn);
+            return Scheduler_runWithPriority(priorityLevel, fn2);
           }
           __name(runWithPriority$1, "runWithPriority$1");
           function scheduleCallback(reactPriorityLevel, callback, options2) {
@@ -29102,14 +29102,14 @@
           function flushSyncCallbackQueueImpl() {
             if (!isFlushingSyncQueue && syncQueue !== null) {
               isFlushingSyncQueue = true;
-              var i = 0;
+              var i2 = 0;
               {
                 try {
                   var _isSync2 = true;
                   var _queue = syncQueue;
                   runWithPriority$1(ImmediatePriority$1, function() {
-                    for (; i < _queue.length; i++) {
-                      var callback = _queue[i];
+                    for (; i2 < _queue.length; i2++) {
+                      var callback = _queue[i2];
                       do {
                         callback = callback(_isSync2);
                       } while (callback !== null);
@@ -29118,7 +29118,7 @@
                   syncQueue = null;
                 } catch (error3) {
                   if (syncQueue !== null) {
-                    syncQueue = syncQueue.slice(i + 1);
+                    syncQueue = syncQueue.slice(i2 + 1);
                   }
                   Scheduler_scheduleCallback(Scheduler_ImmediatePriority, flushSyncCallbackQueue);
                   throw error3;
@@ -29868,8 +29868,8 @@
             var effects = finishedQueue.effects;
             finishedQueue.effects = null;
             if (effects !== null) {
-              for (var i = 0; i < effects.length; i++) {
-                var effect = effects[i];
+              for (var i2 = 0; i2 < effects.length; i2++) {
+                var effect = effects[i2];
                 var callback = effect.callback;
                 if (callback !== null) {
                   effect.callback = null;
@@ -29881,7 +29881,7 @@
           __name(commitUpdateQueue, "commitUpdateQueue");
           var fakeInternalInstance = {};
           var isArray3 = Array.isArray;
-          var emptyRefsObject = new React8.Component().refs;
+          var emptyRefsObject = new React9.Component().refs;
           var didWarnAboutStateAssignmentForComponent;
           var didWarnAboutUninitializedState;
           var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -30834,8 +30834,8 @@
             function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren, lanes) {
               {
                 var knownKeys = null;
-                for (var i = 0; i < newChildren.length; i++) {
-                  var child = newChildren[i];
+                for (var i2 = 0; i2 < newChildren.length; i2++) {
+                  var child = newChildren[i2];
                   knownKeys = warnOnInvalidKey(child, knownKeys, returnFiber);
                 }
               }
@@ -31221,13 +31221,13 @@
           var contextStackCursor$1 = createCursor(NO_CONTEXT);
           var contextFiberStackCursor = createCursor(NO_CONTEXT);
           var rootInstanceStackCursor = createCursor(NO_CONTEXT);
-          function requiredContext(c) {
-            if (!(c !== NO_CONTEXT)) {
+          function requiredContext(c2) {
+            if (!(c2 !== NO_CONTEXT)) {
               {
                 throw Error("Expected host context to exist. This error is likely caused by a bug in React. Please file an issue.");
               }
             }
-            return c;
+            return c2;
           }
           __name(requiredContext, "requiredContext");
           function getRootHostContainer() {
@@ -31601,8 +31601,8 @@
           }
           __name(markSourceAsDirty, "markSourceAsDirty");
           function resetWorkInProgressVersions() {
-            for (var i = 0; i < workInProgressSources.length; i++) {
-              var mutableSource = workInProgressSources[i];
+            for (var i2 = 0; i2 < workInProgressSources.length; i2++) {
+              var mutableSource = workInProgressSources[i2];
               {
                 mutableSource._workInProgressVersionPrimary = null;
               }
@@ -31692,10 +31692,10 @@
                 if (hookTypesDev !== null) {
                   var table = "";
                   var secondColumnStart = 30;
-                  for (var i = 0; i <= hookTypesUpdateIndexDev; i++) {
-                    var oldHookName = hookTypesDev[i];
-                    var newHookName = i === hookTypesUpdateIndexDev ? currentHookName : oldHookName;
-                    var row = i + 1 + ". " + oldHookName;
+                  for (var i2 = 0; i2 <= hookTypesUpdateIndexDev; i2++) {
+                    var oldHookName = hookTypesDev[i2];
+                    var newHookName = i2 === hookTypesUpdateIndexDev ? currentHookName : oldHookName;
+                    var row = i2 + 1 + ". " + oldHookName;
                     while (row.length < secondColumnStart) {
                       row += " ";
                     }
@@ -31733,8 +31733,8 @@
                 error2("The final argument passed to %s changed size between renders. The order and size of this array must remain constant.\n\nPrevious: %s\nIncoming: %s", currentHookNameInDev, "[" + prevDeps.join(", ") + "]", "[" + nextDeps.join(", ") + "]");
               }
             }
-            for (var i = 0; i < prevDeps.length && i < nextDeps.length; i++) {
-              if (objectIs(nextDeps[i], prevDeps[i])) {
+            for (var i2 = 0; i2 < prevDeps.length && i2 < nextDeps.length; i2++) {
+              if (objectIs(nextDeps[i2], prevDeps[i2])) {
                 continue;
               }
               return false;
@@ -33522,7 +33522,7 @@
                   var init3 = lazyComponent._init;
                   try {
                     outerMemoType = init3(payload);
-                  } catch (x) {
+                  } catch (x2) {
                     outerMemoType = null;
                   }
                   var outerPropTypes = outerMemoType && outerMemoType.propTypes;
@@ -33795,9 +33795,9 @@
               {
                 var mutableSourceEagerHydrationData = root2.mutableSourceEagerHydrationData;
                 if (mutableSourceEagerHydrationData != null) {
-                  for (var i = 0; i < mutableSourceEagerHydrationData.length; i += 2) {
-                    var mutableSource = mutableSourceEagerHydrationData[i];
-                    var version3 = mutableSourceEagerHydrationData[i + 1];
+                  for (var i2 = 0; i2 < mutableSourceEagerHydrationData.length; i2 += 2) {
+                    var mutableSource = mutableSourceEagerHydrationData[i2];
+                    var version3 = mutableSourceEagerHydrationData[i2 + 1];
                     setWorkInProgressVersion(mutableSource, version3);
                   }
                 }
@@ -34394,8 +34394,8 @@
             {
               if ((revealOrder === "forwards" || revealOrder === "backwards") && children !== void 0 && children !== null && children !== false) {
                 if (Array.isArray(children)) {
-                  for (var i = 0; i < children.length; i++) {
-                    if (!validateSuspenseListNestedChild(children[i], i)) {
+                  for (var i2 = 0; i2 < children.length; i2++) {
+                    if (!validateSuspenseListNestedChild(children[i2], i2)) {
                       return;
                     }
                   }
@@ -35407,9 +35407,9 @@
               } else {
                 console["error"](error3);
               }
-            } catch (e) {
+            } catch (e3) {
               setTimeout(function() {
-                throw e;
+                throw e3;
               });
             }
           }
@@ -36882,11 +36882,11 @@
             flushSyncCallbackQueue();
           }
           __name(flushPendingDiscreteUpdates, "flushPendingDiscreteUpdates");
-          function batchedUpdates$1(fn, a) {
+          function batchedUpdates$1(fn2, a2) {
             var prevExecutionContext = executionContext;
             executionContext |= BatchedContext;
             try {
-              return fn(a);
+              return fn2(a2);
             } finally {
               executionContext = prevExecutionContext;
               if (executionContext === NoContext) {
@@ -36896,11 +36896,11 @@
             }
           }
           __name(batchedUpdates$1, "batchedUpdates$1");
-          function batchedEventUpdates$1(fn, a) {
+          function batchedEventUpdates$1(fn2, a2) {
             var prevExecutionContext = executionContext;
             executionContext |= EventContext;
             try {
-              return fn(a);
+              return fn2(a2);
             } finally {
               executionContext = prevExecutionContext;
               if (executionContext === NoContext) {
@@ -36910,12 +36910,12 @@
             }
           }
           __name(batchedEventUpdates$1, "batchedEventUpdates$1");
-          function discreteUpdates$1(fn, a, b, c, d) {
+          function discreteUpdates$1(fn2, a2, b2, c2, d2) {
             var prevExecutionContext = executionContext;
             executionContext |= DiscreteEventContext;
             {
               try {
-                return runWithPriority$1(UserBlockingPriority$2, fn.bind(null, a, b, c, d));
+                return runWithPriority$1(UserBlockingPriority$2, fn2.bind(null, a2, b2, c2, d2));
               } finally {
                 executionContext = prevExecutionContext;
                 if (executionContext === NoContext) {
@@ -36926,12 +36926,12 @@
             }
           }
           __name(discreteUpdates$1, "discreteUpdates$1");
-          function unbatchedUpdates(fn, a) {
+          function unbatchedUpdates(fn2, a2) {
             var prevExecutionContext = executionContext;
             executionContext &= ~BatchedContext;
             executionContext |= LegacyUnbatchedContext;
             try {
-              return fn(a);
+              return fn2(a2);
             } finally {
               executionContext = prevExecutionContext;
               if (executionContext === NoContext) {
@@ -36941,19 +36941,19 @@
             }
           }
           __name(unbatchedUpdates, "unbatchedUpdates");
-          function flushSync(fn, a) {
+          function flushSync(fn2, a2) {
             var prevExecutionContext = executionContext;
             if ((prevExecutionContext & (RenderContext | CommitContext)) !== NoContext) {
               {
                 error2("flushSync was called from inside a lifecycle method. React cannot flush when React is already rendering. Consider moving this call to a scheduler task or micro task.");
               }
-              return fn(a);
+              return fn2(a2);
             }
             executionContext |= BatchedContext;
             {
               try {
-                if (fn) {
-                  return runWithPriority$1(ImmediatePriority$1, fn.bind(null, a));
+                if (fn2) {
+                  return runWithPriority$1(ImmediatePriority$1, fn2.bind(null, a2));
                 } else {
                   return void 0;
                 }
@@ -37462,8 +37462,8 @@
                 if (spawnedWorkDuringRender !== null) {
                   var expirationTimes = spawnedWorkDuringRender;
                   spawnedWorkDuringRender = null;
-                  for (var i = 0; i < expirationTimes.length; i++) {
-                    scheduleInteractions(root2, expirationTimes[i], root2.memoizedInteractions);
+                  for (var i2 = 0; i2 < expirationTimes.length; i2++) {
+                    scheduleInteractions(root2, expirationTimes[i2], root2.memoizedInteractions);
                   }
                 }
                 schedulePendingInteractions(root2, remainingLanes);
@@ -37673,9 +37673,9 @@
             var prevInteractions = pushInteractions(root2);
             var unmountEffects = pendingPassiveHookEffectsUnmount;
             pendingPassiveHookEffectsUnmount = [];
-            for (var i = 0; i < unmountEffects.length; i += 2) {
-              var _effect = unmountEffects[i];
-              var fiber = unmountEffects[i + 1];
+            for (var i2 = 0; i2 < unmountEffects.length; i2 += 2) {
+              var _effect = unmountEffects[i2];
+              var fiber = unmountEffects[i2 + 1];
               var destroy = _effect.destroy;
               _effect.destroy = void 0;
               {
@@ -38502,7 +38502,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
               var nonExtensibleObject = Object.preventExtensions({});
               new Map([[nonExtensibleObject, null]]);
               new Set([nonExtensibleObject]);
-            } catch (e) {
+            } catch (e3) {
               hasBadMapPolyfill = true;
             }
           }
@@ -39188,10 +39188,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             markRetryLaneIfNotHydrated(fiber, lane);
           }
           __name(attemptHydrationAtCurrentPriority$1, "attemptHydrationAtCurrentPriority$1");
-          function runWithPriority$2(priority, fn) {
+          function runWithPriority$2(priority, fn2) {
             try {
               setCurrentUpdateLanePriority(priority);
-              return fn();
+              return fn2();
             } finally {
             }
           }
@@ -39261,8 +39261,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
                 warn3("copyWithRename() expects paths of the same length");
                 return;
               } else {
-                for (var i = 0; i < newPath.length - 1; i++) {
-                  if (oldPath[i] !== newPath[i]) {
+                for (var i2 = 0; i2 < newPath.length - 1; i2++) {
+                  if (oldPath[i2] !== newPath[i2]) {
                     warn3("copyWithRename() expects paths to be the same except for the deepest key");
                     return;
                   }
@@ -39441,8 +39441,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
               listenToAllSupportedEvents(rootContainerElement);
             }
             if (mutableSources) {
-              for (var i = 0; i < mutableSources.length; i++) {
-                var mutableSource = mutableSources[i];
+              for (var i2 = 0; i2 < mutableSources.length; i2++) {
+                var mutableSource = mutableSources[i2];
                 registerMutableSourceForHydration(root2, mutableSource);
               }
             }
@@ -39773,38 +39773,38 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       init_buffer();
       (function(global2, module2, define2) {
         function Alea(seed) {
-          var me = this, mash = Mash();
-          me.next = function() {
-            var t = 2091639 * me.s0 + me.c * 23283064365386963e-26;
-            me.s0 = me.s1;
-            me.s1 = me.s2;
-            return me.s2 = t - (me.c = t | 0);
+          var me2 = this, mash = Mash();
+          me2.next = function() {
+            var t2 = 2091639 * me2.s0 + me2.c * 23283064365386963e-26;
+            me2.s0 = me2.s1;
+            me2.s1 = me2.s2;
+            return me2.s2 = t2 - (me2.c = t2 | 0);
           };
-          me.c = 1;
-          me.s0 = mash(" ");
-          me.s1 = mash(" ");
-          me.s2 = mash(" ");
-          me.s0 -= mash(seed);
-          if (me.s0 < 0) {
-            me.s0 += 1;
+          me2.c = 1;
+          me2.s0 = mash(" ");
+          me2.s1 = mash(" ");
+          me2.s2 = mash(" ");
+          me2.s0 -= mash(seed);
+          if (me2.s0 < 0) {
+            me2.s0 += 1;
           }
-          me.s1 -= mash(seed);
-          if (me.s1 < 0) {
-            me.s1 += 1;
+          me2.s1 -= mash(seed);
+          if (me2.s1 < 0) {
+            me2.s1 += 1;
           }
-          me.s2 -= mash(seed);
-          if (me.s2 < 0) {
-            me.s2 += 1;
+          me2.s2 -= mash(seed);
+          if (me2.s2 < 0) {
+            me2.s2 += 1;
           }
           mash = null;
         }
         __name(Alea, "Alea");
-        function copy4(f, t) {
-          t.c = f.c;
-          t.s0 = f.s0;
-          t.s1 = f.s1;
-          t.s2 = f.s2;
-          return t;
+        function copy4(f2, t2) {
+          t2.c = f2.c;
+          t2.s0 = f2.s0;
+          t2.s1 = f2.s1;
+          t2.s2 = f2.s2;
+          return t2;
         }
         __name(copy4, "copy");
         function impl(seed, opts) {
@@ -39827,20 +39827,20 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
         __name(impl, "impl");
         function Mash() {
-          var n = 4022871197;
+          var n2 = 4022871197;
           var mash = /* @__PURE__ */ __name(function(data) {
             data = String(data);
-            for (var i = 0; i < data.length; i++) {
-              n += data.charCodeAt(i);
-              var h = 0.02519603282416938 * n;
-              n = h >>> 0;
-              h -= n;
-              h *= n;
-              n = h >>> 0;
-              h -= n;
-              n += h * 4294967296;
+            for (var i2 = 0; i2 < data.length; i2++) {
+              n2 += data.charCodeAt(i2);
+              var h2 = 0.02519603282416938 * n2;
+              n2 = h2 >>> 0;
+              h2 -= n2;
+              h2 *= n2;
+              n2 = h2 >>> 0;
+              h2 -= n2;
+              n2 += h2 * 4294967296;
             }
-            return (n >>> 0) * 23283064365386963e-26;
+            return (n2 >>> 0) * 23283064365386963e-26;
           }, "mash");
           return mash;
         }
@@ -39865,35 +39865,35 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       init_buffer();
       (function(global2, module2, define2) {
         function XorGen(seed) {
-          var me = this, strseed = "";
-          me.x = 0;
-          me.y = 0;
-          me.z = 0;
-          me.w = 0;
-          me.next = function() {
-            var t = me.x ^ me.x << 11;
-            me.x = me.y;
-            me.y = me.z;
-            me.z = me.w;
-            return me.w ^= me.w >>> 19 ^ t ^ t >>> 8;
+          var me2 = this, strseed = "";
+          me2.x = 0;
+          me2.y = 0;
+          me2.z = 0;
+          me2.w = 0;
+          me2.next = function() {
+            var t2 = me2.x ^ me2.x << 11;
+            me2.x = me2.y;
+            me2.y = me2.z;
+            me2.z = me2.w;
+            return me2.w ^= me2.w >>> 19 ^ t2 ^ t2 >>> 8;
           };
           if (seed === (seed | 0)) {
-            me.x = seed;
+            me2.x = seed;
           } else {
             strseed += seed;
           }
-          for (var k = 0; k < strseed.length + 64; k++) {
-            me.x ^= strseed.charCodeAt(k) | 0;
-            me.next();
+          for (var k2 = 0; k2 < strseed.length + 64; k2++) {
+            me2.x ^= strseed.charCodeAt(k2) | 0;
+            me2.next();
           }
         }
         __name(XorGen, "XorGen");
-        function copy4(f, t) {
-          t.x = f.x;
-          t.y = f.y;
-          t.z = f.z;
-          t.w = f.w;
-          return t;
+        function copy4(f2, t2) {
+          t2.x = f2.x;
+          t2.y = f2.y;
+          t2.z = f2.z;
+          t2.w = f2.w;
+          return t2;
         }
         __name(copy4, "copy");
         function impl(seed, opts) {
@@ -39938,42 +39938,42 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       init_buffer();
       (function(global2, module2, define2) {
         function XorGen(seed) {
-          var me = this, strseed = "";
-          me.next = function() {
-            var t = me.x ^ me.x >>> 2;
-            me.x = me.y;
-            me.y = me.z;
-            me.z = me.w;
-            me.w = me.v;
-            return (me.d = me.d + 362437 | 0) + (me.v = me.v ^ me.v << 4 ^ (t ^ t << 1)) | 0;
+          var me2 = this, strseed = "";
+          me2.next = function() {
+            var t2 = me2.x ^ me2.x >>> 2;
+            me2.x = me2.y;
+            me2.y = me2.z;
+            me2.z = me2.w;
+            me2.w = me2.v;
+            return (me2.d = me2.d + 362437 | 0) + (me2.v = me2.v ^ me2.v << 4 ^ (t2 ^ t2 << 1)) | 0;
           };
-          me.x = 0;
-          me.y = 0;
-          me.z = 0;
-          me.w = 0;
-          me.v = 0;
+          me2.x = 0;
+          me2.y = 0;
+          me2.z = 0;
+          me2.w = 0;
+          me2.v = 0;
           if (seed === (seed | 0)) {
-            me.x = seed;
+            me2.x = seed;
           } else {
             strseed += seed;
           }
-          for (var k = 0; k < strseed.length + 64; k++) {
-            me.x ^= strseed.charCodeAt(k) | 0;
-            if (k == strseed.length) {
-              me.d = me.x << 10 ^ me.x >>> 4;
+          for (var k2 = 0; k2 < strseed.length + 64; k2++) {
+            me2.x ^= strseed.charCodeAt(k2) | 0;
+            if (k2 == strseed.length) {
+              me2.d = me2.x << 10 ^ me2.x >>> 4;
             }
-            me.next();
+            me2.next();
           }
         }
         __name(XorGen, "XorGen");
-        function copy4(f, t) {
-          t.x = f.x;
-          t.y = f.y;
-          t.z = f.z;
-          t.w = f.w;
-          t.v = f.v;
-          t.d = f.d;
-          return t;
+        function copy4(f2, t2) {
+          t2.x = f2.x;
+          t2.y = f2.y;
+          t2.z = f2.z;
+          t2.w = f2.w;
+          t2.v = f2.v;
+          t2.d = f2.d;
+          return t2;
         }
         __name(copy4, "copy");
         function impl(seed, opts) {
@@ -40018,57 +40018,57 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       init_buffer();
       (function(global2, module2, define2) {
         function XorGen(seed) {
-          var me = this;
-          me.next = function() {
-            var X = me.x, i = me.i, t, v, w;
-            t = X[i];
-            t ^= t >>> 7;
-            v = t ^ t << 24;
-            t = X[i + 1 & 7];
-            v ^= t ^ t >>> 10;
-            t = X[i + 3 & 7];
-            v ^= t ^ t >>> 3;
-            t = X[i + 4 & 7];
-            v ^= t ^ t << 7;
-            t = X[i + 7 & 7];
-            t = t ^ t << 13;
-            v ^= t ^ t << 9;
-            X[i] = v;
-            me.i = i + 1 & 7;
-            return v;
+          var me2 = this;
+          me2.next = function() {
+            var X2 = me2.x, i2 = me2.i, t2, v2, w2;
+            t2 = X2[i2];
+            t2 ^= t2 >>> 7;
+            v2 = t2 ^ t2 << 24;
+            t2 = X2[i2 + 1 & 7];
+            v2 ^= t2 ^ t2 >>> 10;
+            t2 = X2[i2 + 3 & 7];
+            v2 ^= t2 ^ t2 >>> 3;
+            t2 = X2[i2 + 4 & 7];
+            v2 ^= t2 ^ t2 << 7;
+            t2 = X2[i2 + 7 & 7];
+            t2 = t2 ^ t2 << 13;
+            v2 ^= t2 ^ t2 << 9;
+            X2[i2] = v2;
+            me2.i = i2 + 1 & 7;
+            return v2;
           };
-          function init3(me2, seed2) {
-            var j, w, X = [];
+          function init3(me3, seed2) {
+            var j2, w2, X2 = [];
             if (seed2 === (seed2 | 0)) {
-              w = X[0] = seed2;
+              w2 = X2[0] = seed2;
             } else {
               seed2 = "" + seed2;
-              for (j = 0; j < seed2.length; ++j) {
-                X[j & 7] = X[j & 7] << 15 ^ seed2.charCodeAt(j) + X[j + 1 & 7] << 13;
+              for (j2 = 0; j2 < seed2.length; ++j2) {
+                X2[j2 & 7] = X2[j2 & 7] << 15 ^ seed2.charCodeAt(j2) + X2[j2 + 1 & 7] << 13;
               }
             }
-            while (X.length < 8)
-              X.push(0);
-            for (j = 0; j < 8 && X[j] === 0; ++j)
+            while (X2.length < 8)
+              X2.push(0);
+            for (j2 = 0; j2 < 8 && X2[j2] === 0; ++j2)
               ;
-            if (j == 8)
-              w = X[7] = -1;
+            if (j2 == 8)
+              w2 = X2[7] = -1;
             else
-              w = X[j];
-            me2.x = X;
-            me2.i = 0;
-            for (j = 256; j > 0; --j) {
-              me2.next();
+              w2 = X2[j2];
+            me3.x = X2;
+            me3.i = 0;
+            for (j2 = 256; j2 > 0; --j2) {
+              me3.next();
             }
           }
           __name(init3, "init");
-          init3(me, seed);
+          init3(me2, seed);
         }
         __name(XorGen, "XorGen");
-        function copy4(f, t) {
-          t.x = f.x.slice();
-          t.i = f.i;
-          return t;
+        function copy4(f2, t2) {
+          t2.x = f2.x.slice();
+          t2.i = f2.i;
+          return t2;
         }
         __name(copy4, "copy");
         function impl(seed, opts) {
@@ -40115,71 +40115,71 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       init_buffer();
       (function(global2, module2, define2) {
         function XorGen(seed) {
-          var me = this;
-          me.next = function() {
-            var w = me.w, X = me.X, i = me.i, t, v;
-            me.w = w = w + 1640531527 | 0;
-            v = X[i + 34 & 127];
-            t = X[i = i + 1 & 127];
-            v ^= v << 13;
-            t ^= t << 17;
-            v ^= v >>> 15;
-            t ^= t >>> 12;
-            v = X[i] = v ^ t;
-            me.i = i;
-            return v + (w ^ w >>> 16) | 0;
+          var me2 = this;
+          me2.next = function() {
+            var w2 = me2.w, X2 = me2.X, i2 = me2.i, t2, v2;
+            me2.w = w2 = w2 + 1640531527 | 0;
+            v2 = X2[i2 + 34 & 127];
+            t2 = X2[i2 = i2 + 1 & 127];
+            v2 ^= v2 << 13;
+            t2 ^= t2 << 17;
+            v2 ^= v2 >>> 15;
+            t2 ^= t2 >>> 12;
+            v2 = X2[i2] = v2 ^ t2;
+            me2.i = i2;
+            return v2 + (w2 ^ w2 >>> 16) | 0;
           };
-          function init3(me2, seed2) {
-            var t, v, i, j, w, X = [], limit = 128;
+          function init3(me3, seed2) {
+            var t2, v2, i2, j2, w2, X2 = [], limit = 128;
             if (seed2 === (seed2 | 0)) {
-              v = seed2;
+              v2 = seed2;
               seed2 = null;
             } else {
               seed2 = seed2 + "\0";
-              v = 0;
+              v2 = 0;
               limit = Math.max(limit, seed2.length);
             }
-            for (i = 0, j = -32; j < limit; ++j) {
+            for (i2 = 0, j2 = -32; j2 < limit; ++j2) {
               if (seed2)
-                v ^= seed2.charCodeAt((j + 32) % seed2.length);
-              if (j === 0)
-                w = v;
-              v ^= v << 10;
-              v ^= v >>> 15;
-              v ^= v << 4;
-              v ^= v >>> 13;
-              if (j >= 0) {
-                w = w + 1640531527 | 0;
-                t = X[j & 127] ^= v + w;
-                i = t == 0 ? i + 1 : 0;
+                v2 ^= seed2.charCodeAt((j2 + 32) % seed2.length);
+              if (j2 === 0)
+                w2 = v2;
+              v2 ^= v2 << 10;
+              v2 ^= v2 >>> 15;
+              v2 ^= v2 << 4;
+              v2 ^= v2 >>> 13;
+              if (j2 >= 0) {
+                w2 = w2 + 1640531527 | 0;
+                t2 = X2[j2 & 127] ^= v2 + w2;
+                i2 = t2 == 0 ? i2 + 1 : 0;
               }
             }
-            if (i >= 128) {
-              X[(seed2 && seed2.length || 0) & 127] = -1;
+            if (i2 >= 128) {
+              X2[(seed2 && seed2.length || 0) & 127] = -1;
             }
-            i = 127;
-            for (j = 4 * 128; j > 0; --j) {
-              v = X[i + 34 & 127];
-              t = X[i = i + 1 & 127];
-              v ^= v << 13;
-              t ^= t << 17;
-              v ^= v >>> 15;
-              t ^= t >>> 12;
-              X[i] = v ^ t;
+            i2 = 127;
+            for (j2 = 4 * 128; j2 > 0; --j2) {
+              v2 = X2[i2 + 34 & 127];
+              t2 = X2[i2 = i2 + 1 & 127];
+              v2 ^= v2 << 13;
+              t2 ^= t2 << 17;
+              v2 ^= v2 >>> 15;
+              t2 ^= t2 >>> 12;
+              X2[i2] = v2 ^ t2;
             }
-            me2.w = w;
-            me2.X = X;
-            me2.i = i;
+            me3.w = w2;
+            me3.X = X2;
+            me3.i = i2;
           }
           __name(init3, "init");
-          init3(me, seed);
+          init3(me2, seed);
         }
         __name(XorGen, "XorGen");
-        function copy4(f, t) {
-          t.i = f.i;
-          t.w = f.w;
-          t.X = f.X.slice();
-          return t;
+        function copy4(f2, t2) {
+          t2.i = f2.i;
+          t2.w = f2.w;
+          t2.X = f2.X.slice();
+          return t2;
         }
         __name(copy4, "copy");
         ;
@@ -40227,40 +40227,40 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       init_buffer();
       (function(global2, module2, define2) {
         function XorGen(seed) {
-          var me = this, strseed = "";
-          me.next = function() {
-            var b = me.b, c = me.c, d = me.d, a = me.a;
-            b = b << 25 ^ b >>> 7 ^ c;
-            c = c - d | 0;
-            d = d << 24 ^ d >>> 8 ^ a;
-            a = a - b | 0;
-            me.b = b = b << 20 ^ b >>> 12 ^ c;
-            me.c = c = c - d | 0;
-            me.d = d << 16 ^ c >>> 16 ^ a;
-            return me.a = a - b | 0;
+          var me2 = this, strseed = "";
+          me2.next = function() {
+            var b2 = me2.b, c2 = me2.c, d2 = me2.d, a2 = me2.a;
+            b2 = b2 << 25 ^ b2 >>> 7 ^ c2;
+            c2 = c2 - d2 | 0;
+            d2 = d2 << 24 ^ d2 >>> 8 ^ a2;
+            a2 = a2 - b2 | 0;
+            me2.b = b2 = b2 << 20 ^ b2 >>> 12 ^ c2;
+            me2.c = c2 = c2 - d2 | 0;
+            me2.d = d2 << 16 ^ c2 >>> 16 ^ a2;
+            return me2.a = a2 - b2 | 0;
           };
-          me.a = 0;
-          me.b = 0;
-          me.c = 2654435769 | 0;
-          me.d = 1367130551;
+          me2.a = 0;
+          me2.b = 0;
+          me2.c = 2654435769 | 0;
+          me2.d = 1367130551;
           if (seed === Math.floor(seed)) {
-            me.a = seed / 4294967296 | 0;
-            me.b = seed | 0;
+            me2.a = seed / 4294967296 | 0;
+            me2.b = seed | 0;
           } else {
             strseed += seed;
           }
-          for (var k = 0; k < strseed.length + 20; k++) {
-            me.b ^= strseed.charCodeAt(k) | 0;
-            me.next();
+          for (var k2 = 0; k2 < strseed.length + 20; k2++) {
+            me2.b ^= strseed.charCodeAt(k2) | 0;
+            me2.next();
           }
         }
         __name(XorGen, "XorGen");
-        function copy4(f, t) {
-          t.a = f.a;
-          t.b = f.b;
-          t.c = f.c;
-          t.d = f.d;
-          return t;
+        function copy4(f2, t2) {
+          t2.a = f2.a;
+          t2.b = f2.b;
+          t2.c = f2.c;
+          t2.d = f2.d;
+          return t2;
         }
         __name(copy4, "copy");
         ;
@@ -40325,8 +40325,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         module.exports = polyfill;
       }
       if (polyfill) {
-        for (let k in polyfill) {
-          module.exports[k] = polyfill[k];
+        for (let k2 in polyfill) {
+          module.exports[k2] = polyfill[k2];
         }
       }
     }
@@ -40345,18 +40345,18 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           var shortseed = mixkey(flatten(options.entropy ? [seed, tostring(pool)] : seed == null ? autoseed() : seed, 3), key);
           var arc4 = new ARC4(key);
           var prng = /* @__PURE__ */ __name(function() {
-            var n = arc4.g(chunks), d = startdenom, x = 0;
-            while (n < significance) {
-              n = (n + x) * width;
-              d *= width;
-              x = arc4.g(1);
+            var n2 = arc4.g(chunks), d2 = startdenom, x2 = 0;
+            while (n2 < significance) {
+              n2 = (n2 + x2) * width;
+              d2 *= width;
+              x2 = arc4.g(1);
             }
-            while (n >= overflow) {
-              n /= 2;
-              d /= 2;
-              x >>>= 1;
+            while (n2 >= overflow) {
+              n2 /= 2;
+              d2 /= 2;
+              x2 >>>= 1;
             }
-            return (n + x) / d;
+            return (n2 + x2) / d2;
           }, "prng");
           prng.int32 = function() {
             return arc4.g(4) | 0;
@@ -40384,34 +40384,34 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
         __name(seedrandom, "seedrandom");
         function ARC4(key) {
-          var t, keylen = key.length, me = this, i = 0, j = me.i = me.j = 0, s = me.S = [];
+          var t2, keylen = key.length, me2 = this, i2 = 0, j2 = me2.i = me2.j = 0, s2 = me2.S = [];
           if (!keylen) {
             key = [keylen++];
           }
-          while (i < width) {
-            s[i] = i++;
+          while (i2 < width) {
+            s2[i2] = i2++;
           }
-          for (i = 0; i < width; i++) {
-            s[i] = s[j = mask & j + key[i % keylen] + (t = s[i])];
-            s[j] = t;
+          for (i2 = 0; i2 < width; i2++) {
+            s2[i2] = s2[j2 = mask & j2 + key[i2 % keylen] + (t2 = s2[i2])];
+            s2[j2] = t2;
           }
-          (me.g = function(count) {
-            var t2, r = 0, i2 = me.i, j2 = me.j, s2 = me.S;
+          (me2.g = function(count) {
+            var t3, r2 = 0, i3 = me2.i, j3 = me2.j, s3 = me2.S;
             while (count--) {
-              t2 = s2[i2 = mask & i2 + 1];
-              r = r * width + s2[mask & (s2[i2] = s2[j2 = mask & j2 + t2]) + (s2[j2] = t2)];
+              t3 = s3[i3 = mask & i3 + 1];
+              r2 = r2 * width + s3[mask & (s3[i3] = s3[j3 = mask & j3 + t3]) + (s3[j3] = t3)];
             }
-            me.i = i2;
-            me.j = j2;
-            return r;
+            me2.i = i3;
+            me2.j = j3;
+            return r2;
           })(width);
         }
         __name(ARC4, "ARC4");
-        function copy4(f, t) {
-          t.i = f.i;
-          t.j = f.j;
-          t.S = f.S.slice();
-          return t;
+        function copy4(f2, t2) {
+          t2.i = f2.i;
+          t2.j = f2.j;
+          t2.S = f2.S.slice();
+          return t2;
         }
         __name(copy4, "copy");
         ;
@@ -40421,7 +40421,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             for (prop in obj) {
               try {
                 result.push(flatten(obj[prop], depth - 1));
-              } catch (e) {
+              } catch (e3) {
               }
             }
           }
@@ -40429,9 +40429,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
         __name(flatten, "flatten");
         function mixkey(seed, key) {
-          var stringseed = seed + "", smear, j = 0;
-          while (j < stringseed.length) {
-            key[mask & j] = mask & (smear ^= key[mask & j] * 19) + stringseed.charCodeAt(j++);
+          var stringseed = seed + "", smear, j2 = 0;
+          while (j2 < stringseed.length) {
+            key[mask & j2] = mask & (smear ^= key[mask & j2] * 19) + stringseed.charCodeAt(j2++);
           }
           return tostring(key);
         }
@@ -40446,14 +40446,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
               (global2.crypto || global2.msCrypto).getRandomValues(out);
             }
             return tostring(out);
-          } catch (e) {
+          } catch (e3) {
             var browser3 = global2.navigator, plugins = browser3 && browser3.plugins;
             return [+new Date(), global2, plugins, global2.screen, tostring(pool)];
           }
         }
         __name(autoseed, "autoseed");
-        function tostring(a) {
-          return String.fromCharCode.apply(0, a);
+        function tostring(a2) {
+          return String.fromCharCode.apply(0, a2);
         }
         __name(tostring, "tostring");
         mixkey(math.random(), pool);
@@ -40485,14 +40485,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       var xorshift7 = require_xorshift7();
       var xor4096 = require_xor4096();
       var tychei = require_tychei();
-      var sr = require_seedrandom();
-      sr.alea = alea2;
-      sr.xor128 = xor128;
-      sr.xorwow = xorwow;
-      sr.xorshift7 = xorshift7;
-      sr.xor4096 = xor4096;
-      sr.tychei = tychei;
-      module.exports = sr;
+      var sr2 = require_seedrandom();
+      sr2.alea = alea2;
+      sr2.xor128 = xor128;
+      sr2.xorwow = xorwow;
+      sr2.xorshift7 = xorshift7;
+      sr2.xor4096 = xor4096;
+      sr2.tychei = tychei;
+      module.exports = sr2;
     }
   });
 
@@ -40501,673 +40501,673 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     "node_modules/parsimmon/build/parsimmon.umd.min.js"(exports, module) {
       init_virtual_process_polyfill();
       init_buffer();
-      !function(n, t) {
-        typeof exports == "object" && typeof module == "object" ? module.exports = t() : typeof define == "function" && define.amd ? define([], t) : typeof exports == "object" ? exports.Parsimmon = t() : n.Parsimmon = t();
+      !function(n2, t2) {
+        typeof exports == "object" && typeof module == "object" ? module.exports = t2() : typeof define == "function" && define.amd ? define([], t2) : typeof exports == "object" ? exports.Parsimmon = t2() : n2.Parsimmon = t2();
       }(typeof self != "undefined" ? self : exports, function() {
-        return function(n) {
-          var t = {};
-          function r(e) {
-            if (t[e])
-              return t[e].exports;
-            var u = t[e] = { i: e, l: false, exports: {} };
-            return n[e].call(u.exports, u, u.exports, r), u.l = true, u.exports;
+        return function(n2) {
+          var t2 = {};
+          function r2(e3) {
+            if (t2[e3])
+              return t2[e3].exports;
+            var u2 = t2[e3] = { i: e3, l: false, exports: {} };
+            return n2[e3].call(u2.exports, u2, u2.exports, r2), u2.l = true, u2.exports;
           }
-          __name(r, "r");
-          return r.m = n, r.c = t, r.d = function(n2, t2, e) {
-            r.o(n2, t2) || Object.defineProperty(n2, t2, { configurable: false, enumerable: true, get: e });
-          }, r.r = function(n2) {
-            Object.defineProperty(n2, "__esModule", { value: true });
-          }, r.n = function(n2) {
-            var t2 = n2 && n2.__esModule ? function() {
-              return n2.default;
+          __name(r2, "r");
+          return r2.m = n2, r2.c = t2, r2.d = function(n3, t3, e3) {
+            r2.o(n3, t3) || Object.defineProperty(n3, t3, { configurable: false, enumerable: true, get: e3 });
+          }, r2.r = function(n3) {
+            Object.defineProperty(n3, "__esModule", { value: true });
+          }, r2.n = function(n3) {
+            var t3 = n3 && n3.__esModule ? function() {
+              return n3.default;
             } : function() {
-              return n2;
+              return n3;
             };
-            return r.d(t2, "a", t2), t2;
-          }, r.o = function(n2, t2) {
-            return Object.prototype.hasOwnProperty.call(n2, t2);
-          }, r.p = "", r(r.s = 0);
-        }([function(n, t, r) {
+            return r2.d(t3, "a", t3), t3;
+          }, r2.o = function(n3, t3) {
+            return Object.prototype.hasOwnProperty.call(n3, t3);
+          }, r2.p = "", r2(r2.s = 0);
+        }([function(n2, t2, r2) {
           "use strict";
-          function e(n2) {
-            if (!(this instanceof e))
-              return new e(n2);
-            this._ = n2;
+          function e3(n3) {
+            if (!(this instanceof e3))
+              return new e3(n3);
+            this._ = n3;
           }
-          __name(e, "e");
-          var u = e.prototype;
-          function o(n2, t2) {
-            for (var r2 = 0; r2 < n2; r2++)
-              t2(r2);
+          __name(e3, "e");
+          var u2 = e3.prototype;
+          function o2(n3, t3) {
+            for (var r3 = 0; r3 < n3; r3++)
+              t3(r3);
           }
-          __name(o, "o");
-          function i(n2, t2, r2) {
-            return function(n3, t3) {
-              o(t3.length, function(r3) {
-                n3(t3[r3], r3, t3);
+          __name(o2, "o");
+          function i2(n3, t3, r3) {
+            return function(n4, t4) {
+              o2(t4.length, function(r4) {
+                n4(t4[r4], r4, t4);
               });
-            }(function(r3, e2, u2) {
-              t2 = n2(t2, r3, e2, u2);
-            }, r2), t2;
+            }(function(r4, e4, u3) {
+              t3 = n3(t3, r4, e4, u3);
+            }, r3), t3;
           }
-          __name(i, "i");
-          function f(n2, t2) {
-            return i(function(t3, r2, e2, u2) {
-              return t3.concat([n2(r2, e2, u2)]);
-            }, [], t2);
+          __name(i2, "i");
+          function f2(n3, t3) {
+            return i2(function(t4, r3, e4, u3) {
+              return t4.concat([n3(r3, e4, u3)]);
+            }, [], t3);
           }
-          __name(f, "f");
-          function a(n2, t2) {
-            var r2 = { v: 0, buf: t2 };
-            return o(n2, function() {
-              var n3;
-              r2 = { v: r2.v << 1 | (n3 = r2.buf, n3[0] >> 7), buf: function(n4) {
-                var t3 = i(function(n5, t4, r3, e2) {
-                  return n5.concat(r3 === e2.length - 1 ? Buffer2.from([t4, 0]).readUInt16BE(0) : e2.readUInt16BE(r3));
-                }, [], n4);
-                return Buffer2.from(f(function(n5) {
-                  return (n5 << 1 & 65535) >> 8;
-                }, t3));
-              }(r2.buf) };
-            }), r2;
+          __name(f2, "f");
+          function a2(n3, t3) {
+            var r3 = { v: 0, buf: t3 };
+            return o2(n3, function() {
+              var n4;
+              r3 = { v: r3.v << 1 | (n4 = r3.buf, n4[0] >> 7), buf: function(n5) {
+                var t4 = i2(function(n6, t5, r4, e4) {
+                  return n6.concat(r4 === e4.length - 1 ? Buffer2.from([t5, 0]).readUInt16BE(0) : e4.readUInt16BE(r4));
+                }, [], n5);
+                return Buffer2.from(f2(function(n6) {
+                  return (n6 << 1 & 65535) >> 8;
+                }, t4));
+              }(r3.buf) };
+            }), r3;
           }
-          __name(a, "a");
-          function c() {
+          __name(a2, "a");
+          function c2() {
             return typeof Buffer2 != "undefined";
           }
-          __name(c, "c");
-          function s() {
-            if (!c())
+          __name(c2, "c");
+          function s2() {
+            if (!c2())
               throw new Error("Buffer global does not exist; please use webpack if you need to parse Buffers in the browser.");
           }
-          __name(s, "s");
-          function l(n2) {
-            s();
-            var t2 = i(function(n3, t3) {
-              return n3 + t3;
-            }, 0, n2);
-            if (t2 % 8 != 0)
-              throw new Error("The bits [" + n2.join(", ") + "] add up to " + t2 + " which is not an even number of bytes; the total should be divisible by 8");
-            var r2, u2 = t2 / 8, o2 = (r2 = /* @__PURE__ */ __name(function(n3) {
-              return n3 > 48;
-            }, "r"), i(function(n3, t3) {
-              return n3 || (r2(t3) ? t3 : n3);
-            }, null, n2));
-            if (o2)
-              throw new Error(o2 + " bit range requested exceeds 48 bit (6 byte) Number max.");
-            return new e(function(t3, r3) {
-              var e2 = u2 + r3;
-              return e2 > t3.length ? x(r3, u2.toString() + " bytes") : b(e2, i(function(n3, t4) {
-                var r4 = a(t4, n3.buf);
-                return { coll: n3.coll.concat(r4.v), buf: r4.buf };
-              }, { coll: [], buf: t3.slice(r3, e2) }, n2).coll);
+          __name(s2, "s");
+          function l2(n3) {
+            s2();
+            var t3 = i2(function(n4, t4) {
+              return n4 + t4;
+            }, 0, n3);
+            if (t3 % 8 != 0)
+              throw new Error("The bits [" + n3.join(", ") + "] add up to " + t3 + " which is not an even number of bytes; the total should be divisible by 8");
+            var r3, u3 = t3 / 8, o3 = (r3 = /* @__PURE__ */ __name(function(n4) {
+              return n4 > 48;
+            }, "r"), i2(function(n4, t4) {
+              return n4 || (r3(t4) ? t4 : n4);
+            }, null, n3));
+            if (o3)
+              throw new Error(o3 + " bit range requested exceeds 48 bit (6 byte) Number max.");
+            return new e3(function(t4, r4) {
+              var e4 = u3 + r4;
+              return e4 > t4.length ? x2(r4, u3.toString() + " bytes") : b2(e4, i2(function(n4, t5) {
+                var r5 = a2(t5, n4.buf);
+                return { coll: n4.coll.concat(r5.v), buf: r5.buf };
+              }, { coll: [], buf: t4.slice(r4, e4) }, n3).coll);
             });
           }
-          __name(l, "l");
-          function p(n2, t2) {
-            return new e(function(r2, e2) {
-              return s(), e2 + t2 > r2.length ? x(e2, t2 + " bytes for " + n2) : b(e2 + t2, r2.slice(e2, e2 + t2));
+          __name(l2, "l");
+          function p2(n3, t3) {
+            return new e3(function(r3, e4) {
+              return s2(), e4 + t3 > r3.length ? x2(e4, t3 + " bytes for " + n3) : b2(e4 + t3, r3.slice(e4, e4 + t3));
             });
           }
-          __name(p, "p");
-          function h(n2, t2) {
-            if (typeof (r2 = t2) != "number" || Math.floor(r2) !== r2 || t2 < 0 || t2 > 6)
-              throw new Error(n2 + " requires integer length in range [0, 6].");
-            var r2;
+          __name(p2, "p");
+          function h2(n3, t3) {
+            if (typeof (r3 = t3) != "number" || Math.floor(r3) !== r3 || t3 < 0 || t3 > 6)
+              throw new Error(n3 + " requires integer length in range [0, 6].");
+            var r3;
           }
-          __name(h, "h");
-          function d(n2) {
-            return h("uintBE", n2), p("uintBE(" + n2 + ")", n2).map(function(t2) {
-              return t2.readUIntBE(0, n2);
+          __name(h2, "h");
+          function d2(n3) {
+            return h2("uintBE", n3), p2("uintBE(" + n3 + ")", n3).map(function(t3) {
+              return t3.readUIntBE(0, n3);
             });
           }
-          __name(d, "d");
-          function v(n2) {
-            return h("uintLE", n2), p("uintLE(" + n2 + ")", n2).map(function(t2) {
-              return t2.readUIntLE(0, n2);
+          __name(d2, "d");
+          function v2(n3) {
+            return h2("uintLE", n3), p2("uintLE(" + n3 + ")", n3).map(function(t3) {
+              return t3.readUIntLE(0, n3);
             });
           }
-          __name(v, "v");
-          function g(n2) {
-            return h("intBE", n2), p("intBE(" + n2 + ")", n2).map(function(t2) {
-              return t2.readIntBE(0, n2);
+          __name(v2, "v");
+          function g2(n3) {
+            return h2("intBE", n3), p2("intBE(" + n3 + ")", n3).map(function(t3) {
+              return t3.readIntBE(0, n3);
             });
           }
-          __name(g, "g");
-          function m(n2) {
-            return h("intLE", n2), p("intLE(" + n2 + ")", n2).map(function(t2) {
-              return t2.readIntLE(0, n2);
+          __name(g2, "g");
+          function m2(n3) {
+            return h2("intLE", n3), p2("intLE(" + n3 + ")", n3).map(function(t3) {
+              return t3.readIntLE(0, n3);
             });
           }
-          __name(m, "m");
-          function y(n2) {
-            return n2 instanceof e;
+          __name(m2, "m");
+          function y2(n3) {
+            return n3 instanceof e3;
           }
-          __name(y, "y");
-          function E(n2) {
-            return {}.toString.call(n2) === "[object Array]";
+          __name(y2, "y");
+          function E2(n3) {
+            return {}.toString.call(n3) === "[object Array]";
           }
-          __name(E, "E");
-          function w(n2) {
-            return c() && Buffer2.isBuffer(n2);
+          __name(E2, "E");
+          function w2(n3) {
+            return c2() && Buffer2.isBuffer(n3);
           }
-          __name(w, "w");
-          function b(n2, t2) {
-            return { status: true, index: n2, value: t2, furthest: -1, expected: [] };
+          __name(w2, "w");
+          function b2(n3, t3) {
+            return { status: true, index: n3, value: t3, furthest: -1, expected: [] };
           }
-          __name(b, "b");
-          function x(n2, t2) {
-            return E(t2) || (t2 = [t2]), { status: false, index: -1, value: null, furthest: n2, expected: t2 };
+          __name(b2, "b");
+          function x2(n3, t3) {
+            return E2(t3) || (t3 = [t3]), { status: false, index: -1, value: null, furthest: n3, expected: t3 };
           }
-          __name(x, "x");
-          function B(n2, t2) {
-            if (!t2)
-              return n2;
-            if (n2.furthest > t2.furthest)
-              return n2;
-            var r2 = n2.furthest === t2.furthest ? function(n3, t3) {
+          __name(x2, "x");
+          function B2(n3, t3) {
+            if (!t3)
+              return n3;
+            if (n3.furthest > t3.furthest)
+              return n3;
+            var r3 = n3.furthest === t3.furthest ? function(n4, t4) {
               if (function() {
-                if (e._supportsSet !== void 0)
-                  return e._supportsSet;
-                var n4 = typeof Set != "undefined";
-                return e._supportsSet = n4, n4;
+                if (e3._supportsSet !== void 0)
+                  return e3._supportsSet;
+                var n5 = typeof Set != "undefined";
+                return e3._supportsSet = n5, n5;
               }() && Array.from) {
-                for (var r3 = new Set(n3), u2 = 0; u2 < t3.length; u2++)
-                  r3.add(t3[u2]);
-                var o2 = Array.from(r3);
-                return o2.sort(), o2;
+                for (var r4 = new Set(n4), u3 = 0; u3 < t4.length; u3++)
+                  r4.add(t4[u3]);
+                var o3 = Array.from(r4);
+                return o3.sort(), o3;
               }
-              for (var i2 = {}, f2 = 0; f2 < n3.length; f2++)
-                i2[n3[f2]] = true;
-              for (var a2 = 0; a2 < t3.length; a2++)
-                i2[t3[a2]] = true;
-              var c2 = [];
-              for (var s2 in i2)
-                ({}).hasOwnProperty.call(i2, s2) && c2.push(s2);
-              return c2.sort(), c2;
-            }(n2.expected, t2.expected) : t2.expected;
-            return { status: n2.status, index: n2.index, value: n2.value, furthest: t2.furthest, expected: r2 };
+              for (var i3 = {}, f3 = 0; f3 < n4.length; f3++)
+                i3[n4[f3]] = true;
+              for (var a3 = 0; a3 < t4.length; a3++)
+                i3[t4[a3]] = true;
+              var c3 = [];
+              for (var s3 in i3)
+                ({}).hasOwnProperty.call(i3, s3) && c3.push(s3);
+              return c3.sort(), c3;
+            }(n3.expected, t3.expected) : t3.expected;
+            return { status: n3.status, index: n3.index, value: n3.value, furthest: t3.furthest, expected: r3 };
           }
-          __name(B, "B");
-          var j = {};
-          function S(n2, t2) {
-            if (w(n2))
-              return { offset: t2, line: -1, column: -1 };
-            n2 in j || (j[n2] = {});
-            for (var r2 = j[n2], e2 = 0, u2 = 0, o2 = 0, i2 = t2; i2 >= 0; ) {
-              if (n2.charAt(i2) === "\n" && (u2++, o2 === 0 && (o2 = i2 + 1)), i2 in r2) {
-                e2 = r2[i2].line, o2 === 0 && (o2 = r2[i2].lineStart);
+          __name(B2, "B");
+          var j2 = {};
+          function S2(n3, t3) {
+            if (w2(n3))
+              return { offset: t3, line: -1, column: -1 };
+            n3 in j2 || (j2[n3] = {});
+            for (var r3 = j2[n3], e4 = 0, u3 = 0, o3 = 0, i3 = t3; i3 >= 0; ) {
+              if (n3.charAt(i3) === "\n" && (u3++, o3 === 0 && (o3 = i3 + 1)), i3 in r3) {
+                e4 = r3[i3].line, o3 === 0 && (o3 = r3[i3].lineStart);
                 break;
               }
-              i2--;
+              i3--;
             }
-            var f2 = e2 + u2, a2 = t2 - o2;
-            return r2[t2] = { line: f2, lineStart: o2 }, { offset: t2, line: f2 + 1, column: a2 + 1 };
+            var f3 = e4 + u3, a3 = t3 - o3;
+            return r3[t3] = { line: f3, lineStart: o3 }, { offset: t3, line: f3 + 1, column: a3 + 1 };
           }
-          __name(S, "S");
-          function _23(n2) {
-            if (!y(n2))
-              throw new Error("not a parser: " + n2);
+          __name(S2, "S");
+          function _24(n3) {
+            if (!y2(n3))
+              throw new Error("not a parser: " + n3);
           }
-          __name(_23, "_");
-          function L(n2, t2) {
-            return typeof n2 == "string" ? n2.charAt(t2) : n2[t2];
+          __name(_24, "_");
+          function L2(n3, t3) {
+            return typeof n3 == "string" ? n3.charAt(t3) : n3[t3];
           }
-          __name(L, "L");
-          function O(n2) {
-            if (typeof n2 != "number")
-              throw new Error("not a number: " + n2);
+          __name(L2, "L");
+          function O2(n3) {
+            if (typeof n3 != "number")
+              throw new Error("not a number: " + n3);
           }
-          __name(O, "O");
-          function k(n2) {
-            if (typeof n2 != "function")
-              throw new Error("not a function: " + n2);
+          __name(O2, "O");
+          function k2(n3) {
+            if (typeof n3 != "function")
+              throw new Error("not a function: " + n3);
           }
-          __name(k, "k");
-          function P(n2) {
-            if (typeof n2 != "string")
-              throw new Error("not a string: " + n2);
+          __name(k2, "k");
+          function P2(n3) {
+            if (typeof n3 != "string")
+              throw new Error("not a string: " + n3);
           }
-          __name(P, "P");
-          var q = 2, A = 3, I = 8, F = 5 * I, M = 4 * I, z = "  ";
-          function R(n2, t2) {
-            return new Array(t2 + 1).join(n2);
+          __name(P2, "P");
+          var q2 = 2, A2 = 3, I2 = 8, F2 = 5 * I2, M2 = 4 * I2, z2 = "  ";
+          function R2(n3, t3) {
+            return new Array(t3 + 1).join(n3);
           }
-          __name(R, "R");
-          function U(n2, t2, r2) {
-            var e2 = t2 - n2.length;
-            return e2 <= 0 ? n2 : R(r2, e2) + n2;
+          __name(R2, "R");
+          function U2(n3, t3, r3) {
+            var e4 = t3 - n3.length;
+            return e4 <= 0 ? n3 : R2(r3, e4) + n3;
           }
-          __name(U, "U");
-          function W(n2, t2, r2, e2) {
-            return { from: n2 - t2 > 0 ? n2 - t2 : 0, to: n2 + r2 > e2 ? e2 : n2 + r2 };
+          __name(U2, "U");
+          function W2(n3, t3, r3, e4) {
+            return { from: n3 - t3 > 0 ? n3 - t3 : 0, to: n3 + r3 > e4 ? e4 : n3 + r3 };
           }
-          __name(W, "W");
-          function D(n2, t2) {
-            var r2, e2, u2, o2, a2, c2 = t2.index, s2 = c2.offset, l2 = 1;
-            if (s2 === n2.length)
+          __name(W2, "W");
+          function D2(n3, t3) {
+            var r3, e4, u3, o3, a3, c3 = t3.index, s3 = c3.offset, l3 = 1;
+            if (s3 === n3.length)
               return "Got the end of the input";
-            if (w(n2)) {
-              var p2 = s2 - s2 % I, h2 = s2 - p2, d2 = W(p2, F, M + I, n2.length), v2 = f(function(n3) {
-                return f(function(n4) {
-                  return U(n4.toString(16), 2, "0");
-                }, n3);
-              }, function(n3, t3) {
-                var r3 = n3.length, e3 = [], u3 = 0;
-                if (r3 <= t3)
-                  return [n3.slice()];
-                for (var o3 = 0; o3 < r3; o3++)
-                  e3[u3] || e3.push([]), e3[u3].push(n3[o3]), (o3 + 1) % t3 == 0 && u3++;
-                return e3;
-              }(n2.slice(d2.from, d2.to).toJSON().data, I));
-              o2 = function(n3) {
-                return n3.from === 0 && n3.to === 1 ? { from: n3.from, to: n3.to } : { from: n3.from / I, to: Math.floor(n3.to / I) };
-              }(d2), e2 = p2 / I, r2 = 3 * h2, h2 >= 4 && (r2 += 1), l2 = 2, u2 = f(function(n3) {
-                return n3.length <= 4 ? n3.join(" ") : n3.slice(0, 4).join(" ") + "  " + n3.slice(4).join(" ");
-              }, v2), (a2 = (8 * (o2.to > 0 ? o2.to - 1 : o2.to)).toString(16).length) < 2 && (a2 = 2);
+            if (w2(n3)) {
+              var p3 = s3 - s3 % I2, h3 = s3 - p3, d3 = W2(p3, F2, M2 + I2, n3.length), v3 = f2(function(n4) {
+                return f2(function(n5) {
+                  return U2(n5.toString(16), 2, "0");
+                }, n4);
+              }, function(n4, t4) {
+                var r4 = n4.length, e5 = [], u4 = 0;
+                if (r4 <= t4)
+                  return [n4.slice()];
+                for (var o4 = 0; o4 < r4; o4++)
+                  e5[u4] || e5.push([]), e5[u4].push(n4[o4]), (o4 + 1) % t4 == 0 && u4++;
+                return e5;
+              }(n3.slice(d3.from, d3.to).toJSON().data, I2));
+              o3 = function(n4) {
+                return n4.from === 0 && n4.to === 1 ? { from: n4.from, to: n4.to } : { from: n4.from / I2, to: Math.floor(n4.to / I2) };
+              }(d3), e4 = p3 / I2, r3 = 3 * h3, h3 >= 4 && (r3 += 1), l3 = 2, u3 = f2(function(n4) {
+                return n4.length <= 4 ? n4.join(" ") : n4.slice(0, 4).join(" ") + "  " + n4.slice(4).join(" ");
+              }, v3), (a3 = (8 * (o3.to > 0 ? o3.to - 1 : o3.to)).toString(16).length) < 2 && (a3 = 2);
             } else {
-              var g2 = n2.split(/\r\n|[\n\r\u2028\u2029]/);
-              r2 = c2.column - 1, e2 = c2.line - 1, o2 = W(e2, q, A, g2.length), u2 = g2.slice(o2.from, o2.to), a2 = o2.to.toString().length;
+              var g3 = n3.split(/\r\n|[\n\r\u2028\u2029]/);
+              r3 = c3.column - 1, e4 = c3.line - 1, o3 = W2(e4, q2, A2, g3.length), u3 = g3.slice(o3.from, o3.to), a3 = o3.to.toString().length;
             }
-            var m2 = e2 - o2.from;
-            return w(n2) && (a2 = (8 * (o2.to > 0 ? o2.to - 1 : o2.to)).toString(16).length) < 2 && (a2 = 2), i(function(t3, e3, u3) {
-              var i2, f2 = u3 === m2, c3 = f2 ? "> " : z;
-              return i2 = w(n2) ? U((8 * (o2.from + u3)).toString(16), a2, "0") : U((o2.from + u3 + 1).toString(), a2, " "), [].concat(t3, [c3 + i2 + " | " + e3], f2 ? [z + R(" ", a2) + " | " + U("", r2, " ") + R("^", l2)] : []);
-            }, [], u2).join("\n");
+            var m3 = e4 - o3.from;
+            return w2(n3) && (a3 = (8 * (o3.to > 0 ? o3.to - 1 : o3.to)).toString(16).length) < 2 && (a3 = 2), i2(function(t4, e5, u4) {
+              var i3, f3 = u4 === m3, c4 = f3 ? "> " : z2;
+              return i3 = w2(n3) ? U2((8 * (o3.from + u4)).toString(16), a3, "0") : U2((o3.from + u4 + 1).toString(), a3, " "), [].concat(t4, [c4 + i3 + " | " + e5], f3 ? [z2 + R2(" ", a3) + " | " + U2("", r3, " ") + R2("^", l3)] : []);
+            }, [], u3).join("\n");
           }
-          __name(D, "D");
-          function N(n2, t2) {
-            return ["\n", "-- PARSING FAILED " + R("-", 50), "\n\n", D(n2, t2), "\n\n", (r2 = t2.expected, r2.length === 1 ? "Expected:\n\n" + r2[0] : "Expected one of the following: \n\n" + r2.join(", ")), "\n"].join("");
-            var r2;
+          __name(D2, "D");
+          function N2(n3, t3) {
+            return ["\n", "-- PARSING FAILED " + R2("-", 50), "\n\n", D2(n3, t3), "\n\n", (r3 = t3.expected, r3.length === 1 ? "Expected:\n\n" + r3[0] : "Expected one of the following: \n\n" + r3.join(", ")), "\n"].join("");
+            var r3;
           }
-          __name(N, "N");
-          function G(n2) {
-            return n2.flags !== void 0 ? n2.flags : [n2.global ? "g" : "", n2.ignoreCase ? "i" : "", n2.multiline ? "m" : "", n2.unicode ? "u" : "", n2.sticky ? "y" : ""].join("");
+          __name(N2, "N");
+          function G2(n3) {
+            return n3.flags !== void 0 ? n3.flags : [n3.global ? "g" : "", n3.ignoreCase ? "i" : "", n3.multiline ? "m" : "", n3.unicode ? "u" : "", n3.sticky ? "y" : ""].join("");
           }
-          __name(G, "G");
-          function C() {
-            for (var n2 = [].slice.call(arguments), t2 = n2.length, r2 = 0; r2 < t2; r2 += 1)
-              _23(n2[r2]);
-            return e(function(r3, e2) {
-              for (var u2, o2 = new Array(t2), i2 = 0; i2 < t2; i2 += 1) {
-                if (!(u2 = B(n2[i2]._(r3, e2), u2)).status)
-                  return u2;
-                o2[i2] = u2.value, e2 = u2.index;
+          __name(G2, "G");
+          function C2() {
+            for (var n3 = [].slice.call(arguments), t3 = n3.length, r3 = 0; r3 < t3; r3 += 1)
+              _24(n3[r3]);
+            return e3(function(r4, e4) {
+              for (var u3, o3 = new Array(t3), i3 = 0; i3 < t3; i3 += 1) {
+                if (!(u3 = B2(n3[i3]._(r4, e4), u3)).status)
+                  return u3;
+                o3[i3] = u3.value, e4 = u3.index;
               }
-              return B(b(e2, o2), u2);
+              return B2(b2(e4, o3), u3);
             });
           }
-          __name(C, "C");
-          function J() {
-            var n2 = [].slice.call(arguments);
-            if (n2.length === 0)
+          __name(C2, "C");
+          function J2() {
+            var n3 = [].slice.call(arguments);
+            if (n3.length === 0)
               throw new Error("seqMap needs at least one argument");
-            var t2 = n2.pop();
-            return k(t2), C.apply(null, n2).map(function(n3) {
-              return t2.apply(null, n3);
+            var t3 = n3.pop();
+            return k2(t3), C2.apply(null, n3).map(function(n4) {
+              return t3.apply(null, n4);
             });
           }
-          __name(J, "J");
-          function T() {
-            var n2 = [].slice.call(arguments), t2 = n2.length;
-            if (t2 === 0)
-              return Y("zero alternates");
-            for (var r2 = 0; r2 < t2; r2 += 1)
-              _23(n2[r2]);
-            return e(function(t3, r3) {
-              for (var e2, u2 = 0; u2 < n2.length; u2 += 1)
-                if ((e2 = B(n2[u2]._(t3, r3), e2)).status)
-                  return e2;
-              return e2;
+          __name(J2, "J");
+          function T2() {
+            var n3 = [].slice.call(arguments), t3 = n3.length;
+            if (t3 === 0)
+              return Y2("zero alternates");
+            for (var r3 = 0; r3 < t3; r3 += 1)
+              _24(n3[r3]);
+            return e3(function(t4, r4) {
+              for (var e4, u3 = 0; u3 < n3.length; u3 += 1)
+                if ((e4 = B2(n3[u3]._(t4, r4), e4)).status)
+                  return e4;
+              return e4;
             });
           }
-          __name(T, "T");
-          function V(n2, t2) {
-            return H(n2, t2).or(X([]));
+          __name(T2, "T");
+          function V2(n3, t3) {
+            return H2(n3, t3).or(X2([]));
           }
-          __name(V, "V");
-          function H(n2, t2) {
-            return _23(n2), _23(t2), J(n2, t2.then(n2).many(), function(n3, t3) {
-              return [n3].concat(t3);
+          __name(V2, "V");
+          function H2(n3, t3) {
+            return _24(n3), _24(t3), J2(n3, t3.then(n3).many(), function(n4, t4) {
+              return [n4].concat(t4);
             });
           }
-          __name(H, "H");
-          function K(n2) {
-            P(n2);
-            var t2 = "'" + n2 + "'";
-            return e(function(r2, e2) {
-              var u2 = e2 + n2.length, o2 = r2.slice(e2, u2);
-              return o2 === n2 ? b(u2, o2) : x(e2, t2);
+          __name(H2, "H");
+          function K2(n3) {
+            P2(n3);
+            var t3 = "'" + n3 + "'";
+            return e3(function(r3, e4) {
+              var u3 = e4 + n3.length, o3 = r3.slice(e4, u3);
+              return o3 === n3 ? b2(u3, o3) : x2(e4, t3);
             });
           }
-          __name(K, "K");
-          function Q(n2, t2) {
-            !function(n3) {
-              if (!(n3 instanceof RegExp))
-                throw new Error("not a regexp: " + n3);
-              for (var t3 = G(n3), r3 = 0; r3 < t3.length; r3++) {
-                var e2 = t3.charAt(r3);
-                if (e2 !== "i" && e2 !== "m" && e2 !== "u" && e2 !== "s")
-                  throw new Error('unsupported regexp flag "' + e2 + '": ' + n3);
+          __name(K2, "K");
+          function Q2(n3, t3) {
+            !function(n4) {
+              if (!(n4 instanceof RegExp))
+                throw new Error("not a regexp: " + n4);
+              for (var t4 = G2(n4), r4 = 0; r4 < t4.length; r4++) {
+                var e4 = t4.charAt(r4);
+                if (e4 !== "i" && e4 !== "m" && e4 !== "u" && e4 !== "s")
+                  throw new Error('unsupported regexp flag "' + e4 + '": ' + n4);
               }
-            }(n2), arguments.length >= 2 ? O(t2) : t2 = 0;
-            var r2 = function(n3) {
-              return RegExp("^(?:" + n3.source + ")", G(n3));
-            }(n2), u2 = "" + n2;
-            return e(function(n3, e2) {
-              var o2 = r2.exec(n3.slice(e2));
-              if (o2) {
-                if (0 <= t2 && t2 <= o2.length) {
-                  var i2 = o2[0], f2 = o2[t2];
-                  return b(e2 + i2.length, f2);
+            }(n3), arguments.length >= 2 ? O2(t3) : t3 = 0;
+            var r3 = function(n4) {
+              return RegExp("^(?:" + n4.source + ")", G2(n4));
+            }(n3), u3 = "" + n3;
+            return e3(function(n4, e4) {
+              var o3 = r3.exec(n4.slice(e4));
+              if (o3) {
+                if (0 <= t3 && t3 <= o3.length) {
+                  var i3 = o3[0], f3 = o3[t3];
+                  return b2(e4 + i3.length, f3);
                 }
-                return x(e2, "valid match group (0 to " + o2.length + ") in " + u2);
+                return x2(e4, "valid match group (0 to " + o3.length + ") in " + u3);
               }
-              return x(e2, u2);
+              return x2(e4, u3);
             });
           }
-          __name(Q, "Q");
-          function X(n2) {
-            return e(function(t2, r2) {
-              return b(r2, n2);
+          __name(Q2, "Q");
+          function X2(n3) {
+            return e3(function(t3, r3) {
+              return b2(r3, n3);
             });
           }
-          __name(X, "X");
-          function Y(n2) {
-            return e(function(t2, r2) {
-              return x(r2, n2);
+          __name(X2, "X");
+          function Y2(n3) {
+            return e3(function(t3, r3) {
+              return x2(r3, n3);
             });
           }
-          __name(Y, "Y");
-          function Z(n2) {
-            if (y(n2))
-              return e(function(t2, r2) {
-                var e2 = n2._(t2, r2);
-                return e2.index = r2, e2.value = "", e2;
+          __name(Y2, "Y");
+          function Z2(n3) {
+            if (y2(n3))
+              return e3(function(t3, r3) {
+                var e4 = n3._(t3, r3);
+                return e4.index = r3, e4.value = "", e4;
               });
-            if (typeof n2 == "string")
-              return Z(K(n2));
-            if (n2 instanceof RegExp)
-              return Z(Q(n2));
-            throw new Error("not a string, regexp, or parser: " + n2);
+            if (typeof n3 == "string")
+              return Z2(K2(n3));
+            if (n3 instanceof RegExp)
+              return Z2(Q2(n3));
+            throw new Error("not a string, regexp, or parser: " + n3);
           }
-          __name(Z, "Z");
-          function $(n2) {
-            return _23(n2), e(function(t2, r2) {
-              var e2 = n2._(t2, r2), u2 = t2.slice(r2, e2.index);
-              return e2.status ? x(r2, 'not "' + u2 + '"') : b(r2, null);
+          __name(Z2, "Z");
+          function $2(n3) {
+            return _24(n3), e3(function(t3, r3) {
+              var e4 = n3._(t3, r3), u3 = t3.slice(r3, e4.index);
+              return e4.status ? x2(r3, 'not "' + u3 + '"') : b2(r3, null);
             });
           }
-          __name($, "$");
-          function nn(n2) {
-            return k(n2), e(function(t2, r2) {
-              var e2 = L(t2, r2);
-              return r2 < t2.length && n2(e2) ? b(r2 + 1, e2) : x(r2, "a character/byte matching " + n2);
+          __name($2, "$");
+          function nn2(n3) {
+            return k2(n3), e3(function(t3, r3) {
+              var e4 = L2(t3, r3);
+              return r3 < t3.length && n3(e4) ? b2(r3 + 1, e4) : x2(r3, "a character/byte matching " + n3);
             });
           }
-          __name(nn, "nn");
-          function tn(n2, t2) {
-            arguments.length < 2 && (t2 = n2, n2 = void 0);
-            var r2 = e(function(n3, e2) {
-              return r2._ = t2()._, r2._(n3, e2);
+          __name(nn2, "nn");
+          function tn2(n3, t3) {
+            arguments.length < 2 && (t3 = n3, n3 = void 0);
+            var r3 = e3(function(n4, e4) {
+              return r3._ = t3()._, r3._(n4, e4);
             });
-            return n2 ? r2.desc(n2) : r2;
+            return n3 ? r3.desc(n3) : r3;
           }
-          __name(tn, "tn");
-          function rn() {
-            return Y("fantasy-land/empty");
+          __name(tn2, "tn");
+          function rn2() {
+            return Y2("fantasy-land/empty");
           }
-          __name(rn, "rn");
-          u.parse = function(n2) {
-            if (typeof n2 != "string" && !w(n2))
+          __name(rn2, "rn");
+          u2.parse = function(n3) {
+            if (typeof n3 != "string" && !w2(n3))
               throw new Error(".parse must be called with a string or Buffer as its argument");
-            var t2, r2 = this.skip(fn)._(n2, 0);
-            return t2 = r2.status ? { status: true, value: r2.value } : { status: false, index: S(n2, r2.furthest), expected: r2.expected }, delete j[n2], t2;
-          }, u.tryParse = function(n2) {
-            var t2 = this.parse(n2);
-            if (t2.status)
-              return t2.value;
-            var r2 = N(n2, t2), e2 = new Error(r2);
-            throw e2.type = "ParsimmonError", e2.result = t2, e2;
-          }, u.assert = function(n2, t2) {
-            return this.chain(function(r2) {
-              return n2(r2) ? X(r2) : Y(t2);
+            var t3, r3 = this.skip(fn2)._(n3, 0);
+            return t3 = r3.status ? { status: true, value: r3.value } : { status: false, index: S2(n3, r3.furthest), expected: r3.expected }, delete j2[n3], t3;
+          }, u2.tryParse = function(n3) {
+            var t3 = this.parse(n3);
+            if (t3.status)
+              return t3.value;
+            var r3 = N2(n3, t3), e4 = new Error(r3);
+            throw e4.type = "ParsimmonError", e4.result = t3, e4;
+          }, u2.assert = function(n3, t3) {
+            return this.chain(function(r3) {
+              return n3(r3) ? X2(r3) : Y2(t3);
             });
-          }, u.or = function(n2) {
-            return T(this, n2);
-          }, u.trim = function(n2) {
-            return this.wrap(n2, n2);
-          }, u.wrap = function(n2, t2) {
-            return J(n2, this, t2, function(n3, t3) {
-              return t3;
+          }, u2.or = function(n3) {
+            return T2(this, n3);
+          }, u2.trim = function(n3) {
+            return this.wrap(n3, n3);
+          }, u2.wrap = function(n3, t3) {
+            return J2(n3, this, t3, function(n4, t4) {
+              return t4;
             });
-          }, u.thru = function(n2) {
-            return n2(this);
-          }, u.then = function(n2) {
-            return _23(n2), C(this, n2).map(function(n3) {
-              return n3[1];
+          }, u2.thru = function(n3) {
+            return n3(this);
+          }, u2.then = function(n3) {
+            return _24(n3), C2(this, n3).map(function(n4) {
+              return n4[1];
             });
-          }, u.many = function() {
-            var n2 = this;
-            return e(function(t2, r2) {
-              for (var e2 = [], u2 = void 0; ; ) {
-                if (!(u2 = B(n2._(t2, r2), u2)).status)
-                  return B(b(r2, e2), u2);
-                if (r2 === u2.index)
+          }, u2.many = function() {
+            var n3 = this;
+            return e3(function(t3, r3) {
+              for (var e4 = [], u3 = void 0; ; ) {
+                if (!(u3 = B2(n3._(t3, r3), u3)).status)
+                  return B2(b2(r3, e4), u3);
+                if (r3 === u3.index)
                   throw new Error("infinite loop detected in .many() parser --- calling .many() on a parser which can accept zero characters is usually the cause");
-                r2 = u2.index, e2.push(u2.value);
+                r3 = u3.index, e4.push(u3.value);
               }
             });
-          }, u.tieWith = function(n2) {
-            return P(n2), this.map(function(t2) {
-              if (function(n3) {
-                if (!E(n3))
-                  throw new Error("not an array: " + n3);
-              }(t2), t2.length) {
-                P(t2[0]);
-                for (var r2 = t2[0], e2 = 1; e2 < t2.length; e2++)
-                  P(t2[e2]), r2 += n2 + t2[e2];
-                return r2;
+          }, u2.tieWith = function(n3) {
+            return P2(n3), this.map(function(t3) {
+              if (function(n4) {
+                if (!E2(n4))
+                  throw new Error("not an array: " + n4);
+              }(t3), t3.length) {
+                P2(t3[0]);
+                for (var r3 = t3[0], e4 = 1; e4 < t3.length; e4++)
+                  P2(t3[e4]), r3 += n3 + t3[e4];
+                return r3;
               }
               return "";
             });
-          }, u.tie = function() {
+          }, u2.tie = function() {
             return this.tieWith("");
-          }, u.times = function(n2, t2) {
-            var r2 = this;
-            return arguments.length < 2 && (t2 = n2), O(n2), O(t2), e(function(e2, u2) {
-              for (var o2 = [], i2 = void 0, f2 = void 0, a2 = 0; a2 < n2; a2 += 1) {
-                if (f2 = B(i2 = r2._(e2, u2), f2), !i2.status)
-                  return f2;
-                u2 = i2.index, o2.push(i2.value);
+          }, u2.times = function(n3, t3) {
+            var r3 = this;
+            return arguments.length < 2 && (t3 = n3), O2(n3), O2(t3), e3(function(e4, u3) {
+              for (var o3 = [], i3 = void 0, f3 = void 0, a3 = 0; a3 < n3; a3 += 1) {
+                if (f3 = B2(i3 = r3._(e4, u3), f3), !i3.status)
+                  return f3;
+                u3 = i3.index, o3.push(i3.value);
               }
-              for (; a2 < t2 && (f2 = B(i2 = r2._(e2, u2), f2), i2.status); a2 += 1)
-                u2 = i2.index, o2.push(i2.value);
-              return B(b(u2, o2), f2);
+              for (; a3 < t3 && (f3 = B2(i3 = r3._(e4, u3), f3), i3.status); a3 += 1)
+                u3 = i3.index, o3.push(i3.value);
+              return B2(b2(u3, o3), f3);
             });
-          }, u.result = function(n2) {
+          }, u2.result = function(n3) {
             return this.map(function() {
-              return n2;
+              return n3;
             });
-          }, u.atMost = function(n2) {
-            return this.times(0, n2);
-          }, u.atLeast = function(n2) {
-            return J(this.times(n2), this.many(), function(n3, t2) {
-              return n3.concat(t2);
+          }, u2.atMost = function(n3) {
+            return this.times(0, n3);
+          }, u2.atLeast = function(n3) {
+            return J2(this.times(n3), this.many(), function(n4, t3) {
+              return n4.concat(t3);
             });
-          }, u.map = function(n2) {
-            k(n2);
-            var t2 = this;
-            return e(function(r2, e2) {
-              var u2 = t2._(r2, e2);
-              return u2.status ? B(b(u2.index, n2(u2.value)), u2) : u2;
+          }, u2.map = function(n3) {
+            k2(n3);
+            var t3 = this;
+            return e3(function(r3, e4) {
+              var u3 = t3._(r3, e4);
+              return u3.status ? B2(b2(u3.index, n3(u3.value)), u3) : u3;
             });
-          }, u.contramap = function(n2) {
-            k(n2);
-            var t2 = this;
-            return e(function(r2, e2) {
-              var u2 = t2.parse(n2(r2.slice(e2)));
-              return u2.status ? b(e2 + r2.length, u2.value) : u2;
+          }, u2.contramap = function(n3) {
+            k2(n3);
+            var t3 = this;
+            return e3(function(r3, e4) {
+              var u3 = t3.parse(n3(r3.slice(e4)));
+              return u3.status ? b2(e4 + r3.length, u3.value) : u3;
             });
-          }, u.promap = function(n2, t2) {
-            return k(n2), k(t2), this.contramap(n2).map(t2);
-          }, u.skip = function(n2) {
-            return C(this, n2).map(function(n3) {
-              return n3[0];
+          }, u2.promap = function(n3, t3) {
+            return k2(n3), k2(t3), this.contramap(n3).map(t3);
+          }, u2.skip = function(n3) {
+            return C2(this, n3).map(function(n4) {
+              return n4[0];
             });
-          }, u.mark = function() {
-            return J(en, this, en, function(n2, t2, r2) {
-              return { start: n2, value: t2, end: r2 };
+          }, u2.mark = function() {
+            return J2(en2, this, en2, function(n3, t3, r3) {
+              return { start: n3, value: t3, end: r3 };
             });
-          }, u.node = function(n2) {
-            return J(en, this, en, function(t2, r2, e2) {
-              return { name: n2, value: r2, start: t2, end: e2 };
+          }, u2.node = function(n3) {
+            return J2(en2, this, en2, function(t3, r3, e4) {
+              return { name: n3, value: r3, start: t3, end: e4 };
             });
-          }, u.sepBy = function(n2) {
-            return V(this, n2);
-          }, u.sepBy1 = function(n2) {
-            return H(this, n2);
-          }, u.lookahead = function(n2) {
-            return this.skip(Z(n2));
-          }, u.notFollowedBy = function(n2) {
-            return this.skip($(n2));
-          }, u.desc = function(n2) {
-            E(n2) || (n2 = [n2]);
-            var t2 = this;
-            return e(function(r2, e2) {
-              var u2 = t2._(r2, e2);
-              return u2.status || (u2.expected = n2), u2;
+          }, u2.sepBy = function(n3) {
+            return V2(this, n3);
+          }, u2.sepBy1 = function(n3) {
+            return H2(this, n3);
+          }, u2.lookahead = function(n3) {
+            return this.skip(Z2(n3));
+          }, u2.notFollowedBy = function(n3) {
+            return this.skip($2(n3));
+          }, u2.desc = function(n3) {
+            E2(n3) || (n3 = [n3]);
+            var t3 = this;
+            return e3(function(r3, e4) {
+              var u3 = t3._(r3, e4);
+              return u3.status || (u3.expected = n3), u3;
             });
-          }, u.fallback = function(n2) {
-            return this.or(X(n2));
-          }, u.ap = function(n2) {
-            return J(n2, this, function(n3, t2) {
-              return n3(t2);
+          }, u2.fallback = function(n3) {
+            return this.or(X2(n3));
+          }, u2.ap = function(n3) {
+            return J2(n3, this, function(n4, t3) {
+              return n4(t3);
             });
-          }, u.chain = function(n2) {
-            var t2 = this;
-            return e(function(r2, e2) {
-              var u2 = t2._(r2, e2);
-              return u2.status ? B(n2(u2.value)._(r2, u2.index), u2) : u2;
+          }, u2.chain = function(n3) {
+            var t3 = this;
+            return e3(function(r3, e4) {
+              var u3 = t3._(r3, e4);
+              return u3.status ? B2(n3(u3.value)._(r3, u3.index), u3) : u3;
             });
-          }, u.concat = u.or, u.empty = rn, u.of = X, u["fantasy-land/ap"] = u.ap, u["fantasy-land/chain"] = u.chain, u["fantasy-land/concat"] = u.concat, u["fantasy-land/empty"] = u.empty, u["fantasy-land/of"] = u.of, u["fantasy-land/map"] = u.map;
-          var en = e(function(n2, t2) {
-            return b(t2, S(n2, t2));
-          }), un = e(function(n2, t2) {
-            return t2 >= n2.length ? x(t2, "any character/byte") : b(t2 + 1, L(n2, t2));
-          }), on3 = e(function(n2, t2) {
-            return b(n2.length, n2.slice(t2));
-          }), fn = e(function(n2, t2) {
-            return t2 < n2.length ? x(t2, "EOF") : b(t2, null);
-          }), an = Q(/[0-9]/).desc("a digit"), cn = Q(/[0-9]*/).desc("optional digits"), sn = Q(/[a-z]/i).desc("a letter"), ln = Q(/[a-z]*/i).desc("optional letters"), pn = Q(/\s*/).desc("optional whitespace"), hn = Q(/\s+/).desc("whitespace"), dn = K("\r"), vn = K("\n"), gn = K("\r\n"), mn = T(gn, vn, dn).desc("newline"), yn = T(mn, fn);
-          e.all = on3, e.alt = T, e.any = un, e.cr = dn, e.createLanguage = function(n2) {
-            var t2 = {};
-            for (var r2 in n2)
-              ({}).hasOwnProperty.call(n2, r2) && function(r3) {
-                t2[r3] = tn(function() {
-                  return n2[r3](t2);
+          }, u2.concat = u2.or, u2.empty = rn2, u2.of = X2, u2["fantasy-land/ap"] = u2.ap, u2["fantasy-land/chain"] = u2.chain, u2["fantasy-land/concat"] = u2.concat, u2["fantasy-land/empty"] = u2.empty, u2["fantasy-land/of"] = u2.of, u2["fantasy-land/map"] = u2.map;
+          var en2 = e3(function(n3, t3) {
+            return b2(t3, S2(n3, t3));
+          }), un2 = e3(function(n3, t3) {
+            return t3 >= n3.length ? x2(t3, "any character/byte") : b2(t3 + 1, L2(n3, t3));
+          }), on4 = e3(function(n3, t3) {
+            return b2(n3.length, n3.slice(t3));
+          }), fn2 = e3(function(n3, t3) {
+            return t3 < n3.length ? x2(t3, "EOF") : b2(t3, null);
+          }), an2 = Q2(/[0-9]/).desc("a digit"), cn2 = Q2(/[0-9]*/).desc("optional digits"), sn2 = Q2(/[a-z]/i).desc("a letter"), ln2 = Q2(/[a-z]*/i).desc("optional letters"), pn2 = Q2(/\s*/).desc("optional whitespace"), hn2 = Q2(/\s+/).desc("whitespace"), dn2 = K2("\r"), vn2 = K2("\n"), gn2 = K2("\r\n"), mn2 = T2(gn2, vn2, dn2).desc("newline"), yn2 = T2(mn2, fn2);
+          e3.all = on4, e3.alt = T2, e3.any = un2, e3.cr = dn2, e3.createLanguage = function(n3) {
+            var t3 = {};
+            for (var r3 in n3)
+              ({}).hasOwnProperty.call(n3, r3) && function(r4) {
+                t3[r4] = tn2(function() {
+                  return n3[r4](t3);
                 });
-              }(r2);
-            return t2;
-          }, e.crlf = gn, e.custom = function(n2) {
-            return e(n2(b, x));
-          }, e.digit = an, e.digits = cn, e.empty = rn, e.end = yn, e.eof = fn, e.fail = Y, e.formatError = N, e.index = en, e.isParser = y, e.lazy = tn, e.letter = sn, e.letters = ln, e.lf = vn, e.lookahead = Z, e.makeFailure = x, e.makeSuccess = b, e.newline = mn, e.noneOf = function(n2) {
-            return nn(function(t2) {
-              return n2.indexOf(t2) < 0;
-            }).desc("none of '" + n2 + "'");
-          }, e.notFollowedBy = $, e.of = X, e.oneOf = function(n2) {
-            for (var t2 = n2.split(""), r2 = 0; r2 < t2.length; r2++)
-              t2[r2] = "'" + t2[r2] + "'";
-            return nn(function(t3) {
-              return n2.indexOf(t3) >= 0;
-            }).desc(t2);
-          }, e.optWhitespace = pn, e.Parser = e, e.range = function(n2, t2) {
-            return nn(function(r2) {
-              return n2 <= r2 && r2 <= t2;
-            }).desc(n2 + "-" + t2);
-          }, e.regex = Q, e.regexp = Q, e.sepBy = V, e.sepBy1 = H, e.seq = C, e.seqMap = J, e.seqObj = function() {
-            for (var n2, t2 = {}, r2 = 0, u2 = (n2 = arguments, Array.prototype.slice.call(n2)), o2 = u2.length, i2 = 0; i2 < o2; i2 += 1) {
-              var f2 = u2[i2];
-              if (!y(f2)) {
-                if (E(f2) && f2.length === 2 && typeof f2[0] == "string" && y(f2[1])) {
-                  var a2 = f2[0];
-                  if (Object.prototype.hasOwnProperty.call(t2, a2))
-                    throw new Error("seqObj: duplicate key " + a2);
-                  t2[a2] = true, r2++;
+              }(r3);
+            return t3;
+          }, e3.crlf = gn2, e3.custom = function(n3) {
+            return e3(n3(b2, x2));
+          }, e3.digit = an2, e3.digits = cn2, e3.empty = rn2, e3.end = yn2, e3.eof = fn2, e3.fail = Y2, e3.formatError = N2, e3.index = en2, e3.isParser = y2, e3.lazy = tn2, e3.letter = sn2, e3.letters = ln2, e3.lf = vn2, e3.lookahead = Z2, e3.makeFailure = x2, e3.makeSuccess = b2, e3.newline = mn2, e3.noneOf = function(n3) {
+            return nn2(function(t3) {
+              return n3.indexOf(t3) < 0;
+            }).desc("none of '" + n3 + "'");
+          }, e3.notFollowedBy = $2, e3.of = X2, e3.oneOf = function(n3) {
+            for (var t3 = n3.split(""), r3 = 0; r3 < t3.length; r3++)
+              t3[r3] = "'" + t3[r3] + "'";
+            return nn2(function(t4) {
+              return n3.indexOf(t4) >= 0;
+            }).desc(t3);
+          }, e3.optWhitespace = pn2, e3.Parser = e3, e3.range = function(n3, t3) {
+            return nn2(function(r3) {
+              return n3 <= r3 && r3 <= t3;
+            }).desc(n3 + "-" + t3);
+          }, e3.regex = Q2, e3.regexp = Q2, e3.sepBy = V2, e3.sepBy1 = H2, e3.seq = C2, e3.seqMap = J2, e3.seqObj = function() {
+            for (var n3, t3 = {}, r3 = 0, u3 = (n3 = arguments, Array.prototype.slice.call(n3)), o3 = u3.length, i3 = 0; i3 < o3; i3 += 1) {
+              var f3 = u3[i3];
+              if (!y2(f3)) {
+                if (E2(f3) && f3.length === 2 && typeof f3[0] == "string" && y2(f3[1])) {
+                  var a3 = f3[0];
+                  if (Object.prototype.hasOwnProperty.call(t3, a3))
+                    throw new Error("seqObj: duplicate key " + a3);
+                  t3[a3] = true, r3++;
                   continue;
                 }
                 throw new Error("seqObj arguments must be parsers or [string, parser] array pairs.");
               }
             }
-            if (r2 === 0)
+            if (r3 === 0)
               throw new Error("seqObj expects at least one named parser, found zero");
-            return e(function(n3, t3) {
-              for (var r3, e2 = {}, i3 = 0; i3 < o2; i3 += 1) {
-                var f3, a3;
-                if (E(u2[i3]) ? (f3 = u2[i3][0], a3 = u2[i3][1]) : (f3 = null, a3 = u2[i3]), !(r3 = B(a3._(n3, t3), r3)).status)
-                  return r3;
-                f3 && (e2[f3] = r3.value), t3 = r3.index;
+            return e3(function(n4, t4) {
+              for (var r4, e4 = {}, i4 = 0; i4 < o3; i4 += 1) {
+                var f4, a4;
+                if (E2(u3[i4]) ? (f4 = u3[i4][0], a4 = u3[i4][1]) : (f4 = null, a4 = u3[i4]), !(r4 = B2(a4._(n4, t4), r4)).status)
+                  return r4;
+                f4 && (e4[f4] = r4.value), t4 = r4.index;
               }
-              return B(b(t3, e2), r3);
+              return B2(b2(t4, e4), r4);
             });
-          }, e.string = K, e.succeed = X, e.takeWhile = function(n2) {
-            return k(n2), e(function(t2, r2) {
-              for (var e2 = r2; e2 < t2.length && n2(L(t2, e2)); )
-                e2++;
-              return b(e2, t2.slice(r2, e2));
+          }, e3.string = K2, e3.succeed = X2, e3.takeWhile = function(n3) {
+            return k2(n3), e3(function(t3, r3) {
+              for (var e4 = r3; e4 < t3.length && n3(L2(t3, e4)); )
+                e4++;
+              return b2(e4, t3.slice(r3, e4));
             });
-          }, e.test = nn, e.whitespace = hn, e["fantasy-land/empty"] = rn, e["fantasy-land/of"] = X, e.Binary = { bitSeq: l, bitSeqObj: function(n2) {
-            s();
-            var t2 = {}, r2 = 0, e2 = f(function(n3) {
-              if (E(n3)) {
-                var e3 = n3;
-                if (e3.length !== 2)
-                  throw new Error("[" + e3.join(", ") + "] should be length 2, got length " + e3.length);
-                if (P(e3[0]), O(e3[1]), Object.prototype.hasOwnProperty.call(t2, e3[0]))
-                  throw new Error("duplicate key in bitSeqObj: " + e3[0]);
-                return t2[e3[0]] = true, r2++, e3;
+          }, e3.test = nn2, e3.whitespace = hn2, e3["fantasy-land/empty"] = rn2, e3["fantasy-land/of"] = X2, e3.Binary = { bitSeq: l2, bitSeqObj: function(n3) {
+            s2();
+            var t3 = {}, r3 = 0, e4 = f2(function(n4) {
+              if (E2(n4)) {
+                var e5 = n4;
+                if (e5.length !== 2)
+                  throw new Error("[" + e5.join(", ") + "] should be length 2, got length " + e5.length);
+                if (P2(e5[0]), O2(e5[1]), Object.prototype.hasOwnProperty.call(t3, e5[0]))
+                  throw new Error("duplicate key in bitSeqObj: " + e5[0]);
+                return t3[e5[0]] = true, r3++, e5;
               }
-              return O(n3), [null, n3];
-            }, n2);
-            if (r2 < 1)
-              throw new Error("bitSeqObj expects at least one named pair, got [" + n2.join(", ") + "]");
-            var u2 = f(function(n3) {
-              return n3[0];
-            }, e2);
-            return l(f(function(n3) {
-              return n3[1];
-            }, e2)).map(function(n3) {
-              return i(function(n4, t3) {
-                return t3[0] !== null && (n4[t3[0]] = t3[1]), n4;
-              }, {}, f(function(t3, r3) {
-                return [t3, n3[r3]];
-              }, u2));
+              return O2(n4), [null, n4];
+            }, n3);
+            if (r3 < 1)
+              throw new Error("bitSeqObj expects at least one named pair, got [" + n3.join(", ") + "]");
+            var u3 = f2(function(n4) {
+              return n4[0];
+            }, e4);
+            return l2(f2(function(n4) {
+              return n4[1];
+            }, e4)).map(function(n4) {
+              return i2(function(n5, t4) {
+                return t4[0] !== null && (n5[t4[0]] = t4[1]), n5;
+              }, {}, f2(function(t4, r4) {
+                return [t4, n4[r4]];
+              }, u3));
             });
-          }, byte: function(n2) {
-            if (s(), O(n2), n2 > 255)
-              throw new Error("Value specified to byte constructor (" + n2 + "=0x" + n2.toString(16) + ") is larger in value than a single byte.");
-            var t2 = (n2 > 15 ? "0x" : "0x0") + n2.toString(16);
-            return e(function(r2, e2) {
-              var u2 = L(r2, e2);
-              return u2 === n2 ? b(e2 + 1, u2) : x(e2, t2);
+          }, byte: function(n3) {
+            if (s2(), O2(n3), n3 > 255)
+              throw new Error("Value specified to byte constructor (" + n3 + "=0x" + n3.toString(16) + ") is larger in value than a single byte.");
+            var t3 = (n3 > 15 ? "0x" : "0x0") + n3.toString(16);
+            return e3(function(r3, e4) {
+              var u3 = L2(r3, e4);
+              return u3 === n3 ? b2(e4 + 1, u3) : x2(e4, t3);
             });
-          }, buffer: function(n2) {
-            return p("buffer", n2).map(function(n3) {
-              return Buffer2.from(n3);
+          }, buffer: function(n3) {
+            return p2("buffer", n3).map(function(n4) {
+              return Buffer2.from(n4);
             });
-          }, encodedString: function(n2, t2) {
-            return p("string", t2).map(function(t3) {
-              return t3.toString(n2);
+          }, encodedString: function(n3, t3) {
+            return p2("string", t3).map(function(t4) {
+              return t4.toString(n3);
             });
-          }, uintBE: d, uint8BE: d(1), uint16BE: d(2), uint32BE: d(4), uintLE: v, uint8LE: v(1), uint16LE: v(2), uint32LE: v(4), intBE: g, int8BE: g(1), int16BE: g(2), int32BE: g(4), intLE: m, int8LE: m(1), int16LE: m(2), int32LE: m(4), floatBE: p("floatBE", 4).map(function(n2) {
-            return n2.readFloatBE(0);
-          }), floatLE: p("floatLE", 4).map(function(n2) {
-            return n2.readFloatLE(0);
-          }), doubleBE: p("doubleBE", 8).map(function(n2) {
-            return n2.readDoubleBE(0);
-          }), doubleLE: p("doubleLE", 8).map(function(n2) {
-            return n2.readDoubleLE(0);
-          }) }, n.exports = e;
+          }, uintBE: d2, uint8BE: d2(1), uint16BE: d2(2), uint32BE: d2(4), uintLE: v2, uint8LE: v2(1), uint16LE: v2(2), uint32LE: v2(4), intBE: g2, int8BE: g2(1), int16BE: g2(2), int32BE: g2(4), intLE: m2, int8LE: m2(1), int16LE: m2(2), int32LE: m2(4), floatBE: p2("floatBE", 4).map(function(n3) {
+            return n3.readFloatBE(0);
+          }), floatLE: p2("floatLE", 4).map(function(n3) {
+            return n3.readFloatLE(0);
+          }), doubleBE: p2("doubleBE", 8).map(function(n3) {
+            return n3.readDoubleBE(0);
+          }), doubleLE: p2("doubleLE", 8).map(function(n3) {
+            return n3.readDoubleLE(0);
+          }) }, n2.exports = e3;
         }]);
       });
     }
@@ -41188,8 +41188,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // node_modules/@apextoaster/js-utils/out/vendor.js
   init_virtual_process_polyfill();
   init_buffer();
-  function createCommonjsModule(fn, module) {
-    return module = { exports: {} }, fn(module, module.exports), module.exports;
+  function createCommonjsModule(fn2, module) {
+    return module = { exports: {} }, fn2(module, module.exports), module.exports;
   }
   __name(createCommonjsModule, "createCommonjsModule");
   var main = createCommonjsModule(function(module, exports) {
@@ -41431,10 +41431,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           this.logger.debug({ module: module2, provider }, "module provides contract");
         }
       }
-      bindFunction(fn) {
-        const provides = getProvides(fn);
-        for (const p of provides) {
-          this.bindTo(p.contract, exports.ProviderType.Factory, fn);
+      bindFunction(fn2) {
+        const provides = getProvides(fn2);
+        for (const p2 of provides) {
+          this.bindTo(p2.contract, exports.ProviderType.Factory, fn2);
         }
       }
       bindPrototype(proto) {
@@ -41465,16 +41465,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         version: "3.0.1"
       }
     };
-    function contractName(c) {
-      if (typeof c === "function") {
-        return c.name;
+    function contractName(c2) {
+      if (typeof c2 === "function") {
+        return c2.name;
       } else {
-        return c;
+        return c2;
       }
     }
     __name(contractName, "contractName");
-    function isConstructor(it) {
-      return typeof it === "function";
+    function isConstructor(it2) {
+      return typeof it2 === "function";
     }
     __name(isConstructor, "isConstructor");
     class Container2 {
@@ -41526,8 +41526,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           throw new LoggerNotFoundError("container has no logger");
         }
         this.logger.debug({ version: VERSION_INFO }, "container debug");
-        for (const m of this.modules) {
-          m.debug();
+        for (const m2 of this.modules) {
+          m2.debug();
         }
       }
       getModules() {
@@ -41798,6 +41798,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return mustFind(values, doesExist);
   }
   __name(mustCoalesce, "mustCoalesce");
+  function defaultWhen(condition, ...items) {
+    if (condition) {
+      return items[0];
+    } else {
+      return items[1];
+    }
+  }
+  __name(defaultWhen, "defaultWhen");
   function mergeList(...parts) {
     const out = [];
     for (const part of parts) {
@@ -41842,8 +41850,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(setOrPush, "setOrPush");
   function mergeMap(target, source) {
-    for (const [k, v] of source) {
-      target.set(k, v);
+    for (const [k2, v2] of source) {
+      target.set(k2, v2);
     }
     return target;
   }
@@ -41885,7 +41893,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var HISTORY_SIZE = 20;
   var SPLIT_HEAD_TAIL = 2;
   var TEMPLATE_CHANCE = 100;
-  var RENDER_DELAY = 50;
+  var SPLIT_CHAR = " ";
   var EVENT_COMMON_QUIT = "quit";
   var EVENT_ACTOR_COMMAND = "actor-command";
   var EVENT_ACTOR_JOIN = "actor-join";
@@ -41898,12 +41906,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var EVENT_LOADER_SAVE = "loader-save";
   var EVENT_LOADER_STATE = "loader-state";
   var EVENT_LOADER_WORLD = "loader-world";
-  var EVENT_RENDER_OUTPUT = "render-output";
+  var EVENT_RENDER_INPUT = "render-input";
   var EVENT_STATE_JOIN = "state-join";
   var EVENT_STATE_LOAD = "state-load";
   var EVENT_STATE_OUTPUT = "state-output";
   var EVENT_STATE_ROOM = "state-room";
   var EVENT_STATE_STEP = "state-step";
+  var EVENT_TOKEN_COMMAND = "token-command";
   var SIGNAL_PREFIX = "signal.";
   var SIGNAL_ENTER = "signal.enter";
   var SIGNAL_GET = "signal.get";
@@ -41912,13 +41921,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var SIGNAL_STEP = "signal.step";
   var SIGNAL_USE = "signal.use";
   var VERB_PREFIX = "verbs.";
-  var VERB_DROP = "verbs.common.drop";
-  var VERB_HIT = "verbs.common.hit";
-  var VERB_LOOK = "verbs.common.look";
-  var VERB_MOVE = "verbs.common.move";
-  var VERB_TAKE = "verbs.common.take";
-  var VERB_USE = "verbs.common.use";
-  var VERB_WAIT = "verbs.common.wait";
   var META_CREATE = "verbs.meta.create";
   var META_DEBUG = "verbs.meta.debug";
   var META_GRAPH = "verbs.meta.graph";
@@ -41937,9 +41939,18 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     META_SAVE,
     META_WORLDS
   ];
+  var VERB_DROP = "verbs.common.drop";
+  var VERB_EQUIP = "verbs.common.equip";
+  var VERB_HIT = "verbs.common.hit";
+  var VERB_LOOK = "verbs.common.look";
+  var VERB_MOVE = "verbs.common.move";
+  var VERB_TAKE = "verbs.common.take";
+  var VERB_USE = "verbs.common.use";
+  var VERB_WAIT = "verbs.common.wait";
   var COMMON_VERBS = [
     ...META_VERBS,
     VERB_DROP,
+    VERB_EQUIP,
     VERB_HIT,
     VERB_LOOK,
     VERB_MOVE,
@@ -41949,11 +41960,48 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   ];
   var STAT_HEALTH = "health";
   var STAT_DAMAGE = "damage";
+  var COMMON_STATS = [
+    STAT_HEALTH,
+    STAT_DAMAGE
+  ];
 
-  // out/src/util/schema.js
+  // out/src/util/schema/index.js
   init_virtual_process_polyfill();
   init_buffer();
   var import_ajv = __toModule(require_ajv());
+
+  // out/src/util/schema/MapKeyword.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var KEYWORD_MAP = {
+    keyword: "map",
+    schemaType: "object",
+    compile: (schema2, _parent, it2) => {
+      const keySchema = it2.self.compile(schema2.keys);
+      const valueSchema = it2.self.compile(schema2.values);
+      return (data) => data instanceof Map && checkMap(data, keySchema, valueSchema);
+    },
+    metaSchema: {
+      type: "object",
+      properties: {
+        keys: {
+          type: "object"
+        },
+        values: {
+          type: "object"
+        }
+      }
+    }
+  };
+  function checkMap(data, keySchema, valueSchema) {
+    for (const [key, value] of data) {
+      return keySchema(key) && valueSchema(value);
+    }
+    return true;
+  }
+  __name(checkMap, "checkMap");
+
+  // out/src/util/schema/index.js
   function makeConstStringSchema(value) {
     return {
       type: "object",
@@ -41976,9 +42024,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(makeConstStringSchema, "makeConstStringSchema");
   function makeSchema(type3) {
-    return new import_ajv.default({
+    const ajv = new import_ajv.default({
+      keywords: [
+        KEYWORD_MAP
+      ],
       useDefaults: true
-    }).compile(type3);
+    });
+    return ajv.compile(type3);
   }
   __name(makeSchema, "makeSchema");
 
@@ -41989,6 +42041,27 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/model/mapped/Template.js
   init_virtual_process_polyfill();
   init_buffer();
+  var TEMPLATE_NUMBER_SCHEMA = {
+    type: "object",
+    properties: {
+      max: {
+        type: "number"
+      },
+      min: {
+        type: "number",
+        default: 0
+      },
+      step: {
+        type: "number",
+        default: 1
+      },
+      type: {
+        type: "string",
+        default: "number"
+      }
+    },
+    required: ["max"]
+  };
   var TEMPLATE_STRING_SCHEMA = {
     type: "object",
     properties: {
@@ -42018,6 +42091,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     },
     required: ["id"]
+  };
+  var TEMPLATE_SCRIPT_SCHEMA = {
+    type: "object",
+    properties: {
+      data: {
+        type: "object",
+        map: {
+          keys: {
+            type: "string"
+          },
+          values: TEMPLATE_STRING_SCHEMA
+        },
+        required: []
+      },
+      name: TEMPLATE_STRING_SCHEMA
+    },
+    required: ["data", "name"]
   };
 
   // out/src/model/mapped/Modifier.js
@@ -42063,26 +42153,45 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       base: {
         type: "object",
         properties: {
-          source: TEMPLATE_STRING_SCHEMA,
           items: {
             type: "array",
-            items: {
-              type: "object",
-              required: []
-            }
+            items: TEMPLATE_REF_SCHEMA
           },
           meta: MODIFIER_METADATA_SCHEMA,
-          stats: {
-            type: "object",
-            required: []
-          },
           scripts: {
             type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_SCRIPT_SCHEMA
+            },
             required: []
           },
-          type: TEMPLATE_STRING_SCHEMA
+          slots: {
+            type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_STRING_SCHEMA
+            },
+            required: []
+          },
+          source: TEMPLATE_STRING_SCHEMA,
+          stats: {
+            type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_NUMBER_SCHEMA
+            },
+            required: []
+          },
+          type: makeConstStringSchema(ACTOR_TYPE)
         },
-        required: ["meta"]
+        required: ["items", "meta", "scripts", "slots", "stats"]
       },
       chance: {
         type: "number",
@@ -42107,24 +42216,43 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       base: {
         type: "object",
         properties: {
-          source: {
-            type: "object",
-            required: []
-          },
           items: {
             type: "array",
             items: TEMPLATE_REF_SCHEMA
           },
           meta: TEMPLATE_METADATA_SCHEMA,
-          type: makeConstStringSchema(ACTOR_TYPE),
-          stats: {
-            type: "object",
-            required: []
-          },
           scripts: {
             type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_SCRIPT_SCHEMA
+            },
             required: []
-          }
+          },
+          slots: {
+            type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_STRING_SCHEMA
+            },
+            required: []
+          },
+          source: TEMPLATE_STRING_SCHEMA,
+          stats: {
+            type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_NUMBER_SCHEMA
+            },
+            required: []
+          },
+          type: makeConstStringSchema(ACTOR_TYPE)
         },
         required: ["items", "meta", "type", "scripts", "stats"]
       },
@@ -42146,32 +42274,91 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return doesExist(entity) && entity.type === ITEM_TYPE;
   }
   __name(isItem, "isItem");
+  var ITEM_MODIFIER_SCHEMA = {
+    type: "object",
+    properties: {
+      base: {
+        type: "object",
+        properties: {
+          meta: MODIFIER_METADATA_SCHEMA,
+          scripts: {
+            type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_SCRIPT_SCHEMA
+            },
+            required: []
+          },
+          slot: TEMPLATE_STRING_SCHEMA,
+          stats: {
+            type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_NUMBER_SCHEMA
+            },
+            required: []
+          },
+          type: makeConstStringSchema(ITEM_TYPE)
+        },
+        required: ["meta", "scripts", "slot", "stats", "type"]
+      },
+      chance: {
+        type: "number",
+        default: TEMPLATE_CHANCE
+      },
+      excludes: {
+        type: "array",
+        default: [],
+        items: {
+          type: "string"
+        }
+      },
+      id: {
+        type: "string"
+      }
+    },
+    required: ["base", "id"]
+  };
   var ITEM_TEMPLATE_SCHEMA = {
     type: "object",
     properties: {
       base: {
         type: "object",
         properties: {
-          type: makeConstStringSchema(ITEM_TYPE),
           meta: TEMPLATE_METADATA_SCHEMA,
           scripts: {
             type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_SCRIPT_SCHEMA
+            },
             required: []
           },
+          slot: TEMPLATE_STRING_SCHEMA,
           stats: {
             type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_NUMBER_SCHEMA
+            },
             required: []
-          }
+          },
+          type: makeConstStringSchema(ITEM_TYPE)
         },
-        required: ["meta", "scripts", "stats", "type"]
+        required: ["meta", "scripts", "slot", "stats", "type"]
       },
       mods: {
         type: "array",
         default: [],
-        items: {
-          type: "object",
-          required: []
-        }
+        items: ITEM_MODIFIER_SCHEMA
       }
     },
     required: ["base"]
@@ -42186,27 +42373,39 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     PortalLinkage2["BOTH"] = "both";
   })(PortalLinkage || (PortalLinkage = {}));
   var PORTAL_TYPE = "portal";
-  function isPortal(it) {
-    return doesExist(it) && it.type === PORTAL_TYPE;
+  function isPortal(it2) {
+    return doesExist(it2) && it2.type === PORTAL_TYPE;
   }
   __name(isPortal, "isPortal");
-  var PORTAL_TEMPLATE_SCHEMA = {
+  var PORTAL_MODIFIER_SCHEMA = {
     type: "object",
     properties: {
       base: {
         type: "object",
         properties: {
           dest: TEMPLATE_STRING_SCHEMA,
-          groupKey: TEMPLATE_STRING_SCHEMA,
-          groupSource: TEMPLATE_STRING_SCHEMA,
-          groupTarget: TEMPLATE_STRING_SCHEMA,
+          group: {
+            type: "object",
+            properties: {
+              key: TEMPLATE_STRING_SCHEMA,
+              source: TEMPLATE_STRING_SCHEMA,
+              target: TEMPLATE_STRING_SCHEMA
+            },
+            required: ["key", "source", "target"]
+          },
           link: Object.assign(Object.assign({}, TEMPLATE_STRING_SCHEMA), { default: {
             base: "both",
             type: "string"
           } }),
-          meta: TEMPLATE_METADATA_SCHEMA,
+          meta: MODIFIER_METADATA_SCHEMA,
           scripts: {
             type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_SCRIPT_SCHEMA
+            },
             required: []
           },
           type: {
@@ -42224,14 +42423,77 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             required: ["base", "type"]
           }
         },
-        required: ["dest", "groupKey", "groupSource", "groupTarget", "meta", "scripts"]
+        required: ["dest", "group", "meta", "scripts"]
+      },
+      chance: {
+        type: "number",
+        default: TEMPLATE_CHANCE
+      },
+      excludes: {
+        type: "array",
+        default: [],
+        items: {
+          type: "string"
+        }
+      },
+      id: {
+        type: "string"
+      }
+    },
+    required: ["base", "id"]
+  };
+  var PORTAL_TEMPLATE_SCHEMA = {
+    type: "object",
+    properties: {
+      base: {
+        type: "object",
+        properties: {
+          dest: TEMPLATE_STRING_SCHEMA,
+          group: {
+            type: "object",
+            properties: {
+              key: TEMPLATE_STRING_SCHEMA,
+              source: TEMPLATE_STRING_SCHEMA,
+              target: TEMPLATE_STRING_SCHEMA
+            },
+            required: ["key", "source", "target"]
+          },
+          link: Object.assign(Object.assign({}, TEMPLATE_STRING_SCHEMA), { default: {
+            base: "both",
+            type: "string"
+          } }),
+          meta: TEMPLATE_METADATA_SCHEMA,
+          scripts: {
+            type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_SCRIPT_SCHEMA
+            },
+            required: []
+          },
+          type: {
+            type: "object",
+            properties: {
+              base: {
+                default: PORTAL_TYPE,
+                type: "string"
+              },
+              type: {
+                default: "string",
+                type: "string"
+              }
+            },
+            required: ["base", "type"]
+          }
+        },
+        required: ["dest", "group", "meta", "scripts"]
       },
       mods: {
         type: "array",
-        items: {
-          type: "object",
-          required: []
-        }
+        default: [],
+        items: PORTAL_MODIFIER_SCHEMA
       }
     },
     required: ["base"]
@@ -42245,6 +42507,56 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return doesExist(entity) && entity.type === ROOM_TYPE;
   }
   __name(isRoom, "isRoom");
+  var ROOM_MODIFIER_SCHEMA = {
+    type: "object",
+    properties: {
+      base: {
+        type: "object",
+        properties: {
+          type: makeConstStringSchema(ROOM_TYPE),
+          meta: MODIFIER_METADATA_SCHEMA,
+          actors: {
+            type: "array",
+            items: TEMPLATE_REF_SCHEMA
+          },
+          items: {
+            type: "array",
+            items: TEMPLATE_REF_SCHEMA
+          },
+          portals: {
+            type: "array",
+            items: TEMPLATE_REF_SCHEMA
+          },
+          scripts: {
+            type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_SCRIPT_SCHEMA
+            },
+            required: []
+          }
+        },
+        required: ["actors", "items", "meta", "portals", "scripts", "type"]
+      },
+      chance: {
+        type: "number",
+        default: TEMPLATE_CHANCE
+      },
+      excludes: {
+        type: "array",
+        default: [],
+        items: {
+          type: "string"
+        }
+      },
+      id: {
+        type: "string"
+      }
+    },
+    required: ["base", "id"]
+  };
   var ROOM_TEMPLATE_SCHEMA = {
     type: "object",
     properties: {
@@ -42267,6 +42579,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           },
           scripts: {
             type: "object",
+            map: {
+              keys: {
+                type: "string"
+              },
+              values: TEMPLATE_SCRIPT_SCHEMA
+            },
             required: []
           }
         },
@@ -42275,10 +42593,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       mods: {
         type: "array",
         default: [],
-        items: {
-          type: "object",
-          required: []
-        }
+        items: ROOM_MODIFIER_SCHEMA
       }
     },
     required: ["base"]
@@ -42314,7 +42629,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var INJECT_RANDOM = Symbol("inject-random");
   var INJECT_SCRIPT = Symbol("inject-script");
   var INJECT_TEMPLATE = Symbol("inject-template");
-  var INJECT_TOKENIZER = Symbol("inject-tokenizer");
 
   // out/src/module/BrowserModule.js
   init_virtual_process_polyfill();
@@ -42383,12 +42697,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const pending = new Promise((res, rej) => {
       error2 = /* @__PURE__ */ __name((err) => {
         settled = true;
-        remove2();
+        remove3();
         rej(err);
       }, "error");
       result = /* @__PURE__ */ __name((value) => {
         settled = true;
-        remove2();
+        remove3();
         res(value);
       }, "result");
       emitter.once("error", error2);
@@ -42397,7 +42711,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         inner();
       }
     });
-    const remove2 = /* @__PURE__ */ __name(() => {
+    const remove3 = /* @__PURE__ */ __name(() => {
       emitter.removeListener("error", error2);
       emitter.removeListener(event, result);
       if (settled === false) {
@@ -42406,7 +42720,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }, "remove");
     return {
       pending,
-      remove: remove2
+      remove: remove3
     };
   }
   __name(onceWithRemove, "onceWithRemove");
@@ -42415,8 +42729,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return pending;
   }
   __name(onceEvent, "onceEvent");
-  function catchAndLog(p, logger, msg) {
-    p.catch((err) => {
+  function catchAndLog(p2, logger, msg) {
+    p2.catch((err) => {
       logger.error(err, msg);
     });
   }
@@ -42435,20 +42749,24 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (valueParts.length < filterParts.length) {
       return false;
     }
-    return filterParts.every((it, idx) => it === valueParts[idx]);
+    return filterParts.every((it2, idx) => it2 === valueParts[idx]);
   }
   __name(matchIdSegments, "matchIdSegments");
   function splitPath2(path) {
     if (path.includes("://") === false) {
       return { path };
     }
-    const [protocol, rest] = path.split("://", 2);
+    const [protocol, rest] = path.split("://", SPLIT_HEAD_TAIL);
     return {
       protocol,
       path: rest
     };
   }
   __name(splitPath2, "splitPath");
+  function trim(str2) {
+    return str2.replace(/^\s+/, "").replace(/\s+$/, "");
+  }
+  __name(trim, "trim");
 
   // out/src/service/loader/BaseLoader.js
   var BaseLoader = /* @__PURE__ */ __name(class BaseLoader2 {
@@ -42526,10 +42844,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
 
   // out/src/service/loader/browser/FetchLoader.js
   var BrowserFetchLoader = class extends BaseLoader {
-    constructor(options, w = window) {
+    constructor(options, w2 = window) {
       super(options, ["http", "https"]);
-      this.fetch = w.fetch;
-      this.scope = w;
+      this.fetch = w2.fetch;
+      this.scope = w2;
     }
     async load(path) {
       const text = await this.loadStr(path);
@@ -42553,9 +42871,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   var BrowserLocalLoader = class extends BaseLoader {
-    constructor(options, w = window) {
+    constructor(options, w2 = window) {
       super(options, ["local", "session"]);
-      this.local = w.localStorage;
+      this.local = w2.localStorage;
     }
     async load(path) {
       const text = await this.loadStr(path);
@@ -42607,7 +42925,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   var import_noicejs5 = __toModule(require_main());
-  var React7 = __toModule(require_react());
+  var React8 = __toModule(require_react());
   var import_react_dom = __toModule(require_react_dom());
 
   // node_modules/react-i18next/dist/es/index.js
@@ -42650,8 +42968,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
+    for (var i2 = 0; i2 < props.length; i2++) {
+      var descriptor = props[i2];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor)
@@ -42768,8 +43086,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     var lastLng = i18n.languages[i18n.languages.length - 1];
     if (lng.toLowerCase() === "cimode")
       return true;
-    var loadNotPending = /* @__PURE__ */ __name(function loadNotPending2(l, n) {
-      var loadState = i18n.services.backendConnector.state["".concat(l, "|").concat(n)];
+    var loadNotPending = /* @__PURE__ */ __name(function loadNotPending2(l2, n2) {
+      var loadState = i18n.services.backendConnector.state["".concat(l2, "|").concat(n2)];
       return loadState === -1 || loadState === 2;
     }, "loadNotPending");
     if (options.bindI18n && options.bindI18n.indexOf("languageChanging") > -1 && i18n.services.backendConnector.backend && i18n.isLanguageChangingTo && !loadNotPending(i18n.isLanguageChangingTo, ns))
@@ -42804,30 +43122,30 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // node_modules/react-i18next/node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js
   init_virtual_process_polyfill();
   init_buffer();
-  function _iterableToArrayLimit(arr, i) {
+  function _iterableToArrayLimit(arr, i2) {
     var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
     if (_i == null)
       return;
     var _arr = [];
-    var _n = true;
+    var _n2 = true;
     var _d = false;
-    var _s, _e;
+    var _s, _e2;
     try {
-      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+      for (_i = _i.call(arr); !(_n2 = (_s = _i.next()).done); _n2 = true) {
         _arr.push(_s.value);
-        if (i && _arr.length === i)
+        if (i2 && _arr.length === i2)
           break;
       }
     } catch (err) {
       _d = true;
-      _e = err;
+      _e2 = err;
     } finally {
       try {
-        if (!_n && _i["return"] != null)
+        if (!_n2 && _i["return"] != null)
           _i["return"]();
       } finally {
         if (_d)
-          throw _e;
+          throw _e2;
       }
     }
     return _arr;
@@ -42844,26 +43162,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   function _arrayLikeToArray(arr, len) {
     if (len == null || len > arr.length)
       len = arr.length;
-    for (var i = 0, arr2 = new Array(len); i < len; i++) {
-      arr2[i] = arr[i];
+    for (var i2 = 0, arr2 = new Array(len); i2 < len; i2++) {
+      arr2[i2] = arr[i2];
     }
     return arr2;
   }
   __name(_arrayLikeToArray, "_arrayLikeToArray");
 
   // node_modules/react-i18next/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-  function _unsupportedIterableToArray(o, minLen) {
-    if (!o)
+  function _unsupportedIterableToArray(o2, minLen) {
+    if (!o2)
       return;
-    if (typeof o === "string")
-      return _arrayLikeToArray(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor)
-      n = o.constructor.name;
-    if (n === "Map" || n === "Set")
-      return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
-      return _arrayLikeToArray(o, minLen);
+    if (typeof o2 === "string")
+      return _arrayLikeToArray(o2, minLen);
+    var n2 = Object.prototype.toString.call(o2).slice(8, -1);
+    if (n2 === "Object" && o2.constructor)
+      n2 = o2.constructor.name;
+    if (n2 === "Map" || n2 === "Set")
+      return Array.from(o2);
+    if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
+      return _arrayLikeToArray(o2, minLen);
   }
   __name(_unsupportedIterableToArray, "_unsupportedIterableToArray");
 
@@ -42876,8 +43194,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   __name(_nonIterableRest, "_nonIterableRest");
 
   // node_modules/react-i18next/node_modules/@babel/runtime/helpers/esm/slicedToArray.js
-  function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  function _slicedToArray(arr, i2) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i2) || _unsupportedIterableToArray(arr, i2) || _nonIterableRest();
   }
   __name(_slicedToArray, "_slicedToArray");
 
@@ -42898,9 +43216,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(ownKeys, "ownKeys");
   function _objectSpread(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? arguments[i] : {};
-      if (i % 2) {
+    for (var i2 = 1; i2 < arguments.length; i2++) {
+      var source = arguments[i2] != null ? arguments[i2] : {};
+      if (i2 % 2) {
         ownKeys(Object(source), true).forEach(function(key) {
           _defineProperty(target, key, source[key]);
         });
@@ -42924,8 +43242,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       i18n.reportNamespaces = new ReportNamespaces();
     if (!i18n) {
       warnOnce("You will need to pass in an i18next instance by using initReactI18next");
-      var notReadyT = /* @__PURE__ */ __name(function notReadyT2(k) {
-        return Array.isArray(k) ? k[k.length - 1] : k;
+      var notReadyT = /* @__PURE__ */ __name(function notReadyT2(k2) {
+        return Array.isArray(k2) ? k2[k2.length - 1] : k2;
       }, "notReadyT");
       var retNotReady = [notReadyT, {}, false];
       retNotReady.t = notReadyT;
@@ -42941,14 +43259,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     namespaces = typeof namespaces === "string" ? [namespaces] : namespaces || ["translation"];
     if (i18n.reportNamespaces.addUsedNamespaces)
       i18n.reportNamespaces.addUsedNamespaces(namespaces);
-    var ready = (i18n.isInitialized || i18n.initializedStoreOnce) && namespaces.every(function(n) {
-      return hasLoadedNamespace(n, i18n, i18nOptions);
+    var ready = (i18n.isInitialized || i18n.initializedStoreOnce) && namespaces.every(function(n2) {
+      return hasLoadedNamespace(n2, i18n, i18nOptions);
     });
     function getT() {
       return i18n.getFixedT(null, i18nOptions.nsMode === "fallback" ? namespaces : namespaces[0]);
     }
     __name(getT, "getT");
-    var _useState = (0, import_react2.useState)(getT), _useState2 = _slicedToArray(_useState, 2), t = _useState2[0], setT = _useState2[1];
+    var _useState = (0, import_react2.useState)(getT), _useState2 = _slicedToArray(_useState, 2), t2 = _useState2[0], setT = _useState2[1];
     var isMounted = (0, import_react2.useRef)(true);
     (0, import_react2.useEffect)(function() {
       var bindI18n = i18nOptions.bindI18n, bindI18nStore = i18nOptions.bindI18nStore;
@@ -42971,12 +43289,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return function() {
         isMounted.current = false;
         if (bindI18n && i18n)
-          bindI18n.split(" ").forEach(function(e) {
-            return i18n.off(e, boundReset);
+          bindI18n.split(" ").forEach(function(e3) {
+            return i18n.off(e3, boundReset);
           });
         if (bindI18nStore && i18n)
-          bindI18nStore.split(" ").forEach(function(e) {
-            return i18n.store.off(e, boundReset);
+          bindI18nStore.split(" ").forEach(function(e3) {
+            return i18n.store.off(e3, boundReset);
           });
       };
     }, [i18n, namespaces.join()]);
@@ -42987,8 +43305,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       isInitial.current = false;
     }, [i18n]);
-    var ret = [t, i18n, ready];
-    ret.t = t;
+    var ret = [t2, i18n, ready];
+    ret.t = t2;
     ret.i18n = i18n;
     ret.ready = ready;
     if (ready)
@@ -43024,7 +43342,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/component/react/Frame.js
   init_virtual_process_polyfill();
   init_buffer();
-  var React6 = __toModule(require_react());
+  var React7 = __toModule(require_react());
 
   // out/src/component/react/Input.js
   init_virtual_process_polyfill();
@@ -43049,16 +43367,22 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var React3 = __toModule(require_react());
   var Output = /* @__PURE__ */ __name((props) => React3.createElement("div", null, React3.createElement("div", null, "Output: ", props.output.length, " lines"), props.output.map((line, idx) => React3.createElement("div", { key: idx }, line))), "Output");
 
-  // out/src/component/react/Quit.js
+  // out/src/component/react/Status.js
   init_virtual_process_polyfill();
   init_buffer();
   var React4 = __toModule(require_react());
-  var Quit = /* @__PURE__ */ __name(() => React4.createElement("div", null, React4.createElement("div", null, "Game Over")), "Quit");
+  var Status = /* @__PURE__ */ __name((props) => React4.createElement("div", null, props.stats.map((it2) => React4.createElement("div", { key: it2.name }, it2.name, ": ", it2.value))), "Status");
+
+  // out/src/component/react/Quit.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  var React5 = __toModule(require_react());
+  var Quit = /* @__PURE__ */ __name(() => React5.createElement("div", null, React5.createElement("div", null, "Game Over")), "Quit");
 
   // out/src/component/react/Shortcuts.js
   init_virtual_process_polyfill();
   init_buffer();
-  var React5 = __toModule(require_react());
+  var React6 = __toModule(require_react());
 
   // out/src/component/shared.js
   init_virtual_process_polyfill();
@@ -43078,15 +43402,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }];
 
   // out/src/component/react/Shortcuts.js
-  var { useState: useState2 } = React5;
+  var { useState: useState2 } = React6;
   var Shortcuts = /* @__PURE__ */ __name((props) => {
-    const { t } = useTranslation();
-    const [selected, setSelected] = useState2("actors");
-    return React5.createElement("div", null, React5.createElement("div", null, SHORTCUT_TABS.map((it) => React5.createElement("button", { key: it.value, onClick: () => setSelected(it.value) }, t(it.label)))), React5.createElement("div", null, React5.createElement("ol", null, props[selected].map((it) => React5.createElement("li", { key: it.id }, React5.createElement("a", { onClick: () => props.onSelect(it.id) }, t(it.name)))))));
+    const { t: t2 } = useTranslation();
+    const [tab, setTab] = useState2("actors");
+    function selectItem(value) {
+      if (tab === "verbs") {
+        props.onVerb(value);
+      } else {
+        props.onTarget(value);
+      }
+    }
+    __name(selectItem, "selectItem");
+    return React6.createElement("div", null, React6.createElement("div", null, React6.createElement("ol", null, SHORTCUT_TABS.map((it2) => React6.createElement("li", { key: it2.value }, React6.createElement("button", { id: `tab-${it2.value}`, onClick: () => setTab(it2.value) }, t2(it2.label)))))), React6.createElement("div", null, React6.createElement("ol", null, props[tab].map((it2) => React6.createElement("li", { key: it2.id }, React6.createElement("a", { id: `item-${it2.id}`, onClick: () => selectItem(it2.id) }, t2(it2.name)))))));
   }, "Shortcuts");
 
   // out/src/component/react/Frame.js
-  var { useState: useState3 } = React6;
+  var { useState: useState3 } = React7;
   var Frame = /* @__PURE__ */ __name((props) => {
     const [line, setLine] = useState3("");
     const output2 = props.output.slice(-HISTORY_SIZE);
@@ -43095,9 +43427,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       setLine("");
     }
     __name(sendLine, "sendLine");
-    return React6.createElement("div", { style: {
+    return React7.createElement("div", { style: {
       fontFamily: "monospace"
-    } }, React6.createElement(Output, { output: output2 }), React6.createElement("div", null, props.quit ? React6.createElement(Quit, null) : React6.createElement(Input, { line, prompt: props.prompt, onChange: setLine, onLine: sendLine })), props.show.shortcuts && React6.createElement(Shortcuts, Object.assign({}, props.shortcuts, { onSelect: (id) => setLine(`${line} ${id}`) })));
+    } }, React7.createElement(Output, { output: output2 }), React7.createElement("div", null, props.quit ? React7.createElement(Quit, null) : React7.createElement(Input, { line, prompt: props.prompt, onChange: setLine, onLine: sendLine })), props.show.status && React7.createElement(Status, { stats: props.stats }), props.show.shortcuts && React7.createElement(Shortcuts, Object.assign({}, props.shortcuts, { onTarget: (id) => setLine(`${line} ${id}`), onVerb: (verb) => setLine(verb) })));
   }, "Frame");
 
   // out/src/service/render/react/BaseRender.js
@@ -43137,6 +43469,41 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return { call, clear };
   }
   __name(debounce, "debounce");
+
+  // out/src/util/collection/array.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function randomItem(items, random) {
+    return items[random.nextInt(items.length)];
+  }
+  __name(randomItem, "randomItem");
+  function remove(items, pred) {
+    return items.filter((value, index, list) => pred(value, index, list) === false);
+  }
+  __name(remove, "remove");
+  function groupOn(items, delimiters) {
+    const groups = [];
+    const buffer = [];
+    for (const item of items) {
+      if (delimiters.has(item)) {
+        if (buffer.length > 0) {
+          groups.push(Array.from(buffer));
+          buffer.length = 0;
+        }
+      } else {
+        buffer.push(item);
+      }
+    }
+    if (buffer.length > 0) {
+      groups.push(buffer);
+    }
+    return groups;
+  }
+  __name(groupOn, "groupOn");
+  function head(list) {
+    return mustExist(list[0]);
+  }
+  __name(head, "head");
 
   // out/src/util/script/index.js
   init_virtual_process_polyfill();
@@ -43201,9 +43568,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       shortcuts: {
         type: "boolean",
         default: true
+      },
+      status: {
+        type: "boolean",
+        default: true
+      },
+      throttle: {
+        type: "number"
       }
     },
-    required: []
+    required: ["throttle"]
   };
   var BaseReactRender = /* @__PURE__ */ __name(class BaseReactRender2 {
     constructor(options) {
@@ -43216,7 +43590,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.event = mustExist(options[INJECT_EVENT]);
       this.locale = mustExist(options[INJECT_LOCALE]);
       this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
-      this.queueUpdate = debounce(RENDER_DELAY, () => this.update());
+      this.queueUpdate = debounce(this.config.throttle, () => this.update());
       this.input = "";
       this.output = [];
       this.prompt = "";
@@ -43227,6 +43601,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         portals: [],
         verbs: []
       };
+      this.stats = [];
       this.step = {
         turn: 0,
         time: 0
@@ -43248,7 +43623,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.prompt = prompt;
     }
     async read() {
-      const event = await onceEvent(this.event, EVENT_RENDER_OUTPUT);
+      const event = await onceEvent(this.event, EVENT_RENDER_INPUT);
       return event.line;
     }
     async show(msg) {
@@ -43273,16 +43648,20 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         };
       }
       __name(extractShortcut, "extractShortcut");
-      this.shortcuts.actors = result.room.actors.filter((it) => it.meta.id !== result.pid).map(extractShortcut);
+      this.shortcuts.actors = remove(result.room.actors, (it2) => it2.meta.id === result.pid).map(extractShortcut);
       this.shortcuts.items = result.room.items.map(extractShortcut);
-      this.shortcuts.portals = result.room.portals.map((it) => ({
-        id: `${it.groupSource} ${it.meta.name}`,
-        name: `${it.groupSource} ${it.meta.name}`
+      this.shortcuts.portals = result.room.portals.map((it2) => ({
+        id: it2.meta.id,
+        name: `${it2.group.source} ${it2.meta.name}`
       }));
-      this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
-        id: it,
-        name: it
+      this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it2) => ({
+        id: it2,
+        name: it2
       }));
+      this.stats = Array.from(result.actor.stats.entries()).map((it2) => ({
+        name: it2[0],
+        value: it2[1]
+      })).filter((it2) => COMMON_STATS.includes(it2.name));
       this.setPrompt(`turn ${this.step.turn}`);
       this.queueUpdate.call();
     }
@@ -43297,7 +43676,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.input = line;
       this.output.push(`${this.prompt} > ${this.input}`);
       if (line.length > 0) {
-        this.event.emit(EVENT_RENDER_OUTPUT, {
+        this.event.emit(EVENT_RENDER_INPUT, {
           line
         });
       }
@@ -43327,18 +43706,20 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return super.stop();
     }
     update() {
-      const frame = React7.createElement(Frame, {
+      const frame = React8.createElement(Frame, {
         onLine: (line) => this.nextLine(line),
         output: this.output,
         prompt: this.prompt,
         quit: this.quit,
         shortcuts: this.shortcuts,
         show: {
-          shortcuts: this.config.shortcuts
+          shortcuts: this.config.shortcuts,
+          status: this.config.status
         },
+        stats: this.stats,
         step: this.step
       });
-      const locale = React7.createElement(I18nextProvider, {
+      const locale = React8.createElement(I18nextProvider, {
         i18n: this.locale.getInstance()
       }, frame);
       (0, import_react_dom.render)(locale, document.getElementById("app"));
@@ -43374,28 +43755,45 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/model/Command.js
   init_virtual_process_polyfill();
   init_buffer();
-  function makeCommand(verb, target, index = 0) {
+  function makeCommand(verb, ...targets) {
+    return makeCommandIndex(verb, 0, ...targets);
+  }
+  __name(makeCommand, "makeCommand");
+  function makeCommandIndex(verb, index = 0, ...targets) {
+    const input = [verb, ...targets].join(" ");
     return {
       index,
-      input: `${verb} ${target}`,
-      target,
+      input,
+      targets,
       verb
     };
   }
-  __name(makeCommand, "makeCommand");
-
-  // out/src/util/collection/array.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  function randomItem(items, random) {
-    return items[random.nextInt(items.length)];
-  }
-  __name(randomItem, "randomItem");
+  __name(makeCommandIndex, "makeCommandIndex");
 
   // out/src/service/actor/BehaviorActor.js
+  var BEHAVIOR_ACTOR_SCHEMA = {
+    type: "object",
+    properties: {
+      attack: {
+        type: "number",
+        default: 1
+      },
+      wander: {
+        type: "number",
+        default: 0.25
+      }
+    },
+    required: []
+  };
   var WAIT_CMD = makeCommand(VERB_WAIT, "turn");
   var BehaviorActorService = /* @__PURE__ */ __name(class BehaviorActorService2 {
     constructor(options) {
+      const config3 = mustExist(options.config);
+      const schema2 = makeSchema(BEHAVIOR_ACTOR_SCHEMA);
+      if (!schema2(config3)) {
+        throw new ConfigError("invalid service config");
+      }
+      this.config = config3;
       this.event = mustExist(options[INJECT_EVENT]);
       this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
       this.random = mustExist(options[INJECT_RANDOM]);
@@ -43417,14 +43815,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     onRoom(event) {
       const behavior = this.random.nextFloat();
       this.logger.debug({ event, which: behavior }, "received room event from state");
-      const player = event.room.actors.find((it) => it.source === ActorSource.PLAYER);
-      if (doesExist(player)) {
+      const player = event.room.actors.find((it2) => it2.source === ActorSource.PLAYER);
+      if (behavior < this.config.attack && doesExist(player)) {
         this.logger.debug({ event, player }, "attacking visible player");
         this.queue(event.room, event.actor, makeCommand(VERB_HIT, player.meta.id));
         return;
       }
-      const portals = event.room.portals.filter((it) => it.dest.length > 0);
-      if (behavior < 0.25 && portals.length > 0) {
+      const portals = event.room.portals.filter((it2) => it2.dest.length > 0);
+      if (behavior < this.config.wander && portals.length > 0) {
         const portal = randomItem(portals, this.random);
         this.logger.debug({
           event,
@@ -43464,7 +43862,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     ShowVolume2["ROOM"] = "room";
     ShowVolume2["WORLD"] = "world";
   })(ShowVolume || (ShowVolume = {}));
-  function showCheck(source, target, volume) {
+  function checkVolume(source, target, volume) {
     if (volume === ShowVolume.SELF) {
       if (doesExist(source.actor) && doesExist(target.actor)) {
         return source.actor.meta.id === target.actor.meta.id;
@@ -43477,7 +43875,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     return true;
   }
-  __name(showCheck, "showCheck");
+  __name(checkVolume, "checkVolume");
 
   // out/src/service/actor/PlayerActor.js
   var PlayerActorService = /* @__PURE__ */ __name(class PlayerActorService2 {
@@ -43486,18 +43884,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.event = mustExist(options[INJECT_EVENT]);
       this.locale = mustExist(options[INJECT_LOCALE]);
       this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
-      this.tokenizer = mustExist(options[INJECT_TOKENIZER]);
       this.history = [];
       this.pid = `player-${this.counter.next("player")}`;
     }
     async start() {
-      this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
-        catchAndLog(this.tokenizer.translate([
-          ...COMMON_VERBS,
-          ...event.bundle.verbs
-        ]), this.logger, "error translating verbs");
-      }, this);
-      this.event.on(EVENT_RENDER_OUTPUT, (event) => {
+      this.event.on(EVENT_TOKEN_COMMAND, (event) => {
         catchAndLog(this.onRenderOutput(event), this.logger, "error during render output");
       }, this);
       this.event.on(EVENT_STATE_JOIN, (event) => {
@@ -43539,7 +43930,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     onRoom(event) {
-      const actor = event.room.actors.find((it) => it.meta.id === this.pid);
+      const actor = event.room.actors.find((it2) => it2.meta.id === this.pid);
       if (doesExist(actor)) {
         this.logger.debug({ event }, "updating own room");
         this.room = event.room;
@@ -43551,26 +43942,22 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     async onRenderOutput(event) {
-      this.logger.debug({ event }, "tokenizing input");
-      const commands = await this.tokenizer.parse(event.line);
-      this.logger.debug({ commands, event }, "parsed input line");
-      this.history.push(...commands);
-      for (const command of commands) {
-        this.event.emit(EVENT_ACTOR_COMMAND, {
-          actor: this.actor,
-          command,
-          room: this.room
-        });
-      }
+      this.logger.debug({ event }, "sending input as actor command");
+      this.history.push(event.command);
+      this.event.emit(EVENT_ACTOR_COMMAND, {
+        actor: this.actor,
+        command: event.command,
+        room: this.room
+      });
     }
     async onStateOutput(event) {
       this.logger.debug({ event }, "filtering output");
-      if (doesExist(this.actor) && doesExist(this.room) && doesExist(event.source)) {
+      if (doesExist(this.room) && doesExist(event.source)) {
         const target = {
           actor: this.actor,
           room: this.room
         };
-        if (showCheck(event.source, target, event.volume) === false) {
+        if (checkVolume(event.source, target, event.volume) === false) {
           return;
         }
       }
@@ -43586,7 +43973,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "PlayerActorService");
   PlayerActorService = __decorate([
-    (0, import_noicejs8.Inject)(INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, INJECT_TOKENIZER),
+    (0, import_noicejs8.Inject)(INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
   ], PlayerActorService);
 
@@ -43628,7 +44015,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           args,
           name
         }
-      }, "bus proxying event");
+      }, "bus emitting event");
       return super.emit(name, ...args);
     }
     on(name, handler, group) {
@@ -43703,8 +44090,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
 
   // node_modules/@babel/runtime/helpers/esm/objectSpread.js
   function _objectSpread2(target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i] != null ? Object(arguments[i]) : {};
+    for (var i2 = 1; i2 < arguments.length; i2++) {
+      var source = arguments[i2] != null ? Object(arguments[i2]) : {};
       var ownKeys2 = Object.keys(source);
       if (typeof Object.getOwnPropertySymbols === "function") {
         ownKeys2 = ownKeys2.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
@@ -43733,8 +44120,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   function _defineProperties2(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
+    for (var i2 = 0; i2 < props.length; i2++) {
+      var descriptor = props[i2];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor)
@@ -43779,11 +44166,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // node_modules/@babel/runtime/helpers/esm/getPrototypeOf.js
   init_virtual_process_polyfill();
   init_buffer();
-  function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : /* @__PURE__ */ __name(function _getPrototypeOf2(o2) {
-      return o2.__proto__ || Object.getPrototypeOf(o2);
+  function _getPrototypeOf(o2) {
+    _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : /* @__PURE__ */ __name(function _getPrototypeOf2(o3) {
+      return o3.__proto__ || Object.getPrototypeOf(o3);
     }, "_getPrototypeOf");
-    return _getPrototypeOf(o);
+    return _getPrototypeOf(o2);
   }
   __name(_getPrototypeOf, "_getPrototypeOf");
 
@@ -43794,12 +44181,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // node_modules/@babel/runtime/helpers/esm/setPrototypeOf.js
   init_virtual_process_polyfill();
   init_buffer();
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf || /* @__PURE__ */ __name(function _setPrototypeOf2(o2, p2) {
-      o2.__proto__ = p2;
-      return o2;
+  function _setPrototypeOf(o2, p2) {
+    _setPrototypeOf = Object.setPrototypeOf || /* @__PURE__ */ __name(function _setPrototypeOf2(o3, p3) {
+      o3.__proto__ = p3;
+      return o3;
     }, "_setPrototypeOf");
-    return _setPrototypeOf(o, p);
+    return _setPrototypeOf(o2, p2);
   }
   __name(_setPrototypeOf, "_setPrototypeOf");
 
@@ -43918,7 +44305,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     __name(EventEmitter3, "EventEmitter");
     _createClass2(EventEmitter3, [{
       key: "on",
-      value: /* @__PURE__ */ __name(function on3(events, listener) {
+      value: /* @__PURE__ */ __name(function on4(events, listener) {
         var _this = this;
         events.split(" ").forEach(function(event) {
           _this.observers[event] = _this.observers[event] || [];
@@ -43935,8 +44322,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           delete this.observers[event];
           return;
         }
-        this.observers[event] = this.observers[event].filter(function(l) {
-          return l !== listener;
+        this.observers[event] = this.observers[event].filter(function(l2) {
+          return l2 !== listener;
         });
       }, "off")
     }, {
@@ -43979,10 +44366,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return "" + object;
   }
   __name(makeString, "makeString");
-  function copy3(a, s, t) {
-    a.forEach(function(m) {
-      if (s[m])
-        t[m] = s[m];
+  function copy3(a2, s2, t2) {
+    a2.forEach(function(m2) {
+      if (s2[m2])
+        t2[m2] = s2[m2];
     });
   }
   __name(copy3, "copy");
@@ -44017,24 +44404,24 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(getLastOfPath, "getLastOfPath");
   function setPath(object, path, newValue) {
-    var _getLastOfPath = getLastOfPath(object, path, Object), obj = _getLastOfPath.obj, k = _getLastOfPath.k;
-    obj[k] = newValue;
+    var _getLastOfPath = getLastOfPath(object, path, Object), obj = _getLastOfPath.obj, k2 = _getLastOfPath.k;
+    obj[k2] = newValue;
   }
   __name(setPath, "setPath");
   function pushPath(object, path, newValue, concat3) {
-    var _getLastOfPath2 = getLastOfPath(object, path, Object), obj = _getLastOfPath2.obj, k = _getLastOfPath2.k;
-    obj[k] = obj[k] || [];
+    var _getLastOfPath2 = getLastOfPath(object, path, Object), obj = _getLastOfPath2.obj, k2 = _getLastOfPath2.k;
+    obj[k2] = obj[k2] || [];
     if (concat3)
-      obj[k] = obj[k].concat(newValue);
+      obj[k2] = obj[k2].concat(newValue);
     if (!concat3)
-      obj[k].push(newValue);
+      obj[k2].push(newValue);
   }
   __name(pushPath, "pushPath");
   function getPath(object, path) {
-    var _getLastOfPath3 = getLastOfPath(object, path), obj = _getLastOfPath3.obj, k = _getLastOfPath3.k;
+    var _getLastOfPath3 = getLastOfPath(object, path), obj = _getLastOfPath3.obj, k2 = _getLastOfPath3.k;
     if (!obj)
       return void 0;
-    return obj[k];
+    return obj[k2];
   }
   __name(getPath, "getPath");
   function getPathWithDefaults(data, defaultData, key) {
@@ -44077,8 +44464,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   };
   function escape(data) {
     if (typeof data === "string") {
-      return data.replace(/[&<>"'\/]/g, function(s) {
-        return _entityMap[s];
+      return data.replace(/[&<>"'\/]/g, function(s2) {
+        return _entityMap[s2];
       });
     }
     return data;
@@ -44093,31 +44480,31 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return obj[path];
     var paths = path.split(keySeparator);
     var current = obj;
-    for (var i = 0; i < paths.length; ++i) {
-      if (typeof current[paths[i]] === "string" && i + 1 < paths.length) {
+    for (var i2 = 0; i2 < paths.length; ++i2) {
+      if (typeof current[paths[i2]] === "string" && i2 + 1 < paths.length) {
         return void 0;
       }
-      if (current[paths[i]] === void 0) {
-        var j = 2;
-        var p = paths.slice(i, i + j).join(keySeparator);
-        var mix = current[p];
-        while (mix === void 0 && paths.length > i + j) {
-          j++;
-          p = paths.slice(i, i + j).join(keySeparator);
-          mix = current[p];
+      if (current[paths[i2]] === void 0) {
+        var j2 = 2;
+        var p2 = paths.slice(i2, i2 + j2).join(keySeparator);
+        var mix = current[p2];
+        while (mix === void 0 && paths.length > i2 + j2) {
+          j2++;
+          p2 = paths.slice(i2, i2 + j2).join(keySeparator);
+          mix = current[p2];
         }
         if (mix === void 0)
           return void 0;
         if (typeof mix === "string")
           return mix;
-        if (p && typeof mix[p] === "string")
-          return mix[p];
-        var joinedPath = paths.slice(i + j).join(keySeparator);
+        if (p2 && typeof mix[p2] === "string")
+          return mix[p2];
+        var joinedPath = paths.slice(i2 + j2).join(keySeparator);
         if (joinedPath)
           return deepFind(mix, joinedPath, keySeparator);
         return void 0;
       }
-      current = current[paths[i]];
+      current = current[paths[i2]];
     }
     return current;
   }
@@ -44208,9 +44595,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         var options = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : {
           silent: false
         };
-        for (var m in resources) {
-          if (typeof resources[m] === "string" || Object.prototype.toString.apply(resources[m]) === "[object Array]")
-            this.addResource(lng, ns, m, resources[m], {
+        for (var m2 in resources) {
+          if (typeof resources[m2] === "string" || Object.prototype.toString.apply(resources[m2]) === "[object Array]")
+            this.addResource(lng, ns, m2, resources[m2], {
               silent: true
             });
         }
@@ -44335,8 +44722,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         var keySeparator = options.keySeparator !== void 0 ? options.keySeparator : this.options.keySeparator;
         var namespaces = options.ns || this.options.defaultNS;
         if (nsSeparator && key.indexOf(nsSeparator) > -1) {
-          var m = key.match(this.interpolator.nestingRegexp);
-          if (m && m.length > 0) {
+          var m2 = key.match(this.interpolator.nestingRegexp);
+          if (m2 && m2.length > 0) {
             return {
               key,
               namespaces
@@ -44401,15 +44788,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             var resTypeIsArray = resType === "[object Array]";
             var copy4 = resTypeIsArray ? [] : {};
             var newKeyToUse = resTypeIsArray ? resExactUsedKey : resUsedKey;
-            for (var m in res) {
-              if (Object.prototype.hasOwnProperty.call(res, m)) {
-                var deepKey = "".concat(newKeyToUse).concat(keySeparator).concat(m);
-                copy4[m] = this.translate(deepKey, _objectSpread2({}, options, {
+            for (var m2 in res) {
+              if (Object.prototype.hasOwnProperty.call(res, m2)) {
+                var deepKey = "".concat(newKeyToUse).concat(keySeparator).concat(m2);
+                copy4[m2] = this.translate(deepKey, _objectSpread2({}, options, {
                   joinArrays: false,
                   ns: namespaces
                 }));
-                if (copy4[m] === deepKey)
-                  copy4[m] = res[m];
+                if (copy4[m2] === deepKey)
+                  copy4[m2] = res[m2];
               }
             }
             res = copy4;
@@ -44446,21 +44833,21 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             var lngs = [];
             var fallbackLngs = this.languageUtils.getFallbackCodes(this.options.fallbackLng, options.lng || this.language);
             if (this.options.saveMissingTo === "fallback" && fallbackLngs && fallbackLngs[0]) {
-              for (var i = 0; i < fallbackLngs.length; i++) {
-                lngs.push(fallbackLngs[i]);
+              for (var i2 = 0; i2 < fallbackLngs.length; i2++) {
+                lngs.push(fallbackLngs[i2]);
               }
             } else if (this.options.saveMissingTo === "all") {
               lngs = this.languageUtils.toResolveHierarchy(options.lng || this.language);
             } else {
               lngs.push(options.lng || this.language);
             }
-            var send = /* @__PURE__ */ __name(function send2(l, k, fallbackValue) {
+            var send = /* @__PURE__ */ __name(function send2(l2, k2, fallbackValue) {
               if (_this2.options.missingKeyHandler) {
-                _this2.options.missingKeyHandler(l, namespace, k, updateMissing ? fallbackValue : res, updateMissing, options);
+                _this2.options.missingKeyHandler(l2, namespace, k2, updateMissing ? fallbackValue : res, updateMissing, options);
               } else if (_this2.backendConnector && _this2.backendConnector.saveMissing) {
-                _this2.backendConnector.saveMissing(l, namespace, k, updateMissing ? fallbackValue : res, updateMissing, options);
+                _this2.backendConnector.saveMissing(l2, namespace, k2, updateMissing ? fallbackValue : res, updateMissing, options);
               }
-              _this2.emit("missingKey", l, namespace, k, res);
+              _this2.emit("missingKey", l2, namespace, k2, res);
             }, "send");
             if (this.options.saveMissing) {
               if (this.options.saveMissingPlurals && needsPluralHandling) {
@@ -44506,8 +44893,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             data = _objectSpread2({}, this.options.interpolation.defaultVariables, data);
           res = this.interpolator.interpolate(res, data, options.lng || this.language, options);
           if (skipOnVariables) {
-            var na = res.match(this.interpolator.nestingRegexp);
-            var nestAft = na && na.length;
+            var na2 = res.match(this.interpolator.nestingRegexp);
+            var nestAft = na2 && na2.length;
             if (nestBef < nestAft)
               options.nest = false;
           }
@@ -44546,10 +44933,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         var usedNS;
         if (typeof keys2 === "string")
           keys2 = [keys2];
-        keys2.forEach(function(k) {
+        keys2.forEach(function(k2) {
           if (_this4.isValidLookup(found))
             return;
-          var extracted = _this4.extractFromKey(k, options);
+          var extracted = _this4.extractFromKey(k2, options);
           var key = extracted.key;
           usedKey = key;
           var namespaces = extracted.namespaces;
@@ -44648,49 +45035,49 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       value: /* @__PURE__ */ __name(function getScriptPartFromCode(code) {
         if (!code || code.indexOf("-") < 0)
           return null;
-        var p = code.split("-");
-        if (p.length === 2)
+        var p2 = code.split("-");
+        if (p2.length === 2)
           return null;
-        p.pop();
-        if (p[p.length - 1].toLowerCase() === "x")
+        p2.pop();
+        if (p2[p2.length - 1].toLowerCase() === "x")
           return null;
-        return this.formatLanguageCode(p.join("-"));
+        return this.formatLanguageCode(p2.join("-"));
       }, "getScriptPartFromCode")
     }, {
       key: "getLanguagePartFromCode",
       value: /* @__PURE__ */ __name(function getLanguagePartFromCode(code) {
         if (!code || code.indexOf("-") < 0)
           return code;
-        var p = code.split("-");
-        return this.formatLanguageCode(p[0]);
+        var p2 = code.split("-");
+        return this.formatLanguageCode(p2[0]);
       }, "getLanguagePartFromCode")
     }, {
       key: "formatLanguageCode",
       value: /* @__PURE__ */ __name(function formatLanguageCode(code) {
         if (typeof code === "string" && code.indexOf("-") > -1) {
           var specialCases = ["hans", "hant", "latn", "cyrl", "cans", "mong", "arab"];
-          var p = code.split("-");
+          var p2 = code.split("-");
           if (this.options.lowerCaseLng) {
-            p = p.map(function(part) {
+            p2 = p2.map(function(part) {
               return part.toLowerCase();
             });
-          } else if (p.length === 2) {
-            p[0] = p[0].toLowerCase();
-            p[1] = p[1].toUpperCase();
-            if (specialCases.indexOf(p[1].toLowerCase()) > -1)
-              p[1] = capitalize(p[1].toLowerCase());
-          } else if (p.length === 3) {
-            p[0] = p[0].toLowerCase();
-            if (p[1].length === 2)
-              p[1] = p[1].toUpperCase();
-            if (p[0] !== "sgn" && p[2].length === 2)
-              p[2] = p[2].toUpperCase();
-            if (specialCases.indexOf(p[1].toLowerCase()) > -1)
-              p[1] = capitalize(p[1].toLowerCase());
-            if (specialCases.indexOf(p[2].toLowerCase()) > -1)
-              p[2] = capitalize(p[2].toLowerCase());
+          } else if (p2.length === 2) {
+            p2[0] = p2[0].toLowerCase();
+            p2[1] = p2[1].toUpperCase();
+            if (specialCases.indexOf(p2[1].toLowerCase()) > -1)
+              p2[1] = capitalize(p2[1].toLowerCase());
+          } else if (p2.length === 3) {
+            p2[0] = p2[0].toLowerCase();
+            if (p2[1].length === 2)
+              p2[1] = p2[1].toUpperCase();
+            if (p2[0] !== "sgn" && p2[2].length === 2)
+              p2[2] = p2[2].toUpperCase();
+            if (specialCases.indexOf(p2[1].toLowerCase()) > -1)
+              p2[1] = capitalize(p2[1].toLowerCase());
+            if (specialCases.indexOf(p2[2].toLowerCase()) > -1)
+              p2[2] = capitalize(p2[2].toLowerCase());
           }
-          return p.join("-");
+          return p2.join("-");
         }
         return this.options.cleanCode || this.options.lowerCaseLng ? code.toLowerCase() : code;
       }, "formatLanguageCode")
@@ -44769,13 +45156,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         var _this2 = this;
         var fallbackCodes = this.getFallbackCodes(fallbackCode || this.options.fallbackLng || [], code);
         var codes = [];
-        var addCode = /* @__PURE__ */ __name(function addCode2(c) {
-          if (!c)
+        var addCode = /* @__PURE__ */ __name(function addCode2(c2) {
+          if (!c2)
             return;
-          if (_this2.isSupportedCode(c)) {
-            codes.push(c);
+          if (_this2.isSupportedCode(c2)) {
+            codes.push(c2);
           } else {
-            _this2.logger.warn("rejecting language code not found in supportedLngs: ".concat(c));
+            _this2.logger.warn("rejecting language code not found in supportedLngs: ".concat(c2));
           }
         }, "addCode");
         if (typeof code === "string" && code.indexOf("-") > -1) {
@@ -44891,78 +45278,78 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     fc: 22
   }];
   var _rulesPluralsTypes = {
-    1: /* @__PURE__ */ __name(function _(n) {
-      return Number(n > 1);
+    1: /* @__PURE__ */ __name(function _(n2) {
+      return Number(n2 > 1);
     }, "_"),
-    2: /* @__PURE__ */ __name(function _2(n) {
-      return Number(n != 1);
+    2: /* @__PURE__ */ __name(function _2(n2) {
+      return Number(n2 != 1);
     }, "_"),
-    3: /* @__PURE__ */ __name(function _3(n) {
+    3: /* @__PURE__ */ __name(function _3(n2) {
       return 0;
     }, "_"),
-    4: /* @__PURE__ */ __name(function _4(n) {
-      return Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
+    4: /* @__PURE__ */ __name(function _4(n2) {
+      return Number(n2 % 10 == 1 && n2 % 100 != 11 ? 0 : n2 % 10 >= 2 && n2 % 10 <= 4 && (n2 % 100 < 10 || n2 % 100 >= 20) ? 1 : 2);
     }, "_"),
-    5: /* @__PURE__ */ __name(function _5(n) {
-      return Number(n == 0 ? 0 : n == 1 ? 1 : n == 2 ? 2 : n % 100 >= 3 && n % 100 <= 10 ? 3 : n % 100 >= 11 ? 4 : 5);
+    5: /* @__PURE__ */ __name(function _5(n2) {
+      return Number(n2 == 0 ? 0 : n2 == 1 ? 1 : n2 == 2 ? 2 : n2 % 100 >= 3 && n2 % 100 <= 10 ? 3 : n2 % 100 >= 11 ? 4 : 5);
     }, "_"),
-    6: /* @__PURE__ */ __name(function _6(n) {
-      return Number(n == 1 ? 0 : n >= 2 && n <= 4 ? 1 : 2);
+    6: /* @__PURE__ */ __name(function _6(n2) {
+      return Number(n2 == 1 ? 0 : n2 >= 2 && n2 <= 4 ? 1 : 2);
     }, "_"),
-    7: /* @__PURE__ */ __name(function _7(n) {
-      return Number(n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
+    7: /* @__PURE__ */ __name(function _7(n2) {
+      return Number(n2 == 1 ? 0 : n2 % 10 >= 2 && n2 % 10 <= 4 && (n2 % 100 < 10 || n2 % 100 >= 20) ? 1 : 2);
     }, "_"),
-    8: /* @__PURE__ */ __name(function _8(n) {
-      return Number(n == 1 ? 0 : n == 2 ? 1 : n != 8 && n != 11 ? 2 : 3);
+    8: /* @__PURE__ */ __name(function _8(n2) {
+      return Number(n2 == 1 ? 0 : n2 == 2 ? 1 : n2 != 8 && n2 != 11 ? 2 : 3);
     }, "_"),
-    9: /* @__PURE__ */ __name(function _9(n) {
-      return Number(n >= 2);
+    9: /* @__PURE__ */ __name(function _9(n2) {
+      return Number(n2 >= 2);
     }, "_"),
-    10: /* @__PURE__ */ __name(function _10(n) {
-      return Number(n == 1 ? 0 : n == 2 ? 1 : n < 7 ? 2 : n < 11 ? 3 : 4);
+    10: /* @__PURE__ */ __name(function _10(n2) {
+      return Number(n2 == 1 ? 0 : n2 == 2 ? 1 : n2 < 7 ? 2 : n2 < 11 ? 3 : 4);
     }, "_"),
-    11: /* @__PURE__ */ __name(function _11(n) {
-      return Number(n == 1 || n == 11 ? 0 : n == 2 || n == 12 ? 1 : n > 2 && n < 20 ? 2 : 3);
+    11: /* @__PURE__ */ __name(function _11(n2) {
+      return Number(n2 == 1 || n2 == 11 ? 0 : n2 == 2 || n2 == 12 ? 1 : n2 > 2 && n2 < 20 ? 2 : 3);
     }, "_"),
-    12: /* @__PURE__ */ __name(function _12(n) {
-      return Number(n % 10 != 1 || n % 100 == 11);
+    12: /* @__PURE__ */ __name(function _12(n2) {
+      return Number(n2 % 10 != 1 || n2 % 100 == 11);
     }, "_"),
-    13: /* @__PURE__ */ __name(function _13(n) {
-      return Number(n !== 0);
+    13: /* @__PURE__ */ __name(function _13(n2) {
+      return Number(n2 !== 0);
     }, "_"),
-    14: /* @__PURE__ */ __name(function _14(n) {
-      return Number(n == 1 ? 0 : n == 2 ? 1 : n == 3 ? 2 : 3);
+    14: /* @__PURE__ */ __name(function _14(n2) {
+      return Number(n2 == 1 ? 0 : n2 == 2 ? 1 : n2 == 3 ? 2 : 3);
     }, "_"),
-    15: /* @__PURE__ */ __name(function _15(n) {
-      return Number(n % 10 == 1 && n % 100 != 11 ? 0 : n % 10 >= 2 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);
+    15: /* @__PURE__ */ __name(function _15(n2) {
+      return Number(n2 % 10 == 1 && n2 % 100 != 11 ? 0 : n2 % 10 >= 2 && (n2 % 100 < 10 || n2 % 100 >= 20) ? 1 : 2);
     }, "_"),
-    16: /* @__PURE__ */ __name(function _16(n) {
-      return Number(n % 10 == 1 && n % 100 != 11 ? 0 : n !== 0 ? 1 : 2);
+    16: /* @__PURE__ */ __name(function _16(n2) {
+      return Number(n2 % 10 == 1 && n2 % 100 != 11 ? 0 : n2 !== 0 ? 1 : 2);
     }, "_"),
-    17: /* @__PURE__ */ __name(function _17(n) {
-      return Number(n == 1 || n % 10 == 1 && n % 100 != 11 ? 0 : 1);
+    17: /* @__PURE__ */ __name(function _17(n2) {
+      return Number(n2 == 1 || n2 % 10 == 1 && n2 % 100 != 11 ? 0 : 1);
     }, "_"),
-    18: /* @__PURE__ */ __name(function _18(n) {
-      return Number(n == 0 ? 0 : n == 1 ? 1 : 2);
+    18: /* @__PURE__ */ __name(function _18(n2) {
+      return Number(n2 == 0 ? 0 : n2 == 1 ? 1 : 2);
     }, "_"),
-    19: /* @__PURE__ */ __name(function _19(n) {
-      return Number(n == 1 ? 0 : n == 0 || n % 100 > 1 && n % 100 < 11 ? 1 : n % 100 > 10 && n % 100 < 20 ? 2 : 3);
+    19: /* @__PURE__ */ __name(function _19(n2) {
+      return Number(n2 == 1 ? 0 : n2 == 0 || n2 % 100 > 1 && n2 % 100 < 11 ? 1 : n2 % 100 > 10 && n2 % 100 < 20 ? 2 : 3);
     }, "_"),
-    20: /* @__PURE__ */ __name(function _20(n) {
-      return Number(n == 1 ? 0 : n == 0 || n % 100 > 0 && n % 100 < 20 ? 1 : 2);
+    20: /* @__PURE__ */ __name(function _20(n2) {
+      return Number(n2 == 1 ? 0 : n2 == 0 || n2 % 100 > 0 && n2 % 100 < 20 ? 1 : 2);
     }, "_"),
-    21: /* @__PURE__ */ __name(function _21(n) {
-      return Number(n % 100 == 1 ? 1 : n % 100 == 2 ? 2 : n % 100 == 3 || n % 100 == 4 ? 3 : 0);
+    21: /* @__PURE__ */ __name(function _21(n2) {
+      return Number(n2 % 100 == 1 ? 1 : n2 % 100 == 2 ? 2 : n2 % 100 == 3 || n2 % 100 == 4 ? 3 : 0);
     }, "_"),
-    22: /* @__PURE__ */ __name(function _22(n) {
-      return Number(n == 1 ? 0 : n == 2 ? 1 : (n < 0 || n > 10) && n % 10 == 0 ? 2 : 3);
+    22: /* @__PURE__ */ __name(function _22(n2) {
+      return Number(n2 == 1 ? 0 : n2 == 2 ? 1 : (n2 < 0 || n2 > 10) && n2 % 10 == 0 ? 2 : 3);
     }, "_")
   };
   function createRules() {
     var rules = {};
     sets.forEach(function(set2) {
-      set2.lngs.forEach(function(l) {
-        rules[l] = {
+      set2.lngs.forEach(function(l2) {
+        rules[l2] = {
           numbers: set2.nr,
           plurals: _rulesPluralsTypes[set2.fc]
         };
@@ -45124,11 +45511,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
               interpolationkey: key
             })) : path;
           }
-          var p = key.split(_this.formatSeparator);
-          var k = p.shift().trim();
-          var f = p.join(_this.formatSeparator).trim();
-          return _this.format(getPathWithDefaults(data, defaultData, k), f, lng, _objectSpread2({}, options, data, {
-            interpolationkey: k
+          var p2 = key.split(_this.formatSeparator);
+          var k2 = p2.shift().trim();
+          var f2 = p2.join(_this.formatSeparator).trim();
+          return _this.format(getPathWithDefaults(data, defaultData, k2), f2, lng, _objectSpread2({}, options, data, {
+            interpolationkey: k2
           }));
         }, "handleFormat");
         this.resetRegExp();
@@ -45193,17 +45580,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           var sep2 = this.nestingOptionsSeparator;
           if (key.indexOf(sep2) < 0)
             return key;
-          var c = key.split(new RegExp("".concat(sep2, "[ ]*{")));
-          var optionsString = "{".concat(c[1]);
-          key = c[0];
+          var c2 = key.split(new RegExp("".concat(sep2, "[ ]*{")));
+          var optionsString = "{".concat(c2[1]);
+          key = c2[0];
           optionsString = this.interpolate(optionsString, clonedOptions);
           optionsString = optionsString.replace(/'/g, '"');
           try {
             clonedOptions = JSON.parse(optionsString);
             if (inheritedOptions)
               clonedOptions = _objectSpread2({}, inheritedOptions, clonedOptions);
-          } catch (e) {
-            this.logger.warn("failed parsing options string in nesting for key ".concat(key), e);
+          } catch (e3) {
+            this.logger.warn("failed parsing options string in nesting for key ".concat(key), e3);
             return "".concat(key).concat(sep2).concat(optionsString);
           }
           delete clonedOptions.defaultValue;
@@ -45214,11 +45601,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           var formatters = [];
           var doReduce = false;
           if (match[0].indexOf(this.formatSeparator) !== -1 && !/{.*}/.test(match[1])) {
-            var r = match[1].split(this.formatSeparator).map(function(elem) {
+            var r2 = match[1].split(this.formatSeparator).map(function(elem) {
               return elem.trim();
             });
-            match[1] = r.shift();
-            formatters = r;
+            match[1] = r2.shift();
+            formatters = r2;
             doReduce = true;
           }
           value = fc(handleHasOptions.call(this, match[1].trim(), clonedOptions), clonedOptions);
@@ -45231,8 +45618,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             value = "";
           }
           if (doReduce) {
-            value = formatters.reduce(function(v, f) {
-              return _this2.format(v, f, options.lng, _objectSpread2({}, options, {
+            value = formatters.reduce(function(v2, f2) {
+              return _this2.format(v2, f2, options.lng, _objectSpread2({}, options, {
                 interpolationkey: match[1].trim()
               }));
             }, value.trim());
@@ -45245,14 +45632,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }]);
     return Interpolator2;
   }();
-  function remove(arr, what) {
+  function remove2(arr, what) {
     var found = arr.indexOf(what);
     while (found !== -1) {
       arr.splice(found, 1);
       found = arr.indexOf(what);
     }
   }
-  __name(remove, "remove");
+  __name(remove2, "remove");
   var Connector = function(_EventEmitter) {
     _inherits(Connector2, _EventEmitter);
     function Connector2(backend, store, services) {
@@ -45328,9 +45715,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }, {
       key: "loaded",
       value: /* @__PURE__ */ __name(function loaded(name, err, data) {
-        var s = name.split("|");
-        var lng = s[0];
-        var ns = s[1];
+        var s2 = name.split("|");
+        var lng = s2[0];
+        var ns = s2[1];
         if (err)
           this.emit("failedLoading", lng, ns, err);
         if (data) {
@@ -45338,33 +45725,33 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
         this.state[name] = err ? -1 : 2;
         var loaded2 = {};
-        this.queue.forEach(function(q) {
-          pushPath(q.loaded, [lng], ns);
-          remove(q.pending, name);
+        this.queue.forEach(function(q2) {
+          pushPath(q2.loaded, [lng], ns);
+          remove2(q2.pending, name);
           if (err)
-            q.errors.push(err);
-          if (q.pending.length === 0 && !q.done) {
-            Object.keys(q.loaded).forEach(function(l) {
-              if (!loaded2[l])
-                loaded2[l] = [];
-              if (q.loaded[l].length) {
-                q.loaded[l].forEach(function(ns2) {
-                  if (loaded2[l].indexOf(ns2) < 0)
-                    loaded2[l].push(ns2);
+            q2.errors.push(err);
+          if (q2.pending.length === 0 && !q2.done) {
+            Object.keys(q2.loaded).forEach(function(l2) {
+              if (!loaded2[l2])
+                loaded2[l2] = [];
+              if (q2.loaded[l2].length) {
+                q2.loaded[l2].forEach(function(ns2) {
+                  if (loaded2[l2].indexOf(ns2) < 0)
+                    loaded2[l2].push(ns2);
                 });
               }
             });
-            q.done = true;
-            if (q.errors.length) {
-              q.callback(q.errors);
+            q2.done = true;
+            if (q2.errors.length) {
+              q2.callback(q2.errors);
             } else {
-              q.callback();
+              q2.callback();
             }
           }
         });
         this.emit("loaded", loaded2);
-        this.queue = this.queue.filter(function(q) {
-          return !q.done;
+        this.queue = this.queue.filter(function(q2) {
+          return !q2.done;
         });
       }, "loaded")
     }, {
@@ -45427,9 +45814,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       value: /* @__PURE__ */ __name(function loadOne(name) {
         var _this5 = this;
         var prefix = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "";
-        var s = name.split("|");
-        var lng = s[0];
-        var ns = s[1];
+        var s2 = name.split("|");
+        var lng = s2[0];
+        var ns = s2[1];
         this.read(lng, ns, "read", void 0, void 0, function(err, data) {
           if (err)
             _this5.logger.warn("".concat(prefix, "loading namespace ").concat(ns, " for language ").concat(lng, " failed"), err);
@@ -45620,34 +46007,34 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           }
           var lu = new LanguageUtil(this.options);
           this.store = new ResourceStore(this.options.resources, this.options);
-          var s = this.services;
-          s.logger = baseLogger;
-          s.resourceStore = this.store;
-          s.languageUtils = lu;
-          s.pluralResolver = new PluralResolver(lu, {
+          var s2 = this.services;
+          s2.logger = baseLogger;
+          s2.resourceStore = this.store;
+          s2.languageUtils = lu;
+          s2.pluralResolver = new PluralResolver(lu, {
             prepend: this.options.pluralSeparator,
             compatibilityJSON: this.options.compatibilityJSON,
             simplifyPluralSuffix: this.options.simplifyPluralSuffix
           });
-          s.interpolator = new Interpolator(this.options);
-          s.utils = {
+          s2.interpolator = new Interpolator(this.options);
+          s2.utils = {
             hasLoadedNamespace: this.hasLoadedNamespace.bind(this)
           };
-          s.backendConnector = new Connector(createClassOnDemand(this.modules.backend), s.resourceStore, s, this.options);
-          s.backendConnector.on("*", function(event) {
+          s2.backendConnector = new Connector(createClassOnDemand(this.modules.backend), s2.resourceStore, s2, this.options);
+          s2.backendConnector.on("*", function(event) {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
               args[_key - 1] = arguments[_key];
             }
             _this2.emit.apply(_this2, [event].concat(args));
           });
           if (this.modules.languageDetector) {
-            s.languageDetector = createClassOnDemand(this.modules.languageDetector);
-            s.languageDetector.init(s, this.options.detection, this.options);
+            s2.languageDetector = createClassOnDemand(this.modules.languageDetector);
+            s2.languageDetector.init(s2, this.options.detection, this.options);
           }
           if (this.modules.i18nFormat) {
-            s.i18nFormat = createClassOnDemand(this.modules.i18nFormat);
-            if (s.i18nFormat.init)
-              s.i18nFormat.init(this);
+            s2.i18nFormat = createClassOnDemand(this.modules.i18nFormat);
+            if (s2.i18nFormat.init)
+              s2.i18nFormat.init(this);
           }
           this.translator = new Translator(this.services, this.options);
           this.translator.on("*", function(event) {
@@ -45656,9 +46043,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             }
             _this2.emit.apply(_this2, [event].concat(args));
           });
-          this.modules.external.forEach(function(m) {
-            if (m.init)
-              m.init(_this2);
+          this.modules.external.forEach(function(m2) {
+            if (m2.init)
+              m2.init(_this2);
           });
         }
         if (this.options.fallbackLng && !this.services.languageDetector && !this.options.lng) {
@@ -45686,15 +46073,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         });
         var deferred = defer();
         var load2 = /* @__PURE__ */ __name(function load3() {
-          var finish = /* @__PURE__ */ __name(function finish2(err, t) {
+          var finish = /* @__PURE__ */ __name(function finish2(err, t2) {
             if (_this2.isInitialized)
               _this2.logger.warn("init: i18next is already initialized. You should call init just once!");
             _this2.isInitialized = true;
             if (!_this2.options.isClone)
               _this2.logger.log("initialized", _this2.options);
             _this2.emit("initialized", _this2.options);
-            deferred.resolve(t);
-            callback(err, t);
+            deferred.resolve(t2);
+            callback(err, t2);
           }, "finish");
           if (_this2.languages && _this2.options.compatibilityAPI !== "v1" && !_this2.isInitialized)
             return finish(null, _this2.t.bind(_this2));
@@ -45724,22 +46111,22 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             if (!lng)
               return;
             var lngs = _this3.services.languageUtils.toResolveHierarchy(lng);
-            lngs.forEach(function(l) {
-              if (toLoad.indexOf(l) < 0)
-                toLoad.push(l);
+            lngs.forEach(function(l2) {
+              if (toLoad.indexOf(l2) < 0)
+                toLoad.push(l2);
             });
           }, "append");
           if (!usedLng) {
             var fallbacks = this.services.languageUtils.getFallbackCodes(this.options.fallbackLng);
-            fallbacks.forEach(function(l) {
-              return append(l);
+            fallbacks.forEach(function(l2) {
+              return append(l2);
             });
           } else {
             append(usedLng);
           }
           if (this.options.preload) {
-            this.options.preload.forEach(function(l) {
-              return append(l);
+            this.options.preload.forEach(function(l2) {
+              return append(l2);
             });
           }
           this.services.backendConnector.load(toLoad, this.options.ns, usedCallback);
@@ -45797,14 +46184,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         this.isLanguageChangingTo = lng;
         var deferred = defer();
         this.emit("languageChanging", lng);
-        var done2 = /* @__PURE__ */ __name(function done3(err, l) {
-          if (l) {
-            _this4.language = l;
-            _this4.languages = _this4.services.languageUtils.toResolveHierarchy(l);
-            _this4.translator.changeLanguage(l);
+        var done2 = /* @__PURE__ */ __name(function done3(err, l2) {
+          if (l2) {
+            _this4.language = l2;
+            _this4.languages = _this4.services.languageUtils.toResolveHierarchy(l2);
+            _this4.translator.changeLanguage(l2);
             _this4.isLanguageChangingTo = void 0;
-            _this4.emit("languageChanged", l);
-            _this4.logger.log("languageChanged", l);
+            _this4.emit("languageChanged", l2);
+            _this4.logger.log("languageChanged", l2);
           } else {
             _this4.isLanguageChangingTo = void 0;
           }
@@ -45819,19 +46206,19 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         var setLng = /* @__PURE__ */ __name(function setLng2(lngs) {
           if (!lng && !lngs && _this4.services.languageDetector)
             lngs = [];
-          var l = typeof lngs === "string" ? lngs : _this4.services.languageUtils.getBestMatchFromCodes(lngs);
-          if (l) {
+          var l2 = typeof lngs === "string" ? lngs : _this4.services.languageUtils.getBestMatchFromCodes(lngs);
+          if (l2) {
             if (!_this4.language) {
-              _this4.language = l;
-              _this4.languages = _this4.services.languageUtils.toResolveHierarchy(l);
+              _this4.language = l2;
+              _this4.languages = _this4.services.languageUtils.toResolveHierarchy(l2);
             }
             if (!_this4.translator.language)
-              _this4.translator.changeLanguage(l);
+              _this4.translator.changeLanguage(l2);
             if (_this4.services.languageDetector)
-              _this4.services.languageDetector.cacheUserLanguage(l);
+              _this4.services.languageDetector.cacheUserLanguage(l2);
           }
-          _this4.loadResources(l, function(err) {
-            done2(err, l);
+          _this4.loadResources(l2, function(err) {
+            done2(err, l2);
           });
         }, "setLng");
         if (!lng && this.services.languageDetector && !this.services.languageDetector.async) {
@@ -45872,7 +46259,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }, "getFixedT")
     }, {
       key: "t",
-      value: /* @__PURE__ */ __name(function t() {
+      value: /* @__PURE__ */ __name(function t2() {
         var _this$translator;
         return this.translator && (_this$translator = this.translator).translate.apply(_this$translator, arguments);
       }, "t")
@@ -45905,8 +46292,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         var lastLng = this.languages[this.languages.length - 1];
         if (lng.toLowerCase() === "cimode")
           return true;
-        var loadNotPending = /* @__PURE__ */ __name(function loadNotPending2(l, n) {
-          var loadState = _this6.services.backendConnector.state["".concat(l, "|").concat(n)];
+        var loadNotPending = /* @__PURE__ */ __name(function loadNotPending2(l2, n2) {
+          var loadState = _this6.services.backendConnector.state["".concat(l2, "|").concat(n2)];
           return loadState === -1 || loadState === 2;
         }, "loadNotPending");
         if (options.precheck) {
@@ -45933,9 +46320,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
         if (typeof ns === "string")
           ns = [ns];
-        ns.forEach(function(n) {
-          if (_this7.options.ns.indexOf(n) < 0)
-            _this7.options.ns.push(n);
+        ns.forEach(function(n2) {
+          if (_this7.options.ns.indexOf(n2) < 0)
+            _this7.options.ns.push(n2);
         });
         this.loadResources(function(err) {
           deferred.resolve();
@@ -45995,8 +46382,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         });
         var clone = new I18n2(mergedOptions);
         var membersToCopy = ["store", "services", "language"];
-        membersToCopy.forEach(function(m) {
-          clone[m] = _this8[m];
+        membersToCopy.forEach(function(m2) {
+          clone[m2] = _this8[m2];
         });
         clone.services = _objectSpread2({}, this.services);
         clone.services.utils = {
@@ -46186,20 +46573,20 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }, "toString");
   var exception = YAMLException$1;
   function getLine(buffer, lineStart, lineEnd, position, maxLineLength) {
-    var head = "";
+    var head2 = "";
     var tail = "";
     var maxHalfLength = Math.floor(maxLineLength / 2) - 1;
     if (position - lineStart > maxHalfLength) {
-      head = " ... ";
-      lineStart = position - maxHalfLength + head.length;
+      head2 = " ... ";
+      lineStart = position - maxHalfLength + head2.length;
     }
     if (lineEnd - position > maxHalfLength) {
       tail = " ...";
       lineEnd = position + maxHalfLength - tail.length;
     }
     return {
-      str: head + buffer.slice(lineStart, lineEnd).replace(/\t/g, "\u2192") + tail,
-      pos: position - lineStart + head.length
+      str: head2 + buffer.slice(lineStart, lineEnd).replace(/\t/g, "\u2192") + tail,
+      pos: position - lineStart + head2.length
     };
   }
   __name(getLine, "getLine");
@@ -46219,12 +46606,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       options.linesBefore = 3;
     if (typeof options.linesAfter !== "number")
       options.linesAfter = 2;
-    var re = /\r?\n|\r|\0/g;
+    var re2 = /\r?\n|\r|\0/g;
     var lineStarts = [0];
     var lineEnds = [];
     var match;
     var foundLineNo = -1;
-    while (match = re.exec(mark.buffer)) {
+    while (match = re2.exec(mark.buffer)) {
       lineEnds.push(match.index);
       lineStarts.push(match.index + match[0].length);
       if (mark.position <= match.index && foundLineNo < 0) {
@@ -46233,23 +46620,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     if (foundLineNo < 0)
       foundLineNo = lineStarts.length - 1;
-    var result = "", i, line;
+    var result = "", i2, line;
     var lineNoLength = Math.min(mark.line + options.linesAfter, lineEnds.length).toString().length;
     var maxLineLength = options.maxLength - (options.indent + lineNoLength + 3);
-    for (i = 1; i <= options.linesBefore; i++) {
-      if (foundLineNo - i < 0)
+    for (i2 = 1; i2 <= options.linesBefore; i2++) {
+      if (foundLineNo - i2 < 0)
         break;
-      line = getLine(mark.buffer, lineStarts[foundLineNo - i], lineEnds[foundLineNo - i], mark.position - (lineStarts[foundLineNo] - lineStarts[foundLineNo - i]), maxLineLength);
-      result = common.repeat(" ", options.indent) + padStart((mark.line - i + 1).toString(), lineNoLength) + " | " + line.str + "\n" + result;
+      line = getLine(mark.buffer, lineStarts[foundLineNo - i2], lineEnds[foundLineNo - i2], mark.position - (lineStarts[foundLineNo] - lineStarts[foundLineNo - i2]), maxLineLength);
+      result = common.repeat(" ", options.indent) + padStart((mark.line - i2 + 1).toString(), lineNoLength) + " | " + line.str + "\n" + result;
     }
     line = getLine(mark.buffer, lineStarts[foundLineNo], lineEnds[foundLineNo], mark.position, maxLineLength);
     result += common.repeat(" ", options.indent) + padStart((mark.line + 1).toString(), lineNoLength) + " | " + line.str + "\n";
     result += common.repeat("-", options.indent + lineNoLength + 3 + line.pos) + "^\n";
-    for (i = 1; i <= options.linesAfter; i++) {
-      if (foundLineNo + i >= lineEnds.length)
+    for (i2 = 1; i2 <= options.linesAfter; i2++) {
+      if (foundLineNo + i2 >= lineEnds.length)
         break;
-      line = getLine(mark.buffer, lineStarts[foundLineNo + i], lineEnds[foundLineNo + i], mark.position - (lineStarts[foundLineNo] - lineStarts[foundLineNo + i]), maxLineLength);
-      result += common.repeat(" ", options.indent) + padStart((mark.line + i + 1).toString(), lineNoLength) + " | " + line.str + "\n";
+      line = getLine(mark.buffer, lineStarts[foundLineNo + i2], lineEnds[foundLineNo + i2], mark.position - (lineStarts[foundLineNo] - lineStarts[foundLineNo + i2]), maxLineLength);
+      result += common.repeat(" ", options.indent) + padStart((mark.line + i2 + 1).toString(), lineNoLength) + " | " + line.str + "\n";
     }
     return result.replace(/\n$/, "");
   }
@@ -46496,16 +46883,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     },
     defaultStyle: "lowercase"
   });
-  function isHexCode(c) {
-    return 48 <= c && c <= 57 || 65 <= c && c <= 70 || 97 <= c && c <= 102;
+  function isHexCode(c2) {
+    return 48 <= c2 && c2 <= 57 || 65 <= c2 && c2 <= 70 || 97 <= c2 && c2 <= 102;
   }
   __name(isHexCode, "isHexCode");
-  function isOctCode(c) {
-    return 48 <= c && c <= 55;
+  function isOctCode(c2) {
+    return 48 <= c2 && c2 <= 55;
   }
   __name(isOctCode, "isOctCode");
-  function isDecCode(c) {
-    return 48 <= c && c <= 57;
+  function isDecCode(c2) {
+    return 48 <= c2 && c2 <= 57;
   }
   __name(isDecCode, "isDecCode");
   function resolveYamlInteger(data) {
@@ -46989,70 +47376,70 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return Object.prototype.toString.call(obj);
   }
   __name(_class, "_class");
-  function is_EOL(c) {
-    return c === 10 || c === 13;
+  function is_EOL(c2) {
+    return c2 === 10 || c2 === 13;
   }
   __name(is_EOL, "is_EOL");
-  function is_WHITE_SPACE(c) {
-    return c === 9 || c === 32;
+  function is_WHITE_SPACE(c2) {
+    return c2 === 9 || c2 === 32;
   }
   __name(is_WHITE_SPACE, "is_WHITE_SPACE");
-  function is_WS_OR_EOL(c) {
-    return c === 9 || c === 32 || c === 10 || c === 13;
+  function is_WS_OR_EOL(c2) {
+    return c2 === 9 || c2 === 32 || c2 === 10 || c2 === 13;
   }
   __name(is_WS_OR_EOL, "is_WS_OR_EOL");
-  function is_FLOW_INDICATOR(c) {
-    return c === 44 || c === 91 || c === 93 || c === 123 || c === 125;
+  function is_FLOW_INDICATOR(c2) {
+    return c2 === 44 || c2 === 91 || c2 === 93 || c2 === 123 || c2 === 125;
   }
   __name(is_FLOW_INDICATOR, "is_FLOW_INDICATOR");
-  function fromHexCode(c) {
+  function fromHexCode(c2) {
     var lc;
-    if (48 <= c && c <= 57) {
-      return c - 48;
+    if (48 <= c2 && c2 <= 57) {
+      return c2 - 48;
     }
-    lc = c | 32;
+    lc = c2 | 32;
     if (97 <= lc && lc <= 102) {
       return lc - 97 + 10;
     }
     return -1;
   }
   __name(fromHexCode, "fromHexCode");
-  function escapedHexLen(c) {
-    if (c === 120) {
+  function escapedHexLen(c2) {
+    if (c2 === 120) {
       return 2;
     }
-    if (c === 117) {
+    if (c2 === 117) {
       return 4;
     }
-    if (c === 85) {
+    if (c2 === 85) {
       return 8;
     }
     return 0;
   }
   __name(escapedHexLen, "escapedHexLen");
-  function fromDecimalCode(c) {
-    if (48 <= c && c <= 57) {
-      return c - 48;
+  function fromDecimalCode(c2) {
+    if (48 <= c2 && c2 <= 57) {
+      return c2 - 48;
     }
     return -1;
   }
   __name(fromDecimalCode, "fromDecimalCode");
-  function simpleEscapeSequence(c) {
-    return c === 48 ? "\0" : c === 97 ? "\x07" : c === 98 ? "\b" : c === 116 ? "	" : c === 9 ? "	" : c === 110 ? "\n" : c === 118 ? "\v" : c === 102 ? "\f" : c === 114 ? "\r" : c === 101 ? "" : c === 32 ? " " : c === 34 ? '"' : c === 47 ? "/" : c === 92 ? "\\" : c === 78 ? "\x85" : c === 95 ? "\xA0" : c === 76 ? "\u2028" : c === 80 ? "\u2029" : "";
+  function simpleEscapeSequence(c2) {
+    return c2 === 48 ? "\0" : c2 === 97 ? "\x07" : c2 === 98 ? "\b" : c2 === 116 ? "	" : c2 === 9 ? "	" : c2 === 110 ? "\n" : c2 === 118 ? "\v" : c2 === 102 ? "\f" : c2 === 114 ? "\r" : c2 === 101 ? "" : c2 === 32 ? " " : c2 === 34 ? '"' : c2 === 47 ? "/" : c2 === 92 ? "\\" : c2 === 78 ? "\x85" : c2 === 95 ? "\xA0" : c2 === 76 ? "\u2028" : c2 === 80 ? "\u2029" : "";
   }
   __name(simpleEscapeSequence, "simpleEscapeSequence");
-  function charFromCodepoint(c) {
-    if (c <= 65535) {
-      return String.fromCharCode(c);
+  function charFromCodepoint(c2) {
+    if (c2 <= 65535) {
+      return String.fromCharCode(c2);
     }
-    return String.fromCharCode((c - 65536 >> 10) + 55296, (c - 65536 & 1023) + 56320);
+    return String.fromCharCode((c2 - 65536 >> 10) + 55296, (c2 - 65536 & 1023) + 56320);
   }
   __name(charFromCodepoint, "charFromCodepoint");
   var simpleEscapeCheck = new Array(256);
   var simpleEscapeMap = new Array(256);
-  for (var i = 0; i < 256; i++) {
-    simpleEscapeCheck[i] = simpleEscapeSequence(i) ? 1 : 0;
-    simpleEscapeMap[i] = simpleEscapeSequence(i);
+  for (var i2 = 0; i2 < 256; i2++) {
+    simpleEscapeCheck[i2] = simpleEscapeSequence(i2) ? 1 : 0;
+    simpleEscapeMap[i2] = simpleEscapeSequence(i2);
   }
   function State$1(input, options) {
     this.input = input;
@@ -48323,30 +48710,30 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return false;
   }
   __name(testImplicitResolving, "testImplicitResolving");
-  function isWhitespace(c) {
-    return c === CHAR_SPACE || c === CHAR_TAB;
+  function isWhitespace(c2) {
+    return c2 === CHAR_SPACE || c2 === CHAR_TAB;
   }
   __name(isWhitespace, "isWhitespace");
-  function isPrintable(c) {
-    return 32 <= c && c <= 126 || 161 <= c && c <= 55295 && c !== 8232 && c !== 8233 || 57344 <= c && c <= 65533 && c !== CHAR_BOM || 65536 <= c && c <= 1114111;
+  function isPrintable(c2) {
+    return 32 <= c2 && c2 <= 126 || 161 <= c2 && c2 <= 55295 && c2 !== 8232 && c2 !== 8233 || 57344 <= c2 && c2 <= 65533 && c2 !== CHAR_BOM || 65536 <= c2 && c2 <= 1114111;
   }
   __name(isPrintable, "isPrintable");
-  function isNsCharOrWhitespace(c) {
-    return isPrintable(c) && c !== CHAR_BOM && c !== CHAR_CARRIAGE_RETURN && c !== CHAR_LINE_FEED;
+  function isNsCharOrWhitespace(c2) {
+    return isPrintable(c2) && c2 !== CHAR_BOM && c2 !== CHAR_CARRIAGE_RETURN && c2 !== CHAR_LINE_FEED;
   }
   __name(isNsCharOrWhitespace, "isNsCharOrWhitespace");
-  function isPlainSafe(c, prev, inblock) {
-    var cIsNsCharOrWhitespace = isNsCharOrWhitespace(c);
-    var cIsNsChar = cIsNsCharOrWhitespace && !isWhitespace(c);
-    return (inblock ? cIsNsCharOrWhitespace : cIsNsCharOrWhitespace && c !== CHAR_COMMA && c !== CHAR_LEFT_SQUARE_BRACKET && c !== CHAR_RIGHT_SQUARE_BRACKET && c !== CHAR_LEFT_CURLY_BRACKET && c !== CHAR_RIGHT_CURLY_BRACKET) && c !== CHAR_SHARP && !(prev === CHAR_COLON && !cIsNsChar) || isNsCharOrWhitespace(prev) && !isWhitespace(prev) && c === CHAR_SHARP || prev === CHAR_COLON && cIsNsChar;
+  function isPlainSafe(c2, prev, inblock) {
+    var cIsNsCharOrWhitespace = isNsCharOrWhitespace(c2);
+    var cIsNsChar = cIsNsCharOrWhitespace && !isWhitespace(c2);
+    return (inblock ? cIsNsCharOrWhitespace : cIsNsCharOrWhitespace && c2 !== CHAR_COMMA && c2 !== CHAR_LEFT_SQUARE_BRACKET && c2 !== CHAR_RIGHT_SQUARE_BRACKET && c2 !== CHAR_LEFT_CURLY_BRACKET && c2 !== CHAR_RIGHT_CURLY_BRACKET) && c2 !== CHAR_SHARP && !(prev === CHAR_COLON && !cIsNsChar) || isNsCharOrWhitespace(prev) && !isWhitespace(prev) && c2 === CHAR_SHARP || prev === CHAR_COLON && cIsNsChar;
   }
   __name(isPlainSafe, "isPlainSafe");
-  function isPlainSafeFirst(c) {
-    return isPrintable(c) && c !== CHAR_BOM && !isWhitespace(c) && c !== CHAR_MINUS && c !== CHAR_QUESTION && c !== CHAR_COLON && c !== CHAR_COMMA && c !== CHAR_LEFT_SQUARE_BRACKET && c !== CHAR_RIGHT_SQUARE_BRACKET && c !== CHAR_LEFT_CURLY_BRACKET && c !== CHAR_RIGHT_CURLY_BRACKET && c !== CHAR_SHARP && c !== CHAR_AMPERSAND && c !== CHAR_ASTERISK && c !== CHAR_EXCLAMATION && c !== CHAR_VERTICAL_LINE && c !== CHAR_EQUALS && c !== CHAR_GREATER_THAN && c !== CHAR_SINGLE_QUOTE && c !== CHAR_DOUBLE_QUOTE && c !== CHAR_PERCENT && c !== CHAR_COMMERCIAL_AT && c !== CHAR_GRAVE_ACCENT;
+  function isPlainSafeFirst(c2) {
+    return isPrintable(c2) && c2 !== CHAR_BOM && !isWhitespace(c2) && c2 !== CHAR_MINUS && c2 !== CHAR_QUESTION && c2 !== CHAR_COLON && c2 !== CHAR_COMMA && c2 !== CHAR_LEFT_SQUARE_BRACKET && c2 !== CHAR_RIGHT_SQUARE_BRACKET && c2 !== CHAR_LEFT_CURLY_BRACKET && c2 !== CHAR_RIGHT_CURLY_BRACKET && c2 !== CHAR_SHARP && c2 !== CHAR_AMPERSAND && c2 !== CHAR_ASTERISK && c2 !== CHAR_EXCLAMATION && c2 !== CHAR_VERTICAL_LINE && c2 !== CHAR_EQUALS && c2 !== CHAR_GREATER_THAN && c2 !== CHAR_SINGLE_QUOTE && c2 !== CHAR_DOUBLE_QUOTE && c2 !== CHAR_PERCENT && c2 !== CHAR_COMMERCIAL_AT && c2 !== CHAR_GRAVE_ACCENT;
   }
   __name(isPlainSafeFirst, "isPlainSafeFirst");
-  function isPlainSafeLast(c) {
-    return !isWhitespace(c) && c !== CHAR_COLON;
+  function isPlainSafeLast(c2) {
+    return !isWhitespace(c2) && c2 !== CHAR_COLON;
   }
   __name(isPlainSafeLast, "isPlainSafeLast");
   function codePointAt(string2, pos) {
@@ -48371,7 +48758,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   var STYLE_FOLDED = 4;
   var STYLE_DOUBLE = 5;
   function chooseScalarStyle(string2, singleLineOnly, indentPerLevel, lineWidth, testAmbiguousType, quotingType, forceQuotes, inblock) {
-    var i;
+    var i2;
     var char = 0;
     var prevChar = null;
     var hasLineBreak = false;
@@ -48380,8 +48767,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     var previousLineBreak = -1;
     var plain = isPlainSafeFirst(codePointAt(string2, 0)) && isPlainSafeLast(codePointAt(string2, string2.length - 1));
     if (singleLineOnly || forceQuotes) {
-      for (i = 0; i < string2.length; char >= 65536 ? i += 2 : i++) {
-        char = codePointAt(string2, i);
+      for (i2 = 0; i2 < string2.length; char >= 65536 ? i2 += 2 : i2++) {
+        char = codePointAt(string2, i2);
         if (!isPrintable(char)) {
           return STYLE_DOUBLE;
         }
@@ -48389,13 +48776,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         prevChar = char;
       }
     } else {
-      for (i = 0; i < string2.length; char >= 65536 ? i += 2 : i++) {
-        char = codePointAt(string2, i);
+      for (i2 = 0; i2 < string2.length; char >= 65536 ? i2 += 2 : i2++) {
+        char = codePointAt(string2, i2);
         if (char === CHAR_LINE_FEED) {
           hasLineBreak = true;
           if (shouldTrackWidth) {
-            hasFoldableLine = hasFoldableLine || i - previousLineBreak - 1 > lineWidth && string2[previousLineBreak + 1] !== " ";
-            previousLineBreak = i;
+            hasFoldableLine = hasFoldableLine || i2 - previousLineBreak - 1 > lineWidth && string2[previousLineBreak + 1] !== " ";
+            previousLineBreak = i2;
           }
         } else if (!isPrintable(char)) {
           return STYLE_DOUBLE;
@@ -48403,7 +48790,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         plain = plain && isPlainSafe(char, prevChar, inblock);
         prevChar = char;
       }
-      hasFoldableLine = hasFoldableLine || shouldTrackWidth && (i - previousLineBreak - 1 > lineWidth && string2[previousLineBreak + 1] !== " ");
+      hasFoldableLine = hasFoldableLine || shouldTrackWidth && (i2 - previousLineBreak - 1 > lineWidth && string2[previousLineBreak + 1] !== " ");
     }
     if (!hasLineBreak && !hasFoldableLine) {
       if (plain && !forceQuotes && !testAmbiguousType(string2)) {
@@ -48515,13 +48902,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     var result = "";
     var char = 0;
     var escapeSeq;
-    for (var i = 0; i < string2.length; char >= 65536 ? i += 2 : i++) {
-      char = codePointAt(string2, i);
+    for (var i2 = 0; i2 < string2.length; char >= 65536 ? i2 += 2 : i2++) {
+      char = codePointAt(string2, i2);
       escapeSeq = ESCAPE_SEQUENCES[char];
       if (!escapeSeq && isPrintable(char)) {
-        result += string2[i];
+        result += string2[i2];
         if (char >= 65536)
-          result += string2[i + 1];
+          result += string2[i2 + 1];
       } else {
         result += escapeSeq || encodeHex(char);
       }
@@ -48939,14 +49326,32 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           }
         }
       },
-      verbs: {
-        type: "array",
-        items: {
-          type: "string"
-        }
+      words: {
+        type: "object",
+        properties: {
+          articles: {
+            type: "array",
+            items: {
+              type: "string"
+            }
+          },
+          prepositions: {
+            type: "array",
+            items: {
+              type: "string"
+            }
+          },
+          verbs: {
+            type: "array",
+            items: {
+              type: "string"
+            }
+          }
+        },
+        required: ["articles", "prepositions", "verbs"]
       }
     },
-    required: ["bundles", "verbs"]
+    required: ["bundles", "words"]
   };
 
   // out/src/model/world/Template.js
@@ -49092,9 +49497,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           states: {
             type: "array",
             items: CONFIG_SERVICE_SCHEMA
+          },
+          tokenizers: {
+            type: "array",
+            items: CONFIG_SERVICE_SCHEMA
           }
         },
-        required: ["actors", "loaders", "renders", "states"]
+        required: ["actors", "loaders", "renders", "states", "tokenizers"]
       }
     },
     required: [
@@ -49163,7 +49572,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_virtual_process_polyfill();
   init_buffer();
   var import_seedrandom = __toModule(require_seedrandom2());
-  var AleaRandomGenerator = class {
+  var AleaRandomService = class {
     constructor() {
       this.source = (0, import_seedrandom.alea)();
     }
@@ -49181,7 +49590,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.source = (0, import_seedrandom.alea)(initial);
     }
   };
-  __name(AleaRandomGenerator, "AleaRandomGenerator");
+  __name(AleaRandomService, "AleaRandomService");
 
   // out/src/service/script/LocalScript.js
   init_virtual_process_polyfill();
@@ -49207,7 +49616,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     if (this.source === ActorSource.PLAYER) {
       const item = mustExist(context.item);
-      await context.state.show("actor.get.player", { item });
+      await context.state.show(context.source, "actor.get.player", { item });
     }
   }
   __name(SignalActorGet, "SignalActorGet");
@@ -49248,7 +49657,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     const attacker = mustExist(context.actor);
     const item = mustExist(context.item);
-    await context.state.show("actor.hit.hit", {
+    await context.state.show(context.source, "actor.hit.hit", {
       actor: this,
       attacker,
       item
@@ -49257,7 +49666,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const damage = context.random.nextInt(maxDamage);
     const health = decrementKey(this.stats, STAT_HEALTH, damage);
     if (health > 0) {
-      await context.state.show("actor.hit.health", { actor: this, damage, health });
+      await context.state.show(context.source, "actor.hit.health", { actor: this, damage, health });
     } else {
       const room = mustExist(context.room);
       for (const dropItem of this.items) {
@@ -49267,7 +49676,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           target: room
         }, context);
       }
-      await context.state.show("actor.hit.dead", { actor: this, damage });
+      await context.state.show(context.source, "actor.hit.dead", { actor: this, damage });
     }
   }
   __name(SignalActorHit, "SignalActorHit");
@@ -49279,10 +49688,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (!isActor(this)) {
       throw new ScriptTargetError("target must be an actor");
     }
-    await context.state.show("actor.step.look.actor.seen", { actor: this });
+    await context.state.show(context.source, "actor.step.look.actor.seen", { actor: this });
     const health = getKey(this.stats, STAT_HEALTH, 0);
     if (health <= 0) {
-      await context.state.show("actor.step.look.actor.dead", { actor: this });
+      await context.state.show(context.source, "actor.step.look.actor.dead", { actor: this });
     }
   }
   __name(SignalActorLook, "SignalActorLook");
@@ -49301,7 +49710,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const health = getKey(this.stats, STAT_HEALTH, 0);
     if (health <= 0) {
       if (this.source === ActorSource.PLAYER) {
-        await context.state.show("actor.step.command.dead", { actor: this });
+        await context.state.show(context.source, "actor.step.command.dead", { actor: this });
         await context.state.quit();
       }
       return;
@@ -49321,15 +49730,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     };
     const scripts = getVerbScripts(source);
     if (scripts.has(command.verb) === false) {
-      await context.state.show("actor.step.command.unknown", showContext, ShowVolume.SELF, source);
+      await context.state.show(context.source, "actor.step.command.unknown", showContext);
       context.logger.warn({ command }, "unknown verb");
       return;
     }
     if (this.source === ActorSource.PLAYER) {
-      if (command.target.length > 0) {
-        await context.state.show("actor.step.command.player.target", showContext, ShowVolume.SELF, source);
+      if (command.targets.length > 0) {
+        await context.state.show(context.source, "actor.step.command.player.target", showContext);
       } else {
-        await context.state.show("actor.step.command.player.verb", showContext, ShowVolume.SELF, source);
+        await context.state.show(context.source, "actor.step.command.player.verb", showContext);
       }
     }
     return context.script.invoke(this, command.verb, context);
@@ -49343,7 +49752,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (!isItem(this)) {
       throw new ScriptTargetError("target must be an item");
     }
-    await context.state.show("actor.step.look.item.seen", { item: this });
+    await context.state.show(context.source, "actor.step.look.item.seen", { item: this });
   }
   __name(SignalItemLook, "SignalItemLook");
 
@@ -49369,7 +49778,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       throw new ScriptTargetError("target must be an item");
     }
     const actor = mustExist(context.actor);
-    await context.state.show("item.use.any", { actor, item: this });
+    await context.state.show(context.source, "item.use.any", { actor, item: this });
   }
   __name(SignalItemUse, "SignalItemUse");
 
@@ -49380,7 +49789,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (!isPortal(this)) {
       throw new ScriptTargetError("target must be a portal");
     }
-    await context.state.show("actor.step.look.room.portal", { portal: this });
+    await context.state.show(context.source, "actor.step.look.room.portal", { portal: this });
     if (this.dest.length > 0) {
       const [room] = await context.state.find({
         meta: {
@@ -49388,7 +49797,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         },
         type: ROOM_TYPE
       });
-      await context.state.show("actor.step.look.room.dest", { portal: this, room });
+      await context.state.show(context.source, "actor.step.look.room.dest", { portal: this, room });
     }
   }
   __name(SignalPortalLook, "SignalPortalLook");
@@ -49400,7 +49809,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (!isRoom(this)) {
       throw new ScriptTargetError("target must be a room");
     }
-    await context.state.show("actor.step.look.room.seen", { room: this });
+    await context.state.show(context.source, "actor.step.look.room.seen", { room: this });
     for (const actor of this.actors) {
       if (actor === context.actor) {
         continue;
@@ -49491,7 +49900,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       matched.name = matched.name || name.includes(filter2.name);
       if (isPortal(entity)) {
         const sourceName = [
-          entity.groupSource.toLocaleLowerCase(),
+          entity.group.source.toLocaleLowerCase(),
           name
         ].join(" ");
         matched.name = matched.name || sourceName.includes(filter2.name);
@@ -49527,7 +49936,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         id: this.meta.id
       },
       meta: {
-        name: command.target
+        name: head(command.targets)
       },
       room: {
         id: room.meta.id
@@ -49536,7 +49945,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     });
     const moving = indexEntity(results, command.index, isItem);
     if (isNil(moving)) {
-      await context.state.show("actor.step.drop.type", { command });
+      await context.state.show(context.source, "actor.step.drop.type", { command });
       return;
     }
     await context.transfer.moveItem({
@@ -49547,6 +49956,135 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(VerbActorDrop, "VerbActorDrop");
 
+  // out/src/script/verb/actor/ActorEquip.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // out/src/util/entity/find.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function findMatching(state, search) {
+    const matchers = mustCoalesce(search.matchers, createStrictMatcher());
+    const results = [];
+    for (const room of state.rooms) {
+      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
+        continue;
+      }
+      if (matchers.entity(room, search)) {
+        results.push(room);
+      }
+      for (const actor of room.actors) {
+        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
+          continue;
+        }
+        if (matchers.entity(actor, search)) {
+          results.push(actor);
+        }
+        for (const item of actor.items) {
+          if (matchers.entity(item, search)) {
+            results.push(item);
+          }
+        }
+      }
+      for (const item of room.items) {
+        if (matchers.entity(item, search)) {
+          results.push(item);
+        }
+      }
+      for (const portal of room.portals) {
+        if (matchers.entity(portal, search)) {
+          results.push(portal);
+        }
+      }
+    }
+    return results;
+  }
+  __name(findMatching, "findMatching");
+  function findRoom(state, search) {
+    const results = findContainer(state, search);
+    return results.filter(isRoom);
+  }
+  __name(findRoom, "findRoom");
+  function findContainer(state, search) {
+    const matchers = mustCoalesce(search.matchers, createStrictMatcher());
+    const results = new Set();
+    for (const room of state.rooms) {
+      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
+        continue;
+      }
+      for (const actor of room.actors) {
+        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
+          continue;
+        }
+        if (matchers.entity(actor, search)) {
+          results.add(room);
+        }
+        for (const item of actor.items) {
+          if (matchers.entity(item, search)) {
+            results.add(actor);
+          }
+        }
+      }
+      for (const item of room.items) {
+        if (matchers.entity(item, search)) {
+          results.add(room);
+        }
+      }
+      for (const portal of room.portals) {
+        if (matchers.entity(portal, search)) {
+          results.add(room);
+        }
+      }
+    }
+    return Array.from(results);
+  }
+  __name(findContainer, "findContainer");
+  function findSlotItem(actor, slot) {
+    const id = actor.slots.get(slot);
+    if (doesExist(id) && hasText(id)) {
+      return actor.items.find((it2) => it2.meta.id === id);
+    } else {
+      return void 0;
+    }
+  }
+  __name(findSlotItem, "findSlotItem");
+  function findActorSlots(actor, filter2) {
+    return Array.from(actor.slots.keys()).filter((it2) => matchIdSegments(it2, filter2));
+  }
+  __name(findActorSlots, "findActorSlots");
+
+  // out/src/script/verb/actor/ActorEquip.js
+  async function VerbActorEquip(context) {
+    if (!isActor(this)) {
+      throw new ScriptTargetError("script target must be an actor");
+    }
+    const command = mustExist(context.command);
+    const [targetName, targetSlot] = command.targets;
+    const results = await context.state.find({
+      actor: {
+        id: this.meta.id
+      },
+      meta: {
+        name: targetName
+      },
+      matchers: createFuzzyMatcher()
+    });
+    const item = indexEntity(results, command.index, isItem);
+    if (isNil(item)) {
+      await context.state.show(context.source, "actor.step.equip.none", { command });
+      return;
+    }
+    const slotName = mustCoalesce(targetSlot, item.slot);
+    const [slot] = findActorSlots(this, slotName);
+    if (this.slots.has(slot)) {
+      this.slots.set(slot, item.meta.id);
+      await context.state.show(context.source, "actor.step.equip.item", { item, slot });
+    } else {
+      await context.state.show(context.source, "actor.step.equip.slot", { item, slot });
+    }
+  }
+  __name(VerbActorEquip, "VerbActorEquip");
+
   // out/src/script/verb/actor/ActorHit.js
   init_virtual_process_polyfill();
   init_buffer();
@@ -49554,11 +50092,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (!isActor(this)) {
       throw new ScriptTargetError("script target must be an actor");
     }
+    const actor = this;
     const command = mustExist(context.command);
     const room = mustExist(context.room);
     const results = await context.state.find({
       meta: {
-        name: command.target
+        name: head(command.targets)
       },
       room: {
         id: room.meta.id
@@ -49567,27 +50106,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     });
     const target = indexEntity(results, command.index, isActor);
     if (isNil(target)) {
-      await context.state.show("actor.step.hit.type", { command }, ShowVolume.SELF, {
-        actor: this,
-        room
-      });
+      await context.state.show(context.source, "actor.step.hit.type", { command });
       return;
     }
     if (this === target) {
-      await context.state.show("actor.step.hit.self", { command }, ShowVolume.SELF, {
-        actor: this,
-        room
-      });
+      await context.state.show(context.source, "actor.step.hit.self", { command });
       return;
     }
-    if (this.items.length === 0) {
-      await context.state.show("actor.step.hit.item", { target }, ShowVolume.SELF, {
-        actor: this,
-        room
-      });
+    const [slot] = findActorSlots(this, "weapon");
+    const item = findSlotItem(actor, slot);
+    if (isNil(item)) {
+      await context.state.show(context.source, "actor.step.hit.item", { target });
       return;
     }
-    await context.script.invoke(target, SIGNAL_HIT, Object.assign(Object.assign({}, context), { actor: this, item: this.items[0] }));
+    await context.script.invoke(target, SIGNAL_HIT, Object.assign(Object.assign({}, context), {
+      actor,
+      item
+    }));
   }
   __name(VerbActorHit, "VerbActorHit");
 
@@ -49601,10 +50136,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const room = mustExist(context.room);
     const sourceContext = Object.assign(Object.assign({}, context), { actor: this });
     const command = mustExist(context.command);
-    if (command.target === "") {
+    if (command.targets.length === 0) {
       const health = getKey(this.stats, STAT_HEALTH, 0);
-      await context.state.show("actor.step.look.room.you", { actor: this });
-      await context.state.show("actor.step.look.room.health", { actor: this, health });
+      await context.state.show(context.source, "actor.step.look.room.you", { actor: this });
+      await context.state.show(context.source, "actor.step.look.room.health", { actor: this, health });
       for (const item of this.items) {
         await context.script.invoke(item, SIGNAL_LOOK, sourceContext);
       }
@@ -49612,7 +50147,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     const results = await context.state.find({
       meta: {
-        name: command.target
+        name: head(command.targets)
       },
       matchers: createFuzzyMatcher()
     });
@@ -49620,7 +50155,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     if (doesExist(target)) {
       return context.script.invoke(target, SIGNAL_LOOK, sourceContext);
     }
-    return context.state.show("actor.step.look.none");
+    return context.state.show(context.source, "actor.step.look.none");
   }
   __name(VerbActorLook, "VerbActorLook");
 
@@ -49632,16 +50167,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       throw new ScriptTargetError("script target must be an actor");
     }
     const command = mustExist(context.command);
-    const targetName = command.target;
+    const targetName = head(command.targets);
     const currentRoom = mustExist(context.room);
-    const portals = currentRoom.portals.filter((it) => {
-      const group = it.groupSource.toLocaleLowerCase();
-      const name = it.meta.name.toLocaleLowerCase();
-      return it.meta.id === targetName || name === targetName || group === targetName || `${group} ${name}` === targetName;
+    const portals = currentRoom.portals.filter((it2) => {
+      const group = it2.group.source.toLocaleLowerCase();
+      const name = it2.meta.name.toLocaleLowerCase();
+      return it2.meta.id === targetName || name === targetName || group === targetName || `${group} ${name}` === targetName;
     });
     const targetPortal = indexEntity(portals, command.index, isPortal);
     if (isNil(targetPortal)) {
-      await context.state.show("actor.step.move.missing", { command });
+      await context.state.show(context.source, "actor.step.move.missing", { command });
       return;
     }
     const rooms = await context.state.find({
@@ -49660,17 +50195,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       source: currentRoom,
       target: targetRoom
     }, context);
-    await context.state.show("actor.step.move.portal", {
+    await context.state.show(context.source, "actor.step.move.portal", {
       actor: this,
       portal: targetPortal
-    }, ShowVolume.SELF, {
-      actor: this,
-      room: currentRoom
     });
     if (this.source === ActorSource.PLAYER) {
       context.logger.debug({ actor: this, room: targetRoom }, "player entered room");
       await context.state.enter({ actor: this, room: targetRoom });
-      await context.script.invoke(this, VERB_LOOK, context);
+      await context.script.invoke(targetRoom, SIGNAL_LOOK, context);
     }
   }
   __name(VerbActorMove, "VerbActorMove");
@@ -49685,11 +50217,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const command = mustExist(context.command);
     const room = mustExist(context.room);
     context.logger.debug({ command, room }, "taking item from room");
-    const valid = new Set(room.items.map((it) => it.meta.id));
+    const valid = new Set(room.items.map((it2) => it2.meta.id));
     const matchers = createFuzzyMatcher();
     const results = await context.state.find({
       meta: {
-        name: command.target
+        name: head(command.targets)
       },
       room: {
         id: room.meta.id
@@ -49704,7 +50236,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     });
     const moving = indexEntity(results, command.index, isItem);
     if (isNil(moving)) {
-      await context.state.show("actor.step.take.type", { command });
+      await context.state.show(context.source, "actor.step.take.type", { command });
       return;
     }
     await context.transfer.moveItem({
@@ -49724,23 +50256,47 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     const command = mustExist(context.command);
     const room = mustExist(context.room);
-    const results = await context.state.find({
+    const itemResults = await context.state.find({
       meta: {
-        name: command.target
+        name: head(command.targets)
       },
       room: {
         id: room.meta.id
       },
       matchers: createFuzzyMatcher()
     });
-    const target = indexEntity(results, command.index, isItem);
-    if (!isItem(target)) {
-      await context.state.show("actor.step.use.type", { command });
+    const item = indexEntity(itemResults, command.index, isItem);
+    if (!isItem(item)) {
+      await context.state.show(context.source, "actor.step.use.type", { command });
       return;
     }
-    await context.script.invoke(target, SIGNAL_USE, Object.assign(Object.assign({}, context), { actor: this }));
+    const actor = await getUseTarget(this, context);
+    if (!isActor(actor)) {
+      await context.state.show(context.source, "actor.step.use.target", { command });
+      return;
+    }
+    await context.script.invoke(item, SIGNAL_USE, Object.assign(Object.assign({}, context), { actor }));
   }
   __name(VerbActorUse, "VerbActorUse");
+  async function getUseTarget(actor, context) {
+    const command = mustExist(context.command);
+    const room = mustExist(context.room);
+    if (command.targets.length > 1) {
+      const actorResults = await context.state.find({
+        matchers: createFuzzyMatcher(),
+        meta: {
+          name: head(command.targets)
+        },
+        room: {
+          id: room.meta.id
+        },
+        type: ACTOR_TYPE
+      });
+      return actorResults[0];
+    }
+    return actor;
+  }
+  __name(getUseTarget, "getUseTarget");
 
   // out/src/script/verb/actor/ActorWait.js
   init_virtual_process_polyfill();
@@ -49766,6 +50322,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     ["signal-room-look", SignalRoomLook],
     ["signal-room-step", SignalRoomStep],
     ["verb-actor-drop", VerbActorDrop],
+    ["verb-actor-equip", VerbActorEquip],
     ["verb-actor-hit", VerbActorHit],
     ["verb-actor-look", VerbActorLook],
     ["verb-actor-move", VerbActorMove],
@@ -49915,7 +50472,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         lines.push(`    item: ${item.meta.name} (${item.meta.id})`);
       }
       for (const portal of room.portals) {
-        lines.push(`    portal: ${portal.meta.name} (${portal.groupSource}) -> ${portal.dest} (${portal.groupTarget})`);
+        lines.push(`    portal: ${portal.meta.name} (${portal.group.source}) -> ${portal.dest} (${portal.group.target})`);
       }
     }
     return lines;
@@ -49942,7 +50499,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         const segments = [
           `  ${sanitize(room.meta.id)} -> ${sanitize(portal.dest)}`,
           "[",
-          `label="${portal.groupSource} ${portal.meta.name}"`,
+          `label="${portal.group.source} ${portal.meta.name}"`,
           "];"
         ];
         lines.push(segments.join(" "));
@@ -49958,11 +50515,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_buffer();
   var import_noicejs15 = __toModule(require_main());
 
+  // out/src/util/entity/index.js
+  init_virtual_process_polyfill();
+  init_buffer();
+  function equipItems(actor, items) {
+    for (const [slot, id] of items) {
+      if (actor.slots.has(slot)) {
+        const item = actor.items.find((it2) => matchIdSegments(it2.meta.id, id));
+        if (doesExist(item) && matchIdSegments(item.slot, slot)) {
+          actor.slots.set(slot, item.meta.id);
+        }
+      }
+    }
+  }
+  __name(equipItems, "equipItems");
+
   // out/src/util/template/index.js
   init_virtual_process_polyfill();
   init_buffer();
   function findByBaseId(templates, id) {
-    return mustFind(templates, (it) => it.base.meta.id === id);
+    return mustFind(templates, (it2) => it2.base.meta.id === id);
   }
   __name(findByBaseId, "findByBaseId");
 
@@ -49981,15 +50553,18 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.world = world;
     }
     async createActor(template, source = ActorSource.BEHAVIOR) {
+      const slots = this.template.renderStringMap(template.base.slots);
       const actor = {
-        type: "actor",
-        source,
         items: await this.createItemList(template.base.items),
         meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
         scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
-        stats: this.template.renderNumberMap(template.base.stats)
+        slots,
+        source,
+        stats: this.template.renderNumberMap(template.base.stats),
+        type: "actor"
       };
       await this.modifyActor(actor, template.mods);
+      equipItems(actor, slots);
       return actor;
     }
     async createActorList(templates) {
@@ -50011,10 +50586,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async createItem(template) {
       const item = {
-        type: ITEM_TYPE,
         meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
+        scripts: await this.createScripts(template.base.scripts, ITEM_TYPE),
+        slot: this.template.renderString(template.base.slot),
         stats: this.template.renderNumberMap(template.base.stats),
-        scripts: await this.createScripts(template.base.scripts, ITEM_TYPE)
+        type: ITEM_TYPE
       };
       await this.modifyItem(item, template.mods);
       return item;
@@ -50047,9 +50623,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async createPortal(template) {
       const portal = {
         dest: "",
-        groupKey: this.template.renderString(template.base.groupKey),
-        groupSource: this.template.renderString(template.base.groupSource),
-        groupTarget: this.template.renderString(template.base.groupTarget),
+        group: {
+          key: this.template.renderString(template.base.group.key),
+          source: this.template.renderString(template.base.group.source),
+          target: this.template.renderString(template.base.group.target)
+        },
         link: this.template.renderString(template.base.link),
         meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
         scripts: await this.createScripts(template.base.scripts, PORTAL_TYPE),
@@ -50144,9 +50722,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       const selected = this.selectModifiers(available);
       for (const mod of selected) {
         await this.modifyMetadata(target.meta, mod.meta);
-        target.groupKey = this.template.modifyString(target.groupKey, mod.groupKey);
-        target.groupSource = this.template.modifyString(target.groupSource, mod.groupSource);
-        target.groupTarget = this.template.modifyString(target.groupTarget, mod.groupTarget);
+        target.group.key = this.template.modifyString(target.group.key, mod.group.key);
+        target.group.source = this.template.modifyString(target.group.source, mod.group.source);
+        target.group.target = this.template.modifyString(target.group.target, mod.group.target);
         target.link = this.template.modifyString(target.link, mod.link);
         target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
       }
@@ -50176,8 +50754,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           continue;
         }
         selected.push(mod.base);
-        for (const e of mod.excludes) {
-          excluded.add(e);
+        for (const e3 of mod.excludes) {
+          excluded.add(e3);
         }
       }
       return selected;
@@ -50195,15 +50773,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         const sourceGroups = new Map();
         for (const portal of room.portals) {
           if (portal.dest === "") {
-            setOrPush(sourceGroups, portal.groupSource, portal);
+            setOrPush(sourceGroups, portal.group.source, portal);
           }
         }
         this.logger.debug({
           groups: Array.from(sourceGroups.keys())
         }, "finding destinations for portal groups");
         for (const [group, portals] of sourceGroups) {
-          const groupTemplates = portals.map((it) => findByBaseId(world.templates.portals, it.meta.template));
-          const potentialDests = groupTemplates.map((it) => it.base.dest);
+          const groupTemplates = portals.map((it2) => findByBaseId(world.templates.portals, it2.meta.template));
+          const potentialDests = groupTemplates.map((it2) => it2.base.dest);
           const destId = this.template.renderString(randomItem(potentialDests, this.random));
           this.logger.debug({
             destId,
@@ -50213,12 +50791,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             ...searchRooms,
             ...addedRooms,
             ...pendingRooms
-          ].find((it) => {
-            if (it.meta.id === room.meta.id) {
+          ].find((it2) => {
+            if (it2.meta.id === room.meta.id) {
               return false;
             }
-            if (matchIdSegments(it.meta.id, destId)) {
-              return it.portals.some((p) => p.dest === "" && p.groupTarget === group);
+            if (matchIdSegments(it2.meta.id, destId)) {
+              return it2.portals.some((p2) => p2.dest === "" && p2.group.target === group);
             } else {
               return false;
             }
@@ -50254,7 +50832,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return addedRooms;
     }
     async reversePortal(portal) {
-      return Object.assign(Object.assign({}, portal), { groupSource: portal.groupTarget, groupTarget: portal.groupSource, meta: {
+      return Object.assign(Object.assign({}, portal), { group: {
+        key: portal.group.key,
+        source: portal.group.target,
+        target: portal.group.source
+      }, meta: {
         desc: portal.meta.desc,
         id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,
         name: portal.meta.name,
@@ -50347,91 +50929,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   }
   __name(isItemTransfer, "isItemTransfer");
 
-  // out/src/util/entity/find.js
-  init_virtual_process_polyfill();
-  init_buffer();
-  function findMatching(state, search) {
-    const matchers = mustCoalesce(search.matchers, createStrictMatcher());
-    const results = [];
-    for (const room of state.rooms) {
-      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
-        continue;
-      }
-      if (matchers.entity(room, search)) {
-        results.push(room);
-      }
-      for (const actor of room.actors) {
-        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
-          continue;
-        }
-        if (matchers.entity(actor, search)) {
-          results.push(actor);
-        }
-        for (const item of actor.items) {
-          if (matchers.entity(item, search)) {
-            results.push(item);
-          }
-        }
-      }
-      for (const item of room.items) {
-        if (matchers.entity(item, search)) {
-          results.push(item);
-        }
-      }
-      for (const portal of room.portals) {
-        if (matchers.entity(portal, search)) {
-          results.push(portal);
-        }
-      }
-    }
-    return results;
-  }
-  __name(findMatching, "findMatching");
-  function findRoom(state, search) {
-    const results = findContainer(state, search);
-    return results.filter(isRoom);
-  }
-  __name(findRoom, "findRoom");
-  function findContainer(state, search) {
-    const matchers = mustCoalesce(search.matchers, createStrictMatcher());
-    const results = new Set();
-    for (const room of state.rooms) {
-      if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
-        continue;
-      }
-      for (const actor of room.actors) {
-        if (doesExist(search.actor) && matchers.metadata(actor, search.actor) === false) {
-          continue;
-        }
-        if (matchers.entity(actor, search)) {
-          results.add(room);
-        }
-        for (const item of actor.items) {
-          if (matchers.entity(item, search)) {
-            results.add(actor);
-          }
-        }
-      }
-      for (const item of room.items) {
-        if (matchers.entity(item, search)) {
-          results.add(room);
-        }
-      }
-      for (const portal of room.portals) {
-        if (matchers.entity(portal, search)) {
-          results.add(room);
-        }
-      }
-    }
-    return Array.from(results);
-  }
-  __name(findContainer, "findContainer");
-
   // out/src/service/loader/events.js
   init_virtual_process_polyfill();
   init_buffer();
-  function hasState(it) {
-    return typeof it === "object" && doesExist(it) && doesExist(it.state);
+  function hasState(it2) {
+    return typeof it2 === "object" && doesExist(it2) && doesExist(it2.state);
   }
   __name(hasState, "hasState");
 
@@ -50472,25 +50974,25 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }, "handling command event");
       switch (command.verb) {
         case META_CREATE:
-          await this.doCreate(command.target, command.index);
+          await this.doCreate(event);
           break;
         case META_DEBUG:
           await this.doDebug();
           break;
         case META_GRAPH:
-          await this.doGraph(command.target);
+          await this.doGraph(event);
           break;
         case META_HELP:
           await this.doHelp(event);
           break;
         case META_LOAD:
-          await this.doLoad(command.target);
+          await this.doLoad(event);
           break;
         case META_QUIT:
           await this.doQuit();
           break;
         case META_SAVE:
-          await this.doSave(command.target);
+          await this.doSave(event);
           break;
         case META_WORLDS:
           await this.doWorlds();
@@ -50502,7 +51004,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async onJoin(event) {
       const state = mustExist(this.state);
-      const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
+      const world = mustFind(this.worlds, (it2) => it2.meta.id === state.meta.template);
       const [existingActor] = findMatching(state, {
         meta: {
           id: event.pid
@@ -50535,7 +51037,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         this.logger.debug({
           actor
         }, "created player actor, placing in room");
-        const room = mustFind(state.rooms, (it) => it.meta.id === state.start.room);
+        const room = mustFind(state.rooms, (it2) => it2.meta.id === state.start.room);
         room.actors.push(actor);
         this.logger.debug({
           pid: event.pid
@@ -50556,16 +51058,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.logger.debug({ world: world.meta.id }, "registering loaded world");
       this.worlds.push(world);
     }
-    async doCreate(target, depth) {
+    async doCreate(event) {
       const generator = mustExist(this.generator);
-      const [id, seed] = target.split(" ", SPLIT_HEAD_TAIL);
+      const [id, seed] = event.command.targets;
+      const depth = event.command.index;
       this.logger.debug({
         depth,
         id,
         seed,
-        worlds: this.worlds.map((it) => it.meta.id)
+        worlds: this.worlds.map((it2) => it2.meta.id)
       }, "creating new world state");
-      const world = mustFind(this.worlds, (it) => it.meta.id === id);
+      const world = mustFind(this.worlds, (it2) => it2.meta.id === id);
       this.event.emit(EVENT_LOCALE_BUNDLE, {
         name: "world",
         bundle: world.locale
@@ -50616,7 +51119,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         });
       }
     }
-    async doGraph(path) {
+    async doGraph(event) {
       if (isNil(this.state)) {
         this.event.emit(EVENT_STATE_OUTPUT, {
           line: "meta.graph.none",
@@ -50630,6 +51133,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       const lines = graphState(this.state);
       const data = lines.join("\n");
+      const [path] = event.command.targets;
       this.event.emit(EVENT_LOADER_SAVE, {
         data,
         path
@@ -50646,12 +51150,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     async doHelp(event) {
       const scripts = getVerbScripts(event);
-      const worldVerbs = Array.from(scripts.keys()).filter((it) => it.startsWith(VERB_PREFIX));
+      const worldVerbs = Array.from(scripts.keys()).filter((it2) => it2.startsWith(VERB_PREFIX));
       this.logger.debug({ event, worldVerbs }, "collected world verbs for help");
       const verbs = [
         ...worldVerbs,
         ...META_VERBS
-      ].sort().map((it) => `$t(${it})`).join(", ");
+      ].sort().map((it2) => `$t(${it2})`).join(", ");
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
           verbs
@@ -50664,15 +51168,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         volume: ShowVolume.WORLD
       });
     }
-    async doLoad(path) {
+    async doLoad(event) {
+      const [path] = event.command.targets;
       const doneEvent = onceEvent(this.event, EVENT_LOADER_DONE);
       const stateEvent = onceEvent(this.event, EVENT_LOADER_STATE);
       this.event.emit(EVENT_LOADER_READ, {
         path
       });
-      const event = await Promise.race([doneEvent, stateEvent]);
-      if (!hasState(event)) {
-        this.logger.debug({ event }, "path read event received first");
+      const loadEvent = await Promise.race([doneEvent, stateEvent]);
+      if (!hasState(loadEvent)) {
+        this.logger.debug({ loadEvent }, "path read event received first");
         this.event.emit(EVENT_STATE_OUTPUT, {
           context: {
             path
@@ -50686,8 +51191,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         });
         return;
       }
-      const { state } = event;
-      const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
+      const { state } = loadEvent;
+      const world = mustFind(this.worlds, (it2) => it2.meta.id === state.meta.template);
       this.logger.debug({ bundle: world.locale }, "loading world locale bundle");
       this.event.emit(EVENT_LOCALE_BUNDLE, {
         bundle: world.locale,
@@ -50713,7 +51218,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     async doQuit() {
       this.event.emit(EVENT_COMMON_QUIT);
     }
-    async doSave(path) {
+    async doSave(event) {
       if (isNil(this.state)) {
         this.event.emit(EVENT_STATE_OUTPUT, {
           line: "meta.save.none",
@@ -50726,11 +51231,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         return;
       }
       const state = this.state;
-      const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
+      const world = mustFind(this.worlds, (it2) => it2.meta.id === state.meta.template);
       const data = {
         state,
         worlds: [world]
       };
+      const [path] = event.command.targets;
       const pendingSave = onceEvent(this.event, EVENT_LOADER_DONE);
       this.event.emit(EVENT_LOADER_SAVE, {
         data,
@@ -50763,7 +51269,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.commandBuffer.push(actor, command);
       this.logger.debug({
         actor: actor.meta.id,
-        left: this.commandQueue.remaining().map((it) => it.meta.id),
+        left: this.commandQueue.remaining().map((it2) => it2.meta.id),
         size: this.commandQueue.size,
         verb: command.verb
       }, "pushing command to queue");
@@ -50816,15 +51322,23 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       for (const room of this.state.rooms) {
         if (seen.has(room.meta.id) === false) {
           seen.add(room.meta.id);
-          await this.script.invoke(room, SIGNAL_STEP, Object.assign(Object.assign({}, scope), { room }));
+          const roomSource = {
+            room
+          };
+          await this.script.invoke(room, SIGNAL_STEP, Object.assign(Object.assign({}, scope), { room, source: roomSource }));
           for (const actor of room.actors) {
             if (seen.has(actor.meta.id) === false) {
               seen.add(actor.meta.id);
+              const actorSource = {
+                actor,
+                room
+              };
               const command = await this.getActorCommand(actor);
               await this.script.invoke(actor, SIGNAL_STEP, Object.assign(Object.assign({}, scope), {
                 actor,
                 command,
-                room
+                room,
+                source: actorSource
               }));
               for (const item of actor.items) {
                 if (seen.has(item.meta.id) === false) {
@@ -50832,7 +51346,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
                   await this.script.invoke(item, SIGNAL_STEP, Object.assign(Object.assign({}, scope), {
                     actor,
                     item,
-                    room
+                    room,
+                    source: actorSource
                   }));
                 }
               }
@@ -50842,7 +51357,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
                 seen.add(item.meta.id);
                 await this.script.invoke(item, SIGNAL_STEP, Object.assign(Object.assign({}, scope), {
                   item,
-                  room
+                  room,
+                  source: roomSource
                 }));
               }
             }
@@ -50851,7 +51367,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
                 seen.add(portal.meta.id);
                 await this.script.invoke(portal, SIGNAL_STEP, Object.assign(Object.assign({}, scope), {
                   portal,
-                  room
+                  room,
+                  source: roomSource
                 }));
               }
             }
@@ -50897,7 +51414,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       throw new ScriptTargetError("cannot move rooms");
     }
-    async stepShow(line, context, volume = ShowVolume.WORLD, source) {
+    async stepShow(source, line, context, volume = ShowVolume.SELF) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line,
         context,
@@ -50912,7 +51429,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       for (const room of rooms) {
         for (const actor of room.actors) {
           this.commandQueue.add(actor);
-          this.logger.debug({ actor: actor.meta.id, size: this.commandQueue.size }, "adding actor to queue");
+          this.logger.debug({
+            actor,
+            size: this.commandQueue.size
+          }, "adding actor to queue");
         }
       }
       this.logger.debug("broadcasting room changes");
@@ -50947,6 +51467,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/util/template/JoinChain.js
   init_virtual_process_polyfill();
   init_buffer();
+  var LEVEL_EVEN_ODD = 2;
   var JoinChain = class {
     constructor(options) {
       this.joiners = options.joiners;
@@ -50954,7 +51475,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     render(chain, depth = 0) {
       if (Array.isArray(chain)) {
-        const level = depth % 2;
+        const level = depth % LEVEL_EVEN_ODD;
         if (level === 0) {
           return this.renderAnd(chain, depth);
         } else {
@@ -50966,11 +51487,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
     renderAnd(chain, depth) {
       const joiner = this.joiners[depth % this.joiners.length];
-      return chain.map((it) => {
-        if (typeof it === "string") {
-          return it;
+      return chain.map((it2) => {
+        if (typeof it2 === "string") {
+          return it2;
         } else {
-          return this.render(it, depth + 1);
+          return this.render(it2, depth + 1);
         }
       }).join(joiner);
     }
@@ -50993,10 +51514,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   function splitChain(input, options) {
     const lang = (0, import_parsimmon.createLanguage)({
       Empty: () => (0, import_parsimmon.regexp)(/^$/),
-      List: (r) => (0, import_parsimmon.string)(options.group.start).then(r.Value.sepBy((0, import_parsimmon.string)(options.split))).skip((0, import_parsimmon.string)(options.group.end)),
-      Token: () => (0, import_parsimmon.regexp)(/[-a-zA-Z ]+/),
-      Top: (r) => (0, import_parsimmon.alt)(r.Value, r.Empty),
-      Value: (r) => (0, import_parsimmon.alt)(r.List, r.Token)
+      List: (r2) => (0, import_parsimmon.string)(options.group.start).then(r2.Value.sepBy((0, import_parsimmon.string)(options.split))).skip((0, import_parsimmon.string)(options.group.end)),
+      Token: () => (0, import_parsimmon.regexp)(/[-a-zA-Z {}]+/),
+      Top: (r2) => (0, import_parsimmon.alt)(r2.Value, r2.Empty),
+      Value: (r2) => (0, import_parsimmon.alt)(r2.List, r2.Token)
     });
     const parse = lang.Top.tryParse(input);
     if (typeof parse === "string") {
@@ -51012,6 +51533,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // out/src/service/template/ChainTemplateService.js
   var ChainTemplateService = /* @__PURE__ */ __name(class ChainTemplateService2 {
     constructor(options) {
+      this.locale = mustExist(options[INJECT_LOCALE]);
       this.random = mustExist(options[INJECT_RANDOM]);
       this.joiner = new JoinChain({
         joiners: [" "],
@@ -51023,13 +51545,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       return base + offset;
     }
     modifyString(base, mod) {
-      return mod.base.replace(/{{base}}/g, base);
+      const key = this.renderString(mod);
+      return this.locale.translate(key, { base });
     }
     modifyNumberList(base, mod) {
-      return base.map((it, idx) => this.modifyNumber(it, mod[idx]));
+      return base.map((it2, idx) => this.modifyNumber(it2, mod[idx]));
     }
     modifyStringList(base, mod) {
-      return base.map((it, idx) => this.modifyString(it, mod[idx]));
+      return base.map((it2, idx) => this.modifyString(it2, mod[idx]));
     }
     modifyNumberMap(base, mod) {
       const result = new Map();
@@ -51081,10 +51604,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     renderNumberList(input) {
-      return input.map((it) => this.renderNumber(it));
+      return input.map((it2) => this.renderNumber(it2));
     }
     renderStringList(input) {
-      return input.map((it) => this.renderString(it));
+      return input.map((it2) => this.renderString(it2));
     }
     renderNumberMap(input) {
       const result = new Map();
@@ -51124,33 +51647,3305 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     }
   }, "ChainTemplateService");
   ChainTemplateService = __decorate([
-    (0, import_noicejs18.Inject)(INJECT_RANDOM),
+    (0, import_noicejs18.Inject)(INJECT_LOCALE, INJECT_RANDOM),
     __metadata("design:paramtypes", [Object])
   ], ChainTemplateService);
 
-  // out/src/service/tokenizer/WordTokenizer.js
+  // out/src/service/tokenizer/CompromiseTokenizer.js
+  init_virtual_process_polyfill();
+  init_buffer();
+
+  // node_modules/compromise/builds/compromise.mjs
+  init_virtual_process_polyfill();
+  init_buffer();
+  var e = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split("");
+  var t = /* @__PURE__ */ __name(function(t2) {
+    let r2 = (t2 = t2 || "_") + "-";
+    for (let t3 = 0; t3 < 7; t3++)
+      r2 += e[Math.floor(Math.random() * e.length)];
+    return r2;
+  }, "t");
+  var r = { "!": "\xA1", "?": "\xBF\u0241", '"': '\u201C\u201D"\u275D\u275E', "'": "\u2018\u201B\u275B\u275C", "-": "\u2014\u2013", a: "\xAA\xC0\xC1\xC2\xC3\xC4\xC5\xE0\xE1\xE2\xE3\xE4\xE5\u0100\u0101\u0102\u0103\u0104\u0105\u01CD\u01CE\u01DE\u01DF\u01E0\u01E1\u01FA\u01FB\u0200\u0201\u0202\u0203\u0226\u0227\u023A\u0386\u0391\u0394\u039B\u03AC\u03B1\u03BB\u0410\u0430\u0434\u0466\u0467\u04D0\u04D1\u04D2\u04D3\u019B\u0245\xE6", b: "\xDF\xFE\u0180\u0181\u0182\u0183\u0184\u0185\u0243\u0392\u03B2\u03D0\u03E6\u0411\u0412\u042A\u042C\u0432\u044A\u044C\u0462\u0463\u048C\u048D", c: "\xA2\xA9\xC7\xE7\u0106\u0107\u0108\u0109\u010A\u010B\u010C\u010D\u0186\u0187\u0188\u023B\u023C\u037B\u037C\u037D\u03F2\u03F9\u03FD\u03FE\u0421\u0441\u0454\u0480\u0481\u04AA\u04AB", d: "\xD0\u010E\u010F\u0110\u0111\u0189\u018A\u0221\u018B\u018C\u01F7", e: "\xC8\xC9\xCA\xCB\xE8\xE9\xEA\xEB\u0112\u0113\u0114\u0115\u0116\u0117\u0118\u0119\u011A\u011B\u018E\u018F\u0190\u01DD\u0204\u0205\u0206\u0207\u0228\u0229\u0246\u0247\u0388\u0395\u039E\u03A3\u03AD\u03B5\u03BE\u03F1\u03F5\u03F6\u0400\u0401\u0415\u042D\u0435\u0450\u0451\u04BC\u04BD\u04BE\u04BF\u04D6\u04D7\u04D8\u04D9\u04DA\u04DB\u04EC\u04ED", f: "\u0191\u0192\u03DC\u03DD\u04FA\u04FB\u0492\u0493\u017F", g: "\u011C\u011D\u011E\u011F\u0120\u0121\u0122\u0123\u0193\u01E4\u01E5\u01E6\u01E7\u01F4\u01F5", h: "\u0124\u0125\u0126\u0127\u0195\u01F6\u021E\u021F\u0389\u0397\u0402\u040A\u040B\u041D\u043D\u0452\u045B\u04A2\u04A3\u04A4\u04A5\u04BA\u04BB\u04C9\u04CA", I: "\xCC\xCD\xCE\xCF", i: "\xEC\xED\xEE\xEF\u0128\u0129\u012A\u012B\u012C\u012D\u012E\u012F\u0130\u0131\u0196\u0197\u0208\u0209\u020A\u020B\u038A\u0390\u03AA\u03AF\u03B9\u03CA\u0406\u0407\u0456\u0457", j: "\u0134\u0135\u01F0\u0237\u0248\u0249\u03F3\u0408\u0458", k: "\u0136\u0137\u0138\u0198\u0199\u01E8\u01E9\u039A\u03BA\u040C\u0416\u041A\u0436\u043A\u045C\u049A\u049B\u049C\u049D\u049E\u049F\u04A0\u04A1", l: "\u0139\u013A\u013B\u013C\u013D\u013E\u013F\u0140\u0141\u0142\u019A\u01AA\u01C0\u01CF\u01D0\u0234\u023D\u0399\u04C0\u04CF", m: "\u039C\u03FA\u03FB\u041C\u043C\u04CD\u04CE", n: "\xD1\xF1\u0143\u0144\u0145\u0146\u0147\u0148\u0149\u014A\u014B\u019D\u019E\u01F8\u01F9\u0220\u0235\u039D\u03A0\u03AE\u03B7\u03DE\u040D\u0418\u0419\u041B\u041F\u0438\u0439\u043B\u043F\u045D\u048A\u048B\u04C5\u04C6\u04E2\u04E3\u04E4\u04E5\u03C0", o: "\xD2\xD3\xD4\xD5\xD6\xD8\xF0\xF2\xF3\xF4\xF5\xF6\xF8\u014C\u014D\u014E\u014F\u0150\u0151\u019F\u01A0\u01A1\u01D1\u01D2\u01EA\u01EB\u01EC\u01ED\u01FE\u01FF\u020C\u020D\u020E\u020F\u022A\u022B\u022C\u022D\u022E\u022F\u0230\u0231\u038C\u0398\u039F\u03B8\u03BF\u03C3\u03CC\u03D5\u03D8\u03D9\u03EC\u03ED\u03F4\u041E\u0424\u043E\u0472\u0473\u04E6\u04E7\u04E8\u04E9\u04EA\u04EB", p: "\u01A4\u01BF\u03A1\u03C1\u03F7\u03F8\u03FC\u0420\u0440\u048E\u048F\xDE", q: "\u024A\u024B", r: "\u0154\u0155\u0156\u0157\u0158\u0159\u01A6\u0210\u0211\u0212\u0213\u024C\u024D\u0403\u0413\u042F\u0433\u044F\u0453\u0490\u0491", s: "\u015A\u015B\u015C\u015D\u015E\u015F\u0160\u0161\u01A7\u01A8\u0218\u0219\u023F\u0405\u0455", t: "\u0162\u0163\u0164\u0165\u0166\u0167\u01AB\u01AC\u01AD\u01AE\u021A\u021B\u0236\u023E\u0393\u03A4\u03C4\u03EE\u0422\u0442", u: "\xB5\xD9\xDA\xDB\xDC\xF9\xFA\xFB\xFC\u0168\u0169\u016A\u016B\u016C\u016D\u016E\u016F\u0170\u0171\u0172\u0173\u01AF\u01B0\u01B1\u01B2\u01D3\u01D4\u01D5\u01D6\u01D7\u01D8\u01D9\u01DA\u01DB\u01DC\u0214\u0215\u0216\u0217\u0244\u03B0\u03BC\u03C5\u03CB\u03CD", v: "\u03BD\u0474\u0475\u0476\u0477", w: "\u0174\u0175\u019C\u03C9\u03CE\u03D6\u03E2\u03E3\u0428\u0429\u0448\u0449\u0461\u047F", x: "\xD7\u03A7\u03C7\u03D7\u03F0\u0425\u0445\u04B2\u04B3\u04FC\u04FD\u04FE\u04FF", y: "\xDD\xFD\xFF\u0176\u0177\u0178\u01B3\u01B4\u0232\u0233\u024E\u024F\u038E\u03A5\u03AB\u03B3\u03C8\u03D2\u03D3\u03D4\u040E\u0423\u0443\u0447\u045E\u0470\u0471\u04AE\u04AF\u04B0\u04B1\u04EE\u04EF\u04F0\u04F1\u04F2\u04F3", z: "\u0179\u017A\u017B\u017C\u017D\u017E\u01A9\u01B5\u01B6\u0224\u0225\u0240\u0396\u03B6" };
+  var a = {};
+  Object.keys(r).forEach(function(e3) {
+    r[e3].split("").forEach(function(t2) {
+      a[t2] = e3;
+    });
+  });
+  var n = /* @__PURE__ */ __name((e3) => {
+    let t2 = e3.split("");
+    return t2.forEach((e4, r2) => {
+      a[e4] && (t2[r2] = a[e4]);
+    }), t2.join("");
+  }, "n");
+  var i = /([A-Z]\.)+[A-Z]?,?$/;
+  var o = /^[A-Z]\.,?$/;
+  var s = /[A-Z]{2,}('s|,)?$/;
+  var l = /([a-z]\.)+[a-z]\.?$/;
+  var u = /* @__PURE__ */ __name(function(e3) {
+    return i.test(e3) === true || (l.test(e3) === true || (o.test(e3) === true || s.test(e3) === true));
+  }, "u");
+  var c = /[a-z\u00C0-\u00FF] ?\/ ?[a-z\u00C0-\u00FF]/;
+  var h = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3 = (e3 = (e3 = e3 || "").toLowerCase()).trim();
+    return e3 = n(e3), c.test(e3) === true && (e3 = e3.replace(/\/.*/, "")), e3 = (e3 = (e3 = (e3 = (e3 = (e3 = (e3 = e3.replace(/^[#@]/, "")).replace(/[,;.!?]+$/, "")).replace(/[\u0027\u0060\u00B4\u2018\u2019\u201A\u201B\u2032\u2035\u2039\u203A]+/g, "'")).replace(/[\u0022\u00AB\u00BB\u201C\u201D\u201E\u201F\u2033\u2034\u2036\u2037\u2E42\u301D\u301E\u301F\uFF02]+/g, '"')).replace(/\u2026/g, "...")).replace(/\u2013/g, "-")).replace(/([aeiou][ktrp])in$/, "$1ing"), /^(re|un)-?[^aeiou]./.test(e3) === true && (e3 = e3.replace("-", "")), u(e3) && (e3 = e3.replace(/\./g, "")), /^[:;]/.test(e3) === false && (e3 = (e3 = (e3 = e3.replace(/\.{3,}$/g, "")).replace(/[",\.!:;\?\)]+$/g, "")).replace(/^['"\(]+/g, "")), (e3 = (e3 = e3.replace(/[\u200B-\u200D\uFEFF]/g, "")).trim()) === "" && (e3 = t2), e3 = e3.replace(/([0-9]),([0-9])/g, "$1$2");
+  }, "h");
+  var d = /* @__PURE__ */ __name(function(e3) {
+    return e3 = (e3 = e3.replace(/['’]s$/, "")).replace(/s['’]$/, "s");
+  }, "d");
+  var g = /^[ \n\t\.\[\](){}⟨⟩:,،、‒–—―…!‹›«»‐\-?‘’;\/⁄·&*•^†‡°¡¿※№÷×ºª%‰+−=‱¶′″‴§~\|‖¦©℗®℠™¤₳฿\u0022\uFF02\u0027\u201C\u201F\u201B\u201E\u2E42\u201A\u2035\u2036\u2037\u301D\u0060\u301F]+/;
+  var p = /[ \n\t\.'\[\](){}⟨⟩:,،、‒–—―…!‹›«»‐\-?‘’;\/⁄·&*@•^†‡°¡¿※#№÷×ºª‰+−=‱¶′″‴§~\|‖¦©℗®℠™¤₳฿\u0022\uFF02\u201D\u00B4\u301E]+$/;
+  var m = /\//;
+  var f = /['’]/;
+  var b = /^[a-z]\.([a-z]\.)+/i;
+  var v = /^[-+\.][0-9]/;
+  var y = /^'[0-9]{2}/;
+  var w = /* @__PURE__ */ __name((e3) => {
+    let t2 = e3, r2 = "", a2 = "";
+    (e3 = (e3 = e3.replace(g, (t3) => (r2 = t3, r2 !== "-" && r2 !== "+" && r2 !== "." || !v.test(e3) ? r2 === "'" && y.test(e3) ? (r2 = "", t3) : "" : (r2 = "", t3)))).replace(p, (n3) => (a2 = n3, f.test(n3) && /[sn]['’]$/.test(t2) && f.test(r2) === false ? (a2 = a2.replace(f, ""), "'") : b.test(e3) === true ? (a2 = a2.replace(/\./, ""), ".") : ""))) === "" && (t2 = t2.replace(/ *$/, (e4) => (a2 = e4 || "", "")), e3 = t2, r2 = "", a2 = a2);
+    let n2 = h(e3);
+    const i2 = { text: e3, clean: n2, reduced: d(n2), pre: r2, post: a2 };
+    return m.test(e3) && e3.split(m).forEach((e4) => {
+      i2.alias = i2.alias || {}, i2.alias[e4.trim()] = true;
+    }), i2;
+  }, "w");
+  function k(e3) {
+    var t2 = { exports: {} };
+    return e3(t2, t2.exports), t2.exports;
+  }
+  __name(k, "k");
+  var A = k(function(e3, t2) {
+    const r2 = /^[A-Z][a-z'\u00C0-\u00FF]/, a2 = /^[A-Z]+s?$/;
+    t2.toUpperCase = function() {
+      return this.text = this.text.toUpperCase(), this;
+    }, t2.toLowerCase = function() {
+      return this.text = this.text.toLowerCase(), this;
+    }, t2.toTitleCase = function() {
+      return this.text = this.text.replace(/^ *[a-z\u00C0-\u00FF]/, (e4) => e4.toUpperCase()), this;
+    }, t2.isUpperCase = function() {
+      return a2.test(this.text);
+    }, t2.isTitleCase = function() {
+      return r2.test(this.text);
+    }, t2.titleCase = t2.isTitleCase;
+  });
+  var D = k(function(e3, t2) {
+    const r2 = /(\u0022|\uFF02|\u0027|\u201C|\u2018|\u201F|\u201B|\u201E|\u2E42|\u201A|\u00AB|\u2039|\u2035|\u2036|\u2037|\u301D|\u0060|\u301F)/, a2 = /(\u0022|\uFF02|\u0027|\u201D|\u2019|\u201D|\u2019|\u201D|\u201D|\u2019|\u00BB|\u203A|\u2032|\u2033|\u2034|\u301E|\u00B4|\u301E)/;
+    t2.hasPost = function(e4) {
+      return this.post.indexOf(e4) !== -1;
+    }, t2.hasPre = function(e4) {
+      return this.pre.indexOf(e4) !== -1;
+    }, t2.hasQuote = function() {
+      return r2.test(this.pre) || a2.test(this.post);
+    }, t2.hasQuotation = t2.hasQuote, t2.hasComma = function() {
+      return this.hasPost(",");
+    }, t2.hasPeriod = function() {
+      return this.hasPost(".") === true && this.hasPost("...") === false;
+    }, t2.hasExclamation = function() {
+      return this.hasPost("!");
+    }, t2.hasQuestionMark = function() {
+      return this.hasPost("?") || this.hasPost("\xBF");
+    }, t2.hasEllipses = function() {
+      return this.hasPost("..") || this.hasPost("\u2026") || this.hasPre("..") || this.hasPre("\u2026");
+    }, t2.hasSemicolon = function() {
+      return this.hasPost(";");
+    }, t2.hasSlash = function() {
+      return /\//.test(this.text);
+    }, t2.hasHyphen = function() {
+      const e4 = /^(-|–|—)$/;
+      return e4.test(this.post) || e4.test(this.pre);
+    }, t2.hasDash = function() {
+      const e4 = / (-|–|—) /;
+      return e4.test(this.post) || e4.test(this.pre);
+    }, t2.hasContraction = function() {
+      return Boolean(this.implicit);
+    }, t2.addPunctuation = function(e4) {
+      return e4 !== "," && e4 !== ";" || (this.post = this.post.replace(e4, "")), this.post = e4 + this.post, this;
+    };
+  });
+  var $ = /* @__PURE__ */ __name(function(e3, t2, r2 = 3) {
+    if (e3 === t2)
+      return 1;
+    if (e3.length < r2 || t2.length < r2)
+      return 0;
+    const a2 = function(e4, t3) {
+      let r3 = e4.length, a3 = t3.length;
+      if (r3 === 0)
+        return a3;
+      if (a3 === 0)
+        return r3;
+      let n3 = (a3 > r3 ? a3 : r3) + 1;
+      if (Math.abs(r3 - a3) > (n3 || 100))
+        return n3 || 100;
+      let i2, o2, s2, l2, u2, c2, h2 = [];
+      for (let e5 = 0; e5 < n3; e5++)
+        h2[e5] = [e5], h2[e5].length = n3;
+      for (let e5 = 0; e5 < n3; e5++)
+        h2[0][e5] = e5;
+      for (let n4 = 1; n4 <= r3; ++n4)
+        for (o2 = e4[n4 - 1], i2 = 1; i2 <= a3; ++i2) {
+          if (n4 === i2 && h2[n4][i2] > 4)
+            return r3;
+          s2 = t3[i2 - 1], l2 = o2 === s2 ? 0 : 1, u2 = h2[n4 - 1][i2] + 1, (c2 = h2[n4][i2 - 1] + 1) < u2 && (u2 = c2), (c2 = h2[n4 - 1][i2 - 1] + l2) < u2 && (u2 = c2);
+          let a4 = n4 > 1 && i2 > 1 && o2 === t3[i2 - 2] && e4[n4 - 2] === s2 && (c2 = h2[n4 - 2][i2 - 2] + l2) < u2;
+          h2[n4][i2] = a4 ? c2 : u2;
+        }
+      return h2[r3][a3];
+    }(e3, t2);
+    let n2 = Math.max(e3.length, t2.length);
+    return 1 - (n2 === 0 ? 0 : a2 / n2);
+  }, "$");
+  var P = /* @__PURE__ */ __name(function() {
+  }, "P");
+  P = /* @__PURE__ */ __name(function(e3, t2, r2, a2) {
+    let n2 = function(e4, t3, r3, a3) {
+      if (t3.id === e4.id)
+        return true;
+      if (t3.anything === true)
+        return true;
+      if (t3.start === true && r3 !== 0)
+        return false;
+      if (t3.end === true && r3 !== a3 - 1)
+        return false;
+      if (t3.word !== void 0) {
+        if (e4.implicit !== null && e4.implicit === t3.word)
+          return true;
+        if (e4.alias !== void 0 && e4.alias.hasOwnProperty(t3.word))
+          return true;
+        if (t3.soft === true && t3.word === e4.root)
+          return true;
+        if (t3.fuzzy !== void 0) {
+          let r4 = $(t3.word, e4.reduced);
+          if (r4 > t3.fuzzy)
+            return true;
+          if (t3.soft === true && (r4 = $(t3.word, e4.root), r4 > t3.fuzzy))
+            return true;
+        }
+        return t3.word === e4.clean || t3.word === e4.text || t3.word === e4.reduced;
+      }
+      return t3.tag !== void 0 ? e4.tags[t3.tag] === true : t3.method !== void 0 ? typeof e4[t3.method] == "function" && e4[t3.method]() === true : t3.regex !== void 0 ? t3.regex.test(e4.clean) : t3.fastOr !== void 0 ? !(!e4.implicit || t3.fastOr.hasOwnProperty(e4.implicit) !== true) || t3.fastOr.hasOwnProperty(e4.reduced) || t3.fastOr.hasOwnProperty(e4.text) : t3.choices !== void 0 && (t3.operator === "and" ? t3.choices.every((t4) => P(e4, t4, r3, a3)) : t3.choices.some((t4) => P(e4, t4, r3, a3)));
+    }(e3, t2, r2, a2);
+    return t2.negative === true ? !n2 : n2;
+  }, "P");
+  var E = P;
+  var H = {};
+  var j = { doesMatch: function(e3, t2, r2) {
+    return E(this, e3, t2, r2);
+  }, isAcronym: function() {
+    return u(this.text);
+  }, isImplicit: function() {
+    return this.text === "" && Boolean(this.implicit);
+  }, isKnown: function() {
+    return Object.keys(this.tags).some((e3) => H[e3] !== true);
+  }, setRoot: function(e3) {
+    let t2 = e3.transforms, r2 = this.implicit || this.clean;
+    if (this.tags.Plural && (r2 = t2.toSingular(r2, e3)), this.tags.Verb && !this.tags.Negative && !this.tags.Infinitive) {
+      let a2 = null;
+      this.tags.PastTense ? a2 = "PastTense" : this.tags.Gerund ? a2 = "Gerund" : this.tags.PresentTense ? a2 = "PresentTense" : this.tags.Participle ? a2 = "Participle" : this.tags.Actor && (a2 = "Actor"), r2 = t2.toInfinitive(r2, e3, a2);
+    }
+    this.root = r2;
+  } };
+  var N = /[\s-]/;
+  var x = /^[A-Z-]+$/;
+  var F = { textOut: function(e3, t2, r2) {
+    e3 = e3 || {};
+    let a2 = this.text, i2 = this.pre, o2 = this.post;
+    return e3.reduced === true && (a2 = this.reduced || ""), e3.root === true && (a2 = this.root || ""), e3.implicit === true && this.implicit && (a2 = this.implicit || ""), e3.normal === true && (a2 = this.clean || this.text || ""), e3.root === true && (a2 = this.root || this.reduced || ""), e3.unicode === true && (a2 = n(a2)), e3.titlecase === true && (this.tags.ProperNoun && !this.titleCase() || (this.tags.Acronym ? a2 = a2.toUpperCase() : x.test(a2) && !this.tags.Acronym && (a2 = a2.toLowerCase()))), e3.lowercase === true && (a2 = a2.toLowerCase()), e3.acronyms === true && this.tags.Acronym && (a2 = a2.replace(/\./g, "")), e3.whitespace !== true && e3.root !== true || (i2 = "", o2 = " ", N.test(this.post) !== false && !e3.last || this.implicit || (o2 = "")), e3.punctuation !== true || e3.root || (this.hasPost(".") === true ? o2 = "." + o2 : this.hasPost("?") === true ? o2 = "?" + o2 : this.hasPost("!") === true ? o2 = "!" + o2 : this.hasPost(",") === true ? o2 = "," + o2 : this.hasEllipses() === true && (o2 = "..." + o2)), t2 !== true && (i2 = ""), r2 !== true && (o2 = ""), e3.abbreviations === true && this.tags.Abbreviation && (o2 = o2.replace(/^\./, "")), i2 + a2 + o2;
+  } };
+  var C = { Auxiliary: 1, Possessive: 1 };
+  var B = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = Object.keys(e3.tags);
+    const a2 = t2.tags;
+    return r2 = r2.sort((e4, t3) => C[t3] || !a2[t3] ? -1 : a2[t3] ? a2[e4] ? a2[e4].lineage.length > a2[t3].lineage.length ? 1 : a2[e4].isA.length > a2[t3].isA.length ? -1 : 0 : 0 : 1), r2;
+  }, "B");
+  var G = { text: true, tags: true, implicit: true, whitespace: true, clean: false, id: false, index: false, offset: false, bestTag: false };
+  var z = { json: function(e3, t2) {
+    e3 = e3 || {};
+    let r2 = {};
+    return (e3 = Object.assign({}, G, e3)).text && (r2.text = this.text), e3.normal && (r2.normal = this.clean), e3.tags && (r2.tags = Object.keys(this.tags)), e3.clean && (r2.clean = this.clean), (e3.id || e3.offset) && (r2.id = this.id), e3.implicit && this.implicit !== null && (r2.implicit = this.implicit), e3.whitespace && (r2.pre = this.pre, r2.post = this.post), e3.bestTag && (r2.bestTag = B(this, t2)[0]), r2;
+  } };
+  var I = Object.assign({}, A, D, j, F, z);
+  function O() {
+    return typeof window != "undefined" && window.document;
+  }
+  __name(O, "O");
+  var T = /* @__PURE__ */ __name(function(e3, t2) {
+    for (e3 = e3.toString(); e3.length < t2; )
+      e3 += " ";
+    return e3;
+  }, "T");
+  var V = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    if (O())
+      return void console.log("%c" + T(e3.clean, 3) + "  + " + t2 + " ", "color: #6accb2;");
+    let a2 = "[33m" + T(e3.clean, 15) + "[0m + [32m" + t2 + "[0m ";
+    r2 && (a2 = T(a2, 35) + " " + r2), console.log(a2);
+  }, "V");
+  var M = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    if (O())
+      return void console.log("%c" + T(e3.clean, 3) + "  - " + t2 + " ", "color: #AB5850;");
+    let a2 = "[33m" + T(e3.clean, 3) + " [31m - #" + t2 + "[0m ";
+    r2 && (a2 = T(a2, 35) + " " + r2), console.log(a2);
+  }, "M");
+  var J = /* @__PURE__ */ __name((e3) => e3.charAt(0).toUpperCase() + e3.substr(1), "J");
+  var L = /* @__PURE__ */ __name(function(e3, t2, r2, a2) {
+    let n2 = a2.tags;
+    if (t2 === "" || t2 === "." || t2 === "-")
+      return;
+    if (t2[0] === "#" && (t2 = t2.replace(/^#/, "")), t2 = J(t2), e3.tags[t2] === true)
+      return;
+    const i2 = a2.isVerbose();
+    i2 === true && V(e3, t2, r2), e3.tags[t2] = true, n2.hasOwnProperty(t2) === true && (n2[t2].isA.forEach((t3) => {
+      e3.tags[t3] = true, i2 === true && V(e3, "\u2192 " + t3);
+    }), e3.unTag(n2[t2].notA, "\u2190", a2));
+  }, "L");
+  var S = /* @__PURE__ */ __name(function(e3, t2, r2, a2) {
+    if (typeof t2 != "string")
+      for (let n2 = 0; n2 < t2.length; n2++)
+        L(e3, t2[n2], r2, a2);
+    else
+      L(e3, t2, r2, a2);
+  }, "S");
+  var _23 = /^[a-z]/;
+  var K = /* @__PURE__ */ __name(function(e3, t2, r2, a2) {
+    const n2 = a2.isVerbose();
+    if (t2 === "*")
+      return e3.tags = {}, e3;
+    var i2;
+    t2 = t2.replace(/^#/, ""), _23.test(t2) === true && (t2 = (i2 = t2).charAt(0).toUpperCase() + i2.substr(1)), e3.tags[t2] === true && (delete e3.tags[t2], n2 === true && M(e3, t2, r2));
+    const o2 = a2.tags;
+    if (o2[t2]) {
+      let r3 = o2[t2].lineage;
+      for (let t3 = 0; t3 < r3.length; t3++)
+        e3.tags[r3[t3]] === true && (delete e3.tags[r3[t3]], n2 === true && M(e3, " - " + r3[t3]));
+    }
+    return e3;
+  }, "K");
+  var q = /* @__PURE__ */ __name(function(e3, t2, r2, a2) {
+    if (typeof t2 != "string" && t2)
+      for (let n2 = 0; n2 < t2.length; n2++)
+        K(e3, t2[n2], r2, a2);
+    else
+      K(e3, t2, r2, a2);
+  }, "q");
+  var W = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    const a2 = r2.tags;
+    if (t2[0] === "#" && (t2 = t2.replace(/^#/, "")), a2[t2] === void 0)
+      return true;
+    let n2 = a2[t2].notA || [];
+    for (let t3 = 0; t3 < n2.length; t3++)
+      if (e3.tags[n2[t3]] === true)
+        return false;
+    return a2[t2].isA === void 0 || W(e3, a2[t2].isA, r2);
+  }, "W");
+  var R = W;
+  var U = { tag: function(e3, t2, r2) {
+    return S(this, e3, t2, r2), this;
+  }, tagSafe: function(e3, t2, r2) {
+    return R(this, e3, r2) && S(this, e3, t2, r2), this;
+  }, unTag: function(e3, t2, r2) {
+    return q(this, e3, t2, r2), this;
+  }, canBe: function(e3, t2) {
+    return R(this, e3, t2);
+  } };
+  var Q = class {
+    constructor(e3 = "") {
+      e3 = String(e3);
+      let r2 = w(e3);
+      this.text = r2.text || "", this.clean = r2.clean, this.reduced = r2.reduced, this.root = null, this.implicit = null, this.pre = r2.pre || "", this.post = r2.post || "", this.tags = {}, this.prev = null, this.next = null, this.id = t(r2.clean), this.isA = "Term", r2.alias && (this.alias = r2.alias);
+    }
+    set(e3) {
+      let t2 = w(e3);
+      return this.text = t2.text, this.clean = t2.clean, this.reduced = t2.reduced, this.root = null, this.implicit = null, this;
+    }
+  };
+  __name(Q, "Q");
+  Q.prototype.clone = function() {
+    let e3 = new Q(this.text);
+    return e3.pre = this.pre, e3.post = this.post, e3.clean = this.clean, e3.reduced = this.reduced, e3.root = this.root, e3.implicit = this.implicit, e3.tags = Object.assign({}, this.tags), e3;
+  }, Object.assign(Q.prototype, I), Object.assign(Q.prototype, U);
+  var Z = Q;
+  var X = { terms: function(e3) {
+    if (this.length === 0)
+      return [];
+    if (this.cache.terms)
+      return e3 !== void 0 ? this.cache.terms[e3] : this.cache.terms;
+    let t2 = [this.pool.get(this.start)];
+    for (let r2 = 0; r2 < this.length - 1; r2 += 1) {
+      let a2 = t2[t2.length - 1].next;
+      if (a2 === null) {
+        console.error("Compromise error: Linked list broken in phrase '" + this.start + "'");
+        break;
+      }
+      let n2 = this.pool.get(a2);
+      if (t2.push(n2), e3 !== void 0 && e3 === r2)
+        return t2[e3];
+    }
+    return e3 === void 0 && (this.cache.terms = t2), e3 !== void 0 ? t2[e3] : t2;
+  }, clone: function(e3) {
+    if (e3) {
+      let e4 = this.buildFrom(this.start, this.length);
+      return e4.cache = this.cache, e4;
+    }
+    let t2 = this.terms().map((e4) => e4.clone());
+    return t2.forEach((e4, r2) => {
+      this.pool.add(e4), t2[r2 + 1] && (e4.next = t2[r2 + 1].id), t2[r2 - 1] && (e4.prev = t2[r2 - 1].id);
+    }), this.buildFrom(t2[0].id, t2.length);
+  }, lastTerm: function() {
+    let e3 = this.terms();
+    return e3[e3.length - 1];
+  }, hasId: function(e3) {
+    if (this.length === 0 || !e3)
+      return false;
+    if (this.start === e3)
+      return true;
+    if (this.cache.terms) {
+      let t3 = this.cache.terms;
+      for (let r2 = 0; r2 < t3.length; r2++)
+        if (t3[r2].id === e3)
+          return true;
+      return false;
+    }
+    let t2 = this.start;
+    for (let r2 = 0; r2 < this.length - 1; r2 += 1) {
+      let r3 = this.pool.get(t2);
+      if (r3 === void 0)
+        return console.error(`Compromise error: Linked list broken. Missing term '${t2}' in phrase '${this.start}'
+`), false;
+      if (r3.next === e3)
+        return true;
+      t2 = r3.next;
+    }
+    return false;
+  }, wordCount: function() {
+    return this.terms().filter((e3) => e3.text !== "").length;
+  }, fullSentence: function() {
+    let e3 = this.terms(0);
+    for (; e3.prev; )
+      e3 = this.pool.get(e3.prev);
+    let t2 = e3.id, r2 = 1;
+    for (; e3.next; )
+      e3 = this.pool.get(e3.next), r2 += 1;
+    return this.buildFrom(t2, r2);
+  } };
+  var Y = { text: function(e3 = {}, t2, r2) {
+    typeof e3 == "string" && (e3 = e3 === "normal" ? { whitespace: true, unicode: true, lowercase: true, punctuation: true, acronyms: true, abbreviations: true, implicit: true, normal: true } : e3 === "clean" ? { titlecase: false, lowercase: true, punctuation: true, whitespace: true, unicode: true, implicit: true, normal: true } : e3 === "reduced" ? { punctuation: false, titlecase: false, lowercase: true, whitespace: true, unicode: true, implicit: true, reduced: true } : e3 === "implicit" ? { punctuation: true, implicit: true, whitespace: true, trim: true } : e3 === "root" ? { titlecase: false, lowercase: true, punctuation: true, whitespace: true, unicode: true, implicit: true, root: true } : {});
+    let a2 = this.terms(), n2 = false;
+    a2[0] && a2[0].prev === null && a2[a2.length - 1].next === null && (n2 = true);
+    let i2 = a2.reduce((i3, o2, s2) => {
+      if (s2 === 0 && o2.text === "" && o2.implicit !== null && !e3.implicit)
+        return i3;
+      e3.last = r2 && s2 === a2.length - 1;
+      let l2 = true, u2 = true;
+      return n2 === false && (s2 === 0 && t2 && (l2 = false), s2 === a2.length - 1 && r2 && (u2 = false)), i3 + o2.textOut(e3, l2, u2);
+    }, "");
+    return n2 === true && r2 && (i2 = i2.replace(/ +$/, "")), e3.trim === true && (i2 = i2.trim()), i2;
+  } };
+  var ee = { trim: function() {
+    let e3 = this.terms();
+    if (e3.length > 0) {
+      e3[0].pre = e3[0].pre.replace(/^\s+/, "");
+      let t2 = e3[e3.length - 1];
+      t2.post = t2.post.replace(/\s+$/, "");
+    }
+    return this;
+  } };
+  var te = /[.?!]\s*$/;
+  var re = /* @__PURE__ */ __name(function(e3, t2) {
+    t2[0].pre = e3[0].pre;
+    let r2 = e3[e3.length - 1], a2 = t2[t2.length - 1];
+    a2.post = function(e4, t3) {
+      if (te.test(t3))
+        return t3 + e4.match(/\s*$/);
+      return e4;
+    }(r2.post, a2.post), r2.post = "", r2.post === "" && (r2.post += " ");
+  }, "re");
+  var ae = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    let a2 = e3.terms(), n2 = t2.terms();
+    re(a2, n2), function(e4, t3, r3) {
+      let a3 = e4[e4.length - 1], n3 = t3[t3.length - 1], i3 = a3.next;
+      a3.next = t3[0].id, n3.next = i3, i3 && (r3.get(i3).prev = n3.id);
+      let o3 = e4[0].id;
+      o3 && (t3[0].prev = o3);
+    }(a2, n2, e3.pool);
+    let i2 = [e3], o2 = e3.start, s2 = [r2];
+    return s2 = s2.concat(r2.parents()), s2.forEach((e4) => {
+      let t3 = e4.list.filter((e5) => e5.hasId(o2));
+      i2 = i2.concat(t3);
+    }), i2 = function(e4) {
+      return e4.filter((t3, r3) => e4.indexOf(t3) === r3);
+    }(i2), i2.forEach((e4) => {
+      e4.length += t2.length;
+    }), e3.cache = {}, e3;
+  }, "ae");
+  var ne = / /;
+  var ie = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    const a2 = e3.start;
+    let n2 = t2.terms();
+    !function(e4) {
+      let t3 = e4[e4.length - 1];
+      ne.test(t3.post) === false && (t3.post += " ");
+    }(n2), function(e4, t3, r3) {
+      let a3 = r3[r3.length - 1];
+      a3.next = e4.start;
+      let n3 = e4.pool, i3 = n3.get(e4.start);
+      i3.prev && (n3.get(i3.prev).next = t3.start);
+      r3[0].prev = e4.terms(0).prev, e4.terms(0).prev = a3.id;
+    }(e3, t2, n2);
+    let i2 = [e3], o2 = [r2];
+    return o2 = o2.concat(r2.parents()), o2.forEach((e4) => {
+      let r3 = e4.list.filter((e5) => e5.hasId(a2) || e5.hasId(t2.start));
+      i2 = i2.concat(r3);
+    }), i2 = function(e4) {
+      return e4.filter((t3, r3) => e4.indexOf(t3) === r3);
+    }(i2), i2.forEach((e4) => {
+      e4.length += t2.length, e4.start === a2 && (e4.start = t2.start), e4.cache = {};
+    }), e3;
+  }, "ie");
+  var oe = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = t2.pool(), a2 = e3.terms(), n2 = r2.get(a2[0].prev) || {}, i2 = r2.get(a2[a2.length - 1].next) || {};
+    a2[0].implicit && n2.implicit && (n2.set(n2.implicit), n2.post += " "), function(e4, t3, r3, a3) {
+      let n3 = e4.parents();
+      n3.push(e4), n3.forEach((e5) => {
+        let n4 = e5.list.find((e6) => e6.hasId(t3));
+        n4 && (n4.length -= r3, n4.start === t3 && (n4.start = a3.id), n4.cache = {});
+      }), e4.list = e4.list.filter((e5) => !(!e5.start || !e5.length));
+    }(t2, e3.start, e3.length, i2), n2 && (n2.next = i2.id), i2 && (i2.prev = n2.id);
+  }, "oe");
+  var se = { append: function(e3, t2) {
+    return ae(this, e3, t2), this;
+  }, prepend: function(e3, t2) {
+    return ie(this, e3, t2), this;
+  }, delete: function(e3) {
+    return oe(this, e3), this;
+  }, replace: function(e3, t2) {
+    let r2 = this.length;
+    ae(this, e3, t2);
+    let a2 = this.buildFrom(this.start, this.length);
+    a2.length = r2, oe(a2, t2);
+  }, splitOn: function(e3) {
+    let t2 = this.terms(), r2 = { before: null, match: null, after: null }, a2 = t2.findIndex((t3) => t3.id === e3.start);
+    if (a2 === -1)
+      return r2;
+    let n2 = t2.slice(0, a2);
+    n2.length > 0 && (r2.before = this.buildFrom(n2[0].id, n2.length));
+    let i2 = t2.slice(a2, a2 + e3.length);
+    i2.length > 0 && (r2.match = this.buildFrom(i2[0].id, i2.length));
+    let o2 = t2.slice(a2 + e3.length, t2.length);
+    return o2.length > 0 && (r2.after = this.buildFrom(o2[0].id, o2.length, this.pool)), r2;
+  } };
+  var le = { json: function(e3 = {}, t2) {
+    let r2 = {};
+    return e3.text && (r2.text = this.text()), e3.normal && (r2.normal = this.text("normal")), e3.clean && (r2.clean = this.text("clean")), e3.reduced && (r2.reduced = this.text("reduced")), e3.implicit && (r2.implicit = this.text("implicit")), e3.root && (r2.root = this.text("root")), e3.trim && (r2.text && (r2.text = r2.text.trim()), r2.normal && (r2.normal = r2.normal.trim()), r2.reduced && (r2.reduced = r2.reduced.trim())), e3.terms && (e3.terms === true && (e3.terms = {}), r2.terms = this.terms().map((r3) => r3.json(e3.terms, t2))), r2;
+  } };
+  var ue = { lookAhead: function(e3) {
+    e3 || (e3 = ".*");
+    let t2 = this.pool, r2 = [];
+    const a2 = /* @__PURE__ */ __name(function(e4) {
+      let n3 = t2.get(e4);
+      n3 && (r2.push(n3), n3.prev && a2(n3.next));
+    }, "a");
+    let n2 = this.terms(), i2 = n2[n2.length - 1];
+    return a2(i2.next), r2.length === 0 ? [] : this.buildFrom(r2[0].id, r2.length).match(e3);
+  }, lookBehind: function(e3) {
+    e3 || (e3 = ".*");
+    let t2 = this.pool, r2 = [];
+    const a2 = /* @__PURE__ */ __name(function(e4) {
+      let n3 = t2.get(e4);
+      n3 && (r2.push(n3), n3.prev && a2(n3.prev));
+    }, "a");
+    let n2 = t2.get(this.start);
+    return a2(n2.prev), r2.length === 0 ? [] : this.buildFrom(r2[r2.length - 1].id, r2.length).match(e3);
+  } };
+  var ce = Object.assign({}, X, Y, ee, se, le, ue);
+  var he = /* @__PURE__ */ __name(function(e3, t2) {
+    if (t2.length === 0)
+      return true;
+    for (let e4 = 0; e4 < t2.length; e4 += 1) {
+      let r2 = t2[e4];
+      if (r2.optional !== true && r2.negative !== true && r2.start === true && e4 > 0)
+        return true;
+      if (r2.anything === true && r2.negative === true)
+        return true;
+    }
+    return false;
+  }, "he");
+  var de = k(function(e3, t2) {
+    t2.getGreedy = function(e4, t3) {
+      let r2 = Object.assign({}, e4.regs[e4.r], { start: false, end: false }), a2 = e4.t;
+      for (; e4.t < e4.terms.length; e4.t += 1) {
+        if (t3 && e4.terms[e4.t].doesMatch(t3, e4.start_i + e4.t, e4.phrase_length))
+          return e4.t;
+        let n2 = e4.t - a2 + 1;
+        if (r2.max !== void 0 && n2 === r2.max)
+          return e4.t;
+        if (e4.terms[e4.t].doesMatch(r2, e4.start_i + e4.t, e4.phrase_length) === false)
+          return r2.min !== void 0 && n2 < r2.min ? null : e4.t;
+      }
+      return e4.t;
+    }, t2.greedyTo = function(e4, t3) {
+      let r2 = e4.t;
+      if (!t3)
+        return e4.terms.length;
+      for (; r2 < e4.terms.length; r2 += 1)
+        if (e4.terms[r2].doesMatch(t3, e4.start_i + r2, e4.phrase_length) === true)
+          return r2;
+      return null;
+    }, t2.isEndGreedy = function(e4, t3) {
+      if (e4.end === true && e4.greedy === true && t3.start_i + t3.t < t3.phrase_length - 1) {
+        let r2 = Object.assign({}, e4, { end: false });
+        if (t3.terms[t3.t].doesMatch(r2, t3.start_i + t3.t, t3.phrase_length) === true)
+          return true;
+      }
+      return false;
+    }, t2.doOrBlock = function(e4, r2 = 0) {
+      let a2 = e4.regs[e4.r], n2 = false;
+      for (let t3 = 0; t3 < a2.choices.length; t3 += 1) {
+        let i2 = a2.choices[t3];
+        if (n2 = i2.every((t4, a3) => {
+          let n3 = 0, i3 = e4.t + a3 + r2 + n3;
+          if (e4.terms[i3] === void 0)
+            return false;
+          let o2 = e4.terms[i3].doesMatch(t4, i3 + e4.start_i, e4.phrase_length);
+          if (o2 === true && t4.greedy === true)
+            for (let r3 = 1; r3 < e4.terms.length; r3 += 1) {
+              let a4 = e4.terms[i3 + r3];
+              if (a4) {
+                if (a4.doesMatch(t4, e4.start_i + r3, e4.phrase_length) !== true)
+                  break;
+                n3 += 1;
+              }
+            }
+          return r2 += n3, o2;
+        }), n2) {
+          r2 += i2.length;
+          break;
+        }
+      }
+      return n2 && a2.greedy === true ? t2.doOrBlock(e4, r2) : r2;
+    }, t2.doAndBlock = function(e4) {
+      let t3 = 0;
+      return e4.regs[e4.r].choices.every((r2) => {
+        let a2 = r2.every((t4, r3) => {
+          let a3 = e4.t + r3;
+          return e4.terms[a3] !== void 0 && e4.terms[a3].doesMatch(t4, a3, e4.phrase_length);
+        });
+        return a2 === true && r2.length > t3 && (t3 = r2.length), a2;
+      }) === true && t3;
+    }, t2.getGroup = function(e4, t3, r2) {
+      if (e4.groups[e4.groupId])
+        return e4.groups[e4.groupId];
+      const a2 = e4.terms[t3].id;
+      return e4.groups[e4.groupId] = { group: String(r2), start: a2, length: 0 }, e4.groups[e4.groupId];
+    };
+  });
+  var ge = /* @__PURE__ */ __name(function(e3, r2, a2, n2) {
+    let i2 = { t: 0, terms: e3, r: 0, regs: r2, groups: {}, start_i: a2, phrase_length: n2, hasGroup: false, groupId: null, previousGroup: null };
+    for (; i2.r < r2.length; i2.r += 1) {
+      let e4 = r2[i2.r];
+      if (i2.hasGroup = typeof e4.named == "string" || typeof e4.named == "number", i2.hasGroup === true) {
+        const a4 = r2[i2.r - 1];
+        a4 && a4.named === e4.named && i2.previousGroup ? i2.groupId = i2.previousGroup : (i2.groupId = t(e4.named), i2.previousGroup = i2.groupId);
+      }
+      if (!i2.terms[i2.t]) {
+        if (r2.slice(i2.r).some((e5) => !e5.optional) === false)
+          break;
+        return null;
+      }
+      if (e4.anything === true && e4.greedy === true) {
+        let t2 = de.greedyTo(i2, r2[i2.r + 1]);
+        if (t2 === null || t2 === 0)
+          return null;
+        if (e4.min !== void 0 && t2 - i2.t < e4.min)
+          return null;
+        if (e4.max !== void 0 && t2 - i2.t > e4.max) {
+          i2.t = i2.t + e4.max;
+          continue;
+        }
+        if (i2.hasGroup === true) {
+          de.getGroup(i2, i2.t, e4.named).length = t2 - i2.t;
+        }
+        i2.t = t2;
+        continue;
+      }
+      if (e4.choices !== void 0 && e4.operator === "or") {
+        let t2 = de.doOrBlock(i2);
+        if (t2) {
+          if (e4.negative === true)
+            return null;
+          if (i2.hasGroup === true) {
+            de.getGroup(i2, i2.t, e4.named).length += t2;
+          }
+          i2.t += t2;
+          continue;
+        }
+        if (!e4.optional)
+          return null;
+      }
+      if (e4.choices !== void 0 && e4.operator === "and") {
+        let t2 = de.doAndBlock(i2);
+        if (t2) {
+          if (e4.negative === true)
+            return null;
+          if (i2.hasGroup === true) {
+            de.getGroup(i2, i2.t, e4.named).length += t2;
+          }
+          i2.t += t2;
+          continue;
+        }
+        if (!e4.optional)
+          return null;
+      }
+      let a3 = i2.terms[i2.t], o2 = a3.doesMatch(e4, i2.start_i + i2.t, i2.phrase_length);
+      if (e4.anything === true || o2 === true || de.isEndGreedy(e4, i2)) {
+        let t2 = i2.t;
+        if (e4.optional && r2[i2.r + 1] && e4.negative)
+          continue;
+        if (e4.optional && r2[i2.r + 1]) {
+          let t3 = a3.doesMatch(r2[i2.r + 1], i2.start_i + i2.t, i2.phrase_length);
+          if (e4.negative || t3) {
+            let e5 = i2.terms[i2.t + 1];
+            e5 && e5.doesMatch(r2[i2.r + 1], i2.start_i + i2.t, i2.phrase_length) || (i2.r += 1);
+          }
+        }
+        if (i2.t += 1, e4.end === true && i2.t !== i2.terms.length && e4.greedy !== true)
+          return null;
+        if (e4.greedy === true) {
+          if (i2.t = de.getGreedy(i2, r2[i2.r + 1]), i2.t === null)
+            return null;
+          if (e4.min && e4.min > i2.t)
+            return null;
+          if (e4.end === true && i2.start_i + i2.t !== n2)
+            return null;
+        }
+        if (i2.hasGroup === true) {
+          const r3 = de.getGroup(i2, t2, e4.named);
+          i2.t > 1 && e4.greedy ? r3.length += i2.t - t2 : r3.length++;
+        }
+      } else {
+        if (e4.negative) {
+          let t2 = Object.assign({}, e4);
+          if (t2.negative = false, i2.terms[i2.t].doesMatch(t2, i2.start_i + i2.t, i2.phrase_length) === true)
+            return null;
+        }
+        if (e4.optional !== true) {
+          if (i2.terms[i2.t].isImplicit() && r2[i2.r - 1] && i2.terms[i2.t + 1]) {
+            if (i2.terms[i2.t - 1] && i2.terms[i2.t - 1].implicit === r2[i2.r - 1].word)
+              return null;
+            if (i2.terms[i2.t + 1].doesMatch(e4, i2.start_i + i2.t, i2.phrase_length)) {
+              i2.t += 2;
+              continue;
+            }
+          }
+          return null;
+        }
+      }
+    }
+    return { match: i2.terms.slice(0, i2.t), groups: i2.groups };
+  }, "ge");
+  var pe = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    if (!r2 || r2.length === 0)
+      return r2;
+    if (t2.some((e4) => e4.end)) {
+      let t3 = e3[e3.length - 1];
+      r2 = r2.filter(({ match: e4 }) => e4.indexOf(t3) !== -1);
+    }
+    return r2;
+  }, "pe");
+  var me = /(?:^|\s)([\!\[\^]*(?:<[^<]*>)?\/.*?[^\\\/]\/[\?\]\+\*\$~]*)(?:\s|$)/;
+  var fe = /([\!\[\^]*(?:<[^<]*>)?\([^\)]+[^\\\)]\)[\?\]\+\*\$~]*)(?:\s|$)/;
+  var be = / /g;
+  var ve = /* @__PURE__ */ __name((e3) => /^[\!\[\^]*(<[^<]*>)?\//.test(e3) && /\/[\?\]\+\*\$~]*$/.test(e3), "ve");
+  var ye = /* @__PURE__ */ __name(function(e3) {
+    return e3 = (e3 = e3.map((e4) => e4.trim())).filter((e4) => e4);
+  }, "ye");
+  var we = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.split(me), r2 = [];
+    t2.forEach((e4) => {
+      ve(e4) ? r2.push(e4) : r2 = r2.concat(e4.split(fe));
+    }), r2 = ye(r2);
+    let a2 = [];
+    return r2.forEach((e4) => {
+      ((e5) => /^[\!\[\^]*(<[^<]*>)?\(/.test(e5) && /\)[\?\]\+\*\$~]*$/.test(e5))(e4) || ve(e4) ? a2.push(e4) : a2 = a2.concat(e4.split(be));
+    }), a2 = ye(a2), a2;
+  }, "we");
+  var ke = /\{([0-9]+,?[0-9]*)\}/;
+  var Ae = /&&/;
+  var De = new RegExp(/^<\s*?(\S+)\s*?>/);
+  var $e = /* @__PURE__ */ __name(function(e3) {
+    return e3[e3.length - 1];
+  }, "$e");
+  var Pe = /* @__PURE__ */ __name(function(e3) {
+    return e3[0];
+  }, "Pe");
+  var Ee = /* @__PURE__ */ __name(function(e3) {
+    return e3.substr(1);
+  }, "Ee");
+  var He = /* @__PURE__ */ __name(function(e3) {
+    return e3.substr(0, e3.length - 1);
+  }, "He");
+  var je = /* @__PURE__ */ __name(function(e3) {
+    return e3 = Ee(e3), e3 = He(e3);
+  }, "je");
+  var Ne = /* @__PURE__ */ __name(function(e3) {
+    let t2 = {};
+    for (let r3 = 0; r3 < 2; r3 += 1) {
+      if ($e(e3) === "$" && (t2.end = true, e3 = He(e3)), Pe(e3) === "^" && (t2.start = true, e3 = Ee(e3)), (Pe(e3) === "[" || $e(e3) === "]") && (t2.named = true, Pe(e3) === "[" ? t2.groupType = $e(e3) === "]" ? "single" : "start" : t2.groupType = "end", e3 = (e3 = e3.replace(/^\[/, "")).replace(/\]$/, ""), Pe(e3) === "<")) {
+        const r4 = De.exec(e3);
+        r4.length >= 2 && (t2.named = r4[1], e3 = e3.replace(r4[0], ""));
+      }
+      if ($e(e3) === "+" && (t2.greedy = true, e3 = He(e3)), e3 !== "*" && $e(e3) === "*" && e3 !== "\\*" && (t2.greedy = true, e3 = He(e3)), $e(e3) === "?" && (t2.optional = true, e3 = He(e3)), Pe(e3) === "!" && (t2.negative = true, e3 = Ee(e3)), Pe(e3) === "(" && $e(e3) === ")") {
+        Ae.test(e3) ? (t2.choices = e3.split(Ae), t2.operator = "and") : (t2.choices = e3.split("|"), t2.operator = "or"), t2.choices[0] = Ee(t2.choices[0]);
+        let r4 = t2.choices.length - 1;
+        t2.choices[r4] = He(t2.choices[r4]), t2.choices = t2.choices.map((e4) => e4.trim()), t2.choices = t2.choices.filter((e4) => e4), t2.choices = t2.choices.map((e4) => e4.split(/ /g).map(Ne)), e3 = "";
+      }
+      if (Pe(e3) === "/" && $e(e3) === "/")
+        return e3 = je(e3), t2.regex = new RegExp(e3), t2;
+      if (Pe(e3) === "~" && $e(e3) === "~")
+        return e3 = je(e3), t2.soft = true, t2.word = e3, t2;
+    }
+    return ke.test(e3) === true && (e3 = e3.replace(ke, (e4, r3) => {
+      let a2 = r3.split(/,/g);
+      return a2.length === 1 ? (t2.min = Number(a2[0]), t2.max = Number(a2[0])) : (t2.min = Number(a2[0]), t2.max = Number(a2[1] || 999)), t2.greedy = true, t2.optional = true, "";
+    })), Pe(e3) === "#" ? (t2.tag = Ee(e3), t2.tag = (r2 = t2.tag).charAt(0).toUpperCase() + r2.substr(1), t2) : Pe(e3) === "@" ? (t2.method = Ee(e3), t2) : e3 === "." ? (t2.anything = true, t2) : e3 === "*" ? (t2.anything = true, t2.greedy = true, t2.optional = true, t2) : (e3 && (e3 = (e3 = e3.replace("\\*", "*")).replace("\\.", "."), t2.word = e3.toLowerCase()), t2);
+    var r2;
+  }, "Ne");
+  var xe = Ne;
+  var Fe = /* @__PURE__ */ __name(function(e3, t2 = {}) {
+    return e3.filter((e4) => e4.groupType).length > 0 && (e3 = function(e4) {
+      let t3, r2 = false, a2 = -1;
+      for (let n2 = 0; n2 < e4.length; n2++) {
+        const i2 = e4[n2];
+        i2.groupType !== "single" || i2.named !== true ? (i2.groupType === "start" && (r2 = true, typeof i2.named == "string" || typeof i2.named == "number" ? t3 = i2.named : (a2 += 1, t3 = a2)), r2 && (i2.named = t3), i2.groupType === "end" && (r2 = false)) : (a2 += 1, i2.named = a2);
+      }
+      return e4;
+    }(e3)), t2.fuzzy || (e3 = function(e4) {
+      return e4.map((e5) => {
+        if (e5.choices !== void 0 && e5.choices.every((e6) => {
+          if (e6.length !== 1)
+            return false;
+          let t3 = e6[0];
+          return t3.word !== void 0 && t3.negative !== true && t3.optional !== true && t3.method !== true;
+        }) === true) {
+          let t3 = {};
+          e5.choices.forEach((e6) => {
+            t3[e6[0].word] = true;
+          }), e5.fastOr = t3, delete e5.choices;
+        }
+        return e5;
+      });
+    }(e3)), e3;
+  }, "Fe");
+  var Ce = /* @__PURE__ */ __name(function(e3, t2 = {}) {
+    if (e3 == null || e3 === "")
+      return [];
+    if (typeof e3 == "object") {
+      if (function(e4) {
+        return Object.prototype.toString.call(e4) === "[object Array]";
+      }(e3)) {
+        if (e3.length === 0 || !e3[0])
+          return [];
+        if (typeof e3[0] == "object")
+          return e3;
+        if (typeof e3[0] == "string")
+          return function(e4) {
+            return [{ choices: e4.map((e5) => [{ word: e5 }]), operator: "or" }];
+          }(e3);
+      }
+      return e3 && e3.isA === "Doc" ? function(e4) {
+        if (!e4 || !e4.list || !e4.list[0])
+          return [];
+        let t3 = [];
+        return e4.list.forEach((e5) => {
+          let r3 = [];
+          e5.terms().forEach((e6) => {
+            r3.push(e6.id);
+          }), t3.push(r3);
+        }), [{ idBlocks: t3 }];
+      }(e3) : [];
+    }
+    typeof e3 == "number" && (e3 = String(e3));
+    let r2 = we(e3);
+    return r2 = r2.map((e4) => xe(e4)), r2 = Fe(r2, t2), r2 = function(e4, t3) {
+      return t3.fuzzy === true && (t3.fuzzy = 0.85), typeof t3.fuzzy == "number" && (e4 = e4.map((e5) => (t3.fuzzy > 0 && e5.word && (e5.fuzzy = t3.fuzzy), e5.choices && e5.choices.forEach((e6) => {
+        e6.forEach((e7) => {
+          e7.fuzzy = t3.fuzzy;
+        });
+      }), e5))), e4;
+    }(r2, t2), r2;
+  }, "Ce");
+  var Be = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = [], a2 = t2[0].idBlocks;
+    for (let t3 = 0; t3 < e3.length; t3 += 1)
+      a2.forEach((a3) => {
+        if (a3.length === 0)
+          return;
+        a3.every((r3, a4) => e3[t3 + a4].id === r3) && (r2.push({ match: e3.slice(t3, t3 + a3.length) }), t3 += a3.length - 1);
+      });
+    return r2;
+  }, "Be");
+  var Ge = /* @__PURE__ */ __name(function(e3, t2, r2 = false) {
+    if (typeof t2 == "string" && (t2 = Ce(t2)), he(e3, t2) === true)
+      return [];
+    const a2 = t2.filter((e4) => e4.optional !== true && e4.negative !== true).length;
+    let n2 = e3.terms(), i2 = [];
+    if (t2[0].idBlocks) {
+      let e4 = Be(n2, t2);
+      if (e4 && e4.length > 0)
+        return pe(n2, t2, e4);
+    }
+    if (t2[0].start === true) {
+      let e4 = ge(n2, t2, 0, n2.length);
+      return e4 && e4.match && e4.match.length > 0 && (e4.match = e4.match.filter((e5) => e5), i2.push(e4)), pe(n2, t2, i2);
+    }
+    for (let e4 = 0; e4 < n2.length && !(e4 + a2 > n2.length); e4 += 1) {
+      let a3 = ge(n2.slice(e4), t2, e4, n2.length);
+      if (a3 && a3.match && a3.match.length > 0 && (e4 += a3.match.length - 1, a3.match = a3.match.filter((e5) => e5), i2.push(a3), r2 === true))
+        return pe(n2, t2, i2);
+    }
+    return pe(n2, t2, i2);
+  }, "Ge");
+  var ze = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = {};
+    Ge(e3, t2).forEach(({ match: e4 }) => {
+      e4.forEach((e5) => {
+        r2[e5.id] = true;
+      });
+    });
+    let a2 = e3.terms(), n2 = [], i2 = [];
+    return a2.forEach((e4) => {
+      r2[e4.id] !== true ? i2.push(e4) : i2.length > 0 && (n2.push(i2), i2 = []);
+    }), i2.length > 0 && n2.push(i2), n2;
+  }, "ze");
+  var Ie = { match: function(e3, t2 = false) {
+    let r2 = Ge(this, e3, t2);
+    return r2 = r2.map(({ match: e4, groups: t3 }) => {
+      let r3 = this.buildFrom(e4[0].id, e4.length, t3);
+      return r3.cache.terms = e4, r3;
+    }), r2;
+  }, has: function(e3) {
+    return Ge(this, e3, true).length > 0;
+  }, not: function(e3) {
+    let t2 = ze(this, e3);
+    return t2 = t2.map((e4) => this.buildFrom(e4[0].id, e4.length)), t2;
+  }, canBe: function(e3, t2) {
+    let r2 = [], a2 = this.terms(), n2 = false;
+    for (let i2 = 0; i2 < a2.length; i2 += 1) {
+      let o2 = a2[i2].canBe(e3, t2);
+      o2 === true && (n2 === true ? r2[r2.length - 1].push(a2[i2]) : r2.push([a2[i2]]), n2 = o2);
+    }
+    return r2 = r2.filter((e4) => e4.length > 0).map((e4) => this.buildFrom(e4[0].id, e4.length)), r2;
+  } };
+  var Oe = class {
+    constructor(e3, t2, r2) {
+      this.start = e3, this.length = t2, this.isA = "Phrase", Object.defineProperty(this, "pool", { enumerable: false, writable: true, value: r2 }), Object.defineProperty(this, "cache", { enumerable: false, writable: true, value: {} }), Object.defineProperty(this, "groups", { enumerable: false, writable: true, value: {} });
+    }
+  };
+  __name(Oe, "Oe");
+  Oe.prototype.buildFrom = function(e3, t2, r2) {
+    let a2 = new Oe(e3, t2, this.pool);
+    return r2 && Object.keys(r2).length > 0 ? a2.groups = r2 : a2.groups = this.groups, a2;
+  }, Object.assign(Oe.prototype, Ie), Object.assign(Oe.prototype, ce);
+  var Te = { term: "terms" };
+  Object.keys(Te).forEach((e3) => Oe.prototype[e3] = Oe.prototype[Te[e3]]);
+  var Ve = Oe;
+  var Me = class {
+    constructor(e3 = {}) {
+      Object.defineProperty(this, "words", { enumerable: false, value: e3 });
+    }
+    add(e3) {
+      return this.words[e3.id] = e3, this;
+    }
+    get(e3) {
+      return this.words[e3];
+    }
+    remove(e3) {
+      delete this.words[e3];
+    }
+    merge(e3) {
+      return Object.assign(this.words, e3.words), this;
+    }
+    stats() {
+      return { words: Object.keys(this.words).length };
+    }
+  };
+  __name(Me, "Me");
+  Me.prototype.clone = function() {
+    let e3 = Object.keys(this.words).reduce((e4, t2) => {
+      let r2 = this.words[t2].clone();
+      return e4[r2.id] = r2, e4;
+    }, {});
+    return new Me(e3);
+  };
+  var Je = Me;
+  var Le = /* @__PURE__ */ __name((e3) => {
+    e3.forEach((t2, r2) => {
+      r2 > 0 && (t2.prev = e3[r2 - 1].id), e3[r2 + 1] && (t2.next = e3[r2 + 1].id);
+    });
+  }, "Le");
+  var Se = /(\S.+?[.!?\u203D\u2E18\u203C\u2047-\u2049])(?=\s+|$)/g;
+  var _e = /\S/;
+  var Ke = /[ .][A-Z]\.? *$/i;
+  var qe = /(?:\u2026|\.{2,}) *$/;
+  var We = /((?:\r?\n|\r)+)/;
+  var Re = /[a-z0-9\u00C0-\u00FF\u00a9\u00ae\u2000-\u3300\ud000-\udfff]/i;
+  var Ue = /^\s+/;
+  var Qe = /* @__PURE__ */ __name(function(e3, t2) {
+    if (Ke.test(e3) === true)
+      return false;
+    if (qe.test(e3) === true)
+      return false;
+    if (Re.test(e3) === false)
+      return false;
+    let r2 = e3.replace(/[.!?\u203D\u2E18\u203C\u2047-\u2049] *$/, "").split(" "), a2 = r2[r2.length - 1].toLowerCase();
+    return !t2.hasOwnProperty(a2);
+  }, "Qe");
+  var Ze = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = t2.cache.abbreviations;
+    e3 = e3 || "";
+    let a2 = [], n2 = [];
+    if (!(e3 = String(e3)) || typeof e3 != "string" || _e.test(e3) === false)
+      return a2;
+    let i2 = function(e4) {
+      let t3 = [], r3 = e4.split(We);
+      for (let e5 = 0; e5 < r3.length; e5++) {
+        let a3 = r3[e5].split(Se);
+        for (let e6 = 0; e6 < a3.length; e6++)
+          t3.push(a3[e6]);
+      }
+      return t3;
+    }(e3 = e3.replace("\xA0", " "));
+    for (let e4 = 0; e4 < i2.length; e4++) {
+      let t3 = i2[e4];
+      if (t3 !== void 0 && t3 !== "") {
+        if (_e.test(t3) === false) {
+          if (n2[n2.length - 1]) {
+            n2[n2.length - 1] += t3;
+            continue;
+          }
+          if (i2[e4 + 1]) {
+            i2[e4 + 1] = t3 + i2[e4 + 1];
+            continue;
+          }
+        }
+        n2.push(t3);
+      }
+    }
+    for (let e4 = 0; e4 < n2.length; e4++) {
+      let t3 = n2[e4];
+      n2[e4 + 1] && Qe(t3, r2) === false ? n2[e4 + 1] = t3 + (n2[e4 + 1] || "") : t3 && t3.length > 0 && (a2.push(t3), n2[e4] = "");
+    }
+    if (a2.length === 0)
+      return [e3];
+    for (let e4 = 1; e4 < a2.length; e4 += 1) {
+      let t3 = a2[e4].match(Ue);
+      t3 !== null && (a2[e4 - 1] += t3[0], a2[e4] = a2[e4].replace(Ue, ""));
+    }
+    return a2;
+  }, "Ze");
+  var Xe = /\S/;
+  var Ye = /^[!?.]+$/;
+  var et = /(\S+)/;
+  var tt = /[a-z] ?\/ ?[a-z]*$/;
+  var rt = [".", "?", "!", ":", ";", "-", "\u2013", "\u2014", "--", "...", "(", ")", "[", "]", '"', "'", "`"];
+  rt = rt.reduce((e3, t2) => (e3[t2] = true, e3), {});
+  var at = /* @__PURE__ */ __name(function(e3) {
+    if (/^(re|un|micro|macro|trans|bi|mono|over)-?[^aeiou]./.test(e3) === true)
+      return false;
+    if (/^([a-z\u00C0-\u00FF/]+)(-|–|—)(like|ish|less|able)/i.test(e3) === true)
+      return false;
+    if (/^([a-z\u00C0-\u00FF`"'/]+)(-|–|—)([a-z0-9\u00C0-\u00FF].*)/i.test(e3) === true)
+      return true;
+    return /^([0-9]{1,4})(-|–|—)([a-z\u00C0-\u00FF`"'/-]+$)/i.test(e3) === true;
+  }, "at");
+  var nt = /* @__PURE__ */ __name(function(e3) {
+    let t2 = [];
+    const r2 = e3.split(/[-–—]/);
+    let a2 = "-", n2 = e3.match(/[-–—]/);
+    n2 && n2[0] && (a2 = n2);
+    for (let e4 = 0; e4 < r2.length; e4++)
+      e4 === r2.length - 1 ? t2.push(r2[e4]) : t2.push(r2[e4] + a2);
+    return t2;
+  }, "nt");
+  var it = /* @__PURE__ */ __name(function(e3) {
+    let t2 = [], r2 = [];
+    if (typeof (e3 = e3 || "") == "number" && (e3 = String(e3)), function(e4) {
+      return Object.prototype.toString.call(e4) === "[object Array]";
+    }(e3))
+      return e3;
+    const a2 = e3.split(et);
+    for (let e4 = 0; e4 < a2.length; e4++)
+      at(a2[e4]) !== true ? r2.push(a2[e4]) : r2 = r2.concat(nt(a2[e4]));
+    let n2 = "";
+    for (let e4 = 0; e4 < r2.length; e4++) {
+      let a3 = r2[e4];
+      Xe.test(a3) === true && rt.hasOwnProperty(a3) === false && Ye.test(a3) === false ? (t2.length > 0 ? (t2[t2.length - 1] += n2, t2.push(a3)) : t2.push(n2 + a3), n2 = "") : n2 += a3;
+    }
+    return n2 && (t2.length === 0 && (t2[0] = ""), t2[t2.length - 1] += n2), t2 = function(e4) {
+      for (let t3 = 1; t3 < e4.length - 1; t3++)
+        tt.test(e4[t3]) && (e4[t3 - 1] += e4[t3] + e4[t3 + 1], e4[t3] = null, e4[t3 + 1] = null);
+      return e4;
+    }(t2), t2 = function(e4) {
+      const t3 = /^[0-9]{1,4}(:[0-9][0-9])?([a-z]{1,2})? ?(-|–|—) ?$/, r3 = /^[0-9]{1,4}([a-z]{1,2})? ?$/;
+      for (let a3 = 0; a3 < e4.length - 1; a3 += 1)
+        e4[a3 + 1] && t3.test(e4[a3]) && r3.test(e4[a3 + 1]) && (e4[a3] = e4[a3] + e4[a3 + 1], e4[a3 + 1] = null);
+      return e4;
+    }(t2), t2 = t2.filter((e4) => e4), t2;
+  }, "it");
+  var ot = /* @__PURE__ */ __name(function(e3 = "", t2, r2) {
+    let a2 = null;
+    return typeof e3 != "string" && (typeof e3 == "number" ? e3 = String(e3) : function(e4) {
+      return Object.prototype.toString.call(e4) === "[object Array]";
+    }(e3) && (a2 = e3)), a2 = a2 || Ze(e3, t2), a2 = a2.map((e4) => it(e4)), r2 = r2 || new Je(), a2.map((e4) => {
+      e4 = e4.map((e5) => {
+        let t4 = new Z(e5);
+        return r2.add(t4), t4;
+      }), Le(e4);
+      let t3 = new Ve(e4[0].id, e4.length, r2);
+      return t3.cache.terms = e4, t3;
+    });
+  }, "ot");
+  var st = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = new Je();
+    return e3.map((e4, a2) => {
+      let n2 = e4.terms.map((n3, i2) => {
+        let o2 = new Z(n3.text);
+        return o2.pre = n3.pre !== void 0 ? n3.pre : "", n3.post === void 0 && (n3.post = " ", i2 >= e4.terms.length - 1 && (n3.post = ". ", a2 >= e4.terms.length - 1 && (n3.post = "."))), o2.post = n3.post !== void 0 ? n3.post : " ", n3.tags && n3.tags.forEach((e5) => o2.tag(e5, "", t2)), r2.add(o2), o2;
+      });
+      return Le(n2), new Ve(n2[0].id, n2.length, r2);
+    });
+  }, "st");
+  var lt = ["Person", "Place", "Organization"];
+  var ut = { Noun: { notA: ["Verb", "Adjective", "Adverb"] }, Singular: { isA: "Noun", notA: "Plural" }, ProperNoun: { isA: "Noun" }, Person: { isA: ["ProperNoun", "Singular"], notA: ["Place", "Organization", "Date"] }, FirstName: { isA: "Person" }, MaleName: { isA: "FirstName", notA: ["FemaleName", "LastName"] }, FemaleName: { isA: "FirstName", notA: ["MaleName", "LastName"] }, LastName: { isA: "Person", notA: ["FirstName"] }, NickName: { isA: "Person", notA: ["FirstName", "LastName"] }, Honorific: { isA: "Noun", notA: ["FirstName", "LastName", "Value"] }, Place: { isA: "Singular", notA: ["Person", "Organization"] }, Country: { isA: ["Place", "ProperNoun"], notA: ["City"] }, City: { isA: ["Place", "ProperNoun"], notA: ["Country"] }, Region: { isA: ["Place", "ProperNoun"] }, Address: { isA: "Place" }, Organization: { isA: ["Singular", "ProperNoun"], notA: ["Person", "Place"] }, SportsTeam: { isA: "Organization" }, School: { isA: "Organization" }, Company: { isA: "Organization" }, Plural: { isA: "Noun", notA: ["Singular"] }, Uncountable: { isA: "Noun" }, Pronoun: { isA: "Noun", notA: lt }, Actor: { isA: "Noun", notA: lt }, Activity: { isA: "Noun", notA: ["Person", "Place"] }, Unit: { isA: "Noun", notA: lt }, Demonym: { isA: ["Noun", "ProperNoun"], notA: lt }, Possessive: { isA: "Noun" } };
+  var ct = { Verb: { notA: ["Noun", "Adjective", "Adverb", "Value", "Expression"] }, PresentTense: { isA: "Verb", notA: ["PastTense", "FutureTense"] }, Infinitive: { isA: "PresentTense", notA: ["PastTense", "Gerund"] }, Imperative: { isA: "Infinitive" }, Gerund: { isA: "PresentTense", notA: ["PastTense", "Copula", "FutureTense"] }, PastTense: { isA: "Verb", notA: ["FutureTense"] }, FutureTense: { isA: "Verb" }, Copula: { isA: "Verb" }, Modal: { isA: "Verb", notA: ["Infinitive"] }, PerfectTense: { isA: "Verb", notA: "Gerund" }, Pluperfect: { isA: "Verb" }, Participle: { isA: "PastTense" }, PhrasalVerb: { isA: "Verb" }, Particle: { isA: "PhrasalVerb" }, Auxiliary: { notA: ["Noun", "Adjective", "Value"] } };
+  var ht = { Value: { notA: ["Verb", "Adjective", "Adverb"] }, Ordinal: { isA: "Value", notA: ["Cardinal"] }, Cardinal: { isA: "Value", notA: ["Ordinal"] }, Fraction: { isA: "Value", notA: ["Noun"] }, RomanNumeral: { isA: "Cardinal", notA: ["Ordinal", "TextValue"] }, TextValue: { isA: "Value", notA: ["NumericValue"] }, NumericValue: { isA: "Value", notA: ["TextValue"] }, Money: { isA: "Cardinal" }, Percent: { isA: "Value" } };
+  var dt = ["Noun", "Verb", "Adjective", "Adverb", "Value", "QuestionWord"];
+  var gt = { Adjective: { notA: ["Noun", "Verb", "Adverb", "Value"] }, Comparable: { isA: ["Adjective"] }, Comparative: { isA: ["Adjective"] }, Superlative: { isA: ["Adjective"], notA: ["Comparative"] }, NumberRange: {}, Adverb: { notA: ["Noun", "Verb", "Adjective", "Value"] }, Date: { notA: ["Verb", "Adverb", "Preposition", "Adjective"] }, Month: { isA: ["Date", "Singular"], notA: ["Year", "WeekDay", "Time"] }, WeekDay: { isA: ["Date", "Noun"] }, Timezone: { isA: ["Date", "Noun"], notA: ["Adjective", "ProperNoun"] }, Time: { isA: ["Date"], notA: ["AtMention"] }, Determiner: { notA: dt }, Conjunction: { notA: dt }, Preposition: { notA: dt }, QuestionWord: { notA: ["Determiner"] }, Currency: { isA: ["Noun"] }, Expression: { notA: ["Noun", "Adjective", "Verb", "Adverb"] }, Abbreviation: {}, Url: { notA: ["HashTag", "PhoneNumber", "Verb", "Adjective", "Value", "AtMention", "Email"] }, PhoneNumber: { notA: ["HashTag", "Verb", "Adjective", "Value", "AtMention", "Email"] }, HashTag: {}, AtMention: { isA: ["Noun"], notA: ["HashTag", "Verb", "Adjective", "Value", "Email"] }, Emoji: { notA: ["HashTag", "Verb", "Adjective", "Value", "AtMention"] }, Emoticon: { notA: ["HashTag", "Verb", "Adjective", "Value", "AtMention"] }, Email: { notA: ["HashTag", "Verb", "Adjective", "Value", "AtMention"] }, Acronym: { notA: ["Plural", "RomanNumeral"] }, Negative: { notA: ["Noun", "Adjective", "Value"] }, Condition: { notA: ["Verb", "Adjective", "Noun", "Value"] } };
+  var pt = { Noun: "blue", Verb: "green", Negative: "green", Date: "red", Value: "red", Adjective: "magenta", Preposition: "cyan", Conjunction: "cyan", Determiner: "cyan", Adverb: "cyan" };
+  var mt = /* @__PURE__ */ __name(function(e3) {
+    return Object.keys(e3).forEach((t2) => {
+      e3[t2].color ? e3[t2].color = e3[t2].color : pt[t2] ? e3[t2].color = pt[t2] : e3[t2].isA.some((r2) => !!pt[r2] && (e3[t2].color = pt[r2], true));
+    }), e3;
+  }, "mt");
+  var ft = /* @__PURE__ */ __name(function(e3) {
+    return Object.keys(e3).forEach((t2) => {
+      let r2 = e3[t2], a2 = r2.isA.length;
+      for (let t3 = 0; t3 < a2; t3++) {
+        let a3 = r2.isA[t3];
+        e3[a3] && (r2.isA = r2.isA.concat(e3[a3].isA));
+      }
+      r2.isA = function(e4) {
+        return e4.filter((e5, t3, r3) => r3.indexOf(e5) === t3);
+      }(r2.isA);
+    }), e3;
+  }, "ft");
+  var bt = /* @__PURE__ */ __name(function(e3) {
+    let t2 = Object.keys(e3);
+    return t2.forEach((r2) => {
+      let a2 = e3[r2];
+      a2.notA = a2.notA || [], a2.isA.forEach((t3) => {
+        if (e3[t3] && e3[t3].notA) {
+          let r3 = typeof e3[t3].notA == "string" ? [e3[t3].isA] : e3[t3].notA || [];
+          a2.notA = a2.notA.concat(r3);
+        }
+      });
+      for (let n2 = 0; n2 < t2.length; n2++) {
+        const i2 = t2[n2];
+        e3[i2].notA.indexOf(r2) !== -1 && a2.notA.push(i2);
+      }
+      a2.notA = function(e4) {
+        return e4.filter((e5, t3, r3) => r3.indexOf(e5) === t3);
+      }(a2.notA);
+    }), e3;
+  }, "bt");
+  var vt = /* @__PURE__ */ __name(function(e3) {
+    let t2 = Object.keys(e3);
+    return t2.forEach((r2) => {
+      let a2 = e3[r2];
+      a2.lineage = [];
+      for (let n2 = 0; n2 < t2.length; n2++)
+        e3[t2[n2]].isA.indexOf(r2) !== -1 && a2.lineage.push(t2[n2]);
+    }), e3;
+  }, "vt");
+  var yt = /* @__PURE__ */ __name(function(e3) {
+    return e3 = function(e4) {
+      return Object.keys(e4).forEach((t2) => {
+        let r2 = e4[t2];
+        r2.isA = r2.isA || [], typeof r2.isA == "string" && (r2.isA = [r2.isA]), r2.notA = r2.notA || [], typeof r2.notA == "string" && (r2.notA = [r2.notA]);
+      }), e4;
+    }(e3), e3 = ft(e3), e3 = bt(e3), e3 = mt(e3), e3 = vt(e3);
+  }, "yt");
+  var wt = /* @__PURE__ */ __name(function(e3, t2) {
+    Object.keys(e3).forEach((r2) => {
+      t2[r2] = e3[r2];
+    });
+  }, "wt");
+  var kt = (() => {
+    let e3 = {};
+    return wt(ut, e3), wt(ct, e3), wt(ht, e3), wt(gt, e3), e3 = yt(e3), e3;
+  })();
+  var At = { Comparative: "true\xA6better", Superlative: "true\xA6earlier", PresentTense: "true\xA6is,sounds", Value: "true\xA6a few", Noun: "true\xA6a5b4c2f1here,ie,lit,m0no doubt,pd,tce;a,d;t,y;a,ca,o0;l,rp;a,l;d,l,rc", Copula: "true\xA6a1is,w0;as,ere;m,re", PastTense: "true\xA6be3came,d2had,lied,meant,sa2taken,w0;as,e0;nt,re;id;en,gan", Condition: "true\xA6if,lest,unless", Preposition: "true\xA6'o,-,aLbIcHdGexcept,fFiDmidQnotwithstandiRoBpSqua,sAt6u3vi2w0;/o,hereNith0;!in,oR;a,s-a-vis;n1p0;!on;like,til;h0ill,owards;an,r0;ough0u;!oJ;ans,ince,o that;',f0n2ut;!f;f,n0;!to;or,rom;espite,own,u3;hez,irca;ar1e0oAy;sides,tween;ri6;',bo7cross,ft6lo5m3propos,round,s1t0;!op;! long 0;as;id0ong0;!st;ng;er;ut", Gerund: "true\xA6accord0be0develop0go0result0stain0;ing", Negative: "true\xA6n0;ever,o0;!n,t", QuestionWord: "true\xA6how3wh0;at,e1ich,o0y;!m,se;n,re; come,'s", Plural: "true\xA6records", Conjunction: "true\xA6&,aFbBcuz,how9in caEno8o7p5supposing,t2v1wh0yet;eth9ile;ers4s;h0o;eref9o0;!uC;l0rovided that;us;r,therwi6; matt1r;!ev0;er;e0ut;cau1f0;ore;se;lthou1nd,s 0;far as,if;gh", Abbreviation: "true\xA6a0Jb0Gc0Ad08e05f02g01h00iYjWkanVlTmNnKoJpFque,rDs8t6u5v2w0;is0r,y0B;!c;a,b,e1i0ol,s,t;tro,vo;r,t;niv,safa,t;ce,e0;l,mp,nn,x;ask,e2fc,gt,i1q,r,s,t,u0;pt,rg;r,tu;c,nJp0;!t;b,d,e0;pGs,v;a,d,ennNhd,l,p,r1s0vt;!eud;ef,o0;b,f,n;ct,kla,nt;e0ov;b0e;!r;a4d,essrs,i1lle,me,r7s0t;!tr;n1s0;c,ter;!n;!j,r,sc;at,it,lb,ng,t0;!d;!s;an,d,r,u0;l,n;a,da,e,n0;c,f;on,wy;a,en,ov;e1ig,l0m,r,t,y;!a;b,m;a,g,ng,s1tc,x0;!p;p,q,t;ak,e0ist,r;c,f,pt,t;a3ca,l,m2o0pl,res,yn;!l0m1nn,rp;!o;dr;!l0pt;!if;a,c,l1r0;ig,os;!dg,vd;d4l3p2r1ss0tty,ug,ve;n,t;c,iz;prox,r,t;!ta;!j,m,v", Pronoun: "true\xA6'em,elle,h4i3me,ourselves,she5th1us,we,you0;!rself;e0ou;m,y;!l,t;e0im;!'s", Singular: "true\xA60:15;1:12;2:18;a15b0Sc0Jd0Ce09f04gZhViUjel0kitty,lSmOnNoMpHquestionGrEs9t6u4w3;ay,om02;nc0Zs 3;doll0Kst0M; rex,a4h3ic,ragedy,v show;ere,i2;l0x return;i6ky,omeoMt3uper bowl,yst14;ep4ri2u3;de0Xff;faSmoS;st1ze;al0i2o3;om,se;! mark;a6i1la5r4u3;dPrpoH;eroga00ie0Gobl0U;te,y1;rt,te0N;bjWceJthers,verview;othi2umb1;a5ee08o3;del,m3nopo0rni2th1;!my;n,yf0;i3unch;ne;ci2nsect;ead start,o3uman right;l0me4u3;se;! run;adf0entlem6irl02laci1od,rand4u3;l0y; slam,fa3mo3;th1;an;a6ella,ly,ol0r4un3;di2;ee market,iWo3;nti1sP;mi0th1;conomy,gg,ner7ven4x3;ampTecu9;i2t;ad8e5inn1o3ragonf0ude;cumentGg3i0l0or;gy;ath,t3;ec3;tive;!dy;a9eili2h7i5o3redit card;ttage,u3;ri1sin;ty,vil w3;ar;andeli1ocol3;ate;n3rF;ary;aCel0lesJo8r5u3;n3tterf0;ti2;eakfa4o3;!th1;st;dy,tt5y3;!fri3;end;le;nki2r3;ri1;er;d5l0noma0u3;nt;ly; homin5verti3;si2;ng;em", FemaleName: "true\xA60:J3;1:J7;2:IG;3:IF;4:IX;5:IK;6:JO;7:H0;8:JG;9:JK;A:HN;B:HY;C:IT;D:IP;E:JD;F:HC;G:I0;aGRbFLcDPdCYeBOfB4gADh9Ti9Gj8Gk7Gl60m49n3No3Jp37qu36r2Ds16t0Eu0Cv02wVxiTyOzH;aLeIineb,oHsof2;e3Uf2la,ra;h3iKlIna,ynH;ab,ep;da,ma;da,h3iHra;nab;aKeJi0Fol5BuIvH;etAonDO;i0na;le0sen2;el,gm3Jn,rGJs8W;aoHme0nyi;m62yAE;aMendDYhiDFiH;dele8lJnH;if48niHo0;e,f47;a,helmi0lHma;a,ow;ka0nB;aNeKiHusa5;cIktoriBMlAole7viH;anC3enJ0;kF9tor2;da,lA9nus,rHs0;a,nHoniH4;a,iFQ;leHnesH4;nIHrH;i1y;g8rHxH5;su5te;aYeUhRiNoLrIuHy3;i,la;acIZiHu0L;c2na,sH;hBPta;nHr0H;iBNya;aJffaEOnHs6;a,gtiH;ng;!nFQra;aIeHomasi0;a,l9Po8Ares1;l2ndolwethu;g9Go88rIssH;!a,ie;eHi,ri9;sa,za;bPlNmLnJrIs6tHwa0;ia0um;a63yn;iHya;a,ka,s6;arB6e3iHmEDra;!ka;a,iH;a,t6;at6it6;a0Fcarlet3We0BhXiTkye,neza0oRtNuIyH;bIBlvi1;e,ha,mayIEni7sIzH;an3MetAie,y;anHi9;!a,e,nH;aDe;aJeH;fHl5GphH;an4;cHZr5;b2fiA8m0OnHphi1;d3ia,ja,ya;er3lJmon1nIobh8PtH;a,i;dy;lEPv2;aMeIirHo0risF7y5;a,lDK;ba,e0i5lJrH;iHrDOyl;!d8Hfa;ia,lDX;hd,iMki3nJrIu0w0yH;la,ma,na;i,le8on,ron;aIda,ia,nHon;a,on;!ya;k6mH;!aa;lJrItaye81vH;da,inj;e0ife;en1i0ma;anA5bNd3Nh1RiBkMlLmJndIrHs6vannaD;aDi0;ra,y;aHi3;nt6ra;lDKma,ome;ee0in8Ru3;in1ri0;a05e00hYiVoIuH;by,thDH;bScRghQl2KnPsJwIxH;anAXie,y;an,e0;aIeHie,lE; merBLann9ll1marDBt7;!lHnn1;iHyn;e,nH;a,d9K;da,i,na;ayy8D;hel62io;bDKer7yn;a,cIkHmas,n9Fta,ya;ki,o;helGki;ea,iannGDoH;da,n1K;an0bJem9Agi0iInHta,y0;a88ee;han83na;a,eH;cEAkaD;bi0chIe,i0mo0nHquEKvCy0;di,ia;aEIelHiB;!e,le;een4ia0;aNeMhKipaluk,oJrHute66;iHudenCQ;scil3LyamvaB;lly,rt2;ilome0oebe,ylH;is,lis;arl,ggy,nelope,r5t3;ige,m0TnKo5rvaDGtIulH;a,etAin1;ricHsy,tBY;a,e,ia;do3i06;ctav2dIfCZis6lHphCZumC3yunbileg;a,ga,iv2;eHvAC;l2tA;aWeUiMoIurHy5;!ay,ul;a,eJor,rIuH;f,r;aDeCma;ll1mi;aNcLhariBOkKlaJna,sHta,vi;anHha;ur;!y;a,iDTki;hoGk9VolH;a,eDJ;!mh;hir,lHna,risFsreC;!a,lBT;asuLdKh2i6CnJomi9rgEPtHzanin zah3;aHhal4;li1s6;cy,etA;a,e8iEV;nngu30;a09ckenz4e01iMoJrignayani,uriDDyH;a,rH;a,lNna,tG;bi0i3llBInH;a,iH;ca,ka,qD3;a,cTkaSlNmi,nLrItzi,yH;ar;aIiam,lH;anEO;!l,nB;dy,eHh,n4;nhGrva;aKdJiCPlH;iHy;cent,e;red;!gros;!e5;ae5hH;ae5el3Z;ag5EgNi,lKrH;edi79iIjem,on,yH;em,l;em,sF;an4iHliF;nHsCE;a,da;!an,han;b0DcASd0Be,g09ha,i08ja,l06n04rLsoum60tKuIv82x9IyHz4;a,bell,ra,soB9;de,rH;a,eC;h8Fild1t4;a,cYgUiKjor4l7Sn4s6tJwa,yH;!aHbe6Wja8lAE;m,nBH;a,ha,in1;!aJbCBeIja,lEna,sHt64;!a,ol,sa;!l1H;! Jh,mInH;!a,e,n1;!awit,i;aliAHcJeduarBfernIjHlui5Y;o6Ful2;anB;ecil2la3;arJeIie,oHr44ueriA;!t;!ry;et42i37;el4Ui76y;dHon,ue5;akran7y;ak,en,iHk,lo3O;a,ka,nB;a,re,s4te;daHg4;!l3A;alEd4elHge,isDBon0;ei8in1yn;el,le;a0Ne0CiYoQuLyH;d2la,nH;!a,dIeBGnHsCL;!a,eBF;a,sCJ;aCWcJel0PiFlIna,pHz;e,i7;a,u,wa;iHy;a0Se,ja,l2JnB;is,l1SrJttIuHvel4;el5is1;e,ie;aKeIi9na,rH;a86i9;lHn1t7;ei;!in1;aSbb9CdRepa,lMnJsIv2zH;!a,be5LetAz4;a,etA;!a,dH;a,sHy;ay,ey,i,y;a,iJja,lHy;iHy;aA0e;!aH;!n5F;ia,ya;!nH;!a,ne;aPda,e0iNjYla,nMoKsJtHx4y5;iHt4;c2t2;e2LlCG;la,nHra;a,ie,o3;a,or1;a,gh,laH;!ni;!h,nH;a,d3e,n5P;cOdon97iNkes6mi9Ana,rMtJurIvHxmi,y5;ern1in2;a,e54ie,yn;as6iIoH;nya,ya;fa,s6;a,isF;a,la;ey,ie,y;a04eZhXiOlAKoNrJyH;lHra;a,ee,ie;istHy6D;a,en,iIyH;!na;!e,n59;nul,ri,urtnB0;aOerNlAZmJrHzzy;a,stH;en,in;!berlImernH;aq;eHi,y;e,y;a,stC;!na,ra;aHei3ongordzol;dij1w5;el7QiKjsi,lJnIrH;a,i,ri;d3na,za;ey,i,lBDs4y;ra,s6;bi7cAJdiat7IeB2iRlQmPnyakuma19rNss6KtKvi7yH;!e,lH;a,eH;e,i8L;a6DeIhHi4NlEri0y;ar6Ber6Bie,leCrB2y;!lyn8Gri0;a,en,iHl5Soli0yn;!ma,n3VsF;a5il1;ei8Ei,l4;a,tl6L;a07eYiVoNuH;anLdKliHst63;a8HeHsF;!n8tH;!a,te;e5Ji3Jy;a,i7;!anNcelEd6RelGhan7RlLni,sIva0yH;a,ce;eHie;fHlEph5U;a,in1;eHie;en,n1;!a,e,n41;lHng;!i1ClH;!i1B;anMle0nJrIsH;i8Csi8C;i,ri;!a,elGif2CnH;a,etAiHy;!e,f2A;a,e8EiInH;a,e8DiH;e,n1;cMd1mi,nIque4Xsmin3Ovie3y8zH;min9;a9eIiH;ce,e,n1s;!lHsFt0F;e,le;inIk4lEquelH;in1yn;da,ta;lRmPnOo0rNsIvaHzaro;!a0lu,na;aJiIlaHob84;!n9N;do3;!belHdo3;!a,e,l39;a77en1i0ma;a,di3es,gr6Yji;a8elBogH;en1;a,e8iHo0se;a0na;aSeOiJoHusFyacin2B;da,ll4rten23snH;a,i9Q;lImaH;ri;aIdHlaI;a,egard;ry;ath1CiJlInriet7rmi8sH;sa,t1B;en2Sga,mi;di;bi2Dil8IlNnMrJsItHwa,yl8Iz7H;i5St4;n5Yti;iHmo51ri52;etH;!te;aDnaD;a,ey,l4;a03eXiSlQoOrKunJwH;enHyne1Q;!dolE;ay,el;acIetHiselB;a,chC;e,ieH;!la;ld1AogooH;sh;adys,enHor2yn2H;a,da,na;aKgi,lIna,ov89selHta;a,e,le;da,liH;an;!n0;mLnJorgIrH;ald3Pi,m3Ctru8B;etAi4W;a,eHna;s26vieve;ma;bIil,le,mHrnet,yG;al5Ni5;i5FrielH;a,l1;aVeSiRloOoz2rH;anJeIiH;da,eB;da,ja;!cH;esIiHoi0O;n1s61;!ca;!rH;a,encH;e,ia;en,o0;lIn0rnH;!anB;ec2ic2;jr,n7rKtHy9;emIiHma,ouma7;ha,ma,n;eh;ah,iBrah,za0;cr4Nd0Ne0Mi0Lk7l04mWn4YrTsNtMuLvH;aJelIiH;!e,ta;in0Gyn;!ngel2S;geni1la,ni45;h5Sta;mLperanKtH;eIhHrel5;er;l30r9;za;a,eralB;iHma,nest2Jyn;cHka,n;a,ka;a,eMiJmH;aHie,y;!li8;lHn1;ee,iHy;a,e,ja;lHrald;da,y;aWeUiNlMma,no3oKsJvH;a,iH;na,ra;a,ie;iHuiH;se;a,en,ie,y;a0c2da,f,nMsJzaH;!betHve7;e,h;aHe,ka;!beH;th;!a,or;anor,nH;!a;!in1na;leCs6;vi;eIiHna,wi0;e,th;l,n;aYeMh2iLjeneKoHul30;lor5Tminiq4In3FrHtt4;a,eCis,la,othHthy;ea,y;ba;an0AnaDon8x4ya;anQbPde,eOiMja,lJmetr2nHsir5K;a,iH;ce,se;a,iIla,orHphi8;es,is;a,l6D;dHrdH;re;!d5Cna;!b2HoraDra;a,d3nH;!a,e;hl2i0l0HmNnLphn1rIvi1XyH;le,na;a,by,cIia,lH;a,en1;ey,ie;a,etAiH;!ca,el1Cka,z;arHia;is;a0Se0Oh05i03lVoKrIynH;di,th2;istHy05;al,i0;lPnMrIurH;tn1E;aJd2NiHn2Nri8;!nH;a,e,n1;!l1X;cepci59n4sH;tanHuelo;ce,za;eHleC;en,tA;aJeoIotH;il51;!pat3;ir9rJudH;etAiH;a,ne;a,e,iH;ce,sZ;a3er3ndH;i,y;aReNloe,rH;isJyH;stH;al;sy,tH;a1Ren,iHy;!an1e,n1;deJlseIrH;!i9yl;a,y;li8;nMrH;isKlImH;ai8;a,eHotA;n1tA;!sa;d3elGtH;al,elG;cIlH;esAi44;el2ilH;e,ia,y;itlZlYmilXndWrOsMtHy5;aKeJhHri0;erHleCrEy;in1;ri0;li0ri0;a33sH;a32ie;a,iNlLmeJolIrH;ie,ol;!e,in1yn;lHn;!a,la;a,eHie,o7y;ne,y;na,sF;a0Hi0H;a,e,l1;is7l4;in,yn;a0Ie02iZlXoUrH;andSeQiJoIyH;an0nn;nwEok9;an3DdgLg0XtH;n2XtH;!aInH;ey,i,y;ny;etH;!t9;an0e,nH;da,na;i9y;bbi9glarIlo05nH;i7n4;ka;ancHossom,ythe;a,he;an17lja0nHsm3I;i7tH;ou;aUcky,linTni7rPssOtJulaDvH;!erlH;ey,y;hJsy,tH;e,iHy9;e,na;!anH;ie,y;!ie;nHt6yl;adIiH;ce;etAi8;ay,da;!triH;ce,z;rbJyaH;rmH;aa;a3ie,o3ra;a2Sb2Md23g1Zi1Qj5l16m0Xn09oi,r04sUtTuPvOwa,yIzH;ra,u0;aKes6gJlIseH;!l;in;un;!nH;a,na;a,i2Ir2J;drJgus1RrIsteH;ja;el2;a,ey,i,y;aahua,he0;hIi2Gja,mi7s2DtrH;id;aMlIraqHt21;at;eIi9yH;!n;e,iHy;gh;!nH;ti;iJleIo6pi7;ta;en,n1tA;aHelG;!n1J;a00dje5eYgUiSjQnJohito,toHya;inetAnH;el5ia;!aKeIiHmJ;e,ka;!mHtA;ar4;!belIliFmU;sa;!le;a,eliH;ca;ka,sHta;a,sa;elHie;a,iH;a,ca,n1qH;ue;!tA;te;! JbImHstasiNya;ar2;el;cla3jul2pau5;aLberKeliJiHy;e,l2naH;!ta;a,ja;!ly;hGiIl2nB;da;a,ra;le;aWba,ePiMlKma,thJyH;a,c2sH;a,on,sa;ea;iHys0N;e,s0M;a,cIn1sHza;a,e,ha,on,sa;e,ia,ja;c2is6jaKksaKna,sJxH;aHia;!nd3;ia,saH;nd3;ra;ia;i0nIyH;ah,na;a,is,naDoud;la;c6da,leCmNnLsH;haDlH;inHyY;g,n;!h;a,o,slH;ey;ee;en;at6g4nIusH;ti0;es;ie;aWdiTelMrH;eJiH;anMenH;a,e,ne;an0;na;!aLeKiIyH;nn;a,n1;a,e;!ne;!iH;de;e,lEsH;on;yn;!lH;i8yn;ne;aKbIiHrL;!gaK;ey,i9y;!e;gaH;il;dKliyJradhIs6;ha;ya;ah;a,ya", Actor: "true\xA6aJbGcFdCengineIfAgardenIh9instructPjournalLlawyIm8nurse,opeOp5r3s1t0;echnCherapK;ailNcientJecretary,oldiGu0;pervKrgeon;e0oofE;ceptionGsearC;hotographClumbColi1r0sychologF;actitionBogrammB;cem6t5;echanic,inist9us4;airdress8ousekeep8;arm7ire0;fight6m2;eputy,iet0;ici0;an;arpent2lerk;ricklay1ut0;ch0;er;ccoun6d2ge7r0ssis6ttenda7;chitect,t0;ist;minist1v0;is1;rat0;or;ta0;nt", Honorific: "true\xA6a01bYcQdPeOfiJgIhon,jr,king,lHmCoffic00p7queen,r3s0taoiseach,vice6;e1fc,gt,ir,r,u0;ltRpt,rg;cond liInBrgeaJ;abbi,e0;ar1p9s,v0;!erend; admirX;astOhd,r0vt;esideDi1of0;!essM;me mini4nce0;!ss;a3essrs,i2lle,me,r1s0;!tr;!s;stK;gistrate,j,r6yF;i3lb,t;en,ov;eld mar3rst l0;ady,i0;eutena0;nt;shG;sq,xcellency;et,oct6r,utchess;apt6hance4mdr,o0pl;lonel,m2ngress0unci3;m0wom0;an;dr,mand5;ll0;or;!ain;ldg,rig0;!adi0;er;d0sst,tty,yatullah;j,m0v;!ir0;al", SportsTeam: "true\xA60:1A;1:1H;2:1G;a1Eb16c0Td0Kfc dallas,g0Ihouston 0Hindiana0Gjacksonville jagua0k0El0Bm01newToQpJqueens parkIreal salt lake,sAt5utah jazz,vancouver whitecaps,w3yW;ashington 3est ham0Rh10;natio1Oredski2wizar0W;ampa bay 6e5o3;ronto 3ttenham hotspur;blue ja0Mrapto0;nnessee tita2xasC;buccanee0ra0K;a7eattle 5heffield0Kporting kansas0Wt3;. louis 3oke0V;c1Frams;marine0s3;eah15ounG;cramento Rn 3;antonio spu0diego 3francisco gJjose earthquak1;char08paA; ran07;a8h5ittsburgh 4ortland t3;imbe0rail blaze0;pirat1steele0;il3oenix su2;adelphia 3li1;eagl1philNunE;dr1;akland 3klahoma city thunder,rlando magic;athle0Mrai3;de0; 3castle01;england 7orleans 6york 3;city fc,g4je0FknXme0Fred bul0Yy3;anke1;ian0D;pelica2sain0C;patrio0Brevolut3;ion;anchester Be9i3ontreal impact;ami 7lwaukee b6nnesota 3;t4u0Fvi3;kings;imberwolv1wi2;rewe0uc0K;dolphi2heat,marli2;mphis grizz3ts;li1;cXu08;a4eicesterVos angeles 3;clippe0dodDla9; galaxy,ke0;ansas city 3nE;chiefs,roya0E; pace0polis colU;astr06dynamo,rockeTtexa2;olden state warrio0reen bay pac3;ke0;.c.Aallas 7e3i05od5;nver 5troit 3;lio2pisto2ti3;ge0;broncZnuggeM;cowbo4maver3;ic00;ys; uQ;arCelKh8incinnati 6leveland 5ol3;orado r3umbus crew sc;api5ocki1;brow2cavalie0india2;bengaWre3;ds;arlotte horAicago 3;b4cubs,fire,wh3;iteB;ea0ulR;diff3olina panthe0; c3;ity;altimore 9lackburn rove0oston 5rooklyn 3uffalo bilN;ne3;ts;cel4red3; sox;tics;rs;oriol1rave2;rizona Ast8tlanta 3;brav1falco2h4u3;nited;aw9;ns;es;on villa,r3;os;c5di3;amondbac3;ks;ardi3;na3;ls", Uncountable: "true\xA60:1I;1:16;2:1X;a1Rb1Jc1Ad17e10f0Ug0Nh0Ii0Ej0Dknowled1Ql08mYnews,oXpTrOsDt8vi7w3;a5ea0Bi4oo3;d,l;ldlife,ne;rmth,t0;neg17ol0Ctae;e6h5oothpaste,r3una;affTou3;ble,sers,t;ermod1Mund0;a,nnis;aBcene0Aeri1hAil9kittl1now,o8p6t4u3;g10nshi0Q;ati1Le3;am,el;ace1Ee3;ci1ed;ap,cc0;k,v0;eep,ingl1;d0Dfe18l3nd,tish;m11t;a6e4ic3;e,ke0M;c3laxa0Isearch;ogni0Hrea0H;bi1in;aPe5hys2last9o3ress04;l3rk,w0;it2yA;a12trZ;bstetr2il,xygen;aAe8ilk,o5u3;mps,s3;ic;n3o0I;ey,o3;gamy;a3chan2;sl1t;chine3il,themat2; learn0Bry;aught0e5i4ogi0Su3;ck,g0I;ce,ghtn08ngui0QteratN;a3isM;th0;ewelAusti0L;ce,mp3nformaUtself;a3ortan0J;ti3;en0H;a6isto5o3;ck3mework,n3spitali0B;ey;ry;ir,libut,ppiD;ene6o4r3um,ymna0D;aCound;l3ssip;d,f; 3t2;editQpo3;ol;i7lour,o4urnit3;ure;od,rgive3uri0wl;ne3;ss;c9sh;conom2duca8lectr7n5quip6th2very3;body,o3thH;ne;joy3tertain3;ment;iciPon2;tiI;ar4iabet1raugh4;es;ts;aAelcius,h6iv2l5o3urrency;al,ld w3nfusiDttD;ar;ass2oth5;aos,e3;e4w3;ing;se;r7sh;a7eef,i4lood,owls,read,utt0;er;lliar4s3;on;ds;g3ss;ga3;ge;c8dvi7ero5ir4mnes3rt,thlet2;ty;craft;b2d3naut2;ynam2;ce;id,ou3;st2;ics", Infinitive: "true\xA60:6S;1:76;2:5C;3:74;4:73;5:67;6:6F;7:6Y;8:6Q;9:72;A:70;B:5X;C:6X;D:6L;E:77;F:5B;a6Kb66c57d4De3Xf3Jg3Dh37i2Uj2Sk2Ql2Hm26n23o1Yp1Jr0Rs06tYuTvOwHyG;awn,e31ield;aJe1Zhist6iIoGre6D;nd0rG;k,ry;pe,sh,th0;lk,nHrGsh,tDve;n,raE;d0t;aJiHoG;te,w;eGsC;!w;l6Jry;nHpGr4se;gra4Pli41;dGi9lo5Zpub3Q;erGo;mi5Cw1I;aMeLhKig5SoJrHuGwi7;ne,rn;aGe0Mi5Uu7y;de,in,nsf0p,v5J;r2ZuD;ank,reatB;nd,st;lk,rg1Qs9;aZcWeVhTi4Dkip,lSmRnee3Lo52pQtJuGwitD;bmCck,ff0gge7ppHrGspe5;ge,pri1rou4Zvi3;ly,o36;aLeKoJrHuG;dy,mb6;aFeGi3;ngthBss,tD;p,re;m,p;in,ke,r0Qy;la58oil,rink6;e1Zi6o3J;am,ip;a2iv0oG;ck,rtBut;arDem,le5n1r3tt6;aHo2rG;atDew;le,re;il,ve;a05eIisk,oHuG;in,le,sh;am,ll;a01cZdu8fYgXje5lUmTnt,pQquPsKtJvGwa5V;eGiew,o36;al,l,rG;se,t;aFi2u44;eJi7oItG;!o2rG;i5uc20;l3rt;mb6nt,r3;e7i2;air,eHlGo43r0K;a8y;at;aFemb0i3Zo3;aHeGi3y;a1nt;te,x;a5Dr0J;act1Yer,le5u1;a13ei3k5PoGyc6;gni2Cnci6rd;ch,li2Bs5N;i1nG;ge,k;aTerSiRlOoMrIuG;b21ll,mp,rGsh;cha1s4Q;ai1eIiEoG;cGdu8greAhibCmi1te7vi2W;eAlaim;di5pa2ss,veE;iEp,rtr46sGur;e,t;aHead,uG;g,n4;n,y;ck,le;fo34mCsi7;ck,iErt4Mss,u1;bJccur,ff0pera9utweIverGwe;co47lap,ta22u1wG;helm;igh;ser3taF;eHotG;e,i8;ed,gle5;aMeLiIoHuG;ltip3Grd0;nit13ve;nHrr12sreprG;eseE;d,g6us;asu2lt,n0Nr4;intaFna4rHtG;ch,t0;ch,kGry;et;aMeLiJoGu1C;aHck,oGve;k,sB;d,n;ft,g35ke,mCnk,st2YveG;!n;a2Fc0Et;b0Nck,uG;gh,nD;iGno34;ck,ll,ss;am,oFuG;d4mp;gno2mQnGss3H;cOdica9flu0MhNsKtIvG;eGol3;nt,st;erGrodu8;a5fe2;i7tG;aGru5;ll;abCibC;lu1Fr1D;agi24pG;lemeEo22ro3;aKeIi2oHuG;nt,rry;n02pe,st;aGlp;d,t;nd6ppBrm,te;aKloAove1PrIuG;arGeAi15;ant39d;aGip,ow,umb6;b,sp;in,th0ze;aReaQiOlMoJrHuncG;ti3J;acGeshB;tu2;cus,lHrG;ce,eca7m,s30;d,l24;a1ZoG;at,od,w;gu2lGni1Xt,x;e,l;r,tu2;il,stBvG;or;a15cho,le5mSnPstNvalua9xG;a0AcLerKi7pGte19;a18eHi2laFoGreA;rt,se;ct,riG;en8;ci1t;el,han4;abGima9;li1J;ab6couXdHfor8ga4han8j03riDsu2t0vG;isi2Vy;!u2;body,er4pG;hasiGow0;ze;a07eUiLoKrHuG;mp;aHeAiG;ft;g,in;d4ubt;ff0p,re5sHvG;iZor8;aKcHliGmiApl1Btingui14;ke;oGuA;uGv0;ra4;gr1YppG;ear,ro3;cOeNfLliv0ma0Fny,pKsHterG;mi0G;cribe,er3iHtrG;oy;gn,re;a0Be0Ai5osC;eGi0By;at,ct;m,pB;iIlHrG;ea1;a2i06;de;ma4n8rGte;e,kB;a0Ae09h06i9l04oJrG;aHeGoAu0Hy;a9dC;ck,ve;llZmSnHok,py,uGv0;gh,nt;cePdu5fMsKtIvG;eGin8;rt,y;aFin0VrG;a7ibu9ol;iGtitu9;d0st;iHoGroE;rm;gu2rm;rn;biLfoKmaJpG;a2laF;in;re;nd;rt;ne;ap1e5;aGip,o1;im,w;aHeG;at,ck,w;llen4n4r4se;a1nt0;ll,ncIrGt0u1;eGry;!en;el;aSePloOoMrIuG;lGry;ly;igHuG;sh;htB;en;a7mb,o7rrGth0un8;ow;ck;ar,lHnefCtrG;ay;ie3ong;ng,se;band0Jc0Bd06ffo05gr04id,l01mu1nYppTrQsKttGvoid,waC;acIeHra5;ct;m0Fnd;h,k;k,sG;eIiHocia9uG;me;gn,st;mb6rt;le;chHgGri3;ue;!i3;eaJlIroG;aDve;ch;aud,y;l,r;noun8sw0tG;icipa9;ce;lHt0;er;e4ow;ee;rd;aRdIju7mCoR;it;st;!reA;ss;cJhie3knowled4tiva9;te;ge;ve;eIouEu1;se;nt;pt;on", Unit: "true\xA60:19;a14b12c0Od0Ne0Lf0Gg0Ch09in0Hjoule0k02l00mNnMoLpIqHsqCt7volts,w6y4z3\xB02\xB51;g,s;c,f,n;b,e2;a0Nb,d0Dears old,o1;tt0H;att0b;able4b3d,e2on1sp;!ne0;a2r0D;!l,sp;spo04; ft,uare 1;c0Id0Hf3i0Fkilo0Jm1ya0E;e0Mil1;e0li0H;eet0o0D;t,uart0;ascals,e2i1ou0Pt;c0Mnt0;rcent,t02;hms,uYz;an0JewtT;/s,b,e9g,i3l,m2p1\xB2,\xB3;h,s;!\xB2;!/h,cro5l1;e1li08;! pFs1\xB2;! 1;anEpD;g06s0B;gQter1;! 2s1;! 1;per second;b,i00m,u1x;men0x0;b,elvin0g,ilo2m1nR;!/h,ph,\xB2;byZgXmeter1;! p2s1;! p1;er1; hour;e1g,r0z;ct1rtz0;aXogQ;al2b,igAra1;in0m0;!l1;on0;a4emtPl2t1;\xB2,\xB3; oz,uid ou1;nce0;hrenheit0rad0;b,x1;abyH;eciCg,l,mA;arat0eAg,m9oulomb0u1;bic 1p0;c5d4fo3i2meAya1;rd0;nch0;ot0;eci2;enti1;me4;!\xB2,\xB3;lsius0nti1;g2li1me1;ter0;ram0;bl,y1;te0;c4tt1;os1;eco1;nd0;re0;!s", Organization: "true\xA60:46;a3Ab2Qc2Ad21e1Xf1Tg1Lh1Gi1Dj19k17l13m0Sn0Go0Dp07qu06rZsStFuBv8w3y1;amaha,m0Xou1w0X;gov,tu2S;a3e1orld trade organizati41;lls fargo,st1;fie22inghou16;l1rner br3D;-m11gree31l street journ25m11;an halNeriz3Wisa,o1;dafo2Gl1;kswagLvo;bs,kip,n2ps,s1;a tod2Rps;es35i1;lev2Xted natio2Uv; mobi2Kaco bePd bMeAgi frida9h3im horto2Tmz,o1witt2W;shiba,y1;ota,s r Y;e 1in lizzy;b3carpen33daily ma2Xguess w2holli0rolling st1Ms1w2;mashing pumpki2Ouprem0;ho;ea1lack eyed pe3Fyrds;ch bo1tl0;ys;l2s1;co,la m12;efoni07us;a6e4ieme2Gnp,o2pice gir5ta1ubaru;rbucks,to2N;ny,undgard1;en;a2Rx pisto1;ls;few25insbu26msu1X;.e.m.,adiohead,b6e3oyal 1yan2X;b1dutch she4;ank;/max,aders dige1Ed 1vl32;bu1c1Uhot chili peppe2Klobst28;ll;c,s;ant2Vizno2F;an5bs,e3fiz24hilip morrBi2r1;emier27octer & gamb1Rudenti14;nk floyd,zza hut;psi28tro1uge08;br2Qchina,n2Q; 2ason1Xda2G;ld navy,pec,range juli2xf1;am;us;a9b8e5fl,h4i3o1sa,wa;kia,tre dame,vart1;is;ke,ntendo,ss0K;l,s;c,st1Etflix,w1; 1sweek;kids on the block,york08;a,c;nd1Us2t1;ional aca2Fo,we0Q;a,cYd0O;aAcdonald9e5i3lb,o1tv,yspace;b1Nnsanto,ody blu0t1;ley crue,or0O;crosoft,t1;as,subisO;dica3rcedes2talli1;ca;!-benz;id,re;'s,s;c's milk,tt13z1Y;'ore09a3e1g,ittle caesa1Ktd;novo,x1;is,mark; pres5-z-boy,bour party;atv,fc,kk,m1od1K;art;iffy lu0Lo3pmorgan1sa;! cha1;se;hnson & johns1Sy d1R;bm,hop,n1tv;c,g,te1;l,rpol; & m,asbro,ewlett-packaTi3o1sbc,yundai;me dep1n1J;ot;tac1zbollah;hi;eneral 6hq,l5mb,o2reen d0Iu1;cci,ns n ros0;ldman sachs,o1;dye1g0B;ar;axo smith kliZencore;electr0Im1;oto0V;a3bi,da,edex,i1leetwood mac,oGrito-l0A;at,nancial1restoV; tim0;cebook,nnie mae;b06sa,u3xxon1; m1m1;ob0H;!rosceptics;aiml0Ae5isney,o3u1;nkin donuts,po0Wran dur1;an;j,w j1;on0;a,f leppa3ll,p2r spiegZstiny's chi1;ld;eche mode,t;rd;aEbc,hBi9nn,o3r1;aigsli5eedence clearwater reviv1ossra05;al;!ca c5l4m1o0Ast05;ca2p1;aq;st;dplMgate;ola;a,sco1tigroup;! systems;ev2i1;ck fil-a,na daily;r0Hy;dbury,pital o1rl's jr;ne;aGbc,eCfAl6mw,ni,o2p,r1;exiteeWos;ei3mbardiJston 1;glo1pizza;be;ng;ack & deckFo2ue c1;roX;ckbuster video,omingda1;le; g1g1;oodriN;cht3e ge0n & jer2rkshire hathaw1;ay;ryH;el;nana republ3s1xt5y5;f,kin robbi1;ns;ic;bXcSdidRerosmith,ig,lLmFnheuser-busEol,ppleAr7s3t&t,v2y1;er;is,on;hland2s1;n,ociated F; o1;il;by4g2m1;co;os; compu2bee1;'s;te1;rs;ch;c,d,erican3t1;!r1;ak; ex1;pre1;ss; 4catel2t1;air;!-luce1;nt;jazeera,qae1;da;as;/dc,a3er,t1;ivisi1;on;demy of scienc0;es;ba,c", Demonym: "true\xA60:16;1:13;a0Wb0Nc0Cd0Ae09f07g04h02iYjVkTlPmLnIomHpDqatari,rBs7t5u4v3wel0Rz2;am0Fimbabwe0;enezuel0ietnam0H;g9krai1;aiwThai,rinida0Iu2;ni0Qrkmen;a4cot0Ke3ingapoOlovak,oma0Tpa05udRw2y0X;edi0Kiss;negal0Br08;mo0uU;o6us0Lw2;and0;a3eru0Hhilipp0Po2;li0Ertugu06;kist3lesti1na2raguay0;ma1;ani;amiZi2orweP;caragu0geri2;an,en;a3ex0Mo2;ngo0Erocc0;cedo1la2;gasy,y08;a4eb9i2;b2thua1;e0Dy0;o,t02;azakh,eny0o2uwaiti;re0;a2orda1;ma0Bp2;anN;celandic,nd4r2sraeli,ta02vo06;a2iT;ni0qi;i0oneV;aiDin2ondur0unN;di;amDe2hanai0reek,uatemal0;or2rm0;gi0;i2ren7;lipino,n4;cuadoVgyp6ngliJsto1thiopi0urope0;a2ominXut4;niH;a9h6o4roa3ub0ze2;ch;ti0;lom2ngol5;bi0;a6i2;le0n2;ese;lifor1m2na3;bo2eroo1;di0;angladeshi,el8o6r3ul2;gaG;aziBi2;ti2;sh;li2s1;vi0;aru2gi0;si0;fAl7merBngol0r5si0us2;sie,tr2;a2i0;li0;gent2me1;ine;ba1ge2;ri0;ni0;gh0r2;ic0;an", Possessive: "true\xA6anyAh5its,m3noCo1sometBthe0yo1;ir1mselves;ur0;!s;i8y0;!se4;er1i0;mse2s;!s0;!e0;lf;o1t0;hing;ne", Currency: "true\xA6$,aud,bScQdLeurKfJgbp,hkd,iIjpy,kGlEp8r7s3usd,x2y1z0\xA2,\xA3,\xA5,\u0434\u0435\u043D,\u043B\u0432,\u0440\u0443\u0431,\u0E3F,\u20A1,\u20A8,\u20AC,\u20AD,\uFDFC;lotyS\u0142;en,uanR;af,of;h0t5;e0il5;k0q0;elM;iel,oubleLp,upeeL;e2ound st0;er0;lingI;n0soH;ceGn0;ies,y;e0i8;i,mpi7;n,r0wanzaCyatC;!onaBw;ls,nr;ori7ranc9;!o8;en3i2kk,o0;b0ll2;ra5;me4n0rham4;ar3;ad,e0ny;nt1;aht,itcoin0;!s", City: "true\xA60:73;1:61;2:6G;3:5U;4:5R;a68b54c4Id4Ae46f3Yg3Jh38i2Zj2Uk2Dl22m1Kn19o16p0Uq0Sr0Ls01tPuOvLwDxiBy9z5;a7h5i4Muri4O;a5e5ongsh0;ng3J;greb,nzib5G;ang2e5okoha3Uunfu;katerin3Jrev0;a5n0O;m5Hn;arsBeAi6roclBu5;h0xi,zh5P;c7n5;d5nipeg,terth4;hoek,s1K;hi5Zkl3C;l63xford;aw;a6ern2i5ladivost5Molgogr6K;en3lni6R;lenc6Dncouv2Yr3ughn;lan bat1Drumqi,trecht;aDbilisi,eCheBi9o8r7u5;l21n63r5;in,ku;ipoli,ondh62;kyo,m34ron1QulouS;an5jua3l2Zmisoa6Era3;j4Xshui; hag65ssaloni2L;gucigal28hr0l av1W;briz,i6llinn,mpe5Ang5rtu,shk2X;i2Msh0;an,chu1n0p2Iyu0;aEeDh8kopje,owe1It7u5ydney;ra5zh51;ba0Jt;aten is59ockholm,rasbou6Auttga31;an8e6i5;jiazhua1llo1m60y0;f54n5;ya1zh4L;gh3Ot4U;att4Ao1Yv49;cramen18int DlBn5o paulo,ppo3Wrajevo; 7aa,t5;a 5ia3Io domin3I;a3fe,m1O;antonCdie3Gfrancisco,j5ped3Ssalv8;o5u0;se;em,v5z2B;ad0I;lou59peters29;aAe9i7o5;me,sar5t5A;io;ga,o5yadh;! de janei3I;cife,ykjavik;b4Uip4lei2Mnc2Swalpindi;ingdao,u5;ez2i0Q;aEeDhCiBo8r7u6yong5;ya1;eb5Aya1;ag54etor53;rt5zn0; 5la4Fo;au prin0Nelizabe29sa05;ls3Srae5Ctts2B;iladelph4Ynom pe1Doenix;r26tah tik3I;ler00naji,r4Pt5;na,r36;ak47des0Lm1Rr6s5ttawa;a3Ylo;an,d07;a8ew6i5ovosibir1Oyc;ng2Hs; 5cast39;del27orlea46taip16york;g8iro4Xn5pl2Zshv36v0;ch6ji1t5;es,o1;a1o1;a6o5p4;ya;no,sa0Y;aFeCi9o6u5;mb2Cni28sc40;gadishu,nt6s5;c17ul;evideo,re31;ami,l6n18s5;kolc,sissauga;an,waukee;cca,d5lbour2Pmph41;an,ell5i3;in,\xEDn;cau,drAkass2Tl9n8r5shh4A;aca6ib5rakesh,se2N;or;i1Ty;a4EchEdal12i47;mo;id;aCeiAi8o6u5vRy2;anLckn0Rdhia3;n5s angel28;d2g bea1O;brev2De3Kma5nz,sb2verpo2A;!ss29;c5pzig;est0C; p6g5ho2Yn0Gusan27;os;az,la35;aHharFiClaipeBo9rak0Hu7y5;iv,o5;to;ala lump4n5;mi1sh0;be,hi0Llka2Zpavog4si5wlo2;ce;da;ev,n5rkuk;gSsha5;sa;k5toum;iv;bIdu3llakuric0Tmpa3Gn6ohsiu1ra5un1Lwaguc0T;c0Sj;d5o,p4;ah1Vy;a7e6i5ohannesZ;l1Xn0;dd37rusalem;ip4k5;ar2J;bad0mph1QnBrkutYs8ta01z5\u0307zm7;m6tapala5;pa;ir;fah0l6tanb5;ul;am2Zi2I;che2d5;ianap2Lo21;aBe8o5yder2W; chi mi6ms,nolulu,u5;st2;nh;f6lsin5rakli2;ki;ei;ifa,lifax,m7n5rb1Dva3;gAnov5oi;er;bu2Wilt2;aFdanEenDhCiPlasgBo9raz,u5;a5jr21;dal6ng5yaquil;zh1H;aja2Lupe;ld coa18then5;bu2P;ow;ent;e0Toa;sk;lw7n5za;dhi5gt1C;nag0S;ay;aisal26es,o8r6ukuya5;ma;ankfu5esno;rt;rt5sh0; wor6ale5;za;th;d5indhov0Nl paso;in5mont2;bur5;gh;aAe8ha0Visp4o7resd0Ju5;b5esseldorf,rb0shanbe;ai,l0G;ha,nggu0rtmu11;hradRl5troit;hi;donghHe5k08li0masc1Xr es sala1HugavpiY;gu,je2;aKebu,hAo5raio03uriti1P;lo7n6penhag0Ar5;do1Nk;akLst0V;gVm5;bo;aBen8i6ongqi1ristchur5;ch;ang m7ca5ttago1;go;g6n5;ai;du,zho1;n5ttogr12;digarh,g5;ch8sha,zh06;i9lga8mayenJn6pe town,r5;acCdiff;ber18c5;un;ry;ro;aUeMhJirmingh0ToIr9u5;chareRdapeRenos air7r5s0tu0;g5sa;as;es;a9is6usse5;ls;ba6t5;ol;ne;sil0Mtisla7zzav5;il5;le;va;goZst2;op6ubaneshw5;ar;al;iBl9ng8r5;g6l5n;in;en;aluru,hazi;fa5grade,o horizonte;st;ji1rut;ghd0BkGnAot9r7s6yan n4;ur;el,r07;celo3ranquil09;na;ou;du1g6ja lu5;ka;alo6k5;ok;re;ng;ers5u;field;a04b01cc00ddis abaZgartaYhmedWizawl,lQmNnHqaZrEsBt7uck5;la5;nd;he7l5;an5;ta;ns;h5unci2;dod,gab5;at;li5;ngt2;on;a6chora5kaNtwerp;ge;h7p5;ol5;is;eim;aravati,m0s5;terd5;am; 8buquerq7e5giers,maty;ppo,xandr5;ia;ue;basrah al qadim5mawsil al jadid5;ah;ab5;ad;la;ba;ra;idj0u dha5;bi;an;lbo6rh5;us;rg", Country: "true\xA60:39;1:2M;a2Xb2Ec22d1Ye1Sf1Mg1Ch1Ai14j12k0Zl0Um0Gn05om3DpZqat1KrXsKtCu6v4wal3yemTz2;a25imbabwe;es,lis and futu2Y;a2enezue32ietnam;nuatu,tican city;.5gTkraiZnited 3ruXs2zbeE;a,sr;arab emirat0Kkingdom,states2;! of am2Y;k.,s.2; 28a.;a7haBimor-les0Bo6rinidad4u2;nis0rk2valu;ey,me2Ys and caic1U; and 2-2;toba1K;go,kel0Znga;iw2Wji2nz2S;ki2U;aCcotl1eBi8lov7o5pa2Cri lanka,u4w2yr0;az2ed9itzerl1;il1;d2Rriname;lomon1Wmal0uth 2;afr2JkLsud2P;ak0en0;erra leoEn2;gapo1Xt maart2;en;negKrb0ychellY;int 2moa,n marino,udi arab0;hele25luc0mart20;epublic of ir0Dom2Duss0w2;an26;a3eHhilippinTitcairn1Lo2uerto riM;l1rtugE;ki2Cl3nama,pua new0Ura2;gu6;au,esti2;ne;aAe8i6or2;folk1Hth3w2;ay; k2ern mariana1C;or0N;caragua,ger2ue;!ia;p2ther19w zeal1;al;mib0u2;ru;a6exi5icro0Ao2yanm05;ldova,n2roc4zamb9;a3gol0t2;enegro,serrat;co;c9dagasc00l6r4urit3yot2;te;an0i15;shall0Wtin2;ique;a3div2i,ta;es;wi,ys0;ao,ed01;a5e4i2uxembourg;b2echtenste11thu1F;er0ya;ban0Hsotho;os,tv0;azakh1Ee3iriba03o2uwait,yrgyz1E;rWsovo;eling0Jnya;a2erF;ma15p1B;c6nd5r3s2taly,vory coast;le of m19rael;a2el1;n,q;ia,oI;el1;aiSon2ungary;dur0Mg kong;aAermany,ha0Pibralt9re7u2;a5ern4inea2ya0O;!-biss2;au;sey;deloupe,m,tema0P;e2na0M;ce,nl1;ar;bTmb0;a6i5r2;ance,ench 2;guia0Dpoly2;nes0;ji,nl1;lklandTroeT;ast tim6cu5gypt,l salv5ngl1quatorial3ritr4st2thiop0;on0; guin2;ea;ad2;or;enmark,jibou4ominica3r con2;go;!n B;ti;aAentral african 9h7o4roat0u3yprQzech2; 8ia;ba,racao;c3lo2morPngo-brazzaville,okFsta r03te d'ivoiK;mb0;osD;i2ristmasF;le,na;republic;m2naTpe verde,yman9;bod0ero2;on;aFeChut00o8r4u2;lgar0r2;kina faso,ma,undi;azil,itish 2unei;virgin2; is2;lands;liv0nai4snia and herzegoviGtswaGuvet2; isl1;and;re;l2n7rmuF;ar2gium,ize;us;h3ngladesh,rbad2;os;am3ra2;in;as;fghaFlCmAn5r3ustr2zerbaijH;al0ia;genti2men0uba;na;dorra,g4t2;arct6igua and barbu2;da;o2uil2;la;er2;ica;b2ger0;an0;ia;ni2;st2;an", Region: "true\xA60:2M;1:2S;2:2J;a2Pb2Cc1Yd1Tes1Sf1Qg1Kh1Gi1Bj17k12l0Zm0On07o05pZqWrTsKtFuCv9w5y3zacatec2T;akut0o0Du3;cat2k07;a4est 3isconsin,yomi1L;bengal,vi6;rwick2Ashington3;! dc;er4i3;rgin0;acruz,mont;dmurt0t3;ah,tar3; 2Ka0W;a5e4laxca1Qripu1Wu3;scaDva;langa1nnessee,x2E;bas0Um3smNtar24;aulip2Cil nadu;a8i6o4taf10u3ylh1E;ffYrr03s19;me1Bno1Puth 3;cVdU;ber0c3kkim,naloa;hu2ily;n4skatchew2xo3;ny; luis potosi,ta catari1;a3hode9;j3ngp06;asth2shahi;ingh24u3;e3intana roo;bec,en5reta0Q;ara7e5rince edward3unjab; i3;sl0A;i,nnsylv3rnambu0A;an0;!na;axa0Xdisha,h3klaho1Zntar3reg6ss0Ax0F;io;aIeDo5u3;evo le3nav0V;on;r3tt16va scot0;f8mandy,th3; 3ampton15;c5d4yo3;rk13;ako1M;aroli1;olk;bras1Lva0Bw3; 4foundland3;! and labrador;brunswick,hamp0Wjers3mexiRyork state;ey;galOyarit;a9eghala0Mi5o3;nta1r3;dov0elos;ch5dlanCn4ss3zor11;issippi,ouri;as geraOneso18;ig2oac2;dhy12harasht0Gine,ni4r3ssachusetts;anhao,i el,ylF;p3toba;ur;anca0Ie3incoln0IouisH;e3iR;ds;a5e4h3omi;aka06ul1;ntucky,ra01;bardino,lmyk0ns0Qr3;achay,el0nata0X;alis5har3iangxi;kh3;and;co;daho,llino6n3owa;d4gush3;et0;ia1;is;a5ert4i3un2;dalFm0D;fordZ;mpYrya1waii;ansu,eorg0lou7oa,u3;an4erre3izhou,jarat;ro;ajuato,gdo3;ng;cesterS;lori3uji2;da;sex;ageTe6o4uran3;go;rs3;et;lawaLrbyK;aEeaDh8o3rimea ,umbr0;ahui6l5nnectic4rsi3ventry;ca;ut;i02orado;la;e4hattisgarh,i3uvash0;apQhuahua;chn4rke3;ss0;ya;ra;lFm3;bridge6peche;a8ihar,r7u3;ck3ryat0;ingham3;shi3;re;emen,itish columb0;h0ja cal7lk6s3v6;hkorto3que;st2;an;ar0;iforn0;ia;dygea,guascalientes,lAndhr8r4ss3;am;izo1kans4un3;achal 6;as;na;a 3;pradesh;a5ber4t3;ai;ta;ba4s3;ka;ma", Place: "true\xA6a0Eb0Bc04d03e02f00gVhUiRjfk,kOlMmJneGoFpBque,rd,s9t6u5v4w1y0;akutOyz;ake isFis1y0;!o;!c;a,ostok,t;laanbaatar,p02safa,t;ahiti,e1he 0;bronx,hamptons;nn,x;a0fo,oho,t,under7yd;khalNsk;a2e1h0itcairn;l,x;k,nnN;!cif04;kla,nt,rd;b1w eng0;land;!r;a1co,i0t,uc;dNnn;gadZlibu,nhattZ;a0gw,hr;s,x;an1osrae,rasnoyar0ul;sk;!s;a1cn,da,nd0st;ianRochina;!x;arlem,kg,nd,oHwy;a3re0;at 0enwich;brita0lakH;in;!y village;co,l0ra;!a;urope,vergladC;ak,en,fw,ist,own4xb;al5dg,gk,h2l1o0rA;lo,nn;!t;a1ina0uuk;town;morro,tham;!if;cn,e1kk,l0rooklyn;vd;l air,verly hills;frica,lta,m7n3r2sia,tl1ve,zor0;es;!ant2;ct1iz;adyr,tarct0;ic0; oce0;an;ericas,s", MaleName: "true\xA60:E5;1:D6;2:DO;3:AY;4:D2;5:CG;6:B6;7:CW;8:C8;9:DK;A:DL;B:A6;C:C2;aCObBLcAJd9He8Nf85g7Ih6Ui6Ej5Ek52l4Dm35n2To2Np2Fqu2Dr1Ls11t0Eu0Dv07wTxSyIzD;aDor0;cDh9Tkaria,n5W;hEkD;!aCM;ar5WeCL;aLoFuD;sDu2KvBY;if,uf;nFsEusD;ouf,sD;ef;aDg;s,tD;an,h0;hli,nBMssX;avi3ho4;aMeKiFoDyaC2;jcie8Clfgang,odrow,utD;!er;lDnst1;bFey,frD1lD;aBDiD;am,e,s;e9Fur;i,nde6sD;!l8t1;de,lErrAyD;l1ne;lDt3;aAAy;aGiDladimir,ojte7Z;cEha0kt69nceDrgAJva0;!nt;e3Vt67;lentDnA5;in4Y;ghBVlyss5Cnax,sm0;aXeShOiMoHrFuEyD;!l3ro7s1;n9r5C;avAWeDist0oy,um0;ntAOv5Zy;bGdFmDny;!as,mDoharu;aCTie,y;!d;iBy;mDt5;!my,othy;adFeoEia8GomD;!as;!do8P;!de5;dGrD;en9LrD;an9KeDy;ll,n9J;!dy;dgh,ha,iDnn3req,tsu4T;cB5ka;aTcotRePhLiJoHpenc3tDur1Vylve9Kzym1;anFeDua8D;f0phBTvDwa8C;e62ie;!islaw,l8;lom1nBFuD;leyma7ta;dDlBm1yabonga;!dhart7Bn8;aFeD;lDrm0;d1t1;h7Une,qu10un,wn,y7;aDbasti0k2Al4Rrg4Oth,ymoAU;m5n;!tD;!ie,y;lEmDnti2Eq5Bul;!ke5MmCu4;ik,vato7X;aYeUheAAiQoHuEyD;an,ou;b7NdEf5pe7SssD;!elBZ;ol3Fy;an,bKcJdIel,geHh0landBQmGnFry,sEyD;!ce;coe,s;!aAHnC;an,eo;l47r;e5Og3n8olfo,ri7A;co,ky;bCeB7;cDl8;ar6Pc6OhEkDo;!ey,ie,y;a99ie;gEid,ubAx,yDza;an1InY;gA8iD;naA4s;ch70fa4lHmGndFpha4sEul,wi2HyD;an,mo82;h7Vm5;alBDol2Uy;iATon;f,ph;ent2inD;cy,t1;aIeGhilFier72ol,rD;aka16eD;m,st1;!ip,lip;dALrcy,tD;ar,e3Gr1X;b4Kdra7Ft4ZulD;!o17;ctav3Fi3liv3mAFndrej,rHsEtDum9wA;is,to;aEc9k9m0vD;al5Z;ma;i,l53vL;aLeJiFoDu3A;aDel,j5l0ma0r3K;h,m;cEg4i49kD;!au,h7Uola;holBkDolB;!olB;al,d,il,ls1vD;il8Y;hom,thD;anDy;!a4i4;aZeWiMoHuEyD;l2Jr1;hamEr6XstaD;fa,p5C;ed,mH;di0We,hamFis2FntEsDussa;es,he;e,y;ad,ed,mD;ad,ed;cIgu4hai,kGlFnEtchD;!e6;a8Aik;house,o0Bt1;ae5YeA4olD;aj;ah,hDk8;aEeD;al,l;el,l;hElv2rD;le,ri6v2;di,met;ay0ck,hTjd,ks2DlRmadWnQrKs1tFuricExD;!imilian9Nwe6;e,io;eGhEiBtDus,yB;!eo,hew,ia;eDis;us,w;j,o;cHio,kGlFqu7Dsha6tDv2;iDy;!m,n;in,on;!el,oPus;!el9IoOus;iGu4;achDcolm,ik;ai,y;amEdi,eDmoud;sh;adDm5T;ou;aXeQiOlo3EoKuEyD;le,nd1;cGiFkDth3uk;aDe;!s;gi,s,z;as,iaD;no;g0nn7SrenFuDv8Jwe6;!iD;e,s;!zo;am,oD;n4r;a8Cevi,la5JnIoGst3thaFvD;eDi;nte;bo;!nD;!a6Sel;!ny;mFnErDur5Hwr5H;ry,s;ce,d1;ar,o5A;aLeGhaled,iDrist5Iu4Vy6X;er0p,rD;by,k,ollD;os;en0iGnDrmit,v44;!dEnDt5Z;e1Ay;a6ri59;r,th;cp3j5m66na73rEsp9them,uD;ri;im,l;a02eUiSoGuD;an,lDst2;en,iD;an,en,o,us;aNeLhnKkubBnIrGsD;eEhDi8Bue;!ua;!ph;dDge;an,i,on;!aDny;h,s,th5I;!ath5Hie,nC;!l,sDy;ph;o,qu2;an,mD;!mC;d,ffIrFsD;sDus;!e;a6BemEmai7oDry;me,ni0Y;i7Ty;!e60rD;ey,y;cKdAkImHrFsEvi3yD;!dAs1;on,p3;ed,od,rDv56;e5Nod;al,es4Xis1;a,e,oDub;b,v;k,ob,quD;es;aWbQchiPgNkeMlija,nuLonut,rJsFtDv0;ai,suD;ki;aEha0i7DmaDsac;el,il;ac,iaD;h,s;a,vinDw2;!g;k,nngu5S;!r;nacDor;io;ka;ai,rahD;im;aPeJoIuDyd9;be2KgGmber4WsD;eyEsD;a2e2;in,n;h,o;m3ra3Gsse2wa4B;aHctGitGnrErD;be2Dm0;iDy;!q11;or;th;bMlLmza,nKo,rFsEyD;a4JdA;an,s0;lGo50rFuDv8;hi4Gki,tD;a,o;is1y;an,ey;k,s;!im;ib;aVeRiPlenOoLrHuD;ilEsD;!tavo;herme,lerD;mo;aFegDov3;!g,orD;io,y;dy,h5Wnt;nzaErD;an,d1;lo;!n;lbe5Ano,oD;rg3Hvan5A;ne,oFrD;aDry;ld,rd5H;ffr8rge;brElArDv2;la28r3Sth,y;e3EielD;!i5;aTePiNlLorr0NrD;anFedDitz;!dCeDri2B;ri2A;cFkD;!ie,lD;in,yn;esLisD;!co,z36;etch3oD;yd;d4lDnn,onn;ip;deriFliEng,rnD;an06;pe,x;co;bi0di,hd;ar04dZfrYit0lSmKnHo2rFsteb0th0uge7vDymAzra;an,eD;ns,re36;gi,i0DnDrol,v2w2;est4Pie;oEriqDzo;ue;ch;aJerIiEmD;aIe2Z;lErD;!h0;!iD;o,s;s1y;nu4;be0Cd1iGliFmEt1viDwood;n,s;er,o;ot1Ys;!as,j4NsD;ha;a2en;!dCg9mGoEuEwD;a2Din;arD;do;o0Wu0W;l,nD;est;a01eRiOoHrGuFwEylD;an,l0;ay7ight;a7dl8nc0st2;ag0ew;minGnEri0ugDvydBy2D;!lB;!a2MnDov0;e6ie,y;go,iDykB;cDk;!k;armuEeDll1on,rk;go;id;anKj0lbeJmetri5nHon,rGsFvEwDxt3;ay7ey;en,in;hawn,mo0B;ek,ri0I;is,nDv3;is,y;rt;!dD;re;an,lNmLnKrGvD;e,iD;! lucDd;as,ca;en,iFne6rDyl;eDin,yl;l3Bn;n,o,us;!e,i4ny;iDon;an,en,on;e,lB;as;a09e07hYiar0lNoIrGuEyrD;il,us;rtD;!is;aDistob0U;ig;dy,lGnErD;ey,neli5y;or,rD;ad;by,e,in,l2t1;aIeFiDyK;fDnt;fo0Ft1;meEt5velaD;nd;nt;rFuEyD;!t1;de;enD;ce;aIeGrisEuD;ck;!tD;i0oph3;st3;er;d,rDs;b4leD;s,y;cDdric,s9;il;lGmer1rD;ey,lEro6y;ll;!os,t1;eb,v2;a07eZiVlaUoRrEuDyr1;ddy,rtK;aLeGiFuEyD;an,ce,on;ce,no;an,ce;nEtD;!t;dEtD;!on;an,on;dEndD;en,on;!foDl8y;rd;bErDyd;is;!by;i7ke;bFlEshD;al;al,lC;ek;nHrDshoi;at,nEtD;!r1C;aDie;rd14;!edict,iEjam2nC;ie,y;to;kaMlazs,nHrD;n8rDt;eDy;tt;ey;dDeE;ar,iD;le;ar17b0Vd0Rf0Pgust2hm0Mi0Jja0Il04m00nSputsiRrIsaHuFveEyDziz;a0kh0;ry;gust5st2;us;hi;aKchJiIjun,maHnFon,tDy0;hDu09;ur;av,oD;ld;an,nd0H;!el,ki;ie;ta;aq;as,dIgel0CtD;hoGoD;i7nD;!i09y;ne;ny;er,reDy;!as,i,s,w;iFmaDos;nu4r;el;ne,r,t;an,bePdAeJfHi,lGonFphXt1vD;aNin;on;so,zo;an,en;onTrD;edU;c,jaGksandFssaGxD;!andD;er,ru;ar,er;ndD;ro;rtN;ni;dAm9;ar;en;ad,eD;d,t;in;onD;so;aEi,olfDri0vik;!o;mDn;!a;dHeGraEuD;!bakr,lfazl;hDm;am;!l;allIelFoulaye,ulD;!lDrF;ah,o;! rD;ahm0;an;ah;av,on", LastName: "true\xA60:9F;1:9V;2:9H;3:9X;4:9N;5:8J;6:9K;7:A0;8:9E;9:88;A:6E;B:77;C:6J;a9Ub8Lc7Kd6Xe6Rf6Dg5Vh58i54j4Pk45l3Nm2Rn2Eo26p1Nquispe,r17s0Ft05vVwOxNyGzD;aytsADhD;aDou,u;ng,o;aGeun7ZiDoshiA9un;!lD;diDmaz;rim,z;maDng;da,guc97mo6UsDzaB;aBhiA7;iao,u;aHeGiEoDright,u;jc8Sng;lDmm0nkl0sniewsB;liA1s3;b0iss,lt0;a5Rgn0lDng,tanabe;k0sh;aHeGiEoDukA;lk5roby5;dAllalDnogr2Zr0Zss0val37;ba,obos;lasEsel7N;lGn dFrg8EsEzD;qu7;ily9Oqu7silj9O;en b35ijk,yk;enzue95verde;aLeix1JhHi4j6ka3IoGrFsui,uD;om4ZrD;c4n0un1;an,embl8TynisB;dor95lst31m2rr9th;at5Mi7LoD;mErD;are6Ylaci64;ps3s0Y;hirAkah8Dnaka;a00chWeThPiNmKoItFuEvDzabo;en8Aobod34;ar7bot2lliv4zuB;aEein0oD;i67j3Lyan8V;l6rm0;kol5lovy5re6Psa,to,uD;ng,sa;iDy5Z;rn5tD;!h;l5YmDngh,rbu;mo6Do6J;aFeDimizu;hu,vchD;en7Cuk;la,r17;gu8mDoh,pulve8Trra4R;jDyD;on5;evi6Filtz,miDneid0roed0ulz,warz;dEtD;!z;!t;ar42h6ito,lFnDr2saBto,v2;ch7d0AtDz;a4Pe,os;as,ihAm3Zo0Q;aOeNiKoGuEyD;a66oo,u;bio,iz,sD;so,u;bEc7Bdrigue57g03j73mDosevelt,ssi,ta7Nux,w3Z;a4Be0O;ertsDins3;!on;bei0LcEes,vDzzo;as,e8;ci,hards3;ag4es,it0ut0y9;dFmEnDsmu7Zv5F;tan1;ir7os;ic,u;aSeLhJiGoErDut6;asad,if5Zochazk1W;lishc24pDrti62u55we66;e2Tov48;cEe09nD;as,to;as60hl0;aDillips;k,m,n5K;de3AetIna,rGtD;ersErovDtersC;!a,ic;en,on;eDic,ry,ss3;i8ra,tz,z;ers;h71k,rk0tEvD;ic,l3T;el,t2O;bJconnor,g2ClGnei5PrEzD;demir,turk;ella3MtDwe5N;ega,iz;iDof6GsC;vDyn1F;ei8;aPri1;aLeJguy1iFoDune44ym4;rodahl,vDwak;ak3Uik5otn56;eEkolDlsCx3;ic,ov6X;ls1miD;!n1;ils3mD;co42ec;gy,kaEray4varD;ro;jiDmu8shiD;ma;aXcVeQiPoIuD;lGnFrDssoli5T;atDpUr68;i,ov2;oz,te4B;d0l0;h4lIo0HrEsDza0Z;er,s;aFeEiDoz5r3Ete4B;!n6F;au,i8no,t4M;!l9;i2Rl0;crac5Ohhail5kke3Qll0;hmeGij0j2ElFndErci0ssiDyer19;!er;e3Bo2Z;n0Io;dAti;cartDlaughl6;hy;dMe6Dgnu5Ei0jer34kLmJnci59rFtEyD;er,r;ei,ic,su1N;iEkAqu9roqu6tinD;ez,s;a54c,nD;!o;a52mD;ad5;e5Oin1;rig4Ns1;aSeMiIoGuEyD;!nch;k2nDo;d,gu;mbarDpe2Rvr2;di;!nDu,yana1R;coln,dD;bDholm;erg;bed5TfeGhtFitn0kaEn6rDw2G;oy;!j;in1on1;bvDvD;re;iDmmy,rsCu,voie;ne,t11;aTennedy,h4iSlQnez46oJrGuEvar4woD;k,n;cerDmar58znets5;a,o2G;aDem0i2Zyeziu;sni3PvD;ch3U;bay4Frh0Jsk0TvaFwalDzl5;czDsB;yk;cFlD;!cDen3Q;huk;!ev2ic,s;e6uiveD;rt;eff0l2mu8nnun1;hn,lloe,minsBrEstra31to,ur,yDzl5;a,s0;j0GlsC;aMenLha2Pim0QoEuD;ng,r2;e2JhFnErge2Ju2NvD;anA;es,ss3;anEnsD;en,on,t3;nesDsC;en,s1;ki26s1;cGkob3RnsDrv06;en,sD;enDon;!s;ks3obs1;brahimAglesi3Ake4Ll0CnoZoneFshikEto,vanoD;u,v4A;awa;scu;aPeIitchcock,jaltal6oFrist46uD;!aDb0gh9ynh;m4ng;a23dz2fEjga2Sk,rDx3B;ak0Yvat;er,fm3B;iGmingw3NnErD;nand7re8;dDriks1;ers3;kkiEnD;on1;la,n1;dz2g1lvoLmJnsCqIrr0SsFuEyD;as36es;g1ng;anEhiD;mo0Q;i,ov08;ue;alaD;in1;rs1;aMeorgLheorghe,iJjonIoGrEuDw3;o,staf2Utierr7zm4;ayDg2iffitUub0;li1G;lub3Rme0JnD;calv9zale0I;aj,i;l,mDordaL;en7;iev3B;gnJlGmaFnd2No,rDs2Nuthi0;cDza;ia;ge;eaElD;agh0i,o;no;e,on;ab0erMiIjeldsted,lor9oGrFuD;cDent9ji3F;hs;an1Wiedm4;ntaDrt6st0urni0;na;lipEsD;ch0;ovD;!ic;hatAnandeVrD;arDei8;a,i;ov2;dHinste6riksCsDva0D;cob2ZpDtra2X;inoDosiM;za;en,s3;er,is3wards;aUeMiKjurhuJoHrisco0YuEvorakD;!oQ;arte,boEmitru,rDt2U;and,ic;is;g4he0Hmingu7n2Ord19tD;to;us;aDmitr29ssanayake;s,z; GbnaFlEmirDrvis1Lvi,w4;!ov2;gado,ic;th;bo0groot,jo03lEsilDvri9;va;a cruz,e3uD;ca;hl,mcevsBnErw6t2EviD;d5es,s;ieDku1S;ls1;ki;a05e00hNiobMlarkLoFrD;ivDuz;elli;h1lGntFop0rDs26x;byn,reD;a,ia;i,rer0O;em4liD;ns;!e;anu;aLeIiu,oGriDuJwe;stD;eDiaD;ns1;i,ng,uFwDy;!dhury;!n,onEuD;ng;!g;kEnDtterjee,v7;!d,g;ma,raboD;rty;bGl09ng2rD;eghetEnD;a,y;ti;an,ota0M;cer9lder3mpbeIrFstDvadi08;iDro;llo;doEt0uDvalho;so;so,zo;ll;es;a09eXhUiSlNoGrFyD;rne,tyD;qi;ank5iem,ooks,yant;gdan5nFruya,su,uchEyHziD;c,n5;ard;darDik;enD;ko;ov;aEondD;al;nEzD;ev2;co;ancRshwD;as;a01oDuiy4;umDwmD;ik;ckNethov1gu,ktLnJrD;gGisFnD;ascoDds1;ni;ha;er,mD;ann;gtDit7nett;ss3;asD;hi;er,ham;b2ch,ez,hMiley,kk0nHrDu0;bEnDua;es,i0;ieDosa;ri;dDik;a8yopadhyD;ay;ra;er;k,ng;ic;cosZdYguilXkhtXlSnJrGsl4yD;aEd6;in;la;aEsl4;an;ujo,ya;dFgelD;ovD;!a;ersGov,reD;aDjL;ss1;en;en,on,s3;on;eksejGiyGmeiFvD;ar7es;ez;da;ev;ar;ams;ta", WeekDay: "true\xA6fri2mon2s1t0wednesd3;hurs1ues1;aturd1und1;!d0;ay0;!s", Month: "true\xA6aBdec9feb7j2mar,nov9oct1sep0;!t8;!o8;an3u0;l1n0;!e;!y;!u1;!ru0;ary;!em0;ber;pr1ug0;!ust;!il", Date: "true\xA6ago,t2week0yesterd4; e0e0;nd;mr2o0;d0morrow;ay;!w", FirstName: "true\xA6aKblair,cGdevFgabrieEhinaDjBk8l7m3nelly,quinn,re2sh0;ay,e0iloh;a,lby;g6ne;a1el0ina,org5;!okuh9;naia,r0;ion,lo;ashawn,uca;asCe1ir0rE;an;lsAnyat2rry;am0ess6ie,ude;ie,m5;ta;le;an,on;as2h0;arl0eyenne;ie;ey,sidy;lex2ndr1ubr0;ey;a,ea;is", Person: "true\xA6ashton kutchTbScNdLeJgastOhHinez,jFkEleDmCnettKoBp9r4s3t2v0;a0irgin maH;lentino rossi,n go3;aylor,heresa may,iger woods,yra banks;addam hussain,carlett johanssKlobodan milosevic,uC;ay romano,e3o1ush limbau0;gh;d stewart,nald0;inho,o;ese witherspoFilly;a0ipJ;lmIris hiltD;prah winfrFra;essiaen,itt romnEubarek;bron james,e;anye west,iefer sutherland,obe bryant;aime,effers8k rowli0;ng;alle ber0itlBulk hogan;ry;ff0meril lagasse,zekiel;ie;a0enzel washingt2ick wolf;lt1nte;ar1lint0;on;dinal wols1son0;! palm2;ey;arack obama,rock;er", Verb: "true\xA6awak9born,cannot,fr8g7h5k3le2m1s0wors9;e8h3;ake sure,sg;ngth6ss6;eep tabs,n0;own;as0e2;!t2;iv1onna;ight0;en", PhrasalVerb: "true\xA60:7L;1:79;2:7X;3:7N;4:72;5:80;6:7P;7:6V;8:78;9:7J;A:6W;B:5Z;C:7S;D:7K;a81b6Lc5Rd5Me5Lf4Kg41h3Kiron0j3Gk3Bl2Vm2Jn2Ho2Fp1Wquiet7Ar1Js0CtSuQvacuum 1wHyammer9zE;eroBip FonE;e0k0;by,up;aLeHhGiForErit5G;d 1k33;mp0n2Vpe0r7s7;eel Dip 85;aFiEn2J;gh 09rd0;n Dr E;d2in,o5J;it 61k7lk6rm 6Csh 7Nt6Qv51;rge9sE;e AherB;aTeRhPiLoJrGuEype 69;ckBrn E;d2in,o3Sup;aFiEot0y 2I;ckle6Rp 7T;ck6Qde Y;ne6Pp Es4O;d2o73up;ck GdFe Egh6Bme0p o0Gre0;aw3ba4d2in,up;e 61y 1;by,o7D;ink Erow 6D;ba4ov8up;aEe 5Zll53;m 1r X;ck9ke Flk E;ov8u54;aEba4d2in,o3Cup;ba4ft8p59w3;a0Jc0Ie0Ch08i05l01m00nZoYpTquare StKuIwE;earGiE;ngFtch E;aw3ba4o77; by;ck Eit 1m 1ss0;in,up;aJe0WiIoGrEuc3G;aigh1WiE;ke 6Gn3A;p Erm1Z;by,in,o6T;n3Br 1tc3T;c3Amp0nd Er6Zve6y 1;ba4d2up;d2o6Pup;ar37eHiGlFrEur9;ing9uc7;a3Fit 5B;l13n 1;e5Sll0;be2Wrt0;ap 4Sow D;ash 5Foke0;eep FiEow A;c3Wp 1;in,oE;ff,v8;gn 4XngFt Ez7;d2o5up; al54le0;aGoEu4T;ot Eut0w 6D;aw3ba4f3Go67;c2PdeBk58ve6;e Ill1And HtE; Etl4H;d2in,o5upE;!on;aw3ba4d2in,o27up;o5Mto;al51out0rap51;il6v7;aPeMiLoHuE;b 4Ule0n Estl7;aEba4d2in5Jo3Ut39u3S;c26w3;ll Got FuE;g2Tnd6;a27f30o5;arCin,o5;ng 53p6;aEel6inBnt0;c5Dd E;o31u0I;c24t0;aSeRiPlNoLrIsyc2HuE;ll Gt E;aEba4d2in,o1Ot3Gup;p3Lw3;ap3Kd2in,o5t3Eup;attle9ess FiHoE;p 1;ah1Oon;iEp 5Hr3Yur4Jwer 5H;nt0;ay4DuE;gBmp A;ck Eg0le9n Ap4A;o2Yup;el 4KncilB;c42ir 3Un0ss GtFy E;ba4o54; d2c24;aw3ba4o18;pEw3X;e3Wt D;arrow46erd0oE;d6te45;aMeJiIoGuE;ddl7lE;l 3I;c1Dp 1uth6ve E;al3Nd2in,o5up;ss0x 1;asur7lFss E;a1Gup;t A;ke Fn ArEs1Px0;k Ary6;do,o48up;aRePiKoEuck0;aIc3Hg HoEse0;k Ese3F;aft8ba4d2forw2Jin46ov8uE;nd8p;in,o0M;d A;e HghtGnFsEv1V;ten 4M;e 1k 1; 1e37;arCd2;av1Jt 37velE; o3U;c7p 1sh Etch9ugh6y20;in3Uo5;eFick6nock E;d2o3Q;eEyB;l 2Pp E;aw3ba4d2fTin,o07to,up;aGoFuE;ic7mpB;ke31t35;c3Azz 1;aQeLiIoFuE;nker32rry 1s0W;lEneBrse2X;d Ee 1;ba4d2fast,o01up;de Ft E;ba4on,up;aw3o5;aElp0;d Gl 2Ar Et 1;fEof;rom;in,oTu1H;c02m 1nFve Ez25;it,to;d Eg 2FkerG;d2in,o5;aTeMive Kloss 22oGrFunE; f0N;in3How 2B; Eof 21;aFb1Dit,oErCt0Pu18;ff,n,v8;bo5ft8hKw3;aw3ba4d2in,oEup,w3;ff,n,ut;aJek0t E;aFb17d2oErCup;ff,n,ut,v8;cFhEl1XrCt,w3;ead;ross;r 1;d aFnE;g 1;bo5;a08e01iSlOoKrGuE;cEel 1;k 1;eFighten Eown9y 1;aw3o2S;eEshe1N; 1z7;lGol E;aEwi1G;bo5rC;d Alow 1;aFeEip0;sh0;g Ake0mErE;e 2R;gLlJnHrFsEzzle0;h 2P;e Em 1;aw3ba4up;d0isE;h 1;e El 19;aw3fJ;ht ba4ure0;eJnFsE;s 1;cGd E;fEo25;or;e D;dVl 1;cIll Erm0t0W;ap04bGd2in,oFtE;hrough;ff,ut,v8;a4ehi20;e 0L;at0dge0nd 0Ky7;oHrE;aFess Aop E;aw3bUin,o1E;g9w9; 0Dubl7;aXhUlean AoHrEut 10;ack9eep Eoss D;by,d2oEup;n,ut;me HoFuntE; o1Q;k 1l E;d2o1I;aKbJforHin,oGtFuE;nd8;ogeth8;ut,v8;th,wE;ard;a4y;pErCw3;art;eEipB;ck Der E;on,up;lKncel0rHsGtch FveB; in;o19up;h Dt6;ry FvE;e Y;aw3o15;l Em05;aEba4d2o13up;rCw3;a0Ke0Bl04oVrJuE;bblGcklWil02lk AndlWrn 08st FtEy 13zz6;t D;in,o5up;e E;ov8;anOeaMiFush E;o0Oup;ghIng E;aFba4d2forEin,o5up;th;bo5lErCw3;ong;teE;n 1;k E;d2in,o5up;ch0;arLgKil An7oHssGttlFunce Ex D;aw3ba4;e A; arC;k Dt 1;e 1;d2up; d2;d 1;aJeed0oEurt0;cGw E;aw3ba4d2o5up;ck;k E;in,oL;ck0nk0st6; oKaHef 1nd E;d2ov8up;er;up;r0t E;d2in,oEup;ff,ut;ff,nE;to;ck Kil0nGrgFsE;h D;ain9e D;g Dk9; on;in,o5; o5;aw3d2o5up;ay;cNdJsk Guction6; oE;ff;arCo5;ouE;nd;d E;d2oEup;ff,n;own;t E;o5up;ut", Modal: "true\xA6c5lets,m4ought3sh1w0;ill,o5;a0o4;ll,nt;! to,a;ay,ight,ust;an,o0;uld", Adjective: "true\xA60:7P;1:84;2:83;3:8A;4:7W;5:5S;6:4N;7:4O;8:58;9:6I;A:81;a6Wb6Gc63d5Je54f4Hg49h3Wi39j37k36l2Vm2Ln2Bo1Wp1Dquack,r12s0Ft07uMvJwByear5;arp0eFholeEiDoB;man5oBu6P;d6Rzy;despr7Ls5S;!sa7;eClBste2A;co1Nl o4W;!k5;aCiBola4M;b89ce versa,ol5H;ca3gabo6Gnilla;ltUnHpCrb5Msu4tterB;!mo7G; Eb1SpDsBti1M;ca7etBide dKtairs;!ti2;er,i3U;f36to da1;aLbeco75convin29deIeHfair,ivers4knGprecedVrEsCwB;iel3Nritt6A;i1XuB;pervis0spec3Y;eBu5;cognHgul6Tl6T;own;ndi2v64xpect0;cid0rB;!grou5ZsB;iz0tood;b7pp0Dssu6UuthorB;iz0;i26ra;aGeEhDi6AoCrB;i1oubl0us3M;geth8p,rp6Vuc67;ough4Wril33;en60l32mpBrr2X;o6Ati2;boo,lBn;ent0;aWcVeThSiQmug,nobbi3LoOpNqueami3LtFuBymb6H;bDi gener5DpBrpri6D;erBre0N;! dup8b,i2C;du0seq52;anda77eGiFrBunni2y3F;aightCiB;ki2p0; fBfB;or5K;ll,r5S;aBreotyp0;dfa6Cmi2;a55ec2Gir1Hlend6Cot on; call0le,mb8phist1XrBu0Vvi48;d6Ary;gnifica3nB;ce51g7;am2Re8ocki2ut;cBda1em5lfi32ni1Wpa6Jre6;o1Er42;at5Gient28reec5G;cr0me;aJeEiCoB;bu60tt51uQy4;ghtBv4;!-2Bf9;ar,bel,condi1du6Dfres5AlEpublic42sCtard0vB;ea26;is4CoB;lu1na3;aQe1Cuc4A;b5TciBllyi2;al,st;aOeLicayu6lac5Ropuli5QrCuB;bl5Jmp0n51;eGiDoB;!b07fu5RmiBp8;ne3si2;mCor,sBva1;ti6;a53e;ci5MmB;a0EiB;er,um;ac20rBti1;feAma2XpleBv38;xi2;rBst;allelDtB;-tiBi4;me;!ed;bLffJkIld fashion0nHpGrg1Eth8utFvB;al,erB;!all,niCt,wB;eiBrouB;ght;do0Ter,g2Qsi4B;en,posi1; boa5Og2Oli6;!ay; gua5MbBli6;eat;eDsB;cBer0Eole1;e6u3O;d2Xse;aJeIiHoBua4X;nFrCtB;ab7;thB;!eB;rn;chala3descri58stop;ght5;arby,cessa44ighbor5xt;k0usia1A;aIeGiDoBultip7;bi7derBl0Vnth5ot,st;a1n;nBx0;dblo0RiaBor;tu37;ande3Qdi4NnaBre;ci2;cBgenta,in,j01keshift,le,mmoth,ny,sculi6;ab33ho;aKeFiCoBu15;uti14vi2;mCteraB;l,te;it0;ftEgBth4;al,eCitiB;ma1;nda3K;!-0C;ngu3Zst,tt8;ap1Xind5no0A;agg0uB;niMstifi0veni7;de4gno4Klleg4mQnEpso 20rB;a1rB;eleBita0J;va3; KaJbr0corIdGfluenQiQnFsEtCviB;go0Fti2;aAen3SoxB;ic3B;a6i2Vul0D;a1er,oce3;iCoB;or;reA;deq3Qppr33;fBsitu,vitro;ro3;mFpB;arDerfeAoBrop8;li1rtB;a3ed;ti4;eBi0S;d2Vn3C;aIeFiDoBumdr3I;ne36ok0rrBs08ur5;if2Z;ghfalut1QspB;an2X;aClB;liYpf9;li2;lEnDrB;d04roB;wi2;dy;f,low0;ainf9ener2Oiga24lHoGraDuB;ilBng ho;ty;cCtB;ef9is;ef9;ne,od;ea2Iob4;aTeNinMlKoFrB;a1VeDoz1MustB;raB;ti2;e2Gq10tf9;oDrB; keeps,eBm8tuna1;g03ign;liB;sh;aBue3;g31tte1P;al,i1;dFmCrB;ti7;a7ini6;ne;le; up;bl0i3l27r Cux,voB;ri1uri1;oBreac1E;ff;aLfficie3lKmHnFreAthere4veExB;aAcess,pe1QtraCuB;be2Nl0E;!va1E;n,ryday; BcouraEti0O;rou1sui1;erCiB;ne3;gi2;abo23dMe17i1;g8sB;t,ygB;oi2;er;aReJiDoBrea14ue;mina3ne,ubB;le,tf9;dact1Bfficu1OsCvB;er1K;creDeas0gruntl0hone1FordCtB;a3ressM;er5;et; HadpGfFgene1PliDrang0spe1PtCvoB;ut;ail0ermin0;be1Mca1ghB;tf9;ia3;an;facto;i5magBngeroUs0G;ed,i2;ly;ertaMhief,ivil,oDrB;aBowd0u0G;mp0vZz0;loImGnCrrBve0P;eAu1I;cre1fu0LgrDsCtB;empo0Dra0E;ta3;ue3;mer08pleB;te,x;ni4ss4;in;aNeIizarHlFoCrB;and new,isk,okN;gCna fiUttom,urgeoB;is;us;ank,indB;!i2;re;autif9hiDloCnBst,yoD;eUt;v0w;nd;ul;ckCnkru0WrrB;en;!wards; priori,b0Mc0Jd09fra08g04h03lYmWntiquVppSrMsIttracti06utheHvEwB;aCkB;wa0T;ke,re;ant garCerB;age;de;ntU;leep,piDsuDtonB;isB;hi2;ri2;ab,bitEroDtiB;fiB;ci4;ga3;raB;ry;are3etiNrB;oprB;ia1;at0;aJuB;si2;arEcohCeBiIl,oof;rt;olB;ic;mi2;ead;ainDgressiConiB;zi2;ve;st;id; IeGuFvB;aCerB;se;nc0;ed;lt;pt,qB;ua1;hoc,infinitB;um;cuCtu4u1;al;ra1;erLlKoIruHsCuB;nda3;e3oCtraA;ct;lu1rbi2;ng;te;pt;aBve;rd;aze,e;ra3;nt", Comparable: "true\xA60:41;1:4I;2:45;3:2Y;4:4B;5:3X;a4Ob44c3Od3De35f2Rg2Fh24i1Vj1Uk1Rl1Jm1Dn17o15p0Vqu0Tr0KsTtMuIvFw7y6za13;ell27ou4;aBe9hi1Yi7r6;o4y;ck0Ode,l6n1ry,se;d,y;a6i4Mt;k,ry;n1Tr6sK;m,y;a7e6ulgar;nge5rda2xi4;g9in,st;g0n6pco3Mse5;like0t6;i1r6;ue;aAen9hi8i7ough,r6;anqu2Oen1ue;dy,g3Sme0ny,r09;ck,n,rs2P;d40se;ll,me,rt,s6wd45;te5;aVcarUeThRiQkin0FlMmKoHpGqua1FtAu7w6;eet,ift;b7dd13per0Gr6;e,re2H;sta2Ft3;aAe9iff,r7u6;pXr1;a6ict,o4;ig3Fn0U;a1ep,rn;le,rk;e22i3Fright0;ci28ft,l7o6re,ur;n,thi4;emn,id;a6el0ooth;ll,rt;e8i6ow,y;ck,g35m6;!y;ek,nd3D;ck,l0mp3;a6iTort,rill,y;dy,ll0Xrp;cu0Rve0Rxy;ce,ed,y;d,fe,int0l1Vv14;aBe9i8o6ude;mantic,o1Isy,u6;gh,nd;ch,pe,tzy;a6d,mo0H;dy,l;gg7ndom,p6re,w;id;ed;ai2i6;ck,et;aEhoDi1QlCoBr8u6;ny,r6;e,p3;egna2ic7o6;fouYud;ey,k0;li04or,te1B;ain,easa2;ny;in5le;dd,f6i0ld,ranQ;fi10;aAe8i7o6;b3isy,rm15sy;ce,mb3;a6w;r,t;ive,rr01;aAe8ild,o7u6;nda19te;ist,o1;a6ek,llX;n,s0ty;d,tuQ;aBeAi9o6ucky;f0Un7o1Du6ve0w17y0T;d,sy;e0g;g1Tke0tt3ve0;an,wd;me,r6te;ge;e7i6;nd;en;ol0ui1P;cy,ll,n6;sBt6;e6ima8;llege2r6;es7media6;te;ti4;ecu6ta2;re;aEeBiAo8u6;ge,m6ng1R;b3id;ll6me0t;ow;gh,l0;a6f04sita2;dy,v6;en0y;nd1Hppy,r6te5;d,sh;aGenFhDiClBoofy,r6;a9e8is0o6ue1E;o6ss;vy;at,en,y;nd,y;ad,ib,ooI;a2d1;a6o6;st0;t3uiY;u1y;aIeeb3iDlat,oAr8u6;ll,n6r14;!ny;aHe6iend0;e,sh;a7r6ul;get5mG;my;erce8n6rm;an6e;ciC;! ;le;ir,ke,n0Fr,st,t,ulA;aAerie,mp9sse7v6xtre0Q;il;nti6;al;ty;r7s6;tern,y;ly,th0;aFeCi9r7u6;ll,mb;u6y;nk;r7vi6;ne;e,ty;a6ep,nD;d6f,r;!ly;mp,pp03rk;aHhDlAo8r7u6;dd0r0te;isp,uel;ar6ld,mmon,ol,st0ward0zy;se;e6ou1;a6vW;n,r;ar8e6il0;ap,e6;sy;mi4;gey,lm8r6;e5i4;ful;!i4;aNiLlIoEr8u6;r0sy;ly;aAi7o6;ad,wn;ef,g7llia2;nt;ht;sh,ve;ld,r7un6;cy;ed,i4;ng;a7o6ue;nd,o1;ck,nd;g,tt6;er;d,ld,w1;dy;bsu9ng8we6;so6;me;ry;rd", TextOrdinal: "true\xA6bGeDf9hundredHmGnin7qu6s4t0zeroH;enGh1rFwe0;lfFn9;ir0ousandE;d,t4;e0ixt9;cond,ptAvent8xtA;adr9int9;et0th;e6ie8;i2o0;r0urt3;tie5;ft1rst;ight0lev1;e0h,ie2;en1;illion0;th", Cardinal: "true\xA6bHeEf8hundred,mHnineAone,qu6s4t0zero;en,h2rGw0;e0o;lve,n8;irt9ousandEree;e0ix5;pt1ven4xt1;adr0int0;illion;i3o0;r1ur0;!t2;ty;ft0ve;e2y;ight0lev1;!e0y;en;illion0;!s", Expression: "true\xA6a02b01dXeVfuck,gShLlImHnGoDpBshAtsk,u7voi04w3y0;a1eLu0;ck,p;!a,hoo,y;h1ow,t0;af,f;e0oa;e,w;gh,h0;! 0h,m;huh,oh;eesh,hh,it;ff,hew,l0sst;ease,z;h1o0w,y;h,o,ps;!h;ah,ope;eh,mm;m1ol0;!s;ao,fao;a4e2i,mm,oly1urr0;ah;! mo6;e,ll0y;!o;ha0i;!ha;ah,ee,o0rr;l0odbye;ly;e0h,t cetera,ww;k,p;'oh,a0uh;m0ng;mit,n0;!it;ah,oo,ye; 1h0rgh;!em;la", Adverb: "true\xA6a08by 06d02eYfShQinPjustOkinda,mMnJoEpCquite,r9s5t2up1very,well,ye0;p,s; to,wards5;h1iny bit,o0wiO;o,t6ward;en,us;eldom,o0uch;!me1rt0; of;hYtimes,w09;a1e0;alT;ndomSthN;ar excellDer0oint blank; Nhaps;f3n0;ce0ly;! 0;ag02moW; courIten;ewKo0; longEt 0;onIwithstanding;aybe,eanwhiAore0;!ovB;! aboU;deed,steV;en0;ce;or2u0;lArther0;!moJ; 0ev3;examp0good,suH;le;n1v0;er; mas0ough;se;e0irect1; 1finite0;ly;ju8trop;far,n0;ow; DbroCd nauseam,gBl6ny3part,s2t 0w4;be6l0mo6wor6;arge,ea5; soon,ide;mo1w0;ay;re;l 1mo0one,ready,so,ways;st;b1t0;hat;ut;ain;ad;lot,posteriori", Determiner: "true\xA6aBboth,d9e6few,l4mu8neiDown,plenty,s3th2various,wh0;at0ich0;evC;at,e4is,ose;everal,ome;a,e0;!ast,s;a1i6l0very;!se;ch;e0u;!s;!n0;!o0y;th0;er" };
+  var Dt = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var $t = Dt.split("").reduce(function(e3, t2, r2) {
+    return e3[t2] = r2, e3;
+  }, {});
+  var Pt = /* @__PURE__ */ __name(function(e3) {
+    if ($t[e3] !== void 0)
+      return $t[e3];
+    let t2 = 0, r2 = 1, a2 = 36, n2 = 1;
+    for (; r2 < e3.length; t2 += a2, r2++, a2 *= 36)
+      ;
+    for (let r3 = e3.length - 1; r3 >= 0; r3--, n2 *= 36) {
+      let a3 = e3.charCodeAt(r3) - 48;
+      a3 > 10 && (a3 -= 7), t2 += a3 * n2;
+    }
+    return t2;
+  }, "Pt");
+  var Et = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    const a2 = Pt(t2);
+    return a2 < e3.symCount ? e3.syms[a2] : r2 + a2 + 1 - e3.symCount;
+  }, "Et");
+  var Ht = /* @__PURE__ */ __name(function(e3) {
+    const t2 = { nodes: e3.split(";"), syms: [], symCount: 0 };
+    return e3.match(":") && function(e4) {
+      const t3 = new RegExp("([0-9A-Z]+):([0-9A-Z]+)");
+      for (let r2 = 0; r2 < e4.nodes.length; r2++) {
+        const a2 = t3.exec(e4.nodes[r2]);
+        if (!a2) {
+          e4.symCount = r2;
+          break;
+        }
+        e4.syms[Pt(a2[1])] = Pt(a2[2]);
+      }
+      e4.nodes = e4.nodes.slice(e4.symCount, e4.nodes.length);
+    }(t2), function(e4) {
+      const t3 = [], r2 = /* @__PURE__ */ __name((a2, n2) => {
+        let i2 = e4.nodes[a2];
+        i2[0] === "!" && (t3.push(n2), i2 = i2.slice(1));
+        const o2 = i2.split(/([A-Z0-9,]+)/g);
+        for (let i3 = 0; i3 < o2.length; i3 += 2) {
+          const s2 = o2[i3], l2 = o2[i3 + 1];
+          if (!s2)
+            continue;
+          const u2 = n2 + s2;
+          if (l2 === "," || l2 === void 0) {
+            t3.push(u2);
+            continue;
+          }
+          const c2 = Et(e4, l2, a2);
+          r2(c2, u2);
+        }
+      }, "r");
+      return r2(0, ""), t3;
+    }(t2);
+  }, "Ht");
+  var jt = /* @__PURE__ */ __name(function(e3) {
+    const t2 = e3.split("|").reduce((e4, t3) => {
+      const r3 = t3.split("\xA6");
+      return e4[r3[0]] = r3[1], e4;
+    }, {}), r2 = {};
+    return Object.keys(t2).forEach(function(e4) {
+      const a2 = Ht(t2[e4]);
+      e4 === "true" && (e4 = true);
+      for (let t3 = 0; t3 < a2.length; t3++) {
+        const n2 = a2[t3];
+        r2.hasOwnProperty(n2) === true ? Array.isArray(r2[n2]) === false ? r2[n2] = [r2[n2], e4] : r2[n2].push(e4) : r2[n2] = e4;
+      }
+    }), r2;
+  }, "jt");
+  var Nt = { "20th century fox": "Organization", "7 eleven": "Organization", "motel 6": "Organization", g8: "Organization", vh1: "Organization", q1: "Date", q2: "Date", q3: "Date", q4: "Date", her: ["Possessive", "Pronoun"], his: ["Possessive", "Pronoun"], their: ["Possessive", "Pronoun"], themselves: ["Possessive", "Pronoun"], your: ["Possessive", "Pronoun"], our: ["Possessive", "Pronoun"], my: ["Possessive", "Pronoun"], its: ["Possessive", "Pronoun"] };
+  var xt = { Unit: (e3, t2) => {
+    e3[t2] = ["Abbreviation", "Unit"];
+  }, Cardinal: (e3, t2) => {
+    e3[t2] = ["TextValue", "Cardinal"];
+  }, TextOrdinal: (e3, t2) => {
+    e3[t2] = ["Ordinal", "TextValue"], e3[t2 + "s"] = ["TextValue", "Fraction"];
+  }, Singular: (e3, t2, r2) => {
+    e3[t2] = "Singular";
+    let a2 = r2.transforms.toPlural(t2, r2);
+    e3[a2] = e3[a2] || "Plural";
+  }, Infinitive: (e3, t2, r2) => {
+    e3[t2] = "Infinitive";
+    let a2 = r2.transforms.conjugate(t2, r2), n2 = Object.keys(a2);
+    for (let t3 = 0; t3 < n2.length; t3++) {
+      let r3 = a2[n2[t3]];
+      e3[r3] = e3[r3] || n2[t3];
+    }
+  }, Comparable: (e3, t2, r2) => {
+    e3[t2] = "Comparable";
+    let a2 = r2.transforms.adjectives(t2), n2 = Object.keys(a2);
+    for (let t3 = 0; t3 < n2.length; t3++) {
+      let r3 = a2[n2[t3]];
+      e3[r3] = e3[r3] || n2[t3];
+    }
+  }, PhrasalVerb: (e3, t2, r2) => {
+    e3[t2] = ["PhrasalVerb", "Infinitive"];
+    let a2 = t2.split(" "), n2 = r2.transforms.conjugate(a2[0], r2), i2 = Object.keys(n2);
+    for (let t3 = 0; t3 < i2.length; t3++) {
+      let o2 = n2[i2[t3]] + " " + a2[1];
+      e3[o2] = e3[o2] || ["PhrasalVerb", i2[t3]], r2.hasCompound[n2[i2[t3]]] = true;
+    }
+  }, Demonym: (e3, t2, r2) => {
+    e3[t2] = "Demonym";
+    let a2 = r2.transforms.toPlural(t2, r2);
+    e3[a2] = e3[a2] || ["Demonym", "Plural"];
+  } };
+  var Ft = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    Object.keys(e3).forEach((a2) => {
+      let n2 = e3[a2];
+      n2 !== "Abbreviation" && n2 !== "Unit" || (r2.cache.abbreviations[a2] = true);
+      let i2 = a2.split(" ");
+      i2.length > 1 && (r2.hasCompound[i2[0]] = true), xt[n2] === void 0 ? t2[a2] !== void 0 ? (typeof t2[a2] == "string" && (t2[a2] = [t2[a2]]), typeof n2 == "string" ? t2[a2].push(n2) : t2[a2] = t2[a2].concat(n2)) : t2[a2] = n2 : xt[n2](t2, a2, r2);
+    });
+  }, "Ft");
+  var Ct = /* @__PURE__ */ __name(function(e3) {
+    let t2 = Object.assign({}, Nt);
+    return Object.keys(At).forEach((r2) => {
+      let a2 = jt(At[r2]);
+      Object.keys(a2).forEach((e4) => {
+        a2[e4] = r2;
+      }), Ft(a2, t2, e3);
+    }), t2;
+  }, "Ct");
+  var Bt = Ft;
+  var Gt = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.irregulars.nouns, r2 = Object.keys(t2);
+    for (let a3 = 0; a3 < r2.length; a3++) {
+      const n3 = r2[a3];
+      e3.words[n3] = "Singular", e3.words[t2[n3]] = "Plural";
+    }
+    let a2 = e3.irregulars.verbs, n2 = Object.keys(a2);
+    for (let t3 = 0; t3 < n2.length; t3++) {
+      const r3 = n2[t3];
+      e3.words[r3] = e3.words[r3] || "Infinitive";
+      let i2 = e3.transforms.conjugate(r3, e3);
+      i2 = Object.assign(i2, a2[r3]), Object.keys(i2).forEach((t4) => {
+        e3.words[i2[t4]] = e3.words[i2[t4]] || t4, e3.words[i2[t4]] === "Participle" && (e3.words[i2[t4]] = t4);
+      });
+    }
+  }, "Gt");
+  var zt = { g: "Gerund", prt: "Participle", perf: "PerfectTense", pst: "PastTense", fut: "FuturePerfect", pres: "PresentTense", pluperf: "Pluperfect", a: "Actor" };
+  var It = { act: { a: "_or" }, ache: { pst: "ached", g: "aching" }, age: { g: "ageing", pst: "aged", pres: "ages" }, aim: { a: "_er", g: "_ing", pst: "_ed" }, arise: { prt: "_n", pst: "arose" }, babysit: { a: "_ter", pst: "babysat" }, ban: { a: "", g: "_ning", pst: "_ned" }, be: { a: "", g: "am", prt: "been", pst: "was", pres: "is" }, beat: { a: "_er", g: "_ing", prt: "_en" }, become: { prt: "_" }, begin: { g: "_ning", prt: "begun", pst: "began" }, being: { g: "are", pst: "were", pres: "are" }, bend: { prt: "bent" }, bet: { a: "_ter", prt: "_" }, bind: { pst: "bound" }, bite: { g: "biting", prt: "bitten", pst: "bit" }, bleed: { pst: "bled", prt: "bled" }, blow: { prt: "_n", pst: "blew" }, boil: { a: "_er" }, brake: { prt: "broken" }, break: { pst: "broke" }, breed: { pst: "bred" }, bring: { pst: "brought", prt: "brought" }, broadcast: { pst: "_" }, budget: { pst: "_ed" }, build: { pst: "built", prt: "built" }, burn: { prt: "_ed" }, burst: { prt: "_" }, buy: { pst: "bought", prt: "bought" }, can: { a: "", fut: "_", g: "", pst: "could", perf: "could", pluperf: "could", pres: "_" }, catch: { pst: "caught" }, choose: { g: "choosing", prt: "chosen", pst: "chose" }, cling: { prt: "clung" }, come: { prt: "_", pst: "came", g: "coming" }, compete: { a: "competitor", g: "competing", pst: "_d" }, cost: { pst: "_" }, creep: { prt: "crept" }, cut: { prt: "_" }, deal: { pst: "_t", prt: "_t" }, develop: { a: "_er", g: "_ing", pst: "_ed" }, die: { g: "dying", pst: "_d" }, dig: { g: "_ging", pst: "dug", prt: "dug" }, dive: { prt: "_d" }, do: { pst: "did", pres: "_es" }, draw: { prt: "_n", pst: "drew" }, dream: { prt: "_t" }, drink: { prt: "drunk", pst: "drank" }, drive: { g: "driving", prt: "_n", pst: "drove" }, drop: { g: "_ping", pst: "_ped" }, eat: { a: "_er", g: "_ing", prt: "_en", pst: "ate" }, edit: { pst: "_ed", g: "_ing" }, egg: { pst: "_ed" }, fall: { prt: "_en", pst: "fell" }, feed: { prt: "fed", pst: "fed" }, feel: { a: "_er", pst: "felt" }, fight: { pst: "fought", prt: "fought" }, find: { pst: "found" }, flee: { g: "_ing", prt: "fled" }, fling: { prt: "flung" }, fly: { prt: "flown", pst: "flew" }, forbid: { pst: "forbade" }, forget: { g: "_ing", prt: "forgotten", pst: "forgot" }, forgive: { g: "forgiving", prt: "_n", pst: "forgave" }, free: { a: "", g: "_ing" }, freeze: { g: "freezing", prt: "frozen", pst: "froze" }, get: { pst: "got", prt: "gotten" }, give: { g: "giving", prt: "_n", pst: "gave" }, go: { prt: "_ne", pst: "went", pres: "goes" }, grow: { prt: "_n" }, guide: { pst: "_d" }, hang: { pst: "hung", prt: "hung" }, have: { g: "having", pst: "had", prt: "had", pres: "has" }, hear: { pst: "_d", prt: "_d" }, hide: { prt: "hidden", pst: "hid" }, hit: { prt: "_" }, hold: { pst: "held", prt: "held" }, hurt: { pst: "_", prt: "_" }, ice: { g: "icing", pst: "_d" }, imply: { pst: "implied", pres: "implies" }, is: { a: "", g: "being", pst: "was", pres: "_" }, keep: { prt: "kept" }, kneel: { prt: "knelt" }, know: { prt: "_n" }, lay: { pst: "laid", prt: "laid" }, lead: { pst: "led", prt: "led" }, leap: { prt: "_t" }, leave: { pst: "left", prt: "left" }, lend: { prt: "lent" }, lie: { g: "lying", pst: "lay" }, light: { pst: "lit", prt: "lit" }, log: { g: "_ging", pst: "_ged" }, loose: { prt: "lost" }, lose: { g: "losing", pst: "lost" }, make: { pst: "made", prt: "made" }, mean: { pst: "_t", prt: "_t" }, meet: { a: "_er", g: "_ing", pst: "met", prt: "met" }, miss: { pres: "_" }, name: { g: "naming" }, patrol: { g: "_ling", pst: "_led" }, pay: { pst: "paid", prt: "paid" }, prove: { prt: "_n" }, puke: { g: "puking" }, put: { prt: "_" }, quit: { prt: "_" }, read: { pst: "_", prt: "_" }, ride: { prt: "ridden" }, reside: { pst: "_d" }, ring: { pst: "rang", prt: "rung" }, rise: { fut: "will have _n", g: "rising", prt: "_n", pst: "rose", pluperf: "had _n" }, rub: { g: "_bing", pst: "_bed" }, run: { g: "_ning", prt: "_", pst: "ran" }, say: { pst: "said", prt: "said", pres: "_s" }, seat: { pst: "sat", prt: "sat" }, see: { g: "_ing", prt: "_n", pst: "saw" }, seek: { prt: "sought" }, sell: { pst: "sold", prt: "sold" }, send: { prt: "sent" }, set: { prt: "_" }, sew: { prt: "_n" }, shake: { prt: "_n" }, shave: { prt: "_d" }, shed: { g: "_ding", pst: "_", pres: "_s" }, shine: { pst: "shone", prt: "shone" }, shoot: { pst: "shot", prt: "shot" }, show: { pst: "_ed" }, shut: { prt: "_" }, sing: { prt: "sung", pst: "sang" }, sink: { pst: "sank", pluperf: "had sunk" }, sit: { pst: "sat" }, ski: { pst: "_ied" }, slay: { prt: "slain" }, sleep: { prt: "slept" }, slide: { pst: "slid", prt: "slid" }, smash: { pres: "_es" }, sneak: { prt: "snuck" }, speak: { fut: "will have spoken", prt: "spoken", pst: "spoke", perf: "have spoken", pluperf: "had spoken" }, speed: { prt: "sped" }, spend: { prt: "spent" }, spill: { prt: "_ed", pst: "spilt" }, spin: { g: "_ning", pst: "spun", prt: "spun" }, spit: { prt: "spat" }, split: { prt: "_" }, spread: { pst: "_" }, spring: { prt: "sprung" }, stand: { pst: "stood" }, steal: { a: "_er", pst: "stole" }, stick: { pst: "stuck" }, sting: { pst: "stung" }, stink: { pst: "stunk", prt: "stunk" }, stream: { a: "_er" }, strew: { prt: "_n" }, strike: { g: "striking", pst: "struck" }, suit: { a: "_er", g: "_ing", pst: "_ed" }, sware: { prt: "sworn" }, swear: { pst: "swore" }, sweep: { prt: "swept" }, swim: { g: "_ming", pst: "swam" }, swing: { pst: "swung" }, take: { fut: "will have _n", pst: "took", perf: "have _n", pluperf: "had _n" }, teach: { pst: "taught", pres: "_es" }, tear: { pst: "tore" }, tell: { pst: "told" }, think: { pst: "thought" }, thrive: { prt: "_d" }, tie: { g: "tying", pst: "_d" }, undergo: { prt: "_ne" }, understand: { pst: "understood" }, upset: { prt: "_" }, wait: { a: "_er", g: "_ing", pst: "_ed" }, wake: { pst: "woke" }, wear: { pst: "wore" }, weave: { prt: "woven" }, wed: { pst: "wed" }, weep: { prt: "wept" }, win: { g: "_ning", pst: "won" }, wind: { prt: "wound" }, withdraw: { pst: "withdrew" }, wring: { prt: "wrung" }, write: { g: "writing", prt: "written", pst: "wrote" } };
+  var Ot = Object.keys(It);
+  for (let e3 = 0; e3 < Ot.length; e3++) {
+    const t2 = Ot[e3];
+    let r2 = {};
+    Object.keys(It[t2]).forEach((e4) => {
+      let a2 = It[t2][e4];
+      a2 = a2.replace("_", t2), r2[zt[e4]] = a2;
+    }), It[t2] = r2;
+  }
+  var Tt = It;
+  var Vt = { b: [{ reg: /([^aeiou][aeiou])b$/i, repl: { pr: "$1bs", pa: "$1bbed", gr: "$1bbing" } }], d: [{ reg: /(end)$/i, repl: { pr: "$1s", pa: "ent", gr: "$1ing", ar: "$1er" } }, { reg: /(eed)$/i, repl: { pr: "$1s", pa: "$1ed", gr: "$1ing", ar: "$1er" } }, { reg: /(ed)$/i, repl: { pr: "$1s", pa: "$1ded", ar: "$1der", gr: "$1ding" } }, { reg: /([^aeiou][ou])d$/i, repl: { pr: "$1ds", pa: "$1dded", gr: "$1dding" } }], e: [{ reg: /(eave)$/i, repl: { pr: "$1s", pa: "$1d", gr: "eaving", ar: "$1r" } }, { reg: /(ide)$/i, repl: { pr: "$1s", pa: "ode", gr: "iding", ar: "ider" } }, { reg: /(t|sh?)(ake)$/i, repl: { pr: "$1$2s", pa: "$1ook", gr: "$1aking", ar: "$1$2r" } }, { reg: /w(ake)$/i, repl: { pr: "w$1s", pa: "woke", gr: "waking", ar: "w$1r" } }, { reg: /m(ake)$/i, repl: { pr: "m$1s", pa: "made", gr: "making", ar: "m$1r" } }, { reg: /(a[tg]|i[zn]|ur|nc|gl|is)e$/i, repl: { pr: "$1es", pa: "$1ed", gr: "$1ing" } }, { reg: /([bd]l)e$/i, repl: { pr: "$1es", pa: "$1ed", gr: "$1ing" } }, { reg: /(om)e$/i, repl: { pr: "$1es", pa: "ame", gr: "$1ing" } }], g: [{ reg: /([^aeiou][aou])g$/i, repl: { pr: "$1gs", pa: "$1gged", gr: "$1gging" } }], h: [{ reg: /(..)([cs]h)$/i, repl: { pr: "$1$2es", pa: "$1$2ed", gr: "$1$2ing" } }], k: [{ reg: /(ink)$/i, repl: { pr: "$1s", pa: "unk", gr: "$1ing", ar: "$1er" } }], m: [{ reg: /([^aeiou][aeiou])m$/i, repl: { pr: "$1ms", pa: "$1mmed", gr: "$1mming" } }], n: [{ reg: /(en)$/i, repl: { pr: "$1s", pa: "$1ed", gr: "$1ing" } }], p: [{ reg: /(e)(ep)$/i, repl: { pr: "$1$2s", pa: "$1pt", gr: "$1$2ing", ar: "$1$2er" } }, { reg: /([^aeiou][aeiou])p$/i, repl: { pr: "$1ps", pa: "$1pped", gr: "$1pping" } }, { reg: /([aeiu])p$/i, repl: { pr: "$1ps", pa: "$1p", gr: "$1pping" } }], r: [{ reg: /([td]er)$/i, repl: { pr: "$1s", pa: "$1ed", gr: "$1ing" } }, { reg: /(er)$/i, repl: { pr: "$1s", pa: "$1ed", gr: "$1ing" } }], s: [{ reg: /(ish|tch|ess)$/i, repl: { pr: "$1es", pa: "$1ed", gr: "$1ing" } }], t: [{ reg: /(ion|end|e[nc]t)$/i, repl: { pr: "$1s", pa: "$1ed", gr: "$1ing" } }, { reg: /(.eat)$/i, repl: { pr: "$1s", pa: "$1ed", gr: "$1ing" } }, { reg: /([aeiu])t$/i, repl: { pr: "$1ts", pa: "$1t", gr: "$1tting" } }, { reg: /([^aeiou][aeiou])t$/i, repl: { pr: "$1ts", pa: "$1tted", gr: "$1tting" } }], w: [{ reg: /(.llow)$/i, repl: { pr: "$1s", pa: "$1ed" } }, { reg: /(..)(ow)$/i, repl: { pr: "$1$2s", pa: "$1ew", gr: "$1$2ing", prt: "$1$2n" } }], y: [{ reg: /(i|f|rr)y$/i, repl: { pr: "$1ies", pa: "$1ied", gr: "$1ying" } }], z: [{ reg: /([aeiou]zz)$/i, repl: { pr: "$1es", pa: "$1ed", gr: "$1ing" } }] };
+  var Mt = { pr: "PresentTense", pa: "PastTense", gr: "Gerund", prt: "Participle", ar: "Actor" };
+  var Jt = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = {}, a2 = Object.keys(t2.repl);
+    for (let n2 = 0; n2 < a2.length; n2 += 1) {
+      let i2 = a2[n2];
+      r2[Mt[i2]] = e3.replace(t2.reg, t2.repl[i2]);
+    }
+    return r2;
+  }, "Jt");
+  var Lt = /* @__PURE__ */ __name(function(e3 = "") {
+    let t2 = e3[e3.length - 1];
+    if (Vt.hasOwnProperty(t2) === true)
+      for (let r2 = 0; r2 < Vt[t2].length; r2 += 1) {
+        if (Vt[t2][r2].reg.test(e3) === true)
+          return Jt(e3, Vt[t2][r2]);
+      }
+    return {};
+  }, "Lt");
+  var St = /[bcdfghjklmnpqrstvwxz]y$/;
+  var _t = { Gerund: (e3) => e3.charAt(e3.length - 1) === "e" ? e3.replace(/e$/, "ing") : e3 + "ing", PresentTense: (e3) => e3.charAt(e3.length - 1) === "s" ? e3 + "es" : St.test(e3) === true ? e3.slice(0, -1) + "ies" : e3 + "s", PastTense: (e3) => e3.charAt(e3.length - 1) === "e" ? e3 + "d" : e3.substr(-2) === "ed" ? e3 : St.test(e3) === true ? e3.slice(0, -1) + "ied" : e3 + "ed" };
+  var Kt = /* @__PURE__ */ __name(function(e3 = "", t2) {
+    let r2 = {};
+    return t2 && t2.irregulars && t2.irregulars.verbs.hasOwnProperty(e3) === true && (r2 = Object.assign({}, t2.irregulars.verbs[e3])), r2 = Object.assign({}, Lt(e3), r2), r2.Gerund === void 0 && (r2.Gerund = _t.Gerund(e3)), r2.PastTense === void 0 && (r2.PastTense = _t.PastTense(e3)), r2.PresentTense === void 0 && (r2.PresentTense = _t.PresentTense(e3)), r2;
+  }, "Kt");
+  var qt = [/ght$/, /nge$/, /ough$/, /ain$/, /uel$/, /[au]ll$/, /ow$/, /oud$/, /...p$/];
+  var Wt = [/ary$/];
+  var Rt = { nice: "nicest", late: "latest", hard: "hardest", inner: "innermost", outer: "outermost", far: "furthest", worse: "worst", bad: "worst", good: "best", big: "biggest", large: "largest" };
+  var Ut = [{ reg: /y$/i, repl: "iest" }, { reg: /([aeiou])t$/i, repl: "$1ttest" }, { reg: /([aeou])de$/i, repl: "$1dest" }, { reg: /nge$/i, repl: "ngest" }, { reg: /([aeiou])te$/i, repl: "$1test" }];
+  var Qt = [/ght$/, /nge$/, /ough$/, /ain$/, /uel$/, /[au]ll$/, /ow$/, /old$/, /oud$/, /e[ae]p$/];
+  var Zt = [/ary$/, /ous$/];
+  var Xt = { grey: "greyer", gray: "grayer", green: "greener", yellow: "yellower", red: "redder", good: "better", well: "better", bad: "worse", sad: "sadder", big: "bigger" };
+  var Yt = [{ reg: /y$/i, repl: "ier" }, { reg: /([aeiou])t$/i, repl: "$1tter" }, { reg: /([aeou])de$/i, repl: "$1der" }, { reg: /nge$/i, repl: "nger" }];
+  var er = { toSuperlative: function(e3) {
+    if (Rt.hasOwnProperty(e3))
+      return Rt[e3];
+    for (let t2 = 0; t2 < Ut.length; t2++)
+      if (Ut[t2].reg.test(e3))
+        return e3.replace(Ut[t2].reg, Ut[t2].repl);
+    for (let t2 = 0; t2 < Wt.length; t2++)
+      if (Wt[t2].test(e3) === true)
+        return null;
+    for (let t2 = 0; t2 < qt.length; t2++)
+      if (qt[t2].test(e3) === true)
+        return e3.charAt(e3.length - 1) === "e" ? e3 + "st" : e3 + "est";
+    return e3 + "est";
+  }, toComparative: function(e3) {
+    if (Xt.hasOwnProperty(e3))
+      return Xt[e3];
+    for (let t2 = 0; t2 < Yt.length; t2++)
+      if (Yt[t2].reg.test(e3) === true)
+        return e3.replace(Yt[t2].reg, Yt[t2].repl);
+    for (let t2 = 0; t2 < Zt.length; t2++)
+      if (Zt[t2].test(e3) === true)
+        return null;
+    for (let t2 = 0; t2 < Qt.length; t2++)
+      if (Qt[t2].test(e3) === true)
+        return e3 + "er";
+    return /e$/.test(e3) === true ? e3 + "r" : e3 + "er";
+  } };
+  var tr = /* @__PURE__ */ __name(function(e3) {
+    let t2 = {}, r2 = er.toSuperlative(e3);
+    r2 && (t2.Superlative = r2);
+    let a2 = er.toComparative(e3);
+    return a2 && (t2.Comparative = a2), t2;
+  }, "tr");
+  var rr = { a: [[/(antenn|formul|nebul|vertebr|vit)a$/i, "$1ae"], [/([ti])a$/i, "$1a"]], e: [[/(kn|l|w)ife$/i, "$1ives"], [/(hive)$/i, "$1s"], [/([m|l])ouse$/i, "$1ice"], [/([m|l])ice$/i, "$1ice"]], f: [[/^(dwar|handkerchie|hoo|scar|whar)f$/i, "$1ves"], [/^((?:ca|e|ha|(?:our|them|your)?se|she|wo)l|lea|loa|shea|thie)f$/i, "$1ves"]], i: [[/(octop|vir)i$/i, "$1i"]], m: [[/([ti])um$/i, "$1a"]], n: [[/^(oxen)$/i, "$1"]], o: [[/(al|ad|at|er|et|ed|ad)o$/i, "$1oes"]], s: [[/(ax|test)is$/i, "$1es"], [/(alias|status)$/i, "$1es"], [/sis$/i, "ses"], [/(bu)s$/i, "$1ses"], [/(sis)$/i, "ses"], [/^(?!talis|.*hu)(.*)man$/i, "$1men"], [/(octop|vir|radi|nucle|fung|cact|stimul)us$/i, "$1i"]], x: [[/(matr|vert|ind|cort)(ix|ex)$/i, "$1ices"], [/^(ox)$/i, "$1en"]], y: [[/([^aeiouy]|qu)y$/i, "$1ies"]], z: [[/(quiz)$/i, "$1zes"]] };
+  var ar = /(x|ch|sh|s|z)$/;
+  var nr = /* @__PURE__ */ __name(function(e3 = "", t2) {
+    let r2 = t2.irregulars.nouns;
+    if (r2.hasOwnProperty(e3))
+      return r2[e3];
+    let a2 = function(e4) {
+      let t3 = e4[e4.length - 1];
+      if (rr.hasOwnProperty(t3) === true)
+        for (let r3 = 0; r3 < rr[t3].length; r3 += 1) {
+          let a3 = rr[t3][r3][0];
+          if (a3.test(e4) === true)
+            return e4.replace(a3, rr[t3][r3][1]);
+        }
+      return null;
+    }(e3);
+    return a2 !== null ? a2 : ar.test(e3) ? e3 + "es" : e3 + "s";
+  }, "nr");
+  var ir = [[/([^v])ies$/i, "$1y"], [/ises$/i, "isis"], [/(kn|[^o]l|w)ives$/i, "$1ife"], [/^((?:ca|e|ha|(?:our|them|your)?se|she|wo)l|lea|loa|shea|thie)ves$/i, "$1f"], [/^(dwar|handkerchie|hoo|scar|whar)ves$/i, "$1f"], [/(antenn|formul|nebul|vertebr|vit)ae$/i, "$1a"], [/(octop|vir|radi|nucle|fung|cact|stimul)(i)$/i, "$1us"], [/(buffal|tomat|tornad)(oes)$/i, "$1o"], [/(eas)es$/i, "$1e"], [/(..[aeiou]s)es$/i, "$1"], [/(vert|ind|cort)(ices)$/i, "$1ex"], [/(matr|append)(ices)$/i, "$1ix"], [/(x|ch|ss|sh|z|o)es$/i, "$1"], [/men$/i, "man"], [/(n)ews$/i, "$1ews"], [/([ti])a$/i, "$1um"], [/([^aeiouy]|qu)ies$/i, "$1y"], [/(s)eries$/i, "$1eries"], [/(m)ovies$/i, "$1ovie"], [/([m|l])ice$/i, "$1ouse"], [/(cris|ax|test)es$/i, "$1is"], [/(alias|status)es$/i, "$1"], [/(ss)$/i, "$1"], [/(ics)$/i, "$1"], [/s$/i, ""]];
+  var or = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = t2.irregulars.nouns, a2 = (n2 = r2, Object.keys(n2).reduce((e4, t3) => (e4[n2[t3]] = t3, e4), {}));
+    var n2;
+    if (a2.hasOwnProperty(e3))
+      return a2[e3];
+    for (let t3 = 0; t3 < ir.length; t3++)
+      if (ir[t3][0].test(e3) === true)
+        return e3 = e3.replace(ir[t3][0], ir[t3][1]);
+    return e3;
+  }, "or");
+  var sr = { Participle: [{ reg: /own$/i, to: "ow" }, { reg: /(.)un([g|k])$/i, to: "$1in$2" }], Actor: [{ reg: /(er)er$/i, to: "$1" }], PresentTense: [{ reg: /(..)(ies)$/i, to: "$1y" }, { reg: /(tch|sh)es$/i, to: "$1" }, { reg: /(ss|zz)es$/i, to: "$1" }, { reg: /([tzlshicgrvdnkmu])es$/i, to: "$1e" }, { reg: /(n[dtk]|c[kt]|[eo]n|i[nl]|er|a[ytrl])s$/i, to: "$1" }, { reg: /(ow)s$/i, to: "$1" }, { reg: /(op)s$/i, to: "$1" }, { reg: /([eirs])ts$/i, to: "$1t" }, { reg: /(ll)s$/i, to: "$1" }, { reg: /(el)s$/i, to: "$1" }, { reg: /(ip)es$/i, to: "$1e" }, { reg: /ss$/i, to: "ss" }, { reg: /s$/i, to: "" }], Gerund: [{ reg: /(..)(p|d|t|g){2}ing$/i, to: "$1$2" }, { reg: /(ll|ss|zz)ing$/i, to: "$1" }, { reg: /([^aeiou])ying$/i, to: "$1y" }, { reg: /([^ae]i.)ing$/i, to: "$1e" }, { reg: /(ea[dklnrtv])ing$/i, to: "$1" }, { reg: /(ch|sh)ing$/i, to: "$1" }, { reg: /(z)ing$/i, to: "$1e" }, { reg: /(a[gdkvtc])ing$/i, to: "$1e" }, { reg: /(u[rtcbn])ing$/i, to: "$1e" }, { reg: /([^o]o[bdknprv])ing$/i, to: "$1e" }, { reg: /([tbckg]l)ing$/i, to: "$1e" }, { reg: /(c|s)ing$/i, to: "$1e" }, { reg: /(..)ing$/i, to: "$1" }], PastTense: [{ reg: /(ued)$/i, to: "ue" }, { reg: /ea(rn|l|m)ed$/i, to: "ea$1" }, { reg: /a([^aeiouy])ed$/i, to: "a$1e" }, { reg: /([aeiou]zz)ed$/i, to: "$1" }, { reg: /(e|i)lled$/i, to: "$1ll" }, { reg: /(.)(sh|ch)ed$/i, to: "$1$2" }, { reg: /(tl|gl)ed$/i, to: "$1e" }, { reg: /(um?pt?)ed$/i, to: "$1" }, { reg: /(ss)ed$/i, to: "$1" }, { reg: /pped$/i, to: "p" }, { reg: /tted$/i, to: "t" }, { reg: /(..)gged$/i, to: "$1g" }, { reg: /(..)lked$/i, to: "$1lk" }, { reg: /([^aeiouy][aeiou])ked$/i, to: "$1ke" }, { reg: /(.[aeiou])led$/i, to: "$1l" }, { reg: /(..)(h|ion|n[dt]|ai.|[cs]t|pp|all|ss|tt|int|ail|ld|en|oo.|er|k|pp|w|ou.|rt|ght|rm)ed$/i, to: "$1$2" }, { reg: /(.ut)ed$/i, to: "$1e" }, { reg: /(.pt)ed$/i, to: "$1" }, { reg: /(us)ed$/i, to: "$1e" }, { reg: /(dd)ed$/i, to: "$1" }, { reg: /(..[^aeiouy])ed$/i, to: "$1e" }, { reg: /(..)ied$/i, to: "$1y" }, { reg: /(.o)ed$/i, to: "$1o" }, { reg: /(..i)ed$/i, to: "$1" }, { reg: /(.a[^aeiou])ed$/i, to: "$1" }, { reg: /([aeiou][^aeiou])ed$/i, to: "$1e" }, { reg: /([rl])ew$/i, to: "$1ow" }, { reg: /([pl])t$/i, to: "$1t" }] };
+  var lr = { Gerund: ["ing"], Actor: ["erer"], Infinitive: ["ate", "ize", "tion", "rify", "then", "ress", "ify", "age", "nce", "ect", "ise", "ine", "ish", "ace", "ash", "ure", "tch", "end", "ack", "and", "ute", "ade", "ock", "ite", "ase", "ose", "use", "ive", "int", "nge", "lay", "est", "ain", "ant", "ent", "eed", "er", "le", "own", "unk", "ung", "en"], PastTense: ["ed", "lt", "nt", "pt", "ew", "ld"], PresentTense: ["rks", "cks", "nks", "ngs", "mps", "tes", "zes", "ers", "les", "acks", "ends", "ands", "ocks", "lays", "eads", "lls", "els", "ils", "ows", "nds", "ays", "ams", "ars", "ops", "ffs", "als", "urs", "lds", "ews", "ips", "es", "ts", "ns"] };
+  lr = Object.keys(lr).reduce((e3, t2) => (lr[t2].forEach((r2) => e3[r2] = t2), e3), {});
+  var ur = lr;
+  var cr = { nouns: { addendum: "addenda", alga: "algae", alumna: "alumnae", alumnus: "alumni", analysis: "analyses", antenna: "antennae", appendix: "appendices", avocado: "avocados", axis: "axes", bacillus: "bacilli", barracks: "barracks", beau: "beaux", bus: "buses", cactus: "cacti", chateau: "chateaux", child: "children", circus: "circuses", clothes: "clothes", corpus: "corpora", criterion: "criteria", curriculum: "curricula", database: "databases", deer: "deer", diagnosis: "diagnoses", echo: "echoes", embargo: "embargoes", epoch: "epochs", foot: "feet", formula: "formulae", fungus: "fungi", genus: "genera", goose: "geese", halo: "halos", hippopotamus: "hippopotami", index: "indices", larva: "larvae", leaf: "leaves", libretto: "libretti", loaf: "loaves", man: "men", matrix: "matrices", memorandum: "memoranda", modulus: "moduli", mosquito: "mosquitoes", mouse: "mice", nebula: "nebulae", nucleus: "nuclei", octopus: "octopi", opus: "opera", ovum: "ova", ox: "oxen", parenthesis: "parentheses", person: "people", phenomenon: "phenomena", prognosis: "prognoses", quiz: "quizzes", radius: "radii", referendum: "referenda", rodeo: "rodeos", sex: "sexes", shoe: "shoes", sombrero: "sombreros", stimulus: "stimuli", stomach: "stomachs", syllabus: "syllabi", synopsis: "synopses", tableau: "tableaux", thesis: "theses", thief: "thieves", tooth: "teeth", tornado: "tornados", tuxedo: "tuxedos", vertebra: "vertebrae" }, verbs: Tt };
+  var hr = { conjugate: Kt, adjectives: tr, toPlural: nr, toSingular: or, toInfinitive: function(e3, t2, r2) {
+    if (!e3)
+      return "";
+    if (t2.words.hasOwnProperty(e3) === true) {
+      let r3 = t2.irregulars.verbs, a2 = Object.keys(r3);
+      for (let t3 = 0; t3 < a2.length; t3++) {
+        let n2 = Object.keys(r3[a2[t3]]);
+        for (let i2 = 0; i2 < n2.length; i2++)
+          if (e3 === r3[a2[t3]][n2[i2]])
+            return a2[t3];
+      }
+    }
+    if ((r2 = r2 || function(e4) {
+      let t3 = e4.substr(e4.length - 3);
+      if (ur.hasOwnProperty(t3) === true)
+        return ur[t3];
+      let r3 = e4.substr(e4.length - 2);
+      return ur.hasOwnProperty(r3) === true ? ur[r3] : e4.substr(e4.length - 1) === "s" ? "PresentTense" : null;
+    }(e3)) && sr[r2])
+      for (let t3 = 0; t3 < sr[r2].length; t3++) {
+        const a2 = sr[r2][t3];
+        if (a2.reg.test(e3) === true)
+          return e3.replace(a2.reg, a2.to);
+      }
+    return e3;
+  } };
+  var dr = false;
+  var gr = class {
+    constructor() {
+      Object.defineProperty(this, "words", { enumerable: false, value: {}, writable: true }), Object.defineProperty(this, "hasCompound", { enumerable: false, value: {}, writable: true }), Object.defineProperty(this, "irregulars", { enumerable: false, value: cr, writable: true }), Object.defineProperty(this, "tags", { enumerable: false, value: Object.assign({}, kt), writable: true }), Object.defineProperty(this, "transforms", { enumerable: false, value: hr, writable: true }), Object.defineProperty(this, "taggers", { enumerable: false, value: [], writable: true }), Object.defineProperty(this, "cache", { enumerable: false, value: { abbreviations: {} } }), this.words = Ct(this), Gt(this);
+    }
+    verbose(e3) {
+      return dr = e3, this;
+    }
+    isVerbose() {
+      return dr;
+    }
+    addWords(e3) {
+      let t2 = {};
+      Object.keys(e3).forEach((r2) => {
+        let a2 = e3[r2];
+        r2 = r2.toLowerCase().trim(), t2[r2] = a2;
+      }), Bt(t2, this.words, this);
+    }
+    addConjugations(e3) {
+      return Object.assign(this.irregulars.verbs, e3), this;
+    }
+    addPlurals(e3) {
+      return Object.assign(this.irregulars.nouns, e3), this;
+    }
+    addTags(e3) {
+      return e3 = Object.assign({}, e3), this.tags = Object.assign(this.tags, e3), this.tags = yt(this.tags), this;
+    }
+    postProcess(e3) {
+      return this.taggers.push(e3), this;
+    }
+    stats() {
+      return { words: Object.keys(this.words).length, plurals: Object.keys(this.irregulars.nouns).length, conjugations: Object.keys(this.irregulars.verbs).length, compounds: Object.keys(this.hasCompound).length, postProcessors: this.taggers.length };
+    }
+  };
+  __name(gr, "gr");
+  var pr = /* @__PURE__ */ __name(function(e3) {
+    return JSON.parse(JSON.stringify(e3));
+  }, "pr");
+  gr.prototype.clone = function() {
+    let e3 = new gr();
+    return e3.words = Object.assign({}, this.words), e3.hasCompound = Object.assign({}, this.hasCompound), e3.irregulars = pr(this.irregulars), e3.tags = pr(this.tags), e3.transforms = this.transforms, e3.taggers = this.taggers, e3;
+  };
+  var mr = gr;
+  var fr = k(function(e3, t2) {
+    t2.all = function() {
+      return this.parents()[0] || this;
+    }, t2.parent = function() {
+      return this.from ? this.from : this;
+    }, t2.parents = function(e4) {
+      let t3 = [];
+      const r2 = /* @__PURE__ */ __name(function(e5) {
+        e5.from && (t3.push(e5.from), r2(e5.from));
+      }, "r");
+      return r2(this), t3 = t3.reverse(), typeof e4 == "number" ? t3[e4] : t3;
+    }, t2.clone = function(e4) {
+      let t3 = this.list.map((t4) => t4.clone(e4));
+      return this.buildFrom(t3);
+    }, t2.wordCount = function() {
+      return this.list.reduce((e4, t3) => e4 += t3.wordCount(), 0);
+    }, t2.wordcount = t2.wordCount;
+  });
+  var br = k(function(e3, t2) {
+    t2.first = function(e4) {
+      return e4 === void 0 ? this.get(0) : this.slice(0, e4);
+    }, t2.last = function(e4) {
+      if (e4 === void 0)
+        return this.get(this.list.length - 1);
+      let t3 = this.list.length;
+      return this.slice(t3 - e4, t3);
+    }, t2.slice = function(e4, t3) {
+      let r2 = this.list.slice(e4, t3);
+      return this.buildFrom(r2);
+    }, t2.eq = function(e4) {
+      let t3 = this.list[e4];
+      return t3 === void 0 ? this.buildFrom([]) : this.buildFrom([t3]);
+    }, t2.get = t2.eq, t2.firstTerms = function() {
+      return this.match("^.");
+    }, t2.firstTerm = t2.firstTerms, t2.lastTerms = function() {
+      return this.match(".$");
+    }, t2.lastTerm = t2.lastTerms, t2.termList = function(e4) {
+      let t3 = [];
+      for (let r2 = 0; r2 < this.list.length; r2++) {
+        let a2 = this.list[r2].terms();
+        for (let r3 = 0; r3 < a2.length; r3++)
+          if (t3.push(a2[r3]), e4 !== void 0 && t3[e4] !== void 0)
+            return t3[e4];
+      }
+      return t3;
+    };
+    t2.groups = function(e4) {
+      return e4 === void 0 ? function(e5) {
+        let t3 = {};
+        const r2 = {};
+        for (let t4 = 0; t4 < e5.list.length; t4++) {
+          const a3 = e5.list[t4], n2 = Object.keys(a3.groups).map((e6) => a3.groups[e6]);
+          for (let e6 = 0; e6 < n2.length; e6++) {
+            const { group: t5, start: i2, length: o2 } = n2[e6];
+            r2[t5] || (r2[t5] = []), r2[t5].push(a3.buildFrom(i2, o2));
+          }
+        }
+        const a2 = Object.keys(r2);
+        for (let n2 = 0; n2 < a2.length; n2++) {
+          const i2 = a2[n2];
+          t3[i2] = e5.buildFrom(r2[i2]);
+        }
+        return t3;
+      }(this) : (typeof e4 == "number" && (e4 = String(e4)), function(e5, t3) {
+        const r2 = [];
+        for (let a2 = 0; a2 < e5.list.length; a2++) {
+          const n2 = e5.list[a2];
+          let i2 = Object.keys(n2.groups);
+          i2 = i2.filter((e6) => n2.groups[e6].group === t3), i2.forEach((e6) => {
+            r2.push(n2.buildFrom(n2.groups[e6].start, n2.groups[e6].length));
+          });
+        }
+        return e5.buildFrom(r2);
+      }(this, e4) || this.buildFrom([]));
+    }, t2.group = t2.groups, t2.sentences = function(e4) {
+      let t3 = [];
+      return this.list.forEach((e5) => {
+        t3.push(e5.fullSentence());
+      }), typeof e4 == "number" ? this.buildFrom([t3[e4]]) : this.buildFrom(t3);
+    }, t2.sentence = t2.sentences;
+  });
+  var vr = /* @__PURE__ */ __name(function(e3, t2) {
+    if (e3._cache && e3._cache.set === true) {
+      let { words: r2, tags: a2 } = function(e4) {
+        let t3 = [], r3 = [];
+        return e4.forEach((e5) => {
+          e5.optional !== true && e5.negative !== true && (e5.tag !== void 0 && t3.push(e5.tag), e5.word !== void 0 && r3.push(e5.word));
+        }), { tags: t3, words: r3 };
+      }(t2);
+      for (let t3 = 0; t3 < r2.length; t3++)
+        if (e3._cache.words[r2[t3]] === void 0)
+          return false;
+      for (let t3 = 0; t3 < a2.length; t3++)
+        if (e3._cache.tags[a2[t3]] === void 0)
+          return false;
+    }
+    return true;
+  }, "vr");
+  var yr = k(function(e3, t2) {
+    t2.match = function(e4, t3 = {}) {
+      typeof t3 != "string" && typeof t3 != "number" && t3 !== null || (t3 = { group: t3 });
+      let r2 = Ce(e4, t3);
+      if (r2.length === 0)
+        return this.buildFrom([]);
+      if (vr(this, r2) === false)
+        return this.buildFrom([]);
+      let a2 = this.list.reduce((e5, t4) => e5.concat(t4.match(r2)), []);
+      return t3.group !== void 0 && t3.group !== null && t3.group !== "" ? this.buildFrom(a2).groups(t3.group) : this.buildFrom(a2);
+    }, t2.not = function(e4, t3 = {}) {
+      let r2 = Ce(e4, t3);
+      if (r2.length === 0 || vr(this, r2) === false)
+        return this;
+      let a2 = this.list.reduce((e5, t4) => e5.concat(t4.not(r2)), []);
+      return this.buildFrom(a2);
+    }, t2.matchOne = function(e4, t3 = {}) {
+      let r2 = Ce(e4, t3);
+      if (vr(this, r2) === false)
+        return this.buildFrom([]);
+      for (let e5 = 0; e5 < this.list.length; e5++) {
+        let t4 = this.list[e5].match(r2, true);
+        return this.buildFrom(t4);
+      }
+      return this.buildFrom([]);
+    }, t2.if = function(e4, t3 = {}) {
+      let r2 = Ce(e4, t3);
+      if (vr(this, r2) === false)
+        return this.buildFrom([]);
+      let a2 = this.list.filter((e5) => e5.has(r2) === true);
+      return this.buildFrom(a2);
+    }, t2.ifNo = function(e4, t3 = {}) {
+      let r2 = Ce(e4, t3), a2 = this.list.filter((e5) => e5.has(r2) === false);
+      return this.buildFrom(a2);
+    }, t2.has = function(e4, t3 = {}) {
+      let r2 = Ce(e4, t3);
+      return vr(this, r2) !== false && this.list.some((e5) => e5.has(r2) === true);
+    }, t2.lookAhead = function(e4, t3 = {}) {
+      e4 || (e4 = ".*");
+      let r2 = Ce(e4, t3), a2 = [];
+      return this.list.forEach((e5) => {
+        a2 = a2.concat(e5.lookAhead(r2));
+      }), a2 = a2.filter((e5) => e5), this.buildFrom(a2);
+    }, t2.lookAfter = t2.lookAhead, t2.lookBehind = function(e4, t3 = {}) {
+      e4 || (e4 = ".*");
+      let r2 = Ce(e4, t3), a2 = [];
+      return this.list.forEach((e5) => {
+        a2 = a2.concat(e5.lookBehind(r2));
+      }), a2 = a2.filter((e5) => e5), this.buildFrom(a2);
+    }, t2.lookBefore = t2.lookBehind, t2.before = function(e4, t3 = {}) {
+      let r2 = Ce(e4, t3), a2 = this.if(r2).list.map((e5) => {
+        let t4 = e5.terms().map((e6) => e6.id), a3 = e5.match(r2)[0], n2 = t4.indexOf(a3.start);
+        return n2 === 0 || n2 === -1 ? null : e5.buildFrom(e5.start, n2);
+      });
+      return a2 = a2.filter((e5) => e5 !== null), this.buildFrom(a2);
+    }, t2.after = function(e4, t3 = {}) {
+      let r2 = Ce(e4, t3), a2 = this.if(r2).list.map((e5) => {
+        let t4 = e5.terms(), a3 = t4.map((e6) => e6.id), n2 = e5.match(r2)[0], i2 = a3.indexOf(n2.start);
+        if (i2 === -1 || !t4[i2 + n2.length])
+          return null;
+        let o2 = t4[i2 + n2.length].id, s2 = e5.length - i2 - n2.length;
+        return e5.buildFrom(o2, s2);
+      });
+      return a2 = a2.filter((e5) => e5 !== null), this.buildFrom(a2);
+    }, t2.hasAfter = function(e4, t3 = {}) {
+      return this.filter((r2) => r2.lookAfter(e4, t3).found);
+    }, t2.hasBefore = function(e4, t3 = {}) {
+      return this.filter((r2) => r2.lookBefore(e4, t3).found);
+    };
+  });
+  var wr = /* @__PURE__ */ __name(function(e3, t2, r2, a2) {
+    let n2 = [];
+    typeof e3 == "string" && (n2 = e3.split(" ")), t2.list.forEach((i2) => {
+      let o2 = i2.terms();
+      r2 === true && (o2 = o2.filter((r3) => r3.canBe(e3, t2.world))), o2.forEach((r3, i3) => {
+        n2.length > 1 ? n2[i3] && n2[i3] !== "." && r3.tag(n2[i3], a2, t2.world) : r3.tag(e3, a2, t2.world);
+      });
+    });
+  }, "wr");
+  var kr = { tag: function(e3, t2) {
+    return e3 ? (wr(e3, this, false, t2), this) : this;
+  }, tagSafe: function(e3, t2) {
+    return e3 ? (wr(e3, this, true, t2), this) : this;
+  }, unTag: function(e3, t2) {
+    return this.list.forEach((r2) => {
+      r2.terms().forEach((r3) => r3.unTag(e3, t2, this.world));
+    }), this;
+  }, canBe: function(e3) {
+    if (!e3)
+      return this;
+    let t2 = this.world, r2 = this.list.reduce((r3, a2) => r3.concat(a2.canBe(e3, t2)), []);
+    return this.buildFrom(r2);
+  } };
+  var Ar = { map: function(e3) {
+    if (!e3)
+      return this;
+    let t2 = this.list.map((t3, r2) => {
+      let a2 = this.buildFrom([t3]);
+      a2.from = null;
+      let n2 = e3(a2, r2);
+      return n2 && n2.list && n2.list[0] ? n2.list[0] : n2;
+    });
+    return t2 = t2.filter((e4) => e4), t2.length === 0 ? this.buildFrom(t2) : typeof t2[0] != "object" || t2[0].isA !== "Phrase" ? t2 : this.buildFrom(t2);
+  }, forEach: function(e3, t2) {
+    return e3 ? (this.list.forEach((r2, a2) => {
+      let n2 = this.buildFrom([r2]);
+      t2 === true && (n2.from = null), e3(n2, a2);
+    }), this) : this;
+  }, filter: function(e3) {
+    if (!e3)
+      return this;
+    let t2 = this.list.filter((t3, r2) => {
+      let a2 = this.buildFrom([t3]);
+      return a2.from = null, e3(a2, r2);
+    });
+    return this.buildFrom(t2);
+  }, find: function(e3) {
+    if (!e3)
+      return this;
+    let t2 = this.list.find((t3, r2) => {
+      let a2 = this.buildFrom([t3]);
+      return a2.from = null, e3(a2, r2);
+    });
+    return t2 ? this.buildFrom([t2]) : void 0;
+  }, some: function(e3) {
+    return e3 ? this.list.some((t2, r2) => {
+      let a2 = this.buildFrom([t2]);
+      return a2.from = null, e3(a2, r2);
+    }) : this;
+  }, random: function(e3) {
+    if (!this.found)
+      return this;
+    let t2 = Math.floor(Math.random() * this.list.length);
+    if (e3 === void 0) {
+      let e4 = [this.list[t2]];
+      return this.buildFrom(e4);
+    }
+    return t2 + e3 > this.length && (t2 = this.length - e3, t2 = t2 < 0 ? 0 : t2), this.slice(t2, t2 + e3);
+  } };
+  var Dr = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    let a2 = function(e4, t3 = []) {
+      let r3 = {};
+      return e4.forEach((e5, a3) => {
+        let n3 = true;
+        t3[a3] !== void 0 && (n3 = t3[a3]);
+        let i2 = function(e6) {
+          return e6.split(/[ -]/g);
+        }(e5 = (e5 = (e5 || "").toLowerCase()).replace(/[,;.!?]+$/, "")).map((e6) => e6.trim());
+        r3[i2[0]] = r3[i2[0]] || {}, i2.length === 1 ? r3[i2[0]].value = n3 : (r3[i2[0]].more = r3[i2[0]].more || [], r3[i2[0]].more.push({ rest: i2.slice(1), value: n3 }));
+      }), r3;
+    }(e3, t2), n2 = [];
+    for (let e4 = 0; e4 < r2.list.length; e4++) {
+      const t3 = r2.list[e4];
+      let i2 = t3.terms().map((e5) => e5.reduced);
+      for (let e5 = 0; e5 < i2.length; e5++)
+        a2[i2[e5]] !== void 0 && (a2[i2[e5]].more !== void 0 && a2[i2[e5]].more.forEach((r3) => {
+          if (i2[e5 + r3.rest.length] === void 0)
+            return;
+          r3.rest.every((t4, r4) => t4 === i2[e5 + r4 + 1]) === true && n2.push({ id: t3.terms()[e5].id, value: r3.value, length: r3.rest.length + 1 });
+        }), a2[i2[e5]].value !== void 0 && n2.push({ id: t3.terms()[e5].id, value: a2[i2[e5]].value, length: 1 }));
+    }
+    return n2;
+  }, "Dr");
+  var $r = k(function(e3, t2) {
+    t2.lookup = function(e4) {
+      let t3 = [], r2 = (a2 = e4) && Object.prototype.toString.call(a2) === "[object Object]";
+      var a2;
+      r2 === true && (e4 = Object.keys(e4).map((r3) => (t3.push(e4[r3]), r3))), typeof e4 == "string" && (e4 = [e4]), this._cache.set !== true && this.cache();
+      let n2 = Dr(e4, t3, this), i2 = this.list[0];
+      if (r2 === true) {
+        let e5 = {};
+        return n2.forEach((t4) => {
+          e5[t4.value] = e5[t4.value] || [], e5[t4.value].push(i2.buildFrom(t4.id, t4.length));
+        }), Object.keys(e5).forEach((t4) => {
+          e5[t4] = this.buildFrom(e5[t4]);
+        }), e5;
+      }
+      return n2 = n2.map((e5) => i2.buildFrom(e5.id, e5.length)), this.buildFrom(n2);
+    }, t2.lookUp = t2.lookup;
+  });
+  var Pr = { cache: function(e3) {
+    e3 = e3 || {};
+    let t2 = {}, r2 = {};
+    return this._cache.words = t2, this._cache.tags = r2, this._cache.set = true, this.list.forEach((a2, n2) => {
+      a2.cache = a2.cache || {}, a2.terms().forEach((a3) => {
+        t2[a3.reduced] && !t2.hasOwnProperty(a3.reduced) || (t2[a3.reduced] = t2[a3.reduced] || [], t2[a3.reduced].push(n2), Object.keys(a3.tags).forEach((e4) => {
+          r2[e4] = r2[e4] || [], r2[e4].push(n2);
+        }), e3.root && (a3.setRoot(this.world), t2[a3.root] = [n2]));
+      });
+    }), this;
+  }, uncache: function() {
+    return this._cache = {}, this.list.forEach((e3) => {
+      e3.cache = {};
+    }), this.parents().forEach((e3) => {
+      e3._cache = {}, e3.list.forEach((e4) => {
+        e4.cache = {};
+      });
+    }), this;
+  } };
+  var Er = { replaceWith: function(e3, t2 = {}) {
+    return e3 ? (t2 === true && (t2 = { keepTags: true }), t2 === false && (t2 = { keepTags: false }), t2 = t2 || {}, this.uncache(), this.list.forEach((r2) => {
+      let a2, n2 = e3;
+      if (typeof e3 == "function" && (n2 = e3(r2)), n2 && typeof n2 == "object" && n2.isA === "Doc")
+        a2 = n2.list, this.pool().merge(n2.pool());
+      else {
+        if (typeof n2 != "string")
+          return;
+        {
+          t2.keepCase !== false && r2.terms(0).isTitleCase() && (n2 = (i2 = n2).charAt(0).toUpperCase() + i2.substr(1)), a2 = ot(n2, this.world, this.pool());
+          let e4 = this.buildFrom(a2);
+          e4.tagger(), a2 = e4.list;
+        }
+      }
+      var i2;
+      if (t2.keepTags === true) {
+        let e4 = r2.json({ terms: { tags: true } }).terms;
+        a2[0].terms().forEach((t3, r3) => {
+          e4[r3] && t3.tagSafe(e4[r3].tags, "keptTag", this.world);
+        });
+      }
+      r2.replace(a2[0], this);
+    }), this) : this.delete();
+  }, replace: function(e3, t2, r2) {
+    return t2 === void 0 ? this.replaceWith(e3, r2) : (this.match(e3).replaceWith(t2, r2), this);
+  } };
+  var Hr = k(function(e3, t2) {
+    const r2 = /* @__PURE__ */ __name(function(e4) {
+      return e4 && Object.prototype.toString.call(e4) === "[object Object]";
+    }, "r"), a2 = /* @__PURE__ */ __name(function(e4, t3) {
+      let r3 = ot(e4, t3.world)[0], a3 = t3.buildFrom([r3]);
+      return a3.tagger(), t3.list = a3.list, t3;
+    }, "a");
+    t2.append = function(e4 = "") {
+      return e4 ? this.found ? (this.uncache(), this.list.forEach((t3) => {
+        let a3;
+        r2(e4) && e4.isA === "Doc" ? a3 = e4.list[0].clone() : typeof e4 == "string" && (a3 = ot(e4, this.world, this.pool())[0]), this.buildFrom([a3]).tagger(), t3.append(a3, this);
+      }), this) : a2(e4, this) : this;
+    }, t2.insertAfter = t2.append, t2.insertAt = t2.append, t2.prepend = function(e4) {
+      return e4 ? this.found ? (this.uncache(), this.list.forEach((t3) => {
+        let a3;
+        r2(e4) && e4.isA === "Doc" ? a3 = e4.list[0].clone() : typeof e4 == "string" && (a3 = ot(e4, this.world, this.pool())[0]), this.buildFrom([a3]).tagger(), t3.prepend(a3, this);
+      }), this) : a2(e4, this) : this;
+    }, t2.insertBefore = t2.prepend, t2.concat = function() {
+      this.uncache();
+      let e4 = this.list.slice(0);
+      for (let t3 = 0; t3 < arguments.length; t3++) {
+        let r3 = arguments[t3];
+        if (typeof r3 == "string") {
+          let t4 = ot(r3, this.world);
+          e4 = e4.concat(t4);
+        } else
+          r3.isA === "Doc" ? e4 = e4.concat(r3.list) : r3.isA === "Phrase" && e4.push(r3);
+      }
+      return this.buildFrom(e4);
+    }, t2.delete = function(e4) {
+      this.uncache();
+      let t3 = this;
+      return e4 && (t3 = this.match(e4)), t3.list.forEach((e5) => e5.delete(this)), this;
+    }, t2.remove = t2.delete;
+  });
+  var jr = { clean: true, reduced: true, root: true };
+  var Nr = { text: function(e3) {
+    e3 = e3 || {};
+    let t2 = false;
+    this.parents().length === 0 && (t2 = true), (e3 === "root" || typeof e3 == "object" && e3.root) && this.list.forEach((e4) => {
+      e4.terms().forEach((e5) => {
+        e5.root === null && e5.setRoot(this.world);
+      });
+    });
+    let r2 = this.list.reduce((r3, a2, n2) => {
+      const i2 = !t2 && n2 === 0, o2 = !t2 && n2 === this.list.length - 1;
+      return r3 + a2.text(e3, i2, o2);
+    }, "");
+    return jr[e3] !== true && e3.reduced !== true && e3.clean !== true && e3.root !== true || (r2 = r2.trim()), r2;
+  } };
+  var xr = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    let a2 = function(e4) {
+      let t3 = 0, r3 = 0, a3 = {};
+      return e4.termList().forEach((e5) => {
+        a3[e5.id] = { index: r3, start: t3 + e5.pre.length, length: e5.text.length }, t3 += e5.pre.length + e5.text.length + e5.post.length, r3 += 1;
+      }), a3;
+    }(e3.all());
+    (r2.terms.index || r2.index) && t2.forEach((e4) => {
+      e4.terms.forEach((e5) => {
+        e5.index = a2[e5.id].index;
+      }), e4.index = e4.terms[0].index;
+    }), (r2.terms.offset || r2.offset) && t2.forEach((e4) => {
+      e4.terms.forEach((e5) => {
+        e5.offset = a2[e5.id] || {};
+      }), e4.offset = { index: e4.terms[0].offset.index, start: e4.terms[0].offset.start - e4.text.indexOf(e4.terms[0].text), length: e4.text.length };
+    });
+  }, "xr");
+  var Fr = k(function(e3, t2) {
+    const r2 = { text: true, terms: true, trim: true };
+    t2.json = function(e4 = {}) {
+      if (typeof e4 == "number" && this.list[e4])
+        return this.list[e4].json(r2);
+      (e4 = function(e5) {
+        return (e5 = Object.assign({}, r2, e5)).unique && (e5.reduced = true), e5.offset && (e5.text = true, e5.terms && e5.terms !== true || (e5.terms = {}), e5.terms.offset = true), (e5.index || e5.terms.index) && (e5.terms = e5.terms === true ? {} : e5.terms, e5.terms.id = true), e5;
+      }(e4)).root === true && this.list.forEach((e5) => {
+        e5.terms().forEach((e6) => {
+          e6.root === null && e6.setRoot(this.world);
+        });
+      });
+      let t3 = this.list.map((t4) => t4.json(e4, this.world));
+      if ((e4.terms.offset || e4.offset || e4.terms.index || e4.index) && xr(this, t3, e4), e4.frequency || e4.freq || e4.count) {
+        let e5 = {};
+        this.list.forEach((t4) => {
+          let r3 = t4.text("reduced");
+          e5[r3] = e5[r3] || 0, e5[r3] += 1;
+        }), this.list.forEach((r3, a2) => {
+          t3[a2].count = e5[r3.text("reduced")];
+        });
+      }
+      if (e4.unique) {
+        let e5 = {};
+        t3 = t3.filter((t4) => e5[t4.reduced] !== true && (e5[t4.reduced] = true, true));
+      }
+      return t3;
+    }, t2.data = t2.json;
+  });
+  var Cr = k(function(e3) {
+    const t2 = "[0m", r2 = /* @__PURE__ */ __name(function(e4, t3) {
+      for (e4 = e4.toString(); e4.length < t3; )
+        e4 += " ";
+      return e4;
+    }, "r");
+    const a2 = { green: "#7f9c6c", red: "#914045", blue: "#6699cc", magenta: "#6D5685", cyan: "#2D85A8", yellow: "#e6d7b3", black: "#303b50" }, n2 = { green: function(e4) {
+      return "[32m" + e4 + t2;
+    }, red: function(e4) {
+      return "[31m" + e4 + t2;
+    }, blue: function(e4) {
+      return "[34m" + e4 + t2;
+    }, magenta: function(e4) {
+      return "[35m" + e4 + t2;
+    }, cyan: function(e4) {
+      return "[36m" + e4 + t2;
+    }, yellow: function(e4) {
+      return "[33m" + e4 + t2;
+    }, black: function(e4) {
+      return "[30m" + e4 + t2;
+    } };
+    e3.exports = function(e4) {
+      return typeof window != "undefined" && window.document ? (function(e5) {
+        let t3 = e5.world.tags;
+        e5.list.forEach((e6) => {
+          console.log('\n%c"' + e6.text() + '"', "color: #e6d7b3;"), e6.terms().forEach((e7) => {
+            let n3 = Object.keys(e7.tags), i2 = e7.text || "-";
+            e7.implicit && (i2 = "[" + e7.implicit + "]");
+            let o2 = "'" + i2 + "'";
+            o2 = r2(o2, 8);
+            let s2 = n3.find((e8) => t3[e8] && t3[e8].color), l2 = "steelblue";
+            t3[s2] && (l2 = t3[s2].color, l2 = a2[l2]), console.log(`   ${o2}  -  %c${n3.join(", ")}`, `color: ${l2 || "steelblue"};`);
+          });
+        });
+      }(e4), e4) : (console.log(n2.blue("=====")), e4.list.forEach((t3) => {
+        console.log(n2.blue("  -----")), t3.terms().forEach((t4) => {
+          let a3 = Object.keys(t4.tags), i2 = t4.text || "-";
+          t4.implicit && (i2 = "[" + t4.implicit + "]"), i2 = n2.yellow(i2);
+          let o2 = "'" + i2 + "'";
+          o2 = r2(o2, 18);
+          let s2 = n2.blue("  \uFF5C ") + o2 + "  - " + function(e5, t5) {
+            return (e5 = e5.map((e6) => {
+              if (!t5.tags.hasOwnProperty(e6))
+                return e6;
+              const r3 = t5.tags[e6].color || "blue";
+              return n2[r3](e6);
+            })).join(", ");
+          }(a3, e4.world);
+          console.log(s2);
+        });
+      }), console.log(""), e4);
+    };
+  });
+  var Br = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.json({ text: false, terms: false, reduced: true }), r2 = {};
+    t2.forEach((e4) => {
+      r2[e4.reduced] || (e4.count = 0, r2[e4.reduced] = e4), r2[e4.reduced].count += 1;
+    });
+    let a2 = Object.keys(r2).map((e4) => r2[e4]);
+    return a2.sort((e4, t3) => e4.count > t3.count ? -1 : e4.count < t3.count ? 1 : 0), a2;
+  }, "Br");
+  var Gr = { debug: function() {
+    return Cr(this), this;
+  }, out: function(e3) {
+    if (e3 === "text")
+      return this.text();
+    if (e3 === "normal")
+      return this.text("normal");
+    if (e3 === "json")
+      return this.json();
+    if (e3 === "offset" || e3 === "offsets")
+      return this.json({ offset: true });
+    if (e3 === "array")
+      return this.json({ terms: false }).map((e4) => e4.text).filter((e4) => e4);
+    if (e3 === "freq" || e3 === "frequency")
+      return Br(this);
+    if (e3 === "terms") {
+      let e4 = [];
+      return this.json({ text: false, terms: { text: true } }).forEach((t2) => {
+        let r2 = t2.terms.map((e5) => e5.text);
+        r2 = r2.filter((e5) => e5), e4 = e4.concat(r2);
+      }), e4;
+    }
+    return e3 === "tags" ? this.list.map((e4) => e4.terms().reduce((e5, t2) => (e5[t2.clean || t2.implicit] = Object.keys(t2.tags), e5), {})) : e3 === "debug" ? (Cr(this), this) : this.text();
+  } };
+  var zr = { alpha: (e3, t2) => {
+    let r2 = e3.text("clean"), a2 = t2.text("clean");
+    return r2 < a2 ? -1 : r2 > a2 ? 1 : 0;
+  }, length: (e3, t2) => {
+    let r2 = e3.text().trim().length, a2 = t2.text().trim().length;
+    return r2 < a2 ? 1 : r2 > a2 ? -1 : 0;
+  }, wordCount: (e3, t2) => {
+    let r2 = e3.wordCount(), a2 = t2.wordCount();
+    return r2 < a2 ? 1 : r2 > a2 ? -1 : 0;
+  } };
+  zr.alphabetical = zr.alpha, zr.wordcount = zr.wordCount;
+  var Ir = { index: true, sequence: true, seq: true, sequential: true, chron: true, chronological: true };
+  var Or = { sort: function(e3) {
+    return (e3 = e3 || "alpha") === "freq" || e3 === "frequency" || e3 === "topk" ? function(e4) {
+      let t2 = {};
+      const r2 = { case: true, punctuation: false, whitespace: true, unicode: true };
+      return e4.list.forEach((e5) => {
+        let a2 = e5.text(r2);
+        t2[a2] = t2[a2] || 0, t2[a2] += 1;
+      }), e4.list.sort((e5, a2) => {
+        let n2 = t2[e5.text(r2)], i2 = t2[a2.text(r2)];
+        return n2 < i2 ? 1 : n2 > i2 ? -1 : 0;
+      }), e4;
+    }(this) : Ir.hasOwnProperty(e3) ? function(e4) {
+      let t2 = {};
+      return e4.json({ terms: { offset: true } }).forEach((e5) => {
+        t2[e5.terms[0].id] = e5.terms[0].offset.start;
+      }), e4.list = e4.list.sort((e5, r2) => t2[e5.start] > t2[r2.start] ? 1 : t2[e5.start] < t2[r2.start] ? -1 : 0), e4;
+    }(this) : typeof (e3 = zr[e3] || e3) == "function" ? (this.list = this.list.sort(e3), this) : this;
+  }, reverse: function() {
+    let e3 = [].concat(this.list);
+    return e3 = e3.reverse(), this.buildFrom(e3);
+  }, unique: function() {
+    let e3 = [].concat(this.list), t2 = {};
+    return e3 = e3.filter((e4) => {
+      let r2 = e4.text("reduced").trim() || e4.text("implicit").trim();
+      return t2.hasOwnProperty(r2) !== true && (t2[r2] = true, true);
+    }), this.buildFrom(e3);
+  } };
+  var Tr = /[\[\]{}⟨⟩:,،、‒–—―…‹›«»‐\-;\/⁄·*\•^†‡°¡¿※№÷×ºª%‰=‱¶§~|‖¦©℗®℠™¤₳฿]/g;
+  var Vr = /['‘’“”"′″‴]+/g;
+  var Mr = { whitespace: function(e3) {
+    let t2 = e3.list.map((e4) => e4.terms());
+    t2.forEach((e4, r2) => {
+      e4.forEach((a2, n2) => {
+        a2.hasDash() !== true ? (a2.pre = a2.pre.replace(/\s/g, ""), a2.post = a2.post.replace(/\s/g, ""), (e4.length - 1 !== n2 || t2[r2 + 1]) && (a2.implicit && Boolean(a2.text) === true || a2.hasHyphen() !== true && (a2.post += " "))) : a2.post = " - ";
+      });
+    });
+  }, punctuation: function(e3) {
+    e3.forEach((e4) => {
+      e4.hasHyphen() === true && (e4.post = " "), e4.pre = e4.pre.replace(Tr, ""), e4.post = e4.post.replace(Tr, ""), e4.post = e4.post.replace(/\.\.\./, ""), /!/.test(e4.post) === true && (e4.post = e4.post.replace(/!/g, ""), e4.post = "!" + e4.post), /\?/.test(e4.post) === true && (e4.post = e4.post.replace(/[\?!]*/, ""), e4.post = "?" + e4.post);
+    });
+  }, unicode: function(e3) {
+    e3.forEach((e4) => {
+      e4.isImplicit() !== true && (e4.text = n(e4.text));
+    });
+  }, quotations: function(e3) {
+    e3.forEach((e4) => {
+      e4.post = e4.post.replace(Vr, ""), e4.pre = e4.pre.replace(Vr, "");
+    });
+  }, adverbs: function(e3) {
+    e3.match("#Adverb").not("(not|nary|seldom|never|barely|almost|basically|so)").remove();
+  }, abbreviations: function(e3) {
+    e3.list.forEach((e4) => {
+      let t2 = e4.terms();
+      t2.forEach((e5, r2) => {
+        e5.tags.Abbreviation === true && t2[r2 + 1] && (e5.post = e5.post.replace(/^\./, ""));
+      });
+    });
+  } };
+  var Jr = { whitespace: true, unicode: true, punctuation: true, emoji: true, acronyms: true, abbreviations: true, case: false, contractions: false, parentheses: false, quotations: false, adverbs: false, possessives: false, verbs: false, nouns: false, honorifics: false };
+  var Lr = { light: {}, medium: { case: true, contractions: true, parentheses: true, quotations: true, adverbs: true } };
+  Lr.heavy = Object.assign({}, Lr.medium, { possessives: true, verbs: true, nouns: true, honorifics: true });
+  var Sr = { normalize: function(e3) {
+    typeof (e3 = e3 || {}) == "string" && (e3 = Lr[e3] || {}), e3 = Object.assign({}, Jr, e3), this.uncache();
+    let t2 = this.termList();
+    return e3.case && this.toLowerCase(), e3.whitespace && Mr.whitespace(this), e3.unicode && Mr.unicode(t2), e3.punctuation && Mr.punctuation(t2), e3.emoji && this.remove("(#Emoji|#Emoticon)"), e3.acronyms && this.acronyms().strip(), e3.abbreviations && Mr.abbreviations(this), (e3.contraction || e3.contractions) && this.contractions().expand(), e3.parentheses && this.parentheses().unwrap(), (e3.quotations || e3.quotes) && Mr.quotations(t2), e3.adverbs && Mr.adverbs(this), (e3.possessive || e3.possessives) && this.possessives().strip(), e3.verbs && this.verbs().toInfinitive(), (e3.nouns || e3.plurals) && this.nouns().toSingular(), e3.honorifics && this.remove("#Honorific"), this;
+  } };
+  var _r = k(function(e3, t2) {
+    t2.splitOn = function(e4) {
+      if (!e4) {
+        return this.parent().splitOn(this);
+      }
+      let t3 = Ce(e4), r2 = [];
+      return this.list.forEach((e5) => {
+        let a2 = e5.match(t3);
+        if (a2.length === 0)
+          return void r2.push(e5);
+        let n2 = e5;
+        a2.forEach((e6) => {
+          let t4 = n2.splitOn(e6);
+          t4.before && r2.push(t4.before), t4.match && r2.push(t4.match), n2 = t4.after;
+        }), n2 && r2.push(n2);
+      }), this.buildFrom(r2);
+    }, t2.splitAfter = function(e4) {
+      if (!e4) {
+        return this.parent().splitAfter(this);
+      }
+      let t3 = Ce(e4), r2 = [];
+      return this.list.forEach((e5) => {
+        let a2 = e5.match(t3);
+        if (a2.length === 0)
+          return void r2.push(e5);
+        let n2 = e5;
+        a2.forEach((e6) => {
+          let t4 = n2.splitOn(e6);
+          t4.before && t4.match ? (t4.before.length += t4.match.length, r2.push(t4.before)) : t4.match && r2.push(t4.match), n2 = t4.after;
+        }), n2 && r2.push(n2);
+      }), this.buildFrom(r2);
+    }, t2.split = t2.splitAfter, t2.splitBefore = function(e4) {
+      if (!e4) {
+        return this.parent().splitBefore(this);
+      }
+      let t3 = Ce(e4), r2 = [];
+      return this.list.forEach((e5) => {
+        let a2 = e5.match(t3);
+        if (a2.length === 0)
+          return void r2.push(e5);
+        let n2 = e5;
+        a2.forEach((e6) => {
+          let t4 = n2.splitOn(e6);
+          t4.before && r2.push(t4.before), t4.match && t4.after && (t4.match.length += t4.after.length), n2 = t4.match;
+        }), n2 && r2.push(n2);
+      }), this.buildFrom(r2);
+    }, t2.segment = function(e4, t3) {
+      e4 = e4 || {}, t3 = t3 || { text: true };
+      let r2 = this, a2 = Object.keys(e4);
+      return a2.forEach((e5) => {
+        r2 = r2.splitOn(e5);
+      }), r2.list.forEach((t4) => {
+        for (let r3 = 0; r3 < a2.length; r3 += 1)
+          if (t4.has(a2[r3]))
+            return void (t4.segment = e4[a2[r3]]);
+      }), r2.list.map((e5) => {
+        let r3 = e5.json(t3);
+        return r3.segment = e5.segment || null, r3;
+      });
+    };
+  });
+  var Kr = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = e3.world;
+    return e3.list.forEach((e4) => {
+      e4.terms().forEach((e5) => e5[t2](r2));
+    }), e3;
+  }, "Kr");
+  var qr = { toLowerCase: function() {
+    return Kr(this, "toLowerCase");
+  }, toUpperCase: function() {
+    return Kr(this, "toUpperCase");
+  }, toTitleCase: function() {
+    return Kr(this, "toTitleCase");
+  }, toCamelCase: function() {
+    return this.list.forEach((e3) => {
+      let t2 = e3.terms();
+      t2.forEach((e4, r2) => {
+        r2 !== 0 && e4.toTitleCase(), r2 !== t2.length - 1 && (e4.post = "");
+      });
+    }), this;
+  } };
+  var Wr = k(function(e3, t2) {
+    t2.pre = function(e4, t3) {
+      return e4 === void 0 ? this.list[0].terms(0).pre : (this.list.forEach((r2) => {
+        let a2 = r2.terms(0);
+        t3 === true ? a2.pre += e4 : a2.pre = e4;
+      }), this);
+    }, t2.post = function(e4, t3) {
+      return e4 === void 0 ? this.list.map((e5) => {
+        let t4 = e5.terms();
+        return t4[t4.length - 1].post;
+      }) : (this.list.forEach((r2) => {
+        let a2 = r2.terms(), n2 = a2[a2.length - 1];
+        t3 === true ? n2.post += e4 : n2.post = e4;
+      }), this);
+    }, t2.trim = function() {
+      return this.list = this.list.map((e4) => e4.trim()), this;
+    }, t2.hyphenate = function() {
+      return this.list.forEach((e4) => {
+        let t3 = e4.terms();
+        t3.forEach((e5, r2) => {
+          r2 !== 0 && (e5.pre = ""), t3[r2 + 1] && (e5.post = "-");
+        });
+      }), this;
+    }, t2.dehyphenate = function() {
+      const e4 = /(-|–|—)/;
+      return this.list.forEach((t3) => {
+        t3.terms().forEach((t4) => {
+          e4.test(t4.post) && (t4.post = " ");
+        });
+      }), this;
+    }, t2.deHyphenate = t2.dehyphenate, t2.toQuotations = function(e4, t3) {
+      return e4 = e4 || '"', t3 = t3 || '"', this.list.forEach((r2) => {
+        let a2 = r2.terms();
+        a2[0].pre = e4 + a2[0].pre;
+        let n2 = a2[a2.length - 1];
+        n2.post = t3 + n2.post;
+      }), this;
+    }, t2.toQuotation = t2.toQuotations, t2.toParentheses = function(e4, t3) {
+      return e4 = e4 || "(", t3 = t3 || ")", this.list.forEach((r2) => {
+        let a2 = r2.terms();
+        a2[0].pre = e4 + a2[0].pre;
+        let n2 = a2[a2.length - 1];
+        n2.post = t3 + n2.post;
+      }), this;
+    };
+  });
+  var Rr = { join: function(e3) {
+    this.uncache();
+    let t2 = this.list[0], r2 = t2.length, a2 = {};
+    for (let r3 = 1; r3 < this.list.length; r3++) {
+      const n3 = this.list[r3];
+      a2[n3.start] = true;
+      let i2 = t2.lastTerm();
+      e3 && (i2.post += e3), i2.next = n3.start, n3.terms(0).prev = i2.id, t2.length += n3.length, t2.cache = {};
+    }
+    let n2 = t2.length - r2;
+    return this.parents().forEach((e4) => {
+      e4.list.forEach((e5) => {
+        let r3 = e5.terms();
+        for (let a3 = 0; a3 < r3.length; a3++)
+          if (r3[a3].id === t2.start) {
+            e5.length += n2;
+            break;
+          }
+        e5.cache = {};
+      }), e4.list = e4.list.filter((e5) => a2[e5.start] !== true);
+    }), this.buildFrom([t2]);
+  } };
+  var Ur = /[,\)"';:\-–—\.…]/;
+  var Qr = /* @__PURE__ */ __name(function(e3, t2) {
+    if (!e3.found)
+      return;
+    let r2 = e3.termList();
+    for (let e4 = 0; e4 < r2.length - 1; e4++) {
+      const t3 = r2[e4];
+      if (Ur.test(t3.post))
+        return;
+    }
+    r2.forEach((e4) => {
+      e4.implicit = e4.clean;
+    }), r2[0].text += t2, r2.slice(1).forEach((e4) => {
+      e4.text = "";
+    });
+    for (let e4 = 0; e4 < r2.length - 1; e4++) {
+      const t3 = r2[e4];
+      t3.post = t3.post.replace(/ /, "");
+    }
+  }, "Qr");
+  var Zr = { contract: function() {
+    let e3 = this.not("@hasContraction"), t2 = e3.match("(we|they|you) are");
+    return Qr(t2, "'re"), t2 = e3.match("(he|she|they|it|we|you) will"), Qr(t2, "'ll"), t2 = e3.match("(he|she|they|it|we) is"), Qr(t2, "'s"), t2 = e3.match("#Person is"), Qr(t2, "'s"), t2 = e3.match("#Person would"), Qr(t2, "'d"), t2 = e3.match("(is|was|had|would|should|could|do|does|have|has|can) not"), Qr(t2, "n't"), t2 = e3.match("(i|we|they) have"), Qr(t2, "'ve"), t2 = e3.match("(would|should|could) have"), Qr(t2, "'ve"), t2 = e3.match("i am"), Qr(t2, "'m"), t2 = e3.match("going to"), this;
+  } };
+  var Xr = Object.assign({}, fr, br, yr, kr, Ar, $r, Pr, Er, Hr, Nr, Fr, Gr, Or, Sr, _r, qr, Wr, Rr, Zr);
+  var Yr = {};
+  [["terms", "."], ["hyphenated", "@hasHyphen ."], ["adjectives", "#Adjective"], ["hashTags", "#HashTag"], ["emails", "#Email"], ["emoji", "#Emoji"], ["emoticons", "#Emoticon"], ["atMentions", "#AtMention"], ["urls", "#Url"], ["adverbs", "#Adverb"], ["pronouns", "#Pronoun"], ["conjunctions", "#Conjunction"], ["prepositions", "#Preposition"]].forEach((e3) => {
+    Yr[e3[0]] = function(t2) {
+      let r2 = this.match(e3[1]);
+      return typeof t2 == "number" && (r2 = r2.get(t2)), r2;
+    };
+  }), Yr.emojis = Yr.emoji, Yr.atmentions = Yr.atMentions, Yr.words = Yr.terms, Yr.phoneNumbers = function(e3) {
+    let t2 = this.splitAfter("@hasComma");
+    return t2 = t2.match("#PhoneNumber+"), typeof e3 == "number" && (t2 = t2.get(e3)), t2;
+  }, Yr.money = function(e3) {
+    let t2 = this.match("#Money #Currency?");
+    return typeof e3 == "number" && (t2 = t2.get(e3)), t2;
+  }, Yr.places = function(e3) {
+    let t2 = this.match("(#City && @hasComma) (#Region|#Country)"), r2 = this.not(t2).splitAfter("@hasComma");
+    return r2 = r2.concat(t2), r2.sort("index"), r2 = r2.match("#Place+"), typeof e3 == "number" && (r2 = r2.get(e3)), r2;
+  }, Yr.organizations = function(e3) {
+    let t2 = this.clauses();
+    return t2 = t2.match("#Organization+"), typeof e3 == "number" && (t2 = t2.get(e3)), t2;
+  }, Yr.entities = function(e3) {
+    let t2 = this.clauses(), r2 = t2.people();
+    r2 = r2.concat(t2.places()), r2 = r2.concat(t2.organizations());
+    return r2 = r2.not(["someone", "man", "woman", "mother", "brother", "sister", "father"]), r2.sort("sequence"), typeof e3 == "number" && (r2 = r2.get(e3)), r2;
+  }, Yr.things = Yr.entities, Yr.topics = Yr.entities;
+  var ea = Yr;
+  var ta = /^(under|over)-?/;
+  var ra = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    let a2 = r2.words, n2 = e3[t2].reduced + " " + e3[t2 + 1].reduced;
+    return a2[n2] !== void 0 && a2.hasOwnProperty(n2) === true ? (e3[t2].tag(a2[n2], "lexicon-two", r2), e3[t2 + 1].tag(a2[n2], "lexicon-two", r2), 1) : t2 + 2 < e3.length && (n2 += " " + e3[t2 + 2].reduced, a2[n2] !== void 0 && a2.hasOwnProperty(n2) === true) ? (e3[t2].tag(a2[n2], "lexicon-three", r2), e3[t2 + 1].tag(a2[n2], "lexicon-three", r2), e3[t2 + 2].tag(a2[n2], "lexicon-three", r2), 2) : t2 + 3 < e3.length && (n2 += " " + e3[t2 + 3].reduced, a2[n2] !== void 0 && a2.hasOwnProperty(n2) === true) ? (e3[t2].tag(a2[n2], "lexicon-four", r2), e3[t2 + 1].tag(a2[n2], "lexicon-four", r2), e3[t2 + 2].tag(a2[n2], "lexicon-four", r2), e3[t2 + 3].tag(a2[n2], "lexicon-four", r2), 3) : 0;
+  }, "ra");
+  var aa = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = t2.words, a2 = t2.hasCompound;
+    for (let n2 = 0; n2 < e3.length; n2 += 1) {
+      let i2 = e3[n2].clean;
+      if (a2[i2] === true && n2 + 1 < e3.length) {
+        let r3 = ra(e3, n2, t2);
+        if (r3 > 0) {
+          n2 += r3;
+          continue;
+        }
+      }
+      if (r2[i2] === void 0 || r2.hasOwnProperty(i2) !== true)
+        if (i2 === e3[n2].reduced || r2.hasOwnProperty(e3[n2].reduced) !== true) {
+          if (ta.test(i2) === true) {
+            let a3 = i2.replace(ta, "");
+            r2.hasOwnProperty(a3) === true && e3[n2].tag(r2[a3], "noprefix-lexicon", t2);
+          }
+        } else
+          e3[n2].tag(r2[e3[n2].reduced], "lexicon", t2);
+      else
+        e3[n2].tag(r2[i2], "lexicon", t2);
+    }
+    return e3;
+  }, "aa");
+  var na = /[\'‘’‛‵′`´]$/;
+  var ia = /^(m|k|cm|km|m)\/(s|h|hr)$/;
+  var oa = [[/^[\w\.]+@[\w\.]+\.[a-z]{2,3}$/, "Email"], [/^#[a-z0-9_\u00C0-\u00FF]{2,}$/, "HashTag"], [/^@1?[0-9](am|pm)$/i, "Time"], [/^@1?[0-9]:[0-9]{2}(am|pm)?$/i, "Time"], [/^@\w{2,}$/, "AtMention"], [/^(https?:\/\/|www\.)+\w+\.[a-z]{2,3}/, "Url"], [/^[a-z0-9./].+\.(com|net|gov|org|ly|edu|info|biz|dev|ru|jp|de|in|uk|br|io|ai)/, "Url"], [/^'[0-9]{2}$/, "Year"], [/^[012]?[0-9](:[0-5][0-9])(:[0-5][0-9])$/, "Time"], [/^[012]?[0-9](:[0-5][0-9])?(:[0-5][0-9])? ?(am|pm)$/i, "Time"], [/^[012]?[0-9](:[0-5][0-9])(:[0-5][0-9])? ?(am|pm)?$/i, "Time"], [/^[PMCE]ST$/, "Time"], [/^utc ?[+-]?[0-9]+?$/, "Time"], [/^[a-z0-9]*? o\'?clock$/, "Time"], [/^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}/i, "Date"], [/^[0-9]{1,4}-[0-9]{1,2}-[0-9]{1,4}$/, "Date"], [/^[0-9]{1,4}\/[0-9]{1,2}\/[0-9]{1,4}$/, "Date"], [/^[0-9]{1,4}-[a-z]{2,9}-[0-9]{1,4}$/i, "Date"], [/^gmt[+-][0-9][0-9]?$/i, "Timezone"], [/^utc[+-][0-9][0-9]?$/i, "Timezone"], [/^ma?c\'.*/, "LastName"], [/^o\'[drlkn].*/, "LastName"], [/^ma?cd[aeiou]/, "LastName"], [/^(lol)+[sz]$/, "Expression"], [/^woo+a*?h?$/, "Expression"], [/^(un|de|re)\\-[a-z\u00C0-\u00FF]{2}/, "Verb"], [/^[0-9]{1,4}\.[0-9]{1,2}\.[0-9]{1,4}$/, "Date"], [/^[0-9]{3}-[0-9]{4}$/, "PhoneNumber"], [/^(\+?[0-9][ -])?[0-9]{3}[ -]?[0-9]{3}-[0-9]{4}$/, "PhoneNumber"], [/^[-+]?[\$\xA2-\xA5\u058F\u060B\u09F2\u09F3\u09FB\u0AF1\u0BF9\u0E3F\u17DB\u20A0-\u20BD\uA838\uFDFC\uFE69\uFF04\uFFE0\uFFE1\uFFE5\uFFE6][-+]?[0-9]+(,[0-9]{3})*(\.[0-9]+)?(k|m|b|bn)?\+?$/, ["Money", "Value"]], [/^[-+]?[0-9]+(,[0-9]{3})*(\.[0-9]+)?[\$\xA2-\xA5\u058F\u060B\u09F2\u09F3\u09FB\u0AF1\u0BF9\u0E3F\u17DB\u20A0-\u20BD\uA838\uFDFC\uFE69\uFF04\uFFE0\uFFE1\uFFE5\uFFE6]\+?$/, ["Money", "Value"]], [/^[-+]?[\$£]?[0-9]([0-9,.])+?(usd|eur|jpy|gbp|cad|aud|chf|cny|hkd|nzd|kr|rub)$/i, ["Money", "Value"]], [/^[-+]?[0-9]+(,[0-9]{3})*(\.[0-9]+)?\+?$/, ["Cardinal", "NumericValue"]], [/^[-+]?[0-9]+(,[0-9]{3})*(\.[0-9]+)?(st|nd|rd|r?th)$/, ["Ordinal", "NumericValue"]], [/^\.[0-9]+\+?$/, ["Cardinal", "NumericValue"]], [/^[-+]?[0-9]+(,[0-9]{3})*(\.[0-9]+)?%\+?$/, ["Percent", "Cardinal", "NumericValue"]], [/^\.[0-9]+%$/, ["Percent", "Cardinal", "NumericValue"]], [/^[0-9]{1,4}\/[0-9]{1,4}(st|nd|rd|th)?s?$/, ["Fraction", "NumericValue"]], [/^[0-9.]{1,3}[a-z]{0,2}[-–—][0-9]{1,3}[a-z]{0,2}$/, ["Value", "NumberRange"]], [/^[0-9][0-9]?(:[0-9][0-9])?(am|pm)? ?[-–—] ?[0-9][0-9]?(:[0-9][0-9])?(am|pm)?$/, ["Time", "NumberRange"]], [/^[0-9.]+([a-z]{1,4})$/, "Value"]];
+  var sa = /^[IVXLCDM]{2,}$/;
+  var la = /^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+  var ua = "Adjective";
+  var ca = "Infinitive";
+  var ha = "PresentTense";
+  var da = "Singular";
+  var ga = "PastTense";
+  var pa = "Expression";
+  var ma = { a: [[/.[aeiou]na$/, "Noun"], [/.[oau][wvl]ska$/, "LastName"], [/.[^aeiou]ica$/, da], [/^([hyj]a)+$/, pa]], c: [[/.[^aeiou]ic$/, ua]], d: [[/[aeiou](pp|ll|ss|ff|gg|tt|rr|bb|nn|mm)ed$/, ga], [/.[aeo]{2}[bdgmnprvz]ed$/, ga], [/.[aeiou][sg]hed$/, ga], [/.[aeiou]red$/, ga], [/.[aeiou]r?ried$/, ga], [/.[bcdgtr]led$/, ga], [/.[aoui]f?led$/, ga], [/.[iao]sed$/, ga], [/[aeiou]n?[cs]ed$/, ga], [/[aeiou][rl]?[mnf]ed$/, ga], [/[aeiou][ns]?c?ked$/, ga], [/[aeiou][nl]?ged$/, ga], [/.[tdbwxz]ed$/, ga], [/[^aeiou][aeiou][tvx]ed$/, ga], [/.[cdlmnprstv]ied$/, ga], [/[^aeiou]ard$/, da], [/[aeiou][^aeiou]id$/, ua], [/.[vrl]id$/, ua]], e: [[/.[lnr]ize$/, ca], [/.[^aeiou]ise$/, ca], [/.[aeiou]te$/, ca], [/.[^aeiou][ai]ble$/, ua], [/.[^aeiou]eable$/, ua], [/.[ts]ive$/, ua], [/[a-z]-like$/, ua]], h: [[/.[^aeiouf]ish$/, ua], [/.v[iy]ch$/, "LastName"], [/^ug?h+$/, pa], [/^uh[ -]?oh$/, pa], [/[a-z]-ish$/, ua]], i: [[/.[oau][wvl]ski$/, "LastName"]], k: [[/^(k){2}$/, pa]], l: [[/.[gl]ial$/, ua], [/.[^aeiou]ful$/, ua], [/.[nrtumcd]al$/, ua], [/.[^aeiou][ei]al$/, ua]], m: [[/.[^aeiou]ium$/, da], [/[^aeiou]ism$/, da], [/^h*u*m+$/, pa], [/^\d+ ?[ap]m$/, "Date"]], n: [[/.[lsrnpb]ian$/, ua], [/[^aeiou]ician$/, "Actor"], [/[aeiou][ktrp]in$/, "Gerund"]], o: [[/^no+$/, pa], [/^(yo)+$/, pa], [/^woo+[pt]?$/, pa]], r: [[/.[bdfklmst]ler$/, "Noun"], [/[aeiou][pns]er$/, da], [/[^i]fer$/, ca], [/.[^aeiou][ao]pher$/, "Actor"], [/.[lk]er$/, "Noun"], [/.ier$/, "Comparative"]], t: [[/.[di]est$/, "Superlative"], [/.[icldtgrv]ent$/, ua], [/[aeiou].*ist$/, ua], [/^[a-z]et$/, "Verb"]], s: [[/.[^aeiou]ises$/, ha], [/.[rln]ates$/, ha], [/.[^z]ens$/, "Verb"], [/.[lstrn]us$/, da], [/.[aeiou]sks$/, ha], [/.[aeiou]kes$/, ha], [/[aeiou][^aeiou]is$/, da], [/[a-z]\'s$/, "Noun"], [/^yes+$/, pa]], v: [[/.[^aeiou][ai][kln]ov$/, "LastName"]], y: [[/.[cts]hy$/, ua], [/.[st]ty$/, ua], [/.[gk]y$/, ua], [/.[tnl]ary$/, ua], [/.[oe]ry$/, da], [/[rdntkbhs]ly$/, "Adverb"], [/...lly$/, "Adverb"], [/[bszmp]{2}y$/, ua], [/.(gg|bb|zz)ly$/, ua], [/.[ai]my$/, ua], [/[ea]{2}zy$/, ua], [/.[^aeiou]ity$/, da]] };
+  var fa = "Adjective";
+  var ba = "Infinitive";
+  var va = "PresentTense";
+  var ya = "Singular";
+  var wa = "PastTense";
+  var ka = "Adverb";
+  var Aa = "Plural";
+  var Da = "Verb";
+  var $a = "LastName";
+  var Pa = [null, null, { ea: ya, ia: "Noun", ic: fa, ly: ka, "'n": Da, "'t": Da }, { oed: wa, ued: wa, xed: wa, " so": ka, "'ll": "Modal", "'re": "Copula", azy: fa, eer: "Noun", end: Da, ped: wa, ffy: fa, ify: ba, ing: "Gerund", ize: ba, lar: fa, mum: fa, nes: va, nny: fa, oid: fa, ous: fa, que: fa, rol: ya, sis: ya, zes: va }, { amed: wa, aped: wa, ched: wa, lked: wa, nded: wa, cted: wa, dged: wa, akis: $a, cede: ba, chuk: $a, czyk: $a, ects: va, ends: Da, enko: $a, ette: ya, fies: va, fore: ka, gate: ba, gone: fa, ices: Aa, ints: Aa, ines: Aa, ions: Aa, less: ka, llen: fa, made: fa, nsen: $a, oses: va, ould: "Modal", some: fa, sson: $a, tage: ba, teen: "Value", tion: ya, tive: fa, tors: "Noun", vice: ya }, { tized: wa, urned: wa, eased: wa, ances: Aa, bound: fa, ettes: Aa, fully: ka, ishes: va, ities: Aa, marek: $a, nssen: $a, ology: "Noun", ports: Aa, rough: fa, tches: va, tieth: "Ordinal", tures: Aa, wards: ka, where: ka }, { auskas: $a, keeper: "Actor", logist: "Actor", teenth: "Value" }, { opoulos: $a, borough: "Place", sdottir: $a }];
+  var Ea = { ":(": true, ":)": true, ":P": true, ":p": true, ":O": true, ":3": true, ":|": true, ":/": true, ":\\": true, ":$": true, ":*": true, ":@": true, ":-(": true, ":-)": true, ":-P": true, ":-p": true, ":-O": true, ":-3": true, ":-|": true, ":-/": true, ":-\\": true, ":-$": true, ":-*": true, ":-@": true, ":^(": true, ":^)": true, ":^P": true, ":^p": true, ":^O": true, ":^3": true, ":^|": true, ":^/": true, ":^\\": true, ":^$": true, ":^*": true, ":^@": true, "):": true, "(:": true, "$:": true, "*:": true, ")-:": true, "(-:": true, "$-:": true, "*-:": true, ")^:": true, "(^:": true, "$^:": true, "*^:": true, "<3": true, "</3": true, "<\\3": true };
+  var Ha = /^(\u00a9|\u00ae|[\u2319-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/;
+  var ja = { lexicon: aa, punctuation: function(e3, t2, r2) {
+    let a2 = e3[t2];
+    if (na.test(a2.text) && !na.test(a2.pre) && !na.test(a2.post) && a2.clean.length > 2) {
+      let e4 = a2.clean[a2.clean.length - 2];
+      if (e4 === "s")
+        return void a2.tag(["Possessive", "Noun"], "end-tick", r2);
+      e4 === "n" && a2.tag(["Gerund"], "chillin", r2);
+    }
+    ia.test(a2.text) && a2.tag("Unit", "per-sec", r2);
+  }, regex: function(e3, t2) {
+    let r2 = e3.text;
+    for (let a2 = 0; a2 < oa.length; a2 += 1)
+      if (oa[a2][0].test(r2) === true) {
+        e3.tagSafe(oa[a2][1], "prefix #" + a2, t2);
+        break;
+      }
+    e3.text.length >= 2 && sa.test(r2) && la.test(r2) && e3.tag("RomanNumeral", "xvii", t2);
+  }, suffix: function(e3, t2) {
+    !function(e4, t3) {
+      const r2 = e4.clean.length;
+      let a2 = 7;
+      r2 <= a2 && (a2 = r2 - 1);
+      for (let n2 = a2; n2 > 1; n2 -= 1) {
+        let a3 = e4.clean.substr(r2 - n2, r2);
+        if (Pa[a3.length].hasOwnProperty(a3) === true) {
+          let r3 = Pa[a3.length][a3];
+          e4.tagSafe(r3, "suffix -" + a3, t3);
+          break;
+        }
+      }
+    }(e3, t2), function(e4, t3) {
+      let r2 = e4.clean, a2 = r2[r2.length - 1];
+      if (ma.hasOwnProperty(a2) === true) {
+        let n2 = ma[a2];
+        for (let i2 = 0; i2 < n2.length; i2 += 1)
+          if (n2[i2][0].test(r2) === true) {
+            e4.tagSafe(n2[i2][1], `endReg ${a2} #${i2}`, t3);
+            break;
+          }
+      }
+    }(e3, t2);
+  }, emoji: (e3, t2) => {
+    let r2 = e3.pre + e3.text + e3.post;
+    var a2;
+    r2 = r2.trim(), r2 = r2.replace(/[.!?,]$/, ""), ((e4) => !(e4.charAt(0) !== ":" || e4.match(/:.?$/) === null || e4.match(" ") || e4.length > 35))(r2) === true && (e3.tag("Emoji", "comma-emoji", t2), e3.text = r2, e3.pre = e3.pre.replace(":", ""), e3.post = e3.post.replace(":", "")), e3.text.match(Ha) && (e3.tag("Emoji", "unicode-emoji", t2), e3.text = r2), (a2 = (a2 = r2).replace(/^[:;]/, ":"), Ea.hasOwnProperty(a2)) === true && (e3.tag("Emoticon", "emoticon-emoji", t2), e3.text = r2);
+  } };
+  var Na = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = e3.world;
+    ja.lexicon(t2, r2);
+    for (let e4 = 0; e4 < t2.length; e4 += 1) {
+      let a2 = t2[e4];
+      ja.punctuation(t2, e4, r2), ja.regex(a2, r2), ja.suffix(a2, r2), ja.emoji(a2, r2);
+    }
+    return e3;
+  }, "Na");
+  var xa = { beforeThisWord: { there: "Verb", me: "Verb", man: "Adjective", only: "Verb", him: "Verb", were: "Noun", took: "Noun", himself: "Verb", went: "Noun", who: "Noun", jr: "Person" }, afterThisWord: { i: "Verb", first: "Noun", it: "Verb", there: "Verb", not: "Verb", because: "Noun", if: "Noun", but: "Noun", who: "Verb", this: "Noun", his: "Noun", when: "Noun", you: "Verb", very: "Adjective", old: "Noun", never: "Verb", before: "Noun" }, beforeThisPos: { Copula: "Noun", PastTense: "Noun", Conjunction: "Noun", Modal: "Noun", Pluperfect: "Noun", PerfectTense: "Verb" }, afterThisPos: { Adjective: "Noun", Possessive: "Noun", Determiner: "Noun", Adverb: "Verb", Pronoun: "Verb", Value: "Noun", Ordinal: "Noun", Modal: "Verb", Superlative: "Noun", Demonym: "Noun", Honorific: "Person" } };
+  var Fa = Object.keys(xa.afterThisPos);
+  var Ca = Object.keys(xa.beforeThisPos);
+  var Ba = /* @__PURE__ */ __name(function(e3, t2) {
+    for (let r2 = 0; r2 < e3.length; r2 += 1) {
+      let a2 = e3[r2];
+      if (a2.isKnown() === true)
+        continue;
+      let n2 = e3[r2 - 1];
+      if (n2) {
+        if (xa.afterThisWord.hasOwnProperty(n2.clean) === true) {
+          let e5 = xa.afterThisWord[n2.clean];
+          a2.tag(e5, "after-" + n2.clean, t2);
+          continue;
+        }
+        let e4 = Fa.find((e5) => n2.tags[e5]);
+        if (e4 !== void 0) {
+          let r3 = xa.afterThisPos[e4];
+          a2.tag(r3, "after-" + e4, t2);
+          continue;
+        }
+      }
+      let i2 = e3[r2 + 1];
+      if (i2) {
+        if (xa.beforeThisWord.hasOwnProperty(i2.clean) === true) {
+          let e5 = xa.beforeThisWord[i2.clean];
+          a2.tag(e5, "before-" + i2.clean, t2);
+          continue;
+        }
+        let e4 = Ca.find((e5) => i2.tags[e5]);
+        if (e4 !== void 0) {
+          let r3 = xa.beforeThisPos[e4];
+          a2.tag(r3, "before-" + e4, t2);
+          continue;
+        }
+      }
+    }
+  }, "Ba");
+  var Ga = /^[A-Z][a-z'\u00C0-\u00FF]/;
+  var za = /[0-9]/;
+  var Ia = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.world;
+    e3.list.forEach((e4) => {
+      let r2 = e4.terms();
+      for (let e5 = 1; e5 < r2.length; e5++) {
+        const a2 = r2[e5];
+        Ga.test(a2.text) === true && za.test(a2.text) === false && a2.tags.Date === void 0 && a2.tag("ProperNoun", "titlecase-noun", t2);
+      }
+    });
+  }, "Ia");
+  var Oa = /^(re|un)-?[a-z\u00C0-\u00FF]/;
+  var Ta = /^(re|un)-?/;
+  var Va = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = t2.words;
+    e3.forEach((e4) => {
+      if (e4.isKnown() !== true && Oa.test(e4.clean) === true) {
+        let a2 = e4.clean.replace(Ta, "");
+        a2 && a2.length > 3 && r2[a2] !== void 0 && r2.hasOwnProperty(a2) === true && e4.tag(r2[a2], "stem-" + a2, t2);
+      }
+    });
+  }, "Va");
+  var Ma = { isSingular: [/(ax|test)is$/i, /(octop|vir|radi|nucle|fung|cact|stimul)us$/i, /(octop|vir)i$/i, /(rl)f$/i, /(alias|status)$/i, /(bu)s$/i, /(al|ad|at|er|et|ed|ad)o$/i, /(ti)um$/i, /(ti)a$/i, /sis$/i, /(?:(^f)fe|(lr)f)$/i, /hive$/i, /s[aeiou]+ns$/i, /(^aeiouy|qu)y$/i, /(x|ch|ss|sh|z)$/i, /(matr|vert|ind|cort)(ix|ex)$/i, /(m|l)ouse$/i, /(m|l)ice$/i, /(antenn|formul|nebul|vertebr|vit)a$/i, /.sis$/i, /^(?!talis|.*hu)(.*)man$/i], isPlural: [/(^v)ies$/i, /ises$/i, /ives$/i, /(antenn|formul|nebul|vertebr|vit)ae$/i, /(octop|vir|radi|nucle|fung|cact|stimul)i$/i, /(buffal|tomat|tornad)oes$/i, /(analy|ba|diagno|parenthe|progno|synop|the)ses$/i, /(vert|ind|cort)ices$/i, /(matr|append)ices$/i, /(x|ch|ss|sh|s|z|o)es$/i, /is$/i, /men$/i, /news$/i, /.tia$/i, /(^f)ves$/i, /(lr)ves$/i, /(^aeiouy|qu)ies$/i, /(m|l)ice$/i, /(cris|ax|test)es$/i, /(alias|status)es$/i, /ics$/i] };
+  var Ja = ["Uncountable", "Pronoun", "Place", "Value", "Person", "Month", "WeekDay", "Holiday"];
+  var La = [/ss$/, /sis$/, /[^aeiou][uo]s$/, /'s$/];
+  var Sa = [/i$/, /ae$/];
+  var _a = /* @__PURE__ */ __name(function(e3, t2) {
+    if (e3.tags.Noun && !e3.tags.Acronym) {
+      let r2 = e3.clean;
+      if (e3.tags.Singular || e3.tags.Plural)
+        return;
+      if (r2.length <= 3)
+        return void e3.tag("Singular", "short-singular", t2);
+      if (Ja.find((t3) => e3.tags[t3]))
+        return;
+      if (Ma.isPlural.find((e4) => e4.test(r2)))
+        return void e3.tag("Plural", "plural-rules", t2);
+      if (Ma.isSingular.find((e4) => e4.test(r2)))
+        return void e3.tag("Singular", "singular-rules", t2);
+      if (/s$/.test(r2) === true) {
+        if (La.find((e4) => e4.test(r2)))
+          return;
+        return void e3.tag("Plural", "plural-fallback", t2);
+      }
+      if (Sa.find((e4) => e4.test(r2)))
+        return;
+      e3.tag("Singular", "singular-fallback", t2);
+    }
+  }, "_a");
+  var Ka = ["academy", "administration", "agence", "agences", "agencies", "agency", "airlines", "airways", "army", "assoc", "associates", "association", "assurance", "authority", "autorite", "aviation", "bank", "banque", "board", "boys", "brands", "brewery", "brotherhood", "brothers", "building society", "bureau", "cafe", "caisse", "capital", "care", "cathedral", "center", "central bank", "centre", "chemicals", "choir", "chronicle", "church", "circus", "clinic", "clinique", "club", "co", "coalition", "coffee", "collective", "college", "commission", "committee", "communications", "community", "company", "comprehensive", "computers", "confederation", "conference", "conseil", "consulting", "containers", "corporation", "corps", "corp", "council", "crew", "daily news", "data", "departement", "department", "department store", "departments", "design", "development", "directorate", "division", "drilling", "education", "eglise", "electric", "electricity", "energy", "ensemble", "enterprise", "enterprises", "entertainment", "estate", "etat", "evening news", "faculty", "federation", "financial", "fm", "foundation", "fund", "gas", "gazette", "girls", "government", "group", "guild", "health authority", "herald", "holdings", "hospital", "hotel", "hotels", "inc", "industries", "institut", "institute", "institute of technology", "institutes", "insurance", "international", "interstate", "investment", "investments", "investors", "journal", "laboratory", "labs", "liberation army", "limited", "local authority", "local health authority", "machines", "magazine", "management", "marine", "marketing", "markets", "media", "memorial", "mercantile exchange", "ministere", "ministry", "military", "mobile", "motor", "motors", "musee", "museum", "news", "news service", "observatory", "office", "oil", "optical", "orchestra", "organization", "partners", "partnership", "people's party", "petrol", "petroleum", "pharmacare", "pharmaceutical", "pharmaceuticals", "pizza", "plc", "police", "polytechnic", "post", "power", "press", "productions", "quartet", "radio", "regional authority", "regional health authority", "reserve", "resources", "restaurant", "restaurants", "savings", "school", "securities", "service", "services", "social club", "societe", "society", "sons", "standard", "state police", "state university", "stock exchange", "subcommittee", "syndicat", "systems", "telecommunications", "telegraph", "television", "times", "tribunal", "tv", "union", "university", "utilities", "workers"].reduce(function(e3, t2) {
+    return e3[t2] = "Noun", e3;
+  }, {});
+  var qa = /* @__PURE__ */ __name(function(e3) {
+    return !!e3.tags.Noun && (!(e3.tags.Pronoun || e3.tags.Comma || e3.tags.Possessive) && !!(e3.tags.Organization || e3.tags.Acronym || e3.tags.Place || e3.titleCase()));
+  }, "qa");
+  var Wa = /^[A-Z]('s|,)?$/;
+  var Ra = /([A-Z]\.){2}[A-Z]?/i;
+  var Ua = { I: true, A: true };
+  var Qa = { neighbours: Ba, case: Ia, stem: Va, plural: _a, organizations: function(e3, t2) {
+    for (let r2 = 0; r2 < e3.length; r2 += 1) {
+      let a2 = e3[r2];
+      if (Ka[a2.clean] !== void 0 && Ka.hasOwnProperty(a2.clean) === true) {
+        let n2 = e3[r2 - 1];
+        if (n2 !== void 0 && qa(n2) === true) {
+          n2.tagSafe("Organization", "org-word-1", t2), a2.tagSafe("Organization", "org-word-2", t2);
+          continue;
+        }
+        let i2 = e3[r2 + 1];
+        if (i2 !== void 0 && i2.clean === "of" && e3[r2 + 2] && qa(e3[r2 + 2])) {
+          a2.tagSafe("Organization", "org-of-word-1", t2), i2.tagSafe("Organization", "org-of-word-2", t2), e3[r2 + 2].tagSafe("Organization", "org-of-word-3", t2);
+          continue;
+        }
+      }
+    }
+  }, acronyms: function(e3, t2) {
+    e3.forEach((e4) => {
+      e4.tags.RomanNumeral !== true && (Ra.test(e4.text) === true && e4.tag("Acronym", "period-acronym", t2), e4.isUpperCase() && function(e5, t3) {
+        let r2 = e5.reduced;
+        return !!e5.tags.Acronym || !t3.words[r2] && !(r2.length > 5) && e5.isAcronym();
+      }(e4, t2) ? (e4.tag("Acronym", "acronym-step", t2), e4.tag("Noun", "acronym-infer", t2)) : !Ua.hasOwnProperty(e4.text) && Wa.test(e4.text) && (e4.tag("Acronym", "one-letter-acronym", t2), e4.tag("Noun", "one-letter-infer", t2)), e4.tags.Organization && e4.text.length <= 3 && e4.tag("Acronym", "acronym-org", t2), e4.tags.Organization && e4.isUpperCase() && e4.text.length <= 6 && e4.tag("Acronym", "acronym-org-case", t2));
+    });
+  } };
+  var Za = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = e3.world;
+    return Qa.neighbours(t2, r2), Qa.case(e3), Qa.stem(t2, r2), t2.forEach((t3) => {
+      t3.isKnown() === false && t3.tag("Noun", "noun-fallback", e3.world);
+    }), Qa.organizations(t2, r2), Qa.acronyms(t2, r2), t2.forEach((t3) => {
+      Qa.plural(t3, e3.world);
+    }), e3;
+  }, "Za");
+  var Xa = /n't$/;
+  var Ya = { "won't": ["will", "not"], wont: ["will", "not"], "can't": ["can", "not"], cant: ["can", "not"], cannot: ["can", "not"], "shan't": ["should", "not"], dont: ["do", "not"], dun: ["do", "not"] };
+  var en = /* @__PURE__ */ __name(function(e3, t2) {
+    if (Ya.hasOwnProperty(e3.clean) === true)
+      return Ya[e3.clean];
+    if (e3.clean === "ain't" || e3.clean === "aint")
+      return function(e4, t3) {
+        let r2 = t3.terms(), a2 = r2.indexOf(e4), n2 = r2.slice(0, a2).find((e5) => e5.tags.Noun);
+        return n2 && n2.tags.Plural ? ["are", "not"] : ["is", "not"];
+      }(e3, t2);
+    if (Xa.test(e3.clean) === true) {
+      return [e3.clean.replace(Xa, ""), "not"];
+    }
+    return null;
+  }, "en");
+  var tn = /([a-z\u00C0-\u00FF]+)[\u0027\u0060\u00B4\u2018\u2019\u201A\u201B\u2032\u2035\u2039\u203A]([a-z]{1,2})$/i;
+  var rn = { ll: "will", ve: "have", re: "are", m: "am", "n't": "not" };
+  var an = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.text.match(tn);
+    return t2 === null ? null : rn.hasOwnProperty(t2[2]) ? [t2[1], rn[t2[2]]] : null;
+  }, "an");
+  var nn = { wanna: ["want", "to"], gonna: ["going", "to"], im: ["i", "am"], alot: ["a", "lot"], ive: ["i", "have"], imma: ["I", "will"], "where'd": ["where", "did"], whered: ["where", "did"], "when'd": ["when", "did"], whend: ["when", "did"], howd: ["how", "did"], whatd: ["what", "did"], dunno: ["do", "not", "know"], brb: ["be", "right", "back"], gtg: ["got", "to", "go"], irl: ["in", "real", "life"], tbh: ["to", "be", "honest"], imo: ["in", "my", "opinion"], til: ["today", "i", "learned"], rn: ["right", "now"], twas: ["it", "was"], "@": ["at"] };
+  var on3 = /* @__PURE__ */ __name(function(e3) {
+    return nn.hasOwnProperty(e3.clean) ? nn[e3.clean] : null;
+  }, "on");
+  var sn = /([a-z\u00C0-\u00FF]+)[\u0027\u0060\u00B4\u2018\u2019\u201A\u201B\u2032\u2035\u2039\u203A]s$/i;
+  var ln = { that: true, there: true };
+  var un = { here: true, there: true, everywhere: true };
+  var cn = /* @__PURE__ */ __name(function(e3, t2, r2) {
+    let a2 = e3.text.match(sn);
+    if (a2 !== null) {
+      if (((e4, t3) => {
+        if (e4.tags.Possessive)
+          return true;
+        if (e4.tags.Pronoun || e4.tags.QuestionWord)
+          return false;
+        if (ln.hasOwnProperty(e4.reduced))
+          return false;
+        let r3 = t3.get(e4.next);
+        if (!r3)
+          return true;
+        if (r3.tags.Verb)
+          return !!r3.tags.Infinitive || !!r3.tags.PresentTense;
+        if (r3.tags.Noun)
+          return un.hasOwnProperty(r3.reduced) !== true;
+        let a3 = t3.get(r3.next);
+        return !(!a3 || !a3.tags.Noun || a3.tags.Pronoun) || (r3.tags.Adjective || r3.tags.Adverb || r3.tags.Verb, false);
+      })(e3, t2.pool) === true)
+        return e3.tag("#Possessive", "isPossessive", r2), null;
+      if (a2 !== null)
+        return ((e4, t3) => {
+          let r3 = t3.terms(), a3 = r3.indexOf(e4);
+          return r3.slice(a3 + 1, a3 + 3).find((e5) => e5.tags.PastTense);
+        })(e3, t2) ? [a2[1], "has"] : [a2[1], "is"];
+    }
+    return null;
+  }, "cn");
+  var hn = /[a-z\u00C0-\u00FF]'d$/;
+  var dn = { how: true, what: true };
+  var gn = /* @__PURE__ */ __name(function(e3, t2) {
+    if (hn.test(e3.clean)) {
+      let r2 = e3.clean.replace(/'d$/, ""), a2 = t2.terms(), n2 = a2.indexOf(e3), i2 = a2.slice(n2 + 1, n2 + 4);
+      for (let e4 = 0; e4 < i2.length; e4++) {
+        let t3 = i2[e4];
+        if (t3.tags.Verb)
+          return t3.tags.PastTense ? [r2, "had"] : dn[r2] === true ? [r2, "did"] : [r2, "would"];
+      }
+      return [r2, "would"];
+    }
+    return null;
+  }, "gn");
+  var pn = /^([0-9.]{1,3}[a-z]{0,2}) ?[-–—] ?([0-9]{1,3}[a-z]{0,2})$/i;
+  var mn = /^([0-9][0-9]?(:[0-9][0-9])?(am|pm)?) ?[-–—] ?([0-9][0-9]?(:[0-9][0-9])?(am|pm)?)$/i;
+  var fn = /* @__PURE__ */ __name(function(e3) {
+    if (e3.tags.PhoneNumber === true)
+      return null;
+    let t2 = e3.text.match(pn);
+    return t2 !== null ? [t2[1], "to", t2[2]] : (t2 = e3.text.match(mn), t2 !== null ? [t2[1], "to", t2[4]] : null);
+  }, "fn");
+  var bn = /^(l|c|d|j|m|n|qu|s|t)[\u0027\u0060\u00B4\u2018\u2019\u201A\u201B\u2032\u2035\u2039\u203A]([a-z\u00C0-\u00FF]+)$/i;
+  var vn = { l: "le", c: "ce", d: "de", j: "je", m: "me", n: "ne", qu: "que", s: "se", t: "tu" };
+  var yn = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.text.match(bn);
+    if (t2 === null || vn.hasOwnProperty(t2[1]) === false)
+      return null;
+    let r2 = [vn[t2[1]], t2[2]];
+    return r2[0] && r2[1] ? r2 : null;
+  }, "yn");
+  var wn = /^[0-9]+$/;
+  var kn = /^[0-9]+(st|nd|rd|th)$/;
+  var An = /^[0-9:]+(am|pm)?$/;
+  var Dn = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = ot(e3.join(" "), t2.world, t2.pool())[0], a2 = r2.terms();
+    aa(a2, t2.world);
+    let n2 = a2[0];
+    return kn.test(n2.text) ? (a2[0].tag("Ordinal", "ord-range", t2.world), a2[2].tag("Ordinal", "ord-range", t2.world)) : wn.test(n2.text) ? (a2[0].tag("Cardinal", "num-range", t2.world), a2[2].tag("Cardinal", "num-range", t2.world)) : An.test(n2.text) && (a2[0].tag("Time", "time-range", t2.world), a2[1].tag("Date", "time-range", t2.world), a2[2].tag("Time", "time-range", t2.world)), a2.forEach((e4) => {
+      e4.implicit = e4.text, e4.text = "", e4.clean = "", e4.pre = "", e4.post = "", Object.keys(e4.tags).length === 0 && (e4.tags.Noun = true);
+    }), r2;
+  }, "Dn");
+  var $n = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.world;
+    return e3.list.forEach((r2) => {
+      let a2 = r2.terms();
+      for (let n2 = 0; n2 < a2.length; n2 += 1) {
+        let i2 = a2[n2], o2 = en(i2, r2);
+        if (o2 = o2 || an(i2), o2 = o2 || on3(i2), o2 = o2 || cn(i2, r2, t2), o2 = o2 || gn(i2, r2), o2 = o2 || fn(i2), o2 = o2 || yn(i2), o2 !== null) {
+          let t3 = Dn(o2, e3);
+          r2.has("#NumberRange") === true && e3.buildFrom([t3]).tag("NumberRange"), t3.terms(0).text = i2.text, r2.buildFrom(i2.id, 1, e3.pool()).replace(t3, e3, true);
+        }
+      }
+    }), e3;
+  }, "$n");
+  var Pn = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = e3._cache.tags[t2] || [];
+    return r2 = r2.map((t3) => e3.list[t3]), e3.buildFrom(r2);
+  }, "Pn");
+  var En = /* @__PURE__ */ __name(function(e3) {
+    let t2 = Pn(e3, "Infinitive");
+    return t2.found && (t2 = t2.ifNo("@hasQuestionMark"), t2 = t2.ifNo("(i|we|they)"), t2.not("will be").match("[#Infinitive] (#Determiner|#Possessive) #Noun").notIf("(our|their)").match("#Infinitive").tag("Imperative", "shut-the"), t2.match("^[#Infinitive] #Adverb?$", 0).tag("Imperative", "go-fast"), t2.match("[(do && #Infinitive)] not? #Verb", 0).tag("Imperative", "do-not"), t2.match("[#Infinitive] (it|some) (#Comparative|#Preposition|please|now|again)", 0).tag("Imperative", "do-it")), t2 = function(e4, t3) {
+      let r2 = e4._cache.words[t3] || [];
+      return r2 = r2.map((t4) => e4.list[t4]), e4.buildFrom(r2);
+    }(e3, "like"), t2.match("#Adverb like").notIf("(really|generally|typically|usually|sometimes|often|just) [like]").tag("Adverb", "adverb-like"), t2 = Pn(e3, "Adjective"), t2.match("#Determiner #Adjective$").notIf("(#Comparative|#Superlative)").terms(1).tag("Noun", "the-adj-1"), t2 = Pn(e3, "FirstName"), t2.match("#FirstName (#Noun|@titleCase)").ifNo("^#Possessive").ifNo("(#Pronoun|#Plural)").ifNo("@hasComma .").lastTerm().tag("#LastName", "firstname-noun"), t2 = Pn(e3, "Value"), t2 = t2.match("#Value #PresentTense").ifNo("#Copula"), t2.found && (t2.has("(one|1)") === true ? t2.terms(1).tag("Singular", "one-presentTense") : t2.terms(1).tag("Plural", "value-presentTense")), e3.match("^(well|so|okay)").tag("Expression", "well-"), e3.match("#Value [of a second]", 0).unTag("Value", "of-a-second"), e3.match("#Value [seconds]", 0).unTag("Value", "30-seconds").tag(["Unit", "Plural"]), t2 = Pn(e3, "Gerund"), t2.match("(be|been) (#Adverb|not)+? #Gerund").not("#Verb$").tag("Auxiliary", "be-walking"), e3.match("(try|use|attempt|build|make) #Verb").ifNo("(@hasComma|#Negative|#PhrasalVerb|#Copula|will|be)").lastTerm().tag("#Noun", "do-verb"), t2 = Pn(e3, "Possessive"), t2 = t2.match("#Possessive [#Infinitive]", 0), t2.lookBehind("(let|made|make|force|ask)").found || t2.tag("Noun", "her-match"), e3;
+  }, "En");
+  var Hn = /* @__PURE__ */ __name(function(e3) {
+    let t2 = {};
+    for (let r2 = 0; r2 < e3.length; r2++)
+      t2[e3[r2]] = true;
+    return Object.keys(t2);
+  }, "Hn");
+  var jn = [{ match: "too much", tag: "Adverb Adjective", reason: "bit-4" }, { match: "u r", tag: "Pronoun Copula", reason: "u r" }, { match: "#Copula (pretty|dead|full|well|sure) (#Adjective|#Noun)", tag: "#Copula #Adverb #Adjective", reason: "sometimes-adverb" }, { match: "(#Pronoun|#Person) (had|#Adverb)? [better] #PresentTense", group: 0, tag: "Modal", reason: "i-better" }, { match: "[#Gerund] #Adverb? not? #Copula", group: 0, tag: "Activity", reason: "gerund-copula" }, { match: "[#Gerund] #Modal", group: 0, tag: "Activity", reason: "gerund-modal" }, { match: "holy (shit|fuck|hell)", tag: "Expression", reason: "swears-expression" }, { match: "#Noun #Actor", tag: "Actor", reason: "thing-doer" }, { match: "#Conjunction [u]", group: 0, tag: "Pronoun", reason: "u-pronoun-2" }, { match: "[u] #Verb", group: 0, tag: "Pronoun", reason: "u-pronoun-1" }, { match: "#Noun [(who|whom)]", group: 0, tag: "Determiner", reason: "captain-who" }, { match: "a bit much", tag: "Determiner Adverb Adjective", reason: "bit-3" }, { match: "#Verb #Adverb? #Noun [(that|which)]", group: 0, tag: "Preposition", reason: "that-prep" }, { match: "@hasComma [which] (#Pronoun|#Verb)", group: 0, tag: "Preposition", reason: "which-copula" }, { match: "#Copula just [like]", group: 0, tag: "Preposition", reason: "like-preposition" }, { match: "#Noun [like] #Noun", group: 0, tag: "Preposition", reason: "noun-like" }, { match: "[had] #Noun+ #PastTense", group: 0, tag: "Condition", reason: "had-he" }, { match: "[were] #Noun+ to #Infinitive", group: 0, tag: "Condition", reason: "were-he" }, { match: "^how", tag: "QuestionWord", reason: "how-question" }, { match: "[how] (#Determiner|#Copula|#Modal|#PastTense)", group: 0, tag: "QuestionWord", reason: "how-is" }, { match: "^which", tag: "QuestionWord", reason: "which-question" }, { match: "[so] #Noun", group: 0, tag: "Conjunction", reason: "so-conj" }, { match: "[(who|what|where|why|how|when)] #Noun #Copula #Adverb? (#Verb|#Adjective)", group: 0, tag: "Conjunction", reason: "how-he-is-x" }];
+  var Nn = { adverbAdjective: ["dark", "bright", "flat", "light", "soft", "pale", "dead", "dim", "faux", "little", "wee", "sheer", "most", "near", "good", "extra", "all"], personDate: ["april", "june", "may", "jan", "august", "eve"], personMonth: ["january", "april", "may", "june", "jan", "sep"], personAdjective: ["misty", "rusty", "dusty", "rich", "randy", "young"], personVerb: ["pat", "wade", "ollie", "will", "rob", "buck", "bob", "mark", "jack"], personPlace: ["darwin", "hamilton", "paris", "alexandria", "houston", "kobe", "santiago", "salvador", "sydney", "victoria"], personNoun: ["art", "baker", "berg", "bill", "brown", "charity", "chin", "christian", "cliff", "daisy", "dawn", "dick", "dolly", "faith", "franco", "gene", "green", "hall", "hill", "holly", "hope", "jean", "jewel", "joy", "kelvin", "king", "kitty", "lane", "lily", "melody", "mercedes", "miles", "olive", "penny", "ray", "reed", "robin", "rod", "rose", "sky", "summer", "trinity", "van", "viola", "violet", "wang", "white"] };
+  var xn = `(${Nn.personDate.join("|")})`;
+  var Fn = [{ match: "#Holiday (day|eve)", tag: "Holiday", reason: "holiday-day" }, { match: "[sun] the #Ordinal", tag: "WeekDay", reason: "sun-the-5th" }, { match: "[sun] #Date", group: 0, tag: "WeekDay", reason: "sun-feb" }, { match: "#Date (on|this|next|last|during)? [sun]", group: 0, tag: "WeekDay", reason: "1pm-sun" }, { match: "(in|by|before|during|on|until|after|of|within|all) [sat]", group: 0, tag: "WeekDay", reason: "sat" }, { match: "(in|by|before|during|on|until|after|of|within|all) [wed]", group: 0, tag: "WeekDay", reason: "wed" }, { match: "(in|by|before|during|on|until|after|of|within|all) [march]", group: 0, tag: "Month", reason: "march" }, { match: "[sat] #Date", group: 0, tag: "WeekDay", reason: "sat-feb" }, { match: "#Preposition [(march|may)]", group: 0, tag: "Month", reason: "in-month" }, { match: "this [(march|may)]", group: 0, tag: "Month", reason: "this-month" }, { match: "next [(march|may)]", group: 0, tag: "Month", reason: "this-month" }, { match: "last [(march|may)]", group: 0, tag: "Month", reason: "this-month" }, { match: "[(march|may)] the? #Value", group: 0, tag: "Month", reason: "march-5th" }, { match: "#Value of? [(march|may)]", group: 0, tag: "Month", reason: "5th-of-march" }, { match: "[(march|may)] .? #Date", group: 0, tag: "Month", reason: "march-and-feb" }, { match: "#Date .? [(march|may)]", group: 0, tag: "Month", reason: "feb-and-march" }, { match: "#Adverb [(march|may)]", group: 0, tag: "Verb", reason: "quickly-march" }, { match: "[(march|may)] #Adverb", group: 0, tag: "Verb", reason: "march-quickly" }, { match: "#Value of #Month", tag: "Date", reason: "value-of-month" }, { match: "#Cardinal #Month", tag: "Date", reason: "cardinal-month" }, { match: "#Month #Value to #Value", tag: "Date", reason: "value-to-value" }, { match: "#Month the #Value", tag: "Date", reason: "month-the-value" }, { match: "(#WeekDay|#Month) #Value", tag: "Date", reason: "date-value" }, { match: "#Value (#WeekDay|#Month)", tag: "Date", reason: "value-date" }, { match: "(#TextValue && #Date) #TextValue", tag: "Date", reason: "textvalue-date" }, { match: `in [${xn}]`, group: 0, tag: "Date", reason: "in-june" }, { match: `during [${xn}]`, group: 0, tag: "Date", reason: "in-june" }, { match: `on [${xn}]`, group: 0, tag: "Date", reason: "in-june" }, { match: `by [${xn}]`, group: 0, tag: "Date", reason: "by-june" }, { match: `after [${xn}]`, group: 0, tag: "Date", reason: "after-june" }, { match: `#Date [${xn}]`, group: 0, tag: "Date", reason: "in-june" }, { match: xn + " #Value", tag: "Date", reason: "june-5th" }, { match: xn + " #Date", tag: "Date", reason: "june-5th" }, { match: xn + " #ProperNoun", tag: "Person", reason: "june-smith", safe: true }, { match: xn + " #Acronym? (#ProperNoun && !#Month)", tag: "Person", reason: "june-smith-jr" }, { match: "#Cardinal [second]", tag: "Unit", reason: "one-second" }, { match: "#Month #NumberRange", tag: "Date", reason: "aug 20-21" }, { match: "(#Place|#Demonmym|#Time) (standard|daylight|central|mountain)? time", tag: "Timezone", reason: "std-time" }, { match: "(eastern|mountain|pacific|central|atlantic) (standard|daylight|summer)? time", tag: "Timezone", reason: "eastern-time" }, { match: "#Time [(eastern|mountain|pacific|central|est|pst|gmt)]", group: 0, tag: "Timezone", reason: "5pm-central" }, { match: "(central|western|eastern) european time", tag: "Timezone", reason: "cet" }];
+  var Cn = `(${Nn.personAdjective.join("|")})`;
+  var Bn = [{ match: "[all] #Determiner? #Noun", group: 0, tag: "Adjective", reason: "all-noun" }, { match: `#Adverb [${Cn}]`, group: 0, tag: "Adjective", reason: "really-rich" }, { match: Cn + " #Person", tag: "Person", reason: "randy-smith" }, { match: Cn + " #Acronym? #ProperNoun", tag: "Person", reason: "rusty-smith" }, { match: "#Copula [(just|alone)]$", group: 0, tag: "Adjective", reason: "not-adverb" }, { match: "#Singular is #Adverb? [#PastTense$]", group: 0, tag: "Adjective", reason: "is-filled" }, { match: "[#PastTense] #Singular is", group: 0, tag: "Adjective", reason: "smoked-poutine" }, { match: "[#PastTense] #Plural are", group: 0, tag: "Adjective", reason: "baked-onions" }, { match: "well [#PastTense]", group: 0, tag: "Adjective", reason: "well-made" }, { match: "#Copula [fucked up?]", tag: "Adjective", reason: "swears-adjective" }, { match: "#Singular (seems|appears) #Adverb? [#PastTense$]", group: 0, tag: "Adjective", reason: "seems-filled" }, { match: "(a|an) [#Gerund]", group: 0, tag: "Adjective", reason: "a|an" }, { match: "as [#Gerund] as", group: 0, tag: "Adjective", reason: "as-gerund-as" }, { match: "more [#Gerund] than", group: 0, tag: "Adjective", reason: "more-gerund-than" }, { match: "(so|very|extremely) [#Gerund]", group: 0, tag: "Adjective", reason: "so-gerund" }, { match: "(it|he|she|everything|something) #Adverb? was #Adverb? [#Gerund]", group: 0, tag: "Adjective", reason: "it-was-gerund" }, { match: "(found|found) it #Adverb? [#Gerund]", group: 0, tag: "Adjective", reason: "found-it-gerund" }, { match: "a (little|bit|wee) bit? [#Gerund]", group: 0, tag: "Adjective", reason: "a-bit-gerund" }, { match: "#Copula #Adjective? [(out|in|through)]$", group: 0, tag: "Adjective", reason: "still-out" }, { match: "^[#Adjective] (the|your) #Noun", group: 0, tag: "Infinitive", reason: "shut-the" }];
+  var Gn = [{ match: "there (are|were) #Adjective? [#PresentTense]", group: 0, tag: "Plural", reason: "there-are" }, { match: "#Determiner [sun]", group: 0, tag: "Singular", reason: "the-sun" }, { match: "#Verb (a|an) [#Value]", group: 0, tag: "Singular", reason: "did-a-value" }, { match: "the [(can|will|may)]", group: 0, tag: "Singular", reason: "the can" }, { match: "#FirstName #Acronym? (#Possessive && #LastName)", tag: "Possessive", reason: "name-poss" }, { match: "#Organization+ #Possessive", tag: "Possessive", reason: "org-possessive" }, { match: "#Place+ #Possessive", tag: "Possessive", reason: "place-possessive" }, { match: "(#Verb && !#Modal) (all|every|each|most|some|no) [#PresentTense]", group: 0, tag: "Noun", reason: "all-presentTense" }, { match: "#Determiner [#Adjective] #Copula", group: 0, tag: "Noun", reason: "the-adj-is" }, { match: "#Adjective [#Adjective] #Copula", group: 0, tag: "Noun", reason: "adj-adj-is" }, { match: "(had|have|#PastTense) #Adjective [#PresentTense]", group: 0, tag: "Noun", reason: "adj-presentTense" }, { match: "^#Adjective [#PresentTense]", group: 0, tag: "Noun", reason: "start adj-presentTense" }, { match: "#Value #Adjective [#PresentTense]", group: 0, tag: "Noun", reason: "one-big-reason" }, { match: "#PastTense #Adjective+ [#PresentTense]", group: 0, tag: "Noun", reason: "won-wide-support" }, { match: "(many|few|several|couple) [#PresentTense]", group: 0, tag: "Noun", reason: "many-poses" }, { match: "#Adverb #Adjective [#PresentTense]", group: 0, tag: "Noun", reason: "very-big-dream" }, { match: "#Adjective [#Infinitive] #Noun", group: 0, tag: "Noun", reason: "good-wait-staff" }, { match: "#Adjective #Adjective [#PresentTense]", group: 0, tag: "Noun", reason: "adorable-little-store" }, { match: "#Preposition #Adjective [#PresentTense]", group: 0, tag: "Noun", reason: "of-basic-training" }, { match: "#Adjective [#Gerund]", group: 0, tag: "Noun", reason: "early-warning" }, { match: "#Gerund #Adverb? #Comparative [#PresentTense]", group: 0, tag: "Noun", reason: "higher-costs" }, { match: "#Infinitive (this|that|the) [#Infinitive]", group: 0, tag: "Noun", reason: "do-this-dance" }, { match: "(his|her|its) [#Adjective]", group: 0, tag: "Noun", reason: "his-fine" }, { match: "some [#Verb] #Plural", group: 0, tag: "Noun", reason: "determiner6" }, { match: "more #Noun", tag: "Noun", reason: "more-noun" }, { match: "(#Noun && @hasComma) #Noun (and|or) [#PresentTense]", group: 0, tag: "Noun", reason: "noun-list" }, { match: "(right|rights) of .", tag: "Noun", reason: "right-of" }, { match: "a [bit]", group: 0, tag: "Noun", reason: "bit-2" }, { match: "#Possessive #Ordinal [#PastTense]", group: 0, tag: "Noun", reason: "first-thought" }, { match: "#Gerund #Determiner [#Infinitive]", group: 0, tag: "Noun", reason: "running-a-show" }, { match: "#Determiner #Adverb [#Infinitive]", group: 0, tag: "Noun", reason: "the-reason" }, { match: "(the|this|those|these) #Adjective [#Verb]", group: 0, tag: "Noun", reason: "the-adj-verb" }, { match: "(the|this|those|these) #Adverb #Adjective [#Verb]", group: 0, tag: "Noun", reason: "determiner4" }, { match: "#Determiner [#Adjective] (#Copula|#PastTense|#Auxiliary)", group: 0, tag: "Noun", reason: "the-adj-2" }, { match: "(the|this|a|an) [#Infinitive] #Adverb? #Verb", group: 0, tag: "Noun", reason: "determiner5" }, { match: "#Determiner [#Infinitive] #Noun", group: 0, tag: "Noun", reason: "determiner7" }, { match: "#Determiner #Adjective #Adjective? [#Infinitive]", group: 0, tag: "Noun", reason: "a-nice-inf" }, { match: "the [#Verb] #Preposition .", group: 0, tag: "Noun", reason: "determiner1" }, { match: "#Determiner [#Verb] of", group: 0, tag: "Noun", reason: "the-verb-of" }, { match: "#Adjective #Noun+ [#Infinitive] #Copula", group: 0, tag: "Noun", reason: "career-move" }, { match: "#Determiner #Noun of [#Verb]", group: 0, tag: "Noun", reason: "noun-of-noun" }, { match: "#Determiner [(western|eastern|northern|southern|central)] #Noun", group: 0, tag: "Noun", reason: "western-line" }, { match: "#Possessive [#Gerund]", group: 0, tag: "Noun", reason: "her-polling" }, { match: "(his|her|its) [#PresentTense]", group: 0, tag: "Noun", reason: "its-polling" }, { match: "(#Determiner|#Value) [(linear|binary|mobile|lexical|technical|computer|scientific|formal)] #Noun", group: 0, tag: "Noun", reason: "technical-noun" }, { match: "(the|those|these|a|an) [#Participle] #Noun", group: 0, tag: "Adjective", reason: "blown-motor" }, { match: "(the|those|these|a|an) #Adjective? [#Infinitive]", group: 0, tag: "Noun", reason: "det-inf" }, { match: "(the|those|these|a|an) #Adjective? [#PresentTense]", group: 0, tag: "Noun", reason: "det-pres" }, { match: "(the|those|these|a|an) #Adjective? [#PastTense]", group: 0, tag: "Noun", reason: "det-past" }, { match: "(this|that) [#Gerund]", group: 0, tag: "Noun", reason: "this-gerund" }, { match: "at some [#Infinitive]", group: 0, tag: "Noun", reason: "at-some-inf" }, { match: "(#Noun && @hasHyphen) #Verb", tag: "Noun", reason: "hyphen-verb" }, { match: "is no [#Verb]", group: 0, tag: "Noun", reason: "is-no-verb" }, { match: "[#Verb] than", group: 0, tag: "Noun", reason: "correction" }, { match: "(go|goes|went) to [#Infinitive]", group: 0, tag: "Noun", reason: "goes-to-verb" }, { match: "(a|an) #Noun [#Infinitive] (#Preposition|#Noun)", group: 0, tag: "Noun", reason: "a-noun-inf" }, { match: "(a|an) #Noun [#Infinitive]$", group: 0, tag: "Noun", reason: "a-noun-inf2" }, { match: "do [so]", group: 0, tag: "Noun", reason: "so-noun" }, { match: "#Copula [#Infinitive] #Noun", group: 0, tag: "Noun", reason: "is-pres-noun" }, { match: "#Determiner #Adverb? [close]", group: 0, tag: "Adjective", reason: "a-close" }, { match: "#Determiner [(shit|damn|hell)]", group: 0, tag: "Noun", reason: "swears-noun" }, { match: "(the|these) [#Singular] (were|are)", group: 0, tag: "Plural", reason: "singular-were" }, { match: "#Gerund #Adjective? for [#Infinitive]", group: 0, tag: "Noun", reason: "running-for" }, { match: "#Gerund #Adjective to [#Infinitive]", group: 0, tag: "Noun", reason: "running-to" }, { match: "(many|any|some|several) [#PresentTense] for", group: 0, tag: "Noun", reason: "any-verbs-for" }, { match: "(have|had) [#Adjective] #Preposition .", group: 0, tag: "Noun", reason: "have-fun" }, { match: "co #Noun", tag: "Actor", reason: "co-noun" }, { match: "to #PresentTense #Noun [#PresentTense] #Preposition", group: 0, tag: "Noun", reason: "gas-exchange" }, { match: "a #Noun+ or #Adverb+? [#Verb]", group: 0, tag: "Noun", reason: "noun-or-noun" }];
+  var zn = [{ match: "[still] #Adjective", group: 0, tag: "Adverb", reason: "still-advb" }, { match: "[still] #Verb", group: 0, tag: "Adverb", reason: "still-verb" }, { match: "[so] #Adjective", group: 0, tag: "Adverb", reason: "so-adv" }, { match: "[way] #Comparative", group: 0, tag: "Adverb", reason: "way-adj" }, { match: "[way] #Adverb #Adjective", group: 0, tag: "Adverb", reason: "way-too-adj" }, { match: "[all] #Verb", group: 0, tag: "Adverb", reason: "all-verb" }, { match: "(#Verb && !#Modal) [like]", group: 0, tag: "Adverb", reason: "verb-like" }, { match: "(barely|hardly) even", tag: "Adverb", reason: "barely-even" }, { match: "[even] #Verb", group: 0, tag: "Adverb", reason: "even-walk" }, { match: "even left", tag: "#Adverb #Verb", reason: "even-left" }, { match: "(#PresentTense && !#Copula) [(hard|quick|long|bright|slow|fast|backwards|forwards)]", group: 0, tag: "Adverb", reason: "lazy-ly" }, { match: "[much] #Adjective", group: 0, tag: "Adverb", reason: "bit-1" }, { match: "#Copula [#Adverb]$", group: 0, tag: "Adjective", reason: "is-well" }, { match: "a [(little|bit|wee) bit?] #Adjective", group: 0, tag: "Adverb", reason: "a-bit-cold" }, { match: `[${`(${Nn.adverbAdjective.join("|")})`}] #Adjective`, group: 0, tag: "Adverb", reason: "dark-green" }, { match: "#Adverb [#Adverb]$", group: 0, tag: "Adjective", reason: "kinda-sparkly" }, { match: "#Adverb [#Adverb] (and|or|then)", group: 0, tag: "Adjective", reason: "kinda-sparkly-and" }];
+  var In = [{ match: "1 #Value #PhoneNumber", tag: "PhoneNumber", reason: "1-800-Value" }, { match: "#NumericValue #PhoneNumber", tag: "PhoneNumber", reason: "(800) PhoneNumber" }, { match: "#Demonym #Currency", tag: "Currency", reason: "demonym-currency" }, { match: "[second] #Noun", group: 0, tag: "Ordinal", reason: "second-noun" }, { match: "#Value+ [#Currency]", group: 0, tag: "Unit", reason: "5-yan" }, { match: "#Value [(foot|feet)]", group: 0, tag: "Unit", reason: "foot-unit" }, { match: "(minus|negative) #Value", tag: "Value", reason: "minus-value" }, { match: "#Value [#Abbreviation]", group: 0, tag: "Unit", reason: "value-abbr" }, { match: "#Value [k]", group: 0, tag: "Unit", reason: "value-k" }, { match: "#Unit an hour", tag: "Unit", reason: "unit-an-hour" }, { match: "#Value (point|decimal) #Value", tag: "Value", reason: "value-point-value" }, { match: "(#Value|a) [(buck|bucks|grand)]", group: 0, tag: "Currency", reason: "value-bucks" }, { match: "#Determiner [(half|quarter)] #Ordinal", group: 0, tag: "Value", reason: "half-ordinal" }, { match: "a #Value", tag: "Value", reason: "a-value" }, { match: "[#Value+] #Currency", group: 0, tag: "Money", reason: "15 usd" }, { match: "(hundred|thousand|million|billion|trillion|quadrillion)+ and #Value", tag: "Value", reason: "magnitude-and-value" }, { match: "!once [(a|an)] (#Duration|hundred|thousand|million|billion|trillion)", group: 0, tag: "Value", reason: "a-is-one" }];
+  var On = `(${Nn.personVerb.join("|")})`;
+  var Tn = [{ match: "[#Adjective] #Possessive #Noun", group: 0, tag: "Verb", reason: "gerund-his-noun" }, { match: "[#Adjective] (us|you)", group: 0, tag: "Gerund", reason: "loving-you" }, { match: "(slowly|quickly) [#Adjective]", group: 0, tag: "Gerund", reason: "slowly-adj" }, { match: "(#Modal|i|they|we|do) not? [like]", group: 0, tag: "PresentTense", reason: "modal-like" }, { match: "do (simply|just|really|not)+ [(#Adjective|like)]", group: 0, tag: "Verb", reason: "do-simply-like" }, { match: "does (#Adverb|not)? [#Adjective]", group: 0, tag: "PresentTense", reason: "does-mean" }, { match: "i (#Adverb|do)? not? [mean]", group: 0, tag: "PresentTense", reason: "i-mean" }, { match: "#Noun #Adverb? [left]", group: 0, tag: "PastTense", reason: "left-verb" }, { match: "(this|that) [#Plural]", group: 0, tag: "PresentTense", reason: "this-verbs" }, { match: "[#Copula (#Adverb|not)+?] (#Gerund|#PastTense)", group: 0, tag: "Auxiliary", reason: "copula-walking" }, { match: "[(has|had) (#Adverb|not)+?] #PastTense", group: 0, tag: "Auxiliary", reason: "had-walked" }, { match: "#Adverb+? [(#Modal|did)+ (#Adverb|not)+?] #Verb", group: 0, tag: "Auxiliary", reason: "modal-verb" }, { match: "[#Modal (#Adverb|not)+? have (#Adverb|not)+? had (#Adverb|not)+?] #Verb", group: 0, tag: "Auxiliary", reason: "would-have" }, { match: "[(has|had) (#Adverb|not)+?] #PastTense", group: 0, tag: "Auxiliary", reason: "had-walked" }, { match: "[(do|does|will|have|had)] (not|#Adverb)+? #Verb", group: 0, tag: "Auxiliary", reason: "have-had" }, { match: "[about to] #Adverb? #Verb", group: 0, tag: ["Auxiliary", "Verb"], reason: "about-to" }, { match: "#Modal (#Adverb|not)+? be (#Adverb|not)+? #Verb", group: 0, tag: "Auxiliary", reason: "would-be" }, { match: "(were|was) being [#PresentTense]", group: 0, tag: "PastTense", reason: "was-being" }, { match: "[#Modal (#Adverb|not)+? have (#Adverb|not)+? had (#Adverb|not)+?] #Verb", group: 0, tag: "Auxiliary", reason: "would-have" }, { match: "(#Modal|had|has) (#Adverb|not)+? been (#Adverb|not)+? #Verb", group: 0, tag: "Auxiliary", reason: "had-been" }, { match: "[(be|being|been)] #Participle", group: 0, tag: "Auxiliary", reason: "being-foo" }, { match: "(#Verb && @hasHyphen) up", tag: "PhrasalVerb", reason: "foo-up" }, { match: "(#Verb && @hasHyphen) off", tag: "PhrasalVerb", reason: "foo-off" }, { match: "(#Verb && @hasHyphen) over", tag: "PhrasalVerb", reason: "foo-over" }, { match: "(#Verb && @hasHyphen) out", tag: "PhrasalVerb", reason: "foo-out" }, { match: "#PhrasalVerb [#PhrasalVerb]", group: 0, tag: "Particle", reason: "phrasal-particle" }, { match: "(lived|went|crept|go) [on] for", group: 0, tag: "PhrasalVerb", reason: "went-on" }, { match: "#Verb (him|her|it|us|himself|herself|itself|everything|something) [(up|down)]", group: 0, tag: "Adverb", reason: "phrasal-pronoun-advb" }, { match: "[will #Adverb? not? #Adverb? be] #Gerund", group: 0, tag: "Copula", reason: "will-be-copula" }, { match: "will #Adverb? not? #Adverb? [be] #Adjective", group: 0, tag: "Copula", reason: "be-copula" }, { match: "[march] (up|down|back|to|toward)", group: 0, tag: "Infinitive", reason: "march-to" }, { match: "#Modal [march]", group: 0, tag: "Infinitive", reason: "must-march" }, { match: "(let|make|made) (him|her|it|#Person|#Place|#Organization)+ [#Singular] (a|an|the|it)", group: 0, tag: "Infinitive", reason: "let-him-glue" }, { match: "will [#Adjective]", group: 0, tag: "Verb", reason: "will-adj" }, { match: "#Pronoun [#Adjective] #Determiner #Adjective? #Noun", group: 0, tag: "Verb", reason: "he-adj-the" }, { match: "#Copula [#Adjective to] #Verb", group: 0, tag: "Verb", reason: "adj-to" }, { match: "[open] #Determiner", group: 0, tag: "Infinitive", reason: "open-the" }, { match: "[#PresentTense] (are|were|was) #Adjective", group: 0, tag: "Plural", reason: "compromises-are-possible" }, { match: `#Modal [${On}]`, group: 0, tag: "Verb", reason: "would-mark" }, { match: `#Adverb [${On}]`, group: 0, tag: "Verb", reason: "really-mark" }, { match: "(to|#Modal) [mark]", group: 0, tag: "PresentTense", reason: "to-mark" }, { match: "^[#Infinitive] (is|was)", group: 0, tag: "Noun", reason: "checkmate-is" }, { match: On + " #Person", tag: "Person", reason: "rob-smith" }, { match: On + " #Acronym #ProperNoun", tag: "Person", reason: "rob-a-smith" }, { match: "[shit] (#Determiner|#Possessive|them)", group: 0, tag: "Verb", reason: "swear1-verb" }, { match: "[damn] (#Determiner|#Possessive|them)", group: 0, tag: "Verb", reason: "swear2-verb" }, { match: "[fuck] (#Determiner|#Possessive|them)", group: 0, tag: "Verb", reason: "swear3-verb" }];
+  var Vn = [{ match: "(west|north|south|east|western|northern|southern|eastern)+ #Place", tag: "Region", reason: "west-norfolk" }, { match: "#City [(al|ak|az|ar|ca|ct|dc|fl|ga|id|il|nv|nh|nj|ny|oh|pa|sc|tn|tx|ut|vt|pr)]", group: 0, tag: "Region", reason: "us-state" }, { match: "portland [or]", group: 0, tag: "Region", reason: "portland-or" }, { match: "#ProperNoun+ (district|region|province|county|prefecture|municipality|territory|burough|reservation)", tag: "Region", reason: "foo-district" }, { match: "(district|region|province|municipality|territory|burough|state) of #ProperNoun", tag: "Region", reason: "district-of-Foo" }, { match: "in [#ProperNoun] #Place", group: 0, tag: "Place", reason: "propernoun-place" }, { match: "#Value #Noun (st|street|rd|road|crescent|cr|way|tr|terrace|avenue|ave)", tag: "Address", reason: "address-st" }];
+  var Mn = `(${Nn.personNoun.join("|")})`;
+  var Jn = `(${Nn.personMonth.join("|")})`;
+  var Ln = [{ match: "[(1st|2nd|first|second)] #Honorific", group: 0, tag: "Honorific", reason: "ordinal-honorific" }, { match: "[(private|general|major|corporal|lord|lady|secretary|premier)] #Honorific? #Person", group: 0, tag: "Honorific", reason: "ambg-honorifics" }, { match: "#Copula [(#Noun|#PresentTense)] #LastName", group: 0, tag: "FirstName", reason: "copula-noun-lastname" }, { match: "(lady|queen|sister) #ProperNoun", tag: "FemaleName", reason: "lady-titlecase", safe: true }, { match: "(king|pope|father) #ProperNoun", tag: "MaleName", reason: "pope-titlecase", safe: true }, { match: "[(will|may|april|june|said|rob|wade|ray|rusty|drew|miles|jack|chuck|randy|jan|pat|cliff|bill)] #LastName", group: 0, tag: "FirstName", reason: "maybe-lastname" }, { match: "#FirstName [#Determiner #Noun] #LastName", group: 0, tag: "NickName", reason: "first-noun-last" }, { match: "#Possessive [#FirstName]", group: 0, tag: "Person", reason: "possessive-name" }, { match: "#ProperNoun (b|c|d|e|f|g|h|j|k|l|m|n|o|p|q|r|s|t|u|v|w|x|y|z) #ProperNoun", tag: "Person", reason: "titlecase-acronym-titlecase", safe: true }, { match: "#Acronym #LastName", tag: "Person", reason: "acronym-latname", safe: true }, { match: "#Person (jr|sr|md)", tag: "Person", reason: "person-honorific" }, { match: "#Person #Person the? #RomanNumeral", tag: "Person", reason: "roman-numeral" }, { match: "#FirstName [/^[^aiurck]$/]", group: 0, tag: ["Acronym", "Person"], reason: "john-e" }, { match: "#Honorific #Person", tag: "Person", reason: "honorific-person" }, { match: "#Honorific #Acronym", tag: "Person", reason: "Honorific-TitleCase" }, { match: "#Noun van der? #Noun", tag: "Person", reason: "van der noun", safe: true }, { match: "(king|queen|prince|saint|lady) of #Noun", tag: "Person", reason: "king-of-noun", safe: true }, { match: "(prince|lady) #Place", tag: "Person", reason: "lady-place" }, { match: "(king|queen|prince|saint) #ProperNoun", tag: "Person", reason: "saint-foo" }, { match: "[#ProperNoun] #Person", group: 0, tag: "Person", reason: "proper-person", safe: true }, { match: "al (#Person|#ProperNoun)", tag: "Person", reason: "al-borlen", safe: true }, { match: "#FirstName de #Noun", tag: "Person", reason: "bill-de-noun" }, { match: "#FirstName (bin|al) #Noun", tag: "Person", reason: "bill-al-noun" }, { match: "#FirstName #Acronym #ProperNoun", tag: "Person", reason: "bill-acronym-title" }, { match: "#FirstName #FirstName #ProperNoun", tag: "Person", reason: "bill-firstname-title" }, { match: "#Honorific #FirstName? #ProperNoun", tag: "Person", reason: "dr-john-Title" }, { match: "#FirstName the #Adjective", tag: "Person", reason: "name-the-great" }, { match: "#FirstName (green|white|brown|hall|young|king|hill|cook|gray|price)", tag: "Person", reason: "bill-green" }, { match: Mn + " #Person", tag: "Person", reason: "ray-smith", safe: true }, { match: Mn + " #Acronym? #ProperNoun", tag: "Person", reason: "ray-a-smith", safe: true }, { match: `#Infinitive #Determiner? #Adjective? #Noun? (to|for) [${Jn}]`, group: 0, tag: "Person", reason: "ambig-person" }, { match: `#Infinitive [${Jn}]`, group: 0, tag: "Person", reason: "infinitive-person" }, { match: `[${Jn}] #Modal`, group: 0, tag: "Person", reason: "ambig-modal" }, { match: "[may] be", group: 0, tag: "Verb", reason: "may-be" }, { match: `#Modal [${Jn}]`, group: 0, tag: "Person", reason: "modal-ambig" }, { match: `#Copula [${Jn}]`, group: 0, tag: "Person", reason: "is-may" }, { match: `[${Jn}] #Copula`, group: 0, tag: "Person", reason: "may-is" }, { match: `that [${Jn}]`, group: 0, tag: "Person", reason: "that-month" }, { match: `with [${Jn}]`, group: 0, tag: "Person", reason: "with-month" }, { match: `for [${Jn}]`, group: 0, tag: "Person", reason: "for-month" }, { match: `this [${Jn}]`, group: 0, tag: "Month", reason: "this-may" }, { match: `next [${Jn}]`, group: 0, tag: "Month", reason: "next-may" }, { match: `last [${Jn}]`, group: 0, tag: "Month", reason: "last-may" }, { match: `#Date [${Jn}]`, group: 0, tag: "Month", reason: "date-may" }, { match: `[${Jn}] the? #Value`, group: 0, tag: "Month", reason: "may-5th" }, { match: `#Value of [${Jn}]`, group: 0, tag: "Month", reason: "5th-of-may" }, { match: "#ProperNoun (van|al|bin) #ProperNoun", tag: "Person", reason: "title-van-title", safe: true }, { match: "#ProperNoun (de|du) la? #ProperNoun", tag: "Person", reason: "title-de-title", safe: true }, { match: "#Singular #Acronym #LastName", tag: "#Person", reason: "title-acro-noun", safe: true }, { match: "#FirstName (#Noun && #ProperNoun) #ProperNoun?", tag: "Person", reason: "firstname-titlecase" }, { match: "#FirstName #Acronym #Noun", tag: "Person", reason: "n-acro-noun", safe: true }, { match: "#FirstName [(de|di|du|van|von) #Person]", group: 0, tag: "LastName", reason: "de-firstname" }, { match: `[${`(${Nn.personPlace.join("|")})`}] (#ProperNoun && !#Place)`, group: 0, tag: "FirstName", reason: "place-firstname" }];
+  var Sn = [];
+  Sn = Sn.concat(jn), Sn = Sn.concat(Fn), Sn = Sn.concat(Bn), Sn = Sn.concat(Gn), Sn = Sn.concat(zn), Sn = Sn.concat(In), Sn = Sn.concat(Tn), Sn = Sn.concat(Vn), Sn = Sn.concat([{ match: "#Noun (&|n) #Noun", tag: "Organization", reason: "Noun-&-Noun" }, { match: "#Organization of the? #ProperNoun", tag: "Organization", reason: "org-of-place", safe: true }, { match: "#Organization #Country", tag: "Organization", reason: "org-country" }, { match: "#ProperNoun #Organization", tag: "Organization", reason: "titlecase-org" }, { match: "#ProperNoun (ltd|co|inc|dept|assn|bros)", tag: "Organization", reason: "org-abbrv" }, { match: "the [#Acronym]", group: 0, tag: "Organization", reason: "the-acronym", safe: true }, { match: "(world|global|international|national|#Demonym) #Organization", tag: "Organization", reason: "global-org" }, { match: "#Noun+ (public|private) school", tag: "School", reason: "noun-public-school" }]), Sn = Sn.concat(Ln);
+  var _n = [];
+  Sn.forEach((e3) => {
+    e3.reg = Ce(e3.match);
+    let t2 = function(e4) {
+      let t3 = [];
+      if (e4.reg.filter((e5) => e5.fastOr !== void 0).length === 1) {
+        let r2 = e4.reg.findIndex((e5) => e5.fastOr !== void 0);
+        Object.keys(e4.reg[r2].fastOr).forEach((a2) => {
+          let n2 = Object.assign({}, e4);
+          n2.reg = n2.reg.slice(0), n2.reg[r2] = Object.assign({}, n2.reg[r2]), n2.reg[r2].word = a2, delete n2.reg[r2].operator, delete n2.reg[r2].fastOr, t3.push(n2);
+        });
+      }
+      return t3;
+    }(e3);
+    t2.length > 0 ? _n = _n.concat(t2) : _n.push(e3);
+  }), _n.forEach((e3) => (e3.required = function(e4) {
+    let t2 = [], r2 = [];
+    return e4.forEach((e5) => {
+      e5.optional !== true && e5.negative !== true && (e5.tag !== void 0 && t2.push(e5.tag), e5.word !== void 0 && r2.push(e5.word));
+    }), { tags: Hn(t2), words: Hn(r2) };
+  }(e3.reg), e3));
+  var Kn = _n;
+  var qn = /* @__PURE__ */ __name(function(e3) {
+    Kn.forEach((t2) => {
+      let r2 = [];
+      t2.required.words.forEach((t3) => {
+        r2.push(e3._cache.words[t3] || []);
+      }), t2.required.tags.forEach((t3) => {
+        r2.push(e3._cache.tags[t3] || []);
+      });
+      let a2 = function(e4) {
+        if (e4.length === 0)
+          return [];
+        let t3 = {};
+        e4.forEach((e5) => {
+          e5 = Hn(e5);
+          for (let r4 = 0; r4 < e5.length; r4++)
+            t3[e5[r4]] = t3[e5[r4]] || 0, t3[e5[r4]] += 1;
+        });
+        let r3 = Object.keys(t3);
+        return r3 = r3.filter((r4) => t3[r4] === e4.length), r3 = r3.map((e5) => Number(e5)), r3;
+      }(r2);
+      if (a2.length === 0)
+        return;
+      let n2 = a2.map((t3) => e3.list[t3]), i2 = e3.buildFrom(n2).match(t2.reg, t2.group);
+      i2.found && (t2.safe === true ? i2.tagSafe(t2.tag, t2.reason) : i2.tag(t2.tag, t2.reason));
+    });
+  }, "qn");
+  var Wn = /* @__PURE__ */ __name(function(e3) {
+    return qn(e3), En(e3), e3;
+  }, "Wn");
+  var Rn = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.termList();
+    return e3 = Na(e3, t2), e3 = Za(e3, t2), (e3 = $n(e3)).cache(), (e3 = Wn(e3)).uncache(), e3.world.taggers.forEach((t3) => {
+      t3(e3);
+    }), e3;
+  }, "Rn");
+  var Un = /* @__PURE__ */ __name(function(e3) {
+    class t2 extends e3 {
+      stripPeriods() {
+        return this.termList().forEach((e4) => {
+          e4.tags.Abbreviation === true && e4.next && (e4.post = e4.post.replace(/^\./, ""));
+          let t3 = e4.text.replace(/\./, "");
+          e4.set(t3);
+        }), this;
+      }
+      addPeriods() {
+        return this.termList().forEach((e4) => {
+          e4.post = e4.post.replace(/^\./, ""), e4.post = "." + e4.post;
+        }), this;
+      }
+    }
+    __name(t2, "t");
+    return t2.prototype.unwrap = t2.prototype.stripPeriods, e3.prototype.abbreviations = function(e4) {
+      let r2 = this.match("#Abbreviation");
+      return typeof e4 == "number" && (r2 = r2.get(e4)), new t2(r2.list, this, this.world);
+    }, e3;
+  }, "Un");
+  var Qn = /\./;
+  var Zn = /* @__PURE__ */ __name(function(e3) {
+    class t2 extends e3 {
+      stripPeriods() {
+        return this.termList().forEach((e4) => {
+          let t3 = e4.text.replace(/\./g, "");
+          e4.set(t3);
+        }), this;
+      }
+      addPeriods() {
+        return this.termList().forEach((e4) => {
+          let t3 = e4.text.replace(/\./g, "");
+          t3 = t3.split("").join("."), Qn.test(e4.post) === false && (t3 += "."), e4.set(t3);
+        }), this;
+      }
+    }
+    __name(t2, "t");
+    return t2.prototype.unwrap = t2.prototype.stripPeriods, t2.prototype.strip = t2.prototype.stripPeriods, e3.prototype.acronyms = function(e4) {
+      let r2 = this.match("#Acronym");
+      return typeof e4 == "number" && (r2 = r2.get(e4)), new t2(r2.list, this, this.world);
+    }, e3;
+  }, "Zn");
+  var Xn = /* @__PURE__ */ __name(function(e3) {
+    return e3.prototype.clauses = function(t2) {
+      let r2 = this.if("@hasComma").notIf("@hasComma @hasComma").notIf("@hasComma . .? (and|or) .").notIf("(#City && @hasComma) #Country").notIf("(#WeekDay && @hasComma) #Date").notIf("(#Date && @hasComma) #Year").notIf("@hasComma (too|also)$").match("@hasComma"), a2 = this.splitAfter(r2), n2 = a2.quotations();
+      a2 = a2.splitOn(n2);
+      let i2 = a2.parentheses();
+      a2 = a2.splitOn(i2);
+      let o2 = a2.if("#Copula #Adjective #Conjunction (#Pronoun|#Determiner) #Verb").match("#Conjunction");
+      a2 = a2.splitBefore(o2);
+      let s2 = a2.if("if .{2,9} then .").match("then");
+      a2 = a2.splitBefore(s2), a2 = a2.splitBefore("as well as ."), a2 = a2.splitBefore("such as ."), a2 = a2.splitBefore("in addition to ."), a2 = a2.splitAfter("@hasSemicolon"), a2 = a2.splitAfter("@hasDash");
+      let l2 = a2.filter((e4) => e4.wordCount() > 5 && e4.match("#Verb+").length >= 2);
+      if (l2.found) {
+        let e4 = l2.splitAfter("#Noun .* #Verb .* #Noun+");
+        a2 = a2.splitOn(e4.eq(0));
+      }
+      return typeof t2 == "number" && (a2 = a2.get(t2)), new e3(a2.list, this, this.world);
+    }, e3;
+  }, "Xn");
+  var Yn = /* @__PURE__ */ __name(function(e3) {
+    class t2 extends e3 {
+      constructor(e4, t3, r2) {
+        super(e4, t3, r2), this.contracted = null;
+      }
+      expand() {
+        return this.list.forEach((e4) => {
+          let t3 = e4.terms(), r2 = t3[0].isTitleCase();
+          t3.forEach((e5, r3) => {
+            e5.set(e5.implicit || e5.text), e5.implicit = void 0, r3 < t3.length - 1 && e5.post === "" && (e5.post += " ");
+          }), r2 && t3[0].toTitleCase();
+        }), this;
+      }
+    }
+    __name(t2, "t");
+    return e3.prototype.contractions = function(e4) {
+      let r2 = this.match("@hasContraction+");
+      return typeof e4 == "number" && (r2 = r2.get(e4)), new t2(r2.list, this, this.world);
+    }, e3.prototype.expanded = e3.prototype.isExpanded, e3.prototype.contracted = e3.prototype.isContracted, e3;
+  }, "Yn");
+  var ei = /* @__PURE__ */ __name(function(e3) {
+    const t2 = /* @__PURE__ */ __name(function(e4) {
+      let t3 = e4.splitAfter("@hasComma").splitOn("(and|or) not?").not("(and|or) not?"), r3 = e4.match("[.] (and|or)", 0);
+      return { things: t3, conjunction: e4.match("(and|or) not?"), beforeLast: r3, hasOxford: r3.has("@hasComma") };
+    }, "t");
+    class r2 extends e3 {
+      conjunctions() {
+        return this.match("(and|or)");
+      }
+      parts() {
+        return this.splitAfter("@hasComma").splitOn("(and|or) not?");
+      }
+      items() {
+        return t2(this).things;
+      }
+      add(e4) {
+        return this.forEach((r3) => {
+          let a2 = t2(r3).beforeLast;
+          a2.append(e4), a2.termList(0).addPunctuation(",");
+        }), this;
+      }
+      remove(e4) {
+        return this.items().if(e4).remove();
+      }
+      hasOxfordComma() {
+        return this.filter((e4) => t2(e4).hasOxford);
+      }
+      addOxfordComma() {
+        let e4 = this.items(), t3 = e4.eq(e4.length - 2);
+        return t3.found && t3.has("@hasComma") === false && t3.post(", "), this;
+      }
+      removeOxfordComma() {
+        let e4 = this.items(), t3 = e4.eq(e4.length - 2);
+        return t3.found && t3.has("@hasComma") === true && t3.post(" "), this;
+      }
+    }
+    __name(r2, "r");
+    return r2.prototype.things = r2.prototype.items, e3.prototype.lists = function(e4) {
+      let t3 = this.if("@hasComma+ .? (and|or) not? ."), a2 = t3.match("(#Noun|#Adjective|#Determiner|#Article)+ #Conjunction not? (#Article|#Determiner)? #Adjective? #Noun+").if("#Noun"), n2 = t3.match("(#Adjective|#Adverb)+ #Conjunction not? #Adverb? #Adjective+"), i2 = t3.match("(#Verb|#Adverb)+ #Conjunction not? #Adverb? #Verb+"), o2 = a2.concat(n2);
+      return o2 = o2.concat(i2), o2 = o2.if("@hasComma"), typeof e4 == "number" && (o2 = t3.get(e4)), new r2(o2.list, this, this.world);
+    }, e3;
+  }, "ei");
+  var ti = /* @__PURE__ */ __name(function(e3) {
+    return e3.has("#Plural") === true || e3.has("(#Pronoun|#Place|#Value|#Person|#Uncountable|#Month|#WeekDay|#Holiday|#Possessive)") !== true;
+  }, "ti");
+  var ri = { hour: "an", heir: "an", heirloom: "an", honest: "an", honour: "an", honor: "an", uber: "an" };
+  var ai = { a: true, e: true, f: true, h: true, i: true, l: true, m: true, n: true, o: true, r: true, s: true, x: true };
+  var ni = [/^onc?e/i, /^u[bcfhjkqrstn][aeiou]/i, /^eul/i];
+  var ii = /* @__PURE__ */ __name(function(e3) {
+    if (e3.has("#Person") || e3.has("#Place"))
+      return "";
+    if (e3.has("#Plural"))
+      return "the";
+    let t2 = e3.text("normal").trim();
+    if (ri.hasOwnProperty(t2))
+      return ri[t2];
+    let r2 = t2.substr(0, 1);
+    if (e3.has("^@isAcronym") && ai.hasOwnProperty(r2))
+      return "an";
+    for (let e4 = 0; e4 < ni.length; e4++)
+      if (ni[e4].test(t2))
+        return "a";
+    return /^[aeiou]/i.test(t2) ? "an" : "a";
+  }, "ii");
+  var oi = { isSingular: [/(ax|test)is$/i, /(octop|vir|radi|nucle|fung|cact|stimul)us$/i, /(octop|vir)i$/i, /(rl)f$/i, /(alias|status)$/i, /(bu)s$/i, /(al|ad|at|er|et|ed|ad)o$/i, /(ti)um$/i, /(ti)a$/i, /sis$/i, /(?:(^f)fe|(lr)f)$/i, /hive$/i, /(^aeiouy|qu)y$/i, /(x|ch|ss|sh|z)$/i, /(matr|vert|ind|cort)(ix|ex)$/i, /(m|l)ouse$/i, /(m|l)ice$/i, /(antenn|formul|nebul|vertebr|vit)a$/i, /.sis$/i, /^(?!talis|.*hu)(.*)man$/i], isPlural: [/(antenn|formul|nebul|vertebr|vit)ae$/i, /(octop|vir|radi|nucle|fung|cact|stimul)i$/i, /men$/i, /.tia$/i, /(m|l)ice$/i] };
+  var si = /s$/;
+  var li = /* @__PURE__ */ __name(function(e3) {
+    return !oi.isSingular.find((t2) => t2.test(e3)) && (si.test(e3) === true || (!!oi.isPlural.find((t2) => t2.test(e3)) || null));
+  }, "li");
+  var ui = { he: "his", she: "hers", they: "theirs", we: "ours", i: "mine", you: "yours", her: "hers", their: "theirs", our: "ours", my: "mine", your: "yours" };
+  var ci = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.text("text").trim();
+    return ui.hasOwnProperty(t2) ? (e3.replaceWith(ui[t2], true), void e3.tag("Possessive", "toPossessive")) : /s$/.test(t2) ? (t2 += "'", e3.replaceWith(t2, true), void e3.tag("Possessive", "toPossessive")) : (t2 += "'s", e3.replaceWith(t2, true), void e3.tag("Possessive", "toPossessive"));
+  }, "ci");
+  var hi = /* @__PURE__ */ __name(function(e3) {
+    let t2 = { main: e3 };
+    if (e3.has("#Noun (of|by|for) .")) {
+      let r2 = e3.splitAfter("[#Noun+]", 0);
+      t2.main = r2.eq(0), t2.post = r2.eq(1);
+    }
+    return t2;
+  }, "hi");
+  var di = { json: function(e3) {
+    let t2 = null;
+    typeof e3 == "number" && (t2 = e3, e3 = null), e3 = e3 || { text: true, normal: true, trim: true, terms: true };
+    let r2 = [];
+    return this.forEach((t3) => {
+      let a2 = t3.json(e3)[0];
+      a2.article = ii(t3), r2.push(a2);
+    }), t2 !== null ? r2[t2] : r2;
+  }, adjectives: function() {
+    let e3 = this.lookAhead("^(that|who|which)? (was|is|will)? be? #Adverb? #Adjective+");
+    return e3 = e3.concat(this.lookBehind("#Adjective+ #Adverb?$")), e3 = e3.match("#Adjective"), e3.sort("index");
+  }, isPlural: function() {
+    return this.if("#Plural");
+  }, hasPlural: function() {
+    return this.filter((e3) => ti(e3));
+  }, toPlural: function(e3) {
+    let t2 = this.world.transforms.toPlural;
+    return this.forEach((r2) => {
+      if (r2.has("#Plural") || ti(r2) === false)
+        return;
+      let a2 = hi(r2).main, n2 = a2.text("reduced");
+      if ((a2.has("#Singular") || li(n2) !== true) && (n2 = t2(n2, this.world), a2.replace(n2).tag("#Plural"), e3)) {
+        let e4 = a2.lookBefore("(an|a) #Adjective?$").not("#Adjective");
+        e4.found === true && e4.remove();
+      }
+    }), this;
+  }, toSingular: function(e3) {
+    let t2 = this.world.transforms.toSingular;
+    return this.forEach((r2) => {
+      if (r2.has("^#Singular+$") || ti(r2) === false)
+        return;
+      let a2 = hi(r2).main, n2 = a2.text("reduced");
+      if ((a2.has("#Plural") || li(n2) === true) && (n2 = t2(n2, this.world), a2.replace(n2).tag("#Singular"), e3)) {
+        let e4 = r2, t3 = r2.lookBefore("#Adjective");
+        t3.found && (e4 = t3);
+        let a3 = ii(e4);
+        e4.insertBefore(a3);
+      }
+    }), this;
+  }, toPossessive: function() {
+    return this.forEach((e3) => {
+      ci(e3);
+    }), this;
+  } };
+  var gi = /* @__PURE__ */ __name(function(e3) {
+    class t2 extends e3 {
+    }
+    __name(t2, "t");
+    return Object.assign(t2.prototype, di), e3.prototype.nouns = function(e4, r2 = {}) {
+      let a2 = this.match("(#City && @hasComma) (#Region|#Country)"), n2 = this.not(a2).splitAfter("@hasComma");
+      n2 = n2.concat(a2);
+      let i2 = n2.quotations();
+      return i2.found && (n2 = n2.splitOn(i2.eq(0))), n2 = n2.match("#Noun+ (of|by)? the? #Noun+?"), r2.keep_anaphora !== true && (n2 = n2.not("#Pronoun"), n2 = n2.not("(there|these)"), n2 = n2.not("(#Month|#WeekDay)"), n2 = n2.not("(my|our|your|their|her|his)")), n2 = n2.not("(of|for|by|the)$"), typeof e4 == "number" && (n2 = n2.get(e4)), new t2(n2.list, this, this.world);
+    }, e3;
+  }, "gi");
+  var pi = /\(/;
+  var mi = /\)/;
+  var fi = /* @__PURE__ */ __name(function(e3) {
+    class t2 extends e3 {
+      unwrap() {
+        return this.list.forEach((e4) => {
+          let t3 = e4.terms(0);
+          t3.pre = t3.pre.replace(pi, "");
+          let r2 = e4.lastTerm();
+          r2.post = r2.post.replace(mi, "");
+        }), this;
+      }
+    }
+    __name(t2, "t");
+    return e3.prototype.parentheses = function(e4) {
+      let r2 = [];
+      return this.list.forEach((e5) => {
+        let t3 = e5.terms();
+        for (let a2 = 0; a2 < t3.length; a2 += 1) {
+          const n2 = t3[a2];
+          if (pi.test(n2.pre)) {
+            for (let i2 = a2; i2 < t3.length; i2 += 1)
+              if (mi.test(t3[i2].post)) {
+                let t4 = i2 - a2 + 1;
+                r2.push(e5.buildFrom(n2.id, t4)), a2 = i2;
+                break;
+              }
+          }
+        }
+      }), typeof e4 == "number" ? (r2 = r2[e4] ? [r2[e4]] : [], new t2(r2, this, this.world)) : new t2(r2, this, this.world);
+    }, e3;
+  }, "fi");
+  var bi = /* @__PURE__ */ __name(function(e3) {
+    class t2 extends e3 {
+      constructor(e4, t3, r2) {
+        super(e4, t3, r2), this.contracted = null;
+      }
+      strip() {
+        return this.list.forEach((e4) => {
+          e4.terms().forEach((e5) => {
+            let t3 = e5.text.replace(/'s$/, "");
+            e5.set(t3 || e5.text);
+          });
+        }), this;
+      }
+    }
+    __name(t2, "t");
+    return e3.prototype.possessives = function(e4) {
+      let r2 = this.match("#Noun+? #Possessive");
+      return typeof e4 == "number" && (r2 = r2.get(e4)), new t2(r2.list, this, this.world);
+    }, e3;
+  }, "bi");
+  var vi = { '"': '"', "\uFF02": "\uFF02", "'": "'", "\u201C": "\u201D", "\u2018": "\u2019", "\u201F": "\u201D", "\u201B": "\u2019", "\u201E": "\u201D", "\u2E42": "\u201D", "\u201A": "\u2019", "\xAB": "\xBB", "\u2039": "\u203A", "\u2035": "\u2032", "\u2036": "\u2033", "\u2037": "\u2034", "\u301D": "\u301E", "`": "\xB4", "\u301F": "\u301E" };
+  var yi = RegExp("(" + Object.keys(vi).join("|") + ")");
+  var wi = /* @__PURE__ */ __name(function(e3) {
+    class t2 extends e3 {
+      unwrap() {
+        return this;
+      }
+    }
+    __name(t2, "t");
+    return e3.prototype.quotations = function(e4) {
+      let r2 = [];
+      return this.list.forEach((e5) => {
+        let t3 = e5.terms();
+        for (let a2 = 0; a2 < t3.length; a2 += 1) {
+          const n2 = t3[a2];
+          if (yi.test(n2.pre)) {
+            let i2 = (n2.pre.match(yi) || [])[0], o2 = vi[i2];
+            for (let i3 = a2; i3 < t3.length; i3 += 1)
+              if (t3[i3].post.indexOf(o2) !== -1) {
+                let t4 = i3 - a2 + 1;
+                r2.push(e5.buildFrom(n2.id, t4)), a2 = i3;
+                break;
+              }
+          }
+        }
+      }), typeof e4 == "number" ? (r2 = r2[e4] ? [r2[e4]] : [], new t2(r2, this, this.world)) : new t2(r2, this, this.world);
+    }, e3.prototype.quotes = e3.prototype.quotations, e3;
+  }, "wi");
+  var ki = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = e3.verb, a2 = r2.text("reduced");
+    if (r2.has("#Infinitive"))
+      return a2;
+    let n2 = null;
+    return r2.has("#PastTense") ? n2 = "PastTense" : r2.has("#Gerund") ? n2 = "Gerund" : r2.has("#PresentTense") ? n2 = "PresentTense" : r2.has("#Participle") ? n2 = "Participle" : r2.has("#Actor") && (n2 = "Actor"), t2.transforms.toInfinitive(a2, t2, n2);
+  }, "ki");
+  var Ai = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.verb;
+    if (t2.has("(are|were|does)") || e3.auxiliary.has("(are|were|does)"))
+      return true;
+    let r2 = function(e4) {
+      return e4.lookBehind("#Noun+").last();
+    }(t2);
+    return !r2.has("(he|she|many|both)") && (!!r2.has("(we|they|you|i)") || !r2.has("#Person") && (!!r2.has("#Plural") || !r2.has("#Singular") && (!t2.has("(is|am|do|was)") && (!(e3.auxiliary.has("(is|am|do|was)") && !e3.negative.found) && null))));
+  }, "Ai");
+  var Di = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = e3.verb;
+    if (!e3.negative.found) {
+      if (e3.auxiliary.found)
+        return e3.auxiliary.eq(0).append("not"), void (e3.auxiliary.has("#Modal have not") && e3.auxiliary.replace("have not", "not have"));
+      if (r2.has("(#Copula|will|has|had|do)"))
+        r2.append("not");
+      else {
+        if (r2.has("#PastTense")) {
+          let a2 = ki(e3, t2);
+          return r2.replaceWith(a2, true), void r2.prepend("did not");
+        }
+        if (r2.has("#PresentTense")) {
+          let a2 = ki(e3, t2);
+          return r2.replaceWith(a2, true), void (Ai(e3) ? r2.prepend("do not") : r2.prepend("does not"));
+        }
+        if (r2.has("#Gerund")) {
+          let a2 = ki(e3, t2);
+          return r2.replaceWith(a2, true), void r2.prepend("not");
+        }
+        Ai(e3) ? r2.prepend("does not") : r2.prepend("do not");
+      }
+    }
+  }, "Di");
+  var $i = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.lookBehind(), r2 = t2.nouns(null, { keep_anaphora: true }).last();
+    return r2.found || (r2 = t2.match("(that|this|each)").last(), r2 = r2.tag("#Noun").nouns()), r2;
+  }, "$i");
+  var Pi = /* @__PURE__ */ __name(function(e3) {
+    let t2 = { adverb: e3.match("#Adverb+"), negative: e3.match("#Negative"), auxiliary: e3.match("#Auxiliary+").not("(#Negative|#Adverb)"), particle: e3.match("#Particle"), verb: e3.match("#Verb+").not("(#Adverb|#Negative|#Auxiliary|#Particle)"), original: e3, subject: $i(e3) };
+    if (t2.verb.has("(#PresentTense|#PastTense|#Infinitive) #Gerund$") && (t2.verb = t2.verb.not("#Gerund$")), !t2.verb.found)
+      return Object.keys(t2).forEach((e4) => {
+        t2[e4] = t2[e4].not(".");
+      }), t2.verb = e3, t2;
+    if (t2.adverb && t2.adverb.found) {
+      let r2 = t2.adverb.text("reduced") + "$";
+      e3.has(r2) && (t2.adverbAfter = true);
+    }
+    return t2;
+  }, "Pi");
+  var Ei = /* @__PURE__ */ __name((e3) => {
+    let t2 = false, r2 = Ai(e3), a2 = e3.negative.found;
+    e3.verb.lookBehind("i (#Adverb|#Verb)?$").found && (t2 = true);
+    let n2 = { PastTense: "was", PresentTense: "is", FutureTense: "will be", Infinitive: "is", Gerund: "being", Actor: "", PerfectTense: "been", Pluperfect: "been" };
+    return r2 && (n2.PastTense = "were", n2.PresentTense = "are", n2.Infinitive = "are"), t2 === true && (n2.PastTense = "was", n2.PresentTense = "am", n2.Infinitive = "am"), a2 && (n2.PastTense += " not", n2.PresentTense += " not", n2.FutureTense = "will not be", n2.Infinitive += " not", n2.PerfectTense = "not " + n2.PerfectTense, n2.Pluperfect = "not " + n2.Pluperfect, n2.Gerund = "not " + n2.Gerund), n2;
+  }, "Ei");
+  var Hi = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.verb.text();
+    return { PastTense: t2 + " have", PresentTense: t2, FutureTense: t2, Infinitive: t2 };
+  }, "Hi");
+  var ji = /* @__PURE__ */ __name(function(e3, t2) {
+    let r2 = e3.verb;
+    if (r2.has("#Copula") || r2.out("normal") === "be" && e3.auxiliary.has("will"))
+      return Ei(e3);
+    if (e3.auxiliary.has("are") && r2.has("#Gerund")) {
+      let r3 = e3.original.clone(), a3 = r3.clone().replace("are", "were"), n3 = r3.clone().replace("are", "will be"), i3 = ki(e3, t2);
+      return { PastTense: a3.text(), PresentTense: r3.text(), FutureTense: n3.text(), Infinitive: i3 };
+    }
+    if (r2.has("#Modal"))
+      return Hi(e3);
+    let a2 = ki(e3, t2);
+    if (!a2)
+      return {};
+    let n2 = t2.transforms.conjugate(a2, t2);
+    n2.Infinitive = a2;
+    let i2 = Ai(e3);
+    i2 === true && (n2.PresentTense = n2.Infinitive);
+    let o2 = e3.verb.termList(0).hasHyphen();
+    if (e3.particle.found) {
+      let t3 = e3.particle.text(), r3 = o2 === true ? "-" : " ";
+      Object.keys(n2).forEach((e4) => n2[e4] += r3 + t3);
+    }
+    const s2 = e3.negative.found;
+    return n2.FutureTense = n2.FutureTense || "will " + n2.Infinitive, s2 && (n2.PastTense = "did not " + n2.Infinitive, n2.FutureTense = "will not " + n2.Infinitive, i2 ? (n2.PresentTense = "do not " + n2.Infinitive, n2.Infinitive = "do not " + n2.Infinitive) : (n2.PresentTense = "does not " + n2.Infinitive, n2.Infinitive = "does not " + n2.Infinitive), n2.Gerund = "not " + n2.Gerund), n2;
+  }, "ji");
+  var Ni = { useParticiple: function(e3) {
+    return !!e3.auxiliary.has("(could|should|would|may|can|must)") || (!!e3.auxiliary.has("am .+? being") || !!e3.auxiliary.has("had .+? been"));
+  }, toParticiple: function(e3, t2) {
+    if (e3.auxiliary.has("(have|had)") && e3.verb.has("#Participle"))
+      return;
+    let r2 = ji(e3, t2), a2 = r2.Participle || r2.PastTense;
+    a2 && e3.verb.replaceWith(a2, false), e3.auxiliary.has("am .+? being") && (e3.auxiliary.remove("am"), e3.auxiliary.replace("being", "have been")), e3.auxiliary.has("have") || e3.auxiliary.append("have"), e3.verb.tag("Participle", "toParticiple"), e3.auxiliary.replace("can", "could"), e3.auxiliary.replace("be have", "have been"), e3.auxiliary.replace("not have", "have not"), e3.auxiliary.tag("Auxiliary");
+  } };
+  var { toParticiple: xi, useParticiple: Fi } = Ni;
+  var Ci = /* @__PURE__ */ __name(function(e3) {
+    return e3.auxiliary.remove("(will|are|am|being)"), e3.auxiliary.remove("(did|does)"), e3.auxiliary.remove("(had|has|have)"), e3.particle.remove(), e3.negative.remove(), e3;
+  }, "Ci");
+  var Bi = { json: function(e3) {
+    let t2 = null;
+    typeof e3 == "number" && (t2 = e3, e3 = null), e3 = e3 || { text: true, normal: true, trim: true, terms: true };
+    let r2 = [];
+    return this.forEach((t3) => {
+      let a2 = t3.json(e3)[0], n2 = Pi(t3);
+      a2.parts = {}, Object.keys(n2).forEach((e4) => {
+        n2[e4] && n2[e4].isA === "Doc" ? a2.parts[e4] = n2[e4].text("normal") : a2.parts[e4] = n2[e4];
+      }), a2.isNegative = t3.has("#Negative"), a2.conjugations = ji(n2, this.world), r2.push(a2);
+    }), t2 !== null ? r2[t2] : r2;
+  }, adverbs: function() {
+    let e3 = [];
+    this.forEach((t3) => {
+      let r2 = Pi(t3).adverb;
+      r2.found && (e3 = e3.concat(r2.list));
+    });
+    let t2 = this.lookBehind("#Adverb+$");
+    return t2.found && (e3 = t2.list.concat(e3)), t2 = this.lookAhead("^#Adverb+"), t2.found && (e3 = e3.concat(t2.list)), this.buildFrom(e3);
+  }, isPlural: function() {
+    let e3 = [];
+    return this.forEach((t2) => {
+      let r2 = Pi(t2);
+      Ai(r2, this.world) === true && e3.push(t2.list[0]);
+    }), this.buildFrom(e3);
+  }, isSingular: function() {
+    let e3 = [];
+    return this.forEach((t2) => {
+      let r2 = Pi(t2);
+      Ai(r2, this.world) === false && e3.push(t2.list[0]);
+    }), this.buildFrom(e3);
+  }, conjugate: function() {
+    let e3 = [];
+    return this.forEach((t2) => {
+      let r2 = Pi(t2), a2 = ji(r2, this.world);
+      e3.push(a2);
+    }), e3;
+  }, toPastTense: function() {
+    return this.forEach((e3) => {
+      let t2 = Pi(e3);
+      if (Fi(t2))
+        return void xi(t2, this.world);
+      if (e3.has("#Imperative"))
+        return;
+      if (e3.has("be") && e3.lookBehind("to$").found)
+        return;
+      if (t2.verb.has("#Gerund") && t2.auxiliary.has("(is|will|was)"))
+        return void e3.replace("is", "was");
+      let r2 = ji(t2, this.world).PastTense;
+      r2 && (t2 = Ci(t2), t2.verb.replaceWith(r2, false), t2.auxiliary.remove("(do|did|will)"));
+    }), this;
+  }, toPresentTense: function() {
+    return this.forEach((e3) => {
+      if (e3.has("#Imperative"))
+        return;
+      let t2 = Pi(e3), r2 = ji(t2, this.world), a2 = r2.PresentTense;
+      if (e3.lookBehind("(i|we) (#Adverb|#Verb)?$").found && (a2 = r2.Infinitive), a2) {
+        if (t2.auxiliary.has("(have|had) been"))
+          return t2.auxiliary.replace("(have|had) been", "am being"), void (r2.Particle && (a2 = r2.Particle || r2.PastTense));
+        t2.verb.replaceWith(a2, false), t2.verb.tag("PresentTense"), t2 = Ci(t2), t2.auxiliary.remove("#Modal"), t2.auxiliary.remove("(do|did|will)");
+      }
+    }), this;
+  }, toFutureTense: function() {
+    return this.forEach((e3) => {
+      let t2 = Pi(e3);
+      if (Fi(t2))
+        return;
+      if (e3.has("#Imperative"))
+        return;
+      let r2 = ji(t2, this.world).FutureTense;
+      r2 && (t2 = Ci(t2), t2.auxiliary.remove("#Modal"), t2.verb.replaceWith(r2, false), t2.verb.tag("FutureTense"), t2.auxiliary.remove("(do|did|will)"));
+    }), this;
+  }, toInfinitive: function() {
+    return this.forEach((e3) => {
+      let t2 = Pi(e3), r2 = ji(t2, this.world).Infinitive;
+      r2 && (e3.replaceWith(r2, false), e3.tag("Infinitive"));
+    }), this;
+  }, toGerund: function() {
+    return this.forEach((e3) => {
+      let t2 = Pi(e3), r2 = ji(t2, this.world).Gerund;
+      r2 && (e3.replaceWith(r2, false), e3.tag("Gerund"));
+    }), this;
+  }, toParticiple: function() {
+    return this.forEach((e3) => {
+      let t2 = Pi(e3), r2 = !t2.auxiliary.found;
+      xi(t2, this.world), r2 && (t2.verb.prepend(t2.auxiliary.text()), t2.auxiliary.remove());
+    }), this;
+  }, isNegative: function() {
+    return this.if("#Negative");
+  }, isPositive: function() {
+    return this.ifNo("#Negative");
+  }, isImperative: function() {
+    return this.if("#Imperative");
+  }, toNegative: function() {
+    return this.list.forEach((e3) => {
+      let t2 = this.buildFrom([e3]), r2 = Pi(t2);
+      Di(r2, t2.world);
+    }), this;
+  }, toPositive: function() {
+    let e3 = this.match("do not #Verb");
+    return e3.found && e3.remove("do not"), this.remove("#Negative");
+  }, subject: function() {
+    let e3 = [];
+    return this.forEach((t2) => {
+      let r2 = $i(t2);
+      r2.list[0] && e3.push(r2.list[0]);
+    }), this.buildFrom(e3);
+  } };
+  var Gi = [Un, Zn, Xn, Yn, ei, gi, fi, bi, wi, function(e3) {
+    class t2 extends e3 {
+    }
+    __name(t2, "t");
+    return Object.assign(t2.prototype, Bi), t2.prototype.negate = t2.prototype.toNegative, e3.prototype.verbs = function(e4) {
+      let r2 = this.match("(#Adverb|#Auxiliary|#Verb|#Negative|#Particle)+");
+      r2 = r2.not("^#Adverb+"), r2 = r2.not("#Adverb+$");
+      let a2 = r2.match("(#Adverb && @hasComma) #Adverb"), n2 = r2.not(a2).splitAfter("@hasComma");
+      return n2 = n2.concat(a2), n2.sort("index"), n2 = n2.if("#Verb"), n2.has("(is|was)$") && (n2 = n2.splitBefore("(is|was)$")), n2.has("#PresentTense #Adverb #PresentTense") && (n2 = n2.splitBefore("#Adverb #PresentTense")), typeof e4 == "number" && (n2 = n2.get(e4)), new t2(n2.list, this, this.world);
+    }, e3;
+  }, function(e3) {
+    class t2 extends e3 {
+    }
+    __name(t2, "t");
+    return e3.prototype.people = function(e4) {
+      let r2 = this.splitAfter("@hasComma");
+      return r2 = r2.match("#Person+"), typeof e4 == "number" && (r2 = r2.get(e4)), new t2(r2.list, this, this.world);
+    }, e3;
+  }];
+  var zi = /* @__PURE__ */ __name(function(e3) {
+    return Object.keys(ea).forEach((t2) => e3.prototype[t2] = ea[t2]), Gi.forEach((t2) => t2(e3)), e3;
+  }, "zi");
+  var Ii = { misc: Xr, selections: ea };
+  var Oi = class {
+    constructor(e3, t2, r2) {
+      this.list = e3, Object.defineProperty(this, "from", { enumerable: false, value: t2, writable: true }), r2 === void 0 && t2 !== void 0 && (r2 = t2.world), Object.defineProperty(this, "world", { enumerable: false, value: r2, writable: true }), Object.defineProperty(this, "_cache", { enumerable: false, writable: true, value: {} }), Object.defineProperty(this, "found", { get: () => this.list.length > 0 }), Object.defineProperty(this, "length", { get: () => this.list.length }), Object.defineProperty(this, "isA", { get: () => "Doc" });
+    }
+    tagger() {
+      return Rn(this);
+    }
+    pool() {
+      return this.list.length > 0 ? this.list[0].pool : this.all().list[0].pool;
+    }
+  };
+  __name(Oi, "Oi");
+  Oi.prototype.buildFrom = function(e3) {
+    return e3 = e3.map((e4) => e4.clone(true)), new Oi(e3, this, this.world);
+  }, Oi.prototype.fromText = function(e3) {
+    let t2 = ot(e3, this.world, this.pool());
+    return this.buildFrom(t2);
+  }, Object.assign(Oi.prototype, Ii.misc), Object.assign(Oi.prototype, Ii.selections), zi(Oi);
+  var Ti = { untag: "unTag", and: "match", notIf: "ifNo", only: "if", onlyIf: "if" };
+  Object.keys(Ti).forEach((e3) => Oi.prototype[e3] = Oi.prototype[Ti[e3]]);
+  var Vi = Oi;
+  var Mi = /* @__PURE__ */ __name(function(e3) {
+    let t2 = e3.termList();
+    return aa(t2, e3.world), e3.world.taggers.forEach((t3) => {
+      t3(e3);
+    }), e3;
+  }, "Mi");
+  var Ji = (/* @__PURE__ */ __name(function e2(t2) {
+    let r2 = t2;
+    const a2 = /* @__PURE__ */ __name(function(e3 = "", t3) {
+      t3 && r2.addWords(t3);
+      let a3 = ot(e3, r2), n2 = new Vi(a3, null, r2);
+      return n2.tagger(), n2;
+    }, "a");
+    return a2.tokenize = function(e3 = "", t3) {
+      let a3 = r2;
+      t3 && (a3 = a3.clone(), a3.words = {}, a3.addWords(t3));
+      let n2 = ot(e3, a3), i2 = new Vi(n2, null, a3);
+      return (t3 || i2.world.taggers.length > 0) && Mi(i2), i2;
+    }, a2.extend = function(e3) {
+      return e3(Vi, r2, this, Ve, Z, Je), this;
+    }, a2.fromJSON = function(e3) {
+      let t3 = st(e3, r2);
+      return new Vi(t3, null, r2);
+    }, a2.clone = function() {
+      return e2(r2.clone());
+    }, a2.verbose = function(e3 = true) {
+      return r2.verbose(e3), this;
+    }, a2.world = function() {
+      return r2;
+    }, a2.parseMatch = function(e3, t3) {
+      return Ce(e3, t3);
+    }, a2.version = "13.11.2", a2.import = a2.load, a2.plugin = a2.extend, a2;
+  }, "e"))(new mr());
+  var compromise_default = Ji;
+
+  // out/src/service/tokenizer/SplitTokenizer.js
   init_virtual_process_polyfill();
   init_buffer();
   var import_noicejs19 = __toModule(require_main());
-  var REMOVED_WORDS = new Set([
-    "a",
-    "an",
-    "at",
-    "on",
-    "the",
-    "to",
-    "toward",
-    "towards"
-  ]);
-  var SPLIT_CHAR = " ";
-  var WordTokenizer = /* @__PURE__ */ __name(class WordTokenizer2 {
+  var SplitTokenizer = /* @__PURE__ */ __name(class SplitTokenizer2 {
     constructor(options) {
+      this.event = mustExist(options[INJECT_EVENT]);
       this.locale = mustExist(options[INJECT_LOCALE]);
       this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
+      this.articles = new Set();
+      this.prepositions = new Set();
       this.verbs = new Map();
     }
+    async start() {
+      this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
+        catchAndLog(this.translate(event.bundle), this.logger, "error translating verbs");
+      }, this);
+      this.event.on(EVENT_RENDER_INPUT, (event) => {
+        catchAndLog(this.onRenderInput(event), this.logger, "error during render output");
+      }, this);
+    }
+    async onRenderInput(event) {
+      this.logger.debug({ event }, "parsing render input");
+      const commands = await this.parse(event.line);
+      this.logger.debug({ commands, event }, "parsed input line");
+      for (const command of commands) {
+        this.event.emit(EVENT_TOKEN_COMMAND, {
+          command
+        });
+      }
+    }
+    async stop() {
+      this.event.removeGroup(this);
+    }
     async split(input) {
-      return trim(input).toLocaleLowerCase().split(SPLIT_CHAR).map(trim).filter((it) => it.length > 0).filter((it) => REMOVED_WORDS.has(it) === false);
+      return trim(input).toLocaleLowerCase().split(SPLIT_CHAR).map(trim).filter((it2) => it2.length > 0).filter((it2) => this.articles.has(it2) === false);
     }
     async parse(input) {
       const [rawVerb, ...targets] = await this.split(input);
@@ -51159,33 +54954,71 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         index: 0,
         input,
         verb,
-        target: ""
+        targets: []
       };
       const last = targets[targets.length - 1];
       if (targets.length > 1 && /^[0-9]+$/.test(last)) {
         targets.pop();
         cmd.index = parseInt(last, 10);
       }
-      cmd.target = targets.join(SPLIT_CHAR);
+      cmd.targets = groupOn(targets, this.prepositions).map((it2) => it2.join(SPLIT_CHAR));
       return [cmd];
     }
-    async translate(verbs) {
-      this.verbs.clear();
-      this.logger.debug({ verbs }, "translating verbs");
+    async translate(bundle) {
+      this.logger.debug({ bundle }, "translating bundle");
+      for (const article of bundle.words.articles) {
+        this.articles.add(article);
+      }
+      for (const preposition of bundle.words.prepositions) {
+        this.prepositions.add(preposition);
+      }
+      const verbs = [...COMMON_VERBS, ...bundle.words.verbs];
       for (const verb of verbs) {
         const translated = this.locale.translate(verb);
         this.verbs.set(translated, verb);
       }
     }
-  }, "WordTokenizer");
-  WordTokenizer = __decorate([
-    (0, import_noicejs19.Inject)(INJECT_LOCALE, INJECT_LOGGER),
+  }, "SplitTokenizer");
+  SplitTokenizer = __decorate([
+    (0, import_noicejs19.Inject)(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER),
     __metadata("design:paramtypes", [Object])
-  ], WordTokenizer);
-  function trim(str2) {
-    return str2.replace(/^\s+/, "").replace(/\s+$/, "");
-  }
-  __name(trim, "trim");
+  ], SplitTokenizer);
+
+  // out/src/service/tokenizer/CompromiseTokenizer.js
+  var CompromiseTokenizer = class extends SplitTokenizer {
+    constructor(options) {
+      super(options);
+      this.nlp = compromise_default;
+    }
+    async parse(input) {
+      const doc = this.nlp(input);
+      const indexTerm = doc.terms().filter((it2) => it2.has("#Cardinal")).first();
+      const verbTerm = doc.verbs().toInfinitive().first();
+      let targetDoc = doc.after(verbTerm);
+      if (indexTerm.found) {
+        targetDoc = targetDoc.before(indexTerm);
+      }
+      const targetTerms = targetDoc.split("#Preposition").delete("#Conjunction").delete("#Determiner").delete("#Preposition").toLowerCase();
+      this.logger.debug({ indexTerm, targetTerms, verbTerm }, "parsed parts of speech from document");
+      const indexText = defaultWhen(indexTerm.found, indexTerm.text(), "0");
+      const targetText = targetTerms.out("array");
+      const verbText = verbTerm.toLowerCase().text();
+      this.logger.debug({ indexText, targetText, verbText }, "extracted index and verb text");
+      const index = parseInt(indexText, 10);
+      const targets = targetText;
+      const verb = getOrDefault(this.verbs, verbText, verbText);
+      const command = {
+        index,
+        input,
+        targets,
+        verb
+      };
+      const terms = doc.termList();
+      this.logger.debug({ command, terms, targets }, "built command from terms");
+      return [command];
+    }
+  };
+  __name(CompromiseTokenizer, "CompromiseTokenizer");
 
   // out/src/util/container.js
   init_virtual_process_polyfill();
@@ -51212,19 +55045,19 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.event = new Singleton(() => mustExist(this.container).create(NodeEventBus));
       this.locale = new Singleton(() => mustExist(this.container).create(NextLocaleService));
       this.parser = new Singleton(() => mustExist(this.container).create(YamlParser));
-      this.random = new Singleton(() => mustExist(this.container).create(AleaRandomGenerator));
+      this.random = new Singleton(() => mustExist(this.container).create(AleaRandomService));
       this.script = new Singleton(() => mustExist(this.container).create(LocalScriptService));
       this.template = new Singleton(() => mustExist(this.container).create(ChainTemplateService));
-      this.tokenizer = new Singleton(() => mustExist(this.container).create(WordTokenizer));
     }
     async configure(options) {
       await super.configure(options);
       this.bind(INJECT_EVENT).toFactory(() => this.event.get());
       this.bind(INJECT_PARSER).toFactory(() => this.parser.get());
-      this.bind(INJECT_TOKENIZER).toFactory(() => this.tokenizer.get());
       this.bind("core-behavior-actor").toConstructor(BehaviorActorService);
       this.bind("core-player-actor").toConstructor(PlayerActorService);
       this.bind("core-local-state").toConstructor(LocalStateService);
+      this.bind("core-compromise-tokenizer").toConstructor(CompromiseTokenizer);
+      this.bind("core-split-tokenizer").toConstructor(SplitTokenizer);
     }
     setConfig(config3) {
       this.bind(INJECT_CONFIG).toInstance(config3);
@@ -51312,13 +55145,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       let camelcase = "";
       let nextChrUpper = false;
       const leadingHyphens = str2.match(/^-+/);
-      for (let i = leadingHyphens ? leadingHyphens[0].length : 0; i < str2.length; i++) {
-        let chr = str2.charAt(i);
+      for (let i2 = leadingHyphens ? leadingHyphens[0].length : 0; i2 < str2.length; i2++) {
+        let chr = str2.charAt(i2);
         if (nextChrUpper) {
           nextChrUpper = false;
           chr = chr.toLocaleUpperCase();
         }
-        if (i !== 0 && (chr === "-" || chr === "_")) {
+        if (i2 !== 0 && (chr === "-" || chr === "_")) {
           nextChrUpper = true;
         } else if (chr !== "-" && chr !== "_") {
           camelcase += chr;
@@ -51332,11 +55165,11 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const lowercase = str2.toLocaleLowerCase();
     joinString = joinString || "-";
     let notCamelcase = "";
-    for (let i = 0; i < str2.length; i++) {
-      const chrLower = lowercase.charAt(i);
-      const chrString = str2.charAt(i);
-      if (chrLower !== chrString && i > 0) {
-        notCamelcase += `${joinString}${lowercase.charAt(i)}`;
+    for (let i2 = 0; i2 < str2.length; i2++) {
+      const chrLower = lowercase.charAt(i2);
+      const chrString = str2.charAt(i2);
+      if (chrLower !== chrString && i2 > 0) {
+        notCamelcase += `${joinString}${lowercase.charAt(i2)}`;
       } else {
         notCamelcase += chrString;
       }
@@ -51344,16 +55177,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     return notCamelcase;
   }
   __name(decamelize, "decamelize");
-  function looksLikeNumber(x) {
-    if (x === null || x === void 0)
+  function looksLikeNumber(x2) {
+    if (x2 === null || x2 === void 0)
       return false;
-    if (typeof x === "number")
+    if (typeof x2 === "number")
       return true;
-    if (/^0x[0-9a-f]+$/i.test(x))
+    if (/^0x[0-9a-f]+$/i.test(x2))
       return true;
-    if (x.length > 1 && x[0] === "0")
+    if (x2.length > 1 && x2[0] === "0")
       return false;
-    return /^[-]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x);
+    return /^[-]?(?:\d+(?:\.\d*)?|\.\d+)(e[-+]?\d+)?$/.test(x2);
   }
   __name(looksLikeNumber, "looksLikeNumber");
 
@@ -51366,31 +55199,31 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   init_buffer();
   function tokenizeArgString(argString) {
     if (Array.isArray(argString)) {
-      return argString.map((e) => typeof e !== "string" ? e + "" : e);
+      return argString.map((e3) => typeof e3 !== "string" ? e3 + "" : e3);
     }
     argString = argString.trim();
-    let i = 0;
+    let i2 = 0;
     let prevC = null;
-    let c = null;
+    let c2 = null;
     let opening = null;
     const args = [];
-    for (let ii = 0; ii < argString.length; ii++) {
-      prevC = c;
-      c = argString.charAt(ii);
-      if (c === " " && !opening) {
+    for (let ii2 = 0; ii2 < argString.length; ii2++) {
+      prevC = c2;
+      c2 = argString.charAt(ii2);
+      if (c2 === " " && !opening) {
         if (!(prevC === " ")) {
-          i++;
+          i2++;
         }
         continue;
       }
-      if (c === opening) {
+      if (c2 === opening) {
         opening = null;
-      } else if ((c === "'" || c === '"') && !opening) {
-        opening = c;
+      } else if ((c2 === "'" || c2 === '"') && !opening) {
+        opening = c2;
       }
-      if (!args[i])
-        args[i] = "";
-      args[i] += c;
+      if (!args[i2])
+        args[i2] = "";
+      args[i2] += c2;
     }
     return args;
   }
@@ -51543,12 +55376,12 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       let notFlags = [];
       const argv3 = Object.assign(Object.create(null), { _: [] });
       const argvReturn = {};
-      for (let i = 0; i < args.length; i++) {
-        const arg = args[i];
+      for (let i2 = 0; i2 < args.length; i2++) {
+        const arg = args[i2];
         let broken;
         let key;
         let letters;
-        let m;
+        let m2;
         let next;
         let value;
         if (arg !== "--" && isUnknownOptionAsArg(arg)) {
@@ -51557,56 +55390,56 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           pushPositional(arg);
           continue;
         } else if (arg.match(/^--.+=/) || !configuration["short-option-groups"] && arg.match(/^-.+=/)) {
-          m = arg.match(/^--?([^=]+)=([\s\S]*)$/);
-          if (m !== null && Array.isArray(m) && m.length >= 3) {
-            if (checkAllAliases(m[1], flags.arrays)) {
-              i = eatArray(i, m[1], args, m[2]);
-            } else if (checkAllAliases(m[1], flags.nargs) !== false) {
-              i = eatNargs(i, m[1], args, m[2]);
+          m2 = arg.match(/^--?([^=]+)=([\s\S]*)$/);
+          if (m2 !== null && Array.isArray(m2) && m2.length >= 3) {
+            if (checkAllAliases(m2[1], flags.arrays)) {
+              i2 = eatArray(i2, m2[1], args, m2[2]);
+            } else if (checkAllAliases(m2[1], flags.nargs) !== false) {
+              i2 = eatNargs(i2, m2[1], args, m2[2]);
             } else {
-              setArg(m[1], m[2]);
+              setArg(m2[1], m2[2]);
             }
           }
         } else if (arg.match(negatedBoolean) && configuration["boolean-negation"]) {
-          m = arg.match(negatedBoolean);
-          if (m !== null && Array.isArray(m) && m.length >= 2) {
-            key = m[1];
+          m2 = arg.match(negatedBoolean);
+          if (m2 !== null && Array.isArray(m2) && m2.length >= 2) {
+            key = m2[1];
             setArg(key, checkAllAliases(key, flags.arrays) ? [false] : false);
           }
         } else if (arg.match(/^--.+/) || !configuration["short-option-groups"] && arg.match(/^-[^-]+/)) {
-          m = arg.match(/^--?(.+)/);
-          if (m !== null && Array.isArray(m) && m.length >= 2) {
-            key = m[1];
+          m2 = arg.match(/^--?(.+)/);
+          if (m2 !== null && Array.isArray(m2) && m2.length >= 2) {
+            key = m2[1];
             if (checkAllAliases(key, flags.arrays)) {
-              i = eatArray(i, key, args);
+              i2 = eatArray(i2, key, args);
             } else if (checkAllAliases(key, flags.nargs) !== false) {
-              i = eatNargs(i, key, args);
+              i2 = eatNargs(i2, key, args);
             } else {
-              next = args[i + 1];
+              next = args[i2 + 1];
               if (next !== void 0 && (!next.match(/^-/) || next.match(negative)) && !checkAllAliases(key, flags.bools) && !checkAllAliases(key, flags.counts)) {
                 setArg(key, next);
-                i++;
+                i2++;
               } else if (/^(true|false)$/.test(next)) {
                 setArg(key, next);
-                i++;
+                i2++;
               } else {
                 setArg(key, defaultValue(key));
               }
             }
           }
         } else if (arg.match(/^-.\..+=/)) {
-          m = arg.match(/^-([^=]+)=([\s\S]*)$/);
-          if (m !== null && Array.isArray(m) && m.length >= 3) {
-            setArg(m[1], m[2]);
+          m2 = arg.match(/^-([^=]+)=([\s\S]*)$/);
+          if (m2 !== null && Array.isArray(m2) && m2.length >= 3) {
+            setArg(m2[1], m2[2]);
           }
         } else if (arg.match(/^-.\..+/) && !arg.match(negative)) {
-          next = args[i + 1];
-          m = arg.match(/^-(.\..+)/);
-          if (m !== null && Array.isArray(m) && m.length >= 2) {
-            key = m[1];
+          next = args[i2 + 1];
+          m2 = arg.match(/^-(.\..+)/);
+          if (m2 !== null && Array.isArray(m2) && m2.length >= 2) {
+            key = m2[1];
             if (next !== void 0 && !next.match(/^-/) && !checkAllAliases(key, flags.bools) && !checkAllAliases(key, flags.counts)) {
               setArg(key, next);
-              i++;
+              i2++;
             } else {
               setArg(key, defaultValue(key));
             }
@@ -51614,15 +55447,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         } else if (arg.match(/^-[^-]+/) && !arg.match(negative)) {
           letters = arg.slice(1, -1).split("");
           broken = false;
-          for (let j = 0; j < letters.length; j++) {
-            next = arg.slice(j + 2);
-            if (letters[j + 1] && letters[j + 1] === "=") {
-              value = arg.slice(j + 3);
-              key = letters[j];
+          for (let j2 = 0; j2 < letters.length; j2++) {
+            next = arg.slice(j2 + 2);
+            if (letters[j2 + 1] && letters[j2 + 1] === "=") {
+              value = arg.slice(j2 + 3);
+              key = letters[j2];
               if (checkAllAliases(key, flags.arrays)) {
-                i = eatArray(i, key, args, value);
+                i2 = eatArray(i2, key, args, value);
               } else if (checkAllAliases(key, flags.nargs) !== false) {
-                i = eatNargs(i, key, args, value);
+                i2 = eatNargs(i2, key, args, value);
               } else {
                 setArg(key, value);
               }
@@ -51630,36 +55463,36 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
               break;
             }
             if (next === "-") {
-              setArg(letters[j], next);
+              setArg(letters[j2], next);
               continue;
             }
-            if (/[A-Za-z]/.test(letters[j]) && /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next) && checkAllAliases(next, flags.bools) === false) {
-              setArg(letters[j], next);
+            if (/[A-Za-z]/.test(letters[j2]) && /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next) && checkAllAliases(next, flags.bools) === false) {
+              setArg(letters[j2], next);
               broken = true;
               break;
             }
-            if (letters[j + 1] && letters[j + 1].match(/\W/)) {
-              setArg(letters[j], next);
+            if (letters[j2 + 1] && letters[j2 + 1].match(/\W/)) {
+              setArg(letters[j2], next);
               broken = true;
               break;
             } else {
-              setArg(letters[j], defaultValue(letters[j]));
+              setArg(letters[j2], defaultValue(letters[j2]));
             }
           }
           key = arg.slice(-1)[0];
           if (!broken && key !== "-") {
             if (checkAllAliases(key, flags.arrays)) {
-              i = eatArray(i, key, args);
+              i2 = eatArray(i2, key, args);
             } else if (checkAllAliases(key, flags.nargs) !== false) {
-              i = eatNargs(i, key, args);
+              i2 = eatNargs(i2, key, args);
             } else {
-              next = args[i + 1];
+              next = args[i2 + 1];
               if (next !== void 0 && (!/^(-|--)[^-]/.test(next) || next.match(negative)) && !checkAllAliases(key, flags.bools) && !checkAllAliases(key, flags.counts)) {
                 setArg(key, next);
-                i++;
+                i2++;
               } else if (/^(true|false)$/.test(next)) {
                 setArg(key, next);
-                i++;
+                i2++;
               } else {
                 setArg(key, defaultValue(key));
               }
@@ -51669,10 +55502,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           key = arg.slice(1);
           setArg(key, defaultValue(key));
         } else if (arg === "--") {
-          notFlags = args.slice(i + 1);
+          notFlags = args.slice(i2 + 1);
           break;
         } else if (configuration["halt-at-non-option"]) {
-          notFlags = args.slice(i);
+          notFlags = args.slice(i2);
           break;
         } else {
           pushPositional(arg);
@@ -51702,7 +55535,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
       if (configuration["strip-aliased"]) {
         ;
-        [].concat(...Object.keys(aliases).map((k) => aliases[k])).forEach((alias) => {
+        [].concat(...Object.keys(aliases).map((k2) => aliases[k2])).forEach((alias) => {
           if (configuration["camel-case-expansion"] && alias.includes("-")) {
             delete argv3[alias.split(".").map((prop) => camelCase(prop)).join(".")];
           }
@@ -51716,8 +55549,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
       }
       __name(pushPositional, "pushPositional");
-      function eatNargs(i, key, args2, argAfterEqualSign) {
-        let ii;
+      function eatNargs(i2, key, args2, argAfterEqualSign) {
+        let ii2;
         let toEat = checkAllAliases(key, flags.nargs);
         toEat = typeof toEat !== "number" || isNaN(toEat) ? 1 : toEat;
         if (toEat === 0) {
@@ -51725,17 +55558,17 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             error2 = Error(__("Argument unexpected for: %s", key));
           }
           setArg(key, defaultValue(key));
-          return i;
+          return i2;
         }
         let available = isUndefined2(argAfterEqualSign) ? 0 : 1;
         if (configuration["nargs-eats-options"]) {
-          if (args2.length - (i + 1) + available < toEat) {
+          if (args2.length - (i2 + 1) + available < toEat) {
             error2 = Error(__("Not enough arguments following: %s", key));
           }
           available = toEat;
         } else {
-          for (ii = i + 1; ii < args2.length; ii++) {
-            if (!args2[ii].match(/^-[^0-9]/) || args2[ii].match(negative) || isUnknownOptionAsArg(args2[ii]))
+          for (ii2 = i2 + 1; ii2 < args2.length; ii2++) {
+            if (!args2[ii2].match(/^-[^0-9]/) || args2[ii2].match(negative) || isUnknownOptionAsArg(args2[ii2]))
               available++;
             else
               break;
@@ -51748,15 +55581,15 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           setArg(key, argAfterEqualSign);
           consumed--;
         }
-        for (ii = i + 1; ii < consumed + i + 1; ii++) {
-          setArg(key, args2[ii]);
+        for (ii2 = i2 + 1; ii2 < consumed + i2 + 1; ii2++) {
+          setArg(key, args2[ii2]);
         }
-        return i + consumed;
+        return i2 + consumed;
       }
       __name(eatNargs, "eatNargs");
-      function eatArray(i, key, args2, argAfterEqualSign) {
+      function eatArray(i2, key, args2, argAfterEqualSign) {
         let argsToSet = [];
-        let next = argAfterEqualSign || args2[i + 1];
+        let next = argAfterEqualSign || args2[i2 + 1];
         const nargsCount = checkAllAliases(key, flags.nargs);
         if (checkAllAliases(key, flags.bools) && !/^(true|false)$/.test(next)) {
           argsToSet.push(true);
@@ -51769,13 +55602,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           if (!isUndefined2(argAfterEqualSign)) {
             argsToSet.push(processValue(key, argAfterEqualSign));
           }
-          for (let ii = i + 1; ii < args2.length; ii++) {
+          for (let ii2 = i2 + 1; ii2 < args2.length; ii2++) {
             if (!configuration["greedy-arrays"] && argsToSet.length > 0 || nargsCount && typeof nargsCount === "number" && argsToSet.length >= nargsCount)
               break;
-            next = args2[ii];
+            next = args2[ii2];
             if (/^-/.test(next) && !negative.test(next) && !isUnknownOptionAsArg(next))
               break;
-            i = ii;
+            i2 = ii2;
             argsToSet.push(processValue(key, next));
           }
         }
@@ -51783,7 +55616,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           error2 = Error(__("Not enough arguments following: %s", key));
         }
         setArg(key, argsToSet);
-        return i;
+        return i2;
       }
       __name(eatArray, "eatArray");
       function setArg(key, val) {
@@ -51797,18 +55630,18 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         const splitKey = key.split(".");
         setKey(argv3, splitKey, value);
         if (flags.aliases[key]) {
-          flags.aliases[key].forEach(function(x) {
-            const keyProperties = x.split(".");
+          flags.aliases[key].forEach(function(x2) {
+            const keyProperties = x2.split(".");
             setKey(argv3, keyProperties, value);
           });
         }
         if (splitKey.length > 1 && configuration["dot-notation"]) {
           ;
-          (flags.aliases[splitKey[0]] || []).forEach(function(x) {
-            let keyProperties = x.split(".");
-            const a = [].concat(splitKey);
-            a.shift();
-            keyProperties = keyProperties.concat(a);
+          (flags.aliases[splitKey[0]] || []).forEach(function(x2) {
+            let keyProperties = x2.split(".");
+            const a2 = [].concat(splitKey);
+            a2.shift();
+            keyProperties = keyProperties.concat(a2);
             if (!(flags.aliases[key] || []).includes(keyProperties.join("."))) {
               setKey(argv3, keyProperties, value);
             }
@@ -51848,8 +55681,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           if (typeof val === "string")
             val = val === "true";
         }
-        let value = Array.isArray(val) ? val.map(function(v) {
-          return maybeCoerceNumber(key, v);
+        let value = Array.isArray(val) ? val.map(function(v2) {
+          return maybeCoerceNumber(key, v2);
         }) : maybeCoerceNumber(key, val);
         if (checkAllAliases(key, flags.counts) && (isUndefined2(value) || typeof value === "boolean")) {
           value = increment();
@@ -51890,8 +55723,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
               if (typeof resolveConfig === "function") {
                 try {
                   config3 = resolveConfig(resolvedConfigPath);
-                } catch (e) {
-                  config3 = e;
+                } catch (e3) {
+                  config3 = e3;
                 }
                 if (config3 instanceof Error) {
                   error2 = config3;
@@ -51940,8 +55773,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         const env3 = mixin.env();
         Object.keys(env3).forEach(function(envVar) {
           if (prefix === "" || envVar.lastIndexOf(prefix, 0) === 0) {
-            const keys2 = envVar.split("__").map(function(key, i) {
-              if (i === 0) {
+            const keys2 = envVar.split("__").map(function(key, i2) {
+              if (i2 === 0) {
                 key = key.substring(prefix.length);
               }
               return camelCase(key);
@@ -51990,47 +55823,47 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             setKey(obj, key.split("."), defaults2[key]);
             if (canLog)
               defaulted[key] = true;
-            (aliases2[key] || []).forEach(function(x) {
-              if (hasKey(obj, x.split(".")))
+            (aliases2[key] || []).forEach(function(x2) {
+              if (hasKey(obj, x2.split(".")))
                 return;
-              setKey(obj, x.split("."), defaults2[key]);
+              setKey(obj, x2.split("."), defaults2[key]);
             });
           }
         });
       }
       __name(applyDefaultsAndAliases, "applyDefaultsAndAliases");
       function hasKey(obj, keys2) {
-        let o = obj;
+        let o2 = obj;
         if (!configuration["dot-notation"])
           keys2 = [keys2.join(".")];
         keys2.slice(0, -1).forEach(function(key2) {
-          o = o[key2] || {};
+          o2 = o2[key2] || {};
         });
         const key = keys2[keys2.length - 1];
-        if (typeof o !== "object")
+        if (typeof o2 !== "object")
           return false;
         else
-          return key in o;
+          return key in o2;
       }
       __name(hasKey, "hasKey");
       function setKey(obj, keys2, value) {
-        let o = obj;
+        let o2 = obj;
         if (!configuration["dot-notation"])
           keys2 = [keys2.join(".")];
         keys2.slice(0, -1).forEach(function(key2) {
           key2 = sanitizeKey(key2);
-          if (typeof o === "object" && o[key2] === void 0) {
-            o[key2] = {};
+          if (typeof o2 === "object" && o2[key2] === void 0) {
+            o2[key2] = {};
           }
-          if (typeof o[key2] !== "object" || Array.isArray(o[key2])) {
-            if (Array.isArray(o[key2])) {
-              o[key2].push({});
+          if (typeof o2[key2] !== "object" || Array.isArray(o2[key2])) {
+            if (Array.isArray(o2[key2])) {
+              o2[key2].push({});
             } else {
-              o[key2] = [o[key2], {}];
+              o2[key2] = [o2[key2], {}];
             }
-            o = o[key2][o[key2].length - 1];
+            o2 = o2[key2][o2[key2].length - 1];
           } else {
-            o = o[key2];
+            o2 = o2[key2];
           }
         });
         const key = sanitizeKey(keys2[keys2.length - 1]);
@@ -52039,26 +55872,26 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         let duplicate = configuration["duplicate-arguments-array"];
         if (!duplicate && checkAllAliases(key, flags.nargs)) {
           duplicate = true;
-          if (!isUndefined2(o[key]) && flags.nargs[key] === 1 || Array.isArray(o[key]) && o[key].length === flags.nargs[key]) {
-            o[key] = void 0;
+          if (!isUndefined2(o2[key]) && flags.nargs[key] === 1 || Array.isArray(o2[key]) && o2[key].length === flags.nargs[key]) {
+            o2[key] = void 0;
           }
         }
         if (value === increment()) {
-          o[key] = increment(o[key]);
-        } else if (Array.isArray(o[key])) {
+          o2[key] = increment(o2[key]);
+        } else if (Array.isArray(o2[key])) {
           if (duplicate && isTypeArray && isValueArray) {
-            o[key] = configuration["flatten-duplicate-arrays"] ? o[key].concat(value) : (Array.isArray(o[key][0]) ? o[key] : [o[key]]).concat([value]);
+            o2[key] = configuration["flatten-duplicate-arrays"] ? o2[key].concat(value) : (Array.isArray(o2[key][0]) ? o2[key] : [o2[key]]).concat([value]);
           } else if (!duplicate && Boolean(isTypeArray) === Boolean(isValueArray)) {
-            o[key] = value;
+            o2[key] = value;
           } else {
-            o[key] = o[key].concat([value]);
+            o2[key] = o2[key].concat([value]);
           }
-        } else if (o[key] === void 0 && isTypeArray) {
-          o[key] = isValueArray ? value : [value];
-        } else if (duplicate && !(o[key] === void 0 || checkAllAliases(key, flags.counts) || checkAllAliases(key, flags.bools))) {
-          o[key] = [o[key], value];
+        } else if (o2[key] === void 0 && isTypeArray) {
+          o2[key] = isValueArray ? value : [value];
+        } else if (duplicate && !(o2[key] === void 0 || checkAllAliases(key, flags.counts) || checkAllAliases(key, flags.bools))) {
+          o2[key] = [o2[key], value];
         } else {
-          o[key] = value;
+          o2[key] = value;
         }
       }
       __name(setKey, "setKey");
@@ -52068,27 +55901,27 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             if (flags.aliases[key])
               return;
             flags.aliases[key] = [].concat(aliases[key] || []);
-            flags.aliases[key].concat(key).forEach(function(x) {
-              if (/-/.test(x) && configuration["camel-case-expansion"]) {
-                const c = camelCase(x);
-                if (c !== key && flags.aliases[key].indexOf(c) === -1) {
-                  flags.aliases[key].push(c);
-                  newAliases[c] = true;
+            flags.aliases[key].concat(key).forEach(function(x2) {
+              if (/-/.test(x2) && configuration["camel-case-expansion"]) {
+                const c2 = camelCase(x2);
+                if (c2 !== key && flags.aliases[key].indexOf(c2) === -1) {
+                  flags.aliases[key].push(c2);
+                  newAliases[c2] = true;
                 }
               }
             });
-            flags.aliases[key].concat(key).forEach(function(x) {
-              if (x.length > 1 && /[A-Z]/.test(x) && configuration["camel-case-expansion"]) {
-                const c = decamelize(x, "-");
-                if (c !== key && flags.aliases[key].indexOf(c) === -1) {
-                  flags.aliases[key].push(c);
-                  newAliases[c] = true;
+            flags.aliases[key].concat(key).forEach(function(x2) {
+              if (x2.length > 1 && /[A-Z]/.test(x2) && configuration["camel-case-expansion"]) {
+                const c2 = decamelize(x2, "-");
+                if (c2 !== key && flags.aliases[key].indexOf(c2) === -1) {
+                  flags.aliases[key].push(c2);
+                  newAliases[c2] = true;
                 }
               }
             });
-            flags.aliases[key].forEach(function(x) {
-              flags.aliases[x] = [key].concat(flags.aliases[key].filter(function(y) {
-                return x !== y;
+            flags.aliases[key].forEach(function(x2) {
+              flags.aliases[x2] = [key].concat(flags.aliases[key].filter(function(y2) {
+                return x2 !== y2;
               }));
             });
           });
@@ -52104,7 +55937,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       __name(checkAllAliases, "checkAllAliases");
       function hasAnyFlag(key) {
         const flagsKeys = Object.keys(flags);
-        const toCheck = [].concat(flagsKeys.map((k) => flags[k]));
+        const toCheck = [].concat(flagsKeys.map((k2) => flags[k2]));
         return toCheck.some(function(flag) {
           return Array.isArray(flag) ? flag.includes(key) : flag[key];
         });
@@ -52125,13 +55958,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         let hasAllFlags = true;
         let next;
         const letters = arg.slice(1).split("");
-        for (let j = 0; j < letters.length; j++) {
-          next = arg.slice(j + 2);
-          if (!hasAnyFlag(letters[j])) {
+        for (let j2 = 0; j2 < letters.length; j2++) {
+          next = arg.slice(j2 + 2);
+          if (!hasAnyFlag(letters[j2])) {
             hasAllFlags = false;
             break;
           }
-          if (letters[j + 1] && letters[j + 1] === "=" || next === "-" || /[A-Za-z]/.test(letters[j]) && /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next) || letters[j + 1] && letters[j + 1].match(/\W/)) {
+          if (letters[j2 + 1] && letters[j2 + 1] === "=" || next === "-" || /[A-Za-z]/.test(letters[j2]) && /^-?\d+(\.\d*)?(e-?\d+)?$/.test(next) || letters[j2 + 1] && letters[j2 + 1].match(/\W/)) {
             break;
           }
         }
@@ -52225,14 +56058,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     });
     while (change) {
       change = false;
-      for (let i = 0; i < aliasArrays.length; i++) {
-        for (let ii = i + 1; ii < aliasArrays.length; ii++) {
-          const intersect = aliasArrays[i].filter(function(v) {
-            return aliasArrays[ii].indexOf(v) !== -1;
+      for (let i2 = 0; i2 < aliasArrays.length; i2++) {
+        for (let ii2 = i2 + 1; ii2 < aliasArrays.length; ii2++) {
+          const intersect = aliasArrays[i2].filter(function(v2) {
+            return aliasArrays[ii2].indexOf(v2) !== -1;
           });
           if (intersect.length) {
-            aliasArrays[i] = aliasArrays[i].concat(aliasArrays[ii]);
-            aliasArrays.splice(ii, 1);
+            aliasArrays[i2] = aliasArrays[i2].concat(aliasArrays[ii2]);
+            aliasArrays.splice(ii2, 1);
             change = true;
             break;
           }
@@ -52240,8 +56073,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       }
     }
     aliasArrays.forEach(function(aliasArray) {
-      aliasArray = aliasArray.filter(function(v, i, self2) {
-        return self2.indexOf(v) === i;
+      aliasArray = aliasArray.filter(function(v2, i2, self2) {
+        return self2.indexOf(v2) === i2;
       });
       const lastAlias = aliasArray.pop();
       if (lastAlias !== void 0 && typeof lastAlias === "string") {
@@ -52325,8 +56158,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
   // node_modules/@apextoaster/js-yaml-schema/out/vendor.js
   init_virtual_process_polyfill();
   init_buffer();
-  function createCommonjsModule$1(fn, module) {
-    return module = { exports: {} }, fn(module, module.exports), module.exports;
+  function createCommonjsModule$1(fn2, module) {
+    return module = { exports: {} }, fn2(module, module.exports), module.exports;
   }
   __name(createCommonjsModule$1, "createCommonjsModule$1");
   var main2 = createCommonjsModule$1(function(module, exports) {
@@ -52568,10 +56401,10 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           this.logger.debug({ module: module2, provider }, "module provides contract");
         }
       }
-      bindFunction(fn) {
-        const provides = getProvides(fn);
-        for (const p of provides) {
-          this.bindTo(p.contract, exports.ProviderType.Factory, fn);
+      bindFunction(fn2) {
+        const provides = getProvides(fn2);
+        for (const p2 of provides) {
+          this.bindTo(p2.contract, exports.ProviderType.Factory, fn2);
         }
       }
       bindPrototype(proto) {
@@ -52602,16 +56435,16 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         version: "3.0.1"
       }
     };
-    function contractName(c) {
-      if (typeof c === "function") {
-        return c.name;
+    function contractName(c2) {
+      if (typeof c2 === "function") {
+        return c2.name;
       } else {
-        return c;
+        return c2;
       }
     }
     __name(contractName, "contractName");
-    function isConstructor(it) {
-      return typeof it === "function";
+    function isConstructor(it2) {
+      return typeof it2 === "function";
     }
     __name(isConstructor, "isConstructor");
     class Container2 {
@@ -52663,8 +56496,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           throw new LoggerNotFoundError("container has no logger");
         }
         this.logger.debug({ version: VERSION_INFO }, "container debug");
-        for (const m of this.modules) {
-          m.debug();
+        for (const m2 of this.modules) {
+          m2.debug();
         }
       }
       getModules() {
@@ -53038,13 +56871,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const text = mustExist(elem).textContent;
     const schema2 = createSchema({
       include: {
-        exists: (it) => doesExist(doc.getElementById(it)),
-        join: (...it) => it.join("-"),
-        read: (it) => {
-          const readElem = mustExist(doc.getElementById(it));
+        exists: (it2) => doesExist(doc.getElementById(it2)),
+        join: (...it2) => it2.join("-"),
+        read: (it2) => {
+          const readElem = mustExist(doc.getElementById(it2));
           return mustExist(readElem.textContent);
         },
-        resolve: (it) => it,
+        resolve: (it2) => it2,
         schema: DEFAULT_SCHEMA
       }
     });
@@ -53078,33 +56911,55 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
       this.services.set(name, svc);
     }
     async create(config3) {
+      for (const state of config3.states) {
+        if (this.services.has(state.name)) {
+          throw new InvalidArgumentError("state service already exists");
+        }
+        const svc = await this.container.create(state.kind, {
+          config: mustCoalesce(state.data, {})
+        });
+        await svc.start();
+        this.add(state.name, svc);
+      }
       for (const loader2 of config3.loaders) {
+        if (this.services.has(loader2.name)) {
+          throw new InvalidArgumentError("loader service already exists");
+        }
         const svc = await this.container.create(loader2.kind, {
           config: mustCoalesce(loader2.data, {})
         });
         await svc.start();
         this.add(loader2.name, svc);
       }
-      for (const actor of config3.actors) {
-        const svc = await this.container.create(actor.kind, {
-          config: mustCoalesce(actor.data, {})
-        });
-        await svc.start();
-        this.add(actor.name, svc);
-      }
       for (const render2 of config3.renders) {
+        if (this.services.has(render2.name)) {
+          throw new InvalidArgumentError("render service already exists");
+        }
         const svc = await this.container.create(render2.kind, {
           config: mustCoalesce(render2.data, {})
         });
         await svc.start();
         this.add(render2.name, svc);
       }
-      for (const state of config3.states) {
-        const svc = await this.container.create(state.kind, {
-          config: mustCoalesce(state.data, {})
+      for (const tokenizer of config3.tokenizers) {
+        if (this.services.has(tokenizer.name)) {
+          throw new InvalidArgumentError("tokenizer service already exists");
+        }
+        const svc = await this.container.create(tokenizer.kind, {
+          config: mustCoalesce(tokenizer.data, {})
         });
         await svc.start();
-        this.add(state.name, svc);
+        this.add(tokenizer.name, svc);
+      }
+      for (const actor of config3.actors) {
+        if (this.services.has(actor.name)) {
+          throw new InvalidArgumentError("actor service already exists");
+        }
+        const svc = await this.container.create(actor.kind, {
+          config: mustCoalesce(actor.data, {})
+        });
+        await svc.start();
+        this.add(actor.name, svc);
       }
     }
     async stop() {
@@ -53131,13 +56986,13 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     logger.info({
       arg
     }, "textual adventure");
-    const modules = arg.module.map((it) => {
-      const ctor = LOADED_MODULES.get(it);
+    const modules = arg.module.map((it2) => {
+      const ctor = LOADED_MODULES.get(it2);
       if (isNil(ctor)) {
         throw new InvalidArgumentError("module not found");
       }
       const module = new ctor();
-      if (it === "core") {
+      if (it2 === "core") {
         module.setConfig(config3);
       }
       return module;
@@ -53149,6 +57004,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const locale = await container.create(INJECT_LOCALE);
     await locale.start();
     const services = await container.create(ServiceManager);
+    services.add("locale", locale);
     await services.create(config3.services);
     const events = await container.create(INJECT_EVENT);
     events.emit(EVENT_LOCALE_BUNDLE, {
@@ -53168,7 +57024,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     const quit = onceEvent(events, "quit");
     for (const input of arg.input) {
       const pending = onceEvent(events, EVENT_ACTOR_OUTPUT);
-      events.emit(EVENT_RENDER_OUTPUT, {
+      events.emit(EVENT_RENDER_INPUT, {
         line: input
       });
       await pending;
@@ -53181,7 +57037,6 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     });
     await quit;
     await services.stop();
-    await locale.stop();
     return 0;
   }
   __name(main3, "main");
@@ -53197,7 +57052,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
     "--module",
     "browser",
     "--input",
-    "create test test 5",
+    "create a test with test and with 20",
     "--input",
     "help"
   ]).then((exitCode) => {

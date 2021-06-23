@@ -29,6 +29,7 @@ locale:
       verbs:
         common:
           drop: drop
+          equip: equip
           hit: hit
           look: look
           move: move
@@ -45,13 +46,58 @@ locale:
           save: save
           worlds: worlds
   current: en
-  verbs: []
+  words:
+    articles:
+      - a
+      - an
+      - and
+      - as
+      - but
+      - for
+      - nor
+      - not
+      - of
+      - or
+      - so
+      - some
+      - the
+    prepositions:
+      - above
+      - across
+      - against
+      - at
+      - behind
+      - below
+      - beside
+      - by
+      - down
+      - from
+      - in
+      - inside
+      - into
+      - on
+      - onto
+      - out
+      - outside
+      - over
+      - through
+      - to
+      - toward
+      - under
+      - up
+      - with
+      - within
+      - without
+    verbs: []
 services:
   actors:
-    - name: actor-player
+    - name: player-actor
       kind: core-player-actor
-    - name: actor-enemy
+    - name: enemy-actor
       kind: core-behavior-actor
+      data:
+        attack: 1.00
+        wander: 0.25
   loaders:
     - name: fetch-loader
       kind: browser-fetch-loader
@@ -64,9 +110,13 @@ services:
       kind: browser-dom-render
       data:
         shortcuts: true
+        throttle: 50
   states:
     - name: local-state
       kind: core-local-state
+  tokenizers:
+    - name: local-tokenizer
+      kind: core-split-tokenizer
 {% endraw %}
 </script>
 <div id="app"></div>

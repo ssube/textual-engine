@@ -34,12 +34,7 @@ export function checkMap<TKey, TValue>(
   valueSchema: ValidateFunction<TValue>
 ): data is Map<TKey, TValue> {
   for (const [key, value] of data) {
-    if (keySchema(key) === false) {
-      return false;
-    }
-    if (valueSchema(value) === false) {
-      return false;
-    }
+    return keySchema(key) && valueSchema(value);
   }
   return true;
 }

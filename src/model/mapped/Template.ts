@@ -117,14 +117,7 @@ export const TEMPLATE_SCRIPT_SCHEMA: JSONSchemaType<BaseTemplate<ScriptRef>> = {
         keys: {
           type: 'string',
         },
-        values: TEMPLATE_STRING_SCHEMA,
-        /* {
-          type: 'object',
-          oneOf: [
-            // TEMPLATE_NUMBER_SCHEMA,
-            TEMPLATE_STRING_SCHEMA,
-          ],
-        }, */
+        values: TEMPLATE_STRING_SCHEMA, // TODO: should be number | string, but ajv cannot do defaults on oneOf
       },
       required: [],
     },

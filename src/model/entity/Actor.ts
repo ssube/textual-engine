@@ -5,7 +5,13 @@ import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
 import { NumberMap, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
-import { Template, TEMPLATE_NUMBER_SCHEMA, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
+import {
+  Template,
+  TEMPLATE_NUMBER_SCHEMA,
+  TEMPLATE_REF_SCHEMA,
+  TEMPLATE_SCRIPT_SCHEMA,
+  TEMPLATE_STRING_SCHEMA,
+} from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { ScriptMap } from '../Script';
 import { Entity } from './Base';
@@ -43,14 +49,17 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
       properties: {
         items: {
           type: 'array',
-          items: {
-            type: 'object',
-            required: [],
-          },
+          items: TEMPLATE_REF_SCHEMA,
         },
         meta: MODIFIER_METADATA_SCHEMA,
         scripts: {
           type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_SCRIPT_SCHEMA,
+          },
           required: [],
         },
         slots: {
@@ -109,6 +118,12 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
         meta: TEMPLATE_METADATA_SCHEMA,
         scripts: {
           type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_SCRIPT_SCHEMA,
+          },
           required: [],
         },
         slots: {

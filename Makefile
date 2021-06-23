@@ -134,7 +134,7 @@ todo:
 	@echo ""
 	@echo "Uses of null:"
 	@echo ""
-	@grep "null" -r src/ test/ || true
+	@grep -P -e "null(?!able)" -r src/ test/ || true
 	@echo ""
 	@echo "Uses of ==:"
 	@echo ""

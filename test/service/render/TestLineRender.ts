@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { stub } from 'sinon';
+import { spy, stub } from 'sinon';
 
 import { CoreModule, EventBus, LineRender, NodeModule, onceEvent, RenderInputEvent } from '../../../src/lib';
 import { INJECT_EVENT } from '../../../src/module';
@@ -100,6 +100,26 @@ describe('readline render', () => {
     });
 
     expect(instance.getPrompt()).to.include('turn 0');
+  });
+
+  it('should not emit its own output', async () => {
+    const instance = new TestReadLine();
+    const writeSpy = spy(instance, 'write');
+
+    const readline = stub().returns(instance);
+
+    const container = await getTestContainer(new CoreModule(), new NodeModule());
+    const render = await container.create(LineRender, {
+      config: {
+        shortcuts: true,
+        throttle: THROTTLE_TIME,
+      },
+    }, readline);
+    await render.start();
+
+    render.show('foo');
+
+    expect(writeSpy).to.have.been.calledWith('foo');
   });
 
   xit('should show a newline between the prompt and output');

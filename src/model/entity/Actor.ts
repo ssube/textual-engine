@@ -49,11 +49,16 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
       properties: {
         items: {
           type: 'array',
+          nullable: true,
           items: TEMPLATE_REF_SCHEMA,
         },
-        meta: MODIFIER_METADATA_SCHEMA,
+        meta: {
+          ...MODIFIER_METADATA_SCHEMA,
+          nullable: true,
+        },
         scripts: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -64,6 +69,7 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
         },
         slots: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -72,9 +78,13 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
           },
           required: [],
         },
-        source: TEMPLATE_STRING_SCHEMA,
+        source: {
+          ...TEMPLATE_STRING_SCHEMA,
+          nullable: true,
+        },
         stats: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -83,9 +93,12 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
           },
           required: [],
         },
-        type: makeConstStringSchema(ACTOR_TYPE),
+        type: {
+          ...makeConstStringSchema(ACTOR_TYPE),
+          nullable: true,
+        },
       },
-      required: ['items', 'meta', 'scripts', 'slots', 'stats'],
+      required: [],
     },
     chance: {
       type: 'number',

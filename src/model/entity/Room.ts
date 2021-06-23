@@ -35,22 +35,32 @@ export const ROOM_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Room>> = {
     base: {
       type: 'object',
       properties: {
-        type: makeConstStringSchema(ROOM_TYPE),
-        meta: MODIFIER_METADATA_SCHEMA,
+        type: {
+          ...makeConstStringSchema(ROOM_TYPE),
+          nullable: true,
+        },
+        meta: {
+          ...MODIFIER_METADATA_SCHEMA,
+          nullable: true,
+        },
         actors: {
           type: 'array',
+          nullable: true,
           items: TEMPLATE_REF_SCHEMA,
         },
         items: {
           type: 'array',
+          nullable: true,
           items: TEMPLATE_REF_SCHEMA,
         },
         portals: {
           type: 'array',
+          nullable: true,
           items: TEMPLATE_REF_SCHEMA,
         },
         scripts: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -60,7 +70,7 @@ export const ROOM_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Room>> = {
           required: [],
         },
       },
-      required: ['actors', 'items', 'meta', 'portals', 'scripts', 'type'],
+      required: [],
     },
     chance: {
       type: 'number',

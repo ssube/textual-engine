@@ -3,11 +3,10 @@ import { expect } from 'chai';
 
 import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomService } from '../../../src/service/random/MathRandom';
-import { ScriptContext } from '../../../src/service/script';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity';
-import { createTestContext, getStubHelper, getTestContainer, getTestLogger } from '../../helper';
+import { createTestContext, getTestContainer } from '../../helper';
 
 describe('state transfer utils', () => {
   describe('move actor helper', () => {
@@ -56,6 +55,7 @@ describe('state transfer utils', () => {
         source: sourceRoom,
         target: targetRoom,
       }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
+
       await expect(transfer.moveActor({
         moving: sourceRoom as any,
         source: sourceRoom,

@@ -4,7 +4,7 @@ import TestRenderer from 'react-test-renderer';
 import { stub } from 'sinon';
 
 import { Quit } from '../../../src/component/react/Quit';
-import { getReactStrings } from './TestOutput';
+import { getReactStrings } from './helper';
 
 describe('react quit component', () => {
   it('should show game over message', async () => {

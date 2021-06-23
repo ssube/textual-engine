@@ -32,9 +32,13 @@ export const ITEM_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Item>> = {
     base: {
       type: 'object',
       properties: {
-        meta: MODIFIER_METADATA_SCHEMA,
+        meta: {
+          ...MODIFIER_METADATA_SCHEMA,
+          nullable: true,
+        },
         scripts: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -43,9 +47,13 @@ export const ITEM_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Item>> = {
           },
           required: [],
         },
-        slot: TEMPLATE_STRING_SCHEMA,
+        slot: {
+          ...TEMPLATE_STRING_SCHEMA,
+          nullable: true,
+        },
         stats: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -54,9 +62,12 @@ export const ITEM_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Item>> = {
           },
           required: [],
         },
-        type: makeConstStringSchema(ITEM_TYPE),
+        type: {
+          ...makeConstStringSchema(ITEM_TYPE),
+          nullable: true,
+        },
       },
-      required: ['meta', 'scripts', 'slot', 'stats', 'type'],
+      required: [],
     },
     chance: {
       type: 'number',

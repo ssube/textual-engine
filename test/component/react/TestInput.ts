@@ -4,7 +4,7 @@ import TestRenderer from 'react-test-renderer';
 import { stub } from 'sinon';
 
 import { Input } from '../../../src/component/react/Input';
-import { getReactStrings } from './TestOutput';
+import { getReactStrings } from './helper';
 
 describe('react output component', () => {
   it('should show the provided output', async () => {

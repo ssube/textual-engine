@@ -2,6 +2,7 @@ import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
+import { makeConstStringSchema } from '../../util/schema';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
 import { BaseTemplate, Template, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
@@ -53,9 +54,13 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
     base: {
       type: 'object',
       properties: {
-        dest: TEMPLATE_STRING_SCHEMA,
+        dest: {
+          ...TEMPLATE_STRING_SCHEMA,
+          nullable: true,
+        },
         group: {
           type: 'object',
+          nullable: true,
           properties: {
             key: TEMPLATE_STRING_SCHEMA,
             source: TEMPLATE_STRING_SCHEMA,
@@ -65,14 +70,19 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
         },
         link: {
           ...TEMPLATE_STRING_SCHEMA,
+          nullable: true,
           default: {
             base: 'both',
             type: 'string',
           },
         },
-        meta: MODIFIER_METADATA_SCHEMA,
+        meta: {
+          ...MODIFIER_METADATA_SCHEMA,
+          nullable: true,
+        },
         scripts: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -82,21 +92,11 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
           required: [],
         },
         type: {
-          type: 'object',
-          properties: {
-            base: {
-              default: PORTAL_TYPE,
-              type: 'string',
-            },
-            type: {
-              default: 'string',
-              type: 'string',
-            },
-          },
-          required: ['base', 'type'],
+          ...makeConstStringSchema(PORTAL_TYPE),
+          nullable: true,
         },
       },
-      required: ['dest', 'group', 'meta', 'scripts'],
+      required: [],
     },
     chance: {
       type: 'number',

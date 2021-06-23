@@ -23,7 +23,8 @@ export type BaseModifier<TBase> = {
 };
 
 export interface Modifier<TEntity> {
-  base: BaseModifier<TEntity>;
+  // base: BaseModifier<TEntity>;
+  base: Partial<BaseModifier<TEntity>>;
 
   /**
    * Chance of this modifier appearing.

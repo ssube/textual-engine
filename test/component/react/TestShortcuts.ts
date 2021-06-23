@@ -4,7 +4,7 @@ import TestRenderer from 'react-test-renderer';
 import { stub } from 'sinon';
 
 import { Shortcuts } from '../../../src/component/react/Shortcuts';
-import { getReactStrings } from './TestOutput';
+import { getReactStrings } from './helper';
 
 describe('react shortcut component', () => {
   it('should show categories', async () => {

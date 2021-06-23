@@ -4,7 +4,7 @@ import TestRenderer from 'react-test-renderer';
 
 import { Status } from '../../../src/component/react/Status';
 import { STAT_HEALTH } from '../../../src/util/constants';
-import { getReactStrings } from './TestOutput';
+import { getReactStrings } from './helper';
 
 describe('react quit component', () => {
   it('should show game over message', async () => {

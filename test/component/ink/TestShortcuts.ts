@@ -5,7 +5,7 @@ import { stub } from 'sinon';
 
 import { Shortcuts } from '../../../src/component/ink/Shortcuts';
 import { KEY_ARROW_DOWN, KEY_ENTER, KEY_TAB } from '../../constants';
-import { sendKeys, removeEscapes, FocusWrapper } from '../helper';
+import { FocusWrapper, removeEscapes, sendKeys } from './helper';
 
 describe('ink shortcut component', () => {
   it('should show categories', async () => {

@@ -239,14 +239,24 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      await this.modifyMetadata(target.meta, mod.meta);
       // target.source cannot be modified
 
-      target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
-      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      if (doesExist(mod.meta)) {
+        await this.modifyMetadata(target.meta, mod.meta);
+      }
 
-      const items = await this.createItemList(mod.items);
-      target.items.push(...items);
+      if (doesExist(mod.stats)) {
+        target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+      }
+
+      if (doesExist(mod.scripts)) {
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
+
+      if (doesExist(mod.items)) {
+        const items = await this.createItemList(mod.items);
+        target.items.push(...items);
+      }
     }
   }
 
@@ -257,10 +267,17 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      await this.modifyMetadata(target.meta, mod.meta);
+      if (doesExist(mod.meta)) {
+        await this.modifyMetadata(target.meta, mod.meta);
+      }
 
-      target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
-      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      if (doesExist(mod.stats)) {
+        target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+      }
+
+      if (doesExist(mod.scripts)) {
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
     }
   }
 
@@ -273,13 +290,23 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      await this.modifyMetadata(target.meta, mod.meta);
+      if (doesExist(mod.meta)) {
+        await this.modifyMetadata(target.meta, mod.meta);
+      }
 
-      target.group.key = this.template.modifyString(target.group.key, mod.group.key);
-      target.group.source = this.template.modifyString(target.group.source, mod.group.source);
-      target.group.target = this.template.modifyString(target.group.target, mod.group.target);
-      target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
-      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      if (doesExist(mod.group)) {
+        target.group.key = this.template.modifyString(target.group.key, mod.group.key);
+        target.group.source = this.template.modifyString(target.group.source, mod.group.source);
+        target.group.target = this.template.modifyString(target.group.target, mod.group.target);
+      }
+
+      if (doesExist(mod.link)) {
+        target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
+      }
+
+      if (doesExist(mod.scripts)) {
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
     }
   }
 
@@ -290,22 +317,32 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      await this.modifyMetadata(target.meta, mod.meta);
+      if (doesExist(mod.meta)) {
+        await this.modifyMetadata(target.meta, mod.meta);
+      }
 
-      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      if (doesExist(mod.scripts)) {
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
 
-      const actors = await this.createActorList(mod.actors);
-      target.actors.push(...actors);
+      if (doesExist(mod.actors)) {
+        const actors = await this.createActorList(mod.actors);
+        target.actors.push(...actors);
+      }
 
-      const items = await this.createItemList(mod.items);
-      target.items.push(...items);
+      if (doesExist(mod.items)) {
+        const items = await this.createItemList(mod.items);
+        target.items.push(...items);
+      }
 
-      const portals = await this.createPortalList(mod.portals);
-      target.portals.push(...portals);
+      if (doesExist(mod.portals)) {
+        const portals = await this.createPortalList(mod.portals);
+        target.portals.push(...portals);
+      }
     }
   }
 
-  public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<BaseModifier<TBase>> {
+  public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<Partial<BaseModifier<TBase>>> {
     const excluded = new Set<string>();
     const selected = [];
 

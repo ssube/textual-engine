@@ -12,10 +12,10 @@ export const Input = (props: InputProps): React.ReactElement => {
     props.onLine(props.line);
   }
 
-  return <form onSubmit={handleSubmit}>
+  return <form id="input-form" onSubmit={handleSubmit}>
     <label>{props.prompt} &gt;
-      <input type="text" value={props.line} onChange={handleChange} />
+      <input id="input-line" type="text" value={props.line} onChange={handleChange} />
     </label>
-    <input type="submit" value="Go" />
+    <input id="input-submit" type="submit" value="Go" />
   </form>;
 };

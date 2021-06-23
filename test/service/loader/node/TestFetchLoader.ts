@@ -175,7 +175,6 @@ describe('node fetch loader', () => {
       state,
       worlds: [world]
     });
-    console.log(payload);
 
     const fetch = stub().returns({
       text: () => Promise.resolve(payload),

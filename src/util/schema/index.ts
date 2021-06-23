@@ -1,6 +1,7 @@
 import Ajv, { JSONSchemaType, ValidateFunction } from 'ajv';
 
-import { TemplateString } from '../model/mapped/Template';
+import { TemplateString } from '../../model/mapped/Template';
+import { KEYWORD_MAP } from './MapKeyword';
 
 /**
  * @todo: make this typesafe for literal string types
@@ -27,7 +28,11 @@ export function makeConstStringSchema<TValue extends string>(value: TValue): JSO
 }
 
 export function makeSchema<TType>(type: JSONSchemaType<TType>): ValidateFunction<TType> {
-  return new Ajv({
+  const ajv = new Ajv({
+    keywords: [
+      KEYWORD_MAP,
+    ],
     useDefaults: true,
-  }).compile(type);
+  });
+  return ajv.compile(type);
 }

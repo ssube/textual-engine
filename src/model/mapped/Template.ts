@@ -5,6 +5,7 @@ import { TEMPLATE_CHANCE } from '../../util/constants';
 import { Replace } from '../../util/types';
 import { Entity } from '../entity/Base';
 import { Metadata } from '../Metadata';
+import { ScriptRef } from '../Script';
 import { Modifier } from './Modifier';
 
 export interface TemplateNumber {
@@ -105,4 +106,29 @@ export const TEMPLATE_REF_SCHEMA: JSONSchemaType<TemplateRef> = {
     },
   },
   required: ['id'],
+};
+
+export const TEMPLATE_SCRIPT_SCHEMA: JSONSchemaType<BaseTemplate<ScriptRef>> = {
+  type: 'object',
+  properties: {
+    data: {
+      type: 'object',
+      map: {
+        keys: {
+          type: 'string',
+        },
+        values: TEMPLATE_STRING_SCHEMA,
+        /* {
+          type: 'object',
+          oneOf: [
+            // TEMPLATE_NUMBER_SCHEMA,
+            TEMPLATE_STRING_SCHEMA,
+          ],
+        }, */
+      },
+      required: [],
+    },
+    name: TEMPLATE_STRING_SCHEMA,
+  },
+  required: ['data', 'name'],
 };

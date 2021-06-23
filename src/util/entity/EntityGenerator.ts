@@ -1,7 +1,7 @@
 import { doesExist, mergeMap, mustExist, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
-import { equipItems } from '.';
 
+import { equipItems } from '.';
 import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
@@ -10,6 +10,7 @@ import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
 import { Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
+import { ScriptMap } from '../../model/Script';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
 import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE, InjectedOptions } from '../../module';
@@ -22,7 +23,6 @@ import { TEMPLATE_CHANCE } from '../constants';
 import { makeServiceLogger } from '../service';
 import { matchIdSegments } from '../string';
 import { findByBaseId } from '../template';
-import { ScriptMap } from '../types';
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
 export class StateEntityGenerator {

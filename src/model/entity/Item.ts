@@ -1,10 +1,13 @@
 import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
+import { TEMPLATE_CHANCE } from '../../util/constants';
 
 import { makeConstStringSchema } from '../../util/schema';
-import { NumberMap, ScriptMap } from '../../util/types';
-import { Template, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
+import { NumberMap } from '../../util/types';
+import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
+import { Template, TEMPLATE_NUMBER_SCHEMA, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
+import { ScriptMap } from '../Script';
 import { Entity } from './Base';
 
 export const ITEM_TYPE = 'item' as const;
@@ -23,6 +26,56 @@ export function isItem(entity: Optional<Entity>): entity is Item {
   return doesExist(entity) && entity.type === ITEM_TYPE;
 }
 
+export const ITEM_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Item>> = {
+  type: 'object',
+  properties: {
+    base: {
+      type: 'object',
+      properties: {
+        meta: MODIFIER_METADATA_SCHEMA,
+        scripts: {
+          type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_SCRIPT_SCHEMA,
+          },
+          required: [],
+        },
+        slot: TEMPLATE_STRING_SCHEMA,
+        stats: {
+          type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_NUMBER_SCHEMA,
+          },
+          required: [],
+        },
+        type: makeConstStringSchema(ITEM_TYPE),
+      },
+      required: ['meta', 'scripts', 'slot', 'stats', 'type'],
+    },
+    chance: {
+      type: 'number',
+      default: TEMPLATE_CHANCE,
+    },
+    excludes: {
+      type: 'array',
+      default: [],
+      items: {
+        type: 'string',
+      },
+    },
+    id: {
+      type: 'string',
+    },
+  },
+  required: ['base', 'id'],
+};
+
 export const ITEM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Item>> = {
   type: 'object',
   properties: {
@@ -32,11 +85,23 @@ export const ITEM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Item>> = {
         meta: TEMPLATE_METADATA_SCHEMA,
         scripts: {
           type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_SCRIPT_SCHEMA,
+          },
           required: [],
         },
         slot: TEMPLATE_STRING_SCHEMA,
         stats: {
           type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_NUMBER_SCHEMA,
+          },
           required: [],
         },
         type: makeConstStringSchema(ITEM_TYPE),
@@ -46,10 +111,7 @@ export const ITEM_TEMPLATE_SCHEMA: JSONSchemaType<Template<Item>> = {
     mods: {
       type: 'array',
       default: [],
-      items: {
-        type: 'object',
-        required: [],
-      },
+      items: ITEM_MODIFIER_SCHEMA,
     },
   },
   required: ['base'],

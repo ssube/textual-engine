@@ -4,8 +4,8 @@ import { WorldEntity } from '../../model/entity';
 import { Actor, isActor } from '../../model/entity/Actor';
 import { isItem, Item } from '../../model/entity/Item';
 import { isRoom, Room } from '../../model/entity/Room';
+import { ScriptMap } from '../../model/Script';
 import { SIGNAL_PREFIX, VERB_PREFIX } from '../constants';
-import { ScriptMap } from '../types';
 
 export interface VerbTarget {
   actor?: Actor;

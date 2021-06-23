@@ -3,10 +3,11 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { ScriptMap, NumberMap, StringMap } from '../../util/types';
+import { NumberMap, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
-import { Template, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
+import { Template, TEMPLATE_NUMBER_SCHEMA, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
+import { ScriptMap } from '../Script';
 import { Entity } from './Base';
 import { Item } from './Item';
 
@@ -54,11 +55,23 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
         },
         slots: {
           type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
           required: [],
         },
         source: TEMPLATE_STRING_SCHEMA,
         stats: {
           type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_NUMBER_SCHEMA,
+          },
           required: [],
         },
         type: makeConstStringSchema(ACTOR_TYPE),
@@ -100,11 +113,23 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
         },
         slots: {
           type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
           required: [],
         },
         source: TEMPLATE_STRING_SCHEMA,
         stats: {
           type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_NUMBER_SCHEMA,
+          },
           required: [],
         },
         type: makeConstStringSchema(ACTOR_TYPE),

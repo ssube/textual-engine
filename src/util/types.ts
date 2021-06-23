@@ -28,15 +28,6 @@ export type Replace<TBase, TKey extends keyof TBase, TValue> = Omit<TBase, TKey>
   [K in TKey]: TValue;
 };
 
-export type ScriptData = Map<string, number | string>;
-
-export interface ScriptRef {
-  data: ScriptData;
-  name: string;
-}
-
-export type ScriptMap = Map<string, ScriptRef>;
-
 /**
  * Map of stat names to their current value.
  */

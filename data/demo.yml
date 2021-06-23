@@ -336,6 +336,8 @@ worlds:
                   name:
                     base: 'Cracked {{base}}'
                 scripts: !map {}
+                slot:
+                  base: '{{base}}'
                 stats: !map
                   damage:
                     min: -4
@@ -351,6 +353,8 @@ worlds:
                   name:
                     base: 'Rusty {{base}}'
                 scripts: !map {}
+                slot:
+                  base: '{{base}}'
                 stats: !map
                   damage:
                     min: -5
@@ -367,6 +371,8 @@ worlds:
                   name:
                     base: 'Shiny {{base}}'
                 scripts: !map {}
+                slot:
+                  base: '{{base}}'
                 stats: !map
                   damage:
                     min: 5

@@ -264,7 +264,7 @@ worlds:
               name:
                 base: Goblin
               desc:
-                base: ((slimy|smelly)|goblin)
+                base: (slimy|smelly) goblin
             items:
               - id: item-sword
                 chance: 20
@@ -381,7 +381,7 @@ worlds:
       portals:
         - base:
             dest:
-              base: ((room-cave|room-cave|room-marsh))
+              base: (room-cave|room-cave|room-marsh)
             group:
               key:
                 base: window
@@ -399,7 +399,7 @@ worlds:
           mods: []
         - base:
             dest:
-              base: ((room-cave|room-cave|room-marsh))
+              base: (room-cave|room-cave|room-marsh)
             group:
               key:
                 base: door
@@ -417,7 +417,7 @@ worlds:
           mods: []
         - base:
             dest:
-              base: ((room-cave|room-marsh))
+              base: (room-cave|room-marsh)
             group:
               key:
                 base: door
@@ -435,7 +435,7 @@ worlds:
           mods: []
         - base:
             dest:
-              base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
+              base: (room-dungeon|room-dungeon|room-cave|room-marsh)
             group:
               key:
                 base: window
@@ -453,7 +453,7 @@ worlds:
           mods: []
         - base:
             dest:
-              base: ((room-cave|room-cave|room-marsh))
+              base: (room-cave|room-cave|room-marsh)
             group:
               key:
                 base: door

@@ -100,7 +100,7 @@ meta:
   name:
     base: Goblin
   desc:
-    base: ((slimy|smelly)|goblin)
+    base: (slimy|smelly) goblin
 ```
 
 #### Template Number
@@ -139,9 +139,10 @@ items:
 #### Template String
 
 Template strings use a series of nested lists, alternating between AND and OR operators, to produce the final
-string. The outermost list starts with the AND operator. Items are joined with spaces.
+string. The whole string starts with the AND operator to join words, so parenthesized groups start with OR, then AND,
+and so on. Items are split on whitespace and joined with spaces.
 
-The template `((gross|slimy)|goblin)` becomes `[[gross OR slimy] AND goblin]`, which will resolve
+The template `(gross|slimy) goblin` becomes `[[gross OR slimy] AND goblin]`, which will resolve
 to one of `gross goblin` or `slimy goblin`.
 
 For example:
@@ -149,7 +150,7 @@ For example:
 ```yaml
 meta:
   desc:
-    base: ((gross|slimy)|goblin)
+    base: (gross|slimy) goblin
 ```
 
 ### Actor Templates

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { InvalidArgumentError } from '@apextoaster/js-utils';
-import { alt, createLanguage, regexp, string } from 'parsimmon';
+import { alt, createLanguage, optWhitespace, regexp, string } from 'parsimmon';
 
 import { InputChain } from '.';
 
@@ -22,8 +22,8 @@ export function splitChain(input: string, options: SplitOptions): InputChain {
   }>({
     Empty: () => regexp(/^$/),
     List: (r) => string(options.group.start).then(r.Value.sepBy(string(options.split))).skip(string(options.group.end)),
-    Token: () => regexp(/[-a-zA-Z {}]+/),
-    Top: (r) => alt(r.Value, r.Empty),
+    Token: () => regexp(/[^,()|]+/),
+    Top: (r) => alt(r.Empty, r.Value.sepBy1(optWhitespace)),
     Value: (r) => alt(r.List, r.Token),
   });
 

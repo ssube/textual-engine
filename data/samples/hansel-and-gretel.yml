@@ -208,7 +208,7 @@ worlds:
       name:
         base: Hansel and Gretel
       desc:
-        base: Grimms' Fairy Tales
+        base: Hansel and Gretel from Grimms' Fairy Tales by The Brothers Grimm
     start:
       actors:
         - id: actor-hansel

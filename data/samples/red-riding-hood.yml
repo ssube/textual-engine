@@ -208,7 +208,7 @@ worlds:
       name:
         base: Little Red Riding Hood
       desc:
-        base: Grimms' Fairy Tales
+        base: Little Red Riding Hood from Grimms' Fairy Tales by The Brothers Grimm
     start:
       actors:
         - id: actor-red

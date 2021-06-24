@@ -208,14 +208,80 @@ worlds:
       name:
         base: Alice in Wonderland
       desc:
-        base: The Queen's Croquet Ground, ch#08
+        base: |-
+          Chapter VIII: The Queen's Croquet Ground from Alice's Adventures in Wonderland by Lewis Carroll
     start:
       actors:
         - id: actor-alice
       rooms:
         - id: room-intro
     templates:
-      actors: []
-      items: []
+      actors:
+        - base:
+            meta:
+              id: actor-alice
+              name:
+                base: Alice
+              desc:
+                base: Alice in Wonderland
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 20
+                min: 20
+          mods: []
+      items:
+        - base:
+            meta:
+              id: item-rose
+              name:
+                base: Rose
+              desc:
+                base: (red|white) rose with sharp thorns
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map
+              damage:
+                max: 1
+                min: 1
+          mods:
+            - chance: 50
+              excludes: []
+              id: painted
+              base:
+                meta:
+                  desc:
+                    base: 'painted {{base}}'
+                  name:
+                    base: 'Painted {{base}}'
+                stats: !map
+                  damage:
+                    max: 2
+                    min: 1
+
       portals: []
-      rooms: []
+      rooms:
+        - base:
+            meta:
+              id: room-intro
+              name:
+                base: Introduction
+              desc:
+                base: a garden with a rose tree
+            actors: []
+            items:
+              - id: item-rose
+              - id: item-rose
+              - id: item-rose
+                chance: 40
+              - id: item-rose
+                chance: 40
+            portals: []
+            scripts: !map {}

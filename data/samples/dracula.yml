@@ -208,7 +208,7 @@ worlds:
       name:
         base: Dracula
       desc:
-        base: Bram Stoker's Dracula, ch#12
+        base: Chapter XII from Dracula by Bram Stoker
     start:
       actors:
         - id: actor-seward

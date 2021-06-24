@@ -1,0 +1,221 @@
+worlds:
+  - defaults:
+      actor:
+        meta:
+          id: actor-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        items: []
+        scripts: !map
+          signal.get:
+            data: !map {}
+            name:
+              base: signal-actor-get
+          signal.hit:
+            data: !map {}
+            name:
+              base: signal-actor-hit
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-actor-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-actor-step
+          verbs.common.drop:
+            data: !map {}
+            name:
+              base: verb-actor-drop
+          verbs.common.equip:
+            data: !map {}
+            name:
+              base: verb-actor-equip
+          verbs.common.hit:
+            data: !map {}
+            name:
+              base: verb-actor-hit
+          verbs.common.look:
+            data: !map {}
+            name:
+              base: verb-actor-look
+          verbs.common.move:
+            data: !map {}
+            name:
+              base: verb-actor-move
+          verbs.common.take:
+            data: !map {}
+            name:
+              base: verb-actor-take
+          verbs.common.use:
+            data: !map {}
+            name:
+              base: verb-actor-use
+          verbs.common.wait:
+            data: !map {}
+            name:
+              base: verb-actor-wait
+          verbs.world.swing:
+            data: !map {}
+            name:
+              base: verb-actor-hit
+        slots: !map {}
+        stats: !map {}
+      item:
+        meta:
+          id: item-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-item-look
+        slot:
+          base: ''
+        stats: !map {}
+      portal:
+        meta:
+          id: portal-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        dest:
+          base: room-none
+        link:
+          base: both
+        group:
+          key:
+            base: ''
+          source:
+            base: ''
+          target:
+            base: ''
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-portal-look
+      room:
+        meta:
+          id: room-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        actors: []
+        items: []
+        portals: []
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-room-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-room-step
+    locale:
+      bundles:
+        en:
+          actor:
+            get:
+              player: |-
+                You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+            hit:
+              dead: '{{actor.meta.name}} has died!'
+              health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
+              hit: |-
+                {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
+            step:
+              command:
+                dead: |-
+                  You are dead!
+                player:
+                  verb: |-
+                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
+                  target: |-
+                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+                unknown: |-
+                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
+              drop:
+                type: |-
+                  {{command.targets}} is not an item!
+              equip:
+                item: |-
+                  You equip the {{item.meta.name}} in your {{slot}}.
+                none: |-
+                  {{command.targets}} is not an item!
+                slot: |-
+                  You are not able to equip {{item.meta.name}} in {{slot}}!
+              hit:
+                item: |-
+                  You cannot hit {{target.meta.name}}, you are not holding anything!
+                self: |-
+                  You cannot hit yourself!
+                type: |-
+                  {{command.targets}} is not an actor!
+              look:
+                none: |-
+                  You see nothing.
+                room:
+                  you: |-
+                    You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+                  health: |-
+                    You have {{health}} health.
+                  seen: |-
+                    You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
+                  inventory: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+                  portal: |-
+                    A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
+                  dest: |-
+                    You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
+                actor:
+                  seen: |-
+                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+                  dead: |-
+                    The {{actor.meta.name}} is dead!
+                item:
+                  seen: |-
+                    You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+              move:
+                missing: |-
+                  {{command.targets}} is not a portal!
+                portal: |-
+                  {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+              take:
+                type: |-
+                  {{command.targets}} is not an item!
+              use:
+                type: |-
+                  {{command.targets}} is not a usable item!
+          item:
+            use:
+              any: |-
+                {{item.meta.name}} has been used by {{actor.meta.name}}!
+      words:
+        articles: []
+        prepositions: []
+        verbs: []
+    meta:
+      id: sample-alice
+      name:
+        base: Alice in Wonderland
+      desc:
+        base: The Queen's Croquet Ground, ch#08
+    start:
+      actors:
+        - id: actor-alice
+      rooms:
+        - id: room-intro
+    templates:
+      actors: []
+      items: []
+      portals: []
+      rooms: []

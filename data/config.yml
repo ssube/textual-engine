@@ -36,6 +36,7 @@ locale:
           hit: hit
           look: look
           move: move
+          open: open
           take: take
           use: use
           wait: wait
@@ -91,7 +92,24 @@ locale:
       - with
       - within
       - without
-    verbs: []
+    verbs:
+      - verbs.common.drop
+      - verbs.common.equip
+      - verbs.common.hit
+      - verbs.common.look
+      - verbs.common.move
+      - verbs.common.take
+      - verbs.common.use
+      - verbs.common.wait
+      - verbs.meta.create
+      - verbs.meta.debug
+      - verbs.meta.graph
+      - verbs.meta.help
+      - verbs.meta.load
+      - verbs.meta.quit
+      - verbs.meta.save
+      - verbs.meta.worlds
+
 services:
   actors:
     - name: player-actor

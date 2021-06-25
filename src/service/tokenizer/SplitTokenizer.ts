@@ -7,13 +7,7 @@ import { LocaleBundle } from '../../model/file/Locale';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import { groupOn } from '../../util/collection/array';
-import {
-  COMMON_VERBS,
-  EVENT_LOCALE_BUNDLE,
-  EVENT_RENDER_INPUT,
-  EVENT_TOKEN_COMMAND,
-  SPLIT_CHAR,
-} from '../../util/constants';
+import { EVENT_LOCALE_BUNDLE, EVENT_RENDER_INPUT, EVENT_TOKEN_COMMAND, SPLIT_CHAR } from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
 import { trim } from '../../util/string';
 import { EventBus } from '../event';
@@ -117,9 +111,9 @@ export class SplitTokenizer implements TokenizerService {
       this.prepositions.add(preposition);
     }
 
-    const verbs = [...COMMON_VERBS, ...bundle.words.verbs];
-    for (const verb of verbs) {
+    for (const verb of bundle.words.verbs) {
       const translated = this.locale.translate(verb);
+      this.logger.debug({ translated, verb }, 'adding translated verb pair');
       this.verbs.set(translated, verb); // trick i18next into translating them back
     }
   }

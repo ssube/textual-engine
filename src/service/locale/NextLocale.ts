@@ -38,6 +38,7 @@ export class NextLocaleService implements LocaleService {
     this.i18next = inst;
 
     this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
+      this.logger.debug({ bundle: event.name }, 'adding bundle to locale');
       this.deleteBundle(event.name);
       this.addBundle(event.name, event.bundle);
     }, this);

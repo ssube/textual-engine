@@ -46,6 +46,10 @@ worlds:
             data: !map {}
             name:
               base: verb-actor-move
+          verbs.common.open:
+            data: !map {}
+            name:
+              base: verb-actor-open
           verbs.common.take:
             data: !map {}
             name:
@@ -220,6 +224,8 @@ worlds:
         articles: []
         prepositions: []
         verbs:
+          - verbs.common.equip
+          - verbs.common.open
           - verbs.world.slog
           - verbs.world.swing
     meta:
@@ -434,7 +440,10 @@ worlds:
               name:
                 base: door
             scripts: !map {}
-            stats: !map {}
+            stats: !map
+              closed:
+                max: 1
+                min: 1
           mods: []
         - base:
             dest:
@@ -454,7 +463,10 @@ worlds:
               name:
                 base: door
             scripts: !map {}
-            stats: !map {}
+            stats: !map
+              closed:
+                max: 1
+                min: 1
           mods: []
         - base:
             dest:
@@ -497,6 +509,9 @@ worlds:
                 base: locked door
             scripts: !map {}
             stats: !map
+              closed:
+                max: 1
+                min: 1
               locked:
                 max: 2
                 min: 0

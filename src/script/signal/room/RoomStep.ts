@@ -6,9 +6,4 @@ export async function SignalRoomStep(this: ScriptTarget, context: ScriptContext)
   if (!isRoom(this)) {
     throw new ScriptTargetError('script target must be a room');
   }
-
-  context.logger.debug({
-    meta: this.meta,
-    scope: Object.keys(context),
-  }, 'step script');
 }

@@ -15,7 +15,9 @@ import { makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
 
 const TEST_ACTOR: Actor = {
+  flags: new Map(),
   items: [{
+    flags: new Map(),
     meta: {
       desc: 'bon',
       id: 'bon',

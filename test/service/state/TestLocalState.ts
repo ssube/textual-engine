@@ -2,7 +2,7 @@
 import { mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { createStubInstance, match, stub } from 'sinon';
+import { match, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
@@ -17,7 +17,6 @@ import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
-import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import {
   StateJoinEvent,
@@ -55,13 +54,13 @@ import {
   VERB_WAIT,
 } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
-import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
-import { createTestContext, getStubHelper, getTestContainer, getTestLogger } from '../../helper';
+import { createTestContext, getTestContainer } from '../../helper';
 
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
+    flags: new Map(),
     items: [],
     meta: {
       id: 'bar',
@@ -99,6 +98,7 @@ const TEST_ACTOR: Template<Actor> = {
 
 const TEST_ITEM: Template<Item> = {
   base: {
+    flags: new Map(),
     meta: {
       id: 'bin',
       name: {
@@ -130,6 +130,7 @@ const TEST_PORTAL: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    flags: new Map(),
     group: {
       key: {
         base: 'door',
@@ -172,6 +173,7 @@ const TEST_PORTAL: Template<Portal> = {
 const TEST_ROOM: Template<Room> = {
   base: {
     actors: [],
+    flags: new Map(),
     items: [],
     meta: {
       id: 'room-foo',

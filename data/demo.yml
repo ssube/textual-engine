@@ -1,13 +1,14 @@
 worlds:
   - defaults:
       actor:
+        flags: !map {}
+        items: []
         meta:
           id: actor-none
           name:
             base: ''
           desc:
             base: ''
-        items: []
         scripts: !map
           signal.get:
             data: !map {}
@@ -64,6 +65,7 @@ worlds:
         slots: !map {}
         stats: !map {}
       item:
+        flags: !map {}
         meta:
           id: item-none
           name:
@@ -83,22 +85,23 @@ worlds:
           base: ''
         stats: !map {}
       portal:
-        meta:
-          id: portal-none
-          name:
-            base: ''
-          desc:
-            base: ''
         dest:
           base: room-none
-        link:
-          base: both
+        flags: !map {}
         group:
           key:
             base: ''
           source:
             base: ''
           target:
+            base: ''
+        link:
+          base: both
+        meta:
+          id: portal-none
+          name:
+            base: ''
+          desc:
             base: ''
         scripts: !map
           signal.look:
@@ -111,13 +114,14 @@ worlds:
               base: signal-portal-use
         stats: !map {}
       room:
+        actors: []
+        flags: !map {}
         meta:
           id: room-none
           name:
             base: ''
           desc:
             base: ''
-        actors: []
         items: []
         portals: []
         scripts: !map
@@ -240,6 +244,7 @@ worlds:
                 base: Bat
               desc:
                 base: flying bat
+            flags: !map {}
             items:
               - id: item-bat-teeth
             scripts: !map {}
@@ -274,6 +279,7 @@ worlds:
                 base: Goblin
               desc:
                 base: (slimy|smelly) goblin
+            flags: !map {}
             items:
               - id: item-sword
                 chance: 20
@@ -313,6 +319,7 @@ worlds:
                 base: Bat Teeth
               desc:
                 base: bat teeth
+            flags: !map {}
             scripts: !map {}
             slot:
               base: weapon-teeth
@@ -327,6 +334,7 @@ worlds:
                 base: Sword
               desc:
                 base: short sword
+            flags: !map {}
             scripts: !map {}
             slot:
               base: weapon-hand
@@ -391,6 +399,7 @@ worlds:
         - base:
             dest:
               base: (room-cave|room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
                 base: window
@@ -410,6 +419,7 @@ worlds:
         - base:
             dest:
               base: (room-cave|room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
                 base: door
@@ -429,6 +439,7 @@ worlds:
         - base:
             dest:
               base: (room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
                 base: door
@@ -448,6 +459,7 @@ worlds:
         - base:
             dest:
               base: (room-dungeon|room-dungeon|room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
                 base: window
@@ -467,6 +479,7 @@ worlds:
         - base:
             dest:
               base: (room-cave|room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
                 base: door
@@ -500,6 +513,7 @@ worlds:
               - id: actor-goblin
               - id: actor-goblin
                 chance: 10
+            flags: !map {}
             items: []
             portals:
               - id: window-west
@@ -515,6 +529,7 @@ worlds:
             actors:
               - id: actor-bat
                 chance: 25
+            flags: !map {}
             items:
               - id: item-sword
                 chance: 50
@@ -530,6 +545,7 @@ worlds:
               desc:
                 base: moist marsh
             actors: []
+            flags: !map {}
             items: []
             portals:
               - id: door-west-forward

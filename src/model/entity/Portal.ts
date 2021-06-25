@@ -3,7 +3,7 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { NumberMap } from '../../util/types';
+import { NumberMap, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
 import {
   BaseTemplate,
@@ -30,6 +30,8 @@ export interface Portal {
    * The destination room.
    */
   dest: string;
+
+  flags: StringMap;
 
   group: {
     key: string;
@@ -66,6 +68,17 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
         dest: {
           ...TEMPLATE_STRING_SCHEMA,
           nullable: true,
+        },
+        flags: {
+          type: 'object',
+          nullable: true,
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
+          required: [],
         },
         group: {
           type: 'object',
@@ -143,6 +156,16 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
       type: 'object',
       properties: {
         dest: TEMPLATE_STRING_SCHEMA,
+        flags: {
+          type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
+          required: [],
+        },
         group: {
           type: 'object',
           properties: {
@@ -182,7 +205,7 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
         },
         type: makeConstStringSchema(PORTAL_TYPE),
       },
-      required: ['dest', 'group', 'meta', 'scripts', 'stats'],
+      required: ['dest', 'flags', 'group', 'meta', 'scripts', 'stats'],
     },
     mods: {
       type: 'array',

@@ -53,6 +53,7 @@ describe('node fetch loader', () => {
     const state = makeTestState('', []);
     const world = makeTestWorld([{
       base: {
+        flags: new Map(),
         items: [],
         meta: {
           id: '',
@@ -80,6 +81,7 @@ describe('node fetch loader', () => {
       mods: [],
     }], [{
       base: {
+        flags: new Map(),
         meta: {
           id: '',
           desc: {
@@ -109,6 +111,7 @@ describe('node fetch loader', () => {
           base: '',
           type: 'string',
         },
+        flags: new Map(),
         link: {
           base: '',
           type: 'string',
@@ -149,6 +152,7 @@ describe('node fetch loader', () => {
     }], [{
       base: {
         actors: [],
+        flags: new Map(),
         items: [],
         meta: {
           id: '',

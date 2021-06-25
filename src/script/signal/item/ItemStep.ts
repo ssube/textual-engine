@@ -6,9 +6,4 @@ export async function SignalItemStep(this: ScriptTarget, context: ScriptContext)
   if (!isItem(this)) {
     throw new ScriptTargetError('script target must be an item');
   }
-
-  context.logger.debug({
-    meta: this.meta,
-    scope: Object.keys(context),
-  }, 'item step script');
 }

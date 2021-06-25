@@ -52,6 +52,7 @@ export class StateEntityGenerator {
   public async createActor(template: Template<Actor>, source = ActorSource.BEHAVIOR): Promise<Actor> {
     const slots = this.template.renderStringMap(template.base.slots);
     const actor: Actor = {
+      flags: this.template.renderStringMap(template.base.flags),
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
       scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
@@ -92,6 +93,7 @@ export class StateEntityGenerator {
 
   public async createItem(template: Template<Item>): Promise<Item> {
     const item: Item = {
+      flags: this.template.renderStringMap(template.base.flags),
       meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
       scripts: await this.createScripts(template.base.scripts, ITEM_TYPE),
       slot: this.template.renderString(template.base.slot),
@@ -138,6 +140,7 @@ export class StateEntityGenerator {
   public async createPortal(template: Template<Portal>): Promise<Portal> {
     const portal: Portal = {
       dest: '',
+      flags: this.template.renderStringMap(template.base.flags),
       group: {
         key: this.template.renderString(template.base.group.key),
         source: this.template.renderString(template.base.group.source),
@@ -179,12 +182,13 @@ export class StateEntityGenerator {
 
   public async createRoom(template: Template<Room>): Promise<Room> {
     const room: Room = {
-      type: ROOM_TYPE,
       actors: await this.createActorList(template.base.actors),
+      flags: this.template.renderStringMap(template.base.flags),
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
       portals: await this.createPortalList(template.base.portals),
       scripts: await this.createScripts(template.base.scripts, ROOM_TYPE),
+      type: ROOM_TYPE,
     };
 
     await this.modifyRoom(room, template.mods);

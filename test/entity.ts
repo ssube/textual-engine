@@ -10,6 +10,7 @@ import { TEMPLATE_CHANCE } from '../src/util/constants';
 
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {
+    flags: new Map(),
     items,
     meta: {
       desc: '',
@@ -27,6 +28,7 @@ export function makeTestActor(id: string, name: string, template: string, ...ite
 
 export function makeTestItem(id: string, name: string, template: string): Item {
   return {
+    flags: new Map(),
     meta: {
       desc: '',
       id,
@@ -50,6 +52,7 @@ export function makeTestRoom(
 ): Room {
   return {
     actors,
+    flags: new Map(),
     items,
     meta: {
       desc: '',
@@ -66,6 +69,7 @@ export function makeTestRoom(
 export function makeTestPortal(id: string, name: string, source: string, target: string, dest: string): Portal {
   return {
     dest,
+    flags: new Map(),
     group: {
       key: name,
       source: source,

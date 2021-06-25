@@ -21,6 +21,7 @@ import { getTestContainer } from '../../helper';
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
+    flags: new Map(),
     items: [{
       chance: TEMPLATE_CHANCE,
       id: 'item-foo',
@@ -54,6 +55,7 @@ const TEST_ACTOR: Template<Actor> = {
 
 const TEST_ITEM: Template<Item> = {
   base: {
+    flags: new Map(),
     meta: {
       desc: {
         base: 'foo',
@@ -93,6 +95,7 @@ const TEST_ROOM: Template<Room> = {
       id: 'actor-foo',
       type: 'id',
     }],
+    flags: new Map(),
     items: [],
     meta: {
       desc: {
@@ -121,6 +124,7 @@ const TEST_PORTAL_EAST: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    flags: new Map(),
     group: {
       key: {
         base: 'door',
@@ -166,6 +170,7 @@ const TEST_PORTAL_WEST: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    flags: new Map(),
     group: {
       key: {
         base: 'door',
@@ -212,6 +217,7 @@ const TEST_ROOM_PORTALS: Template<Room> = {
       id: 'actor-foo',
       type: 'id',
     }],
+    flags: new Map(),
     items: [],
     meta: {
       desc: {
@@ -245,6 +251,7 @@ const TEST_ROOM_PORTALS: Template<Room> = {
 const TEST_WORLD: WorldTemplate = {
   defaults: {
     actor: {
+      flags: new Map(),
       items: [],
       meta: {
         desc: {
@@ -270,6 +277,7 @@ const TEST_WORLD: WorldTemplate = {
       },
     },
     item: {
+      flags: new Map(),
       meta: {
         desc: {
           base: '',
@@ -297,6 +305,7 @@ const TEST_WORLD: WorldTemplate = {
         base: '',
         type: 'string',
       },
+      flags: new Map(),
       group: {
         key: {
           base: '',
@@ -335,6 +344,7 @@ const TEST_WORLD: WorldTemplate = {
     },
     room: {
       actors: [],
+      flags: new Map(),
       items: [],
       meta: {
         desc: {
@@ -388,6 +398,7 @@ const TEST_WORLD: WorldTemplate = {
 
 const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
   base: {
+    flags: new Map(),
     items: [{
       chance: TEMPLATE_CHANCE,
       id: TEST_ITEM.base.meta.id,
@@ -422,6 +433,7 @@ const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
 
 const TEST_ITEM_MODS: Array<Modifier<Item>> = [{
   base: {
+    flags: new Map(),
     meta: {
       desc: {
         base: '',
@@ -450,6 +462,7 @@ const TEST_ITEM_MODS: Array<Modifier<Item>> = [{
 
 const TEST_PORTAL_MODS: Array<Modifier<Portal>> = [{
   base: {
+    flags: new Map(),
     group: {
       key: {
         base: '{{base}}',
@@ -493,6 +506,7 @@ const TEST_ROOM_MODS: Array<Modifier<Room>> = [{
       id: TEST_ACTOR.base.meta.id,
       type: 'id',
     }],
+    flags: new Map(),
     items: [{
       chance: TEMPLATE_CHANCE,
       id: TEST_ITEM.base.meta.id,

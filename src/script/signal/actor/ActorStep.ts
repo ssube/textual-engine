@@ -10,11 +10,6 @@ import { STAT_HEALTH } from '../../../util/constants';
 import { getVerbScripts } from '../../../util/script';
 
 export async function SignalActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  context.logger.debug({
-    meta: this.meta,
-    scope: Object.keys(context),
-  }, 'step script');
-
   if (!isActor(this)) {
     throw new ScriptTargetError('script target must be an actor');
   }

@@ -31,6 +31,7 @@ describe('behavior actor', () => {
     const pending = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
     const actor: Actor = {
+      flags: new Map(),
       items: [],
       meta: {
         desc: '',
@@ -46,6 +47,7 @@ describe('behavior actor', () => {
     };
     const room: Room = {
       actors: [],
+      flags: new Map(),
       items: [],
       meta: {
         desc: '',

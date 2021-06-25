@@ -28,13 +28,14 @@ export const ACTOR_TYPE = 'actor' as const;
 export type ActorType = typeof ACTOR_TYPE;
 
 export interface Actor {
-  type: ActorType;
+  flags: StringMap;
   items: Array<Item>;
   meta: Metadata;
   scripts: ScriptMap;
   slots: StringMap;
   source: ActorSource;
   stats: NumberMap;
+  type: ActorType;
 }
 
 export function isActor(entity: Optional<Entity>): entity is Actor {
@@ -47,6 +48,17 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
     base: {
       type: 'object',
       properties: {
+        flags: {
+          type: 'object',
+          nullable: true,
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
+          required: [],
+        },
         items: {
           type: 'array',
           nullable: true,
@@ -124,6 +136,16 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
     base: {
       type: 'object',
       properties: {
+        flags: {
+          type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
+          required: [],
+        },
         items: {
           type: 'array',
           items: TEMPLATE_REF_SCHEMA,
@@ -162,7 +184,7 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
         },
         type: makeConstStringSchema(ACTOR_TYPE),
       },
-      required: ['items', 'meta', 'type', 'scripts', 'stats'],
+      required: ['flags', 'items', 'meta', 'type', 'scripts', 'stats'],
     },
     mods: {
       type: 'array',

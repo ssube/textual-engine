@@ -79,6 +79,7 @@ export function makeTestPortal(id: string, name: string, source: string, target:
       template: '',
     },
     scripts: new Map(),
+    stats: new Map(),
     type: PORTAL_TYPE,
   };
 }

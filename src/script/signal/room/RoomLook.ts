@@ -6,7 +6,7 @@ import { SIGNAL_LOOK } from '../../../util/constants';
 
 export async function SignalRoomLook(this: WorldEntity, context: ScriptContext): Promise<void> {
   if (!isRoom(this)) {
-    throw new ScriptTargetError('target must be a room');
+    throw new ScriptTargetError('script target must be a room');
   }
 
   await context.state.show(context.source, 'actor.step.look.room.seen', { room: this });

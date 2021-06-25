@@ -139,6 +139,7 @@ describe('node fetch loader', () => {
           },
         },
         scripts: new Map(),
+        stats: new Map(),
         type: {
           base: PORTAL_TYPE,
           type: 'string',

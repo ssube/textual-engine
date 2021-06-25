@@ -75,6 +75,10 @@ worlds:
             data: !map {}
             name:
               base: signal-item-look
+          signal.use:
+            data: !map {}
+            name:
+              base: signal-item-use
         slot:
           base: ''
         stats: !map {}
@@ -101,6 +105,11 @@ worlds:
             data: !map {}
             name:
               base: signal-portal-look
+          signal.use:
+            data: !map {}
+            name:
+              base: signal-portal-use
+        stats: !map {}
       room:
         meta:
           id: room-none
@@ -198,7 +207,7 @@ worlds:
           item:
             use:
               any: |-
-                {{item.meta.name}} has been used by {{actor.meta.name}}!
+                {{item.meta.name}} has been used on {{target.meta.name}}!
           verbs:
             world:
               slog: slog
@@ -396,6 +405,7 @@ worlds:
               name:
                 base: window
             scripts: !map {}
+            stats: !map {}
           mods: []
         - base:
             dest:
@@ -414,6 +424,7 @@ worlds:
               name:
                 base: door
             scripts: !map {}
+            stats: !map {}
           mods: []
         - base:
             dest:
@@ -432,6 +443,7 @@ worlds:
               name:
                 base: door
             scripts: !map {}
+            stats: !map {}
           mods: []
         - base:
             dest:
@@ -450,6 +462,7 @@ worlds:
               name:
                 base: window
             scripts: !map {}
+            stats: !map {}
           mods: []
         - base:
             dest:
@@ -470,6 +483,10 @@ worlds:
               name:
                 base: locked door
             scripts: !map {}
+            stats: !map
+              locked:
+                max: 2
+                min: 0
           mods: []
       rooms:
         - base:

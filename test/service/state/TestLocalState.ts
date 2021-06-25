@@ -159,7 +159,7 @@ const TEST_PORTAL: Template<Portal> = {
         type: 'string',
       },
     },
-
+    stats: new Map(),
     scripts: new Map(),
     type: {
       base: PORTAL_TYPE,

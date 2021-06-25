@@ -8,10 +8,12 @@ import { SignalActorGet } from '../../script/signal/actor/ActorGet';
 import { SignalActorHit } from '../../script/signal/actor/ActorHit';
 import { SignalActorLook } from '../../script/signal/actor/ActorLook';
 import { SignalActorStep } from '../../script/signal/actor/ActorStep';
+import { SignalActorUse } from '../../script/signal/actor/ActorUse';
 import { SignalItemLook } from '../../script/signal/item/ItemLook';
 import { SignalItemStep } from '../../script/signal/item/ItemStep';
 import { SignalItemUse } from '../../script/signal/item/ItemUse';
 import { SignalPortalLook } from '../../script/signal/portal/PortalLook';
+import { SignalPortalUse } from '../../script/signal/portal/PortalUse';
 import { SignalRoomLook } from '../../script/signal/room/RoomLook';
 import { SignalRoomStep } from '../../script/signal/room/RoomStep';
 import { VerbActorDrop } from '../../script/verb/actor/ActorDrop';
@@ -35,10 +37,12 @@ const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['signal-actor-hit', SignalActorHit],
   ['signal-actor-look', SignalActorLook],
   ['signal-actor-step', SignalActorStep],
+  ['signal-actor-use', SignalActorUse],
   ['signal-item-look', SignalItemLook],
   ['signal-item-step', SignalItemStep],
   ['signal-item-use', SignalItemUse],
   ['signal-portal-look', SignalPortalLook],
+  ['signal-portal-use', SignalPortalUse],
   ['signal-room-look', SignalRoomLook],
   ['signal-room-step', SignalRoomStep],
   // verb scripts

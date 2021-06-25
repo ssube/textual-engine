@@ -704,7 +704,7 @@ export class LocalStateService implements StateService {
       return transfer.moveItem(target, context);
     }
 
-    throw new ScriptTargetError('cannot move rooms');
+    throw new ScriptTargetError('move target must be an actor or item');
   }
 
   /**

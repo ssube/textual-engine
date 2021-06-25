@@ -8,7 +8,7 @@ import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
 
 export async function SignalActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
-    throw new ScriptTargetError('invalid entity type');
+    throw new ScriptTargetError('script target must be an actor');
   }
 
   const attacker = mustExist(context.actor);

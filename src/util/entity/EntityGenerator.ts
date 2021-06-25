@@ -146,6 +146,7 @@ export class StateEntityGenerator {
       link: this.template.renderString(template.base.link) as PortalLinkage,
       meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
       scripts: await this.createScripts(template.base.scripts, PORTAL_TYPE),
+      stats: this.template.renderNumberMap(template.base.stats),
       type: PORTAL_TYPE,
     };
 
@@ -306,6 +307,10 @@ export class StateEntityGenerator {
 
       if (doesExist(mod.scripts)) {
         target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
+
+      if (doesExist(mod.stats)) {
+        target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
       }
     }
   }

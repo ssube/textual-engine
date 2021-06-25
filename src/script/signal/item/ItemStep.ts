@@ -4,7 +4,7 @@ import { ScriptContext, ScriptTarget } from '../../../service/script';
 
 export async function SignalItemStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isItem(this)) {
-    throw new ScriptTargetError('target must be an item');
+    throw new ScriptTargetError('script target must be an item');
   }
 
   context.logger.debug({

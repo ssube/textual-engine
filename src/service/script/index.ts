@@ -17,7 +17,7 @@ export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
 
 export interface StateHelper {
-  enter(target: StateSource): Promise<void>;
+  enter(target: StateSource): Promise<void>; // TODO: remove, auto-invoke as part of move
   find<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>>;
   move(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void>; // replaces transfer
   show(source: StateSource, msg: string, context?: LocaleContext, volume?: ShowVolume): Promise<void>;
@@ -54,6 +54,7 @@ export interface SuppliedScope {
   item?: Item;
   portal?: Portal;
   room?: Room;
+  target?: WorldEntity;
 }
 
 /**

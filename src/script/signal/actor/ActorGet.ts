@@ -6,7 +6,7 @@ import { ScriptContext, ScriptTarget } from '../../../service/script';
 
 export async function SignalActorGet(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
-    throw new ScriptTargetError('invalid entity type');
+    throw new ScriptTargetError('script target must be an actor');
   }
 
   if (this.source === ActorSource.PLAYER) {

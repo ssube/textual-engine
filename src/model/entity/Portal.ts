@@ -3,8 +3,15 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
+import { NumberMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
-import { BaseTemplate, Template, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
+import {
+  BaseTemplate,
+  Template,
+  TEMPLATE_NUMBER_SCHEMA,
+  TEMPLATE_SCRIPT_SCHEMA,
+  TEMPLATE_STRING_SCHEMA,
+} from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { ScriptMap } from '../Script';
 import { Entity } from './Base';
@@ -35,6 +42,8 @@ export interface Portal {
   meta: Metadata;
 
   scripts: ScriptMap;
+
+  stats: NumberMap;
 
   type: PortalType;
 }
@@ -88,6 +97,17 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
               type: 'string',
             },
             values: TEMPLATE_SCRIPT_SCHEMA,
+          },
+          required: [],
+        },
+        stats: {
+          type: 'object',
+          nullable: true,
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_NUMBER_SCHEMA,
           },
           required: [],
         },
@@ -150,22 +170,19 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
           },
           required: [],
         },
-        type: {
+        stats: {
           type: 'object',
-          properties: {
-            base: {
-              default: PORTAL_TYPE,
+          map: {
+            keys: {
               type: 'string',
             },
-            type: {
-              default: 'string',
-              type: 'string',
-            },
+            values: TEMPLATE_NUMBER_SCHEMA,
           },
-          required: ['base', 'type'],
+          required: [],
         },
+        type: makeConstStringSchema(PORTAL_TYPE),
       },
-      required: ['dest', 'group', 'meta', 'scripts'],
+      required: ['dest', 'group', 'meta', 'scripts', 'stats'],
     },
     mods: {
       type: 'array',

@@ -1,6 +1,7 @@
-import { mustExist, Optional } from '@apextoaster/js-utils';
+import { isNil, mustExist, Optional } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
+import { WorldEntity } from '../../../model/entity';
 import { Actor, ACTOR_TYPE, isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
@@ -31,32 +32,31 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
     return;
   }
 
-  const actor = await getUseTarget(this, context);
-  if (!isActor(actor)) {
+  const target = await getUseTarget(this, context);
+  if (isNil(target)) {
     await context.state.show(context.source, 'actor.step.use.target', { command });
     return;
   }
 
-  await context.script.invoke(item, SIGNAL_USE, {
+  await context.script.invoke(target, SIGNAL_USE, {
     ...context,
-    actor,
+    item,
   });
 }
 
-export async function getUseTarget(actor: Actor, context: ScriptContext): Promise<Optional<Actor>> {
+export async function getUseTarget(actor: Actor, context: ScriptContext): Promise<Optional<WorldEntity>> {
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 
   if (command.targets.length > 1) {
-    const actorResults = await context.state.find<typeof ACTOR_TYPE>({
+    const actorResults = await context.state.find({
       matchers: createFuzzyMatcher(),
       meta: {
-        name: head(command.targets),
+        name: command.targets[1],
       },
       room: {
         id: room.meta.id,
       },
-      type: ACTOR_TYPE,
     });
 
     return actorResults[0];

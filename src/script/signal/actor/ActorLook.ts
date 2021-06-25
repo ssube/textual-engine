@@ -7,7 +7,7 @@ import { STAT_HEALTH } from '../../../util/constants';
 
 export async function SignalActorLook(this: WorldEntity, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
-    throw new ScriptTargetError('target must be an actor');
+    throw new ScriptTargetError('script target must be an actor');
   }
 
   await context.state.show(context.source, 'actor.step.look.actor.seen', { actor: this });

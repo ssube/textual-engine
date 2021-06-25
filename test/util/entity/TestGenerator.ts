@@ -151,6 +151,7 @@ const TEST_PORTAL_EAST: Template<Portal> = {
       },
     },
     scripts: new Map(),
+    stats: new Map(),
     type: {
       base: PORTAL_TYPE,
       type: 'string',
@@ -195,6 +196,7 @@ const TEST_PORTAL_WEST: Template<Portal> = {
       },
     },
     scripts: new Map(),
+    stats: new Map(),
     type: {
       base: PORTAL_TYPE,
       type: 'string',
@@ -295,6 +297,20 @@ const TEST_WORLD: WorldTemplate = {
         base: '',
         type: 'string',
       },
+      group: {
+        key: {
+          base: '',
+          type: 'string',
+        },
+        source: {
+          base: '',
+          type: 'string',
+        },
+        target: {
+          base: '',
+          type: 'string',
+        },
+      },
       link: {
         base: PortalLinkage.BOTH,
         type: 'string',
@@ -310,21 +326,8 @@ const TEST_WORLD: WorldTemplate = {
           type: 'string',
         },
       },
-      group: {
-        key: {
-          base: '',
-          type: 'string',
-        },
-        source: {
-          base: '',
-          type: 'string',
-        },
-        target: {
-          base: '',
-          type: 'string',
-        },
-      },
       scripts: new Map(),
+      stats: new Map(),
       type: {
         base: PORTAL_TYPE,
         type: 'string',
@@ -476,6 +479,7 @@ const TEST_PORTAL_MODS: Array<Modifier<Portal>> = [{
       },
     },
     scripts: new Map(),
+    stats: new Map(),
   },
   chance: TEMPLATE_CHANCE,
   excludes: [],

@@ -6,7 +6,8 @@ import { isPortal } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { head } from '../../../util/collection/array';
-import { SIGNAL_LOOK } from '../../../util/constants';
+import { getKey } from '../../../util/collection/map';
+import { SIGNAL_LOOK, STAT_LOCKED } from '../../../util/constants';
 import { indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -33,6 +34,12 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     return;
   }
 
+  const locked = getKey(targetPortal.stats, STAT_LOCKED, 0);
+  if (locked > 0) {
+    await context.state.show(context.source, 'actor.step.move.locked', { command, portal: targetPortal });
+    return;
+  }
+
   const rooms = await context.state.find({
     meta: {
       id: targetPortal.dest,
@@ -46,6 +53,11 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     throw new NotFoundError('destination room not found');
   }
 
+  await context.state.show(context.source, 'actor.step.move.portal', {
+    actor: this,
+    portal: targetPortal,
+  });
+
   // move the actor and focus
   await context.transfer.moveActor({
     moving: this,
@@ -53,14 +65,8 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     target: targetRoom,
   }, context);
 
-  await context.state.show(context.source, 'actor.step.move.portal', {
-    actor: this,
-    portal: targetPortal,
-  });
-
   if (this.source === ActorSource.PLAYER) {
     context.logger.debug({ actor: this, room: targetRoom }, 'player entered room');
-    await context.state.enter({ actor: this, room: targetRoom });
     await context.script.invoke(targetRoom, SIGNAL_LOOK, context);
   }
 }

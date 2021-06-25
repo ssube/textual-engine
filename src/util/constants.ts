@@ -119,7 +119,15 @@ export const COMMON_VERBS: ReadonlyArray<string> = [
 export const STAT_HEALTH = 'health';
 export const STAT_DAMAGE = 'damage';
 
+export const STAT_CLOSED = 'closed';
+export const STAT_LOCKED = 'locked';
+
 export const COMMON_STATS: ReadonlyArray<string> = [
   STAT_HEALTH,
   STAT_DAMAGE,
+] as const;
+
+export const STATE_STATS: ReadonlyArray<string> = [
+  STAT_CLOSED,
+  STAT_LOCKED,
 ] as const;

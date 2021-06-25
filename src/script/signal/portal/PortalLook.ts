@@ -6,7 +6,7 @@ import { ScriptContext } from '../../../service/script';
 
 export async function SignalPortalLook(this: WorldEntity, context: ScriptContext): Promise<void> {
   if (!isPortal(this)) {
-    throw new ScriptTargetError('target must be a portal');
+    throw new ScriptTargetError('script target must be a portal');
   }
 
   await context.state.show(context.source, 'actor.step.look.room.portal', { portal: this });

@@ -10,8 +10,8 @@ import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 
-describe('actor look scripts', () => {
-  describe('actor look command without a target', () => {
+describe('actor look verb', () => {
+  describe('actor look verb without a target', () => {
     it('should require the script target be an actor', async () => {
       const context = createTestContext({
         command: makeCommand(VERB_LOOK),
@@ -59,7 +59,7 @@ describe('actor look scripts', () => {
     });
   });
 
-  describe('actor look command with target', () => {
+  describe('actor look verb with target', () => {
     it('should describe the target', async () => {
       const script = createStubInstance(LocalScriptService);
       const state = getStubHelper();

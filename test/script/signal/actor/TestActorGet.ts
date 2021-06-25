@@ -9,49 +9,47 @@ import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
 
-describe('actor get scripts', () => {
-  describe('actor get signal', () => {
-    it('should require the script target be an actor', async () => {
-      const script = createStubInstance(LocalScriptService);
-      const state = getStubHelper();
+describe('actor get signal', () => {
+  it('should require the script target be an actor', async () => {
+    const script = createStubInstance(LocalScriptService);
+    const state = getStubHelper();
 
-      const item = makeTestItem('', '', '');
-      const actor = makeTestActor('', '', '', item);
+    const item = makeTestItem('', '', '');
+    const actor = makeTestActor('', '', '', item);
 
-      const context = createTestContext({
-        actor,
-        item,
-        random: createStubInstance(MathRandomService),
-        room: makeTestRoom('', '', '', [], []),
-        script,
-        state,
-      });
-
-      await expect(SignalActorGet.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
-      await expect(SignalActorGet.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+    const context = createTestContext({
+      actor,
+      item,
+      random: createStubInstance(MathRandomService),
+      room: makeTestRoom('', '', '', [], []),
+      script,
+      state,
     });
 
-    it('should show the received item', async () => {
-      const script = createStubInstance(LocalScriptService);
-      const state = getStubHelper();
-      const transfer = createTestTransfer();
+    await expect(SignalActorGet.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+    await expect(SignalActorGet.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+  });
 
-      const item = makeTestItem('', '', '');
-      const actor = makeTestActor('', '', '');
-      actor.source = ActorSource.PLAYER;
+  it('should show the received item', async () => {
+    const script = createStubInstance(LocalScriptService);
+    const state = getStubHelper();
+    const transfer = createTestTransfer();
 
-      const context = createTestContext({
-        actor,
-        item,
-        random: createStubInstance(MathRandomService),
-        room: makeTestRoom('', '', '', [], []),
-        script,
-        state,
-        transfer,
-      });
-      await SignalActorGet.call(actor, context);
+    const item = makeTestItem('', '', '');
+    const actor = makeTestActor('', '', '');
+    actor.source = ActorSource.PLAYER;
 
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.get.player');
+    const context = createTestContext({
+      actor,
+      item,
+      random: createStubInstance(MathRandomService),
+      room: makeTestRoom('', '', '', [], []),
+      script,
+      state,
+      transfer,
     });
+    await SignalActorGet.call(actor, context);
+
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.get.player');
   });
 });

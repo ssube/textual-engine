@@ -17,7 +17,7 @@ const DEFAULT_NUMBER: TemplateNumber = {
 };
 
 const DEFAULT_STRING: TemplateString = {
-  base: '(foo|bar)',
+  base: '((foo|bar))',
   type: 'string',
 };
 

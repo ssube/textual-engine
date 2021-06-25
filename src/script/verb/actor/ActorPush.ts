@@ -24,7 +24,7 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
   });
 
   if (!isActor(actor)) {
-    return;
+    return context.state.show(context.source, 'actor.push.target', { command });
   }
 
   const [portal] = await context.state.find({
@@ -36,8 +36,10 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
   });
 
   if (!isPortal(portal)) {
-    return;
+    return context.state.show(context.source, 'actor.push.portal', { actor, command });
   }
+
+  // TODO: check closed and locked
 
   const [target] = await context.state.find({
     meta: {
@@ -47,7 +49,7 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
   });
 
   if (!isRoom(target)) {
-    return;
+    return context.state.show(context.source, 'actor.push.dest', { actor, command, portal });
   }
 
   const source = mustExist(context.room);
@@ -57,4 +59,6 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
     source,
     target,
   }, context);
+
+  return context.state.show(context.source, 'actor.push.dest', { actor, command, portal, room: target });
 }

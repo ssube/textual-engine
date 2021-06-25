@@ -10,7 +10,7 @@ import { VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 
-describe('item look scripts', () => {
+describe('item look signal', () => {
   it('should require the script target be an item', async () => {
     const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();

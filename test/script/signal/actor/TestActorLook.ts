@@ -10,7 +10,7 @@ import { VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
 
-describe('actor look scripts', () => {
+describe('actor look signal', () => {
   it('should require the script target be an actor', async () => {
     const state = getStubHelper();
 

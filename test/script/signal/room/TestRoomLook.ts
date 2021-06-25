@@ -10,7 +10,7 @@ import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 
-describe('room look scripts', () => {
+describe('room look signal', () => {
   it('should require the script target be a room', async () => {
     const stateHelper = getStubHelper();
 
@@ -91,7 +91,7 @@ describe('room look scripts', () => {
     const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
     room.portals.push(portal);
 
-    (state.find as SinonStub).returns(Promise.resolve([room]));
+    (state.find as SinonStub).resolves([room]);
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),

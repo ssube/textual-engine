@@ -8,169 +8,165 @@ import { ActorSource } from '../../../../src/model/entity/Actor';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
 import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove';
 import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
+import { SIGNAL_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 
-describe('actor move scripts', () => {
-  describe('actor move command', () => {
-    it('should require the script target be an actor', async () => {
-      const context = createTestContext({
-        command: makeCommand(VERB_WAIT),
-        room: makeTestRoom('', '', '', [], []),
-      });
-
-      await expect(VerbActorMove.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
-      await expect(VerbActorMove.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+describe('actor move verb', () => {
+  it('should require the script target be an actor', async () => {
+    const context = createTestContext({
+      command: makeCommand(VERB_WAIT),
+      room: makeTestRoom('', '', '', [], []),
     });
 
-    it('should target portals by name and move the actor', async () => {
-      const state = getStubHelper();
-      const target = makeTestRoom('', '', '', [], []);
-      (state.find as SinonStub).returns(Promise.resolve([target]));
+    await expect(VerbActorMove.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+    await expect(VerbActorMove.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+  });
 
-      const actor = makeTestActor('', '', '');
-      const room = makeTestRoom('', '', '', [actor], []);
-      const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
-      room.portals.push(portal);
+  it('should target portals by name and move the actor', async () => {
+    const state = getStubHelper();
+    const target = makeTestRoom('', '', '', [], []);
+    (state.find as SinonStub).returns(Promise.resolve([target]));
 
-      const context = createTestContext({
-        command: makeCommand(VERB_MOVE, portal.meta.name),
-        random: createStubInstance(MathRandomService),
-        room,
-        state: state,
-      });
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+    const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
+    room.portals.push(portal);
 
-      await VerbActorMove.call(actor, context);
-
-      expect(room.actors, 'target actors').to.have.lengthOf(1);
-      expect(state.find).to.have.been.calledWith({
-        meta: {
-          id: 'foo',
-        },
-        type: ROOM_TYPE,
-      });
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+    const context = createTestContext({
+      command: makeCommand(VERB_MOVE, portal.meta.name),
+      random: createStubInstance(MathRandomService),
+      room,
+      state,
     });
 
-    it('should target portals by source group', async () => {
-      const state = getStubHelper();
-      const target = makeTestRoom('', '', '', [], []);
-      (state.find as SinonStub).returns(Promise.resolve([target]));
+    await VerbActorMove.call(actor, context);
 
-      const actor = makeTestActor('', '', '');
-      const room = makeTestRoom('', '', '', [actor], []);
-      const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
-      room.portals.push(portal);
-      const context = createTestContext({
-        command: makeCommand(VERB_MOVE, portal.group.source),
-        random: createStubInstance(MathRandomService),
-        room,
-        state,
-      });
+    expect(room.actors, 'target actors').to.have.lengthOf(1);
+    expect(state.find).to.have.been.calledWith({
+      meta: {
+        id: 'foo',
+      },
+      type: ROOM_TYPE,
+    });
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+  });
 
-      await VerbActorMove.call(actor, context);
+  it('should target portals by source group', async () => {
+    const state = getStubHelper();
+    const target = makeTestRoom('', '', '', [], []);
+    (state.find as SinonStub).returns(Promise.resolve([target]));
 
-      expect(room.actors, 'target actors').to.have.lengthOf(1);
-      expect(state.find).to.have.been.calledWith({
-        meta: {
-          id: 'foo',
-        },
-        type: ROOM_TYPE,
-      });
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+    const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
+    room.portals.push(portal);
+    const context = createTestContext({
+      command: makeCommand(VERB_MOVE, portal.group.source),
+      random: createStubInstance(MathRandomService),
+      room,
+      state,
     });
 
-    it('should target portals by source group and name', async () => {
-      const state = getStubHelper();
-      const target = makeTestRoom('', '', '', [], []);
-      (state.find as SinonStub).returns(Promise.resolve([target]));
+    await VerbActorMove.call(actor, context);
 
-      const actor = makeTestActor('', '', '');
-      const room = makeTestRoom('', '', '', [actor], []);
-      const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
-      room.portals.push(portal);
-      const context = createTestContext({
-        command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
-        random: createStubInstance(MathRandomService),
-        room,
-        state,
-      });
+    expect(room.actors, 'target actors').to.have.lengthOf(1);
+    expect(state.find).to.have.been.calledWith({
+      meta: {
+        id: 'foo',
+      },
+      type: ROOM_TYPE,
+    });
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+  });
 
-      await VerbActorMove.call(actor, context);
+  it('should target portals by source group and name', async () => {
+    const state = getStubHelper();
+    const target = makeTestRoom('', '', '', [], []);
+    (state.find as SinonStub).returns(Promise.resolve([target]));
 
-      expect(room.actors, 'target actors').to.have.lengthOf(1);
-      expect(state.find).to.have.been.calledWith({
-        meta: {
-          id: 'foo',
-        },
-        type: ROOM_TYPE,
-      });
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+    const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
+    room.portals.push(portal);
+    const context = createTestContext({
+      command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
+      random: createStubInstance(MathRandomService),
+      room,
+      state,
     });
 
-    it('should show a message if the portal cannot be found', async () => {
-      const state = getStubHelper();
-      const target = makeTestRoom('', '', '', [], []);
-      (state.find as SinonStub).returns(Promise.resolve([target]));
+    await VerbActorMove.call(actor, context);
 
-      const actor = makeTestActor('', '', '');
-      const room = makeTestRoom('', '', '', [actor], []);
-      const context = createTestContext({
-        command: makeCommand(VERB_MOVE, 'door'),
-        random: createStubInstance(MathRandomService),
-        room,
-        state,
-      });
+    expect(room.actors, 'target actors').to.have.lengthOf(1);
+    expect(state.find).to.have.been.calledWith({
+      meta: {
+        id: 'foo',
+      },
+      type: ROOM_TYPE,
+    });
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+  });
 
-      await VerbActorMove.call(actor, context);
+  it('should show a message if the portal cannot be found', async () => {
+    const state = getStubHelper();
+    const target = makeTestRoom('', '', '', [], []);
+    (state.find as SinonStub).returns(Promise.resolve([target]));
 
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.missing');
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+    const context = createTestContext({
+      command: makeCommand(VERB_MOVE, 'door'),
+      random: createStubInstance(MathRandomService),
+      room,
+      state,
     });
 
-    it('should throw an error if the target room cannot be found', async () => {
-      const state = getStubHelper();
-      (state.find as SinonStub).returns(Promise.resolve([]));
+    await VerbActorMove.call(actor, context);
 
-      const actor = makeTestActor('', '', '');
-      const room = makeTestRoom('', '', '', [actor], []);
-      const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
-      room.portals.push(portal);
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.missing');
+  });
 
-      const context = createTestContext({
-        command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
-        random: createStubInstance(MathRandomService),
-        room,
-        state,
-      });
+  it('should throw an error if the target room cannot be found', async () => {
+    const state = getStubHelper();
+    (state.find as SinonStub).returns(Promise.resolve([]));
 
-      return expect(VerbActorMove.call(actor, context)).to.eventually.be.rejectedWith(NotFoundError);
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+    const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
+    room.portals.push(portal);
+
+    const context = createTestContext({
+      command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
+      random: createStubInstance(MathRandomService),
+      room,
+      state,
     });
 
-    it('should call the state helper enter method when the moving actor is a player', async () => {
-      const state = getStubHelper();
-      const target = makeTestRoom('', '', '', [], []);
-      (state.find as SinonStub).returns(Promise.resolve([target]));
+    return expect(VerbActorMove.call(actor, context)).to.eventually.be.rejectedWith(NotFoundError);
+  });
 
-      const actor = makeTestActor('', '', '');
-      actor.source = ActorSource.PLAYER;
+  it('should look at the destination room when the moving actor is a player', async () => {
+    const state = getStubHelper();
+    const target = makeTestRoom('', '', '', [], []);
+    (state.find as SinonStub).returns(Promise.resolve([target]));
 
-      const room = makeTestRoom('', '', '', [actor], []);
-      const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
-      room.portals.push(portal);
+    const actor = makeTestActor('', '', '');
+    actor.source = ActorSource.PLAYER;
 
-      const context = createTestContext({
-        command: makeCommand(VERB_MOVE, portal.meta.name),
-        random: createStubInstance(MathRandomService),
-        room,
-        state,
-      });
-      await VerbActorMove.call(actor, context);
+    const room = makeTestRoom('', '', '', [actor], []);
+    const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
+    room.portals.push(portal);
 
-      expect(state.enter).to.have.callCount(1).and.been.calledWith({
-        actor,
-        room: target,
-      });
+    const context = createTestContext({
+      command: makeCommand(VERB_MOVE, portal.meta.name),
+      random: createStubInstance(MathRandomService),
+      room,
+      state,
     });
+
+    await VerbActorMove.call(actor, context);
+
+    expect(context.script.invoke).to.have.been.calledWith(target, SIGNAL_LOOK, context);
   });
 });

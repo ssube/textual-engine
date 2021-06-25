@@ -9,19 +9,17 @@ import { VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 
-describe('item step scripts', () => {
-  describe('item step command', () => {
-    it('should require the script target be an item', async () => {
-      const state = getStubHelper();
-      const context = createTestContext({
-        command: makeCommand(VERB_WAIT),
-        random: createStubInstance(MathRandomService),
-        room: makeTestRoom('', '', '', [], []),
-        state,
-      });
-
-      await expect(SignalItemStep.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
-      await expect(SignalItemStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+describe('item step signal', () => {
+  it('should require the script target be an item', async () => {
+    const state = getStubHelper();
+    const context = createTestContext({
+      command: makeCommand(VERB_WAIT),
+      random: createStubInstance(MathRandomService),
+      room: makeTestRoom('', '', '', [], []),
+      state,
     });
+
+    await expect(SignalItemStep.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+    await expect(SignalItemStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
   });
 });

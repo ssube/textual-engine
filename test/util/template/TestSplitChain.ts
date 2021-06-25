@@ -10,6 +10,6 @@ describe('group chain split helper', () => {
         end: ')',
       },
       split: '|',
-    })).to.deep.equal(['a', ['b', 'c'], 'd']);
+    })).to.deep.equal([['a', ['b', 'c'], 'd']]);
   });
 });

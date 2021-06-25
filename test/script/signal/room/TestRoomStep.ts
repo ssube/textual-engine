@@ -9,32 +9,30 @@ import { VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 
-describe('room step scripts', () => {
-  describe('room step command', () => {
-    it('should require the script target be an item', async () => {
-      const state = getStubHelper();
+describe('room step signal', () => {
+  it('should require the script target be an item', async () => {
+    const state = getStubHelper();
 
-      const context = createTestContext({
-        command: makeCommand(VERB_WAIT),
-        random: createStubInstance(MathRandomService),
-        room: makeTestRoom('', '', '', [], []),
-        state,
-      });
-
-      await expect(SignalRoomStep.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
-      await expect(SignalRoomStep.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+    const context = createTestContext({
+      command: makeCommand(VERB_WAIT),
+      random: createStubInstance(MathRandomService),
+      room: makeTestRoom('', '', '', [], []),
+      state,
     });
 
-    // this can't really be tested
-    it('should be a noop', async () => {
-      const state = getStubHelper();
+    await expect(SignalRoomStep.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+    await expect(SignalRoomStep.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+  });
 
-      const context = createTestContext({
-        command: makeCommand(VERB_WAIT),
-        state,
-      });
+  // this can't really be tested
+  it('should be a noop', async () => {
+    const state = getStubHelper();
 
-      await expect(SignalRoomStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.equal(undefined);
+    const context = createTestContext({
+      command: makeCommand(VERB_WAIT),
+      state,
     });
+
+    await expect(SignalRoomStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.equal(undefined);
   });
 });

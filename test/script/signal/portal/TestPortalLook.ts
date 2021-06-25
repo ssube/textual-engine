@@ -52,7 +52,7 @@ describe('portal look scripts', () => {
 
     const portal = makeTestPortal('', '', '', '', 'foo');
     const room = makeTestRoom('foo', '', '', [], [], [portal]);
-    (state.find as SinonStub).returns(Promise.resolve([room]));
+    (state.find as SinonStub).resolves([room]);
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),

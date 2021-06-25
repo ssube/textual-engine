@@ -57,10 +57,10 @@ worlds:
             data: !map {}
             name:
               base: verb-actor-wait
-          verbs.world.swing:
+          verbs.world.push:
             data: !map {}
             name:
-              base: verb-actor-hit
+              base: verb-actor-push
         slots: !map {}
         stats: !map {}
       item:
@@ -101,6 +101,7 @@ worlds:
             data: !map {}
             name:
               base: signal-portal-look
+        stats: !map {}
       room:
         meta:
           id: room-none
@@ -199,10 +200,14 @@ worlds:
             use:
               any: |-
                 {{item.meta.name}} has been used by {{actor.meta.name}}!
+          verbs:
+            world:
+              push: push
       words:
         articles: []
         prepositions: []
-        verbs: []
+        verbs:
+          - verbs.world.push
     meta:
       id: sample-alice
       name:

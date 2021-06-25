@@ -21,6 +21,7 @@ import { VerbActorEquip } from '../../script/verb/actor/ActorEquip';
 import { VerbActorHit } from '../../script/verb/actor/ActorHit';
 import { VerbActorLook } from '../../script/verb/actor/ActorLook';
 import { VerbActorMove } from '../../script/verb/actor/ActorMove';
+import { VerbActorPush } from '../../script/verb/actor/ActorPush';
 import { VerbActorTake } from '../../script/verb/actor/ActorTake';
 import { VerbActorUse } from '../../script/verb/actor/ActorUse';
 import { VerbActorWait } from '../../script/verb/actor/ActorWait';
@@ -51,6 +52,7 @@ const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['verb-actor-hit', VerbActorHit],
   ['verb-actor-look', VerbActorLook],
   ['verb-actor-move', VerbActorMove],
+  ['verb-actor-push', VerbActorPush],
   ['verb-actor-take', VerbActorTake],
   ['verb-actor-use', VerbActorUse],
   ['verb-actor-wait', VerbActorWait],

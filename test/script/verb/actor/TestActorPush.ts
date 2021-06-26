@@ -3,10 +3,9 @@ import { createStubInstance, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
-import { VerbActorOpen } from '../../../../src/script/verb/actor/ActorOpen';
 import { VerbActorPush } from '../../../../src/script/verb/actor/ActorPush';
 import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { STAT_CLOSED, VERB_LOOK } from '../../../../src/util/constants';
+import { VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 

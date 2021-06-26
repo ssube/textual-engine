@@ -45,6 +45,7 @@ export interface Portal {
 
   scripts: ScriptMap;
 
+  // TODO: can these be removed in favor of flags?
   stats: NumberMap;
 
   type: PortalType;

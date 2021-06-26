@@ -2,7 +2,7 @@ import { isNil, mustExist, Optional } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { WorldEntity } from '../../../model/entity';
-import { Actor, ACTOR_TYPE, isActor } from '../../../model/entity/Actor';
+import { Actor, isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { head } from '../../../util/collection/array';

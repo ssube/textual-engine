@@ -403,26 +403,32 @@ worlds:
                     max: 5
       portals:
         - base:
-            dest:
-              base: (room-cave|room-cave|room-marsh)
-            flags: !map {}
-            group:
-              key:
-                base: window
-              source:
-                base: west
-              target:
-                base: east
             meta:
               desc:
                 base: ''
               id: window-west
               name:
                 base: window
+            dest:
+              base: (room-cave|room-cave|room-marsh)
+            flags: !map {}
+            group:
+              key:
+                base: window
+              source:
+                base: west
+              target:
+                base: east
             scripts: !map {}
             stats: !map {}
           mods: []
         - base:
+            meta:
+              desc:
+                base: ''
+              id: door-east
+              name:
+                base: door
             dest:
               base: (room-cave|room-cave|room-marsh)
             flags: !map {}
@@ -433,12 +439,6 @@ worlds:
                 base: east
               target:
                 base: west
-            meta:
-              desc:
-                base: ''
-              id: door-east
-              name:
-                base: door
             scripts: !map {}
             stats: !map
               closed:
@@ -446,6 +446,12 @@ worlds:
                 min: 1
           mods: []
         - base:
+            meta:
+              desc:
+                base: ''
+              id: door-west
+              name:
+                base: door
             dest:
               base: (room-cave|room-marsh)
             flags: !map {}
@@ -456,12 +462,6 @@ worlds:
                 base: west
               target:
                 base: east
-            meta:
-              desc:
-                base: ''
-              id: door-west
-              name:
-                base: door
             scripts: !map {}
             stats: !map
               closed:
@@ -469,6 +469,12 @@ worlds:
                 min: 1
           mods: []
         - base:
+            meta:
+              desc:
+                base: ''
+              id: window-east
+              name:
+                base: window
             dest:
               base: (room-dungeon|room-dungeon|room-cave|room-marsh)
             flags: !map {}
@@ -479,16 +485,16 @@ worlds:
                 base: east
               target:
                 base: west
-            meta:
-              desc:
-                base: ''
-              id: window-east
-              name:
-                base: window
             scripts: !map {}
             stats: !map {}
           mods: []
         - base:
+            meta:
+              desc:
+                base: ''
+              id: door-west-forward
+              name:
+                base: locked door
             dest:
               base: (room-cave|room-cave|room-marsh)
             flags: !map {}
@@ -501,12 +507,6 @@ worlds:
                 base: east
             link:
               base: forward
-            meta:
-              desc:
-                base: ''
-              id: door-west-forward
-              name:
-                base: locked door
             scripts: !map {}
             stats: !map
               closed:

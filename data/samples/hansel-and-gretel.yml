@@ -7,6 +7,7 @@ worlds:
             base: ''
           desc:
             base: ''
+        flags: !map {}
         items: []
         scripts: !map
           signal.get:
@@ -70,6 +71,7 @@ worlds:
             base: ''
           desc:
             base: ''
+        flags: !map {}
         scripts: !map
           signal.look:
             data: !map {}
@@ -89,6 +91,7 @@ worlds:
           base: room-none
         link:
           base: both
+        flags: !map {}
         group:
           key:
             base: ''
@@ -101,6 +104,7 @@ worlds:
             data: !map {}
             name:
               base: signal-portal-look
+        stats: !map {}
       room:
         meta:
           id: room-none
@@ -109,6 +113,7 @@ worlds:
           desc:
             base: ''
         actors: []
+        flags: !map {}
         items: []
         portals: []
         scripts: !map
@@ -216,7 +221,59 @@ worlds:
       rooms:
         - id: room-intro
     templates:
-      actors: []
+      actors:
+        - base:
+            meta:
+              id: actor-hansel
+              name:
+                base: Hansel
+              desc:
+                base: a young boy named Hansel; Gretel's brother
+            flags: !map {}
+            items: 
+              - id: item-bread
+            scripts: !map {}
+            slots: !map 
+              pocket-left:
+                base: ''
+              pocket-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+              hunger:
+                max: 10
+                min: 0
+        - base:
+            meta:
+              id: actor-gretel
+              name:
+                base: Gretel
+              desc:
+                base: a young girl named Gretel; Hansel's sister
+            flags: !map {}
+            items:
+              - id: item-note
+            scripts: !map {}
+            slots: !map
+              pocket-left:
+                base: ''
+              pocket-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+              hunger:
+                max: 10
+                min: 0
       items: []
       portals: []
       rooms: []

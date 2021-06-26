@@ -7,41 +7,67 @@ This guide covers the format of a world template and how to make your own.
 - [World Templates](#world-templates)
   - [Contents](#contents)
   - [Concepts](#concepts)
-    - [Starting Actor & Room](#starting-actor--room)
-    - [Rooms & Portals](#rooms--portals)
-  - [Loading Worlds](#loading-worlds)
-  - [Metadata](#metadata)
-  - [Start](#start)
-    - [Start Actors](#start-actors)
-    - [Start Rooms](#start-rooms)
-  - [Templates](#templates)
+    - [Templates and Modifiers](#templates-and-modifiers)
+    - [Instances and Metadata](#instances-and-metadata)
+    - [Rooms and Portals](#rooms-and-portals)
+    - [Starting Actors and Rooms](#starting-actors-and-rooms)
+    - [YAML Format and Types](#yaml-format-and-types)
+  - [Playing and Testing](#playing-and-testing)
+    - [Loading Template Files](#loading-template-files)
+    - [Loading Templates from Github](#loading-templates-from-github)
+    - [Starting New Game from Template](#starting-new-game-from-template)
+  - [How to Implement](#how-to-implement)
+    - [Closed and Locked Doors](#closed-and-locked-doors)
+    - [Introductions, Cutscenes, and Epilogues](#introductions-cutscenes-and-epilogues)
+    - [Spawning New Actors](#spawning-new-actors)
+    - [Removing Existing Actors and Items](#removing-existing-actors-and-items)
+    - [Replace Items on Interaction](#replace-items-on-interaction)
+  - [Template Sections](#template-sections)
+    - [Metadata](#metadata)
+    - [Entity Defaults](#entity-defaults)
+    - [Locale](#locale)
+      - [Locale Bundles](#locale-bundles)
+      - [Locale Words](#locale-words)
+    - [Start Entities](#start-entities)
+      - [Start Actors](#start-actors)
+      - [Start Rooms](#start-rooms)
     - [Template Values](#template-values)
       - [Template Metadata](#template-metadata)
       - [Template Number](#template-number)
       - [Template Reference](#template-reference)
+      - [Template Script](#template-script)
       - [Template String](#template-string)
-    - [Actor Templates](#actor-templates)
-    - [Item Templates](#item-templates)
-    - [Room Templates](#room-templates)
-    - [Portal Templates](#portal-templates)
+    - [Entity Templates](#entity-templates)
+      - [Actor Templates](#actor-templates)
+      - [Item Templates](#item-templates)
+      - [Room Templates](#room-templates)
+      - [Portal Templates](#portal-templates)
 
 ## Concepts
 
-### Starting Actor & Room
+### Templates and Modifiers
 
-When starting a new game, the world state begins empty. A starting actor and room are selected from
-the lists in the world template, then added to the world.
+### Instances and Metadata
 
-### Rooms & Portals
+### Rooms and Portals
 
 Each room has some portals, grouped by wall or direction, with a destination room template.
 
 When the player enters a new room, including the starting room, the game generates destination rooms
 for each group and creates links in both directions, ensuring the player can backtrack.
 
-## Loading Worlds
+### Starting Actors and Rooms
 
-World templates are part of a normal data files, which should not have the `config` and `state` keys:
+When starting a new game, the world state begins empty. A starting actor and room are selected from
+the lists in the world template, then added to the world.
+
+### YAML Format and Types
+
+## Playing and Testing
+
+### Loading Template Files
+
+World templates are part of the normal data file format, and template files should only have the `worlds` key:
 
 ```yaml
 # config: {}
@@ -53,7 +79,41 @@ worlds:
 
 For the typical `YamlParser`, the world should be in a YAML file with UTF-8 encoding.
 
-## Metadata
+### Loading Templates from Github
+
+TODO: explain how to load data files from Gist or MR
+
+### Starting New Game from Template
+
+TODO: explain how to create new world from template
+
+## How to Implement
+
+TODO: better title
+
+### Closed and Locked Doors
+
+TODO: explain how to use closed/locked stats
+
+### Introductions, Cutscenes, and Epilogues
+
+TODO: explain how to use `scene` flag
+
+### Spawning New Actors
+
+TODO: explain hidden rooms and timed/triggered movement
+
+### Removing Existing Actors and Items
+
+TODO: explain scripted removal
+
+### Replace Items on Interaction
+
+TODO: explain how to use replace verb/signal
+
+## Template Sections
+
+### Metadata
 
 Worlds have template metadata, with a literal `id` and template strings for the rest.
 
@@ -62,22 +122,25 @@ Worlds have template metadata, with a literal `id` and template strings for the 
 - `name`: template string, display name
 - `desc`: template string, long description
 
-## Start
+### Entity Defaults
 
-### Start Actors
+### Locale
+
+#### Locale Bundles
+
+#### Locale Words
+
+### Start Entities
+
+#### Start Actors
 
 A list of possible player actor templates. One of these will be selected and created in the start room for each
 player.
 
-### Start Rooms
+#### Start Rooms
 
 A list of possible start room templates. One of these will be selected and created, then other rooms created as the
 starting room's portals are populated. New player actors will be placed in the start room.
-
-## Templates
-
-Each type of entity has a corresponding template, with fields replaced by numeric ranges, template strings,
-and nested references to other templates.
 
 ### Template Values
 
@@ -136,6 +199,10 @@ items:
     chance: 25
 ```
 
+#### Template Script
+
+TODO: explain template script format
+
 #### Template String
 
 Template strings use a series of nested lists, alternating between AND and OR operators, to produce the final
@@ -153,38 +220,91 @@ meta:
     base: (gross|slimy) goblin
 ```
 
-### Actor Templates
+### Entity Templates
+
+Each type of entity has a corresponding template, with fields replaced by numeric ranges, template strings,
+and nested references to other templates.
+
+#### Actor Templates
 
 Actor templates have metadata and scripts, act as a container for items (inventory), and store some numeric stats.
 
-- `meta`: template metadata
-- `items`: list of item template refs
-- `scripts`: a `[string, string]` map of event scripts
-- `stats`: a `[string, number]` map of actor statistics (health, stamina, etc)
+- `meta`
+  - template metadata
+- `flags`
+  - arbitrary data, short tags
+  - a `[string, string]` map
+- `items`
+  - a list of item template refs
+- `scripts`
+  - signal and verb scripts
+  - a `[string, string]` map
+- `slots`
+  - equipment slots
+  - a `[string, string]` map
+- `stats`
+  - actor statistics (health, stamina, etc)
+  - a `[string, number]` map
 
-### Item Templates
+#### Item Templates
 
 Item templates have metadata and scripts, have custom verbs, and store some numeric stats.
 
-- `meta`: template metadata
-- `scripts`: a `[string, script]` map of event scripts with name and data
-- `stats`: a `[string, number]` map of item statistics (health, damage, etc)
+- `meta`
+  - template metadata
+- `flags`
+  - arbitrary data, short tags
+  - a `[string, string]` map
+- `scripts`
+  - event scripts with name and data
+  - a `[string, script]` map
+- `slot`
+  - filter for slots into which this item can be equipped
+  - a string template
+- `stats`
+  - item statistics (health, damage, etc)
+  - a `[string, number]` map
 
-### Room Templates
+#### Room Templates
 
 Room templates have metadata and scripts, have custom verbs, and act as a container for actors, items, and portals.
 
-- `meta`: template metadata
-- `actors`: list of actor template refs
-- `items`: list of item template refs
-- `portals`: list of portal templates
-- `scripts`: a `[string, script]` map of event scripts with name and data
+- `meta`
+  - template metadata
+- `actors`
+  - list of actor template refs
+- `flags`
+  - arbitrary data, short tags
+  - a `[string, string]` map
+- `items`
+  - list of item template refs
+- `portals`
+  - list of portal template refs
+- `scripts`
+  - event scripts with name and data
+  - a `[string, script]` map
 
-### Portal Templates
+#### Portal Templates
 
 Rooms are linked together through portals.
 
 Portals have source and target groups, and the engine attempts to link them by name, within the appropriate groups.
+
+- `meta`
+  - template metadata
+- `dest`
+  - destination room ID
+  - a template string
+  - portals may be linked to existing rooms, which uses the `group` rather than `dest`
+- `flags`
+  - arbitrary data, short tags
+  - a `[string, string]` map
+- `group`
+  - TODO: explain portal groups
+- `scripts`
+  - event scripts with name and data
+  - a `[string, script]` map
+- `stats`
 
 Two portals in the same room and source group will be linked to the same destination room, and portals of the same
 names, within the designated target group. If a matching portal cannot be found, one may be added to the room.

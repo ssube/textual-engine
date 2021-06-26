@@ -12,14 +12,17 @@ This guide covers the format of a world template and how to make your own.
     - [Rooms and Portals](#rooms-and-portals)
     - [Starting Actors and Rooms](#starting-actors-and-rooms)
     - [YAML Format and Types](#yaml-format-and-types)
+      - [Custom Types](#custom-types)
+      - [Using JSON](#using-json)
+      - [Other Parsers](#other-parsers)
   - [Playing and Testing](#playing-and-testing)
-    - [Loading Template Files](#loading-template-files)
+    - [Loading Templates from Local Files](#loading-templates-from-local-files)
     - [Loading Templates from Github](#loading-templates-from-github)
     - [Starting New Game from Template](#starting-new-game-from-template)
   - [How to Implement](#how-to-implement)
     - [Closed and Locked Doors](#closed-and-locked-doors)
+    - [Delaying an Actor's Appearance](#delaying-an-actors-appearance)
     - [Introductions, Cutscenes, and Epilogues](#introductions-cutscenes-and-epilogues)
-    - [Spawning New Actors](#spawning-new-actors)
     - [Removing Existing Actors and Items](#removing-existing-actors-and-items)
     - [Replace Items on Interaction](#replace-items-on-interaction)
   - [Template Sections](#template-sections)
@@ -63,9 +66,90 @@ the lists in the world template, then added to the world.
 
 ### YAML Format and Types
 
+YAML is a human-readable config format with support for comments and sensitive to indentation. The
+[Red Hat Ansible documentation](https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html) has
+a good description of the format, and [the CircleCI documentation](https://circleci.com/blog/what-is-yaml-a-beginner-s-guide/)
+has some helpful illustrated examples.
+
+Every `textual-engine` data file starts with a dictionary:
+
+```yaml
+config: {}  # optional config object
+state: []   # optional save state
+worlds: []  # list of world templates
+```
+
+Please see [the YAML 1.2 specification](https://yaml.org/spec/1.2/spec.html) for the complete syntax.
+
+The [js-yaml library](https://github.com/nodeca/js-yaml) is used to parse YAML and offers [an online demo and validator](https://nodeca.github.io/js-yaml/). `js-yaml` supports the YAML 1.2 specification with custom types.
+
+#### Custom Types
+
+The `textual-engine` YAML schema adds a few custom types:
+
+- `!env`
+  - loads an environment variable by name
+  - for configuring the server
+- `!map`
+  - loads a JS `Map` from a YAML dictionary
+- `!stream`
+  - loads a JS `process` output stream
+  - for configuring the log library
+
+For example:
+
+```yaml
+config:
+  logger:
+    level: !env TEXTUAL_LOG_LEVEL
+    name: textual-engine
+    streams:
+      - level: error
+        stream: !stream stderr
+
+worlds:
+  - # some fields omitted
+    templates:
+      actors:
+        - base:
+            flags: !map
+              key1: value1
+              key2: value2
+```
+
+#### Using JSON
+
+If you prefer using JSON over YAML, or want to use tooling that only supports JSON, most of the data file format is
+supported with the notable exception of custom types.
+
+The YAML syntax is a superset of JSON, and most of the value types can be written in JSON, including dictionaries
+and lists. JSON does not have syntax for custom types and so does not support maps, which prevents JSON worlds from
+using flags or stats, unless those fields are written with inline YAML:
+
+```yaml
+"dict": {
+  "list": [
+    1,
+    2,
+    3
+  ],
+  "map": !map {
+    "key1": "value1",
+    "key2": "value2"
+  }
+}
+```
+
+This may be changed in a future release to support strict JSON.
+
+#### Other Parsers
+
+The engine supports pluggable parsers for other file format, including binary formats. Only `YAML` and limited `JSON`
+support are included.
+
 ## Playing and Testing
 
-### Loading Template Files
+### Loading Templates from Local Files
 
 World templates are part of the normal data file format, and template files should only have the `worlds` key:
 
@@ -95,13 +179,13 @@ TODO: better title
 
 TODO: explain how to use closed/locked stats
 
+### Delaying an Actor's Appearance
+
+TODO: explain hidden rooms and timed/triggered movement
+
 ### Introductions, Cutscenes, and Epilogues
 
 TODO: explain how to use `scene` flag
-
-### Spawning New Actors
-
-TODO: explain hidden rooms and timed/triggered movement
 
 ### Removing Existing Actors and Items
 
@@ -309,35 +393,87 @@ Portals have source and target groups, and the engine attempts to link them by n
 Two portals in the same room and source group will be linked to the same destination room, and portals of the same
 names, within the designated target group. If a matching portal cannot be found, one may be added to the room.
 
+<details>
+
+<summary>
 For example, with two rooms `room-0` and `room-1`, where each room has two portals, named `door` and `window`:
+</summary>
 
 ```yaml
+portals:
+  - base:
+      meta:
+        id:
+          base: portal-door-north
+      dest:
+        base: room-north
+      group:
+        key:
+          base: door
+        source:
+          base: north
+        target:
+          base: south
+  - base:
+      meta:
+        id:
+          base: portal-window-north
+      dest:
+        base: room-north
+      group:
+        key:
+          base: window
+        source:
+          base: north
+        target:
+          base: south
+  - base:
+      meta:
+        id:
+          base: portal-door-south
+      dest:
+        base: room-south
+      group:
+        key:
+          base: door
+        source:
+          base: south
+        target:
+          base: north
+  - base:
+      meta:
+        id:
+          base: portal-window-south
+      dest:
+        base: room-south
+      group:
+        key:
+          base: window
+        source:
+          base: south
+        target:
+          base: north
+
 rooms:
-  - meta:
-      id: room-0
-    portals:
-      - name: door
-        dest: room-1
-        sourceGroup: north
-        targetGroup: south
-      - name: window
-        dest: room-1
-        sourceGroup: north
-        targetGroup: south
-  - meta:
-      id: room-1
-    portals:
-      - name: door
-        dest: room-0
-        sourceGroup: south
-        targetGroup: north
-      - name: window
-        dest: room-0
-        sourceGroup: south
-        targetGroup: north
+  - base:
+      meta:
+        id:
+          base: room-south
+      portals:
+        - id: portal-door-north
+        - id: portal-window-north
+  - base:
+      meta:
+        id:
+          base: room-north
+      portals:
+        - id: portal-door-south
+        - id: portal-window-south
 ```
 
 Note the `dest` changes to the other room, and the `sourceGroup` and `targetGroup` are reversed.
+
+</details>
 
 This will produce a pair of rooms with two bidirectional links, like:
 

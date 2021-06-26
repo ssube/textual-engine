@@ -10,6 +10,7 @@ import { SignalActorLook } from '../../script/signal/actor/ActorLook';
 import { SignalActorStep } from '../../script/signal/actor/ActorStep';
 import { SignalActorUse } from '../../script/signal/actor/ActorUse';
 import { SignalItemLook } from '../../script/signal/item/ItemLook';
+import { SignalItemReplace } from '../../script/signal/item/ItemReplace';
 import { SignalItemStep } from '../../script/signal/item/ItemStep';
 import { SignalItemUse } from '../../script/signal/item/ItemUse';
 import { SignalPortalLook } from '../../script/signal/portal/PortalLook';
@@ -23,6 +24,7 @@ import { VerbActorLook } from '../../script/verb/actor/ActorLook';
 import { VerbActorMove } from '../../script/verb/actor/ActorMove';
 import { VerbActorOpen } from '../../script/verb/actor/ActorOpen';
 import { VerbActorPush } from '../../script/verb/actor/ActorPush';
+import { VerbActorReplace } from '../../script/verb/actor/ActorReplace';
 import { VerbActorTake } from '../../script/verb/actor/ActorTake';
 import { VerbActorUse } from '../../script/verb/actor/ActorUse';
 import { VerbActorWait } from '../../script/verb/actor/ActorWait';
@@ -41,6 +43,7 @@ const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['signal-actor-step', SignalActorStep],
   ['signal-actor-use', SignalActorUse],
   ['signal-item-look', SignalItemLook],
+  ['signal-item-replace', SignalItemReplace],
   ['signal-item-step', SignalItemStep],
   ['signal-item-use', SignalItemUse],
   ['signal-portal-look', SignalPortalLook],
@@ -55,6 +58,7 @@ const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['verb-actor-move', VerbActorMove],
   ['verb-actor-open', VerbActorOpen],
   ['verb-actor-push', VerbActorPush],
+  ['verb-actor-replace', VerbActorReplace],
   ['verb-actor-take', VerbActorTake],
   ['verb-actor-use', VerbActorUse],
   ['verb-actor-wait', VerbActorWait],

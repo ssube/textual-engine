@@ -1,14 +1,16 @@
 /* eslint-disable max-lines */
-import { doesExist, isNil, mustExist, mustFind } from '@apextoaster/js-utils';
+import { doesExist, InvalidArgumentError, isNil, mustExist, mustFind } from '@apextoaster/js-utils';
 import { Container, Inject, Logger } from 'noicejs';
 
 import { StateService, StepResult } from '.';
 import { NotInitializedError } from '../../error/NotInitializedError';
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Command } from '../../model/Command';
-import { EntityForType, WorldEntityType } from '../../model/entity';
+import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
+import { ITEM_TYPE } from '../../model/entity/Item';
+import { PORTAL_TYPE } from '../../model/entity/Portal';
+import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
 import { WorldState } from '../../model/world/State';
 import { WorldTemplate } from '../../model/world/Template';
@@ -571,11 +573,13 @@ export class LocalStateService implements StateService {
       data: new Map(),
       random: this.random,
       state: {
+        create: (id, type, target) => this.stepCreate(id, type, target),
         enter: (target) => this.stepEnter(target),
         find: (search) => this.stepFind(search),
         move: (target, context) => this.stepMove(target, context),
         quit: () => this.doQuit(),
         show: (msg, context, volume, source) => this.stepShow(msg, context, volume, source),
+        update: (entity) => this.stepUpdate(entity),
       },
       transfer: mustExist(this.transfer),
     };
@@ -674,6 +678,43 @@ export class LocalStateService implements StateService {
   /**
    * Handler for a room change from the state helper.
    */
+  public async stepCreate<TType extends WorldEntityType>(id: string, type: TType, target: StateSource): Promise<EntityForType<TType>> {
+    const generator = mustExist(this.generator);
+    const world = generator.getWorld();
+
+    switch (type) {
+      case ACTOR_TYPE: {
+        const template = findByBaseId(world.templates.actors, id);
+        const actor = await generator.createActor(template);
+
+        target.room.actors.push(actor);
+        await this.stepEnter({
+          actor,
+          room: target.room,
+        });
+
+        return actor as EntityForType<TType>; // not a cast, but the compiler doesn't know
+      }
+      case ITEM_TYPE: {
+        const template = findByBaseId(world.templates.items, id);
+        const item = await generator.createItem(template);
+
+        if (doesExist(target.actor)) {
+          target.actor.items.push(item);
+          // TODO: fire get signal
+        } else {
+          target.room.items.push(item);
+        }
+
+        return item as EntityForType<TType>;
+      }
+      case PORTAL_TYPE:
+      case ROOM_TYPE:
+      default:
+        throw new InvalidArgumentError('only actors and items can be created');
+    }
+  }
+
   public async stepEnter(target: StateSource): Promise<void> {
     const generator = mustExist(this.generator);
     const state = mustExist(this.state);
@@ -721,6 +762,11 @@ export class LocalStateService implements StateService {
       volume,
     });
   }
+
+  public async stepUpdate(entity: WorldEntity): Promise<void> {
+    // noop for local state
+  }
+
   // #endregion state access callbacks
 
   /**

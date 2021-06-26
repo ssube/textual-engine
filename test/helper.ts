@@ -58,11 +58,13 @@ export async function getTestContainer(...modules: Array<Module>): Promise<Conta
 
 export function getStubHelper(): StateHelper {
   return {
+    create: stub(),
     enter: stub(),
     find: stub(),
     move: stub(),
     quit: stub(),
     show: stub(),
+    update: stub(),
   };
 }
 

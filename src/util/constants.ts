@@ -61,6 +61,7 @@ export const SIGNAL_ENTER = 'signal.enter';
 export const SIGNAL_GET = 'signal.get';
 export const SIGNAL_HIT = 'signal.hit';
 export const SIGNAL_LOOK = 'signal.look';
+export const SIGNAL_REPLACE = 'signal.replace';
 export const SIGNAL_STEP = 'signal.step';
 export const SIGNAL_USE = 'signal.use';
 

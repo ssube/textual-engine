@@ -20,8 +20,6 @@ services:
   loaders:
     - name: file-loader
       kind: node-file-loader
-    - name: url-loader
-      kind: node-fetch-loader
   renders: []
   states:
     - name: local-state

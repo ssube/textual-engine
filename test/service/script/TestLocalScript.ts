@@ -61,6 +61,26 @@ describe('local script service', () => {
     expect(scriptSpy).to.have.callCount(0);
   });
 
+  it('should gracefully handle unknown scripts', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const target: Item = makeTestItem('', '', '');
+    target.scripts.set('verbs.foo', {
+      data: new Map(),
+      name: 'foo',
+    });
+
+    const scriptSpy = spy();
+    const script = await container.create(LocalScriptService, {}, new Map([
+      ['bar', scriptSpy],
+    ]));
+    await script.invoke(target, 'verbs.foo', createTestContext({
+      item: target,
+    }));
+
+    expect(scriptSpy).to.have.callCount(0);
+  });
+
   it('should broadcast events to matching entities', async () => {
     const container = await getTestContainer(new CoreModule());
 
@@ -74,7 +94,7 @@ describe('local script service', () => {
       makeTestItem('', '', ''),
       makeTestItem('', '', ''),
     ];
-    (state.find as SinonStub).returns(Promise.resolve(results));
+    (state.find as SinonStub).resolves(results);
 
     await script.broadcast(target, 'verbs.bar', createTestContext({
       script,
@@ -82,5 +102,26 @@ describe('local script service', () => {
     }));
 
     expect(invokeStub).to.have.callCount(results.length);
+  });
+
+  it('should contain errors thrown by invoked scripts', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const target: Item = makeTestItem('', '', '');
+    target.scripts.set('verbs.foo', {
+      data: new Map(),
+      name: 'foo',
+    });
+
+    const scriptStub = stub().throws(new Error('script broke'));
+    const script = await container.create(LocalScriptService, {}, new Map([
+      ['foo', scriptStub],
+    ]));
+
+    await script.invoke(target, 'verbs.foo', createTestContext({
+      item: target,
+    }));
+
+    expect(scriptStub).to.have.callCount(1);
   });
 });

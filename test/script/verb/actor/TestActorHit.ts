@@ -35,7 +35,7 @@ describe('actor hit verb', () => {
     const state = getStubHelper();
 
     const target: Actor = makeTestActor('enemy', '', '');
-    (state.find as SinonStub).returns(Promise.resolve([target]));
+    (state.find as SinonStub).resolves([target]);
 
     const context = createTestContext({
       command: makeCommand(VERB_HIT, target.meta.id),
@@ -58,7 +58,7 @@ describe('actor hit verb', () => {
   it('should show an error if the target is not found', async () => {
     const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
-    (state.find as SinonStub).returns(Promise.resolve([]));
+    (state.find as SinonStub).resolves([]);
 
     const context = createTestContext({
       command: makeCommand(VERB_HIT, 'foo'),
@@ -78,7 +78,7 @@ describe('actor hit verb', () => {
     const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
     const actor: Actor = makeTestActor('foo', '', '', makeTestItem('', '', ''));
-    (state.find as SinonStub).returns(Promise.resolve([actor]));
+    (state.find as SinonStub).resolves([actor]);
 
     const context = createTestContext({
       command: makeCommand(VERB_HIT, actor.meta.id),
@@ -97,9 +97,9 @@ describe('actor hit verb', () => {
   it('should show an error if the actor does not have any items', async () => {
     const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
-    (state.find as SinonStub).returns(Promise.resolve([
+    (state.find as SinonStub).resolves([
       makeTestActor('', '', ''),
-    ]));
+    ]);
 
     const context = createTestContext({
       command: makeCommand(VERB_HIT, ''),

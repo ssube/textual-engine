@@ -21,9 +21,9 @@ describe('actor take verb', () => {
 
   it('should show an error if the target is not an item', async () => {
     const state = getStubHelper();
-    (state.find as SinonStub).returns(Promise.resolve([
+    (state.find as SinonStub).resolves([
       makeTestActor('', '', ''),
-    ]));
+    ]);
 
     const context = createTestContext({
       command: makeCommand(VERB_TAKE, 'foo'),
@@ -42,7 +42,7 @@ describe('actor take verb', () => {
     const transfer = createTestTransfer();
 
     const item = makeTestItem('foo', '', '');
-    (state.find as SinonStub).returns(Promise.resolve([item]));
+    (state.find as SinonStub).resolves([item]);
 
     const room = makeTestRoom('', '', '', [], [item]);
     const context = createTestContext({

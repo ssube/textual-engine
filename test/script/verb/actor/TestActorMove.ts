@@ -26,7 +26,7 @@ describe('actor move verb', () => {
   it('should target portals by name and move the actor', async () => {
     const state = getStubHelper();
     const target = makeTestRoom('', '', '', [], []);
-    (state.find as SinonStub).returns(Promise.resolve([target]));
+    (state.find as SinonStub).resolves([target]);
 
     const actor = makeTestActor('', '', '');
     const room = makeTestRoom('', '', '', [actor], []);
@@ -55,7 +55,7 @@ describe('actor move verb', () => {
   it('should target portals by source group', async () => {
     const state = getStubHelper();
     const target = makeTestRoom('', '', '', [], []);
-    (state.find as SinonStub).returns(Promise.resolve([target]));
+    (state.find as SinonStub).resolves([target]);
 
     const actor = makeTestActor('', '', '');
     const room = makeTestRoom('', '', '', [actor], []);
@@ -83,7 +83,7 @@ describe('actor move verb', () => {
   it('should target portals by source group and name', async () => {
     const state = getStubHelper();
     const target = makeTestRoom('', '', '', [], []);
-    (state.find as SinonStub).returns(Promise.resolve([target]));
+    (state.find as SinonStub).resolves([target]);
 
     const actor = makeTestActor('', '', '');
     const room = makeTestRoom('', '', '', [actor], []);
@@ -111,7 +111,7 @@ describe('actor move verb', () => {
   it('should show a message if the portal cannot be found', async () => {
     const state = getStubHelper();
     const target = makeTestRoom('', '', '', [], []);
-    (state.find as SinonStub).returns(Promise.resolve([target]));
+    (state.find as SinonStub).resolves([target]);
 
     const actor = makeTestActor('', '', '');
     const room = makeTestRoom('', '', '', [actor], []);
@@ -129,7 +129,7 @@ describe('actor move verb', () => {
 
   it('should throw an error if the target room cannot be found', async () => {
     const state = getStubHelper();
-    (state.find as SinonStub).returns(Promise.resolve([]));
+    (state.find as SinonStub).resolves([]);
 
     const actor = makeTestActor('', '', '');
     const room = makeTestRoom('', '', '', [actor], []);
@@ -149,7 +149,7 @@ describe('actor move verb', () => {
   it('should look at the destination room when the moving actor is a player', async () => {
     const state = getStubHelper();
     const target = makeTestRoom('', '', '', [], []);
-    (state.find as SinonStub).returns(Promise.resolve([target]));
+    (state.find as SinonStub).resolves([target]);
 
     const actor = makeTestActor('', '', '');
     actor.source = ActorSource.PLAYER;

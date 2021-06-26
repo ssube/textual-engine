@@ -1,29 +1,19 @@
-import { doesExist, mustExist } from '@apextoaster/js-utils';
-import { createSchema } from '@apextoaster/js-yaml-schema';
-import { DEFAULT_SCHEMA, load } from 'js-yaml';
+import { mustExist } from '@apextoaster/js-utils';
+import { load } from 'js-yaml';
 
 import { ConfigError } from '../../error/ConfigError';
 import { CONFIG_SCHEMA, ConfigFile } from '../../model/file/Config';
+import { makeParserSchema } from '../parser';
 import { makeSchema } from '../schema';
 import { splitPath } from '../string';
 
+/* istanbul ignore else */
 export async function loadConfig(url: string, doc = document): Promise<ConfigFile> {
   const { path } = splitPath(url);
   const elem = doc.getElementById(path);
   const text = mustExist(elem).textContent;
 
-  const schema = createSchema({
-    include: {
-      exists: (it) => doesExist(doc.getElementById(it)),
-      join: (...it) => it.join('-'),
-      read: (it) => {
-        const readElem = mustExist(doc.getElementById(it));
-        return mustExist(readElem.textContent);
-      },
-      resolve: (it) => it,
-      schema: DEFAULT_SCHEMA,
-    },
-  });
+  const schema = makeParserSchema();
 
   try {
     const data = load(mustExist(text), {

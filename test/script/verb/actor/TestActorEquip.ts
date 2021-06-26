@@ -28,9 +28,9 @@ describe('actor equip verb', () => {
     actor.slots.set(slot, '');
 
     const state = getStubHelper();
-    (state.find as SinonStub).returns(Promise.resolve([
+    (state.find as SinonStub).resolves([
       item,
-    ]));
+    ]);
 
     const context = createTestContext({
       command: makeCommand(VERB_EQUIP, item.meta.id),
@@ -58,9 +58,9 @@ describe('actor equip verb', () => {
     item.slot = slot;
     const actor = makeTestActor('', '', '', item);
 
-    (state.find as SinonStub).returns(Promise.resolve([
+    (state.find as SinonStub).resolves([
       item,
-    ]));
+    ]);
 
     await VerbActorEquip.call(actor, context);
 
@@ -69,7 +69,7 @@ describe('actor equip verb', () => {
 
   it('should show a message when the item does not exist', async () => {
     const state = getStubHelper();
-    (state.find as SinonStub).returns(Promise.resolve([]));
+    (state.find as SinonStub).resolves([]);
 
     const context = createTestContext({
       command: makeCommand(VERB_EQUIP, 'foo'),

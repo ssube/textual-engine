@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { mustExist } from '@apextoaster/js-utils';
+import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { match, stub } from 'sinon';
@@ -832,6 +832,118 @@ describe('local state service', () => {
     xit('should only step entities once even when they move');
   });
 
+  describe('step create helper', () => {
+    it('should create actors and add them to the target room', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const actor = makeTestActor('', '', '');
+      const room = makeTestRoom('', '', '', [actor]);
+
+      await state.stepCreate('bar', ACTOR_TYPE, {
+        actor,
+        room,
+      });
+
+      expect(room.actors).to.have.lengthOf(2);
+    });
+
+    it('should create items and add them to the target room', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const actor = makeTestActor('', '', '');
+      const room = makeTestRoom('', '', '', [actor]);
+
+      await state.stepCreate('bin', ITEM_TYPE, {
+        room,
+      });
+
+      expect(actor.items, 'actor items').to.have.lengthOf(0);
+      expect(room.items, 'room items').to.have.lengthOf(1);
+    });
+
+    it('should create items and add them to the target actor', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const actor = makeTestActor('', '', '');
+      const room = makeTestRoom('', '', '', [actor]);
+
+      await state.stepCreate('bin', ITEM_TYPE, {
+        actor,
+        room,
+      });
+
+      expect(actor.items, 'actor items').to.have.lengthOf(1);
+      expect(room.items, 'room items').to.have.lengthOf(0);
+    });
+
+    it('should only create actors and items', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const actor = makeTestActor('', '', '');
+      const room = makeTestRoom('', '', '', [actor]);
+
+      await expect(state.stepCreate('door', PORTAL_TYPE, {
+        room,
+      })).to.eventually.be.rejectedWith(InvalidArgumentError);
+
+      await expect(state.stepCreate('foo', ROOM_TYPE, {
+        room,
+      })).to.eventually.be.rejectedWith(InvalidArgumentError);
+    });
+  });
+
   describe('step enter helper', () => {
     xit('should populate portals with new rooms');
     xit('should notify the actor of their new room');
@@ -977,6 +1089,24 @@ describe('local state service', () => {
       const output = await pending;
       expect(output.line).to.equal('foo');
       expect(output.volume).to.equal(ShowVolume.SELF);
+    });
+  });
+
+  describe('step update helper', () => {
+    it('should be a noop for local state', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const entity = makeTestActor('', '', '');
+      return expect(state.stepUpdate(entity)).to.eventually.equal(undefined);
     });
   });
 });

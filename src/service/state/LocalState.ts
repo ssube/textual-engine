@@ -45,7 +45,6 @@ import {
   META_VERBS,
   META_WORLDS,
   SIGNAL_STEP,
-  SPLIT_HEAD_TAIL,
   VERB_PREFIX,
 } from '../../util/constants';
 import { debugState, graphState } from '../../util/entity/debug';
@@ -763,7 +762,7 @@ export class LocalStateService implements StateService {
     });
   }
 
-  public async stepUpdate(entity: WorldEntity): Promise<void> {
+  public async stepUpdate(_entity: WorldEntity): Promise<void> {
     // noop for local state
   }
 

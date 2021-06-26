@@ -49,7 +49,7 @@ export class LineRender implements RenderService {
 
   protected queuePrompt: ClearResult;
 
-  constructor(options: InjectedOptions, readline = createInterface) {
+  constructor(options: InjectedOptions, /* istanbul ignore next */ readline = createInterface) {
     const config = mustExist(options.config);
     const schema = makeSchema(LINE_RENDER_SCHEMA);
     if (!schema(config)) {

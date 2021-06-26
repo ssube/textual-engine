@@ -15,7 +15,7 @@ This guide covers the format of a world template and how to make your own.
     - [Start Actors](#start-actors)
     - [Start Rooms](#start-rooms)
   - [Templates](#templates)
-    - [Template Types](#template-types)
+    - [Template Values](#template-values)
       - [Template Metadata](#template-metadata)
       - [Template Number](#template-number)
       - [Template Reference](#template-reference)
@@ -23,7 +23,7 @@ This guide covers the format of a world template and how to make your own.
     - [Actor Templates](#actor-templates)
     - [Item Templates](#item-templates)
     - [Room Templates](#room-templates)
-      - [Room Portal Templates](#room-portal-templates)
+    - [Portal Templates](#portal-templates)
 
 ## Concepts
 
@@ -79,7 +79,7 @@ starting room's portals are populated. New player actors will be placed in the s
 Each type of entity has a corresponding template, with fields replaced by numeric ranges, template strings,
 and nested references to other templates.
 
-### Template Types
+### Template Values
 
 Template field types correspond to the entity field's type. That is, a string like `name` or `slot` will be
 created from a template string, and a number like `stats` from a template number.
@@ -180,7 +180,7 @@ Room templates have metadata and scripts, have custom verbs, and act as a contai
 - `portals`: list of portal templates
 - `scripts`: a `[string, script]` map of event scripts with name and data
 
-#### Room Portal Templates
+### Portal Templates
 
 Rooms are linked together through portals.
 

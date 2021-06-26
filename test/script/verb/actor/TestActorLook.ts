@@ -66,7 +66,7 @@ describe('actor look verb', () => {
 
       const actor = makeTestActor('bar', '', '');
       const room = makeTestRoom('foo', '', '', [actor], []);
-      (state.find as SinonStub).returns(Promise.resolve([actor]));
+      (state.find as SinonStub).resolves([actor]);
 
       const context = createTestContext({
         command: makeCommand(VERB_LOOK, actor.meta.id),
@@ -84,7 +84,7 @@ describe('actor look verb', () => {
     it('should warn when the target does not exist', async () => {
       const script = createStubInstance(LocalScriptService);
       const state = getStubHelper();
-      (state.find as SinonStub).returns(Promise.resolve([]));
+      (state.find as SinonStub).resolves([]);
 
       const actor = makeTestActor('bar', '', '');
       const room = makeTestRoom('foo', '', '', [actor], []);

@@ -40,4 +40,20 @@ describe('item replace signal', () => {
       .and.been.calledWith('foo', ACTOR_TYPE)
       .and.been.calledWith('bar', ITEM_TYPE);
   });
+
+  it('should show a message when the replace flag is not set', async () => {
+    const state = getStubHelper();
+    const context = createTestContext({
+      actor: makeTestActor('', '', ''),
+      command: makeCommand(VERB_WAIT),
+      random: createStubInstance(MathRandomService),
+      room: makeTestRoom('', '', '', [], []),
+      state,
+    });
+
+    const item = makeTestItem('', '', '');
+    await SignalItemReplace.call(item, context);
+
+    expect(state.show).to.have.been.calledWith(context.source, 'item.replace.none');
+  });
 });

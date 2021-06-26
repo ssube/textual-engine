@@ -22,9 +22,9 @@ describe('actor use verb', () => {
 
   it('should show an error if the target is not an item', async () => {
     const stateHelper = getStubHelper();
-    (stateHelper.find as SinonStub).returns(Promise.resolve([
+    (stateHelper.find as SinonStub).resolves([
       makeTestActor('', '', ''),
-    ]));
+    ]);
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo'),
@@ -43,7 +43,7 @@ describe('actor use verb', () => {
     const state = getStubHelper();
 
     const item = makeTestItem('foo', '', '');
-    (state.find as SinonStub).returns(Promise.resolve([item]));
+    (state.find as SinonStub).resolves([item]);
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo'),

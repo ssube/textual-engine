@@ -8,7 +8,7 @@ import { BaseLoader } from '../BaseLoader';
 export class NodeFileLoader extends BaseLoader implements LoaderService {
   protected fs: typeof promises;
 
-  constructor(options: InjectedOptions, fs = promises) {
+  constructor(options: InjectedOptions, /* istanbul ignore next */ fs = promises) {
     super(options, ['file']);
 
     this.fs = fs;

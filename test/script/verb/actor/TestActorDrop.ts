@@ -30,7 +30,7 @@ describe('actor drop verb', () => {
       makeTestItem('foo-2', '', ''),
       makeTestItem('bar-1', '', ''),
     ];
-    (state.find as SinonStub).returns(Promise.resolve(items));
+    (state.find as SinonStub).resolves(items);
 
     const actor = makeTestActor('', '', '', items[0]);
     const context = createTestContext({
@@ -57,7 +57,7 @@ describe('actor drop verb', () => {
       makeTestItem('foo-2', 'foo bin', ''),
       makeTestItem('bar-1', 'bar bin', ''),
     ];
-    (state.find as SinonStub).returns(Promise.resolve(items));
+    (state.find as SinonStub).resolves(items);
 
     const actor = makeTestActor('', '', '', items[0]);
     const context = createTestContext({
@@ -87,7 +87,7 @@ describe('actor drop verb', () => {
       makeTestItem('foo-2', 'foo bin', ''),
       makeTestItem('bar-1', 'bar bin', ''),
     ];
-    (state.find as SinonStub).returns(Promise.resolve(items));
+    (state.find as SinonStub).resolves(items);
 
     const actor = makeTestActor('', '', '', items[0]);
     const context = createTestContext({
@@ -109,7 +109,7 @@ describe('actor drop verb', () => {
 
   it('should show an error if the target was not found', async () => {
     const state = getStubHelper();
-    (state.find as SinonStub).returns(Promise.resolve([]));
+    (state.find as SinonStub).resolves([]);
 
     const transfer = createTestTransfer();
 

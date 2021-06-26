@@ -8,10 +8,10 @@ This guide covers the format of a world template and how to make your own.
   - [Contents](#contents)
   - [Concepts](#concepts)
     - [Templates and Modifiers](#templates-and-modifiers)
-    - [Instances and Metadata](#instances-and-metadata)
+    - [Entities and Metadata](#entities-and-metadata)
       - [Template Metadata](#template-metadata)
       - [Modifier Metadata](#modifier-metadata)
-      - [Instance Metadata](#instance-metadata)
+      - [Entity Metadata](#entity-metadata)
     - [Rooms and Portals](#rooms-and-portals)
     - [Starting Actors and Rooms](#starting-actors-and-rooms)
     - [YAML Format and Types](#yaml-format-and-types)
@@ -54,14 +54,16 @@ This guide covers the format of a world template and how to make your own.
 
 ### Templates and Modifiers
 
-Every entity is created from a template. Template values may not have any variation, and always generate the same
-entity, or a range of values for more procedural worlds.
+Every entity is created from a template. Template values may not have any variation and always generate the same
+entity, or have a range of values for more procedural worlds.
 
 Within an entity template, string fields are replaced with [template strings](#template-string) and number fields are
-replaced with [template numbers](#template-numbers).
+replaced with [template numbers](#template-numbers). These are rendered back into a string or number value when an
+entity is created from the template.
 
-Each template has a `base` entity and list of modifiers, often adjectives like sharp or rusty. Modifiers each have
-a chance of appearing, and can exclude one another, to prevent mutually exclusive modifiers from appearing together.
+Each template has a set of `base` values and list of modifiers, often adjectives like sharp or rusty. Modifiers each
+have a chance of appearing, and can exclude one another, to prevent mutually exclusive modifiers from appearing
+together.
 
 Between the defaults and modifiers, templates have a few layers:
 
@@ -70,7 +72,7 @@ Between the defaults and modifiers, templates have a few layers:
 - select template `mods`
 
 When creating an entity from the template, the world defaults are rendered first, then passed to the `base` template.
-Some of the `mods` are randomly selected, then applied in order.
+Some of the `mods` are randomly selected, then rendered in order, with the result of the previous.
 
 For example, when creating an actor:
 
@@ -84,21 +86,21 @@ Each string will be rendered in order:
 - `bat` (does not use the `{{base}}` token and so replaces the string entirely)
 - `vampire bat`
 
-### Instances and Metadata
+### Entities and Metadata
 
-Entities are created from templates, and retain a copy of the template ID. While most fields in an entity are the
-template equivalent of the entity value, such as a template string in place of a normal string, the metadata ID is a
-literal string and not a template. Modifier metadata omits the ID entirely.
+Entities are created from templates, and retain a copy of the template ID. While most strings in a template are
+template strings, the ID is a literal string. It is not rendered, but will have a sequential numeric suffix appended,
+such as `actor-bat-0` and `actor-bat-1`. Modifier metadata omits the ID entirely.
 
-| Field  | Template        | Modifier        | Instance       |
+| Field  | Template        | Modifier        | Entity         |
 | ------ | --------------- | --------------- | -------------- |
 | `desc` | template string | template string | literal string |
 | `id`   | literal string  | not present     | literal string |
 | `name` | template string | template string | literal string |
 
-#### Template Metadata
-
 For example:
+
+#### Template Metadata
 
 ```yaml
 meta:
@@ -119,7 +121,7 @@ meta:
     base: Vampire {{base}}
 ```
 
-#### Instance Metadata
+#### Entity Metadata
 
 ```yaml
 meta:
@@ -137,8 +139,13 @@ for each group and creates links in both directions, ensuring the player can bac
 
 ### Starting Actors and Rooms
 
-When starting a new game, the world state begins empty. A starting actor and room are selected from
-the lists in the world template, then added to the world.
+When starting a new game, the world begins empty. One of the starting rooms is selected and created, then populated
+with actors, items, and portals. Additional rooms are added to those portals, until the world depth has been reached.
+
+When a new player joins, one of the starting actors is selected and created, unless an actor already exists with that
+player's ID. In single-player, the player always joins the new world after `create` or `load` commands.
+
+If there is only one starting room or actor, it will always be used. At least one room or actor must be present.
 
 ### YAML Format and Types
 
@@ -311,7 +318,7 @@ TODO: explain how to use `scene` flag
 
 ### Removing Existing Actors and Items
 
-TODO: explain scripted removal
+TODO: explain removing entities from script
 
 ### Replace Items on Interaction
 

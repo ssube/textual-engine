@@ -9,6 +9,9 @@ This guide covers the format of a world template and how to make your own.
   - [Concepts](#concepts)
     - [Templates and Modifiers](#templates-and-modifiers)
     - [Instances and Metadata](#instances-and-metadata)
+      - [Template Metadata](#template-metadata)
+      - [Modifier Metadata](#modifier-metadata)
+      - [Instance Metadata](#instance-metadata)
     - [Rooms and Portals](#rooms-and-portals)
     - [Starting Actors and Rooms](#starting-actors-and-rooms)
     - [YAML Format and Types](#yaml-format-and-types)
@@ -19,7 +22,8 @@ This guide covers the format of a world template and how to make your own.
     - [Loading Templates from Local Files](#loading-templates-from-local-files)
     - [Loading Templates from Github](#loading-templates-from-github)
     - [Starting New Game from Template](#starting-new-game-from-template)
-  - [How to Implement](#how-to-implement)
+  - [Existing Mechanics](#existing-mechanics)
+    - [Default Mechanics](#default-mechanics)
     - [Closed and Locked Doors](#closed-and-locked-doors)
     - [Delaying an Actor's Appearance](#delaying-an-actors-appearance)
     - [Introductions, Cutscenes, and Epilogues](#introductions-cutscenes-and-epilogues)
@@ -35,7 +39,7 @@ This guide covers the format of a world template and how to make your own.
       - [Start Actors](#start-actors)
       - [Start Rooms](#start-rooms)
     - [Template Values](#template-values)
-      - [Template Metadata](#template-metadata)
+      - [Template Metadata](#template-metadata-1)
       - [Template Number](#template-number)
       - [Template Reference](#template-reference)
       - [Template Script](#template-script)
@@ -50,7 +54,79 @@ This guide covers the format of a world template and how to make your own.
 
 ### Templates and Modifiers
 
+Every entity is created from a template. Template values may not have any variation, and always generate the same
+entity, or a range of values for more procedural worlds.
+
+Within an entity template, string fields are replaced with [template strings](#template-string) and number fields are
+replaced with [template numbers](#template-numbers).
+
+Each template has a `base` entity and list of modifiers, often adjectives like sharp or rusty. Modifiers each have
+a chance of appearing, and can exclude one another, to prevent mutually exclusive modifiers from appearing together.
+
+Between the defaults and modifiers, templates have a few layers:
+
+- the world `defaults`
+- the `base` template
+- select template `mods`
+
+When creating an entity from the template, the world defaults are rendered first, then passed to the `base` template.
+Some of the `mods` are randomly selected, then applied in order.
+
+For example, when creating an actor:
+
+- the actor defaults have a base name of `none` (`defaults.actor.name.base`)
+- the actor template has a base name of `bat` (`templates.actors.0.base.name.base`)
+- the actor template has a modifier with a base name of `vampire {{base}}` (`templates.actors.0.mods.0.name.base`)
+
+Each string will be rendered in order:
+
+- `none`
+- `bat` (does not use the `{{base}}` token and so replaces the string entirely)
+- `vampire bat`
+
 ### Instances and Metadata
+
+Entities are created from templates, and retain a copy of the template ID. While most fields in an entity are the
+template equivalent of the entity value, such as a template string in place of a normal string, the metadata ID is a
+literal string and not a template. Modifier metadata omits the ID entirely.
+
+| Field  | Template        | Modifier        | Instance       |
+| ------ | --------------- | --------------- | -------------- |
+| `desc` | template string | template string | literal string |
+| `id`   | literal string  | not present     | literal string |
+| `name` | template string | template string | literal string |
+
+#### Template Metadata
+
+For example:
+
+```yaml
+meta:
+  desc:
+    base: bat
+  name:
+    base: Bat
+  id: actor-bat
+```
+
+#### Modifier Metadata
+
+```yaml
+meta:
+  desc:
+    base: vampire {{base}}
+  name:
+    base: Vampire {{base}}
+```
+
+#### Instance Metadata
+
+```yaml
+meta:
+  desc: vampire bat
+  name: Vampire Bat
+  id: actor-bat-0
+```
 
 ### Rooms and Portals
 
@@ -151,29 +227,75 @@ support are included.
 
 ### Loading Templates from Local Files
 
-World templates are part of the normal data file format, and template files should only have the `worlds` key:
+To load a world template from a local file, such as one you are editing, use the `load` command with a `file://` path:
 
-```yaml
-# config: {}
-# state: []
-worlds:
-  - meta:
-      id: test-world
+```none
+> load file://data/samples/alice.yml
+
+no world states loaded from file://data/samples/alice.yml
 ```
 
-For the typical `YamlParser`, the world should be in a YAML file with UTF-8 encoding.
+Improving this output to indicate whether world templates were loaded is a planned feature: https://github.com/ssube/textual-engine/issues/153
 
 ### Loading Templates from Github
 
-TODO: explain how to load data files from Gist or MR
+To load a world template from Github, use the raw file link from the Gist or pull request, with the `https://` protocol:
+
+```none
+> load https://raw.githubusercontent.com/ssube/textual-engine/master/data/demo.yml
+
+no world states loaded from https://raw.githubusercontent.com/ssube/textual-engine/master/data/demo.yml
+```
+
+This allows you to test new worlds from a branch or PR without checking it out locally.
 
 ### Starting New Game from Template
 
-TODO: explain how to create new world from template
+To start a new game and create an instance of your world template, make sure it is loaded by listing the `worlds`:
 
-## How to Implement
+```none
+> worlds
 
-TODO: better title
+test world (test)
+Alice in Wonderland (sample-alice)
+```
+
+Then `create` a new world using the template ID, with the world seed and number of rooms to generate before loading:
+
+```none
+> create a sample-alice with test seed and 4
+
+created new world Alice in Wonderland (sample-alice-1) from sample-alice with seed of test seed and room depth of 4
+
+> look
+Alice will look the next turn.
+You are a Alice: Alice in Wonderland (player-0).
+You have 20 health.
+You are in a Introduction: a garden with a rose tree (room-intro-21).
+You see a Rose: red rose with sharp thorns (item-rose-12).
+You see a Painted Rose: painted white rose with sharp thorns (item-rose-13).
+You see a Rose: red rose with sharp thorns (item-rose-14).
+```
+
+## Existing Mechanics
+
+### Default Mechanics
+
+A number of simple mechanics are built into the engine:
+
+- looking at actors, items, and through portals
+- moving between rooms
+- using items
+  - for damage and health effects
+  - on yourself and other actors
+- basic inventory
+  - taking and dropping items
+  - using items from inventory
+- equipping items into character-specific slots
+
+These are enabled by default, using the required fields in each template.
+
+Some more complex features require the template to set additional flags or scripts.
 
 ### Closed and Locked Doors
 
@@ -208,11 +330,17 @@ Worlds have template metadata, with a literal `id` and template strings for the 
 
 ### Entity Defaults
 
+TODO: describe entity defaults
+
 ### Locale
 
 #### Locale Bundles
 
+TODO: describe locale strings
+
 #### Locale Words
+
+TODO: describe locale word lists
 
 ### Start Entities
 
@@ -285,7 +413,29 @@ items:
 
 #### Template Script
 
-TODO: explain template script format
+When templates need to use a script, they can refer to the `name` and pass some data. The script `name` must be
+recognized by the script service. The `data` will be merged with existing data and passed on to the script.
+
+- `data`
+  - additional data to pass
+  - values may be template numbers or strings
+  - a `[string, number | string]` map
+- `name`
+  - a template string
+
+For example:
+
+```yaml
+scripts: !map
+  signal.get:
+    data: !map {}
+    name:
+      base: signal-actor-get
+  verbs.common.look:
+    data: !map {}
+    name:
+      base: verb-actor-look
+```
 
 #### Template String
 
@@ -319,7 +469,7 @@ Actor templates have metadata and scripts, act as a container for items (invento
   - arbitrary data, short tags
   - a `[string, string]` map
 - `items`
-  - a list of item template refs
+  - a list of item template references
 - `scripts`
   - signal and verb scripts
   - a `[string, string]` map
@@ -356,14 +506,14 @@ Room templates have metadata and scripts, have custom verbs, and act as a contai
 - `meta`
   - template metadata
 - `actors`
-  - list of actor template refs
+  - list of actor template references
 - `flags`
   - arbitrary data, short tags
   - a `[string, string]` map
 - `items`
-  - list of item template refs
+  - list of item template references
 - `portals`
-  - list of portal template refs
+  - list of portal template references
 - `scripts`
   - event scripts with name and data
   - a `[string, script]` map
@@ -384,11 +534,23 @@ Portals have source and target groups, and the engine attempts to link them by n
   - arbitrary data, short tags
   - a `[string, string]` map
 - `group`
-  - TODO: explain portal groups
+  - how this portal will be linked to other rooms
+  - a complex type:
+    - `key`
+      - the name of the group
+      - a template string
+    - `source`
+      - the side of the room with this portal
+      - a template string
+    - `target`
+      - the side of the room with the target portal
+      - a template string
 - `scripts`
   - event scripts with name and data
   - a `[string, script]` map
 - `stats`
+  - item statistics (closed, locked, etc)
+  - a `[string, number]` map
 
 Two portals in the same room and source group will be linked to the same destination room, and portals of the same
 names, within the designated target group. If a matching portal cannot be found, one may be added to the room.
@@ -396,8 +558,10 @@ names, within the designated target group. If a matching portal cannot be found,
 <details>
 
 <summary>
-For example, with two rooms `room-0` and `room-1`, where each room has two portals, named `door` and `window`:
+For example, with two rooms linked by two ports:
 </summary>
+
+Two rooms, `room-north` and `room-south`, where each room has two portals, in the `door` and `window` groups:
 
 ```yaml
 portals:

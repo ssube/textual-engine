@@ -346,14 +346,9 @@ More detailed information can be found in [the `docs/` directory](./).
 
 ### Creating World Templates
 
-To create worlds, [please see the world templates guide](./world-templates.md).
+To create new worlds, [please see the world templates guide](./world-templates.md).
 
-TODO:
-
-- write the YAML
-- how to validate
-- post them as gists or use github raw links
-- planned: world editor (https://github.com/ssube/textual-engine/issues/73)
+The world editor is a planned feature: https://github.com/ssube/textual-engine/issues/73
 
 ### Developing The Engine
 

@@ -11,6 +11,10 @@ export class StackMap<TKey, TValue> {
     return this.data.clear();
   }
 
+  public depth(key: TKey): number {
+    return this.get(key).length;
+  }
+
   public get(key: TKey): Array<TValue> {
     return this.getOrCreate(key);
   }

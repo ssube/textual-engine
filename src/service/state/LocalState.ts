@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { defer, doesExist, InvalidArgumentError, isNil, mustExist, mustFind } from '@apextoaster/js-utils';
+import { doesExist, InvalidArgumentError, isNil, mustExist, mustFind } from '@apextoaster/js-utils';
 import { Container, Inject, Logger } from 'noicejs';
 
 import { StateService, StepResult } from '.';
@@ -569,6 +569,13 @@ export class LocalStateService implements StateService {
     const start = Date.now();
 
     const scope: Omit<SuppliedScope, 'source'> = {
+      behavior: {
+        depth: async (actor) => this.commandBuffer.depth(actor),
+        queue: async (actor, command) => {
+          this.commandBuffer.push(actor, command);
+        },
+        ready: async (actor) => this.commandBuffer.depth(actor) > 0,
+      },
       data: new Map(),
       random: this.random,
       state: {

@@ -72,6 +72,11 @@ export function createTestTransfer(): StateEntityTransfer {
 
 export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptContext {
   return {
+    behavior: {
+      depth: stub(),
+      queue: stub(),
+      ready: stub(),
+    },
     data: new Map(),
     logger: getTestLogger(),
     random: createStubInstance(MathRandomService),

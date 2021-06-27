@@ -16,6 +16,12 @@ import { RandomService } from '../random';
 export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
 
+export interface CommandHelper {
+  depth(actor: Actor): Promise<number>;
+  queue(actor: Actor, command: Command): Promise<void>; // TODO: add append/prepend/replace flag
+  ready(actor: Actor): Promise<boolean>;
+}
+
 export interface StateHelper {
   create<TType extends WorldEntityType>(id: string, type: TType, target: StateSource): Promise<EntityForType<TType>>;
   enter(target: StateSource): Promise<void>; // TODO: remove, auto-invoke as part of move
@@ -30,6 +36,8 @@ export interface StateHelper {
  * The script scope fields that must be supplied by the caller.
  */
 export interface SuppliedScope {
+  behavior: CommandHelper;
+
   /**
    * Assorted data, primitives only.
    */

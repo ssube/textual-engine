@@ -9,9 +9,9 @@ This guide covers the format of a world template and how to make your own.
   - [Concepts](#concepts)
     - [Templates and Modifiers](#templates-and-modifiers)
     - [Entities and Metadata](#entities-and-metadata)
-      - [Template Metadata](#template-metadata)
-      - [Modifier Metadata](#modifier-metadata)
-      - [Entity Metadata](#entity-metadata)
+      - [Example Template Metadata](#example-template-metadata)
+      - [Example Modifier Metadata](#example-modifier-metadata)
+      - [Example Entity Metadata](#example-entity-metadata)
     - [Rooms and Portals](#rooms-and-portals)
     - [Starting Actors and Rooms](#starting-actors-and-rooms)
     - [YAML Format and Types](#yaml-format-and-types)
@@ -33,13 +33,13 @@ This guide covers the format of a world template and how to make your own.
     - [Metadata](#metadata)
     - [Entity Defaults](#entity-defaults)
     - [Locale](#locale)
-      - [Locale Bundles](#locale-bundles)
-      - [Locale Words](#locale-words)
+      - [Locale Language](#locale-language)
+      - [Language Strings](#language-strings)
     - [Start Entities](#start-entities)
       - [Start Actors](#start-actors)
       - [Start Rooms](#start-rooms)
     - [Template Values](#template-values)
-      - [Template Metadata](#template-metadata-1)
+      - [Template Metadata](#template-metadata)
       - [Template Number](#template-number)
       - [Template Reference](#template-reference)
       - [Template Script](#template-script)
@@ -100,7 +100,7 @@ such as `actor-bat-0` and `actor-bat-1`. Modifier metadata omits the ID entirely
 
 For example:
 
-#### Template Metadata
+#### Example Template Metadata
 
 ```yaml
 meta:
@@ -111,7 +111,9 @@ meta:
   id: actor-bat
 ```
 
-#### Modifier Metadata
+This is how metadata should appear in a base template.
+
+#### Example Modifier Metadata
 
 ```yaml
 meta:
@@ -121,7 +123,9 @@ meta:
     base: Vampire {{base}}
 ```
 
-#### Entity Metadata
+This is how metadata should appear in a template modifier.
+
+#### Example Entity Metadata
 
 ```yaml
 meta:
@@ -129,6 +133,8 @@ meta:
   name: Vampire Bat
   id: actor-bat-0
 ```
+
+This is how metadata will appear in the saved game state.
 
 ### Rooms and Portals
 
@@ -341,13 +347,77 @@ TODO: describe entity defaults
 
 ### Locale
 
-#### Locale Bundles
+Worlds may define multiple languages in their locale bundle. The key for each language should be its
+[ISO 639-1, 639-2, or 639-3 code](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes).
 
-TODO: describe locale strings
+For example:
 
-#### Locale Words
+```yaml
+locale:
+  languages:
+    de: {}
+    en: {}
+    es: {}
+```
 
-TODO: describe locale word lists
+#### Locale Language
+
+Each language contains word lists for the recognized parts of speech, along with a nested dictionary for longer
+strings.
+
+The recognized parts of speech are:
+
+- articles
+  - ignored while parsing
+- prepositions
+  - used to split multiple targets into phrases
+- verbs
+  - decide which actor script to invoke
+
+```yaml
+locale:
+  languages:
+    en: 
+      articles: []
+      prepositions: []
+      strings: {}
+      verbs: []
+```
+
+Items in the word lists may use translation keys from `strings`.
+
+#### Language Strings
+
+The `strings` section of each language is a `[string, string | nested]` dictionary. Values may be strings, or nested
+dictionaries, whose keys may be strings, or further dictionaries.
+
+Translation strings for similar messages (using an item, using an actor, and a missing use target) should be grouped
+under a common key.
+
+For example:
+
+```yaml
+languages:
+  en:
+    strings:
+      meta:
+        create: 'created new world {{state.name}} ({{state.id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
+        debug:
+          none: 'no world state to debug'
+        graph:
+          none: 'no world state to graph'
+        help: 'available verbs: {{verbs}}'
+        load:
+          none: 'no world states loaded from {{-path}}'
+          state: 'loaded world state {{meta.id}} from {{-path}}'
+        quit: 'quitting'
+        save:
+          none: 'no world state to save'
+          state: 'saved world state {{meta.id}} from {{-path}}'
+        step:
+          none: 'please create a world before using any verbs'
+        world: '{{name}} ({{id}})'
+```
 
 ### Start Entities
 

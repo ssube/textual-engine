@@ -12,6 +12,9 @@ This guide covers the format of a world template and how to make your own.
       - [Example Template Metadata](#example-template-metadata)
       - [Example Modifier Metadata](#example-modifier-metadata)
       - [Example Entity Metadata](#example-entity-metadata)
+    - [Flags and Stats](#flags-and-stats)
+      - [Entity Flags](#entity-flags)
+      - [Entity Stats](#entity-stats)
     - [Rooms and Portals](#rooms-and-portals)
     - [Starting Actors and Rooms](#starting-actors-and-rooms)
     - [YAML Format and Types](#yaml-format-and-types)
@@ -98,9 +101,14 @@ such as `actor-bat-0` and `actor-bat-1`. Modifier metadata omits the ID entirely
 | `id`   | literal string  | not present     | literal string |
 | `name` | template string | template string | literal string |
 
+The metadata is a convenient container for localization and searching, containing the entity's unique ID along with
+its short display name and longer description.
+
 For example:
 
 #### Example Template Metadata
+
+This is how metadata should appear in a base template:
 
 ```yaml
 meta:
@@ -111,9 +119,9 @@ meta:
   id: actor-bat
 ```
 
-This is how metadata should appear in a base template.
-
 #### Example Modifier Metadata
+
+This is how metadata should appear in a template modifier:
 
 ```yaml
 meta:
@@ -123,9 +131,9 @@ meta:
     base: Vampire {{base}}
 ```
 
-This is how metadata should appear in a template modifier.
-
 #### Example Entity Metadata
+
+This is how metadata will appear in the saved game state:
 
 ```yaml
 meta:
@@ -134,7 +142,56 @@ meta:
   id: actor-bat-0
 ```
 
-This is how metadata will appear in the saved game state.
+### Flags and Stats
+
+#### Entity Flags
+
+Every world entity has a `flags` field for storing short strings. Flags are meant to help scripts maintain state on
+the entity without changing the class, to communicate with other scripts or between invocations of the same script.
+
+Since JS strings are immutable, flags can only set and removed. For numeric data that needs to be changed, helper
+function are provided to modify the [entity stats](#entity-stats).
+
+Flags are stored on each entity and must be sent whenever the entity changes or moves into another room, so it is
+important to make sure they do not grow too large. If you expect 10 flags per entity, try to keep them under 24
+characters per flag.
+
+The flags field is a `[string, string]` map, and flag values are template strings.
+
+For example:
+
+```yaml
+flags: !map
+  scene:
+    base: cutscene-room
+```
+
+Some common flags are defined in the engine:
+
+- items with `key` can unlock portals whose ID matches the value
+- rooms with `scene` will move actors into a cutscene room if they do not have a flag `scene-${room.meta.id}`
+- items with `replace` and a script for `signal.replace` can be replaced with other items
+  - tearing a piece of paper into scraps
+  - tearing a loaf of bread into crumbs
+  - filling out a form
+
+Scripts can add their own flags by setting them. They do not need to be defined in the engine.
+
+#### Entity Stats
+
+Actors and items have `stats` for storing numeric data, like actor health and weapon damage. Helper functions are
+provided to get, increment, and decrement stats.
+
+Some common stats are defined in the engine:
+
+- actors with `damage` do additional damage when using weapons
+- actors with `health` can be killed
+- items with `damage` are weapons and do damage when an actor is `hit` with them
+- items with `health` can heal actors
+
+Scripts can add their own stats by setting them. They do not need to be defined in the engine.
+
+Including a minimum and maximum value in each stat is a planned feature: https://github.com/ssube/textual-engine/issues/148
 
 ### Rooms and Portals
 
@@ -336,10 +393,15 @@ TODO: explain how to use replace verb/signal
 
 Worlds have template metadata, with a literal `id` and template strings for the rest.
 
-- `id`: string, not templated
+- `id`
   - used in the saved state to refer back to the template world
-- `name`: template string, display name
-- `desc`: template string, long description
+  - literal string, not templated
+- `name`
+  - short display name
+  - a template string
+- `desc`
+  - longer description
+  - a template string
 
 ### Entity Defaults
 
@@ -440,9 +502,14 @@ created from a template string, and a number like `stats` from a template number
 
 Each template has metadata, missing the `template` field that exists in entity metadata.
 
-- `id`: string, not templated
-- `name`: template string, display name
-- `desc`: template string, long description
+- `id`
+  - literal string, not templated
+- `name`
+  - short display name
+  - a template string
+- `desc`
+  - longer description
+  - a template string
 
 For example:
 
@@ -459,9 +526,16 @@ meta:
 
 Template numbers define a range `[min, max)` and select a random integer within that.
 
-- `min`: number, inclusive
-- `max`: number, exclusive
-- `step`: interval between values, optional
+- `min`
+  - minimum value, inclusive
+  - number
+- `max`
+  - maximum value, exclusive
+  - number
+- `step`
+  - interval between values
+  - number
+  - optional, defaults to 1
 
 For example:
 

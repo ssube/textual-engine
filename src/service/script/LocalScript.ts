@@ -9,6 +9,7 @@ import { SignalActorHit } from '../../script/signal/actor/ActorHit';
 import { SignalActorLook } from '../../script/signal/actor/ActorLook';
 import { SignalActorStep } from '../../script/signal/actor/ActorStep';
 import { SignalActorUse } from '../../script/signal/actor/ActorUse';
+import { SignalBehaviorEnemy } from '../../script/signal/behavior/BehaviorEnemy';
 import { SignalItemLook } from '../../script/signal/item/ItemLook';
 import { SignalItemReplace } from '../../script/signal/item/ItemReplace';
 import { SignalItemStep } from '../../script/signal/item/ItemStep';
@@ -36,6 +37,8 @@ import { makeServiceLogger } from '../../util/service';
  * Common scripts, built into the engine and always available.
  */
 const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
+  // behavior scripts
+  ['signal-behavior-enemy', SignalBehaviorEnemy],
   // signal scripts
   ['signal-actor-get', SignalActorGet],
   ['signal-actor-hit', SignalActorHit],

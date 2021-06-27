@@ -50,6 +50,7 @@ export class ScriptActorService implements ActorService {
 
   public async onRoom(event: StateRoomEvent): Promise<void> {
     return this.script.invoke(event.actor, 'signal.behavior', {
+      actor: event.actor,
       behavior: {
         depth: () => Promise.resolve(0), // TODO: implement
         queue: (actor, command) => this.queue(event.room, actor, command),
@@ -57,6 +58,7 @@ export class ScriptActorService implements ActorService {
       },
       data: new Map(),
       random: this.random,
+      room: event.room,
       state: {
         create: () => { throw new NotImplementedError('behavior scripts cannot create entities'); },
         enter: () => { throw new NotImplementedError('behavior scripts cannot enter rooms'); },

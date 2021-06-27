@@ -1,10 +1,9 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { BaseOptions, Container, NullLogger } from 'noicejs';
+import { BaseOptions } from 'noicejs';
 import { createStubInstance } from 'sinon';
 
-import { Actor, ActorSource } from '../../../src/model/entity/Actor';
-import { Room } from '../../../src/model/entity/Room';
+import { ActorSource } from '../../../src/model/entity/Actor';
 import { INJECT_EVENT, INJECT_RANDOM } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { BehaviorActorService } from '../../../src/service/actor/BehaviorActor';
@@ -30,35 +29,8 @@ describe('behavior actor', () => {
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pending = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
-    const actor: Actor = {
-      flags: new Map(),
-      items: [],
-      meta: {
-        desc: '',
-        id: '',
-        name: '',
-        template: '',
-      },
-      scripts: new Map(),
-      slots: new Map(),
-      source: ActorSource.BEHAVIOR,
-      stats: new Map(),
-      type: 'actor',
-    };
-    const room: Room = {
-      actors: [],
-      flags: new Map(),
-      items: [],
-      meta: {
-        desc: '',
-        id: '',
-        name: '',
-        template: '',
-      },
-      portals: [],
-      scripts: new Map(),
-      type: 'room',
-    };
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '');
     events.emit(EVENT_STATE_ROOM, {
       actor,
       room,

@@ -23,13 +23,8 @@ export function getTestConfig(): ConfigFile {
       streams: [],
     },
     locale: {
-      bundles: {},
+      languages: {},
       current: 'en',
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
-      },
     },
     services: {
       actors: [],

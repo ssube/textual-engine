@@ -63,6 +63,27 @@ describe('room look signal', () => {
     expect(script.invoke).to.have.been.calledWithMatch(actor, SIGNAL_LOOK, match.object);
   });
 
+  it('should skip the context actor', async () => {
+    const script = createStubInstance(LocalScriptService);
+    const state = getStubHelper();
+
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+
+    const context = createTestContext({
+      actor,
+      command: makeCommand(VERB_LOOK),
+      random: createStubInstance(MathRandomService),
+      room,
+      script,
+      state,
+    });
+
+    await SignalRoomLook.call(room, context);
+
+    expect(script.invoke).to.have.callCount(0);
+  });
+
   it('should describe items in the room', async () => {
     const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();

@@ -50,15 +50,15 @@ describe('player actor', () => {
     const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
     await locale.start();
     locale.addBundle('world', {
-      bundles: {
+      languages: {
         en: {
-          'meta.help': 'foo',
+          articles: [],
+          prepositions: [],
+          strings: {
+            'meta.help': 'foo',
+          },
+          verbs: [],
         },
-      },
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
       },
     });
 

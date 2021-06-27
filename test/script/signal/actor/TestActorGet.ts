@@ -52,4 +52,24 @@ describe('actor get signal', () => {
 
     expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.get.player');
   });
+
+  it('should only show the item to player actors', async () => {
+    const script = createStubInstance(LocalScriptService);
+    const state = getStubHelper();
+
+    const item = makeTestItem('', '', '');
+    const actor = makeTestActor('', '', '');
+
+    const context = createTestContext({
+      actor,
+      item,
+      random: createStubInstance(MathRandomService),
+      room: makeTestRoom('', '', '', [], []),
+      script,
+      state,
+    });
+    await SignalActorGet.call(actor, context);
+
+    expect(state.show).to.have.callCount(0);
+  });
 });

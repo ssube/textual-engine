@@ -1,54 +1,63 @@
 import { JSONSchemaType } from 'ajv';
 
-export type LocaleLanguage = Record<string, Record<string, string>>;
+interface NestedRecord {
+  [key: string]: NestedString;
+}
+
+export type NestedString = string | NestedRecord;
 
 export interface LocaleBundle {
-  bundles: LocaleLanguage;
-  words: {
+  current?: string;
+  languages: Record<string, {
     articles: Array<string>;
     prepositions: Array<string>;
+    strings: Record<string, NestedString>;
     verbs: Array<string>;
-  };
+  }>;
 }
 
 export const LOCALE_SCHEMA: JSONSchemaType<LocaleBundle> = {
   type: 'object',
   properties: {
-    bundles: {
+    current: {
+      type: 'string',
+      nullable: true,
+    },
+    languages: {
       type: 'object',
       required: [],
       additionalProperties: true,
       patternProperties: {
         '.*': {
           type: 'object',
-          required: [],
+          properties: {
+            articles: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+            prepositions: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+            strings: {
+              type: 'object',
+              required: [],
+            },
+            verbs: {
+              type: 'array',
+              items: {
+                type: 'string',
+              },
+            },
+          },
+          required: ['articles', 'prepositions', 'strings', 'verbs'],
         },
       },
-    },
-    words: {
-      type: 'object',
-      properties: {
-        articles: {
-          type: 'array',
-          items: {
-            type: 'string',
-          },
-        },
-        prepositions: {
-          type: 'array',
-          items: {
-            type: 'string',
-          },
-        },
-        verbs: {
-          type: 'array',
-          items: {
-            type: 'string',
-          },
-        },
-      },
-      required: ['articles', 'prepositions', 'verbs'],
     },
   },
-  required: ['bundles', 'words'],
+  required: ['languages'],
 };

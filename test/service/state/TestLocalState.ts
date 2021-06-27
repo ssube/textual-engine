@@ -2,10 +2,11 @@
 import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { match, stub } from 'sinon';
+import { match, spy, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
+import { ScriptService } from '../../../src/lib';
 import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
@@ -212,12 +213,7 @@ const TEST_WORLD: WorldTemplate = {
     room: TEST_ROOM.base,
   },
   locale: {
-    bundles: {},
-    words: {
-      articles: [],
-      prepositions: [],
-      verbs: [],
-    },
+    languages: {},
   },
   meta: {
     id: 'foo',
@@ -828,8 +824,32 @@ describe('local state service', () => {
       return expect(state.step()).to.eventually.be.rejectedWith(NotInitializedError);
     });
 
+    xit('should only step each entity ID once', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      // TODO: create duplicate IDs
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const script = await container.create<ScriptService, BaseOptions>(INJECT_SCRIPT);
+      const scriptSpy = spy(script, 'invoke');
+
+      await state.step();
+
+      expect(scriptSpy).to.have.callCount(1);
+    });
+
     xit('should error when some actors are missing commands');
-    xit('should only step entities once even when they move');
   });
 
   describe('step create helper', () => {

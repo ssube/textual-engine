@@ -23,27 +23,27 @@ describe('next locale service', () => {
     await locale.start();
 
     locale.addBundle('common', {
-      bundles: {
+      languages: {
         en: {
-          foo: 'bar',
+          articles: [],
+          prepositions: [],
+          strings: {
+            foo: 'bar',
+          },
+          verbs: [],
         },
-      },
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
       },
     });
     locale.addBundle('world', {
-      bundles: {
+      languages: {
         en: {
-          foo: 'bin',
+          articles: [],
+          prepositions: [],
+          strings: {
+            foo: 'bin',
+          },
+          verbs: [],
         },
-      },
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
       },
     });
 
@@ -56,15 +56,15 @@ describe('next locale service', () => {
     await locale.start();
 
     locale.addBundle('common', {
-      bundles: {
+      languages: {
         en: {
-          foo: '{{size}} bar',
+          articles: [],
+          prepositions: [],
+          strings: {
+            foo: '{{size}} bar',
+          },
+          verbs: [],
         },
-      },
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
       },
     });
 
@@ -77,15 +77,15 @@ describe('next locale service', () => {
     await locale.start();
 
     locale.addBundle('common', {
-      bundles: {
+      languages: {
         en: {
-          foo: '{{size}} bar',
+          articles: [],
+          prepositions: [],
+          strings: {
+            foo: '{{size}} bar',
+          },
+          verbs: [],
         },
-      },
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
       },
     });
     locale.deleteBundle('common');

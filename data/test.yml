@@ -1,29 +1,29 @@
-logger:
-  level: debug
-  name: textual-engine
-  streams:
-    - level: debug
-      path: out/test.log
-locale:
-  bundles: {}
-  current: en
-  verbs: []
-services:
-  actors:
-    - name: actor-player
-      kind: core-player-actor
-    - name: actor-enemy
-      kind: core-behavior-actor
-      data:
-        attack: 1.00
-        wander: 0.25
-  loaders:
-    - name: file-loader
-      kind: node-file-loader
-  renders: []
-  states:
-    - name: local-state
-      kind: core-local-state
-  tokenizers:
-    - name: local-tokenizer
-      kind: core-split-tokenizer # easier to test
+config:
+  logger:
+    level: debug
+    name: textual-engine
+    streams:
+      - level: debug
+        path: out/test.log
+  locale:
+    current: en
+    languages: {}
+  services:
+    actors:
+      - name: actor-player
+        kind: core-player-actor
+      - name: actor-enemy
+        kind: core-behavior-actor
+        data:
+          attack: 1.00
+          wander: 0.25
+    loaders:
+      - name: file-loader
+        kind: node-file-loader
+    renders: []
+    states:
+      - name: local-state
+        kind: core-local-state
+    tokenizers:
+      - name: local-tokenizer
+        kind: core-split-tokenizer # easier to test

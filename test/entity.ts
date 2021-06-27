@@ -135,12 +135,7 @@ export function makeTestWorld(actors: Array<Template<Actor>>, items: Array<Templ
       room: defaultRoom.base,
     },
     locale: {
-      bundles: {},
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
-      },
+      languages: {},
     },
     meta: {
       id: 'foo',

@@ -6,7 +6,7 @@ import { makeCommand } from '../../../../src/model/Command';
 import { SignalPortalLook } from '../../../../src/script/signal/portal/PortalLook';
 import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
-import { VERB_LOOK } from '../../../../src/util/constants';
+import { STAT_CLOSED, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
 
@@ -46,7 +46,7 @@ describe('portal look scripts', () => {
     expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.portal');
   });
 
-  it('should describe the portal destination room', async () => {
+  it('should describe the portal destination room for open portals', async () => {
     const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
 
@@ -65,5 +65,28 @@ describe('portal look scripts', () => {
     await SignalPortalLook.call(portal, context);
 
     expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.portal');
+  });
+
+  it('should show a message for closed portals', async () => {
+    const script = createStubInstance(LocalScriptService);
+    const state = getStubHelper();
+
+    const portal = makeTestPortal('', '', '', '', 'foo');
+    portal.stats.set(STAT_CLOSED, 1);
+
+    const room = makeTestRoom('foo', '', '', [], [], [portal]);
+    (state.find as SinonStub).resolves([room]);
+
+    const context = createTestContext({
+      command: makeCommand(VERB_LOOK),
+      random: createStubInstance(MathRandomService),
+      room,
+      script,
+      state,
+    });
+
+    await SignalPortalLook.call(portal, context);
+
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.closed');
   });
 });

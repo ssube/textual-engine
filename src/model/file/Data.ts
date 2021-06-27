@@ -7,11 +7,12 @@ import { ConfigFile, CONFIG_SCHEMA } from './Config';
 export interface DataFile {
   config?: ConfigFile;
   state?: WorldState;
-  worlds: Array<WorldTemplate>;
+  worlds?: Array<WorldTemplate>;
 }
 
 export const DATA_SCHEMA: JSONSchemaType<DataFile> = {
   type: 'object',
+  additionalProperties: false,
   properties: {
     config: {
       ...CONFIG_SCHEMA,
@@ -24,7 +25,8 @@ export const DATA_SCHEMA: JSONSchemaType<DataFile> = {
     worlds: {
       type: 'array',
       items: WORLD_TEMPLATE_SCHEMA,
+      nullable: true,
     },
   },
-  required: ['worlds'],
+  required: [],
 };

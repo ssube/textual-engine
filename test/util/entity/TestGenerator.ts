@@ -366,12 +366,7 @@ const TEST_WORLD: WorldTemplate = {
     },
   },
   locale: {
-    bundles: {},
-    words: {
-      articles: [],
-      prepositions: [],
-      verbs: [],
-    },
+    languages: {},
   },
   meta: {
     desc: {

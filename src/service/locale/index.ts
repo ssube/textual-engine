@@ -31,6 +31,8 @@ export interface LocaleService extends Service {
    */
   getInstance(): i18n;
 
+  getLocale(): string;
+
   /**
    * Translate a string with one or more keys, using the given context.
    */

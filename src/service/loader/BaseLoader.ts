@@ -63,16 +63,17 @@ export abstract class BaseLoader implements LoaderService {
       return;
     }
 
-    for (const world of data.worlds) {
-      this.events.emit(EVENT_LOADER_WORLD, {
-        world,
-      });
+    if (doesExist(data.worlds)) {
+      for (const world of data.worlds) {
+        this.events.emit(EVENT_LOADER_WORLD, {
+          world,
+        });
+      }
     }
 
-    const { state } = data;
-    if (doesExist(state)) {
+    if (doesExist(data.state)) {
       this.events.emit(EVENT_LOADER_STATE, {
-        state,
+        state: data.state,
       });
     }
 

@@ -18,7 +18,7 @@ export { WorldEntity, WorldEntityType } from './model/entity/index';
 
 export { ConfigFile, ConfigLogger, ConfigServiceRef, ConfigServices } from './model/file/Config';
 export { DataFile } from './model/file/Data';
-export { LocaleBundle, LocaleLanguage } from './model/file/Locale';
+export { LocaleBundle } from './model/file/Locale';
 
 export { Modifier, ModifierMetadata, ModifierPrimitive, BaseModifier } from './model/mapped/Modifier';
 export { Template, TemplateMetadata, TemplateNumber, TemplatePrimitive, TemplateRef, TemplateString, BaseTemplate } from './model/mapped/Template';

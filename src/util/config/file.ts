@@ -1,8 +1,10 @@
+import { mustExist } from '@apextoaster/js-utils';
 import { promises } from 'fs';
 import { load } from 'js-yaml';
 
 import { ConfigError } from '../../error/ConfigError';
-import { CONFIG_SCHEMA, ConfigFile } from '../../model/file/Config';
+import { ConfigFile } from '../../model/file/Config';
+import { DATA_SCHEMA } from '../../model/file/Data';
 import { makeParserSchema } from '../parser';
 import { makeSchema } from '../schema';
 
@@ -24,9 +26,9 @@ export async function loadConfig(path: string): Promise<ConfigFile> {
       schema,
     });
 
-    const validate = makeSchema(CONFIG_SCHEMA);
+    const validate = makeSchema(DATA_SCHEMA);
     if (validate(data)) {
-      return data;
+      return mustExist(data.config);
     } else {
       console.error(validate.errors);
       throw new ConfigError('invalid config data');

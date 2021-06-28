@@ -126,88 +126,89 @@ worlds:
             name:
               base: signal-room-step
     locale:
-      bundles:
+      languages:
         en:
-          actor:
-            get:
-              player: |-
-                You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-            hit:
-              dead: '{{actor.meta.name}} has died!'
-              health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
-              hit: |-
-                {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
-            step:
-              command:
-                dead: |-
-                  You are dead!
-                player:
-                  verb: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
-                  target: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
-                unknown: |-
-                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
-              drop:
-                type: |-
-                  {{command.targets}} is not an item!
-              equip:
-                item: |-
-                  You equip the {{item.meta.name}} in your {{slot}}.
-                none: |-
-                  {{command.targets}} is not an item!
-                slot: |-
-                  You are not able to equip {{item.meta.name}} in {{slot}}!
+          strings:
+            actor:
+              get:
+                player: |-
+                  You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
               hit:
-                item: |-
-                  You cannot hit {{target.meta.name}}, you are not holding anything!
-                self: |-
-                  You cannot hit yourself!
-                type: |-
-                  {{command.targets}} is not an actor!
-              look:
-                none: |-
-                  You see nothing.
-                room:
-                  you: |-
-                    You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
-                  health: |-
-                    You have {{health}} health.
-                  seen: |-
-                    You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
-                  inventory: |-
-                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-                  portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
-                  dest: |-
-                    You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
-                actor:
-                  seen: |-
-                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+                dead: '{{actor.meta.name}} has died!'
+                health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
+                hit: |-
+                  {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
+              step:
+                command:
                   dead: |-
-                    The {{actor.meta.name}} is dead!
-                item:
-                  seen: |-
-                    You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-              move:
-                missing: |-
-                  {{command.targets}} is not a portal!
-                portal: |-
-                  {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
-              take:
-                type: |-
-                  {{command.targets}} is not an item!
+                    You are dead!
+                  player:
+                    verb: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the next turn.
+                    target: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+                  unknown: |-
+                    {{actor.meta.name}} does not know how to $t({{command.verb}})!
+                drop:
+                  type: |-
+                    {{command.targets}} is not an item!
+                equip:
+                  item: |-
+                    You equip the {{item.meta.name}} in your {{slot}}.
+                  none: |-
+                    {{command.targets}} is not an item!
+                  slot: |-
+                    You are not able to equip {{item.meta.name}} in {{slot}}!
+                hit:
+                  item: |-
+                    You cannot hit {{target.meta.name}}, you are not holding anything!
+                  self: |-
+                    You cannot hit yourself!
+                  type: |-
+                    {{command.targets}} is not an actor!
+                look:
+                  none: |-
+                    You see nothing.
+                  room:
+                    you: |-
+                      You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+                    health: |-
+                      You have {{health}} health.
+                    seen: |-
+                      You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
+                    inventory: |-
+                      You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+                    portal: |-
+                      A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
+                    dest: |-
+                      You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
+                  actor:
+                    seen: |-
+                      A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+                    dead: |-
+                      The {{actor.meta.name}} is dead!
+                  item:
+                    seen: |-
+                      You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+                move:
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+                take:
+                  type: |-
+                    {{command.targets}} is not an item!
+                use:
+                  type: |-
+                    {{command.targets}} is not a usable item!
+            item:
               use:
-                type: |-
-                  {{command.targets}} is not a usable item!
-          item:
-            use:
-              any: |-
-                {{item.meta.name}} has been used by {{actor.meta.name}}!
-      words:
-        articles: []
-        prepositions: []
-        verbs: []
+                any: |-
+                  {{item.meta.name}} has been used by {{actor.meta.name}}!
+          articles: []
+          prepositions: []
+          verbs: []
+      
     meta:
       id: sample-hansel-gretel
       name:
@@ -230,8 +231,7 @@ worlds:
               desc:
                 base: a young boy named Hansel; Gretel's brother
             flags: !map {}
-            items: 
-              - id: item-bread
+            items: []
             scripts: !map {}
             slots: !map 
               pocket-left:
@@ -256,8 +256,7 @@ worlds:
               desc:
                 base: a young girl named Gretel; Hansel's sister
             flags: !map {}
-            items:
-              - id: item-note
+            items: []
             scripts: !map {}
             slots: !map
               pocket-left:
@@ -274,6 +273,81 @@ worlds:
               hunger:
                 max: 10
                 min: 0
+        - base:
+            meta:
+                id: actor-woodcutter
+                name:
+                  base: The Woodcutter
+                desc:
+                  base: a woodcutter; Hansel and Gretel's father
+            flags: !map {}
+            items:
+              - id: item-ax
+            scripts: !map {}
+            slots: !map
+              weapon-hand-right:
+                base: item-ax
+            stats: !map
+                health:
+                  max: 10
+                  min: 0
+                stamina:
+                  max: 5
+                  min: 1
+        - base:
+            meta:
+                id: actor-stepmother
+                name:
+                  base: Stepmother
+                desc:
+                  base: Hansel and Gretel's stepmother; an unpleasant woman
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+                health:
+                  max: 10
+                  min: 0
+                stamina:
+                  max: 5
+                  min: 1
+        - base:
+            meta:
+                id: actor-witch
+                name:
+                  base: A Witch
+                desc:
+                  base: An evil witch that lives in the candy house; her favorite meal is fat children
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+                health:
+                  max: 10
+                  min: 0
+                stamina:
+                  max: 5
+                  min: 1
+        - base:
+            meta:
+                id: actor-duck
+                name:
+                  base: A Duck
+                desc:
+                  base: A cute duck
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+                  health:
+                    max: 10
+                    min: 0
+                  stamina:
+                    max: 5
+                    min: 1
       items: []
       portals: []
       rooms: []

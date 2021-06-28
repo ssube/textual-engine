@@ -149,8 +149,8 @@ meta:
 Every world entity has a `flags` field for storing short strings. Flags are meant to help scripts maintain state on
 the entity without changing the class, to communicate with other scripts or between invocations of the same script.
 
-Since JS strings are immutable, flags can only set and removed. For numeric data that needs to be changed, helper
-function are provided to modify the [entity stats](#entity-stats).
+Since JS strings are immutable, flags can only be set and removed. For numeric data that needs to be changed, helper
+functions are provided to modify the [entity stats](#entity-stats).
 
 Flags are stored on each entity and must be sent whenever the entity changes or moves into another room, so it is
 important to make sure they do not grow too large. If you expect 10 flags per entity, try to keep them under 24

@@ -6,7 +6,7 @@ import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PORTAL_TYPE, PortalLinkage } from '../../model/entity/Portal';
-import { Room, ROOM_TYPE } from '../../model/entity/Room';
+import { ReadonlyRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
 import { Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
@@ -376,7 +376,7 @@ export class StateEntityGenerator {
   }
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
-  public async populateRoom(firstRoom: Room, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
+  public async populateRoom(firstRoom: ReadonlyRoom, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
     if (max <= 0) {
       return [];
     }

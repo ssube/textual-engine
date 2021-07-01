@@ -3,6 +3,7 @@ import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { setKey } from '../../../util/collection/map';
 
 export async function SignalRoomEnter(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isRoom(this)) {
@@ -30,9 +31,10 @@ export async function SignalRoomEnter(this: ScriptTarget, context: ScriptContext
       target,
     }, context);
 
-    await context.state.show(context.source, 'signal.room.enter.scene', { actor, sceneKey });
+    const flags = setKey(actor.flags, sceneKey, 'shown');
+    await context.state.update(actor, { flags });
 
-    actor.flags.set(sceneKey, 'shown');
+    return context.state.show(context.source, 'signal.room.enter.scene', { actor, sceneKey });
   }
 }
 

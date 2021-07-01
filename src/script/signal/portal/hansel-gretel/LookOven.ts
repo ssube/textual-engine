@@ -14,14 +14,14 @@ export async function SignalPortalLookOven(this: ScriptTarget, context: ScriptCo
 
   await SignalPortalLook.call(this, context);
 
-  const siblings = await context.state.find({
+  const actors = await context.state.find({
     room: {
       id: this.meta.id,
     },
     type: ACTOR_TYPE,
   });
 
-  for (const actor of siblings) {
+  for (const actor of actors) {
     await context.state.show(context.source, 'portal.look.actor', { actor });
   }
 }

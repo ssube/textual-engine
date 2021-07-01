@@ -23,7 +23,9 @@ export async function SignalActorHit(this: ScriptTarget, context: ScriptContext)
   const maxDamage = getKey(item.stats, STAT_DAMAGE, 1) + getKey(attacker.stats, STAT_DAMAGE, 0);
   const damage = context.random.nextInt(maxDamage);
 
-  const health = decrementKey(this.stats, STAT_HEALTH, damage);
+  const [stats, health] = decrementKey(this.stats, STAT_HEALTH, damage);
+  await context.state.update(this, { stats });
+
   if (health > 0) {
     await context.state.show(context.source, 'actor.hit.health', { actor: this, damage, health });
   } else {

@@ -1126,7 +1126,7 @@ describe('local state service', () => {
       });
 
       const entity = makeTestActor('', '', '');
-      return expect(state.stepUpdate(entity)).to.eventually.equal(undefined);
+      return expect(state.stepUpdate(entity, {})).to.eventually.equal(undefined);
     });
   });
 });

@@ -2,35 +2,36 @@ import { Logger } from 'noicejs';
 
 import { Command } from '../../model/Command';
 import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
-import { Actor } from '../../model/entity/Actor';
-import { Item } from '../../model/entity/Item';
-import { Portal } from '../../model/entity/Portal';
-import { Room } from '../../model/entity/Room';
+import { ReadonlyActor } from '../../model/entity/Actor';
+import { ReadonlyItem } from '../../model/entity/Item';
+import { ReadonlyPortal } from '../../model/entity/Portal';
+import { ReadonlyRoom } from '../../model/entity/Room';
 import { ScriptData } from '../../model/Script';
 import { ShowVolume, StateSource } from '../../util/actor';
 import { ActorTransfer, ItemTransfer, StateEntityTransfer } from '../../util/entity/EntityTransfer';
 import { SearchFilter } from '../../util/entity/find';
+import { Immutable } from '../../util/types';
 import { LocaleContext } from '../locale';
 import { RandomService } from '../random';
 import { StepResult } from '../state';
 
-export type ScriptTarget = WorldEntity;
+export type ScriptTarget = Immutable<WorldEntity>;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
 
 export interface CommandHelper {
-  depth(actor: Actor): Promise<number>;
-  queue(actor: Actor, command: Command): Promise<void>; // TODO: add append/prepend/replace flag
-  ready(actor: Actor): Promise<boolean>;
+  depth(actor: ReadonlyActor): Promise<number>;
+  queue(actor: ReadonlyActor, command: Command): Promise<void>; // TODO: add append/prepend/replace flag
+  ready(actor: ReadonlyActor): Promise<boolean>;
 }
 
 export interface StateHelper {
-  create<TType extends WorldEntityType>(id: string, type: TType, target: StateSource): Promise<EntityForType<TType>>;
+  create<TType extends WorldEntityType>(id: string, type: TType, target: StateSource): Promise<Immutable<EntityForType<TType>>>;
   enter(target: StateSource): Promise<void>; // TODO: remove, auto-invoke as part of move
-  find<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>>;
+  find<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<Immutable<EntityForType<TType>>>>;
   move(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void>; // replaces transfer
   show(source: StateSource, msg: string, context?: LocaleContext, volume?: ShowVolume): Promise<void>;
   quit(): Promise<void>;
-  update(entity: WorldEntity): Promise<void>;
+  update<TEntity extends WorldEntity>(entity: Immutable<TEntity>, changes: Partial<Immutable<TEntity>>): Promise<void>;
 }
 
 /**
@@ -62,12 +63,11 @@ export interface SuppliedScope {
   transfer: StateEntityTransfer;
 
   // optional fields
-  actor?: Actor;
-  command?: Command;
-  item?: Item;
-  portal?: Portal;
-  room?: Room;
-  target?: WorldEntity;
+  actor?: ReadonlyActor;
+  command?: Immutable<Command>;
+  item?: ReadonlyItem;
+  portal?: ReadonlyPortal;
+  room?: ReadonlyRoom;
 }
 
 /**

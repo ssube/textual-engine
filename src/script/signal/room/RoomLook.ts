@@ -1,10 +1,9 @@
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { WorldEntity } from '../../../model/entity';
 import { isRoom } from '../../../model/entity/Room';
-import { ScriptContext } from '../../../service/script';
+import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { SIGNAL_LOOK } from '../../../util/constants';
 
-export async function SignalRoomLook(this: WorldEntity, context: ScriptContext): Promise<void> {
+export async function SignalRoomLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isRoom(this)) {
     throw new ScriptTargetError('script target must be a room');
   }

@@ -1,12 +1,11 @@
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { WorldEntity } from '../../../model/entity';
 import { isPortal } from '../../../model/entity/Portal';
 import { ROOM_TYPE } from '../../../model/entity/Room';
-import { ScriptContext } from '../../../service/script';
+import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { getKey } from '../../../util/collection/map';
 import { STAT_CLOSED } from '../../../util/constants';
 
-export async function SignalPortalLook(this: WorldEntity, context: ScriptContext): Promise<void> {
+export async function SignalPortalLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isPortal(this)) {
     throw new ScriptTargetError('script target must be a portal');
   }

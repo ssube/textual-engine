@@ -59,7 +59,9 @@ export function getStubHelper(): StateHelper {
     move: stub(),
     quit: stub(),
     show: stub(),
-    update: stub(),
+    update: async (entity, changes) => {
+      Object.assign(entity, changes);
+    },
   };
 }
 

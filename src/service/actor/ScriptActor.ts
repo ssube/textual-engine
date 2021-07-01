@@ -5,8 +5,8 @@ import { Inject, Logger } from 'noicejs';
 import { ActorService } from '.';
 import { ConfigError } from '../../error/ConfigError';
 import { Command } from '../../model/Command';
-import { Actor, ActorSource } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
+import { ActorSource, ReadonlyActor } from '../../model/entity/Actor';
+import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, EVENT_STATE_STEP } from '../../util/constants';
@@ -127,7 +127,7 @@ export class ScriptActorService implements ActorService {
     this.step.turn = event.step.turn;
   }
 
-  protected async queue(room: Room, actor: Actor, command: Command): Promise<void> {
+  protected async queue(room: ReadonlyRoom, actor: ReadonlyActor, command: Command): Promise<void> {
     this.event.emit(EVENT_ACTOR_COMMAND, {
       actor,
       command,

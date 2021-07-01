@@ -3,8 +3,8 @@ import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
-import { Actor } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
+import { ReadonlyActor } from '../../model/entity/Actor';
+import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { checkVolume, StateSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
@@ -40,8 +40,8 @@ export class PlayerActorService implements ActorService {
   protected logger: Logger;
 
   // old focus
-  protected actor?: Actor;
-  protected room?: Room;
+  protected actor?: ReadonlyActor;
+  protected room?: ReadonlyRoom;
   protected history: Array<Command>;
 
   /**

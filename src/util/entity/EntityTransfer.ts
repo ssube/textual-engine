@@ -1,24 +1,24 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { Actor, isActor } from '../../model/entity/Actor';
-import { isItem, Item } from '../../model/entity/Item';
-import { isRoom, Room } from '../../model/entity/Room';
+import { isActor, ReadonlyActor } from '../../model/entity/Actor';
+import { isItem, ReadonlyItem } from '../../model/entity/Item';
+import { isRoom, ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_LOGGER, InjectedOptions } from '../../module';
 import { ScriptContext } from '../../service/script';
 import { SIGNAL_ENTER, SIGNAL_GET } from '../constants';
 import { makeServiceLogger } from '../service';
 
 export interface ActorTransfer {
-  moving: Actor;
-  source: Room;
-  target: Room;
+  moving: ReadonlyActor;
+  source: ReadonlyRoom;
+  target: ReadonlyRoom;
 }
 
 export interface ItemTransfer {
-  moving: Item;
-  source: Actor | Room;
-  target: Actor | Room;
+  moving: ReadonlyItem;
+  source: ReadonlyActor | ReadonlyRoom;
+  target: ReadonlyActor | ReadonlyRoom;
 }
 
 @Inject(INJECT_LOGGER)
@@ -54,8 +54,10 @@ export class StateEntityTransfer {
 
     // move the actor
     this.logger.debug(transfer, 'moving actor between rooms');
-    source.actors.splice(idx, 1);
-    target.actors.push(transfer.moving);
+
+    // TODO: should not mutate here
+    (source.actors as Array<ReadonlyActor>).splice(idx, 1);
+    (target.actors as Array<ReadonlyActor>).push(transfer.moving);
 
     await context.state.enter({
       actor: moving,
@@ -107,8 +109,10 @@ export class StateEntityTransfer {
       target,
       transfer,
     }, 'moving item between entities');
-    source.items.splice(idx, 1);
-    target.items.push(moving);
+
+    // TODO: mutate elsewhere
+    (source.items as Array<ReadonlyItem>).splice(idx, 1);
+    (target.items as Array<ReadonlyItem>).push(moving);
 
     await context.script.invoke(target, SIGNAL_GET, {
       ...context,

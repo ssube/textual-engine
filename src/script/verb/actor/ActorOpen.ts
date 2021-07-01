@@ -4,7 +4,7 @@ import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { isPortal, PORTAL_TYPE } from '../../../model/entity/Portal';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { getKey } from '../../../util/collection/map';
+import { getKey, setKey } from '../../../util/collection/map';
 import { STAT_CLOSED } from '../../../util/constants';
 import { createFuzzyMatcher } from '../../../util/entity/match';
 
@@ -34,6 +34,8 @@ export async function VerbActorOpen(this: ScriptTarget, context: ScriptContext):
     return;
   }
 
-  portal.stats.set(STAT_CLOSED, 0);
+  const stats = setKey(portal.stats, STAT_CLOSED, 0);
+  await context.state.update(portal, { stats });
+
   await context.state.show(context.source, 'actor.open.opened', { portal });
 }

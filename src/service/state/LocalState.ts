@@ -695,7 +695,10 @@ export class LocalStateService implements StateService {
         const template = findByBaseId(world.templates.actors, id);
         const actor = await generator.createActor(template);
 
-        (target.room.actors as Array<Actor>).push(actor);
+        await this.stepUpdate(target.room, {
+          actors: [...target.room.actors, actor],
+        });
+
         await this.stepEnter({
           actor,
           room: target.room,
@@ -708,11 +711,16 @@ export class LocalStateService implements StateService {
         const item = await generator.createItem(template);
 
         if (doesExist(target.actor)) {
-          (target.actor.items as Array<Item>).push(item);
-          // TODO: fire get signal
+          await this.stepUpdate(target.actor, {
+            items: [...target.actor.items, item],
+          });
         } else {
-          (target.room.items as Array<Item>).push(item);
+          await this.stepUpdate(target.room, {
+            items: [...target.room.items, item],
+          });
         }
+
+        // TODO: fire get signal
 
         return item as Immutable<EntityForType<TType>>;
       }

@@ -24,7 +24,7 @@ export async function SignalItemReplace(this: ScriptTarget, context: ScriptConte
     split: '|',
   }).flat(Infinity) as Array<string>;
 
-  console.log('replace groups', replaceGroups);
+  context.logger.debug({ item: this, replaceGroups }, 'replace groups for item');
 
   for (const group of replaceGroups) {
     const [type, id] = group.split(':');

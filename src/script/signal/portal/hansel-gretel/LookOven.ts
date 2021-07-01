@@ -7,7 +7,7 @@ import { SignalPortalLook } from '../PortalLook';
 /**
  * Describe the room on the other side, and whether it contains one of the siblings.
  */
-export async function SignalPortalLookOven(this: ScriptTarget, context: ScriptContext): Promise<void> {
+export async function SignalPortalLookHGOven(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isPortal(this)) {
     throw new ScriptTargetError('script target must be a portal');
   }

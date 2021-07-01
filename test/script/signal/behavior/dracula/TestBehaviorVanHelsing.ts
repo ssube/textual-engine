@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { createStubInstance } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { SignalBehaviorDraculaVanHelsing } from '../../../../src/script/signal/behavior/dracula/BehaviorVanHelsing';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { VERB_LOOK } from '../../../../src/util/constants';
-import { makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
+import { makeCommand } from '../../../../../src/model/Command';
+import { SignalBehaviorDraculaVanHelsing } from '../../../../../src/script/signal/behavior/dracula/BehaviorVanHelsing';
+import { MathRandomService } from '../../../../../src/service/random/MathRandom';
+import { VERB_LOOK } from '../../../../../src/util/constants';
+import { makeTestItem, makeTestRoom } from '../../../../entity';
+import { createTestContext, getStubHelper } from '../../../../helper';
 
 describe('actor behavior signal for Van Helsing', () => {
   it('should require the script target be an actor', async () => {

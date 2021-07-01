@@ -8,6 +8,7 @@ import { INJECT_LOGGER, InjectedOptions } from '../../module';
 import { ScriptContext } from '../../service/script';
 import { SIGNAL_ENTER, SIGNAL_GET } from '../constants';
 import { makeServiceLogger } from '../service';
+import { remove } from '../collection/array';
 
 export interface ActorTransfer {
   moving: ReadonlyActor;
@@ -55,9 +56,13 @@ export class StateEntityTransfer {
     // move the actor
     this.logger.debug(transfer, 'moving actor between rooms');
 
-    // TODO: should not mutate here
-    (source.actors as Array<ReadonlyActor>).splice(idx, 1);
-    (target.actors as Array<ReadonlyActor>).push(transfer.moving);
+    const sourceActors = remove(source.actors, (it) => it.meta.id === moving.meta.id);
+    await context.state.update(source, { actors: sourceActors });
+
+    const targetActors = [...target.actors, transfer.moving];
+    await context.state.update(target, { actors: targetActors });
+
+    this.logger.debug(transfer, 'sending room entry signal');
 
     await context.state.enter({
       actor: moving,
@@ -110,9 +115,13 @@ export class StateEntityTransfer {
       transfer,
     }, 'moving item between entities');
 
-    // TODO: mutate elsewhere
-    (source.items as Array<ReadonlyItem>).splice(idx, 1);
-    (target.items as Array<ReadonlyItem>).push(moving);
+    const sourceItems = remove(source.items, (it) => it.meta.id === moving.meta.id);
+    await context.state.update(source, { items: sourceItems });
+
+    const targetItems = [...target.items, transfer.moving];
+    await context.state.update(target, { items: targetItems });
+
+    this.logger.debug(transfer, 'sending item get signal');
 
     await context.script.invoke(target, SIGNAL_GET, {
       ...context,

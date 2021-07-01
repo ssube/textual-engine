@@ -1,11 +1,11 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { makeCommand } from '../../../model/Command';
-import { ActorSource, isActor } from '../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { randomItem } from '../../../util/collection/array';
-import { getKey } from '../../../util/collection/map';
-import { VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../../util/constants';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError';
+import { makeCommand } from '../../../../model/Command';
+import { ActorSource, isActor } from '../../../../model/entity/Actor';
+import { ScriptContext, ScriptTarget } from '../../../../service/script';
+import { randomItem } from '../../../../util/collection/array';
+import { getKey } from '../../../../util/collection/map';
+import { VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../../../util/constants';
 
 export async function SignalBehaviorEnemy(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -40,4 +40,3 @@ export async function SignalBehaviorEnemy(this: ScriptTarget, context: ScriptCon
 
   return context.behavior.queue(this, makeCommand(VERB_WAIT));
 }
-

@@ -12,6 +12,7 @@ import { ActorTransfer, ItemTransfer, StateEntityTransfer } from '../../util/ent
 import { SearchFilter } from '../../util/entity/find';
 import { LocaleContext } from '../locale';
 import { RandomService } from '../random';
+import { StepResult } from '../state';
 
 export type ScriptTarget = WorldEntity;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;
@@ -44,12 +45,14 @@ export interface SuppliedScope {
   data: ScriptData;
   random: RandomService;
 
+  source: StateSource;
+
   /**
    * Safe access to search and modify state.
    */
   state: StateHelper;
 
-  source: StateSource;
+  step: StepResult;
 
   /**
    * Entity transfer helper.

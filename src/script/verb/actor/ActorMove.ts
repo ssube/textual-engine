@@ -1,4 +1,4 @@
-import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { doesExist, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { ActorSource, isActor } from '../../../model/entity/Actor';
@@ -57,6 +57,12 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     actor: this,
     portal: targetPortal,
   });
+
+  // leader movement flags
+  const pathKey = this.flags.get('leader');
+  if (doesExist(pathKey)) {
+    currentRoom.flags.set(pathKey, targetPortal.meta.id);
+  }
 
   // move the actor and focus
   await context.transfer.moveActor({

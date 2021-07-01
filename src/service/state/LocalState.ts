@@ -587,6 +587,7 @@ export class LocalStateService implements StateService {
         show: (msg, context, volume, source) => this.stepShow(msg, context, volume, source),
         update: (entity) => this.stepUpdate(entity),
       },
+      step: this.state.step,
       transfer: mustExist(this.transfer),
     };
 

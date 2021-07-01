@@ -16,7 +16,12 @@ describe('script actor', () => {
   it('should invoke the behavior signal on room events', async () => {
     const container = await getTestContainer(new CoreModule());
 
-    const actorService = await container.create(ScriptActorService);
+    const actorService = await container.create(ScriptActorService, {
+      config: {
+        attack: 0.5,
+        wander: 0.5,
+      },
+    });
     await actorService.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);

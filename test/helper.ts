@@ -85,6 +85,10 @@ export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptCon
       room: makeTestRoom('', '', ''),
     },
     state: getStubHelper(),
+    step: {
+      time: 0,
+      turn: 0,
+    },
     transfer: createTestTransfer(),
     ...parts,
   };

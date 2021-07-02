@@ -1,4 +1,4 @@
-import { mustExist } from '@apextoaster/js-utils';
+import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 
@@ -45,5 +45,29 @@ describe('script actor', () => {
 
     const commandActor = mustExist(commandEvent.actor);
     expect(commandActor.meta.id).to.equal(actor.meta.id);
+  });
+
+  it('should detach from events when stopped', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const actorService = await container.create(ScriptActorService, {
+      config: {},
+    });
+    await actorService.start();
+    await actorService.stop();
+
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    expect(events.listenerCount(EVENT_STATE_ROOM)).to.equal(0);
+  });
+
+  it('should not implement the last command method', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const actorService = await container.create(ScriptActorService, {
+      config: {},
+    });
+    await actorService.start();
+
+    return expect(actorService.last()).to.eventually.be.rejectedWith(NotImplementedError);
   });
 });

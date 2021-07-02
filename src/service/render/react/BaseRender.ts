@@ -3,23 +3,20 @@ import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
-import { ShortcutData, ShortcutItem, StatusItem } from '../../../component/shared';
+import { ShortcutData, StatusItem } from '../../../component/shared';
 import { ConfigError } from '../../../error/ConfigError';
-import { Entity } from '../../../model/entity/Base';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { onceEvent } from '../../../util/async/event';
 import { ClearResult, debounce } from '../../../util/async/Throttle';
-import { remove } from '../../../util/collection/array';
 import {
-  COMMON_STATS,
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
 } from '../../../util/constants';
+import { getEventShortcuts } from '../../../util/render';
 import { makeSchema } from '../../../util/schema';
-import { getVerbScripts } from '../../../util/script';
 import { makeServiceLogger } from '../../../util/service';
 import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
 import { EventBus } from '../../event';
@@ -155,28 +152,9 @@ export abstract class BaseReactRender implements RenderService {
   public onRoom(result: ActorRoomEvent): void {
     this.logger.debug(result, 'handling room event from state');
 
-    function extractShortcut(entity: Entity): ShortcutItem {
-      return {
-        id: entity.meta.id,
-        name: entity.meta.name,
-      };
-    }
-
-    this.shortcuts.actors = remove(result.room.actors, (it) => it.meta.id === result.pid).map(extractShortcut);
-    this.shortcuts.items = result.room.items.map(extractShortcut);
-    this.shortcuts.portals = result.room.portals.map((it) => ({
-      id: it.meta.id,
-      name: `${it.group.source} ${it.meta.name}`,
-    }));
-    this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
-      id: it,
-      name: it,
-    }));
-
-    this.stats = Array.from(result.actor.stats.entries()).map((it) => ({
-      name: it[0],
-      value: it[1],
-    })).filter((it) => COMMON_STATS.includes(it.name));
+    const { shortcuts, stats } = getEventShortcuts(result);
+    this.shortcuts = shortcuts;
+    this.stats = stats;
 
     this.setPrompt(`turn ${this.step.turn}`);
     this.queueUpdate.call();

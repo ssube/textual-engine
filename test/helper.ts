@@ -4,7 +4,7 @@ import { createStubInstance, stub } from 'sinon';
 import { LocalScriptService, MathRandomService, StateEntityTransfer } from '../src/lib';
 import { ConfigFile } from '../src/model/file/Config';
 import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
-import { ScriptContext, StateHelper } from '../src/service/script';
+import { CommandHelper, ScriptContext, StateHelper } from '../src/service/script';
 import { makeTestRoom } from './entity';
 
 export function getTestLogger(): Logger {
@@ -65,6 +65,14 @@ export function getStubHelper(): StateHelper {
   };
 }
 
+export function createStubBehavior(): CommandHelper {
+  return {
+    depth: stub(),
+    queue: stub(),
+    ready: stub(),
+  };
+}
+
 export function createTestTransfer(): StateEntityTransfer {
   return {
     moveActor: stub(),
@@ -74,11 +82,7 @@ export function createTestTransfer(): StateEntityTransfer {
 
 export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptContext {
   return {
-    behavior: {
-      depth: stub(),
-      queue: stub(),
-      ready: stub(),
-    },
+    behavior: createStubBehavior(),
     data: new Map(),
     logger: getTestLogger(),
     random: createStubInstance(MathRandomService),

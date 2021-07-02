@@ -571,22 +571,22 @@ export class LocalStateService implements StateService {
 
     const scope: Omit<SuppliedScope, 'source'> = {
       behavior: {
-        depth: async (actor) => this.commandBuffer.depth(actor as Actor),
+        depth: async (actor) => this.commandBuffer.depth(actor),
         queue: async (actor, command) => {
-          this.commandBuffer.push(actor as Actor, command);
+          this.commandBuffer.push(actor, command);
         },
-        ready: async (actor) => this.commandBuffer.depth(actor as Actor) > 0,
+        ready: async (actor) => this.commandBuffer.depth(actor) > 0,
       },
       data: new Map(),
       random: this.random,
       state: {
-        create: (id, type, target) => this.stepCreate(id, type, target),
-        enter: (target) => this.stepEnter(target),
-        find: (search) => this.stepFind(search),
-        move: (target, context) => this.stepMove(target, context),
-        quit: () => this.doQuit(),
-        show: (msg, context, volume, source) => this.stepShow(msg, context, volume, source),
-        update: (entity, changes) => this.stepUpdate(entity, changes),
+        create: /* istanbul ignore next */ (id, type, target) => this.stepCreate(id, type, target),
+        enter: /* istanbul ignore next */ (target) => this.stepEnter(target),
+        find: /* istanbul ignore next */ (search) => this.stepFind(search),
+        move: /* istanbul ignore next */ (target, context) => this.stepMove(target, context),
+        quit: /* istanbul ignore next */ () => this.doQuit(),
+        show: /* istanbul ignore next */ (msg, context, volume, source) => this.stepShow(msg, context, volume, source),
+        update: /* istanbul ignore next */ (entity, changes) => this.stepUpdate(entity, changes),
       },
       step: this.state.step,
       transfer: mustExist(this.transfer),

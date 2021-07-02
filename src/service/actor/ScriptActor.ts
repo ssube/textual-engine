@@ -105,19 +105,19 @@ export class ScriptActorService implements ActorService {
       random: this.random,
       room: event.room,
       state: {
-        create: () => { throw new NotImplementedError('behavior scripts cannot create entities'); },
-        enter: () => { throw new NotImplementedError('behavior scripts cannot enter rooms'); },
+        create: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot create entities'); },
+        enter: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot enter rooms'); },
         find: () => Promise.resolve([]), // TODO: can search own room history
-        move: () => { throw new NotImplementedError('behavior scripts cannot move entities'); },
-        show: () => { throw new NotImplementedError('behavior scripts cannot show messages'); },
-        quit: () => { throw new NotImplementedError('behavior scripts cannot quit the game'); },
-        update: () => { throw new NotImplementedError('behavior scripts cannot update entities'); },
+        move: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot move entities'); },
+        show: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot show messages'); },
+        quit: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot quit the game'); },
+        update: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot update entities'); },
       },
       source: event,
       step: this.step,
       transfer: {
-        moveActor: () => { throw new NotImplementedError('behavior scripts cannot move actors'); },
-        moveItem: () => { throw new NotImplementedError('behavior scripts cannot move items'); },
+        moveActor: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot move actors'); },
+        moveItem: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot move items'); },
       } as any,
     });
   }

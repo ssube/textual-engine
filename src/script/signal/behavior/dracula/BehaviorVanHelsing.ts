@@ -1,5 +1,3 @@
-import { mustExist } from '@apextoaster/js-utils';
-
 import { ScriptTargetError } from '../../../../error/ScriptTargetError';
 import { isActor } from '../../../../model/entity/Actor';
 import { ScriptContext, ScriptTarget } from '../../../../service/script';
@@ -18,9 +16,6 @@ export async function SignalBehaviorDraculaVanHelsing(this: ScriptTarget, contex
   if (!isActor(this)) {
     throw new ScriptTargetError('target must be an actor');
   }
-
-  const behavior = context.random.nextFloat();
-  context.logger.debug({ behavior }, 'received room event from state');
 
   // TODO: behavior
 }

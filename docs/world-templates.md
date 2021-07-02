@@ -25,6 +25,7 @@ This guide covers the format of a world template and how to make your own.
     - [Loading Templates from Local Files](#loading-templates-from-local-files)
     - [Loading Templates from Github](#loading-templates-from-github)
     - [Starting New Game from Template](#starting-new-game-from-template)
+    - [Graphing Rooms and Portals](#graphing-rooms-and-portals)
   - [Existing Mechanics](#existing-mechanics)
     - [Default Mechanics](#default-mechanics)
     - [Closed and Locked Doors](#closed-and-locked-doors)
@@ -345,6 +346,38 @@ You are in a Introduction: a garden with a rose tree (room-intro-21).
 You see a Rose: red rose with sharp thorns (item-rose-12).
 You see a Painted Rose: painted white rose with sharp thorns (item-rose-13).
 You see a Rose: red rose with sharp thorns (item-rose-14).
+```
+
+### Graphing Rooms and Portals
+
+The engine can print a graph of the generated rooms and portal connecting them in [the DOT language](https://graphviz.org/doc/info/lang.html),
+which can be drawn by [the Graphviz tools](https://graphviz.org/). `make` targets are provided to run the game and
+render the graph, and the graph can be used to debug custom worlds.
+
+To load the sample Dracula world template, create a new game, print the graph, and render it:
+
+```shell
+> RUN_ARGS='--config data/config.yml --data file://data/samples/dracula.yml --input "create a sample-dracula with test and with 4" --input "graph file://out/debug-graph" --input quit' make run graph
+yarn
+yarn install v1.22.4
+[1/4] Resolving packages...
+success Already up-to-date.
+Done in 0.31s.
+yarn tsc
+yarn run v1.22.4
+$ /home/ssube/code/ssube/text-adventure/node_modules/.bin/tsc
+Done in 14.03s.
+node  --require esm out/src/index.js --config data/config.yml --data file://data/samples/dracula.yml --input "create a sample-dracula with test and with 4" --input "graph file://out/debug-graph" --input quit
+Output: 3 lines                                                                                         > Actors
+created new world Dracula (sample-dracula-0) from sample-dracula with seed of test and room depth of 4    Items
+wrote 3 node graph to file://out/debug-graph                                                              Portals
+quitting                                                                                                  Verbs
+
+Game Over
+health: 10
+main exited 0
+cat out/debug-graph | dot -Tpng -oout/debug-graph.png && sensible-browser out/debug-graph.png
+Opening in existing browser session.
 ```
 
 ## Existing Mechanics

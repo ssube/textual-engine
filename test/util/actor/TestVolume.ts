@@ -27,7 +27,17 @@ describe('actor utils', () => {
       }, ShowVolume.SELF), 'different actor in the same room').to.equal(false);
     });
 
-    xit('should not show volume self when the source or target actor is missing');
+    it('should not show volume self when the source or target actor is missing', async () => {
+      const sourceActor = makeTestActor('foo', 'foo', 'foo');
+      const room = makeTestRoom('room-foo', 'foo', 'foo', [sourceActor], []);
+
+      expect(checkVolume({
+        actor: sourceActor,
+        room,
+      }, {
+        room,
+      }, ShowVolume.SELF)).to.equal(false);
+    });
 
     it('should show volume room from the same room', async () => {
       const sourceActor = makeTestActor('foo', 'foo', 'foo');

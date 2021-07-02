@@ -1,4 +1,4 @@
-import { doesExist, isNil, Optional } from '@apextoaster/js-utils';
+import { doesExist, Optional } from '@apextoaster/js-utils';
 
 export interface ClearResult<TResult = void> {
   call: () => TResult;
@@ -30,22 +30,16 @@ export function debounce(interval: number, inner: () => void): ClearResult {
 }
 
 export function throttle<TResult>(interval: number, inner: () => TResult): ClearResult<Optional<TResult>> {
-  let fired = false;
   let timeout: Optional<NodeJS.Timeout>;
 
   function call() {
-    if (fired) {
+    if (doesExist(timeout)) {
       return;
     }
 
-    if (isNil(timeout)) {
-      timeout = setTimeout(() => {
-        fired = false;
-        timeout = undefined;
-      }, interval);
-    }
-
-    fired = true;
+    timeout = setTimeout(() => {
+      timeout = undefined;
+    }, interval);
 
     return inner();
   }

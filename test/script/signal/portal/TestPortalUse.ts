@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { createStubInstance } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
@@ -13,7 +12,6 @@ describe('portal use signal', () => {
   it('should require the script target be a portal', async () => {
     const context = createTestContext({
       command: makeCommand(VERB_WAIT),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
     });
 

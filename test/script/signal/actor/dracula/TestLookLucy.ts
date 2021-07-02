@@ -1,10 +1,9 @@
 import { expect } from 'chai';
-import { createStubInstance, SinonStub } from 'sinon';
+import { SinonStub } from 'sinon';
 
-import { SignalActorLookLucy } from '../../../../../src/script/signal/actor/dracula/LookLucy';
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../../src/model/Command';
-import { MathRandomService } from '../../../../../src/service/random/MathRandom';
+import { SignalActorLookLucy } from '../../../../../src/script/signal/actor/dracula/LookLucy';
 import { STAT_HEALTH, VERB_LOOK } from '../../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
 import { createTestContext, getStubHelper } from '../../../../helper';
@@ -16,7 +15,6 @@ describe('actor look signal for Lucy character', () => {
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,
@@ -35,7 +33,6 @@ describe('actor look signal for Lucy character', () => {
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,

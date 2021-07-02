@@ -1,27 +1,21 @@
 import { expect } from 'chai';
-import { createStubInstance } from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../../src/model/Command';
 import { SignalActorStepHGStepmother } from '../../../../../src/script/signal/actor/hansel-gretel/StepStepmother';
-import { MathRandomService } from '../../../../../src/service/random/MathRandom';
 import { STAT_HEALTH, VERB_LOOK } from '../../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
-import { createTestContext, getStubHelper } from '../../../../helper';
+import { createTestContext } from '../../../../helper';
 
 describe('actor step signal for stepmother character', () => {
   it('should require the script target be an actor', async () => {
-    const state = getStubHelper();
-
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,
       },
-      state,
     });
 
     await expect(SignalActorStepHGStepmother.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);

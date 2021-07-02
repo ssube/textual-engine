@@ -7,21 +7,17 @@ import { SignalBehaviorFollow } from '../../../../../src/script/signal/behavior/
 import { MathRandomService } from '../../../../../src/service/random/MathRandom';
 import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
-import { createStubBehavior, createTestContext, getStubHelper } from '../../../../helper';
+import { createStubBehavior, createTestContext } from '../../../../helper';
 
 describe('actor behavior signal for followers', () => {
   it('should require the script target be an actor', async () => {
-    const state = getStubHelper();
-
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,
       },
-      state,
     });
 
     await expect(SignalBehaviorFollow.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);

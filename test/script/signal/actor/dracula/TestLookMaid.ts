@@ -1,27 +1,22 @@
 import { expect } from 'chai';
-import { createStubInstance, SinonStub } from 'sinon';
+import { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../../src/model/Command';
 import { SignalActorLookMaid } from '../../../../../src/script/signal/actor/dracula/LookMaid';
-import { MathRandomService } from '../../../../../src/service/random/MathRandom';
 import { VERB_LOOK } from '../../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
 import { createTestContext, getStubHelper } from '../../../../helper';
 
 describe('actor look signal for maid characters', () => {
   it('should require the script target be an actor', async () => {
-    const state = getStubHelper();
-
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,
       },
-      state,
     });
 
     await expect(SignalActorLookMaid.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);

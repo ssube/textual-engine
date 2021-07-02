@@ -11,17 +11,13 @@ import { createStubBehavior, createTestContext, getStubHelper } from '../../../.
 
 describe('actor behavior signal for fleeing critters', () => {
   it('should require the script target be an actor', async () => {
-    const state = getStubHelper();
-
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,
       },
-      state,
     });
 
     await expect(SignalBehaviorFlee.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);

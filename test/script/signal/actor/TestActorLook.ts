@@ -1,14 +1,12 @@
 import { expect } from 'chai';
-import { createStubInstance, match } from 'sinon';
+import { match } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { SignalActorLook } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper } from '../../../helper';
 
 describe('actor look signal', () => {
   it('should require the script target be an actor', async () => {
@@ -17,7 +15,6 @@ describe('actor look signal', () => {
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,
@@ -30,17 +27,12 @@ describe('actor look signal', () => {
   });
 
   it('should describe the actor', async () => {
-    const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
-    const transfer = createTestTransfer();
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      script,
       state,
-      transfer,
     });
 
     const actor = makeTestActor('', '', '');
@@ -51,17 +43,12 @@ describe('actor look signal', () => {
   });
 
   it('should note if the actor is dead', async () => {
-    const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
-    const transfer = createTestTransfer();
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      script,
       state,
-      transfer,
     });
 
     await SignalActorLook.call(makeTestActor('', '', ''), context);

@@ -1,10 +1,9 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
+import { match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../../src/model/Command';
 import { SignalBehaviorDraculaQuincey } from '../../../../../src/script/signal/behavior/dracula/BehaviorQuincey';
-import { MathRandomService } from '../../../../../src/service/random/MathRandom';
 import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
 import { createStubBehavior, createTestContext, getStubHelper } from '../../../../helper';
@@ -16,7 +15,6 @@ describe('actor behavior signal for Quincey Morris', () => {
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,
@@ -36,7 +34,6 @@ describe('actor behavior signal for Quincey Morris', () => {
     const context = createTestContext({
       behavior,
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room: introRoom,
       source: {
         room: introRoom,

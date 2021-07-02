@@ -4,7 +4,6 @@ import { createStubInstance, match, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorUse } from '../../../../src/script/verb/actor/ActorUse';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { SIGNAL_USE, VERB_USE } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
@@ -28,7 +27,6 @@ describe('actor use verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo'),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       state: stateHelper,
     });
@@ -47,7 +45,6 @@ describe('actor use verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo'),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state,
@@ -71,7 +68,6 @@ describe('actor use verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo', 'bar'),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state,
@@ -84,7 +80,6 @@ describe('actor use verb', () => {
   });
 
   it('should show an error when the target cannot be found', async () => {
-    const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
 
     const item = makeTestItem('foo', '', '');
@@ -94,9 +89,7 @@ describe('actor use verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo', 'bar'),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      script,
       state,
     });
 

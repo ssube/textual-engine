@@ -27,7 +27,6 @@ describe('actor take verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_TAKE, 'foo'),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       state,
     });
@@ -47,7 +46,6 @@ describe('actor take verb', () => {
     const room = makeTestRoom('', '', '', [], [item]);
     const context = createTestContext({
       command: makeCommand(VERB_TAKE, item.meta.id),
-      random: createStubInstance(MathRandomService),
       room,
       state,
       transfer,

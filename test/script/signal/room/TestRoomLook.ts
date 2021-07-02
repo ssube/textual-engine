@@ -4,7 +4,6 @@ import { createStubInstance, match, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalRoomLook } from '../../../../src/script/signal/room/RoomLook';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
@@ -12,13 +11,9 @@ import { createTestContext, getStubHelper } from '../../../helper';
 
 describe('room look signal', () => {
   it('should require the script target be a room', async () => {
-    const stateHelper = getStubHelper();
-
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      state: stateHelper,
     });
 
     await expect(SignalRoomLook.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
@@ -26,15 +21,12 @@ describe('room look signal', () => {
   });
 
   it('should describe the room', async () => {
-    const script = createStubInstance(LocalScriptService);
     const stateHelper = getStubHelper();
 
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
-      script,
       state: stateHelper,
     });
 
@@ -52,7 +44,6 @@ describe('room look signal', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       script,
       state,
@@ -73,7 +64,6 @@ describe('room look signal', () => {
     const context = createTestContext({
       actor,
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       script,
       state,
@@ -93,7 +83,6 @@ describe('room look signal', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       script,
       state,
@@ -116,7 +105,6 @@ describe('room look signal', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       script,
       state,

@@ -8,21 +8,17 @@ import { SignalBehaviorEnemy } from '../../../../../src/script/signal/behavior/c
 import { MathRandomService } from '../../../../../src/service/random/MathRandom';
 import { VERB_HIT, VERB_LOOK, VERB_MOVE } from '../../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../../entity';
-import { createStubBehavior, createTestContext, getStubHelper } from '../../../../helper';
+import { createStubBehavior, createTestContext } from '../../../../helper';
 
 describe('actor behavior signal for common enemies', () => {
   it('should require the script target be an actor', async () => {
-    const state = getStubHelper();
-
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       source: {
         room,
       },
-      state,
     });
 
     await expect(SignalBehaviorEnemy.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);

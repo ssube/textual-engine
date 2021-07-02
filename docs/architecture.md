@@ -35,8 +35,8 @@ This guide covers the engine architecture in detail, describing entities and sho
     - [Node Module](#node-module)
   - [Services](#services)
   - [Scripts](#scripts)
+    - [Script Target (`this`)](#script-target-this)
     - [Script Context](#script-context)
-      - [Script Target (`this`)](#script-target-this)
       - [Scope Data](#scope-data)
     - [Signal Scripts](#signal-scripts)
     - [Verb Scripts](#verb-scripts)
@@ -201,6 +201,7 @@ Modules are dependency injection groups, binding a related set of services.
 Provides:
 
 - `browser-fetch-loader`
+- `browser-local-loader`
 - `browser-page-loader`
 - `browser-dom-render`
 
@@ -222,6 +223,8 @@ Provides:
 - `core-behavior-actor`
 - `core-player-actor`
 - `core-local-state`
+- `core-compromise-tokenizer`
+- `core-split-tokenizer`
 
 ### Node Module
 
@@ -243,14 +246,14 @@ Events in the world are processed by scripts attached to the entity performing t
 invoked on a single target entity or broadcast to an entire room, and take a context with field for some (optional)
 primitive data.
 
+### Script Target (`this`)
+
+The entity on which the script is being invoked. Always a world entity.
+
 ### Script Context
 
 A context is prepared whenever a script is invoked, with the target (entity upon which the script has
 been invoked), any data that was provided, and some helpers that provide safe ways to mutate the game state.
-
-#### Script Target (`this`)
-
-The entity on which the script is being invoked. Always a world entity.
 
 #### Scope Data
 

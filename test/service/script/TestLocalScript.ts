@@ -20,7 +20,7 @@ describe('local script service', () => {
     const script = await container.create(LocalScriptService, {}, new Map());
     await script.invoke(target, 'foo', createTestContext());
 
-    // TODO: assert something
+    // TODO: make assertions
   });
 
   it('should invoke scripts with target', async () => {

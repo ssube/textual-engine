@@ -4,7 +4,7 @@ import { EntityForType, WorldEntityType } from '../../model/entity';
 import { Actor, ActorType, ReadonlyActor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
 import { ReadonlyItem } from '../../model/entity/Item';
-import { isRoom, Room, RoomType } from '../../model/entity/Room';
+import { isRoom, ReadonlyRoom, Room, RoomType } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
 import { hasText, matchIdSegments } from '../string';
@@ -30,11 +30,11 @@ export interface SearchFilter<TType extends WorldEntityType> {
  * Search state for any matching entities, including actors and their inventories.
  */
 // eslint-disable-next-line complexity,sonarjs/cognitive-complexity
-export function findMatching<TType extends WorldEntityType>(state: WorldState, search: SearchFilter<TType>): Array<Immutable<EntityForType<TType>>> {
+export function findMatching<TType extends WorldEntityType>(rooms: ReadonlyArray<ReadonlyRoom>, search: SearchFilter<TType>): Array<Immutable<EntityForType<TType>>> {
   const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
   const results: Array<EntityForType<TType>> = [];
 
-  for (const room of state.rooms) {
+  for (const room of rooms) {
     if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
       continue;
     }

@@ -21,7 +21,7 @@ const TEST_STATE: WorldState = makeTestState('', [
 describe('entity find utils', () => {
   describe('find matching helper', () => {
     it('should return matching entities', async () => {
-      expect(findMatching(TEST_STATE, {
+      expect(findMatching(TEST_STATE.rooms, {
         meta: {
           id: 'bar',
         },
@@ -30,7 +30,7 @@ describe('entity find utils', () => {
         TEST_STATE.rooms[1],
       ]);
 
-      expect(findMatching(TEST_STATE, {
+      expect(findMatching(TEST_STATE.rooms, {
         meta: {
           id: 'bun',
         },
@@ -39,7 +39,7 @@ describe('entity find utils', () => {
         TEST_STATE.rooms[0].actors[0],
       ]);
 
-      expect(findMatching(TEST_STATE, {
+      expect(findMatching(TEST_STATE.rooms, {
         meta: {
           id: 'bin',
         },
@@ -48,7 +48,7 @@ describe('entity find utils', () => {
         TEST_STATE.rooms[1].items[0],
       ]);
 
-      expect(findMatching(TEST_STATE, {
+      expect(findMatching(TEST_STATE.rooms, {
         meta: {
           id: 'bon',
         },
@@ -57,7 +57,7 @@ describe('entity find utils', () => {
         TEST_STATE.rooms[0].actors[0].items[0],
       ]);
 
-      expect(findMatching(TEST_STATE, {
+      expect(findMatching(TEST_STATE.rooms, {
         meta: {
           id: 'p',
         },
@@ -68,7 +68,7 @@ describe('entity find utils', () => {
     });
 
     it('should skip the contents of rooms that do not match the room filter', async () => {
-      const results = findMatching(TEST_STATE, {
+      const results = findMatching(TEST_STATE.rooms, {
         meta: {
           id: 'bin',
         },

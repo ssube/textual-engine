@@ -179,7 +179,7 @@ export class LocalStateService implements StateService {
     const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
     // find an existing actor, if one exists
-    const [existingActor] = findMatching(state, {
+    const [existingActor] = findMatching(state.rooms, {
       meta: {
         id: event.pid,
       },
@@ -747,7 +747,8 @@ export class LocalStateService implements StateService {
   }
 
   public async stepFind<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<Immutable<EntityForType<TType>>>> {
-    return findMatching(mustExist(this.state), search);
+    const state = mustExist(this.state);
+    return findMatching(state.rooms, search);
   }
 
   public async stepMove(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void> {

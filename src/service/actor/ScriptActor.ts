@@ -10,6 +10,7 @@ import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, EVENT_STATE_STEP } from '../../util/constants';
+import { findMatching } from '../../util/entity/find';
 import { makeSchema } from '../../util/schema';
 import { makeServiceLogger } from '../../util/service';
 import { EventBus } from '../event';
@@ -107,7 +108,7 @@ export class ScriptActorService implements ActorService {
       state: {
         create: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot create entities'); },
         enter: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot enter rooms'); },
-        find: () => Promise.resolve([]), // TODO: can search own room history
+        find: (search) => Promise.resolve(findMatching([event.room], search)),
         move: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot move entities'); },
         show: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot show messages'); },
         quit: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot quit the game'); },

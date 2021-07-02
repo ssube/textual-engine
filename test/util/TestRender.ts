@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { ScriptRef } from '../../src/model/Script';
-import { SIGNAL_ENTER, SIGNAL_REPLACE, STAT_HEALTH, VERB_DROP, VERB_WAIT } from '../../src/util/constants';
+import { SIGNAL_ENTER, SIGNAL_REPLACE, STAT_HEALTH, VERB_DROP, VERB_EQUIP, VERB_WAIT } from '../../src/util/constants';
 
 import { getEventShortcuts } from '../../src/util/render';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../entity';
@@ -47,7 +47,7 @@ describe('render shortcuts helper', () => {
 
     const room = makeTestRoom('', '', '');
     room.scripts.set(VERB_WAIT, script);
-    room.scripts.set(VERB_DROP, script);
+    room.scripts.set(VERB_EQUIP, script);
 
     const { shortcuts } = getEventShortcuts({
       actor,
@@ -55,7 +55,7 @@ describe('render shortcuts helper', () => {
       room,
     });
 
-    expect(shortcuts.verbs).to.have.lengthOf(2);
+    expect(shortcuts.verbs).to.have.lengthOf(3);
   });
 
   it('should include common stats', async () => {

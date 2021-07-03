@@ -21,7 +21,6 @@ describe('actor drop verb', () => {
 
   it('should find the target by id', async () => {
     const state = getStubHelper();
-    const transfer = createTestTransfer();
 
     const items = [
       makeTestItem('foo-1', '', ''),
@@ -35,10 +34,9 @@ describe('actor drop verb', () => {
       command: makeCommand(VERB_DROP, items[0].meta.id),
       room: makeTestRoom('', '', '', [], []),
       state,
-      transfer,
     });
     await VerbActorDrop.call(actor, context);
-    expect(transfer.moveItem).to.have.been.calledWithMatch({
+    expect(state.move).to.have.been.calledWithMatch({
       moving: items[0],
       source: match.object,
       target: match.object,
@@ -47,7 +45,6 @@ describe('actor drop verb', () => {
 
   it('should find the target by name', async () => {
     const state = getStubHelper();
-    const transfer = createTestTransfer();
 
     const items = [
       makeTestItem('foo-1', 'foo bob', ''),
@@ -61,12 +58,11 @@ describe('actor drop verb', () => {
       command: makeCommand(VERB_DROP, 'bob'),
       room: makeTestRoom('', '', '', [], []),
       state,
-      transfer,
     });
 
     await VerbActorDrop.call(actor, context);
 
-    expect(transfer.moveItem).to.have.been.calledWithMatch({
+    expect(state.move).to.have.been.calledWithMatch({
       moving: items[0],
       source: match.object,
       target: match.object,
@@ -75,7 +71,6 @@ describe('actor drop verb', () => {
 
   it('should use the command index', async () => {
     const state = getStubHelper();
-    const transfer = createTestTransfer();
 
     const items = [
       makeTestItem('foo-1', 'foo bob', ''),
@@ -89,12 +84,11 @@ describe('actor drop verb', () => {
       command: makeCommandIndex(VERB_DROP, 1, 'foo'),
       room: makeTestRoom('', '', '', [], []),
       state,
-      transfer,
     });
 
     await VerbActorDrop.call(actor, context);
 
-    expect(transfer.moveItem).to.have.been.calledWithMatch({
+    expect(state.move).to.have.been.calledWithMatch({
       moving: items[1],
       source: match.object,
       target: match.object,
@@ -105,18 +99,15 @@ describe('actor drop verb', () => {
     const state = getStubHelper();
     (state.find as SinonStub).resolves([]);
 
-    const transfer = createTestTransfer();
-
     const actor = makeTestActor('', '', '');
     const context = createTestContext({
       command: makeCommandIndex(VERB_DROP, 1, 'foo'),
       room: makeTestRoom('', '', '', [], []),
       state,
-      transfer,
     });
 
     await VerbActorDrop.call(actor, context);
-    expect(transfer.moveItem).to.have.callCount(0);
+    expect(state.move).to.have.callCount(0);
     expect(state.show).to.have.callCount(1);
   });
 });

@@ -869,15 +869,17 @@ describe('local state service', () => {
         command: makeCommand(META_CREATE, 'foo', '4'),
       });
 
-      const actor = makeTestActor('', '', '');
-      const room = makeTestRoom('', '', '', [actor]);
+      const [room] = await state.stepFind({
+        type: ROOM_TYPE,
+      });
 
+      const actor = makeTestActor('', '', '');
       await state.stepCreate('bar', ACTOR_TYPE, {
         actor,
         room,
       });
 
-      expect(room.actors).to.have.lengthOf(2);
+      expect(room.actors).to.have.lengthOf(1);
     });
 
     it('should create items and add them to the target room', async () => {

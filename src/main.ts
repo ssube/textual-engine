@@ -19,6 +19,7 @@ import {
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
 } from './util/constants';
+import { zeroStep } from './util/entity';
 import { ServiceManager } from './util/service/ServiceManager';
 
 // collect modules
@@ -106,10 +107,7 @@ export async function main(args: Array<string>): Promise<number> {
 
   // trigger the first render
   events.emit(EVENT_STATE_STEP, {
-    step: {
-      time: 0,
-      turn: 0,
-    },
+    step: zeroStep(),
   });
 
   // wait for something to quit

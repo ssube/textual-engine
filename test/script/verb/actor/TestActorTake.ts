@@ -38,7 +38,6 @@ describe('actor take verb', () => {
 
   it('should transfer items from the target room', async () => {
     const state = getStubHelper();
-    const transfer = createTestTransfer();
 
     const item = makeTestItem('foo', '', '');
     (state.find as SinonStub).resolves([item]);
@@ -48,13 +47,12 @@ describe('actor take verb', () => {
       command: makeCommand(VERB_TAKE, item.meta.id),
       room,
       state,
-      transfer,
     });
 
     const actor = makeTestActor('', '', '');
     await VerbActorTake.call(actor, context);
 
-    expect(transfer.moveItem).to.have.been.calledWith({
+    expect(state.move).to.have.been.calledWith({
       moving: item,
       source: room,
       target: actor,

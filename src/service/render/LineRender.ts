@@ -10,6 +10,7 @@ import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../
 import { onceEvent } from '../../util/async/event';
 import { ClearResult, debounce } from '../../util/async/Throttle';
 import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../util/constants';
+import { zeroStep } from '../../util/entity';
 import { makeSchema } from '../../util/schema';
 import { makeServiceLogger } from '../../util/service';
 import { ActorOutputEvent } from '../actor/events';
@@ -60,16 +61,13 @@ export class LineRender implements RenderService {
     this.locale = mustExist(options[INJECT_LOCALE]);
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
 
-    this.step = {
-      turn: 0,
-      time: 0,
-    };
+    // a pseudo-method
+    this.queuePrompt = debounce(config.throttle, () => this.showPrompt());
 
     this.padPrompt = false;
     this.readline = readline;
     this.skipLine = false;
-
-    this.queuePrompt = debounce(config.throttle, () => this.showPrompt());
+    this.step = zeroStep();
   }
 
   public async read(): Promise<string> {

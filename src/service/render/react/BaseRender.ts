@@ -15,6 +15,7 @@ import {
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
 } from '../../../util/constants';
+import { zeroStep } from '../../../util/entity';
 import { getEventShortcuts } from '../../../util/render';
 import { makeSchema } from '../../../util/schema';
 import { makeServiceLogger } from '../../../util/service';
@@ -94,10 +95,7 @@ export abstract class BaseReactRender implements RenderService {
       verbs: [],
     };
     this.stats = [];
-    this.step = {
-      turn: 0,
-      time: 0,
-    };
+    this.step = zeroStep();
   }
 
   public async start(): Promise<void> {

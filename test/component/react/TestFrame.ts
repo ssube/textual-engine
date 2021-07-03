@@ -4,6 +4,7 @@ import TestRenderer from 'react-test-renderer';
 import { stub } from 'sinon';
 
 import { Frame } from '../../../src/component/react/Frame';
+import { zeroStep } from '../../../src/util/entity';
 import { getReactStrings } from './helper';
 
 describe('react frame component', () => {
@@ -25,10 +26,7 @@ describe('react frame component', () => {
         status: true,
       },
       stats: [],
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     const renderer = TestRenderer.create(root);
@@ -55,10 +53,7 @@ describe('react frame component', () => {
         status: true,
       },
       stats: [],
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     const renderer = TestRenderer.create(root);
@@ -85,10 +80,7 @@ describe('react frame component', () => {
         status: true,
       },
       stats: [],
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     const renderer = TestRenderer.create(root);

@@ -20,6 +20,7 @@ import {
   EVENT_STATE_ROOM,
   EVENT_TOKEN_COMMAND,
 } from '../../util/constants';
+import { zeroStep } from '../../util/entity';
 import { makeServiceLogger } from '../../util/service';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
@@ -78,7 +79,7 @@ export class PlayerActorService implements ActorService {
       catchAndLog(this.onStateOutput(event), this.logger, 'error during state output');
     }, this);
     this.event.on(EVENT_COMMON_QUIT, () => {
-      catchAndLog(this.showLine({ time: 0, turn: 0 }, 'meta.quit'), this.logger, 'error sending quit output');
+      catchAndLog(this.showLine(zeroStep(), 'meta.quit'), this.logger, 'error sending quit output');
     }, this);
   }
 

@@ -1,12 +1,12 @@
 import { doesExist, mergeMap, mustExist, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { equipItems } from '.';
+import { equipItems, isDestPortal, zeroStep } from '.';
 import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { Portal, PORTAL_TYPE, PortalLinkage } from '../../model/entity/Portal';
-import { ReadonlyRoom, Room, ROOM_TYPE } from '../../model/entity/Room';
+import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
 import { Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
 import { Metadata } from '../../model/Metadata';
@@ -38,10 +38,6 @@ export class StateEntityGenerator {
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.random = mustExist(options[INJECT_RANDOM]);
     this.template = mustExist(options[INJECT_TEMPLATE]);
-  }
-
-  public getWorld(): WorldTemplate {
-    return mustExist(this.world);
   }
 
   public setWorld(world: WorldTemplate): void {
@@ -224,10 +220,7 @@ export class StateEntityGenerator {
       start: {
         room: startRoom.meta.id,
       },
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
       world: {
         ...params,
       },
@@ -373,7 +366,7 @@ export class StateEntityGenerator {
   }
 
   // eslint-disable-next-line complexity, sonarjs/cognitive-complexity
-  public async populateRoom(firstRoom: ReadonlyRoom, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
+  public async populateRoom(firstRoom: Room, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
     if (max <= 0) {
       return [];
     }
@@ -381,7 +374,7 @@ export class StateEntityGenerator {
     const world = this.getWorld();
 
     const addedRooms = [];
-    const pendingRooms: Array<Room> = [firstRoom as Room]; // TODO: do not cast
+    const pendingRooms = [firstRoom];
 
     while (pendingRooms.length > 0 && addedRooms.length < max) {
       const room = mustExist(pendingRooms.shift());
@@ -430,19 +423,19 @@ export class StateEntityGenerator {
           }
 
           // if room is a valid dest
-          if (matchIdSegments(it.meta.id, destId)) {
-            // find unlinked portal in opposing group
-            return it.portals.some((p) => {
-              if (p.dest === '' && groupKeys.has(p.group.key) && p.group.target === group) {
-                this.logger.debug({ destId, portal: p, room }, 'found unlinked destination portal');
-                return true;
-              } else {
-                return false;
-              }
-            });
-          } else {
+          if (matchIdSegments(it.meta.id, destId) === false) {
             return false;
           }
+
+          // find unlinked portal in opposing group
+          return it.portals.some((p) => {
+            if (p.dest === '' && groupKeys.has(p.group.key) && p.group.target === group) {
+              this.logger.debug({ destId, portal: p, room }, 'found unlinked destination portal');
+              return true;
+            } else {
+              return false;
+            }
+          });
         });
 
         if (doesExist(existingRoom)) {
@@ -456,11 +449,7 @@ export class StateEntityGenerator {
 
             if (portal.link === PortalLinkage.BOTH) {
               // find existing portal
-              const existingPortal = existingRoom.portals.find((it) =>
-                it.dest === '' &&
-                it.group.key === portal.group.key &&
-                it.group.target === portal.group.source
-              );
+              const existingPortal = existingRoom.portals.find((it) => isDestPortal(portal, it));
 
               if (doesExist(existingPortal)) {
                 existingPortal.dest = room.meta.id;
@@ -488,22 +477,17 @@ export class StateEntityGenerator {
 
           if (portal.link === PortalLinkage.BOTH) {
             // find existing portal
-            const existingPortal = destRoom.portals.find((it) =>
-              it.dest === '' &&
-              it.group.key === portal.group.key &&
-              it.group.source === portal.group.target
-            );
+            const existingPortal = destRoom.portals.find((it) => isDestPortal(portal, it));
 
             if (doesExist(existingPortal)) {
               existingPortal.dest = room.meta.id;
-
-              continue;
+            } else {
+              // or create reverse link
+              const destPortal = await this.reversePortal(portal, room);
+              destPortal.dest = room.meta.id;
+              destRoom.portals.push(destPortal);
+              this.logger.debug({ portal: destPortal, room }, 'inserting destination portal for new room without match');
             }
-
-            // or create reverse link
-            const destPortal = await this.reversePortal(portal);
-            destPortal.dest = room.meta.id;
-            destRoom.portals.push(destPortal);
           }
         }
 
@@ -516,20 +500,19 @@ export class StateEntityGenerator {
     return addedRooms;
   }
 
-  public async reversePortal(portal: Portal): Promise<Portal> {
-    return {
-      ...portal,
-      group: {
-        key: portal.group.key,
-        source: portal.group.target,
-        target: portal.group.source,
-      },
-      meta: {
-        desc: portal.meta.desc,
-        id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,
-        name: portal.meta.name,
-        template: portal.meta.template,
-      },
-    };
+  public async reversePortal(portal: Portal, room: Room): Promise<Portal> {
+    const template = findByBaseId(this.getWorld().templates.portals, portal.meta.template);
+    const reverse = await this.createPortal(template);
+
+    reverse.dest = room.meta.id;
+    reverse.link = PortalLinkage.BOTH;
+    reverse.group.source = portal.group.target;
+    reverse.group.target = portal.group.source;
+
+    return reverse;
+  }
+
+  protected getWorld(): WorldTemplate {
+    return mustExist(this.world);
   }
 }

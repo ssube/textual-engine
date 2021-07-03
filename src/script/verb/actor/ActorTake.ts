@@ -45,7 +45,7 @@ export async function VerbActorTake(this: ScriptTarget, context: ScriptContext):
     return;
   }
 
-  await context.transfer.moveItem({
+  await context.state.move({
     moving,
     source: room,
     target: this

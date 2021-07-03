@@ -4,6 +4,7 @@ import * as React from 'react';
 import { stub } from 'sinon';
 
 import { Frame } from '../../../src/component/ink/Frame';
+import { zeroStep } from '../../../src/util/entity';
 import { KEY_ENTER, KEY_TAB } from '../../constants';
 import { sendKeys } from './helper';
 
@@ -26,10 +27,7 @@ describe('ink frame component', () => {
         status: true,
       },
       stats: [],
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     const { lastFrame } = render(root);
@@ -56,10 +54,7 @@ describe('ink frame component', () => {
         status: true,
       },
       stats: [],
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     const { lastFrame } = render(root);
@@ -86,10 +81,7 @@ describe('ink frame component', () => {
         status: true,
       },
       stats: [],
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     const { lastFrame, stdin } = render(root);

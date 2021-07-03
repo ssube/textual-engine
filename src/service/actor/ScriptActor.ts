@@ -10,6 +10,7 @@ import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, EVENT_STATE_STEP } from '../../util/constants';
+import { zeroStep } from '../../util/entity';
 import { findMatching } from '../../util/entity/find';
 import { makeSchema } from '../../util/schema';
 import { makeServiceLogger } from '../../util/service';
@@ -64,11 +65,7 @@ export class ScriptActorService implements ActorService {
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.random = mustExist(options[INJECT_RANDOM]);
     this.script = mustExist(options[INJECT_SCRIPT]);
-
-    this.step = {
-      time: 0,
-      turn: 0,
-    };
+    this.step = zeroStep();
   }
 
   public async start(): Promise<void> {
@@ -97,7 +94,7 @@ export class ScriptActorService implements ActorService {
       behavior: {
         depth: () => Promise.resolve(0), // TODO: implement
         queue: (actor, command) => this.queue(event.room, actor, command),
-        ready: () => Promise.resolve(true), // TODO: implement
+        ready: () => Promise.resolve(false), // TODO: implement
       },
       data: new Map([
         ['attack', this.config.attack],
@@ -116,10 +113,6 @@ export class ScriptActorService implements ActorService {
       },
       source: event,
       step: this.step,
-      transfer: {
-        moveActor: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot move actors'); },
-        moveItem: /* istanbul ignore next */ () => { throw new NotImplementedError('behavior scripts cannot move items'); },
-      } as any,
     });
   }
 

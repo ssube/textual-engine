@@ -34,7 +34,7 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
     return;
   }
 
-  await context.transfer.moveItem({
+  await context.state.move({
     moving,
     source: this,
     target: room,

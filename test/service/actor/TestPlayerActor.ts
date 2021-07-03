@@ -23,6 +23,7 @@ import {
   EVENT_TOKEN_COMMAND,
   VERB_WAIT,
 } from '../../../src/util/constants';
+import { zeroStep } from '../../../src/util/entity';
 import { makeTestActor, makeTestRoom } from '../../entity';
 import { getTestContainer } from '../../helper';
 
@@ -70,10 +71,7 @@ describe('player actor', () => {
 
     event.emit(EVENT_STATE_OUTPUT, {
       line: 'meta.help',
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
       volume: ShowVolume.SELF,
     });
 

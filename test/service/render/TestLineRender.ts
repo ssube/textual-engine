@@ -5,6 +5,7 @@ import { spy, stub } from 'sinon';
 import { CoreModule, EventBus, LineRender, NodeModule, onceEvent, RenderInputEvent } from '../../../src/lib';
 import { INJECT_EVENT } from '../../../src/module';
 import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../../src/util/constants';
+import { zeroStep } from '../../../src/util/entity';
 import { getTestContainer } from '../../helper';
 import { TestReadLine } from './helper';
 
@@ -27,10 +28,7 @@ describe('readline render', () => {
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_ACTOR_OUTPUT, {
       line: 'foo',
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     expect(instance.write).to.have.been.calledWith('foo');
@@ -93,10 +91,7 @@ describe('readline render', () => {
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_STATE_STEP, {
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     expect(instance.getPrompt()).to.include('turn 0');

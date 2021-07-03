@@ -5,6 +5,7 @@ import { LocalScriptService, MathRandomService, StateEntityTransfer } from '../s
 import { ConfigFile } from '../src/model/file/Config';
 import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
 import { CommandHelper, ScriptContext, StateHelper } from '../src/service/script';
+import { zeroStep } from '../src/util/entity';
 import { makeTestRoom } from './entity';
 
 export function getTestLogger(): Logger {
@@ -91,11 +92,7 @@ export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptCon
       room: makeTestRoom('', '', ''),
     },
     state: getStubHelper(),
-    step: {
-      time: 0,
-      turn: 0,
-    },
-    transfer: createTestTransfer(),
+    step: zeroStep(),
     ...parts,
   };
 }

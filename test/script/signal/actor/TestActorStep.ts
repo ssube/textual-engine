@@ -107,7 +107,6 @@ describe('actor step signal', () => {
     });
 
     const stateHelper = getStubHelper();
-    const transfer = createTestTransfer();
 
     const room = makeTestRoom('', '', '', [], []);
     const player = {
@@ -119,7 +118,6 @@ describe('actor step signal', () => {
       command: makeCommand(VERB_WAIT),
       room,
       state: stateHelper,
-      transfer,
     });
     await SignalActorStep.call(player, context);
 
@@ -133,7 +131,6 @@ describe('actor step signal', () => {
     });
 
     const stateHelper = getStubHelper();
-    const transfer = createTestTransfer();
 
     const room = makeTestRoom('', '', '', [], []);
     const player = {
@@ -145,7 +142,6 @@ describe('actor step signal', () => {
       command: makeCommand(VERB_WAIT, 'foo', 'bar'),
       room,
       state: stateHelper,
-      transfer,
     });
     await SignalActorStep.call(player, context);
 

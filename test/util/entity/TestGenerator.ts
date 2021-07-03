@@ -173,7 +173,7 @@ const TEST_PORTAL_WEST: Template<Portal> = {
     flags: new Map(),
     group: {
       key: {
-        base: 'door',
+        base: 'window',
         type: 'string',
       },
       source: {
@@ -194,7 +194,7 @@ const TEST_PORTAL_WEST: Template<Portal> = {
         base: '',
         type: 'string',
       },
-      id: 'portal-door-west',
+      id: 'portal-window-west',
       name: {
         base: 'door',
         type: 'string',
@@ -236,7 +236,7 @@ const TEST_ROOM_PORTALS: Template<Room> = {
       type: 'id',
     }, {
       chance: TEMPLATE_CHANCE,
-      id: 'portal-door-west',
+      id: 'portal-window-west',
       type: 'id',
     }],
     scripts: new Map(),

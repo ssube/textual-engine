@@ -32,7 +32,7 @@ export async function SignalActorHit(this: ScriptTarget, context: ScriptContext)
     // drop inventory
     const room = mustExist(context.room);
     for (const dropItem of this.items) {
-      await context.transfer.moveItem({
+      await context.state.move({
         moving: dropItem,
         source: this,
         target: room,

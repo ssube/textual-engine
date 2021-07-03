@@ -28,7 +28,7 @@ export interface StateHelper {
   create<TType extends WorldEntityType>(id: string, type: TType, target: StateSource): Promise<Immutable<EntityForType<TType>>>;
   enter(target: StateSource): Promise<void>; // TODO: remove, auto-invoke as part of move
   find<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<Immutable<EntityForType<TType>>>>;
-  move(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void>; // replaces transfer
+  move(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void>;
   show(source: StateSource, msg: string, context?: LocaleContext, volume?: ShowVolume): Promise<void>;
   quit(): Promise<void>;
   update<TEntity extends WorldEntity>(entity: Immutable<TEntity>, changes: Partial<Immutable<TEntity>>): Promise<void>;
@@ -54,13 +54,6 @@ export interface SuppliedScope {
   state: StateHelper;
 
   step: StepResult;
-
-  /**
-   * Entity transfer helper.
-   *
-   * @todo remove in favor of state.move
-   */
-  transfer: StateEntityTransfer;
 
   // optional fields
   actor?: ReadonlyActor;

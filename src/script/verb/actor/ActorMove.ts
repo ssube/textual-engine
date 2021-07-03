@@ -64,7 +64,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   }
 
   // move the actor and focus
-  await context.transfer.moveActor({
+  await context.state.move({
     moving: this,
     source: currentRoom,
     target: targetRoom,

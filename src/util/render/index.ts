@@ -1,5 +1,5 @@
 import { ShortcutData, ShortcutItem, StatusItem } from '../../component/shared';
-import { Entity } from '../../lib';
+import { Entity } from '../../model/entity/Base';
 import { ActorRoomEvent } from '../../service/actor/events';
 import { remove } from '../collection/array';
 import { COMMON_STATS } from '../constants';

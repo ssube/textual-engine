@@ -1,6 +1,7 @@
 import { doesExist } from '@apextoaster/js-utils';
 
 import { Actor } from '../../model/entity/Actor';
+import { Item } from '../../model/entity/Item';
 import { Portal } from '../../model/entity/Portal';
 import { StepResult } from '../../service/state';
 import { matchIdSegments } from '../string';
@@ -15,6 +16,11 @@ export function equipItems(actor: Actor, items: StringMap): void {
       }
     }
   }
+}
+
+export function filterEquipped(actor: Actor): Array<Item> {
+  const equipped = new Set(actor.slots.values());
+  return actor.items.filter((it) => equipped.has(it.meta.id));
 }
 
 export function isDestPortal(source: Portal, other: Portal): boolean {

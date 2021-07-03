@@ -229,7 +229,8 @@ worlds:
               desc:
                 base: a doctor
             flags: !map {}
-            items: []
+            items:
+              - id: item-telegram-van-helsing
             scripts: !map {}
             slots: !map
               weapon-hand-left:
@@ -248,7 +249,9 @@ worlds:
               desc:
                 base: a solemn doctor
             flags: !map {}
-            items: []
+            items:
+              - id: item-knife
+              - id: item-saw
             scripts: !map {}
             slots: !map
               weapon-hand-left:
@@ -405,7 +408,7 @@ worlds:
             meta:
               id: item-brandy
               name:
-                base: Brandy
+                base: Bottle of Brandy
               desc:
                 base: some words
             flags: !map {}
@@ -415,9 +418,21 @@ worlds:
             stats: !map {}
         - base:
             meta:
+              id: item-sherry
+              name:
+                base: Decanter of Sherry
+              desc:
+                base: drugged
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
               id: item-glass-empty
               name:
-                base: Glass
+                base: Wine Glass
               desc:
                 base: empty wine glass
             flags: !map {}
@@ -1492,9 +1507,12 @@ worlds:
                 base: Kitchen
               desc:
                 base: the kitchen
-            actors: []
+            actors:
+              - id: actor-cook
             flags: !map {}
-            items: []
+            items:
+              - id: item-brandy
+              - id: item-kettle-empty
             portals:
               - id: portal-kitchen-bathroom
               - id: portal-kitchen-back
@@ -1522,9 +1540,17 @@ worlds:
                 base: Dining Room
               desc:
                 base: the dining room
-            actors: []
+            actors:
+              - id: actor-maid
+              - id: actor-maid
+              - id: actor-maid
+              - id: actor-maid-young
             flags: !map {}
-            items: []
+            items:
+              - id: item-sherry
+              - id: item-glass-empty
+              - id: item-glass-empty
+              - id: item-glass-wine
             portals:
               - id: portal-dining-kitchen
             scripts: !map {}

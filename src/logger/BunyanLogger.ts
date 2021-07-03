@@ -18,6 +18,7 @@ export class BunyanLogger {
         item: entityMeta,
         logger: constructorName,
         module: constructorName,
+        portal: entityMeta,
         room: entityMeta,
       },
     });

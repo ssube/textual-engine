@@ -21,7 +21,7 @@ import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
 import { makeServiceLogger } from '../service';
-import { matchIdSegments } from '../string';
+import { hasText, matchIdSegments } from '../string';
 import { findByBaseId } from '../template';
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
@@ -78,12 +78,11 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByBaseId(world.templates.actors, templateRef.id);
       this.logger.debug({
-        template,
         templateRef,
       }, 'create actor for list');
 
+      const template = findByBaseId(world.templates.actors, templateRef.id);
       const item = await this.createActor(template);
       actors.push(item);
     }
@@ -115,12 +114,11 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByBaseId(world.templates.items, templateRef.id);
       this.logger.debug({
-        template,
         templateRef,
       }, 'create item for list');
 
+      const template = findByBaseId(world.templates.items, templateRef.id);
       const item = await this.createItem(template);
       items.push(item);
     }
@@ -167,12 +165,11 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByBaseId(world.templates.portals, templateRef.id);
       this.logger.debug({
-        template,
         templateRef,
       }, 'create portal for list');
 
+      const template = findByBaseId(world.templates.portals, templateRef.id);
       const portal = await this.createPortal(template);
       portals.push(portal);
     }
@@ -375,7 +372,7 @@ export class StateEntityGenerator {
     return selected;
   }
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
+  // eslint-disable-next-line complexity, sonarjs/cognitive-complexity
   public async populateRoom(firstRoom: ReadonlyRoom, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
     if (max <= 0) {
       return [];
@@ -384,7 +381,7 @@ export class StateEntityGenerator {
     const world = this.getWorld();
 
     const addedRooms = [];
-    const pendingRooms = [firstRoom];
+    const pendingRooms: Array<Room> = [firstRoom as Room]; // TODO: do not cast
 
     while (pendingRooms.length > 0 && addedRooms.length < max) {
       const room = mustExist(pendingRooms.shift());
@@ -406,15 +403,22 @@ export class StateEntityGenerator {
       for (const [group, portals] of sourceGroups) {
         // pick a random destination room
         const groupTemplates = portals.map((it) => findByBaseId(world.templates.portals, it.meta.template));
-        const potentialDests = groupTemplates.map((it) => it.base.dest);
+        const potentialDests = groupTemplates.map((it) => it.base.dest).filter((it) => hasText(it.base));
+
+        if (potentialDests.length === 0) {
+          continue;
+        }
+
         const destId = this.template.renderString(randomItem(potentialDests, this.random));
 
         this.logger.debug({
           destId,
           group,
-        }, 'selected destination for portal group');
+          room,
+        }, 'finding destination for portal group');
 
         // look for an existing room
+        const groupKeys = new Set(portals.map((it) => it.group.key));
         const existingRoom = [
           ...searchRooms,
           ...addedRooms,
@@ -428,7 +432,14 @@ export class StateEntityGenerator {
           // if room is a valid dest
           if (matchIdSegments(it.meta.id, destId)) {
             // find unlinked portal in opposing group
-            return it.portals.some((p) => p.dest === '' && p.group.target === group);
+            return it.portals.some((p) => {
+              if (p.dest === '' && groupKeys.has(p.group.key) && p.group.target === group) {
+                this.logger.debug({ destId, portal: p, room }, 'found unlinked destination portal');
+                return true;
+              } else {
+                return false;
+              }
+            });
           } else {
             return false;
           }
@@ -436,12 +447,27 @@ export class StateEntityGenerator {
 
         if (doesExist(existingRoom)) {
           this.logger.debug({
-            existingRoom,
+            room: existingRoom,
             group,
           }, 'linking portal group to existing room');
 
           for (const portal of portals) {
             portal.dest = existingRoom.meta.id;
+
+            if (portal.link === PortalLinkage.BOTH) {
+              // find existing portal
+              const existingPortal = existingRoom.portals.find((it) =>
+                it.dest === '' &&
+                it.group.key === portal.group.key &&
+                it.group.target === portal.group.source
+              );
+
+              if (doesExist(existingPortal)) {
+                existingPortal.dest = room.meta.id;
+              } else {
+                this.logger.debug({ portal, room }, 'portal does not have destination in existing room');
+              }
+            }
           }
 
           continue;
@@ -452,7 +478,7 @@ export class StateEntityGenerator {
         const destRoom = await this.createRoom(destTemplate);
 
         this.logger.debug({
-          destRoom,
+          room: destRoom,
           group,
         }, 'linking portal group to new room');
 
@@ -461,7 +487,20 @@ export class StateEntityGenerator {
           portal.dest = destRoom.meta.id;
 
           if (portal.link === PortalLinkage.BOTH) {
-            // create reverse link
+            // find existing portal
+            const existingPortal = destRoom.portals.find((it) =>
+              it.dest === '' &&
+              it.group.key === portal.group.key &&
+              it.group.source === portal.group.target
+            );
+
+            if (doesExist(existingPortal)) {
+              existingPortal.dest = room.meta.id;
+
+              continue;
+            }
+
+            // or create reverse link
             const destPortal = await this.reversePortal(portal);
             destPortal.dest = room.meta.id;
             destRoom.portals.push(destPortal);

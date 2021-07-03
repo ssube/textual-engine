@@ -360,7 +360,7 @@ worlds:
               target:
                 base: intro
             link:
-              base: forward
+              base: both
             scripts: !map {}
             stats: !map {}
         - base:
@@ -417,7 +417,7 @@ worlds:
             flags: !map {}
             group:
               key:
-                base: path
+                base: door
               source:
                 base: south
               target:
@@ -442,7 +442,7 @@ worlds:
               source:
                 base: west
               target:
-                base: east
+                base: north
             link:
               base: both
             scripts: !map {}
@@ -463,7 +463,7 @@ worlds:
               source:
                 base: east
               target:
-                base: west
+                base: north
             link:
               base: both
             scripts: !map {}
@@ -482,7 +482,28 @@ worlds:
               key:
                 base: path
               source:
-                base: east
+                base: south
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-left-front
+              name:
+                base: Path
+              desc:
+                base: path to front of house
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
               target:
                 base: west
             link:
@@ -503,7 +524,28 @@ worlds:
               key:
                 base: path
               source:
-                base: west
+                base: south
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-right-front
+              name:
+                base: Path
+              desc:
+                base: path to front of house
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
               target:
                 base: east
             link:
@@ -533,6 +575,27 @@ worlds:
             stats: !map {}
         - base:
             meta:
+              id: portal-kitchen-back
+              name:
+                base: Window
+              desc:
+                base: barred window
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: window
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
               id: portal-kitchen-dining
               name:
                 base: Door
@@ -554,7 +617,7 @@ worlds:
             stats: !map {}
         - base:
             meta:
-              id: portal-kitchen-hall
+              id: portal-kitchen-downhall
               name:
                 base: Door
               desc:
@@ -575,49 +638,7 @@ worlds:
             stats: !map {}
         - base:
             meta:
-              id: portal-kitchen-servant
-              name:
-                base: Door
-              desc:
-                base: doorway
-            dest:
-              base: room-house-servant
-            flags: !map {}
-            group:
-              key:
-                base: door
-              source:
-                base: west
-              target:
-                base: east
-            link:
-              base: both
-            scripts: !map {}
-            stats: !map {}
-        - base:
-            meta:
-              id: portal-dining-stairs
-              name:
-                base: Door
-              desc:
-                base: doorway
-            dest:
-              base: room-house-stairs
-            flags: !map {}
-            group:
-              key:
-                base: door
-              source:
-                base: south
-              target:
-                base: north
-            link:
-              base: both
-            scripts: !map {}
-            stats: !map {}
-        - base:
-            meta:
-              id: portal-downhall-bathroom
+              id: portal-kitchen-bathroom
               name:
                 base: Door
               desc:
@@ -638,13 +659,34 @@ worlds:
             stats: !map {}
         - base:
             meta:
+              id: portal-downhall-kitchen
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: room-house-kitchen
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
               id: portal-downhall-entry
               name:
                 base: Door
               desc:
                 base: doorway
             dest:
-              base: room-house-entry
+              base: ''
             flags: !map {}
             group:
               key:
@@ -653,6 +695,27 @@ worlds:
                 base: south
               target:
                 base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-downhall-servant
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: room-house-servant
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
             link:
               base: both
             scripts: !map {}
@@ -692,9 +755,9 @@ worlds:
               key:
                 base: stairs
               source:
-                base: up
+                base: east
               target:
-                base: down
+                base: west
             link:
               base: both
             scripts: !map {}
@@ -722,7 +785,7 @@ worlds:
             stats: !map {}
         - base:
             meta:
-              id: portal-uphall-other
+              id: portal-uphall-bedroom
               name:
                 base: Door
               desc:
@@ -783,6 +846,342 @@ worlds:
               base: both
             scripts: !map {}
             stats: !map {}
+        - base:
+            meta:
+              id: portal-entry-front
+              name:
+                base: Front Door
+              desc:
+                base: front door
+            dest:
+              base: room-house-front
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-stairs-downhall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-downhall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-uphall-stairs
+              name:
+                base: Stairs
+              desc:
+                base: stairs down
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-back-left
+              name:
+                base: Path
+              desc:
+                base: path to left side of house
+            dest:
+              base: room-house-left
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: west
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-back-right
+              name:
+                base: Path
+              desc:
+                base: path to right side of house
+            dest:
+              base: room-house-right
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-entry-downhall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-downhall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-kitchen-bathroom
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-bathroom
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-servant-downhall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-servant-bathroom
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-bathroom
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-bathroom-kitchen
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-kitchen
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-bathroom-servant
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-servant
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-lucy-uphall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-uphall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-garden-lucy
+              name:
+                base: Window
+              desc:
+                base: broken window
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: window
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-dining-kitchen
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-bedroom-uphall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-uphall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-avenue-garden
+              name:
+                base: Bushes
+              desc:
+                base: bushes
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: hedge
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
       rooms:
         - base:
             meta:
@@ -821,6 +1220,7 @@ worlds:
             flags: !map {}
             items: []
             portals:
+              - id: portal-avenue-garden
               - id: portal-avenue-path
             scripts: !map {}
         - base:
@@ -849,6 +1249,7 @@ worlds:
             flags: !map {}
             items: []
             portals:
+              - id: portal-left-front
               - id: portal-left-back
             scripts: !map {}
         - base:
@@ -862,6 +1263,7 @@ worlds:
             flags: !map {}
             items: []
             portals:
+              - id: portal-right-front
               - id: portal-right-back
             scripts: !map {}
         - base:
@@ -876,7 +1278,8 @@ worlds:
             items: []
             portals:
               - id: portal-back-kitchen
-              # TODO: add destination portals for both side rooms
+              - id: portal-back-left
+              - id: portal-back-right
             scripts: !map {}
         - base:
             meta:
@@ -889,9 +1292,10 @@ worlds:
             flags: !map {}
             items: []
             portals:
+              - id: portal-kitchen-bathroom
+              - id: portal-kitchen-back
               - id: portal-kitchen-dining
-              - id: portal-kitchen-hall
-              - id: portal-kitchen-servant
+              - id: portal-kitchen-downhall
             scripts: !map {}
         - base:
             meta:
@@ -903,7 +1307,9 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-servant-bathroom
+              - id: portal-servant-downhall
             scripts: !map {}
         - base:
             meta:
@@ -916,7 +1322,7 @@ worlds:
             flags: !map {}
             items: []
             portals:
-              - id: portal-dining-stairs
+              - id: portal-dining-kitchen
             scripts: !map {}
         - base:
             meta:
@@ -929,8 +1335,9 @@ worlds:
             flags: !map {}
             items: []
             portals:
-              - id: portal-downhall-bathroom
               - id: portal-downhall-entry
+              - id: portal-downhall-kitchen
+              - id: portal-downhall-servant
               - id: portal-downhall-stairs
             scripts: !map {}
         - base:
@@ -943,7 +1350,9 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-entry-front
+              - id: portal-entry-downhall
             scripts: !map {}
         - base:
             meta:
@@ -955,7 +1364,9 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-bathroom-kitchen
+              - id: portal-bathroom-servant
             scripts: !map {}
         - base:
             meta:
@@ -968,6 +1379,7 @@ worlds:
             flags: !map {}
             items: []
             portals:
+              - id: portal-stairs-downhall
               - id: portal-stairs-uphall
             scripts: !map {}
         - base:
@@ -982,7 +1394,8 @@ worlds:
             items: []
             portals:
               - id: portal-uphall-lucy
-              - id: portal-uphall-other
+              - id: portal-uphall-bedroom
+              # id: portal-uphall-stairs
             scripts: !map {}
         - base:
             meta:
@@ -996,6 +1409,7 @@ worlds:
             items: []
             portals:
               - id: portal-lucy-garden
+              - id: portal-lucy-uphall
             scripts: !map {}
         - base:
             meta:
@@ -1007,7 +1421,8 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-bedroom-uphall
             scripts: !map {}
         - base:
             meta:
@@ -1021,4 +1436,5 @@ worlds:
             items: []
             portals:
               - id: portal-garden-avenue
+              - id: portal-garden-lucy
             scripts: !map {}

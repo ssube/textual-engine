@@ -1,14 +1,16 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
+import { match, stub } from 'sinon';
 
-import { INJECT_EVENT } from '../../../src/module';
+import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { ActorCommandEvent } from '../../../src/service/actor/events';
 import { ScriptActorService } from '../../../src/service/actor/ScriptActor';
 import { EventBus } from '../../../src/service/event';
+import { ScriptService } from '../../../src/service/script';
 import { onceEvent } from '../../../src/util/async/event';
-import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_WAIT } from '../../../src/util/constants';
+import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, EVENT_STATE_STEP, VERB_WAIT } from '../../../src/util/constants';
 import { makeTestActor, makeTestRoom } from '../../entity';
 import { getTestContainer } from '../../helper';
 
@@ -70,4 +72,34 @@ describe('script actor', () => {
 
     return expect(actorService.last()).to.eventually.be.rejectedWith(NotImplementedError);
   });
+
+  it('should inform scripts of the current step', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const script = await container.create<ScriptService, BaseOptions>(INJECT_SCRIPT);
+    const invokeStub = stub(script, 'invoke');
+
+    const actorService = await container.create(ScriptActorService, {
+      config: {},
+    });
+    await actorService.start();
+
+    const step = { time: 100, turn: 100 };
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    events.emit(EVENT_STATE_STEP, {
+      step,
+    });
+
+    const actor = makeTestActor('', '', '');
+    await actorService.onRoom({
+      actor,
+      room: makeTestRoom('', '', ''),
+    });
+
+    expect(invokeStub).to.have.been.calledWithMatch(actor, match.string, {
+      step,
+    });
+  });
+
+  xit('should allow scripts to search the current room');
 });

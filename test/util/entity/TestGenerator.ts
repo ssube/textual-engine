@@ -992,8 +992,43 @@ describe('state entity generator', () => {
       }
     });
 
+    it('should link back portals in rooms with a matching portal', async () => {
+      const container = await getTestContainer(new CoreModule());
+
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld({
+        ...TEST_WORLD,
+        templates: {
+          ...TEST_WORLD.templates,
+          portals: [
+            TEST_PORTAL_EAST,
+            {
+              base: {
+                ...TEST_PORTAL_WEST.base,
+                group: {
+                  ...TEST_PORTAL_WEST.base.group,
+                  key: {
+                    base: 'door',
+                    type: 'string',
+                  },
+                },
+              },
+              mods: [],
+            },
+          ],
+          rooms: [TEST_ROOM_PORTALS],
+        },
+      });
+
+      const startRoom = await generator.createRoom(TEST_ROOM_PORTALS);
+      expect(startRoom.portals, 'start room portals').to.have.lengthOf(2);
+
+      const newRooms = await generator.populateRoom(startRoom, [], PORTAL_DEPTH);
+      expect(newRooms, 'new rooms').to.have.lengthOf(1);
+      expect(newRooms[0].portals).to.have.lengthOf(2);
+    });
+
     xit('should not generate rooms for already filled portals');
-    xit('should link back portals in rooms with a matching portal');
     xit('should add new back portals to rooms without a matching target group');
     xit('should not generate back portals for unidirectional portals');
   });

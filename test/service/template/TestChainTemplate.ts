@@ -322,7 +322,18 @@ describe('chain template service', () => {
       expect(rendered.size).to.equal(2);
     });
 
-    xit('should render mixed-type maps');
-    xit('should render template verb maps');
+    it('should render mixed-type maps', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const template = await container.create(ChainTemplateService);
+      const map = new Map<string, TemplateNumber | TemplateString>([
+        ['foo', DEFAULT_STRING],
+        ['bar', DEFAULT_NUMBER],
+      ]);
+
+      const rendered = template.renderPrimitiveMap(map);
+      expect(rendered.size).to.equal(2);
+      expect(rendered.get('foo')).to.be.a('string');
+      expect(rendered.get('bar')).to.be.a('number');
+    });
   });
 });

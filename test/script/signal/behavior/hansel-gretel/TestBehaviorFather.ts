@@ -4,7 +4,7 @@ import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../../src/model/Command';
 import { SignalBehaviorHGFather } from '../../../../../src/script/signal/behavior/hansel-gretel/BehaviorFather';
 import { VERB_LOOK } from '../../../../../src/util/constants';
-import { makeTestItem, makeTestRoom } from '../../../../entity';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
 import { createTestContext, getStubHelper } from '../../../../helper';
 
 describe('actor behavior signal for the father', () => {
@@ -25,6 +25,23 @@ describe('actor behavior signal for the father', () => {
     await expect(SignalBehaviorHGFather.call(makeTestRoom('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
   });
 
-  xit('should lead the children into the woods');
+  it('should lead the children into the woods', async () => {
+    const state = getStubHelper();
+
+    const room = makeTestRoom('', '', '', [], []);
+    const context = createTestContext({
+      command: makeCommand(VERB_LOOK),
+      room,
+      source: {
+        room,
+      },
+      state,
+    });
+
+    await SignalBehaviorHGFather.call(makeTestActor('', '', ''), context);
+
+    // TODO: make assertions
+  });
+
   xit('should return to the house');
 });

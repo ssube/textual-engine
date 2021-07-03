@@ -340,7 +340,211 @@ worlds:
             scripts: !map {}
             slots: !map {}
             stats: !map {}
-      items: []
+      items:
+        - base:
+            meta:
+              id: item-telegram-van-helsing
+              name:
+                base: Telegram from Dr. Van Helsing
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-knife
+              name:
+                base: Long Knife
+              desc:
+                base: long thin knife
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-saw
+              name:
+                base: Surgical Saw
+              desc:
+                base: for bones
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-sheet
+              name:
+                base: White Sheet
+              desc:
+                base: for a bed
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-necklace
+              name:
+                base: Flower Necklace
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-brandy
+              name:
+                base: Brandy
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-glass-empty
+              name:
+                base: Glass
+              desc:
+                base: empty wine glass
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-glass-wine
+              name:
+                base: Glass of Wine
+              desc:
+                base: glass of wine
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-kettle-empty
+              name:
+                base: Kettle
+              desc:
+                base: empty kettle
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-kettle-cold
+              name:
+                base: Kettle
+              desc:
+                base: kettle of cold water
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-kettle-hot
+              name:
+                base: Hot Kettle
+              desc:
+                base: kettle of hot water
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-telegram-holmwood
+              name:
+                base: Telegram from Arthur Holmwood
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-stethoscope
+              name:
+                base: Stethoscope
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-handkerchief
+              name:
+                base: Silk Handkerchief
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-certificate-empty
+              name:
+                base: Death Certificate
+              desc:
+                base: unfilled death certificate
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-certificate-filled
+              name:
+                base: Death Certificate for Mrs. Westenra
+              desc:
+                base: death certificate filled out for Lucy's mother
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-note
+              name:
+                base: Breast Note
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
       portals:
         - base:
             meta:

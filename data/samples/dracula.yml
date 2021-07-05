@@ -1634,9 +1634,12 @@ worlds:
                 base: Lucy's Bedroom
               desc:
                 base: Lucy Westenra's bedroom
-            actors: []
+            actors:
+              - id: actor-lucy
+              - id: actor-mother
             flags: !map {}
-            items: []
+            items:
+              - id: item-sheet
             portals:
               - id: portal-lucy-garden
               - id: portal-lucy-uphall

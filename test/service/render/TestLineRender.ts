@@ -117,6 +117,23 @@ describe('readline render', () => {
     expect(writeSpy).to.have.been.calledWith('foo');
   });
 
+  it('should close the line interface when stopping', async () => {
+    const instance = TestReadLine.createStub();
+    const readline = stub().returns(instance);
+
+    const container = await getTestContainer(new CoreModule(), new NodeModule());
+    const render = await container.create(LineRender, {
+      config: {
+        shortcuts: true,
+        throttle: THROTTLE_TIME,
+      },
+    }, readline);
+    await render.start();
+    await render.stop();
+
+    expect(instance.close).to.have.callCount(1);
+  });
+
   xit('should show a newline between the prompt and output');
   xit('should not emit output after stopping');
 });

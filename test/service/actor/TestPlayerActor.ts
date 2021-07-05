@@ -229,5 +229,63 @@ describe('player actor', () => {
     expect(actorRoomStub).to.have.callCount(1);
   });
 
-  xit('should test output volume when source is set');
+  it('should test output volume when source is set', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+    await locale.start();
+
+    const player = await container.create(PlayerActorService);
+    await player.start();
+
+    const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    const actorOutputStub = stub();
+    event.on(EVENT_ACTOR_OUTPUT, actorOutputStub);
+
+    const pendingJoin = onceEvent<ActorJoinEvent>(event, EVENT_ACTOR_JOIN);
+    event.emit(EVENT_STATE_LOAD, {
+      state: '',
+      world: '',
+    });
+    const { pid } = await pendingJoin;
+
+    const actor = makeTestActor(pid, '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+    event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid,
+      room,
+    });
+
+    const line = 'foo';
+    const step = zeroStep();
+
+    // should be filtered out
+    const other = makeTestActor('', '', '');
+    event.emit(EVENT_STATE_OUTPUT, {
+      line,
+      source: {
+        actor: other,
+        room,
+      },
+      step,
+      volume: ShowVolume.SELF,
+    });
+
+    // should be passed on
+    event.emit(EVENT_STATE_OUTPUT, {
+      line,
+      source: {
+        actor,
+        room,
+      },
+      step,
+      volume: ShowVolume.SELF,
+    });
+
+    expect(actorOutputStub).to.have.callCount(1).and.been.calledWith({
+      line,
+      step,
+    });
+  });
 });

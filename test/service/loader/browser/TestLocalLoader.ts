@@ -1,8 +1,12 @@
 import { expect } from 'chai';
+import { BaseOptions } from 'noicejs';
 import { stub } from 'sinon';
 
+import { INJECT_EVENT } from '../../../../src/module';
 import { CoreModule } from '../../../../src/module/CoreModule';
+import { EventBus } from '../../../../src/service/event';
 import { BrowserLocalLoader } from '../../../../src/service/loader/browser/LocalLoader';
+import { EVENT_LOADER_SAVE } from '../../../../src/util/constants';
 import { getTestContainer } from '../../../helper';
 
 describe('browser local loader', () => {
@@ -39,5 +43,29 @@ describe('browser local loader', () => {
     await loader.saveStr(path, payload);
 
     expect(window.localStorage.setItem).to.have.callCount(2).and.been.calledWith(path, payload);
+  });
+
+  it('should write strings to storage', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const window = {
+      localStorage: {
+        getItem: stub(),
+        setItem: stub(),
+      },
+    };
+    const loader = await container.create(BrowserLocalLoader, {}, window);
+    await loader.start();
+
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+
+    const path = 'out/test.md';
+    const data = 'foo';
+    events.emit(EVENT_LOADER_SAVE, {
+      path: `local://${path}`,
+      data,
+    });
+
+    expect(window.localStorage.setItem).to.have.callCount(1).and.been.calledWith(path, data);
   });
 });

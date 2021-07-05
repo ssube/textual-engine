@@ -92,13 +92,104 @@ describe('react frame component', () => {
       }
     });
 
+    renderer.update(root); // needed to update the contents of the input
+
     const submit = renderer.root.findByProps({ id: 'input-form' });
     submit.props.onSubmit({
       preventDefault: stub(),
     });
 
-    const strings = getReactStrings(renderer.root);
+    expect(onLine).to.have.been.calledWith('bar');
+  });
 
-    expect(strings).to.include('foo');
+  it('should append entity shortcuts to the line', async () => {
+    const onLine = stub();
+    const root = React.createElement(Frame, {
+      onLine,
+      prompt: 'foo',
+      output: [],
+      quit: false,
+      shortcuts: {
+        actors: [{
+          id: 'c',
+          name: 'C',
+        }],
+        items: [],
+        portals: [],
+        verbs: [],
+      },
+      show: {
+        shortcuts: true,
+        status: true,
+      },
+      stats: [],
+      step: zeroStep(),
+    });
+
+    const renderer = TestRenderer.create(root);
+
+    const input = renderer.root.findByProps({ id: 'input-line' });
+    input.props.onChange({
+      target: {
+        value: 'ab',
+      }
+    });
+
+    const shortcut = renderer.root.findByProps({ id: 'item-c' });
+    shortcut.props.onClick();
+
+    const submit = renderer.root.findByProps({ id: 'input-form' });
+    submit.props.onSubmit({
+      preventDefault: stub(),
+    });
+
+    expect(onLine).to.have.been.calledWith('ab c');
+  });
+
+  it('should replace the line with verb shortcuts', async () => {
+    const onLine = stub();
+    const root = React.createElement(Frame, {
+      onLine,
+      prompt: 'foo',
+      output: [],
+      quit: false,
+      shortcuts: {
+        actors: [],
+        items: [],
+        portals: [],
+        verbs: [{
+          id: 'c',
+          name: 'C',
+        }],
+      },
+      show: {
+        shortcuts: true,
+        status: true,
+      },
+      stats: [],
+      step: zeroStep(),
+    });
+
+    const renderer = TestRenderer.create(root);
+
+    const input = renderer.root.findByProps({ id: 'input-line' });
+    input.props.onChange({
+      target: {
+        value: 'ab',
+      }
+    });
+
+    const tab = renderer.root.findByProps({ id: 'tab-verbs' });
+    tab.props.onClick();
+
+    const shortcut = renderer.root.findByProps({ id: 'item-c' });
+    shortcut.props.onClick();
+
+    const submit = renderer.root.findByProps({ id: 'input-form' });
+    submit.props.onSubmit({
+      preventDefault: stub(),
+    });
+
+    expect(onLine).to.have.been.calledWith('c');
   });
 });

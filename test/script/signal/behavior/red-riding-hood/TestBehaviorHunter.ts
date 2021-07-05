@@ -4,7 +4,7 @@ import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../../src/model/Command';
 import { SignalBehaviorRRHHunter } from '../../../../../src/script/signal/behavior/red-riding-hood/BehaviorHunter';
 import { VERB_LOOK } from '../../../../../src/util/constants';
-import { makeTestItem, makeTestRoom } from '../../../../entity';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
 import { createTestContext } from '../../../../helper';
 
 describe('actor behavior signal for the hunter', () => {
@@ -22,6 +22,20 @@ describe('actor behavior signal for the hunter', () => {
     await expect(SignalBehaviorRRHHunter.call(makeTestRoom('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
   });
 
-  xit('should eat cake');
+  it('should eat cake', async () => {
+    const room = makeTestRoom('', '', '', [], []);
+    const context = createTestContext({
+      command: makeCommand(VERB_LOOK),
+      room,
+      source: {
+        room,
+      },
+    });
+
+    await SignalBehaviorRRHHunter.call(makeTestActor('', '', ''), context);
+
+    // TODO: make assertions
+  });
+
   xit('should move to grandma\'s house');
 });

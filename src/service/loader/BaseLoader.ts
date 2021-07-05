@@ -55,13 +55,7 @@ export abstract class BaseLoader implements LoaderService {
 
     const data = await this.loadData(path);
 
-    if (doesExist(data.config)) {
-      this.events.emit(EVENT_LOADER_CONFIG, {
-        config: data.config,
-      });
-
-      return;
-    }
+    // reloading config is not supported yet
 
     if (doesExist(data.worlds)) {
       for (const world of data.worlds) {

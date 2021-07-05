@@ -92,9 +92,9 @@ export class ScriptActorService implements ActorService {
     return this.script.invoke(event.actor, 'signal.behavior', {
       actor: event.actor,
       behavior: {
-        depth: () => Promise.resolve(0), // TODO: implement
+        depth: /* istanbul ignore next */ () => Promise.resolve(0), // TODO: implement
         queue: (actor, command) => this.queue(event.room, actor, command),
-        ready: () => Promise.resolve(false), // TODO: implement
+        ready: /* istanbul ignore next */ () => Promise.resolve(false), // TODO: implement
       },
       data: new Map([
         ['attack', this.config.attack],

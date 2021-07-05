@@ -23,6 +23,7 @@ export function debounce(interval: number, inner: () => void): ClearResult {
   function clear() {
     if (doesExist(timeout)) {
       clearTimeout(timeout);
+      timeout = undefined;
     }
   }
 
@@ -48,6 +49,7 @@ export function throttle<TResult>(interval: number, inner: () => TResult): Clear
   function clear() {
     if (doesExist(timeout)) {
       clearTimeout(timeout);
+      timeout = undefined;
     }
   }
 

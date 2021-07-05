@@ -39,6 +39,20 @@ describe('throttle utils', () => {
 
       expect(inner).to.have.callCount(0);
     });
+
+    it('should handle being repeatedly cleared', async () => {
+      const inner = stub();
+      const slow = debounce(10, inner);
+
+      slow.call();
+      slow.call();
+      slow.clear();
+      slow.clear();
+
+      await mustExist(clock).tickAsync(20);
+
+      expect(inner).to.have.callCount(0);
+    });
   });
 
   describe('throttle helper', () => {
@@ -63,6 +77,20 @@ describe('throttle utils', () => {
 
       slow.call(); // should be throttled
       slow.clear(); // cancels the throttled call
+      await mustExist(clock).tickAsync(20);
+
+      expect(inner).to.have.callCount(1);
+    });
+
+    it('should handle being repeatedly cleared', async () => {
+      const inner = stub();
+      const slow = throttle(10, inner);
+
+      slow.call();
+      slow.call();
+      slow.clear();
+      slow.clear();
+
       await mustExist(clock).tickAsync(20);
 
       expect(inner).to.have.callCount(1);

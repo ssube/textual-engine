@@ -2,6 +2,7 @@ import { expect } from 'chai';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { findMatching } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorTake } from '../../../../src/script/verb/actor/ActorTake';
 import { MathRandomService } from '../../../../src/service/random/MathRandom';
@@ -57,5 +58,34 @@ describe('actor take verb', () => {
       source: room,
       target: actor,
     });
+  });
+
+  it('should only take items from the room', async () => {
+    const rooms = [
+      makeTestRoom('', '', '', [
+        makeTestActor('', '', '', makeTestItem('foo', 'foo', 'foo')),
+      ], [
+        makeTestItem('bar', 'bar', 'bar'),
+      ]),
+    ];
+    const state = getStubHelper();
+    const showStub = state.show as SinonStub;
+    (state.find as SinonStub).callsFake((search) => findMatching(rooms, search));
+
+    await VerbActorTake.call(makeTestActor('', '', ''), createTestContext({
+      command: makeCommand(VERB_TAKE, 'bar'),
+      room: rooms[0],
+      state,
+    }));
+
+    expect(showStub, 'from room inventory').to.have.callCount(0);
+
+    await VerbActorTake.call(makeTestActor('', '', ''), createTestContext({
+      command: makeCommand(VERB_TAKE, 'foo'),
+      room: rooms[0],
+      state,
+    }));
+
+    expect(showStub, 'from other actor inventory').to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.take.type');
   });
 });

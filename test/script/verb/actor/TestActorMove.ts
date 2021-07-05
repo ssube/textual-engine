@@ -7,7 +7,7 @@ import { makeCommand } from '../../../../src/model/Command';
 import { ActorSource } from '../../../../src/model/entity/Actor';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
 import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove';
-import { SIGNAL_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
+import { SIGNAL_LOOK, STAT_LOCKED, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 
@@ -161,5 +161,47 @@ describe('actor move verb', () => {
     await VerbActorMove.call(actor, context);
 
     expect(context.script.invoke).to.have.been.calledWith(target, SIGNAL_LOOK, context);
+  });
+
+  it('should show a message if the portal is locked', async () => {
+    const state = getStubHelper();
+    const target = makeTestRoom('', '', '', [], []);
+    (state.find as SinonStub).resolves([target]);
+
+    const actor = makeTestActor('', '', '');
+    const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
+    portal.stats.set(STAT_LOCKED, 1);
+    const room = makeTestRoom('', '', '', [actor], [], [portal]);
+
+    const context = createTestContext({
+      command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
+      room,
+      state,
+    });
+
+    await VerbActorMove.call(actor, context);
+
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.locked');
+  });
+
+  it('should leave breadcrumbs when the leader flag is set', async () => {
+    const state = getStubHelper();
+    const target = makeTestRoom('', '', '', [], []);
+    (state.find as SinonStub).resolves([target]);
+
+    const actor = makeTestActor('', '', '');
+    actor.flags.set('leader', 'path-test');
+    const portal = makeTestPortal('foo', 'door', 'west', 'east', 'foo');
+    const room = makeTestRoom('', '', '', [actor], [], [portal]);
+
+    const context = createTestContext({
+      command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
+      room,
+      state,
+    });
+
+    await VerbActorMove.call(actor, context);
+
+    expect(room.flags.get('path-test')).to.equal('foo');
   });
 });

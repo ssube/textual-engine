@@ -574,9 +574,7 @@ describe('state entity generator', () => {
     it('should throw when the start room does not exist', async () => {
       const container = await getTestContainer(new CoreModule());
       const generator = await container.create(StateEntityGenerator);
-      generator.setWorld(TEST_WORLD);
-
-      return expect(generator.createState({
+      generator.setWorld({
         ...TEST_WORLD,
         start: {
           actors: TEST_WORLD.start.actors,
@@ -586,7 +584,9 @@ describe('state entity generator', () => {
             type: 'id',
           }],
         },
-      }, {
+      });
+
+      return expect(generator.createState({
         depth: 0,
         id: 'test',
         seed: 'test',

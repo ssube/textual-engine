@@ -196,7 +196,9 @@ export class StateEntityGenerator {
     return mergeMap(baseScripts, scripts);
   }
 
-  public async createState(world: WorldTemplate, params: CreateParams): Promise<WorldState> {
+  public async createState(params: CreateParams): Promise<WorldState> {
+    const world = mustExist(this.world);
+
     // reseed the prng
     this.random.reseed(params.seed); // TODO: fast-forward to last state
 

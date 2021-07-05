@@ -278,7 +278,7 @@ export class LocalStateService implements StateService {
     // create a state
     generator.setWorld(world);
     this.world = world;
-    this.state = await generator.createState(world, {
+    this.state = await generator.createState({
       depth,
       id,
       seed,

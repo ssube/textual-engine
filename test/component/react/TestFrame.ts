@@ -27,6 +27,7 @@ describe('react frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const renderer = TestRenderer.create(root);
@@ -54,6 +55,7 @@ describe('react frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const renderer = TestRenderer.create(root);
@@ -81,6 +83,7 @@ describe('react frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const renderer = TestRenderer.create(root);
@@ -124,6 +127,7 @@ describe('react frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const renderer = TestRenderer.create(root);
@@ -168,6 +172,7 @@ describe('react frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const renderer = TestRenderer.create(root);

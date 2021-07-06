@@ -5,6 +5,7 @@ import { Inject, Logger } from 'noicejs';
 import { RenderService } from '..';
 import { ShortcutData, StatusItem } from '../../../component/shared';
 import { ConfigError } from '../../../error/ConfigError';
+import { TemplateMetadata } from '../../../model/mapped/Template';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { onceEvent } from '../../../util/async/event';
 import { ClearResult, debounce } from '../../../util/async/Throttle';
@@ -14,6 +15,7 @@ import {
   EVENT_COMMON_QUIT,
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
+  EVENT_STATE_WORLD,
 } from '../../../util/constants';
 import { zeroStep } from '../../../util/entity';
 import { getEventShortcuts } from '../../../util/render';
@@ -23,7 +25,7 @@ import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
 import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
-import { StateStepEvent } from '../../state/events';
+import { StateStepEvent, StateWorldEvent } from '../../state/events';
 
 export interface BaseRenderConfig {
   shortcuts: boolean;
@@ -65,6 +67,7 @@ export abstract class BaseReactRender implements RenderService {
   protected shortcuts: ShortcutData;
   protected step: StepResult;
   protected stats: Array<StatusItem>;
+  protected worlds: Array<TemplateMetadata>;
 
   protected queueUpdate: ClearResult;
 
@@ -96,6 +99,7 @@ export abstract class BaseReactRender implements RenderService {
     };
     this.stats = [];
     this.step = zeroStep();
+    this.worlds = [];
   }
 
   public async start(): Promise<void> {
@@ -106,6 +110,7 @@ export abstract class BaseReactRender implements RenderService {
     this.event.on(EVENT_ACTOR_ROOM, (room) => this.onRoom(room), this);
     this.event.on(EVENT_COMMON_QUIT, () => this.onQuit(), this);
     this.event.on(EVENT_STATE_STEP, (step) => this.onStep(step), this);
+    this.event.on(EVENT_STATE_WORLD, (event) => this.onWorlds(event));
   }
 
   public async stop(): Promise<void> {
@@ -164,6 +169,10 @@ export abstract class BaseReactRender implements RenderService {
     this.step = event.step;
     this.setPrompt(`turn ${this.step.turn}`);
     this.update();
+  }
+
+  public onWorlds(event: StateWorldEvent): void {
+    this.worlds = event.worlds;
   }
 
   /**

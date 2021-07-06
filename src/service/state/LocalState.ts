@@ -35,6 +35,7 @@ import {
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
+  EVENT_STATE_WORLD,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -249,6 +250,10 @@ export class LocalStateService implements StateService {
   public async onWorld(world: WorldTemplate): Promise<void> {
     this.logger.debug({ world: world.meta.id }, 'registering loaded world');
     this.loadedWorlds.push(world);
+
+    this.event.emit(EVENT_STATE_WORLD, {
+      worlds: this.loadedWorlds.map((it) => it.meta),
+    });
   }
   // #endregion event handlers
 
@@ -781,6 +786,7 @@ export class LocalStateService implements StateService {
    *
    * @todo only emit changed rooms
    * @todo do not double-loop
+   * @todo skip actors who already have commands queued
    */
   protected async broadcastChanges(rooms: Array<Room>): Promise<void> {
     this.logger.debug('queueing actors');

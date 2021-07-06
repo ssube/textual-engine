@@ -28,6 +28,7 @@ describe('ink frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const { lastFrame } = render(root);
@@ -55,6 +56,7 @@ describe('ink frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const { lastFrame } = render(root);
@@ -82,6 +84,7 @@ describe('ink frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const { lastFrame, stdin } = render(root);
@@ -123,6 +126,7 @@ describe('ink frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const { lastFrame, stdin } = render(root);
@@ -171,6 +175,7 @@ describe('ink frame component', () => {
       },
       stats: [],
       step: zeroStep(),
+      worlds: [],
     });
 
     const { lastFrame, stdin } = render(root);

@@ -30,6 +30,7 @@ export const EVENT_STATE_LOAD = 'state-load';
 export const EVENT_STATE_OUTPUT = 'state-output';
 export const EVENT_STATE_ROOM = 'state-room';
 export const EVENT_STATE_STEP = 'state-step';
+export const EVENT_STATE_WORLD = 'state-world';
 export const EVENT_TOKEN_COMMAND = 'token-command';
 
 export const EVENT_NAMES: ReadonlyArray<string> = [

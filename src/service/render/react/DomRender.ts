@@ -52,6 +52,7 @@ export class ReactDomRender extends BaseReactRender implements RenderService {
       },
       stats: this.stats,
       step: this.step,
+      worlds: this.worlds,
     });
     const locale = React.createElement(I18nextProvider, {
       i18n: this.locale.getInstance(),

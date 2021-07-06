@@ -1,3 +1,4 @@
+import { TemplateMetadata } from '../model/mapped/Template';
 import { StepResult } from '../service/state';
 import { Filter, FilterKeys } from '../util/types';
 
@@ -30,6 +31,7 @@ export interface FrameProps {
   };
   stats: Array<StatusItem>;
   step: StepResult;
+  worlds: Array<TemplateMetadata>;
 }
 
 export interface InputProps {

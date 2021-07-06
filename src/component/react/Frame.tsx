@@ -37,5 +37,8 @@ export const Frame = (props: FrameProps): JSX.Element => {
       onTarget={(id) => setLine(`${line} ${id}`)}
       onVerb={(verb) => setLine(verb)}
     />}
+    <div>
+      {props.worlds.map((it) => <p>{it.id}</p>)}
+    </div>
   </div>;
 };

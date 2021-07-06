@@ -1,6 +1,7 @@
 import { StepResult } from '.';
 import { ReadonlyActor } from '../../model/entity/Actor';
 import { ReadonlyRoom } from '../../model/entity/Room';
+import { TemplateMetadata } from '../../model/mapped/Template';
 import { ShowVolume, StateSource } from '../../util/actor';
 import { LocaleContext } from '../locale';
 
@@ -46,4 +47,8 @@ export interface StateRoomEvent {
 
 export interface StateStepEvent {
   step: StepResult;
+}
+
+export interface StateWorldEvent {
+  worlds: Array<TemplateMetadata>;
 }

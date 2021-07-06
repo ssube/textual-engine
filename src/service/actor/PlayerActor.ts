@@ -18,6 +18,7 @@ import {
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
+  EVENT_STATE_WORLD,
   EVENT_TOKEN_COMMAND,
 } from '../../util/constants';
 import { zeroStep } from '../../util/entity';
@@ -26,7 +27,7 @@ import { Counter } from '../counter';
 import { EventBus } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
 import { StepResult } from '../state';
-import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
+import { StateJoinEvent, StateOutputEvent, StateRoomEvent, StateWorldEvent } from '../state/events';
 import { TokenCommandEvent } from '../tokenizer/events';
 
 /**

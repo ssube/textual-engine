@@ -16,9 +16,11 @@ describe('state debug utils', () => {
       },
       rooms: [
         makeTestRoom('room-1', '', '', [
-          makeTestActor('actor-1', '', ''),
+          makeTestActor('actor-1', '', '', makeTestItem('actor-1-item-1', '', '')),
         ], [
           makeTestItem('item-1', '', ''),
+        ], [
+          makeTestPortal('portal-1', '', '', '', ''),
         ]),
         makeTestRoom('room-2', '', '', [
           makeTestActor('actor-2', '', ''),

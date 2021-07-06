@@ -52,8 +52,10 @@ import { debugState, graphState } from '../../util/entity/debug';
 import { StateEntityGenerator } from '../../util/entity/EntityGenerator';
 import {
   ActorTransfer,
+  EntityTransfer,
   isActorTransfer,
   isItemTransfer,
+  isRoomTransfer,
   ItemTransfer,
   StateEntityTransfer,
 } from '../../util/entity/EntityTransfer';
@@ -733,7 +735,7 @@ export class LocalStateService implements StateService {
     return findMatching(state.rooms, search);
   }
 
-  public async stepMove(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void> {
+  public async stepMove(target: EntityTransfer, context: ScriptContext): Promise<void> {
     const transfer = mustExist(this.transfer);
 
     if (isActorTransfer(target)) {
@@ -742,6 +744,10 @@ export class LocalStateService implements StateService {
 
     if (isItemTransfer(target)) {
       return transfer.moveItem(target, context);
+    }
+
+    if (isRoomTransfer(target)) {
+      return transfer.moveRoom(target, context);
     }
 
     throw new ScriptTargetError('move target must be an actor or item');

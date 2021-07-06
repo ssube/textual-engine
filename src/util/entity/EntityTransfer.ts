@@ -1,4 +1,4 @@
-import { InvalidArgumentError } from '@apextoaster/js-utils';
+import { InvalidArgumentError, isNil } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { isActor, ReadonlyActor } from '../../model/entity/Actor';
@@ -20,6 +20,26 @@ export interface ItemTransfer {
   moving: ReadonlyItem;
   source: ReadonlyActor | ReadonlyRoom;
   target: ReadonlyActor | ReadonlyRoom;
+}
+
+export interface RoomTransfer {
+  moving: undefined;
+  source: ReadonlyRoom;
+  target: ReadonlyRoom;
+}
+
+export type EntityTransfer = ActorTransfer | ItemTransfer | RoomTransfer;
+
+export function isActorTransfer(tx: EntityTransfer): tx is ActorTransfer {
+  return isActor(tx.moving);
+}
+
+export function isItemTransfer(tx: EntityTransfer): tx is ItemTransfer {
+  return isItem(tx.moving);
+}
+
+export function isRoomTransfer(tx: EntityTransfer): tx is RoomTransfer {
+  return isNil(tx.moving);
 }
 
 @Inject(INJECT_LOGGER)
@@ -109,11 +129,7 @@ export class StateEntityTransfer {
     }
 
     // move target from source to dest
-    this.logger.debug({
-      source,
-      target,
-      transfer,
-    }, 'moving item between entities');
+    this.logger.debug(transfer, 'moving item between entities');
 
     const sourceItems = remove(source.items, (it) => it.meta.id === moving.meta.id);
     await context.state.update(source, { items: sourceItems });
@@ -132,12 +148,59 @@ export class StateEntityTransfer {
       ]),
     });
   }
-}
 
-export function isActorTransfer(tx: ActorTransfer | ItemTransfer): tx is ActorTransfer {
-  return isActor(tx.moving);
-}
+  public async moveRoom(transfer: RoomTransfer, context: ScriptContext): Promise<void> {
+    const { source, target } = transfer;
 
-export function isItemTransfer(tx: ActorTransfer | ItemTransfer): tx is ItemTransfer {
-  return isItem(tx.moving);
+    if (!isRoom(source)) {
+      throw new InvalidArgumentError('source entity must be a room');
+    }
+
+    if (!isRoom(target)) {
+      throw new InvalidArgumentError('target entity must be a room');
+    }
+
+    this.logger.debug(transfer, 'moving all entities between rooms');
+
+    const movingActors = Array.from(source.actors);
+    const movingItems = Array.from(source.items);
+    await context.state.update(source, {
+      actors: [],
+      items: [],
+    });
+
+    const actors = [...target.actors, ...movingActors];
+    const items = [...target.items, ...movingItems];
+    await context.state.update(target, {
+      actors,
+      items,
+    });
+
+    for (const moving of movingActors) {
+      await context.state.enter({
+        actor: moving,
+        room: target,
+      });
+
+      await context.script.invoke(target, SIGNAL_ENTER, {
+        ...context,
+        actor: moving,
+        data: new Map([
+          ['source', source.meta.id],
+          ['target', target.meta.id],
+        ]),
+      });
+    }
+
+    for (const moving of movingItems) {
+      await context.script.invoke(target, SIGNAL_GET, {
+        ...context,
+        item: moving,
+        data: new Map([
+          ['source', source.meta.id],
+          ['target', target.meta.id],
+        ]),
+      });
+    }
+  }
 }

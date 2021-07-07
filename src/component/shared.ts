@@ -72,3 +72,9 @@ export interface StatusItem {
 export interface StatusProps {
   stats: Array<StatusItem>;
 }
+
+export interface WorldProps {
+  onClick: (id: string) => void;
+
+  worlds: Array<TemplateMetadata>;
+}

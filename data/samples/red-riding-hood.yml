@@ -215,7 +215,113 @@ worlds:
       rooms:
         - id: room-intro
     templates:
-      actors: []
-      items: []
+      actors:
+        - base:
+            meta:
+              id: actor-red
+              name:
+                base: Little Red Riding Hood
+              desc:
+                base: a young girl named after the red riding hood that she wears.
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              apron-left: {}
+              apron-right: {}
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+        - base:
+            meta:
+              id: actor-wolf-1
+              name:
+                base: Wolf
+              desc:
+                base: a wolf; it looks hungry.
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+        - base:
+            meta:
+              id: actor-wolf-2
+              name:
+                base: Wolf
+              desc:
+                base: a wolf; it looks hungry.
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+        - base:
+            meta:
+              id: actor-grandmother
+              name:
+                base: Grandmother
+              desc:
+                base: Little Red Riding Hood's grandmother.
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+        - base:
+            meta:
+              id: actor-hunter
+              name:
+                base: A Hunter
+              desc:
+                base: a hunter.
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              hand-left: {}
+              hand-right: {}
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+      items:
+        - base:
+            meta:
+              id: item-cake
+              name:
+                base: Piece of Cake
+              desc:
+                base: a piece of red velvet cake with cream cheese frosting; it looks delicious, albeit a bit squished.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
       portals: []
       rooms: []

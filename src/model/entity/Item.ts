@@ -1,9 +1,9 @@
 import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
-import { TEMPLATE_CHANCE } from '../../util/constants';
 
+import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { NumberMap, StringMap } from '../../util/types';
+import { Immutable, NumberMap, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
 import { Template, TEMPLATE_NUMBER_SCHEMA, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
@@ -23,6 +23,10 @@ export interface Item {
   type: ItemType;
 }
 
+export type ReadonlyItem = Immutable<Item>;
+
+export function isItem(entity: Optional<Immutable<Entity>>): entity is ReadonlyItem;
+export function isItem(entity: Optional<Entity>): entity is Item;
 export function isItem(entity: Optional<Entity>): entity is Item {
   return doesExist(entity) && entity.type === ITEM_TYPE;
 }

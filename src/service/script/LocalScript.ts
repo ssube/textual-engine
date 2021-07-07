@@ -9,7 +9,7 @@ import { SignalActorHit } from '../../script/signal/actor/ActorHit';
 import { SignalActorLook } from '../../script/signal/actor/ActorLook';
 import { SignalActorStep } from '../../script/signal/actor/ActorStep';
 import { SignalActorUse } from '../../script/signal/actor/ActorUse';
-import { SignalBehaviorEnemy } from '../../script/signal/behavior/BehaviorEnemy';
+import { SignalBehaviorEnemy } from '../../script/signal/behavior/common/BehaviorEnemy';
 import { SignalItemLook } from '../../script/signal/item/ItemLook';
 import { SignalItemReplace } from '../../script/signal/item/ItemReplace';
 import { SignalItemStep } from '../../script/signal/item/ItemStep';

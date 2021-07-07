@@ -16,13 +16,15 @@ export async function SignalActorUse(this: ScriptTarget, context: ScriptContext)
   const maxDamage = getKey(item.stats, STAT_DAMAGE, 0);
   const maxHealth = getKey(item.stats, STAT_HEALTH, 0);
 
-  const damage = context.random.nextInt(maxDamage);
-  const health = context.random.nextInt(maxHealth);
-  const result = incrementKey(this.stats, STAT_HEALTH, health - damage);
+  const damageRoll = context.random.nextInt(maxDamage);
+  const healthRoll = context.random.nextInt(maxHealth);
+  const [stats, health] = incrementKey(this.stats, STAT_HEALTH, healthRoll - damageRoll);
+
+  await context.state.update(this, { stats });
 
   await context.state.show(context.source, 'actor.use.item.health', {
     actor: this,
     item,
-    health: result,
+    health,
   });
 }

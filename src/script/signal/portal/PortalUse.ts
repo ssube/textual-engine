@@ -3,6 +3,7 @@ import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isPortal } from '../../../model/entity/Portal';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { setKey } from '../../../util/collection/map';
 import { STAT_LOCKED } from '../../../util/constants';
 import { matchIdSegments } from '../../../util/string';
 
@@ -17,7 +18,8 @@ export async function SignalPortalUse(this: ScriptTarget, context: ScriptContext
   // if item is key, unlock
   if (doesExist(key)) {
     if (matchIdSegments(this.meta.id, key)) {
-      this.stats.set(STAT_LOCKED, 0);
+      const stats = setKey(this.stats, STAT_LOCKED, 0);
+      await context.state.update(this, { stats });
       await context.state.show(context.source, 'portal.use.key.unlock', { item, portal: this });
     } else {
       await context.state.show(context.source, 'portal.use.key.wrong', { item, portal: this });

@@ -1,11 +1,9 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
+import { match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand, makeCommandIndex } from '../../../../src/model/Command';
 import { VerbActorDrop } from '../../../../src/script/verb/actor/ActorDrop';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { VERB_DROP, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
@@ -48,7 +46,6 @@ describe('actor drop verb', () => {
   });
 
   it('should find the target by name', async () => {
-    const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
     const transfer = createTestTransfer();
 
@@ -62,9 +59,7 @@ describe('actor drop verb', () => {
     const actor = makeTestActor('', '', '', items[0]);
     const context = createTestContext({
       command: makeCommand(VERB_DROP, 'bob'),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      script,
       state,
       transfer,
     });
@@ -92,7 +87,6 @@ describe('actor drop verb', () => {
     const actor = makeTestActor('', '', '', items[0]);
     const context = createTestContext({
       command: makeCommandIndex(VERB_DROP, 1, 'foo'),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       state,
       transfer,

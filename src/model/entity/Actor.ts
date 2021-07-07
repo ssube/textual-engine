@@ -3,7 +3,7 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { NumberMap, StringMap } from '../../util/types';
+import { Immutable, NumberMap, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
 import {
   Template,
@@ -38,6 +38,11 @@ export interface Actor {
   type: ActorType;
 }
 
+export type ReadonlyActor = Immutable<Actor>;
+
+// Immutable overload needs to come first
+export function isActor(entity: Optional<Immutable<Entity>>): entity is ReadonlyActor;
+export function isActor(entity: Optional<Entity>): entity is Actor;
 export function isActor(entity: Optional<Entity>): entity is Actor {
   return doesExist(entity) && entity.type === ACTOR_TYPE;
 }

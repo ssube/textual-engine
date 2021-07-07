@@ -1,4 +1,4 @@
-import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { doesExist, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { ActorSource, isActor } from '../../../model/entity/Actor';
@@ -6,7 +6,7 @@ import { isPortal } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { head } from '../../../util/collection/array';
-import { getKey } from '../../../util/collection/map';
+import { getKey, setKey } from '../../../util/collection/map';
 import { SIGNAL_LOOK, STAT_LOCKED } from '../../../util/constants';
 import { indexEntity } from '../../../util/entity/match';
 
@@ -30,14 +30,12 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetPortal = indexEntity(portals, command.index, isPortal);
 
   if (isNil(targetPortal)) {
-    await context.state.show(context.source, 'actor.step.move.missing', { command });
-    return;
+    return context.state.show(context.source, 'actor.step.move.missing', { command });
   }
 
   const locked = getKey(targetPortal.stats, STAT_LOCKED, 0);
   if (locked > 0) {
-    await context.state.show(context.source, 'actor.step.move.locked', { command, portal: targetPortal });
-    return;
+    return context.state.show(context.source, 'actor.step.move.locked', { command, portal: targetPortal });
   }
 
   const rooms = await context.state.find({
@@ -57,6 +55,13 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     actor: this,
     portal: targetPortal,
   });
+
+  // leader movement flags
+  const pathKey = this.flags.get('leader');
+  if (doesExist(pathKey)) {
+    const flags = setKey(currentRoom.flags, pathKey, targetPortal.meta.id);
+    await context.state.update(currentRoom, { flags });
+  }
 
   // move the actor and focus
   await context.transfer.moveActor({

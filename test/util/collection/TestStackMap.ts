@@ -58,4 +58,21 @@ describe('stack map', () => {
     expect(map.has('foo')).to.equal(true);
     expect(map.has('bar')).to.equal(false);
   });
+
+  it('should get the depth of each key', async () => {
+    const map = new StackMap();
+    map.push('foo', 1);
+    map.push('foo', 2);
+    map.push('bar', 1);
+
+    expect(map.depth('foo')).to.equal(2);
+    expect(map.depth('bar')).to.equal(1);
+  });
+
+  it('should not create keys when testing depth', async () => {
+    const map = new StackMap();
+
+    expect(map.depth('foo')).to.equal(0);
+    expect(map.has('foo')).to.equal(false);
+  });
 });

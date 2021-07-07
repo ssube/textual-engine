@@ -1,13 +1,12 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
+import { match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { ActorSource } from '../../../../src/model/entity/Actor';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room';
 import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { SIGNAL_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
@@ -35,7 +34,6 @@ describe('actor move verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_MOVE, portal.meta.name),
-      random: createStubInstance(MathRandomService),
       room,
       state,
     });
@@ -63,7 +61,6 @@ describe('actor move verb', () => {
     room.portals.push(portal);
     const context = createTestContext({
       command: makeCommand(VERB_MOVE, portal.group.source),
-      random: createStubInstance(MathRandomService),
       room,
       state,
     });
@@ -91,7 +88,6 @@ describe('actor move verb', () => {
     room.portals.push(portal);
     const context = createTestContext({
       command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
-      random: createStubInstance(MathRandomService),
       room,
       state,
     });
@@ -117,7 +113,6 @@ describe('actor move verb', () => {
     const room = makeTestRoom('', '', '', [actor], []);
     const context = createTestContext({
       command: makeCommand(VERB_MOVE, 'door'),
-      random: createStubInstance(MathRandomService),
       room,
       state,
     });
@@ -138,7 +133,6 @@ describe('actor move verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_MOVE, `${portal.group.source} ${portal.meta.name}`),
-      random: createStubInstance(MathRandomService),
       room,
       state,
     });
@@ -160,7 +154,6 @@ describe('actor move verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_MOVE, portal.meta.name),
-      random: createStubInstance(MathRandomService),
       room,
       state,
     });

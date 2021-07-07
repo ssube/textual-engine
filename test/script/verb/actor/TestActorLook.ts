@@ -4,7 +4,6 @@ import { createStubInstance, match, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorLook } from '../../../../src/script/verb/actor/ActorLook';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
@@ -29,7 +28,6 @@ describe('actor look verb', () => {
       const room = makeTestRoom('', '', '', [], []);
       const context = createTestContext({
         command: makeCommand(VERB_LOOK),
-        random: createStubInstance(MathRandomService),
         room,
         script,
         state,
@@ -46,7 +44,6 @@ describe('actor look verb', () => {
       const actor = makeTestActor('', '', '');
       const context = createTestContext({
         command: makeCommand(VERB_LOOK),
-        random: createStubInstance(MathRandomService),
         room: makeTestRoom('', '', '', [actor], []),
         state,
       });
@@ -70,7 +67,6 @@ describe('actor look verb', () => {
 
       const context = createTestContext({
         command: makeCommand(VERB_LOOK, actor.meta.id),
-        random: createStubInstance(MathRandomService),
         room,
         script,
         state,
@@ -91,7 +87,6 @@ describe('actor look verb', () => {
 
       const context = createTestContext({
         command: makeCommand(VERB_LOOK, 'none'),
-        random: createStubInstance(MathRandomService),
         room,
         script,
         state,

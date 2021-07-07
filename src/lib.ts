@@ -12,7 +12,7 @@ export { Metadata } from './model/Metadata';
 export { Actor, ACTOR_TYPE, ActorSource } from './model/entity/Actor';
 export { Entity } from './model/entity/Base';
 export { Item, ITEM_TYPE } from './model/entity/Item';
-export { Portal, PortalGroups, PortalLinkage } from './model/entity/Portal';
+export { Portal, PortalLinkage } from './model/entity/Portal';
 export { Room, ROOM_TYPE } from './model/entity/Room';
 export { WorldEntity, WorldEntityType } from './model/entity/index';
 

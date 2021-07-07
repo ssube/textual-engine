@@ -26,7 +26,6 @@ describe('actor push verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       state,
     });
 
@@ -45,7 +44,6 @@ describe('actor push verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       state,
     });
 
@@ -68,7 +66,6 @@ describe('actor push verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       state,
     });
 
@@ -93,7 +90,6 @@ describe('actor push verb', () => {
     const source = makeTestRoom('', '', '');
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room: source,
       state,
     });

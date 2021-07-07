@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { alt, createLanguage, optWhitespace, regexp, string } from 'parsimmon';
 
 import { InputChain } from '.';
@@ -32,13 +31,10 @@ export function splitChain(input: string, options: SplitOptions): InputChain {
   });
 
   const parse = lang.Top.tryParse(input);
-  if (typeof parse === 'string') {
-    return [parse];
-  }
 
   if (Array.isArray(parse)) {
     return parse;
+  } else {
+    return [parse];
   }
-
-  throw new InvalidArgumentError('parse did not return a string or array');
 }

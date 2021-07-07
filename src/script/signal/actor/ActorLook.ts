@@ -1,11 +1,10 @@
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { WorldEntity } from '../../../model/entity';
 import { isActor } from '../../../model/entity/Actor';
-import { ScriptContext } from '../../../service/script';
+import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { getKey } from '../../../util/collection/map';
 import { STAT_HEALTH } from '../../../util/constants';
 
-export async function SignalActorLook(this: WorldEntity, context: ScriptContext): Promise<void> {
+export async function SignalActorLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
     throw new ScriptTargetError('script target must be an actor');
   }

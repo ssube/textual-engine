@@ -210,7 +210,7 @@ worlds:
           verbs: []
       
     meta:
-      id: sample-hansel-gretel
+      id: sample-hansel-and-gretel
       name:
         base: Hansel and Gretel
       desc:
@@ -233,7 +233,7 @@ worlds:
             flags: !map {}
             items: []
             scripts: !map {}
-            slots: !map 
+            slots: !map
               pocket-left:
                 base: ''
               pocket-right:
@@ -288,12 +288,12 @@ worlds:
               weapon-hand-right:
                 base: item-ax
             stats: !map
-                health:
-                  max: 10
-                  min: 0
-                stamina:
-                  max: 5
-                  min: 1
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
         - base:
             meta:
                 id: actor-stepmother
@@ -306,12 +306,12 @@ worlds:
             scripts: !map {}
             slots: !map {}
             stats: !map
-                health:
-                  max: 10
-                  min: 0
-                stamina:
-                  max: 5
-                  min: 1
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
         - base:
             meta:
                 id: actor-witch
@@ -324,12 +324,12 @@ worlds:
             scripts: !map {}
             slots: !map {}
             stats: !map
-                health:
-                  max: 10
-                  min: 0
-                stamina:
-                  max: 5
-                  min: 1
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
         - base:
             meta:
                 id: actor-duck
@@ -342,12 +342,240 @@ worlds:
             scripts: !map {}
             slots: !map {}
             stats: !map
-                  health:
-                    max: 10
-                    min: 0
-                  stamina:
-                    max: 5
-                    min: 1
-      items: []
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+      items:
+        - base:
+            meta:
+              id: item-bread
+              name:
+                base: bread
+              desc:
+                  base: A loaf of stale bread. It breaks into crumbs easily.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-crumbs
+              name:
+                base: crumbs
+              desc:
+                base: Some pale bread crumbs.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-pebbles
+              name:
+                base: pebbles
+              desc:
+                base: Smooth, white pebbles
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-brushwood
+              name:
+                base: brushwood
+              desc:
+                base: Some brushwood. This would make a nice fire.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-woodaxe
+              name:
+                base: woodaxe
+              desc:
+                base: A worn woodaxe.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-pearls
+              name:
+                base: pearls
+              desc:
+                base: Perfectly round pearls; they gleam in the light
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-jewels
+              name:
+                base: jewels
+              desc:
+                base: Magnificent rubies, sapphires, and emeralds.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
       portals: []
-      rooms: []
+      rooms:
+        - base:
+            meta:
+                id: room-intro
+                name: 
+                  base: Introductory Scene
+                desc:
+                  base: The intro cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-woodcuttershouse
+                name: 
+                  base: The Woodcutter's House
+                desc:
+                  base: A small cottage where Hansel and Gretel live with their father, the Woodcutter, and their mother.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-walkintowoods
+                name: 
+                  base: Cutcene
+                desc:
+                  base: The cutscene where they walk into the woods will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-forestpath
+                name: 
+                  base: The forest path
+                desc:
+                  base: A worn path through the forest; there's not much to distinguish it from the rest of the forest.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-hill
+                name: 
+                  base: The Hill
+                desc:
+                  base: It's a hill.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-fatherleaves
+                name: 
+                  base: Cutscene
+                desc:
+                  base: The father leaving cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-forest
+                name: 
+                  base: Great Forest
+                desc:
+                  base: The forest; there's no sign of the Woodcutter's house from here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-gingerbreadhouse
+                name: 
+                  base: A Gingerbread House
+                desc:
+                  base: A quaint cottage made of gingerbread, icing, and other confections. It looks good enough to eat.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-witchintro
+                name: 
+                  base: Cutscene
+                desc:
+                  base: The witch's intro cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-intro
+                name: 
+                  base: Introductory Scene
+                desc:
+                  base: The intro cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-oven
+                name: 
+                  base: Oven
+                desc:
+                  base: The witch's oven. The bottom is littered with ashes and... is that a bone?
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-outro
+                name: 
+                  base: Final Scene
+                desc:
+                  base: The outro cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}

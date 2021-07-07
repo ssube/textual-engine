@@ -5,25 +5,16 @@ import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { Actor } from '../../../../src/model/entity/Actor';
 import { VerbActorHit } from '../../../../src/script/verb/actor/ActorHit';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { SIGNAL_HIT, VERB_HIT, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper } from '../../../helper';
 
 describe('actor hit verb', () => {
   it('should require the script target be an actor', async () => {
-    const script = createStubInstance(LocalScriptService);
-    const state = getStubHelper();
-    const transfer = createTestTransfer();
-
     const context = createTestContext({
       command: makeCommand(VERB_WAIT),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      script,
-      state,
-      transfer,
     });
 
     await expect(VerbActorHit.call(makeTestItem('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
@@ -39,7 +30,6 @@ describe('actor hit verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_HIT, target.meta.id),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state,
@@ -62,7 +52,6 @@ describe('actor hit verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_HIT, 'foo'),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state,
@@ -82,7 +71,6 @@ describe('actor hit verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_HIT, actor.meta.id),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state,
@@ -103,7 +91,6 @@ describe('actor hit verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_HIT, ''),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
       script,
       state,

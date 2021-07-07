@@ -7,8 +7,8 @@ import { NotInitializedError } from '../../error/NotInitializedError';
 import { ScriptTargetError } from '../../error/ScriptTargetError';
 import { Command } from '../../model/Command';
 import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
-import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../model/entity/Actor';
-import { ITEM_TYPE } from '../../model/entity/Item';
+import { Actor, ACTOR_TYPE, ActorSource, isActor, ReadonlyActor } from '../../model/entity/Actor';
+import { Item, ITEM_TYPE } from '../../model/entity/Item';
 import { PORTAL_TYPE } from '../../model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../model/entity/Room';
 import { DataFile } from '../../model/file/Data';
@@ -60,6 +60,7 @@ import { findMatching, findRoom, SearchFilter } from '../../util/entity/find';
 import { getVerbScripts } from '../../util/script';
 import { makeServiceLogger } from '../../util/service';
 import { findByBaseId } from '../../util/template';
+import { Immutable } from '../../util/types';
 import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
@@ -83,8 +84,8 @@ export class LocalStateService implements StateService {
   protected random: RandomService;
   protected script: ScriptService;
 
-  protected commandBuffer: StackMap<Actor, Command>;
-  protected commandQueue: CompletionSet<Actor>;
+  protected commandBuffer: StackMap<ReadonlyActor, Command>;
+  protected commandQueue: CompletionSet<ReadonlyActor>;
   protected worlds: Array<WorldTemplate>;
 
   protected state?: WorldState;
@@ -178,7 +179,7 @@ export class LocalStateService implements StateService {
     const world = mustFind(this.worlds, (it) => it.meta.id === state.meta.template);
 
     // find an existing actor, if one exists
-    const [existingActor] = findMatching(state, {
+    const [existingActor] = findMatching(state.rooms, {
       meta: {
         id: event.pid,
       },
@@ -579,14 +580,15 @@ export class LocalStateService implements StateService {
       data: new Map(),
       random: this.random,
       state: {
-        create: (id, type, target) => this.stepCreate(id, type, target),
-        enter: (target) => this.stepEnter(target),
-        find: (search) => this.stepFind(search),
-        move: (target, context) => this.stepMove(target, context),
-        quit: () => this.doQuit(),
-        show: (msg, context, volume, source) => this.stepShow(msg, context, volume, source),
-        update: (entity) => this.stepUpdate(entity),
+        create: /* istanbul ignore next */ (id, type, target) => this.stepCreate(id, type, target),
+        enter: /* istanbul ignore next */ (target) => this.stepEnter(target),
+        find: /* istanbul ignore next */ (search) => this.stepFind(search),
+        move: /* istanbul ignore next */ (target, context) => this.stepMove(target, context),
+        quit: /* istanbul ignore next */ () => this.doQuit(),
+        show: /* istanbul ignore next */ (msg, context, volume, source) => this.stepShow(msg, context, volume, source),
+        update: /* istanbul ignore next */ (entity, changes) => this.stepUpdate(entity, changes),
       },
+      step: this.state.step,
       transfer: mustExist(this.transfer),
     };
 
@@ -684,7 +686,7 @@ export class LocalStateService implements StateService {
   /**
    * Handler for a room change from the state helper.
    */
-  public async stepCreate<TType extends WorldEntityType>(id: string, type: TType, target: StateSource): Promise<EntityForType<TType>> {
+  public async stepCreate<TType extends WorldEntityType>(id: string, type: TType, target: StateSource): Promise<Immutable<EntityForType<TType>>> {
     const generator = mustExist(this.generator);
     const world = generator.getWorld();
 
@@ -693,26 +695,34 @@ export class LocalStateService implements StateService {
         const template = findByBaseId(world.templates.actors, id);
         const actor = await generator.createActor(template);
 
-        target.room.actors.push(actor);
+        await this.stepUpdate(target.room, {
+          actors: [...target.room.actors, actor],
+        });
+
         await this.stepEnter({
           actor,
           room: target.room,
         });
 
-        return actor as EntityForType<TType>; // not a cast, but the compiler doesn't know
+        return actor as Immutable<EntityForType<TType>>; // not a cast, but the compiler doesn't know
       }
       case ITEM_TYPE: {
         const template = findByBaseId(world.templates.items, id);
         const item = await generator.createItem(template);
 
         if (doesExist(target.actor)) {
-          target.actor.items.push(item);
-          // TODO: fire get signal
+          await this.stepUpdate(target.actor, {
+            items: [...target.actor.items, item],
+          });
         } else {
-          target.room.items.push(item);
+          await this.stepUpdate(target.room, {
+            items: [...target.room.items, item],
+          });
         }
 
-        return item as EntityForType<TType>;
+        // TODO: fire get signal
+
+        return item as Immutable<EntityForType<TType>>;
       }
       case PORTAL_TYPE:
       case ROOM_TYPE:
@@ -736,8 +746,9 @@ export class LocalStateService implements StateService {
     await this.broadcastChanges(state.rooms);
   }
 
-  public async stepFind<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<EntityForType<TType>>> {
-    return findMatching(mustExist(this.state), search);
+  public async stepFind<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<Immutable<EntityForType<TType>>>> {
+    const state = mustExist(this.state);
+    return findMatching(state.rooms, search);
   }
 
   public async stepMove(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void> {
@@ -769,8 +780,12 @@ export class LocalStateService implements StateService {
     });
   }
 
-  public async stepUpdate(_entity: WorldEntity): Promise<void> {
-    // noop for local state
+  /**
+   * This is a little bit silly for local state, but in a network model, is needed to forward the changes to the
+   * server for validation and broadcast.
+   */
+  public async stepUpdate<TEntity extends WorldEntity>(entity: Immutable<TEntity>, changes: Partial<Immutable<TEntity>>): Promise<void> {
+    Object.assign(entity, changes);
   }
 
   // #endregion state access callbacks

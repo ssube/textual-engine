@@ -2,12 +2,13 @@ import { isNil, mustExist, Optional } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { WorldEntity } from '../../../model/entity';
-import { Actor, isActor } from '../../../model/entity/Actor';
+import { isActor, ReadonlyActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { head } from '../../../util/collection/array';
 import { SIGNAL_USE } from '../../../util/constants';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
+import { Immutable } from '../../../util/types';
 
 export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -44,7 +45,7 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
   });
 }
 
-export async function getUseTarget(actor: Actor, context: ScriptContext): Promise<Optional<WorldEntity>> {
+export async function getUseTarget(actor: ReadonlyActor, context: ScriptContext): Promise<Optional<Immutable<WorldEntity>>> {
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 

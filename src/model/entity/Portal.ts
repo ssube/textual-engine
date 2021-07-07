@@ -3,15 +3,9 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { NumberMap, StringMap } from '../../util/types';
+import { Immutable, NumberMap, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
-import {
-  BaseTemplate,
-  Template,
-  TEMPLATE_NUMBER_SCHEMA,
-  TEMPLATE_SCRIPT_SCHEMA,
-  TEMPLATE_STRING_SCHEMA,
-} from '../mapped/Template';
+import { Template, TEMPLATE_NUMBER_SCHEMA, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { ScriptMap } from '../Script';
 import { Entity } from './Base';
@@ -45,17 +39,15 @@ export interface Portal {
 
   scripts: ScriptMap;
 
-  // TODO: can these be removed in favor of flags?
   stats: NumberMap;
 
   type: PortalType;
 }
 
-export type PortalGroups = Map<string, {
-  dests: Set<string>;
-  portals: Set<BaseTemplate<Portal>>;
-}>;
+export type ReadonlyPortal = Immutable<Portal>;
 
+export function isPortal(it: Optional<Immutable<Entity>>): it is ReadonlyPortal;
+export function isPortal(it: Optional<Entity>): it is Portal;
 export function isPortal(it: Optional<Entity>): it is Portal {
   return doesExist(it) && it.type === PORTAL_TYPE;
 }

@@ -3,7 +3,7 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { StringMap } from '../../util/types';
+import { Immutable, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
 import { Template, TEMPLATE_REF_SCHEMA, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
@@ -27,6 +27,10 @@ export interface Room {
   type: RoomType;
 }
 
+export type ReadonlyRoom = Immutable<Room>;
+
+export function isRoom(entity: Optional<Immutable<Entity>>): entity is ReadonlyRoom;
+export function isRoom(entity: Optional<Entity>): entity is Room;
 export function isRoom(entity: Optional<Entity>): entity is Room {
   return doesExist(entity) && entity.type === ROOM_TYPE;
 }

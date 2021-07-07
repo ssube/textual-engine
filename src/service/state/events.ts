@@ -1,13 +1,13 @@
 import { StepResult } from '.';
-import { Actor } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
-import { StateSource, ShowVolume } from '../../util/actor';
+import { ReadonlyActor } from '../../model/entity/Actor';
+import { ReadonlyRoom } from '../../model/entity/Room';
+import { ShowVolume, StateSource } from '../../util/actor';
 import { LocaleContext } from '../locale';
 
 export interface StateJoinEvent {
-  actor: Actor;
+  actor: ReadonlyActor;
   pid: string;
-  room: Room;
+  room: ReadonlyRoom;
 }
 
 export interface StateLoadEvent {
@@ -40,8 +40,8 @@ export interface StateOutputEvent {
 }
 
 export interface StateRoomEvent {
-  actor: Actor;
-  room: Room;
+  actor: ReadonlyActor;
+  room: ReadonlyRoom;
 }
 
 export interface StateStepEvent {

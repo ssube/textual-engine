@@ -1,10 +1,9 @@
 import { expect } from 'chai';
-import { createStubInstance, SinonStub } from 'sinon';
+import { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorOpen } from '../../../../src/script/verb/actor/ActorOpen';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { STAT_CLOSED, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
@@ -26,7 +25,6 @@ describe('actor open verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       state,
     });
 
@@ -42,7 +40,6 @@ describe('actor open verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       state,
     });
 
@@ -60,7 +57,6 @@ describe('actor open verb', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       state,
     });
 

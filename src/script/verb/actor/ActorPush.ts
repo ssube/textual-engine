@@ -39,7 +39,7 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
     return context.state.show(context.source, 'actor.push.portal', { actor, command });
   }
 
-  // TODO: check closed and locked
+  // TODO: check whether the portal is closed or locked
 
   const [target] = await context.state.find({
     meta: {

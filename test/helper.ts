@@ -4,7 +4,7 @@ import { createStubInstance, stub } from 'sinon';
 import { LocalScriptService, MathRandomService, StateEntityTransfer } from '../src/lib';
 import { ConfigFile } from '../src/model/file/Config';
 import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
-import { ScriptContext, StateHelper } from '../src/service/script';
+import { CommandHelper, ScriptContext, StateHelper } from '../src/service/script';
 import { makeTestRoom } from './entity';
 
 export function getTestLogger(): Logger {
@@ -59,7 +59,17 @@ export function getStubHelper(): StateHelper {
     move: stub(),
     quit: stub(),
     show: stub(),
-    update: stub(),
+    update: async (entity, changes) => {
+      Object.assign(entity, changes);
+    },
+  };
+}
+
+export function createStubBehavior(): CommandHelper {
+  return {
+    depth: stub(),
+    queue: stub(),
+    ready: stub(),
   };
 }
 
@@ -72,11 +82,7 @@ export function createTestTransfer(): StateEntityTransfer {
 
 export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptContext {
   return {
-    behavior: {
-      depth: stub(),
-      queue: stub(),
-      ready: stub(),
-    },
+    behavior: createStubBehavior(),
     data: new Map(),
     logger: getTestLogger(),
     random: createStubInstance(MathRandomService),
@@ -85,6 +91,10 @@ export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptCon
       room: makeTestRoom('', '', ''),
     },
     state: getStubHelper(),
+    step: {
+      time: 0,
+      turn: 0,
+    },
     transfer: createTestTransfer(),
     ...parts,
   };

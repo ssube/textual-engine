@@ -31,15 +31,11 @@ export class JoinChain {
   }
 
   public render(chain: InputChain, depth = 0): string {
-    if (Array.isArray(chain)) {
-      const level = depth % LEVEL_EVEN_ODD;
-      if (level === 0) {
-        return this.renderAnd(chain, depth);
-      } else {
-        return this.renderOr(chain, depth);
-      }
+    const level = depth % LEVEL_EVEN_ODD;
+    if (level === 0) {
+      return this.renderAnd(chain, depth);
     } else {
-      throw new InvalidArgumentError('input chain is not an array');
+      return this.renderOr(chain, depth);
     }
   }
 

@@ -4,25 +4,16 @@ import { createStubInstance, match, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalPortalLook } from '../../../../src/script/signal/portal/PortalLook';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_CLOSED, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestPortal, makeTestRoom } from '../../../entity';
-import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper } from '../../../helper';
 
 describe('portal look scripts', () => {
   it('should require the script target be a portal', async () => {
-    const script = createStubInstance(LocalScriptService);
-    const state = getStubHelper();
-    const transfer = createTestTransfer();
-
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      script,
-      state,
-      transfer,
     });
 
     await expect(SignalPortalLook.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
@@ -30,14 +21,11 @@ describe('portal look scripts', () => {
   });
 
   it('should describe the portal', async () => {
-    const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      script,
       state,
     });
 
@@ -47,7 +35,6 @@ describe('portal look scripts', () => {
   });
 
   it('should describe the portal destination room for open portals', async () => {
-    const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
 
     const portal = makeTestPortal('', '', '', '', 'foo');
@@ -56,9 +43,7 @@ describe('portal look scripts', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
-      script,
       state,
     });
 
@@ -68,7 +53,6 @@ describe('portal look scripts', () => {
   });
 
   it('should show a message for closed portals', async () => {
-    const script = createStubInstance(LocalScriptService);
     const state = getStubHelper();
 
     const portal = makeTestPortal('', '', '', '', 'foo');
@@ -79,9 +63,7 @@ describe('portal look scripts', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
-      script,
       state,
     });
 

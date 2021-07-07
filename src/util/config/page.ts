@@ -8,8 +8,7 @@ import { makeParserSchema } from '../parser';
 import { makeSchema } from '../schema';
 import { splitPath } from '../string';
 
-/* istanbul ignore else */
-export async function loadConfig(url: string, doc = document): Promise<ConfigFile> {
+export async function loadConfig(url: string, /* istanbul ignore next */ doc = document): Promise<ConfigFile> {
   const { path } = splitPath(url);
   const elem = doc.getElementById(path);
   const text = mustExist(elem).textContent;

@@ -1,3 +1,5 @@
+import { Immutable } from '../util/types';
+
 export type ScriptData = Map<string, number | string>;
 
 export interface ScriptRef {
@@ -6,3 +8,5 @@ export interface ScriptRef {
 }
 
 export type ScriptMap = Map<string, ScriptRef>;
+
+export type ImmutableScriptMap = Map<string, Immutable<ScriptRef>>;

@@ -1,12 +1,12 @@
 import { Command } from '../../model/Command';
-import { Actor } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
+import { ReadonlyActor } from '../../model/entity/Actor';
+import { ReadonlyRoom } from '../../model/entity/Room';
 import { StepResult } from '../state';
 
 export interface ActorCommandEvent {
   command: Command;
-  actor?: Actor;
-  room?: Room;
+  actor?: ReadonlyActor;
+  room?: ReadonlyRoom;
 }
 
 export interface ActorJoinEvent {
@@ -26,7 +26,7 @@ export interface ActorOutputEvent {
 }
 
 export interface ActorRoomEvent {
-  actor: Actor;
+  actor: ReadonlyActor;
   pid: string;
-  room: Room;
+  room: ReadonlyRoom;
 }

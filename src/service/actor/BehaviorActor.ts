@@ -5,8 +5,8 @@ import { Inject, Logger } from 'noicejs';
 import { ActorService } from '.';
 import { ConfigError } from '../../error/ConfigError';
 import { Command, makeCommand } from '../../model/Command';
-import { Actor, ActorSource } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
+import { ActorSource, ReadonlyActor } from '../../model/entity/Actor';
+import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import { randomItem } from '../../util/collection/array';
@@ -110,7 +110,7 @@ export class BehaviorActorService implements ActorService {
     return this.queue(event.room, event.actor, WAIT_CMD);
   }
 
-  protected async queue(room: Room, actor: Actor, command: Command): Promise<void> {
+  protected async queue(room: ReadonlyRoom, actor: ReadonlyActor, command: Command): Promise<void> {
     this.next.set(actor.meta.id, command);
 
     this.event.emit(EVENT_ACTOR_COMMAND, {

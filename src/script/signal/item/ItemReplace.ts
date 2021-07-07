@@ -15,7 +15,7 @@ export async function SignalItemReplace(this: ScriptTarget, context: ScriptConte
     return context.state.show(context.source, 'item.replace.none', { item: this });
   }
 
-  // TODO: respect normal and/or groups
+  // TODO: use join helper and respect normal ordering of and/or groups
   const replaceGroups = splitChain(replaceStr, {
     group: {
       end: ')',
@@ -24,7 +24,7 @@ export async function SignalItemReplace(this: ScriptTarget, context: ScriptConte
     split: '|',
   }).flat(Infinity) as Array<string>;
 
-  console.log('replace groups', replaceGroups);
+  context.logger.debug({ item: this, replaceGroups }, 'replace groups for item');
 
   for (const group of replaceGroups) {
     const [type, id] = group.split(':');

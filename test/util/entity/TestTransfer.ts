@@ -287,7 +287,25 @@ describe('state transfer utils', () => {
       }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
     });
 
+    it('should not invoke scripts when the source and target are the same', async () => {
+      const item = makeTestItem('bun', 'bun', 'bun');
+      const room = makeTestRoom('foo', 'foo', 'foo', [], []);
+
+      const container = await getTestContainer(new CoreModule());
+      const transfer = await container.create(StateEntityTransfer);
+      const context = createTestContext({
+        transfer,
+      });
+
+      await transfer.moveItem({
+        moving: item,
+        source: room,
+        target: room,
+      }, context);
+
+      expect(context.script.invoke).to.have.callCount(0);
+    });
+
     xit('should invoke the get script on the destination entity');
-    xit('should not invoke scripts when the source and target are the same');
   });
 });

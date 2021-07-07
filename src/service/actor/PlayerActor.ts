@@ -108,9 +108,22 @@ export class PlayerActorService implements ActorService {
   }
 
   public onQuit(event: StateQuitEvent): void {
+    const stats = [];
+
+    if (doesExist(this.actor)) {
+      for (const [key, value] of this.actor.stats) {
+        if (event.stats.includes(key)) {
+          stats.push({
+            name: this.locale.translate(key),
+            value,
+          });
+        }
+      }
+    }
+
     this.event.emit(EVENT_ACTOR_QUIT, {
       line: this.locale.translate(event.line, event.context),
-      stats: [], // TODO: use this actor's stats
+      stats,
     });
   }
 

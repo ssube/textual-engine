@@ -263,6 +263,9 @@ worlds:
               health:
                 max: 50
                 min: 30
+              score:
+                max: 0
+                min: 0
               stamina:
                 max: 5
                 min: 1
@@ -301,6 +304,9 @@ worlds:
               health:
                 max: 20
                 min: 14
+              score:
+                max: 0
+                min: 0
               stamina:
                 max: 5
                 min: 1

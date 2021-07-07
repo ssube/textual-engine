@@ -146,6 +146,13 @@ export abstract class BaseReactRender implements RenderService {
   public onQuit(event: ActorQuitEvent): void {
     this.logger.debug('handling quit event from state');
     this.quit = true;
+
+    this.output.push(event.line);
+
+    for (const { name, value } of event.stats) {
+      this.output.push(`${name}: ${value}`);
+    }
+
     this.update();
   }
 

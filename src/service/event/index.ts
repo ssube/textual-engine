@@ -3,11 +3,19 @@ import { EventEmitter } from 'events';
 
 import { Service } from '..';
 import { ErrorHandler, EventHandler } from '../../util/async/event';
-import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent, ActorRoomEvent } from '../actor/events';
+import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent, ActorQuitEvent, ActorRoomEvent } from '../actor/events';
 import { LoaderConfigEvent, LoaderReadEvent, LoaderSaveEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
 import { LocaleBundleEvent } from '../locale/events';
 import { RenderInputEvent } from '../render/events';
-import { StateJoinEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent, StateStepEvent, StateWorldEvent } from '../state/events';
+import {
+  StateJoinEvent,
+  StateLoadEvent,
+  StateOutputEvent,
+  StateQuitEvent,
+  StateRoomEvent,
+  StateStepEvent,
+  StateWorldEvent,
+} from '../state/events';
 import { TokenCommandEvent } from '../tokenizer/events';
 
 export type EventGroup = Service;
@@ -23,6 +31,7 @@ export interface EventBus extends EventEmitter {
   emit(name: 'actor-join', event: ActorJoinEvent): boolean;
   emit(name: 'actor-output', event: ActorOutputEvent): boolean;
   emit(name: 'actor-room', event: ActorRoomEvent): boolean;
+  emit(name: 'actor-quit', event: ActorQuitEvent): boolean;
 
   emit(name: 'locale-bundle', event: LocaleBundleEvent): boolean;
 
@@ -37,6 +46,7 @@ export interface EventBus extends EventEmitter {
 
   emit(name: 'state-join', event: StateJoinEvent): boolean;
   emit(name: 'state-load', event: StateLoadEvent): boolean;
+  emit(name: 'state-quit', event: StateQuitEvent): boolean;
   emit(name: 'state-room', event: StateRoomEvent): boolean;
   emit(name: 'state-step', event: StateStepEvent): boolean;
   emit(name: 'state-output', event: StateOutputEvent): boolean;
@@ -53,6 +63,7 @@ export interface EventBus extends EventEmitter {
   on(name: 'actor-join', handler: EventHandler<ActorJoinEvent>, group?: EventGroup): this;
   on(name: 'actor-output', handler: EventHandler<ActorOutputEvent>, group?: EventGroup): this;
   on(name: 'actor-room', handler: EventHandler<ActorRoomEvent>, group?: EventGroup): this;
+  on(name: 'actor-quit', handler: EventHandler<ActorQuitEvent>, group?: EventGroup): this;
 
   on(name: 'locale-bundle', handler: EventHandler<LocaleBundleEvent>, group?: EventGroup): this;
 
@@ -67,6 +78,7 @@ export interface EventBus extends EventEmitter {
 
   on(name: 'state-join', handler: EventHandler<StateJoinEvent>, group?: EventGroup): this;
   on(name: 'state-load', handler: EventHandler<StateLoadEvent>, group?: EventGroup): this;
+  on(name: 'state-quit', handler: EventHandler<StateQuitEvent>, group?: EventGroup): this;
   on(name: 'state-room', handler: EventHandler<StateRoomEvent>, group?: EventGroup): this;
   on(name: 'state-step', handler: EventHandler<StateStepEvent>, group?: EventGroup): this;
   on(name: 'state-output', handler: EventHandler<StateOutputEvent>, group?: EventGroup): this;

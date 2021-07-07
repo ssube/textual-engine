@@ -33,6 +33,7 @@ import {
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_QUIT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
   EVENT_STATE_WORLD,
@@ -46,18 +47,17 @@ import {
   META_VERBS,
   META_WORLDS,
   SIGNAL_STEP,
+  STAT_SCORE,
   VERB_PREFIX,
 } from '../../util/constants';
 import { zeroStep } from '../../util/entity';
 import { debugState, graphState } from '../../util/entity/debug';
 import { StateEntityGenerator } from '../../util/entity/EntityGenerator';
 import {
-  ActorTransfer,
   EntityTransfer,
   isActorTransfer,
   isItemTransfer,
   isRoomTransfer,
-  ItemTransfer,
   StateEntityTransfer,
 } from '../../util/entity/EntityTransfer';
 import { findMatching, findRoom, SearchFilter } from '../../util/entity/find';
@@ -72,6 +72,8 @@ import { hasState, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '.
 import { LocaleContext } from '../locale';
 import { RandomService } from '../random';
 import { ScriptContext, ScriptService, SuppliedScope } from '../script';
+
+type StateScope = Omit<SuppliedScope, 'source'>;
 
 @Inject(
   INJECT_COUNTER,
@@ -453,7 +455,7 @@ export class LocalStateService implements StateService {
    * Leave the state step loop.
    */
   public async doQuit(): Promise<void> {
-    this.event.emit(EVENT_COMMON_QUIT);
+    return this.stepQuit('quit.meta', {}, [STAT_SCORE]);
   }
 
   public async doSave(event: ActorCommandEvent): Promise<void> {
@@ -557,7 +559,7 @@ export class LocalStateService implements StateService {
     const seen = new Set();
     const start = Date.now();
 
-    const scope: Omit<SuppliedScope, 'source'> = {
+    const scope: StateScope = {
       behavior: {
         depth: async (actor) => this.commandBuffer.depth(actor),
         queue: async (actor, command) => {
@@ -572,7 +574,7 @@ export class LocalStateService implements StateService {
         enter: /* istanbul ignore next */ (target) => this.stepEnter(target),
         find: /* istanbul ignore next */ (search) => this.stepFind(search),
         move: /* istanbul ignore next */ (target, context) => this.stepMove(target, context),
-        quit: /* istanbul ignore next */ () => this.doQuit(),
+        quit: /* istanbul ignore next */ (msg, context, stats) => this.stepQuit(msg, context, stats),
         show: /* istanbul ignore next */ (msg, context, volume, source) => this.stepShow(msg, context, volume, source),
         update: /* istanbul ignore next */ (entity, changes) => this.stepUpdate(entity, changes),
       },
@@ -756,6 +758,14 @@ export class LocalStateService implements StateService {
     }
 
     throw new ScriptTargetError('move target must be an actor or item');
+  }
+
+  public async stepQuit(line: string, context?: LocaleContext, stats: Array<string> = []): Promise<void> {
+    this.event.emit(EVENT_STATE_QUIT, {
+      line,
+      context,
+      stats,
+    });
   }
 
   /**

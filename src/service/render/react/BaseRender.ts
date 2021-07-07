@@ -11,8 +11,8 @@ import { onceEvent } from '../../../util/async/event';
 import { ClearResult, debounce } from '../../../util/async/Throttle';
 import {
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
-  EVENT_COMMON_QUIT,
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
   EVENT_STATE_WORLD,
@@ -21,7 +21,7 @@ import { zeroStep } from '../../../util/entity';
 import { getEventShortcuts } from '../../../util/render';
 import { makeSchema } from '../../../util/schema';
 import { makeServiceLogger } from '../../../util/service';
-import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
+import { ActorOutputEvent, ActorQuitEvent, ActorRoomEvent } from '../../actor/events';
 import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
@@ -108,7 +108,7 @@ export abstract class BaseReactRender implements RenderService {
 
     this.event.on(EVENT_ACTOR_OUTPUT, (output) => this.onOutput(output), this);
     this.event.on(EVENT_ACTOR_ROOM, (room) => this.onRoom(room), this);
-    this.event.on(EVENT_COMMON_QUIT, () => this.onQuit(), this);
+    this.event.on(EVENT_ACTOR_QUIT, (event) => this.onQuit(event), this);
     this.event.on(EVENT_STATE_STEP, (step) => this.onStep(step), this);
     this.event.on(EVENT_STATE_WORLD, (event) => this.onWorlds(event));
   }
@@ -143,7 +143,7 @@ export abstract class BaseReactRender implements RenderService {
   /**
    * Handler for quit events received from state service.
    */
-  public onQuit(): void {
+  public onQuit(event: ActorQuitEvent): void {
     this.logger.debug('handling quit event from state');
     this.quit = true;
     this.update();

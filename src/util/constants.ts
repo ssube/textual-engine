@@ -16,6 +16,7 @@ export const EVENT_COMMON_QUIT = 'quit';
 export const EVENT_ACTOR_COMMAND = 'actor-command';
 export const EVENT_ACTOR_JOIN = 'actor-join';
 export const EVENT_ACTOR_OUTPUT = 'actor-output';
+export const EVENT_ACTOR_QUIT = 'actor-quit';
 export const EVENT_ACTOR_ROOM = 'actor-room';
 export const EVENT_LOCALE_BUNDLE = 'locale-bundle';
 export const EVENT_LOADER_CONFIG = 'loader-config';
@@ -28,6 +29,7 @@ export const EVENT_RENDER_INPUT = 'render-input';
 export const EVENT_STATE_JOIN = 'state-join';
 export const EVENT_STATE_LOAD = 'state-load';
 export const EVENT_STATE_OUTPUT = 'state-output';
+export const EVENT_STATE_QUIT = 'state-quit';
 export const EVENT_STATE_ROOM = 'state-room';
 export const EVENT_STATE_STEP = 'state-step';
 export const EVENT_STATE_WORLD = 'state-world';
@@ -37,6 +39,7 @@ export const EVENT_NAMES: ReadonlyArray<string> = [
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_ERROR,
   EVENT_COMMON_QUIT,
@@ -120,6 +123,7 @@ export const COMMON_VERBS: ReadonlyArray<string> = [
 // common stats
 export const STAT_HEALTH = 'health';
 export const STAT_DAMAGE = 'damage';
+export const STAT_SCORE = 'score';
 
 export const STAT_CLOSED = 'closed';
 export const STAT_LOCKED = 'locked';

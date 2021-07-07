@@ -12,22 +12,21 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
-  EVENT_COMMON_QUIT,
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_QUIT,
   EVENT_STATE_ROOM,
-  EVENT_STATE_WORLD,
   EVENT_TOKEN_COMMAND,
 } from '../../util/constants';
-import { zeroStep } from '../../util/entity';
 import { makeServiceLogger } from '../../util/service';
 import { Counter } from '../counter';
 import { EventBus } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
 import { StepResult } from '../state';
-import { StateJoinEvent, StateOutputEvent, StateRoomEvent, StateWorldEvent } from '../state/events';
+import { StateJoinEvent, StateOutputEvent, StateQuitEvent, StateRoomEvent } from '../state/events';
 import { TokenCommandEvent } from '../tokenizer/events';
 
 /**
@@ -79,8 +78,8 @@ export class PlayerActorService implements ActorService {
     this.event.on(EVENT_STATE_OUTPUT, (event) => {
       catchAndLog(this.onStateOutput(event), this.logger, 'error during state output');
     }, this);
-    this.event.on(EVENT_COMMON_QUIT, () => {
-      catchAndLog(this.showLine(zeroStep(), 'meta.quit'), this.logger, 'error sending quit output');
+    this.event.on(EVENT_STATE_QUIT, (event) => {
+      this.onQuit(event);
     }, this);
   }
 
@@ -106,6 +105,13 @@ export class PlayerActorService implements ActorService {
     } else {
       this.logger.debug({ event }, 'actor joined state');
     }
+  }
+
+  public onQuit(event: StateQuitEvent): void {
+    this.event.emit(EVENT_ACTOR_QUIT, {
+      line: this.locale.translate(event.line, event.context),
+      stats: [], // TODO: use this actor's stats
+    });
   }
 
   public onRoom(event: StateRoomEvent): void {

@@ -20,6 +20,12 @@ export interface Command {
   targets: Array<string>;
 }
 
+export enum CommandOrder {
+  FIRST = 'first',
+  NEXT = 'next',
+  LAST = 'last',
+}
+
 export function makeCommand(verb: string, ...targets: Array<string>): Command {
   return makeCommandIndex(verb, 0, ...targets);
 }

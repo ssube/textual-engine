@@ -25,6 +25,15 @@ export interface ActorOutputEvent {
   step: StepResult;
 }
 
+export interface ActorQuitEvent {
+  line: string;
+
+  stats: Array<{
+    name: string;
+    value: number;
+  }>;
+}
+
 export interface ActorRoomEvent {
   actor: ReadonlyActor;
   pid: string;

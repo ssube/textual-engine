@@ -40,6 +40,25 @@ export interface StateOutputEvent {
   volume: ShowVolume;
 }
 
+export interface StateQuitEvent {
+  /**
+   * Translation context, optional.
+   */
+  context?: LocaleContext;
+
+  /**
+   * Untranslated output, often a locale key.
+   */
+  line: string;
+
+  /**
+   * Which player is quitting. If not specified, all.
+   */
+  pid?: string;
+
+  stats: Array<string>;
+}
+
 export interface StateRoomEvent {
   actor: ReadonlyActor;
   room: ReadonlyRoom;

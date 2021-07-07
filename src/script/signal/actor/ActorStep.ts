@@ -6,7 +6,7 @@ import { LocaleContext } from '../../../service/locale';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { StateSource } from '../../../util/actor';
 import { getKey } from '../../../util/collection/map';
-import { STAT_HEALTH } from '../../../util/constants';
+import { STAT_HEALTH, STAT_SCORE } from '../../../util/constants';
 import { getVerbScripts } from '../../../util/script';
 
 export async function SignalActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -18,7 +18,7 @@ export async function SignalActorStep(this: ScriptTarget, context: ScriptContext
   if (health <= 0) {
     if (this.source === ActorSource.PLAYER) {
       await context.state.show(context.source, 'actor.step.command.dead', { actor: this });
-      await context.state.quit();
+      await context.state.quit('quit.dead', { actor: this }, [STAT_SCORE]);
     }
     return;
   }

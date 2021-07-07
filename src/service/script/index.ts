@@ -8,7 +8,7 @@ import { ReadonlyPortal } from '../../model/entity/Portal';
 import { ReadonlyRoom } from '../../model/entity/Room';
 import { ScriptData } from '../../model/Script';
 import { ShowVolume, StateSource } from '../../util/actor';
-import { ActorTransfer, ItemTransfer, StateEntityTransfer } from '../../util/entity/EntityTransfer';
+import { ActorTransfer, ItemTransfer } from '../../util/entity/EntityTransfer';
 import { SearchFilter } from '../../util/entity/find';
 import { Immutable } from '../../util/types';
 import { LocaleContext } from '../locale';
@@ -30,7 +30,7 @@ export interface StateHelper {
   find<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<Immutable<EntityForType<TType>>>>;
   move(target: ActorTransfer | ItemTransfer, context: ScriptContext): Promise<void>;
   show(source: StateSource, msg: string, context?: LocaleContext, volume?: ShowVolume): Promise<void>;
-  quit(): Promise<void>;
+  quit(msg: string, context?: LocaleContext, stats?: Array<string>): Promise<void>;
   update<TEntity extends WorldEntity>(entity: Immutable<TEntity>, changes: Partial<Immutable<TEntity>>): Promise<void>;
 }
 

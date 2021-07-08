@@ -433,7 +433,196 @@ worlds:
             slot:
               base: ''
             stats: !map {}
-      portals: []
+      portals:
+        - base:
+            meta:
+              id: portal-intro-house
+              name:
+                base: Start
+              desc:
+                base: start the story
+            dest:
+              base: room-woodcutters-house
+            flags: !map {}
+            group:
+              key: 
+                base: start
+              source:
+                base: intro
+              target:
+                base: house
+            link: 
+              base: forward
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-house-bedroom
+              name:
+                base: Bedroom Door
+              desc:
+                base: A wooden door leading to the bedroom. It creaks a lot.
+            dest:
+              base: room-bedroom
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-bedroom-house
+              name:
+                base: Bedroom Door
+              desc:
+                base: A wooden door leading back to the main room of the house. It creaks a lot.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target: 
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-house-yard
+              name:
+                base: Front Door
+              desc:
+                base: The cottage's front door.
+            dest:
+              base: room-yard
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-yard-house
+              name:
+                base: Front Door
+              desc:
+                base: The cottage's front door.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-yard-edge
+              name:
+                base: Forest path
+              desc:
+                base: A path to the edge of the forest.
+            dest:
+              base: room-forest-edge
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-edge-yard
+              name:
+                base: Forest path
+              desc:
+                base: A path leading to the woodcutter's yard.
+            dest:
+                base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-edge-forest
+              name:
+                base: Forest path
+              desc:
+                base: A path leading deeper into the forest; it's starting to become overgrown.
+            dest:
+              base: room-forest
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-forest-edge
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest; it seems like it's starting to become more visible.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
       rooms:
         - base:
             meta:
@@ -445,43 +634,76 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-intro-house
             scripts: !map {}
         - base:
             meta:
-                id: room-woodcuttershouse
+                id: room-woodcutters-house
                 name: 
                   base: The Woodcutter's House
                 desc:
-                  base: A small cottage where Hansel and Gretel live with their father, the Woodcutter, and their mother.
+                  base: A small cottage where Hansel and Gretel live with their father - a Woodcutter - and their mother.
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-house-bedroom
+              - id: portal-house-yard
             scripts: !map {}
         - base:
             meta:
-                id: room-walkintowoods
-                name: 
-                  base: Cutcene
-                desc:
-                  base: The cutscene where they walk into the woods will go here.
+              id: room-bedroom
+              name:
+                base: The Bedroom
+              desc:
+                base: The cottage's bedroom; the whole family sleeps in here. It's pretty cramped.
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-bedroom-house
             scripts: !map {}
         - base:
             meta:
-                id: room-forestpath
+                id: room-yard
                 name: 
-                  base: The forest path
+                  base: Yard
                 desc:
-                  base: A worn path through the forest; there's not much to distinguish it from the rest of the forest.
+                  base: A yard outside the woodcutter's house. It has a meager garden with a few shriveled carrots.
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-yard-house
+              - id: portal-yard-edge
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-forest-edge
+                name: 
+                  base: The forest edge
+                desc:
+                  base: A edge of the forest; the path through the forest is hard to see.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+               - id: portal-edge-yard
+               - id: portal-edge-forest
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-forest
+              name:
+                base: Forest
+              desc:
+                base: A dense forest; it's hard to see the path.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-forest-edge
             scripts: !map {}
         - base:
             meta:
@@ -497,7 +719,7 @@ worlds:
             scripts: !map {}
         - base:
             meta:
-                id: room-fatherleaves
+                id: room-leaving-scene
                 name: 
                   base: Cutscene
                 desc:
@@ -521,7 +743,7 @@ worlds:
             scripts: !map {}
         - base:
             meta:
-                id: room-gingerbreadhouse
+                id: room-gingerbread-house
                 name: 
                   base: A Gingerbread House
                 desc:
@@ -533,7 +755,7 @@ worlds:
             scripts: !map {}
         - base:
             meta:
-                id: room-witchintro
+                id: room-witch-intro
                 name: 
                   base: Cutscene
                 desc:
@@ -545,23 +767,11 @@ worlds:
             scripts: !map {}
         - base:
             meta:
-                id: room-intro
-                name: 
-                  base: Introductory Scene
-                desc:
-                  base: The intro cutscene will go here.
-            actors: []
-            flags: !map {}
-            items: []
-            portals: []
-            scripts: !map {}
-        - base:
-            meta:
                 id: room-oven
                 name: 
                   base: Oven
                 desc:
-                  base: The witch's oven. The bottom is littered with ashes and... is that a bone?
+                  base: The witch's oven. The bottom is littered with ashes and fragments of bone.
             actors: []
             flags: !map {}
             items: []

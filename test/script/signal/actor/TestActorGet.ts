@@ -1,12 +1,11 @@
 import { expect } from 'chai';
-import { createStubInstance, match } from 'sinon';
+import { match } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { ActorSource } from '../../../../src/model/entity/Actor';
 import { SignalActorGet } from '../../../../src/script/signal/actor/ActorGet';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper } from '../../../helper';
 
 describe('actor get signal', () => {
   it('should require the script target be an actor', async () => {

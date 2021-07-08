@@ -1,5 +1,3 @@
-import { InvalidArgumentError } from '@apextoaster/js-utils';
-
 import { InputChain } from '.';
 import { RandomService } from '../../service/random';
 

@@ -11,7 +11,7 @@ import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_HEALTH, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper } from '../../../helper';
 
 const TEST_ACTOR: Actor = {
   flags: new Map(),

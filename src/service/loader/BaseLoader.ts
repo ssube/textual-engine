@@ -6,7 +6,6 @@ import { DataFile } from '../../model/file/Data';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import {
-  EVENT_LOADER_CONFIG,
   EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,

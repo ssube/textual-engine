@@ -1,10 +1,9 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
+import { match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalPortalLook } from '../../../../src/script/signal/portal/PortalLook';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { STAT_CLOSED, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';

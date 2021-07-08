@@ -563,7 +563,7 @@ worlds:
       portals:
         - base:
             meta:
-              id: portal-intro-start
+              id: portal-intro-gate
               name:
                 base: Start
               desc:
@@ -584,7 +584,7 @@ worlds:
             stats: !map {}
         - base:
             meta:
-              id: portal-gate-gate
+              id: portal-gate-avenue
               name:
                 base: Gate
               desc:
@@ -605,7 +605,7 @@ worlds:
             stats: !map {}
         - base:
             meta:
-              id: portal-avenue-path
+              id: portal-avenue-front
               name:
                 base: Path
               desc:
@@ -1413,7 +1413,7 @@ worlds:
             flags: !map {}
             items: []
             portals:
-              - id: portal-intro-start
+              - id: portal-intro-gate
             scripts: !map {}
         - base:
             meta:
@@ -1426,7 +1426,7 @@ worlds:
             flags: !map {}
             items: []
             portals:
-              - id: portal-gate-gate
+              - id: portal-gate-avenue
             scripts: !map {}
         - base:
             meta:
@@ -1440,7 +1440,7 @@ worlds:
             items: []
             portals:
               - id: portal-avenue-garden
-              - id: portal-avenue-path
+              - id: portal-avenue-front
             scripts: !map {}
         - base:
             meta:

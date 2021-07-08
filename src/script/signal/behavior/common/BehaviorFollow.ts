@@ -8,7 +8,7 @@ import { VERB_MOVE } from '../../../../util/constants';
 import { SignalBehaviorEnemy } from './BehaviorEnemy';
 
 /**
- * The children and solders in the Queen's croquet party should:
+ * The children and soldiers in the Queen's croquet party should:
  *
  * - follow the queen
  */

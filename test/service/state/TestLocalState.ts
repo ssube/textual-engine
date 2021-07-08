@@ -25,6 +25,7 @@ import {
   StateOutputEvent,
   StateRoomEvent,
   StateStepEvent,
+  StateWorldEvent,
 } from '../../../src/service/state/events';
 import { LocalStateService } from '../../../src/service/state/LocalState';
 import { ShowVolume } from '../../../src/util/actor';
@@ -41,6 +42,7 @@ import {
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
+  EVENT_STATE_WORLD,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -333,7 +335,22 @@ describe('local state service', () => {
   });
 
   describe('world load event', () => {
-    xit('should register world templates when they load');
+    it('should register world templates when they load', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      const pendingWorlds = onceEvent<StateWorldEvent>(events, EVENT_STATE_WORLD);
+
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const worlds = await pendingWorlds;
+
+      expect(worlds.worlds).to.have.lengthOf(1);
+    });
   });
 
   describe('create command', () => {

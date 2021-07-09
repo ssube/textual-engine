@@ -112,6 +112,7 @@ export class LineRender implements RenderService {
     }
   }
 
+  /* istanbul ignore next */
   public update(): void {
     /* noop */
   }

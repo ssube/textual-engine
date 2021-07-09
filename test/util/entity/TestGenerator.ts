@@ -4,7 +4,6 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { stub } from 'sinon';
 
-import { Counter, LocaleService } from '../../../src/lib';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { isPortal, Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
@@ -14,6 +13,8 @@ import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
 import { INJECT_COUNTER, INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { Counter } from '../../../src/service/counter';
+import { LocaleService } from '../../../src/service/locale';
 import { PORTAL_DEPTH, TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
 import { getTestContainer } from '../../helper';

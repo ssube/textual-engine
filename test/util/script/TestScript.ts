@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { getVerbScripts } from '../../../src/lib';
+import { getVerbScripts } from '../../../src/util/script';
 import { makeTestActor, makeTestRoom } from '../../entity';
 
 describe('script utils', () => {

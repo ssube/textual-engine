@@ -36,12 +36,16 @@ describe('room enter signal', () => {
 
     await SignalRoomEnter.call(room, context);
 
-    expect(context.state.move).to.have.been.calledWith({
+    expect(context.state.move).to.have.callCount(1).and.been.calledWith({
       moving: actor,
       source: room,
       target: room,
     });
 
     expect(actor.flags.get('scene-foo')).to.equal('shown');
+
+    await SignalRoomEnter.call(room, context);
+
+    expect(context.state.move).to.have.callCount(1);
   });
 });

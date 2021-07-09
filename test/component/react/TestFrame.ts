@@ -1,9 +1,10 @@
 import { expect } from 'chai';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { stub } from 'sinon';
+import { match, stub } from 'sinon';
 
 import { Frame } from '../../../src/component/react/Frame';
+import { META_CREATE } from '../../../src/util/constants';
 import { zeroStep } from '../../../src/util/entity';
 import { getReactStrings } from './helper';
 
@@ -196,5 +197,61 @@ describe('react frame component', () => {
     });
 
     expect(onLine).to.have.been.calledWith('c');
+  });
+
+  it('should replace the line for world shortcuts', async () => {
+    const onLine = stub();
+    const root = React.createElement(Frame, {
+      onLine,
+      prompt: 'foo',
+      output: [],
+      quit: false,
+      shortcuts: {
+        actors: [],
+        items: [],
+        portals: [],
+        verbs: [],
+      },
+      show: {
+        shortcuts: true,
+        status: true,
+      },
+      stats: [],
+      step: zeroStep(),
+      worlds: [{
+        id: 'foo',
+        name: {
+          base: 'Foo',
+          type: 'string',
+        },
+        desc: {
+          base: 'bar',
+          type: 'string',
+        },
+      }],
+    });
+
+    const renderer = TestRenderer.create(root);
+
+    const input = renderer.root.findByProps({ id: 'input-line' });
+    input.props.onChange({
+      target: {
+        value: 'ab',
+      }
+    });
+
+    const shortcut = renderer.root.findByProps({ id: 'world-menu' });
+    shortcut.props.onChange({
+      target: {
+        value: 'foo',
+      }
+    });
+
+    const submit = renderer.root.findByProps({ id: 'input-form' });
+    submit.props.onSubmit({
+      preventDefault: stub(),
+    });
+
+    expect(onLine).to.have.been.calledWith(`${META_CREATE} foo with test seed and 10`);
   });
 });

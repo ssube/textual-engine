@@ -2,8 +2,8 @@ import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { LogLevel } from 'noicejs';
 import { stub } from 'sinon';
-import { ConfigError } from '../../../src/lib';
 
+import { ConfigError } from '../../../src/error/ConfigError';
 import { loadConfig } from '../../../src/util/config/page';
 
 describe('page config', () => {

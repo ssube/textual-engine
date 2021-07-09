@@ -15,12 +15,16 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_QUIT,
   EVENT_STATE_ROOM,
   EVENT_TOKEN_COMMAND,
+  STAT_HEALTH,
+  STAT_SCORE,
   VERB_WAIT,
 } from '../../../src/util/constants';
 import { zeroStep } from '../../../src/util/entity';
@@ -286,6 +290,51 @@ describe('player actor', () => {
     expect(actorOutputStub).to.have.callCount(1).and.been.calledWith({
       line,
       step,
+    });
+  });
+
+  it('should include values from the current actor values for quit stats', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+    await locale.start();
+
+    const player = await container.create(PlayerActorService);
+    await player.start();
+
+    const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    const pendingJoin = onceEvent<ActorJoinEvent>(event, EVENT_ACTOR_JOIN);
+    event.emit(EVENT_STATE_LOAD, {
+      state: '',
+      world: '',
+    });
+    const { pid } = await pendingJoin;
+
+    const actor = makeTestActor(pid, '', '');
+    actor.stats.set(STAT_HEALTH, 20);
+    actor.stats.set(STAT_SCORE, 10);
+
+    const room = makeTestRoom('', '', '', [actor], []);
+    event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid,
+      room,
+    });
+
+    const actorQuitStub = stub();
+    event.on(EVENT_ACTOR_QUIT, actorQuitStub);
+
+    event.emit(EVENT_STATE_QUIT, {
+      line: 'foo',
+      stats: [STAT_SCORE],
+    });
+
+    expect(actorQuitStub).to.have.been.calledWith({
+      line: 'foo',
+      stats: [{
+        name: STAT_SCORE,
+        value: 10,
+      }],
     });
   });
 });

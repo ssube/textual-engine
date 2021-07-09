@@ -1,11 +1,13 @@
 import { ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
 import { createStubInstance, stub } from 'sinon';
 
-import { LocalScriptService, MathRandomService, StateEntityTransfer } from '../src/lib';
 import { ConfigFile } from '../src/model/file/Config';
 import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
+import { MathRandomService } from '../src/service/random/MathRandom';
 import { CommandHelper, ScriptContext, StateHelper } from '../src/service/script';
+import { LocalScriptService } from '../src/service/script/LocalScript';
 import { zeroStep } from '../src/util/entity';
+import { StateEntityTransfer } from '../src/util/entity/EntityTransfer';
 import { makeTestRoom } from './entity';
 
 export function getTestLogger(): Logger {

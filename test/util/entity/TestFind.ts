@@ -1,10 +1,11 @@
 import { expect } from 'chai';
-import { ACTOR_TYPE, ITEM_TYPE } from '../../../src/lib';
-import { PORTAL_TYPE } from '../../../src/model/entity/Portal';
 
+import { ACTOR_TYPE } from '../../../src/model/entity/Actor';
+import { ITEM_TYPE } from '../../../src/model/entity/Item';
+import { PORTAL_TYPE } from '../../../src/model/entity/Portal';
 import { ROOM_TYPE } from '../../../src/model/entity/Room';
 import { WorldState } from '../../../src/model/world/State';
-import { findContainer, findRoom, findMatching, findSlotItem } from '../../../src/util/entity/find';
+import { findContainer, findMatching, findRoom, findSlotItem } from '../../../src/util/entity/find';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity';
 
 const TEST_STATE: WorldState = makeTestState('', [
@@ -81,7 +82,25 @@ describe('entity find utils', () => {
       expect(results).to.deep.equal([]);
     });
 
-    xit('should skip the inventory of actors that do not match the actor filter');
+    it('should skip the inventory of actors that do not match the actor filter', async () => {
+      const state = makeTestState('', [
+        makeTestRoom('', '', '', [
+          makeTestActor('foo', 'Foo', '', makeTestItem('foo-item', '', '')),
+          makeTestActor('bar', 'Bar', '', makeTestItem('bar-item', '', ''))
+        ]),
+      ]);
+      const results = findMatching(state.rooms, {
+        meta: {
+          id: 'foo',
+        },
+        actor: {
+          id: 'foo',
+        },
+        type: ITEM_TYPE,
+      });
+
+      expect(results).to.have.lengthOf(1);
+    });
   });
 
   describe('find room helper', () => {

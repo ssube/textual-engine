@@ -1,7 +1,7 @@
 import { JSONSchemaType } from 'ajv';
 import { expect } from 'chai';
 
-import { makeSchema } from '../../../src/lib';
+import { makeSchema } from '../../../src/util/schema';
 
 interface TestData {
   data: Map<number, number>;

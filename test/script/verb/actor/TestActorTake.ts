@@ -2,10 +2,10 @@ import { expect } from 'chai';
 import { match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { findMatching } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorTake } from '../../../../src/script/verb/actor/ActorTake';
 import { VERB_TAKE } from '../../../../src/util/constants';
+import { findMatching } from '../../../../src/util/entity/find';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 

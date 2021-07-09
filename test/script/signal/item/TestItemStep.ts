@@ -4,7 +4,7 @@ import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalItemStep } from '../../../../src/script/signal/item/ItemStep';
 import { VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestActor, makeTestRoom } from '../../../entity';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext } from '../../../helper';
 
 describe('item step signal', () => {
@@ -16,5 +16,10 @@ describe('item step signal', () => {
 
     await expect(SignalItemStep.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
     await expect(SignalItemStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+  });
+
+  it('should otherwise be an empty example', async () => {
+    const context = createTestContext();
+    await expect(SignalItemStep.call(makeTestItem('', '', ''), context)).to.eventually.equal(undefined);
   });
 });

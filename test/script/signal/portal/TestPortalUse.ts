@@ -54,4 +54,21 @@ describe('portal use signal', () => {
 
     expect(portal.stats.get(STAT_LOCKED)).to.equal(1);
   });
+
+  it('should show a generic message if the item is not a key', async () => {
+    const item = makeTestItem('', '', '');
+
+    const portal = makeTestPortal('foo-1', '', '', '', '');
+    portal.stats.set(STAT_LOCKED, 1);
+
+    const context = createTestContext({
+      command: makeCommand(VERB_WAIT),
+      item,
+      random: new MathRandomService(),
+    });
+
+    await SignalPortalUse.call(portal, context);
+
+    expect(context.state.show).to.have.been.calledWith(context.source, 'portal.use.any');
+  });
 });

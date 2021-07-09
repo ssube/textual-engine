@@ -3,6 +3,8 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { match, stub } from 'sinon';
 
+import { ConfigError } from '../../../src/error/ConfigError';
+import { ActorSource } from '../../../src/model/entity/Actor';
 import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { ActorCommandEvent } from '../../../src/service/actor/events';
@@ -99,6 +101,45 @@ describe('script actor', () => {
     expect(invokeStub).to.have.been.calledWithMatch(actor, match.string, {
       step,
     });
+  });
+
+  it('should ignore room events for player actors', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const actorService = await container.create(ScriptActorService, {
+      config: {
+        attack: 0.5,
+        wander: 0.5,
+      },
+    });
+    await actorService.start();
+
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+
+    const actorCommandStub = stub();
+    events.on(EVENT_ACTOR_COMMAND, actorCommandStub);
+
+    const actor = makeTestActor('', '', '');
+    actor.source = ActorSource.PLAYER;
+
+    const room = makeTestRoom('', '', '');
+    events.emit(EVENT_STATE_ROOM, {
+      actor,
+      room,
+    });
+
+    expect(actorCommandStub).to.have.callCount(0);
+  });
+
+  it('should validate the provided config', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    return expect(container.create(ScriptActorService, {
+      config: {
+        attack: 'test',
+        wander: undefined,
+      },
+    })).to.eventually.be.rejectedWith(ConfigError);
   });
 
   xit('should allow scripts to search the current room');

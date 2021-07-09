@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import { match } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { SignalActorLook } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
+import { SignalActorLook } from '../../../../src/script/signal/actor/ActorLook';
 import { STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';

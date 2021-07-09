@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { ACTOR_TYPE, ITEM_TYPE } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
+import { ACTOR_TYPE } from '../../../../src/model/entity/Actor';
+import { ITEM_TYPE } from '../../../../src/model/entity/Item';
 import { SignalItemReplace } from '../../../../src/script/signal/item/ItemReplace';
 import { VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';

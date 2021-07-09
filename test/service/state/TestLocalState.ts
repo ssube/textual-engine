@@ -6,7 +6,6 @@ import { match, spy, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
-import { ScriptService } from '../../../src/lib';
 import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
@@ -18,6 +17,7 @@ import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
+import { ScriptService } from '../../../src/service/script';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import {
   StateJoinEvent,

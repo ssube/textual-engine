@@ -9,7 +9,7 @@ import { ActorSource, ReadonlyActor } from '../../model/entity/Actor';
 import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
-import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, EVENT_STATE_STEP } from '../../util/constants';
+import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, EVENT_STATE_STEP, SIGNAL_BEHAVIOR } from '../../util/constants';
 import { zeroStep } from '../../util/entity';
 import { findMatching } from '../../util/entity/find';
 import { makeSchema } from '../../util/schema';
@@ -89,7 +89,7 @@ export class ScriptActorService implements ActorService {
   }
 
   public async onRoom(event: StateRoomEvent): Promise<void> {
-    return this.script.invoke(event.actor, 'signal.behavior', {
+    return this.script.invoke(event.actor, SIGNAL_BEHAVIOR, {
       actor: event.actor,
       behavior: {
         depth: /* istanbul ignore next */ () => Promise.resolve(0), // TODO: implement

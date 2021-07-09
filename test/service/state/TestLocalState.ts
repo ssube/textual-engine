@@ -2,10 +2,11 @@
 import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { match, spy, stub } from 'sinon';
+import { createStubInstance, match, spy, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
+import { ConfigError } from '../../../src/lib';
 import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
@@ -13,8 +14,9 @@ import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
-import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { Counter } from '../../../src/service/counter';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
 import { ScriptService } from '../../../src/service/script';
@@ -57,7 +59,7 @@ import {
   VERB_WAIT,
 } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
-import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity';
 import { createTestContext, getTestContainer } from '../../helper';
 
 // #region fixtures
@@ -845,6 +847,89 @@ describe('local state service', () => {
       const module = new CoreModule();
       const container = await getTestContainer(module);
 
+      const counter = await container.create<Counter, BaseOptions>(INJECT_COUNTER);
+      stub(counter, 'next').returns(0);
+
+      const generator = createStubInstance(StateEntityGenerator);
+      generator.createState.resolves(makeTestState('', [
+        makeTestRoom('room-0', '', '', [
+          makeTestActor('actor-0', '', '', makeTestItem('item-0', '', '')),
+        ], [
+          makeTestItem('item-1', '', ''),
+        ], [
+          makeTestPortal('portal-0', '', '', '', ''),
+        ]),
+        makeTestRoom('room-0', '', ''),
+        makeTestRoom('room-1', '', '', [
+          makeTestActor('actor-0', '', ''),
+          makeTestActor('actor-1', '', '', makeTestItem('item-0', '', '')),
+        ], [
+          makeTestItem('item-1', '', ''),
+        ], [
+          makeTestPortal('portal-0', '', '', '', ''),
+        ]),
+      ]));
+      module.bind(StateEntityGenerator).toInstance(generator as any);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const rooms = await state.stepFind({
+        type: ROOM_TYPE,
+      });
+
+      let broadcast = true;
+      for (const room of rooms) {
+        for (const actor of room.actors) {
+          if (broadcast) {
+            broadcast = false;
+            await state.stepEnter({ room, actor });
+          }
+
+          console.log('test command for', actor.meta);
+          await state.onCommand({
+            actor,
+            command: makeCommand(VERB_WAIT),
+          });
+        }
+      }
+
+      const script = await container.create<ScriptService, BaseOptions>(INJECT_SCRIPT);
+      const scriptSpy = spy(script, 'invoke');
+
+      // TODO: this throws internally because it is currently difficult to queue two commands for the same actor
+      await state.step();
+
+      expect(scriptSpy).to.have.callCount(1);
+    });
+
+    it('should error when some actors are missing commands', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const counter = await container.create<Counter, BaseOptions>(INJECT_COUNTER);
+      stub(counter, 'next').returns(0);
+
+      const generator = createStubInstance(StateEntityGenerator);
+      generator.createState.resolves(makeTestState('', [
+        makeTestRoom('room-0', '', '', [
+          makeTestActor('actor-0', '', ''),
+        ]),
+        makeTestRoom('room-0', '', '', [
+          makeTestActor('actor-0', '', ''),
+        ]),
+      ]));
+      module.bind(StateEntityGenerator).toInstance(generator as any);
+
       const state = await container.create(LocalStateService);
       await state.start();
 
@@ -858,15 +943,8 @@ describe('local state service', () => {
         command: makeCommand(META_CREATE, 'foo', '4'),
       });
 
-      const script = await container.create<ScriptService, BaseOptions>(INJECT_SCRIPT);
-      const scriptSpy = spy(script, 'invoke');
-
-      await state.step();
-
-      expect(scriptSpy).to.have.callCount(1);
+      return expect(state.step()).to.eventually.be.rejectedWith(Error);
     });
-
-    xit('should error when some actors are missing commands');
   });
 
   describe('step create helper', () => {
@@ -1097,6 +1175,37 @@ describe('local state service', () => {
       };
 
       return expect(state.stepMove(transfer, createTestContext())).to.eventually.be.rejectedWith(ScriptTargetError);
+    });
+
+    it('should move everything', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
+
+      const transfer = {
+        moving: undefined,
+        source: makeTestRoom('', '', '', [makeTestActor('', '', '')], [makeTestItem('', '', '')]),
+        target: makeTestRoom('', '', '', [], []),
+      };
+      await state.stepMove(transfer, createTestContext());
+
+      expect(transfer.source.actors, 'source actors').to.have.lengthOf(0);
+      expect(transfer.target.actors, 'target actors').to.have.lengthOf(1);
+
+      expect(transfer.source.items, 'source items').to.have.lengthOf(0);
+      expect(transfer.target.items, 'target items').to.have.lengthOf(1);
     });
   });
 

@@ -12,7 +12,7 @@ import { ScriptActorService } from '../../../src/service/actor/ScriptActor';
 import { EventBus } from '../../../src/service/event';
 import { ScriptService } from '../../../src/service/script';
 import { onceEvent } from '../../../src/util/async/event';
-import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, EVENT_STATE_STEP, VERB_WAIT } from '../../../src/util/constants';
+import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, EVENT_STATE_STEP, SIGNAL_BEHAVIOR, VERB_WAIT } from '../../../src/util/constants';
 import { makeTestActor, makeTestRoom } from '../../entity';
 import { getTestContainer } from '../../helper';
 
@@ -32,7 +32,7 @@ describe('script actor', () => {
     const pending = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
     const actor = makeTestActor('', '', '');
-    actor.scripts.set('signal.behavior', {
+    actor.scripts.set(SIGNAL_BEHAVIOR, {
       data: new Map(),
       name: 'signal-behavior-enemy',
     });

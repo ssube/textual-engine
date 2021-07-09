@@ -126,92 +126,92 @@ worlds:
             name:
               base: signal-room-step
     locale:
-      bundles:
+      languages:
         en:
-          actor:
-            get:
-              player: |-
-                You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-            hit:
-              dead: '{{actor.meta.name}} has died!'
-              health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
-              hit: |-
-                {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
-            step:
-              command:
-                dead: |-
-                  You are dead!
-                player:
-                  verb: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
-                  target: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
-                unknown: |-
-                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
-              drop:
-                type: |-
-                  {{command.targets}} is not an item!
-              equip:
-                item: |-
-                  You equip the {{item.meta.name}} in your {{slot}}.
-                none: |-
-                  {{command.targets}} is not an item!
-                slot: |-
-                  You are not able to equip {{item.meta.name}} in {{slot}}!
+          articles: []
+          prepositions: []
+          strings:
+            actor:
+              get:
+                player: |-
+                  You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
               hit:
-                item: |-
-                  You cannot hit {{target.meta.name}}, you are not holding anything!
-                self: |-
-                  You cannot hit yourself!
-                type: |-
-                  {{command.targets}} is not an actor!
-              look:
-                none: |-
-                  You see nothing.
-                room:
-                  you: |-
-                    You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
-                  health: |-
-                    You have {{health}} health.
-                  seen: |-
-                    You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
-                  inventory: |-
-                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-                  portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
-                  dest: |-
-                    You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
-                actor:
-                  seen: |-
-                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+                dead: '{{actor.meta.name}} has died!'
+                health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
+                hit: |-
+                  {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
+              step:
+                command:
                   dead: |-
-                    The {{actor.meta.name}} is dead!
-                item:
-                  seen: |-
-                    You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-              move:
-                missing: |-
-                  {{command.targets}} is not a portal!
-                portal: |-
-                  {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
-              take:
-                type: |-
-                  {{command.targets}} is not an item!
+                    You are dead!
+                  player:
+                    verb: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the next turn.
+                    target: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+                  unknown: |-
+                    {{actor.meta.name}} does not know how to $t({{command.verb}})!
+                drop:
+                  type: |-
+                    {{command.targets}} is not an item!
+                equip:
+                  item: |-
+                    You equip the {{item.meta.name}} in your {{slot}}.
+                  none: |-
+                    {{command.targets}} is not an item!
+                  slot: |-
+                    You are not able to equip {{item.meta.name}} in {{slot}}!
+                hit:
+                  item: |-
+                    You cannot hit {{target.meta.name}}, you are not holding anything!
+                  self: |-
+                    You cannot hit yourself!
+                  type: |-
+                    {{command.targets}} is not an actor!
+                look:
+                  none: |-
+                    You see nothing.
+                  room:
+                    you: |-
+                      You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+                    health: |-
+                      You have {{health}} health.
+                    seen: |-
+                      You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
+                    inventory: |-
+                      You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+                    portal: |-
+                      A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
+                    dest: |-
+                      You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
+                  actor:
+                    seen: |-
+                      A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+                    dead: |-
+                      The {{actor.meta.name}} is dead!
+                  item:
+                    seen: |-
+                      You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
+                move:
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+                take:
+                  type: |-
+                    {{command.targets}} is not an item!
+                use:
+                  type: |-
+                    {{command.targets}} is not a usable item!
+            item:
               use:
-                type: |-
-                  {{command.targets}} is not a usable item!
-          item:
-            use:
-              any: |-
-                {{item.meta.name}} has been used by {{actor.meta.name}}!
+                any: |-
+                  {{item.meta.name}} has been used by {{actor.meta.name}}!
+            verbs:
+              world:
+                push: push
           verbs:
-            world:
-              push: push
-      words:
-        articles: []
-        prepositions: []
-        verbs:
-          - verbs.world.push
+            - verbs.world.push
     meta:
       id: sample-alice
       name:
@@ -276,8 +276,141 @@ worlds:
                   damage:
                     max: 2
                     min: 1
+      portals:
+        - base:
+            meta:
+              id: portal-intro-garden
+              name:
+                base: 'Gateway'
+              desc:
+                base: 'flowered arch'
+            dest:
+              base: room-garden-entrance
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-entrance-main
+              name:
+                base: 'Garden Path'
+              desc:
+                base: 'flowered path'
+            dest:
+              base: room-garden-main
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-main-repeat
+              name:
+                base: 'Garden Path'
+              desc:
+                base: 'flowered path'
+            dest:
+              base: room-garden-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: west
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-main-grounds
+              name:
+                base: 'Path'
+              desc:
+                base: 'path out of the garden'
+            dest:
+              base: room-croquet-main
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-grounds-repeat
+              name:
+                base: 'Path'
+              desc:
+                base: 'path through the grounds'
+            dest:
+              base: room-croquet-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: west
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-garden-rose
+              name:
+                base: 'Path'
+              desc:
+                base: 'path to the rose grove'
+            dest:
+              base: room-rose-tree
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: west
+              target:
+                base: east
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-rose-pot
+              name:
+                base: 'Flower Pot'
+              desc:
+                base: 'the open top of the flower pot'
+            dest:
+              base: room-flower-pot
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            scripts: !map {}
+            stats: !map {}
 
-      portals: []
       rooms:
         - base:
             meta:
@@ -285,7 +418,7 @@ worlds:
               name:
                 base: Introduction
               desc:
-                base: a garden with a rose tree
+                base: the introduction to the garden
             actors: []
             flags: !map {}
             items:
@@ -295,5 +428,124 @@ worlds:
                 chance: 40
               - id: item-rose
                 chance: 40
+            portals:
+              - id: portal-intro-garden
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-garden-entrance
+              name:
+                base: Garden Entrance
+              desc:
+                base: a garden with a gateway
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+            - id: portal-entrance-main
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-garden-main
+              name:
+                base: Garden
+              desc:
+                base: a garden with some flowers
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-garden-rose
+              - id: portal-main-repeat
+              - id: portal-main-grounds
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-garden-repeat
+              name:
+                base: Garden
+              desc:
+                base: a garden with some suspiciously familiar flowers
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-main-repeat
+                chance: 80
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-croquet-main
+              name:
+                base: Croquet Ground
+              desc:
+                base: the Queen's croquet ground
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-grounds-repeat
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-croquet-repeat
+              name:
+                base: Croquet Ground
+              desc:
+                base: the Queen's croquet ground
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-grounds-repeat
+                chance: 80
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-queen-entrance
+              name:
+                base: Queen's Entrance
+              desc:
+                base: the Queen's path to the gardens
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-cat-entrance
+              name:
+                base: Cheshire Cat's Entrance
+              desc:
+                base: the Cheshire Cat's path to the grounds
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-rose-tree
+              name:
+                base: Rose Tree
+              desc:
+                base: a rose tree in the garden
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-rose-pot
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-flower-pot
+              name:
+                base: Flower Pot
+              desc:
+                base: a large flower pot in the garden
+            actors: []
+            flags: !map {}
+            items: []
             portals: []
             scripts: !map {}

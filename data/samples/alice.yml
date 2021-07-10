@@ -245,7 +245,127 @@ worlds:
               health:
                 max: 20
                 min: 20
-          mods: []
+        - base:
+            meta:
+              id: actor-gardener-seven
+              name:
+                base: Seven of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-gardener-five
+              name:
+                base: Five of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-gardener-two
+              name:
+                base: Two of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-queen
+              name:
+                base: Queen of Hearts
+              desc:
+                base: the queen of hearts
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-cheshire
+              name:
+                base: Cheshire Cat
+              desc:
+                base: the Cheshire Cat
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-rabbit
+              name:
+                base: White Rabbit
+              desc:
+                base: the White Rabbit, (nervously checking his pocket watch|adjusting his vest)
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-hedgehog
+              name:
+                base: Hedgehog
+              desc:
+                base: one of the Queen's croquet hedgehogs
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
       items:
         - base:
             meta:
@@ -276,6 +396,78 @@ worlds:
                   damage:
                     max: 2
                     min: 1
+        - base:
+            meta:
+              id: item-flamingo
+              name:
+                base: Flamingo
+              desc:
+                base: a flamingo mallet
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-paint
+              name:
+                base: Bucket of Paint
+              desc:
+                base: a bucket of (white|red|pink) paint
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-brush
+              name:
+                base: Paint Brush
+              desc:
+                base: a paint brush
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-flower
+              name:
+                base: Garden Flower
+              desc:
+                base: a flower from the garden
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-crown
+              name:
+                base: King's Crown
+              desc:
+                base: the king's crown on a cushion
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-cookie
+              name:
+                base: Frosted Cookies
+              desc:
+                base: fancy frosted cookies
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
       portals:
         - base:
             meta:
@@ -490,7 +682,13 @@ worlds:
                 base: a garden with some flowers
             actors: []
             flags: !map {}
-            items: []
+            items:
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
             portals:
               - id: portal-garden-rose
               - id: portal-main-repeat
@@ -505,7 +703,13 @@ worlds:
                 base: a garden with some suspiciously familiar flowers
             actors: []
             flags: !map {}
-            items: []
+            items:
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
             portals:
               - id: portal-main-branch
                 chance: 90
@@ -521,7 +725,8 @@ worlds:
                 base: Croquet Ground
               desc:
                 base: the Queen's croquet ground
-            actors: []
+            actors:
+              - id: actor-hedgehog
             flags: !map {}
             items: []
             portals:
@@ -534,7 +739,9 @@ worlds:
                 base: Croquet Ground
               desc:
                 base: the Queen's croquet ground
-            actors: []
+            actors:
+              - id: actor-hedgehog
+                chance: 10
             flags: !map {}
             items: []
             portals:
@@ -552,7 +759,9 @@ worlds:
                 base: Queen's Entrance
               desc:
                 base: the Queen's path to the gardens
-            actors: []
+            actors:
+              - id: actor-queen
+              - id: actor-rabbit
             flags: !map {}
             items: []
             portals: []
@@ -564,7 +773,8 @@ worlds:
                 base: Cheshire Cat's Entrance
               desc:
                 base: the Cheshire Cat's path to the grounds
-            actors: []
+            actors:
+              - id: actor-cheshire
             flags: !map {}
             items: []
             portals: []
@@ -576,9 +786,14 @@ worlds:
                 base: Rose Tree
               desc:
                 base: a rose tree in the garden
-            actors: []
+            actors:
+              - id: actor-gardener-seven
+              - id: actor-gardener-five
+              - id: actor-gardener-two
             flags: !map {}
-            items: []
+            items:
+              - id: item-brush
+              - id: item-paint
             portals:
               - id: portal-rose-pot
             scripts: !map {}

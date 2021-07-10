@@ -336,6 +336,25 @@ worlds:
             stats: !map {}
         - base:
             meta:
+              id: portal-main-branch
+              name:
+                base: 'Garden Path'
+              desc:
+                base: 'flowered path'
+            dest:
+              base: room-garden-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
               id: portal-main-grounds
               name:
                 base: 'Path'
@@ -370,6 +389,25 @@ worlds:
                 base: east
               target:
                 base: west
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-grounds-branch
+              name:
+                base: 'Path'
+              desc:
+                base: 'path through the grounds'
+            dest:
+              base: room-croquet-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
             scripts: !map {}
             stats: !map {}
         - base:
@@ -410,7 +448,6 @@ worlds:
                 base: north
             scripts: !map {}
             stats: !map {}
-
       rooms:
         - base:
             meta:
@@ -472,6 +509,8 @@ worlds:
             portals:
               - id: portal-main-repeat
                 chance: 80
+              - id: portal-main-branch
+                chance: 20
             scripts: !map {}
         - base:
             meta:
@@ -499,6 +538,8 @@ worlds:
             portals:
               - id: portal-grounds-repeat
                 chance: 80
+              - id: portal-grounds-branch
+                chance: 40
             scripts: !map {}
         - base:
             meta:

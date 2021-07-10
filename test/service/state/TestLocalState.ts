@@ -6,7 +6,6 @@ import { createStubInstance, match, spy, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
-import { ConfigError } from '../../../src/lib';
 import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
@@ -899,7 +898,6 @@ describe('local state service', () => {
             await state.stepEnter({ room, actor });
           }
 
-          console.log('test command for', actor.meta);
           await state.onCommand({
             actor,
             command: makeCommand(VERB_WAIT),

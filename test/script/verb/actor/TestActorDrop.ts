@@ -6,7 +6,7 @@ import { makeCommand, makeCommandIndex } from '../../../../src/model/Command';
 import { VerbActorDrop } from '../../../../src/script/verb/actor/ActorDrop';
 import { VERB_DROP, VERB_WAIT } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, createTestTransfer, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper } from '../../../helper';
 
 describe('actor drop verb', () => {
   it('should require the target be an actor', async () => {

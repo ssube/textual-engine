@@ -353,10 +353,14 @@ export class LocalStateService implements StateService {
     const data = lines.join('\n');
     const [path] = event.command.targets;
 
+    const doneEvent = onceEvent<LoaderReadEvent>(this.event, EVENT_LOADER_DONE);
+
     this.event.emit(EVENT_LOADER_SAVE, {
       data,
       path,
     });
+
+    await doneEvent;
 
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {

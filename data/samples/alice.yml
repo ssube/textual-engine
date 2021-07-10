@@ -348,9 +348,9 @@ worlds:
               key:
                 base: path
               source:
-                base: north
+                base: (north|east|south|west)
               target:
-                base: south
+                base: (north|east|south|west)
             scripts: !map {}
             stats: !map {}
         - base:
@@ -405,9 +405,9 @@ worlds:
               key:
                 base: path
               source:
-                base: north
+                base: (north|east|south|west)
               target:
-                base: south
+                base: (north|east|south|west)
             scripts: !map {}
             stats: !map {}
         - base:
@@ -507,10 +507,12 @@ worlds:
             flags: !map {}
             items: []
             portals:
+              - id: portal-main-branch
+                chance: 90
               - id: portal-main-repeat
                 chance: 80
               - id: portal-main-branch
-                chance: 20
+                chance: 50
             scripts: !map {}
         - base:
             meta:
@@ -536,10 +538,12 @@ worlds:
             flags: !map {}
             items: []
             portals:
+              - id: portal-grounds-branch
+                chance: 90
               - id: portal-grounds-repeat
                 chance: 80
               - id: portal-grounds-branch
-                chance: 40
+                chance: 50
             scripts: !map {}
         - base:
             meta:

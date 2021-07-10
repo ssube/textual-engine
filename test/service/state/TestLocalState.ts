@@ -441,14 +441,22 @@ describe('local state service', () => {
         command,
       });
 
-      const pending = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
-      await localState.onCommand({
-        command: makeCommand(META_GRAPH, 'test://url'),
+      const path = 'test://url';
+      const pendingSave = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
+      const pendingCommand = localState.onCommand({
+        command: makeCommand(META_GRAPH, path),
       });
 
-      const output = await pending;
+      events.emit(EVENT_LOADER_DONE, {
+        path,
+      });
+
+      await pendingCommand;
+
+      const output = await pendingSave;
+
       expect(output.data).to.include('strict digraph');
-      expect(output.path).to.equal('test://url');
+      expect(output.path).to.equal(path);
     });
 
     it('should print an error without state', async () => {

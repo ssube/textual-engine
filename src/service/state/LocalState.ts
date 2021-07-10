@@ -92,7 +92,7 @@ export class LocalStateService implements StateService {
 
   protected commandBuffer: StackMap<ReadonlyActor, Command>;
   protected commandQueue: CompletionSet<ReadonlyActor>;
-  protected loadedWorlds: Array<WorldTemplate>;
+  protected loadedWorlds: Map<string, WorldTemplate>;
 
   protected generator?: StateEntityGenerator;
   protected state?: WorldState;
@@ -109,7 +109,7 @@ export class LocalStateService implements StateService {
 
     this.commandBuffer = new StackMap();
     this.commandQueue = new CompletionSet();
-    this.loadedWorlds = [];
+    this.loadedWorlds = new Map();
   }
 
   public async start(): Promise<void> {
@@ -251,10 +251,10 @@ export class LocalStateService implements StateService {
    */
   public async onWorld(world: WorldTemplate): Promise<void> {
     this.logger.debug({ world: world.meta.id }, 'registering loaded world');
-    this.loadedWorlds.push(world);
+    this.loadedWorlds.set(world.meta.id, world);
 
     this.event.emit(EVENT_STATE_WORLD, {
-      worlds: this.loadedWorlds.map((it) => it.meta),
+      worlds: Array.from(this.loadedWorlds.values()).map((it) => it.meta),
     });
   }
   // #endregion event handlers
@@ -272,11 +272,11 @@ export class LocalStateService implements StateService {
       depth,
       id,
       seed,
-      worlds: this.loadedWorlds.map((it) => it.meta.id),
+      worlds: this.loadedWorlds.keys(),
     }, 'creating new world state');
 
     // find the world, prep the generator
-    const world = mustFind(this.loadedWorlds, (it) => it.meta.id === id);
+    const world = mustExist(this.loadedWorlds.get(id));
 
     // load the world locale
     this.event.emit(EVENT_LOCALE_BUNDLE, {
@@ -426,7 +426,7 @@ export class LocalStateService implements StateService {
 
     // was a state event
     const { state } = loadEvent;
-    const world = mustFind(this.loadedWorlds, (it) => it.meta.id === state.meta.template);
+    const world = mustExist(this.loadedWorlds.get(state.meta.template));
 
     this.logger.debug({ bundle: world.locale }, 'loading world locale bundle');
     this.event.emit(EVENT_LOCALE_BUNDLE, {
@@ -473,7 +473,7 @@ export class LocalStateService implements StateService {
     }
 
     const state = this.state;
-    const world = mustFind(this.loadedWorlds, (it) => it.meta.id === state.meta.template);
+    const world = mustExist(this.loadedWorlds.get(state.meta.template));
 
     const data: DataFile = {
       state,
@@ -540,7 +540,7 @@ export class LocalStateService implements StateService {
   }
 
   public async doWorlds(): Promise<void> {
-    for (const world of this.loadedWorlds) {
+    for (const [_key, world] of this.loadedWorlds) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
           id: world.meta.id,

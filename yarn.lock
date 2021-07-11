@@ -7,10 +7,10 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@apextoaster/js-utils/-/js-utils-0.2.1.tgz#8488b454e528a50b942afa65630099bd072e5e3e"
   integrity sha512-VrrIU1AiEv7Uq958QREm7gthLF/8FU9Y1PTPXunzmdZqPVMkCKYjMyklKtNmYeXeMBnsNHFETuZmTNUynZfxjQ==
 
-"@apextoaster/js-yaml-schema@^0.4.0-4":
-  version "0.4.0-4"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/@apextoaster/js-yaml-schema/-/js-yaml-schema-0.4.0-4.tgz#fe9aa034f94a395b8c7eb62b638883a8bc6cbe7d"
-  integrity sha512-StRuVWApi4O5esIoEeMfYIImK821OcMTiJ2siihQKJgXAc/HDWuAEeq0K0DgZBZP0lHjEuFOheeDNHeCLNH/fA==
+"@apextoaster/js-yaml-schema@^0.4.0":
+  version "0.4.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/@apextoaster/js-yaml-schema/-/js-yaml-schema-0.4.0.tgz#6008bb90bbe958a5a645e2224317d14e8dcfa3b9"
+  integrity sha512-On4e0AytT6lpXIw9nHMYbHNyzRLNORzZwcETm4CssfGWRzF3FEzyLhSLfvX7ZNK+Z7l/pntVxiYWZu0S3Vv6Yw==
 
 "@babel/code-frame@7.12.11":
   version "7.12.11"
@@ -4717,10 +4717,10 @@ node-releases@^1.1.71:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/node-releases/-/node-releases-1.1.72.tgz#14802ab6b1039a79a0c7d662b610a5bbd76eacbe"
   integrity sha512-LLUo+PpH3dU6XizX3iVoubUNheF/owjXCZZ5yACDxNnPtgFuludV1ZL3ayK1kVep42Rmm0+R9/Y60NQbZ2bifw==
 
-noicejs@^3.1.0:
-  version "3.1.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/noicejs/-/noicejs-3.1.0.tgz#3e2f1ab525af06137baac9baf5a1348cf75087f1"
-  integrity sha512-IrP+lIZl4MABKvMubAV58eS2u4IXVMkefUlm1Te/kRyus8gRnIUxAdCjWczy/7zXciYJ1sNcQ7k2503l/H7Kjg==
+noicejs@^4.0.0:
+  version "4.0.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/noicejs/-/noicejs-4.0.0.tgz#00a916bbcd6fd6f9866bce3fba60569088c706b6"
+  integrity sha512-VubFRhr0iir5wFP8yUmsQOw6kCKHNwtB8yyRz9DHcKt64N0Yu/k4vdYwHYGN2ruvPLJer90XWrTSK5rbUUmimQ==
 
 normalize-package-data@^2.3.0, normalize-package-data@^2.3.2, normalize-package-data@^2.3.4, normalize-package-data@^2.5.0:
   version "2.5.0"

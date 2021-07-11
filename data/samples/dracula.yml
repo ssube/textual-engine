@@ -258,7 +258,10 @@ worlds:
                 base: ''
               weapon-hand-right:
                 base: ''
-            stats: !map {}
+            stats: !map
+              health:
+                min: 20
+                max: 20
         - base:
             meta:
               id: actor-lucy
@@ -270,7 +273,10 @@ worlds:
             items: []
             scripts: !map {}
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              health:
+                min: 1
+                max: 1
         - base:
             meta:
               id: actor-mother
@@ -282,7 +288,10 @@ worlds:
             items: []
             scripts: !map {}
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              health:
+                min: 0
+                max: 0
         - base:
             meta:
               id: actor-quincey
@@ -294,7 +303,10 @@ worlds:
             items: []
             scripts: !map {}
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              health:
+                min: 20
+                max: 20
         - base:
             meta:
               id: actor-cab
@@ -306,7 +318,10 @@ worlds:
             items: []
             scripts: !map {}
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              health:
+                min: 20
+                max: 20
         - base:
             meta:
               id: actor-cook
@@ -318,7 +333,10 @@ worlds:
             items: []
             scripts: !map {}
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              health:
+                min: 10
+                max: 10
         - base:
             meta:
               id: actor-maid
@@ -330,7 +348,10 @@ worlds:
             items: []
             scripts: !map {}
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              health:
+                min: 10
+                max: 15
         - base:
             meta:
               id: actor-maid-young
@@ -342,7 +363,10 @@ worlds:
             items: []
             scripts: !map {}
             slots: !map {}
-            stats: !map {}
+            stats: !map
+              health:
+                min: 5
+                max: 10
       items:
         - base:
             meta:
@@ -1422,7 +1446,9 @@ worlds:
                 base: Gate
               desc:
                 base: a metal gate onto the property
-            actors: []
+            actors:
+              - id: actor-cab
+              - id: actor-van-helsing
             flags: !map {}
             items: []
             portals:

@@ -777,7 +777,7 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/bunyan@^1.8.6":
+"@types/bunyan@1.8.6":
   version "1.8.6"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/bunyan/-/bunyan-1.8.6.tgz#6527641cca30bedec5feb9ab527b7803b8000582"
   integrity sha512-YiozPOOsS6bIuz31ilYqR5SlLif4TBWsousN2aCWLi5233nZSX19tFbcQUPdR7xJ8ypPyxkCGNxg0CIV5n9qxQ==
@@ -822,7 +822,7 @@
   dependencies:
     "@types/istanbul-lib-report" "*"
 
-"@types/js-yaml@^4.0.1":
+"@types/js-yaml@4.0.1":
   version "4.0.1"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/js-yaml/-/js-yaml-4.0.1.tgz#5544730b65a480b18ace6b6ce914e519cec2d43b"
   integrity sha512-xdOvNmXmrZqqPy3kuCQ+fz6wA0xU5pji9cd1nDrflWaAWtYLLGk5ykW0H6yg5TVyehHP1pfmuuSaZkhP+kspVA==
@@ -857,7 +857,7 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/node/-/node-10.17.13.tgz#ccebcdb990bd6139cd16e84c39dc2fb1023ca90c"
   integrity sha512-pMCcqU2zT4TjqYFrWtYHKal7Sl30Ims6ulZ4UFXxI4xbtQqK/qqKwkDoBFCfooRqqmRu9vY3xaJRwxSh673aYg==
 
-"@types/node@^15.12.2":
+"@types/node@15.12.2":
   version "15.12.2"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/node/-/node-15.12.2.tgz#1f2b42c4be7156ff4a6f914b2fb03d05fa84e38d"
   integrity sha512-zjQ69G564OCIWIOHSXyQEEDpdpGl+G348RAKY0XXy9Z5kU9Vzv1GMNnkar/ZJ8dzXB3COzD9Mo9NtRZ4xfgUww==
@@ -867,7 +867,7 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/normalize-package-data/-/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
   integrity sha512-f5j5b/Gf71L+dbqxIpQ4Z2WlmI/mPJ0fOkGGmFgtb6sAu97EPczzbS3/tJKxmcYDj55OX6ssqwDAWOHIYDRDGA==
 
-"@types/parsimmon@^1.10.6":
+"@types/parsimmon@1.10.6":
   version "1.10.6"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/parsimmon/-/parsimmon-1.10.6.tgz#8fcf95990514d2a7624aa5f630c13bf2427f9cdd"
   integrity sha512-FwAQwMRbkhx0J6YELkwIpciVzCcgEqXEbIrIn3a2P5d3kGEHQ3wVhlN3YdVepYP+bZzCYO6OjmD4o9TGOZ40rA==
@@ -882,21 +882,21 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
-"@types/react-dom@^17.0.5":
+"@types/react-dom@17.0.5":
   version "17.0.5"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/react-dom/-/react-dom-17.0.5.tgz#df44eed5b8d9e0b13bb0cd38e0ea6572a1231227"
   integrity sha512-ikqukEhH4H9gr4iJCmQVNzTB307kROe3XFfHAOTxOXPOw7lAoEXnM5KWTkzeANGL5Ce6ABfiMl/zJBYNi7ObmQ==
   dependencies:
     "@types/react" "*"
 
-"@types/react-test-renderer@^17.0.1":
+"@types/react-test-renderer@17.0.1":
   version "17.0.1"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/react-test-renderer/-/react-test-renderer-17.0.1.tgz#3120f7d1c157fba9df0118dae20cb0297ee0e06b"
   integrity sha512-3Fi2O6Zzq/f3QR9dRnlnHso9bMl7weKCviFmfF6B4LS1Uat6Hkm15k0ZAQuDz+UBq6B3+g+NM6IT2nr5QgPzCw==
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^17.0.6":
+"@types/react@*", "@types/react@17.0.6":
   version "17.0.6"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/react/-/react-17.0.6.tgz#0ec564566302c562bf497d73219797a5e0297013"
   integrity sha512-u/TtPoF/hrvb63LdukET6ncaplYsvCvmkceasx8oG84/ZCsoLxz9Z/raPBP4lTAiWW1Jb889Y9svHmv8R26dWw==
@@ -910,7 +910,7 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/scheduler/-/scheduler-0.16.1.tgz#18845205e86ff0038517aab7a18a62a6b9f71275"
   integrity sha512-EaCxbanVeyxDRTQBkdLb3Bvl/HK7PBK6UJjsSixB0iHKoWxE5uu2Q/DgtpOhPIojN0Zl1whvOd7PoHs2P0s5eA==
 
-"@types/seedrandom@^3.0.0":
+"@types/seedrandom@3.0.0":
   version "3.0.0"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/seedrandom/-/seedrandom-3.0.0.tgz#13f4d71aa58cf6068a2e75261a4580fb71dc84e6"
   integrity sha512-Jr03BtXs7v6M/wtTum2VOMLBq7R8zpjdZLynhA/IOJq83czXrnVo8iSUI05gcq8Ecq0Swt+nuoK3y2ji/TWyMA==
@@ -942,7 +942,7 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/stack-utils/-/stack-utils-2.0.0.tgz#7036640b4e21cc2f259ae826ce843d277dad8cff"
   integrity sha512-RJJrrySY7A8havqpGObOB4W92QXKJo63/jFLLgpvOtsGUqbQZ9Sbgl35KMm1DjC6j7AvmmU2bIno+3IyEaemaw==
 
-"@types/yargs-parser@*", "@types/yargs-parser@^20.2.0":
+"@types/yargs-parser@*", "@types/yargs-parser@20.2.0":
   version "20.2.0"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/yargs-parser/-/yargs-parser-20.2.0.tgz#dd3e6699ba3237f0348cd085e4698780204842f9"
   integrity sha512-37RSHht+gzzgYeobbG+KWryeAW8J33Nhr69cjTqSYymXVZEN9NbRYWoYlRtDhHKPVT1FyNKwaTPC1NynKZpzRA==
@@ -3279,7 +3279,7 @@ ink-select-input@^4.2.0:
     figures "^3.2.0"
     lodash.isequal "^4.5.0"
 
-ink-testing-library@^2.1.0:
+ink-testing-library@2.1.0:
   version "2.1.0"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-testing-library/-/ink-testing-library-2.1.0.tgz#b5ffd1ef1049550ae4d2f008b8770e7ece6e0313"
   integrity sha512-7TNlOjJlJXB33vG7yVa+MMO7hCjaC1bCn+zdpSjknWoLbOWMaFdKc7LJvqVkZ0rZv2+akhjXPrcR/dbxissjUw==
@@ -5848,7 +5848,7 @@ source-map-resolve@^0.5.0:
     source-map-url "^0.4.0"
     urix "^0.1.0"
 
-source-map-support@^0.5.19, source-map-support@^0.5.6:
+source-map-support@0.5.19, source-map-support@^0.5.6:
   version "0.5.19"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/source-map-support/-/source-map-support-0.5.19.tgz#a98b62f86dcaf4f67399648c085291ab9e8fed61"
   integrity sha512-Wonm7zOCIJzBGQdB+thsPar0kYuCIzYvxZwlBa87yi/Mdjv7Tip2cyVbLj5o0cFPN4EVkuTwb3GDDyUx2DGnGw==
@@ -5952,7 +5952,7 @@ stack-utils@^2.0.2:
   dependencies:
     escape-string-regexp "^2.0.0"
 
-standard-version@^9.3.0:
+standard-version@9.3.0:
   version "9.3.0"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/standard-version/-/standard-version-9.3.0.tgz#2e6ff439aa49b2ea8952262f30ae6b70c02467d3"
   integrity sha512-cYxxKXhYfI3S9+CA84HmrJa9B88H56V5FQ302iFF2TNwJukJCNoU8FgWt+11YtwKFXRkQQFpepC2QOF7aDq2Ow==
@@ -6390,7 +6390,7 @@ typedarray@^0.0.6:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.3.2, typescript@~4.3.2:
+typescript@4.3.2, typescript@~4.3.2:
   version "4.3.2"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/typescript/-/typescript-4.3.2.tgz#399ab18aac45802d6f2498de5054fcbbe716a805"
   integrity sha512-zZ4hShnmnoVnAHpVHWpTcxdv7dWP60S2FsydQLV8V5PbS3FifjWFFRiHSWpDJahly88PRyV5teTSLoq4eG7mKw==

@@ -942,7 +942,6 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      // TODO: create duplicate IDs
       await state.doCreate({
         command: makeCommand(META_CREATE, 'foo', '4'),
       });

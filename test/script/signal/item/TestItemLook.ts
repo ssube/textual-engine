@@ -33,4 +33,21 @@ describe('item look signal', () => {
 
     expect(state.show).to.have.been.calledWithMatch(match.object, 'item.signal.look.seen');
   });
+
+  it('should describe whether the item is held', async () => {
+    const state = getStubHelper();
+
+    const item = makeTestItem('', '', '');
+    const actor= makeTestActor('', '', '', item);
+    const context = createTestContext({
+      actor,
+      command: makeCommand(VERB_LOOK),
+      room: makeTestRoom('', '', '', [], []),
+      state,
+    });
+
+    await SignalItemLook.call(item, context);
+
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'item.signal.look.held');
+  });
 });

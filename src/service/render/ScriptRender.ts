@@ -99,7 +99,7 @@ export class ScriptRender {
       this.output.push(event.line);
     }, this);
 
-    // TODO: start input on player join?
+    // TODO: start input on player join
     if (this.config.inputs.length > 0) {
       this.queueInput(this.config.inputs[0]);
     }

@@ -9,7 +9,7 @@ export interface LoaderReadEvent {
 }
 
 export interface LoaderSaveEvent {
-  // TODO: two fields rather than union?
+  // TODO: two fields rather than union
   data: DataFile | string;
   path: string;
 }

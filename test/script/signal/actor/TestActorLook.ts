@@ -39,7 +39,7 @@ describe('actor look signal', () => {
     actor.stats.set(STAT_HEALTH, 1);
     await SignalActorLook.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.actor.seen');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.signal.look.seen');
   });
 
   it('should note if the actor is dead', async () => {
@@ -53,6 +53,6 @@ describe('actor look signal', () => {
 
     await SignalActorLook.call(makeTestActor('', '', ''), context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.actor.seen');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.signal.look.seen');
   });
 });

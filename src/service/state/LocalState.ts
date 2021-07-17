@@ -316,7 +316,7 @@ export class LocalStateService implements StateService {
   public async doDebug(): Promise<void> {
     if (isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.debug.none',
+        line: 'meta.debug.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -340,7 +340,7 @@ export class LocalStateService implements StateService {
   public async doGraph(event: ActorCommandEvent): Promise<void> {
     if (isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.graph.none',
+        line: 'meta.graph.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -416,7 +416,7 @@ export class LocalStateService implements StateService {
         context: {
           path,
         },
-        line: 'meta.load.none',
+        line: 'meta.load.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -458,13 +458,13 @@ export class LocalStateService implements StateService {
    * Leave the state step loop.
    */
   public async doQuit(): Promise<void> {
-    return this.stepQuit('quit.meta', {}, [STAT_SCORE]);
+    return this.stepQuit('meta.quit', {}, [STAT_SCORE]);
   }
 
   public async doSave(event: ActorCommandEvent): Promise<void> {
     if (isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.save.none',
+        line: 'meta.save.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -509,7 +509,7 @@ export class LocalStateService implements StateService {
     // if there is no world state, there won't be an actor, but this error is more informative
     if (isNil(actor) || isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.step.none',
+        line: 'meta.step.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });

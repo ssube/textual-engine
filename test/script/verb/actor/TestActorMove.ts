@@ -47,7 +47,7 @@ describe('actor move verb', () => {
       },
       type: ROOM_TYPE,
     });
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.move.portal');
   });
 
   it('should target portals by source group', async () => {
@@ -74,7 +74,7 @@ describe('actor move verb', () => {
       },
       type: ROOM_TYPE,
     });
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.move.portal');
   });
 
   it('should target portals by source group and name', async () => {
@@ -101,7 +101,7 @@ describe('actor move verb', () => {
       },
       type: ROOM_TYPE,
     });
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.portal');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.move.portal');
   });
 
   it('should show a message if the portal cannot be found', async () => {
@@ -119,7 +119,7 @@ describe('actor move verb', () => {
 
     await VerbActorMove.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.missing');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.move.missing');
   });
 
   it('should throw an error if the target room cannot be found', async () => {
@@ -181,7 +181,7 @@ describe('actor move verb', () => {
 
     await VerbActorMove.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.move.locked');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.move.locked');
   });
 
   it('should leave breadcrumbs when the leader flag is set', async () => {

@@ -19,8 +19,8 @@ export async function SignalActorLookMaid(this: ScriptTarget, context: ScriptCon
 
   const turn = getKey(this.stats, 'awaken', 10);
   if (context.step.turn <= turn) {
-    return context.state.show(context.source, 'actor.step.look.actor.asleep', { actor: this });
+    return context.state.show(context.source, 'actor.signal.look.asleep', { actor: this });
   } else {
-    return context.state.show(context.source, 'actor.step.look.actor.awake', { actor: this });
+    return context.state.show(context.source, 'actor.signal.look.awake', { actor: this });
   }
 }

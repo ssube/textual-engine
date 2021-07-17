@@ -17,7 +17,7 @@ export async function SignalActorStep(this: ScriptTarget, context: ScriptContext
   const health = getKey(this.stats, STAT_HEALTH, 0);
   if (health <= 0) {
     if (this.source === ActorSource.PLAYER) {
-      await context.state.show(context.source, 'actor.step.command.dead', { actor: this });
+      await context.state.show(context.source, 'actor.signal.step.dead', { actor: this });
       await context.state.quit('quit.dead', { actor: this }, [STAT_SCORE]);
     }
     return;
@@ -41,16 +41,15 @@ export async function SignalActorStep(this: ScriptTarget, context: ScriptContext
 
   const scripts = getVerbScripts(source);
   if (scripts.has(command.verb) === false) {
-    await context.state.show(context.source, 'actor.step.command.unknown', showContext);
     context.logger.warn({ command }, 'unknown verb');
-    return;
+    return context.state.show(context.source, 'actor.signal.step.verb.missing', showContext);
   }
 
   if (this.source === ActorSource.PLAYER) {
     if (command.targets.length > 0) {
-      await context.state.show(context.source, 'actor.step.command.player.target', showContext);
+      await context.state.show(context.source, 'actor.signal.step.verb.target', showContext);
     } else {
-      await context.state.show(context.source, 'actor.step.command.player.verb', showContext);
+      await context.state.show(context.source, 'actor.signal.step.verb.player', showContext);
     }
   }
 

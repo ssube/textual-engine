@@ -44,22 +44,22 @@ describe('actor look signal for Lucy character', () => {
 
     lucy.stats.set(STAT_HEALTH, 20);
     await SignalActorLookLucy.call(lucy, context);
-    expect(showStub).to.have.been.calledWith(context.source, 'actor.step.look.actor.healthy');
+    expect(showStub).to.have.been.calledWith(context.source, 'actor.signal.look.healthy');
     showStub.resetHistory();
 
     lucy.stats.set(STAT_HEALTH, 10);
     await SignalActorLookLucy.call(lucy, context);
-    expect(showStub).to.have.been.calledWith(context.source, 'actor.step.look.actor.pale');
+    expect(showStub).to.have.been.calledWith(context.source, 'actor.signal.look.pale');
     showStub.resetHistory();
 
     lucy.stats.set(STAT_HEALTH, 5);
     await SignalActorLookLucy.call(lucy, context);
-    expect(showStub).to.have.been.calledWith(context.source, 'actor.step.look.actor.pale');
+    expect(showStub).to.have.been.calledWith(context.source, 'actor.signal.look.pale');
     showStub.resetHistory();
 
     lucy.stats.set(STAT_HEALTH, 0);
     await SignalActorLookLucy.call(lucy, context);
-    expect(showStub).to.have.been.calledWith(context.source, 'actor.step.look.actor.dead');
+    expect(showStub).to.have.been.calledWith(context.source, 'actor.signal.look.dead');
     showStub.resetHistory();
   });
 });

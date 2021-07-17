@@ -24,18 +24,16 @@ export async function VerbActorOpen(this: ScriptTarget, context: ScriptContext):
   });
 
   if (!isPortal(portal)) {
-    await context.state.show(context.source, 'actor.open.missing', { command });
-    return;
+    return context.state.show(context.source, 'actor.open.missing', { command });
   }
 
   const closed = getKey(portal.stats, STAT_CLOSED, 0);
   if (closed === 0) {
-    await context.state.show(context.source, 'actor.open.already', { portal });
-    return;
+    return context.state.show(context.source, 'actor.open.already', { portal });
   }
 
   const stats = setKey(portal.stats, STAT_CLOSED, 0);
   await context.state.update(portal, { stats });
 
-  await context.state.show(context.source, 'actor.open.opened', { portal });
+  return context.state.show(context.source, 'actor.open.opened', { portal });
 }

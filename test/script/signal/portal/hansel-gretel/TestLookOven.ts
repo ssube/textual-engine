@@ -31,7 +31,7 @@ describe('portal look scripts for oven door', () => {
 
     await SignalPortalLookHGOven.call(makeTestPortal('', '', '', '', ''), context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.portal');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'portal.signal.look.seen');
   });
 
   it('should describe actors in the portal destination room', async () => {

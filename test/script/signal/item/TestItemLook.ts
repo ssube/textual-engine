@@ -31,6 +31,6 @@ describe('item look signal', () => {
 
     await SignalItemLook.call(makeTestItem('', '', ''), context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.item.seen');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'item.signal.look.seen');
   });
 });

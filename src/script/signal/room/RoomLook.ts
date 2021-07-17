@@ -8,7 +8,7 @@ export async function SignalRoomLook(this: ScriptTarget, context: ScriptContext)
     throw new ScriptTargetError('script target must be a room');
   }
 
-  await context.state.show(context.source, 'actor.step.look.room.seen', { room: this });
+  await context.state.show(context.source, 'room.signal.look.seen', { room: this });
 
   for (const actor of this.actors) {
     if (actor === context.actor) {

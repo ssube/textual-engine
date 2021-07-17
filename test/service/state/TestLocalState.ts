@@ -421,7 +421,7 @@ describe('local state service', () => {
       });
       const output = await pending;
 
-      expect(output.line).to.equal('meta.debug.none');
+      expect(output.line).to.equal('meta.debug.missing');
     });
   });
 
@@ -471,7 +471,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.graph.none');
+      expect(output.line).to.equal('meta.graph.missing');
     });
   });
 
@@ -592,7 +592,7 @@ describe('local state service', () => {
       });
 
       const output = await pendingOutput;
-      expect(output.line).to.equal('meta.load.none');
+      expect(output.line).to.equal('meta.load.missing');
       expect(loadStub).to.have.callCount(0);
     });
   });
@@ -672,7 +672,7 @@ describe('local state service', () => {
       });
 
       await expect(pendingOutput).to.eventually.deep.include({
-        line: 'meta.save.none',
+        line: 'meta.save.missing',
       });
     });
   });
@@ -723,7 +723,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.step.none');
+      expect(output.line).to.equal('meta.step.missing');
     });
 
     it('should error without state', async () => {
@@ -741,7 +741,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.step.none');
+      expect(output.line).to.equal('meta.step.missing');
     });
 
     xit('should step after all actors have submitted a command');

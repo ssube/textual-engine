@@ -121,88 +121,109 @@ worlds:
             name:
               base: signal-room-step
     locale:
-      bundles:
+      languages:
         en:
-          actor:
-            get:
-              player: |-
-                You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-            hit:
-              dead: '{{actor.meta.name}} has died!'
-              health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
-              hit: |-
-                {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
-            step:
-              command:
-                dead: |-
-                  You are dead!
-                player:
-                  verb: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
-                  target: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
-                unknown: |-
-                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
-              drop:
-                type: |-
-                  {{command.targets}} is not an item!
-              equip:
-                item: |-
-                  You equip the {{item.meta.name}} in your {{slot}}.
-                none: |-
-                  {{command.targets}} is not an item!
-                slot: |-
-                  You are not able to equip {{item.meta.name}} in {{slot}}!
-              hit:
-                item: |-
-                  You cannot hit {{target.meta.name}}, you are not holding anything!
-                self: |-
-                  You cannot hit yourself!
-                type: |-
-                  {{command.targets}} is not an actor!
-              look:
-                none: |-
-                  You see nothing.
-                room:
-                  you: |-
-                    You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+          articles: []
+          prepositions: []
+          verbs: []
+          strings:
+            actor:
+              signal:
+                get:
+                  item: |-
+                    You have picked up a {{item.meta.name}}: {{item.meta.desc}}.
+                hit:
+                  dead: |-
+                    {{actor.meta.name}} has died!
                   health: |-
-                    You have {{health}} health.
-                  seen: |-
-                    You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
-                  inventory: |-
-                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-                  portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
-                  dest: |-
-                    You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
-                actor:
-                  seen: |-
-                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+                    {{actor.meta.name}} took {{damage}} damage and has {{health}} health left.
+                  item: |-
+                    {{attacker.meta.name}} has hit {{actor.meta.name}} with a {{item.meta.name}}!
+                look:
                   dead: |-
                     The {{actor.meta.name}} is dead!
-                item:
+                  health: |-
+                    You have {{health}} health.
+                  item: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
                   seen: |-
-                    You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-              move:
-                missing: |-
-                  {{command.targets}} is not a portal!
-                portal: |-
-                  {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
-              take:
-                type: |-
-                  {{command.targets}} is not an item!
-              use:
-                type: |-
-                  {{command.targets}} is not a usable item!
-          item:
-            use:
-              any: |-
-                {{item.meta.name}} has been used by {{actor.meta.name}}!
-      words:
-        articles: []
-        prepositions: []
-        verbs: []
+                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}}.
+                  self: |-
+                    You are a {{actor.meta.name}}: {{actor.meta.desc}}.
+                step:
+                  dead: |-
+                    You are dead!
+                  verb:
+                    missing: |-
+                      {{actor.meta.name}} does not know how to $t({{command.verb}})!
+                    player: |-
+                      You will $t({{command.verb}}) the next turn.
+                    target: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+              verb:
+                drop:
+                  type: |-
+                    {{command.targets}} is not an item!
+                equip:
+                  item: |-
+                    You equip the {{item.meta.name}} in your {{slot}}.
+                  missing: |-
+                    {{command.targets}} is not an item!
+                  slot: |-
+                    You are not able to equip {{item.meta.name}} in {{slot}}!
+                hit:
+                  item: |-
+                    You cannot hit {{target.meta.name}}, you are not holding anything!
+                  self: |-
+                    You cannot hit yourself!
+                  type: |-
+                    {{command.targets}} is not an actor!
+                look:
+                  missing: |-
+                    You see nothing.
+                move:
+                  locked: |-
+                    {{portal.meta.name}} is locked!
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+                take:
+                  type: |-
+                    {{command.targets}} is not an item!
+                use:
+                  target: |-
+                    You cannot use items on {{command.targets}}!
+                  type: |-
+                    {{command.targets}} is not a usable item!
+            item:
+              signal:
+                look:
+                  held: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    You see a {{item.meta.name}}: {{item.meta.desc}}.
+              verb:
+                use:
+                  self: |-
+                    You have used {{item.meta.name}} on yourself!
+            portal:
+              signal:
+                look:
+                  closed: |-
+                    The {{portal.meta.name}} is closed.
+                  dest:
+                    missing: |-
+                      There is nothing on the other side.
+                    room: |-
+                      You catch a glimpse of a {{room.meta.name}} through the {{portal.meta.name}}.
+                  seen: |-
+                    A {{portal.meta.name}} leads to the {{portal.group.source}}.
+            room:
+              signal:
+                look:
+                  seen: |-
+                    You are in a {{room.meta.name}}: {{room.meta.desc}}.
     meta:
       id: sample-red-riding-hood
       name:

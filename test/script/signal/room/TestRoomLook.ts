@@ -32,7 +32,7 @@ describe('room look signal', () => {
 
     await SignalRoomLook.call(room, context);
 
-    expect(stateHelper.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.seen');
+    expect(stateHelper.show).to.have.been.calledWithMatch(match.object, 'room.signal.look.seen');
   });
 
   it('should describe actors in the room', async () => {

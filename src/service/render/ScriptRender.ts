@@ -116,7 +116,7 @@ export class ScriptRender {
       return catchAndLog(defer(next.time).then(() => this.queueInput({
         ...next,
         time: 0,
-      })), this.logger, 'error queueing time deferred input');
+      })), this.logger, 'error queueing time input');
     }
 
     if (doesExist(next.step) && next.step > 0) {
@@ -124,7 +124,7 @@ export class ScriptRender {
       return catchAndLog(onceEvent(this.events, EVENT_STATE_STEP).then(() => this.queueInput({
         ...next,
         step: nextStep,
-      })), this.logger, 'error queueing step deferred input');
+      })), this.logger, 'error queueing step input');
     }
 
     this.events.emit(EVENT_RENDER_INPUT, {

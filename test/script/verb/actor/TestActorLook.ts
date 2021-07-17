@@ -2,12 +2,13 @@ import { expect } from 'chai';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { CoreModule } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorLook } from '../../../../src/script/verb/actor/ActorLook';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
-import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
+import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper, getTestContainer } from '../../../helper';
 
 describe('actor look verb', () => {
   describe('actor look verb without a target', () => {
@@ -36,6 +37,38 @@ describe('actor look verb', () => {
       await VerbActorLook.call(makeTestActor('', '', '', makeTestItem('', '', '')), context);
 
       expect(script.invoke).to.have.been.calledWithMatch(room, SIGNAL_LOOK, match.object);
+    });
+
+    it('should not include the player', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const state = getStubHelper();
+
+      const actor = makeTestActor('', '', '');
+      actor.scripts.set(SIGNAL_LOOK, {
+        data: new Map(),
+        name: 'signal-actor-look',
+      });
+      actor.stats.set(STAT_HEALTH, 5);
+
+      const room = makeTestRoom('', '', '', [actor], []);
+      room.scripts.set(SIGNAL_LOOK, {
+        data: new Map(),
+        name: 'signal-room-look',
+      });
+
+      const context = createTestContext({
+        command: makeCommand(VERB_LOOK),
+        room,
+        state,
+        script: await container.create(LocalScriptService),
+      });
+
+      await VerbActorLook.call(actor, context);
+
+      expect(state.show).to.have.callCount(3);
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.signal.look.self');
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.signal.look.health');
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'room.signal.look.seen');
     });
   });
 
@@ -77,25 +110,8 @@ describe('actor look verb', () => {
 
       await VerbActorLook.call(actor, context);
 
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.none');
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.look.missing');
       expect(script.invoke).to.have.callCount(0);
-    });
-
-    it('should not include the player', async () => {
-      const state = getStubHelper();
-
-      const actor = makeTestActor('', '', '');
-      const context = createTestContext({
-        command: makeCommand(VERB_LOOK),
-        room: makeTestRoom('', '', '', [actor], []),
-        state,
-      });
-
-      await VerbActorLook.call(actor, context);
-
-      expect(state.show).to.have.callCount(2);
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.you');
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.health');
     });
   });
 });

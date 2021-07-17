@@ -30,12 +30,12 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetPortal = indexEntity(portals, command.index, isPortal);
 
   if (isNil(targetPortal)) {
-    return context.state.show(context.source, 'actor.step.move.missing', { command });
+    return context.state.show(context.source, 'actor.verb.move.missing', { command });
   }
 
   const locked = getKey(targetPortal.stats, STAT_LOCKED, 0);
   if (locked > 0) {
-    return context.state.show(context.source, 'actor.step.move.locked', { command, portal: targetPortal });
+    return context.state.show(context.source, 'actor.verb.move.locked', { command, portal: targetPortal });
   }
 
   const rooms = await context.state.find({
@@ -51,7 +51,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     throw new NotFoundError('destination room not found');
   }
 
-  await context.state.show(context.source, 'actor.step.move.portal', {
+  await context.state.show(context.source, 'actor.verb.move.portal', {
     actor: this,
     portal: targetPortal,
   });

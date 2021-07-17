@@ -1,3 +1,5 @@
+import { doesExist } from '@apextoaster/js-utils';
+
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
@@ -7,5 +9,9 @@ export async function SignalItemLook(this: ScriptTarget, context: ScriptContext)
     throw new ScriptTargetError('script target must be an item');
   }
 
-  await context.state.show(context.source, 'actor.step.look.item.seen', { item: this });
+  if (doesExist(context.actor) && context.actor.items.includes(this)) {
+    await context.state.show(context.source, 'item.signal.look.held', { item: this });
+  } else {
+    await context.state.show(context.source, 'item.signal.look.seen', { item: this });
+  }
 }

@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { match, stub } from 'sinon';
+import { stub } from 'sinon';
 
 import { Frame } from '../../../src/component/react/Frame';
 import { META_CREATE } from '../../../src/util/constants';

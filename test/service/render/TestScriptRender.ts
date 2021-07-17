@@ -136,4 +136,6 @@ describe('script render', () => {
       },
     })).to.eventually.be.rejectedWith(ConfigError);
   });
+
+  it('should wait for the time trigger before counting against the step trigger');
 });

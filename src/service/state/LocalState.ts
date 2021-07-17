@@ -23,7 +23,6 @@ import { StackMap } from '../../util/collection/StackMap';
 import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
-  EVENT_COMMON_QUIT,
   EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,

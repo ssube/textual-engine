@@ -209,6 +209,13 @@ worlds:
                     {{command.targets}} is not a portal!
                   portal: |-
                     {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+                open:
+                  already: |-
+                    {{portal.meta.name}} is already open.
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    You open {{portal.meta.name}}.
                 take:
                   type: |-
                     {{command.targets}} is not an item!

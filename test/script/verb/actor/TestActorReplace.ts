@@ -31,7 +31,7 @@ describe('actor replace verb', () => {
 
     await VerbActorReplace.call(makeTestActor('', '', ''), context);
 
-    expect(state.show).to.have.callCount(1).and.been.calledWith(context.source, 'actor.replace.missing');
+    expect(state.show).to.have.callCount(1).and.been.calledWith(context.source, 'actor.verb.replace.missing');
   });
 
   it('should signal the target', async () => {

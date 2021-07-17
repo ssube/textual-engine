@@ -30,7 +30,7 @@ describe('actor open verb', () => {
 
     await VerbActorOpen.call(makeTestActor('', '', ''), context);
 
-    expect(state.show).to.have.been.calledWith(context.source, 'actor.open.missing');
+    expect(state.show).to.have.been.calledWith(context.source, 'actor.verb.open.missing');
   });
 
   it('should show a message when the portal is already open', async () => {
@@ -45,7 +45,7 @@ describe('actor open verb', () => {
 
     await VerbActorOpen.call(makeTestActor('', '', ''), context);
 
-    expect(state.show).to.have.been.calledWith(context.source, 'actor.open.already');
+    expect(state.show).to.have.been.calledWith(context.source, 'actor.verb.open.already');
   });
 
   it('should open the portal', async () => {
@@ -63,6 +63,6 @@ describe('actor open verb', () => {
     await VerbActorOpen.call(makeTestActor('', '', ''), context);
 
     expect(portal.stats.get(STAT_CLOSED)).to.equal(0);
-    expect(state.show).to.have.been.calledWith(context.source, 'actor.open.opened');
+    expect(state.show).to.have.been.calledWith(context.source, 'actor.verb.open.portal');
   });
 });

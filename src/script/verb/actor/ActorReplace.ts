@@ -24,7 +24,7 @@ export async function VerbActorReplace(this: ScriptTarget, context: ScriptContex
   });
 
   if (!isItem(item)) {
-    return context.state.show(context.source, 'actor.replace.missing', { command });
+    return context.state.show(context.source, 'actor.verb.replace.missing', { command });
   }
 
   // signal the item

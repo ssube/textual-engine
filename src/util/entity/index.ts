@@ -4,8 +4,10 @@ import { Actor } from '../../model/entity/Actor';
 import { Item } from '../../model/entity/Item';
 import { Portal } from '../../model/entity/Portal';
 import { StepResult } from '../../service/state';
+import { getKey } from '../collection/map';
+import { STAT_CLOSED, STAT_LOCKED } from '../constants';
 import { matchIdSegments } from '../string';
-import { StringMap } from '../types';
+import { Immutable, StringMap } from '../types';
 
 export function equipItems(actor: Actor, items: StringMap): void {
   for (const [slot, id] of items) {
@@ -27,6 +29,16 @@ export function isDestPortal(source: Portal, other: Portal): boolean {
   return other.dest === ''
     && other.group.key === source.group.key
     && other.group.target === source.group.source;
+}
+
+export function getPortalStats(portal: Immutable<Portal>): {
+  closed: boolean;
+  locked: boolean;
+} {
+  return {
+    closed: getKey(portal.stats, STAT_CLOSED, 0) > 0,
+    locked: getKey(portal.stats, STAT_LOCKED, 0) > 0,
+  };
 }
 
 export function zeroStep(): StepResult {

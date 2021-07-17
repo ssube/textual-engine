@@ -6,8 +6,9 @@ import { isPortal } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { head } from '../../../util/collection/array';
-import { getKey, setKey } from '../../../util/collection/map';
-import { SIGNAL_LOOK, STAT_LOCKED } from '../../../util/constants';
+import { setKey } from '../../../util/collection/map';
+import { SIGNAL_LOOK } from '../../../util/constants';
+import { getPortalStats } from '../../../util/entity';
 import { indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -33,8 +34,8 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     return context.state.show(context.source, 'actor.verb.move.missing', { command });
   }
 
-  const locked = getKey(targetPortal.stats, STAT_LOCKED, 0);
-  if (locked > 0) {
+  const { locked } = getPortalStats(targetPortal);
+  if (locked) {
     return context.state.show(context.source, 'actor.verb.move.locked', { command, portal: targetPortal });
   }
 

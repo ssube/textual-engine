@@ -20,10 +20,14 @@ config:
     loaders:
       - name: file-loader
         kind: node-file-loader
-    renders: []
+    renders:
+      - name: script-render
+        kind: core-script-render
+        data:
+          inputs: []
     states:
       - name: local-state
         kind: core-local-state
     tokenizers:
-      - name: local-tokenizer
+      - name: split-tokenizer
         kind: core-split-tokenizer # easier to test

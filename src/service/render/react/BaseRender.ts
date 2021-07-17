@@ -13,6 +13,7 @@ import {
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
+  EVENT_COMMON_QUIT,
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
   EVENT_STATE_WORLD,
@@ -154,6 +155,8 @@ export abstract class BaseReactRender implements RenderService {
     }
 
     this.update();
+
+    this.event.emit(EVENT_COMMON_QUIT);
   }
 
   /**

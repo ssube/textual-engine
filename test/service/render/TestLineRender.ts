@@ -153,6 +153,22 @@ describe('readline render', () => {
     }, readline)).to.eventually.be.rejectedWith(ConfigError);
   });
 
+  it('should handle being stopped without being started', async () => {
+    const instance = TestReadLine.createStub();
+    const readline = stub().returns(instance);
+
+    const container = await getTestContainer(new CoreModule(), new NodeModule());
+    const render = await container.create(LineRender, {
+      config: {
+        shortcuts: true,
+        throttle: THROTTLE_TIME,
+      },
+    }, readline);
+    await render.stop();
+
+    expect(instance.close).to.have.callCount(0);
+  });
+
   xit('should show a newline between the prompt and output');
   xit('should not emit output after stopping');
 });

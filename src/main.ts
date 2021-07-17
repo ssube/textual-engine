@@ -18,7 +18,6 @@ import {
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_INPUT,
-  EVENT_STATE_QUIT,
 } from './util/constants';
 import { ServiceManager } from './util/service/ServiceManager';
 
@@ -93,7 +92,7 @@ export async function main(args: Array<string>): Promise<number> {
     await pending;
   }
 
-  const quit = onceEvent(events, EVENT_STATE_QUIT);
+  const quit = onceEvent(events, EVENT_COMMON_QUIT);
 
   // emit input args
   for (const input of arg.input) {
@@ -107,11 +106,8 @@ export async function main(args: Array<string>): Promise<number> {
     await Promise.race([pending, quit]);
   }
 
-  // wait for state to quit
+  // wait for render to quit (because actor quit, because state quit)
   await quit;
-
-  events.emit(EVENT_COMMON_QUIT);
-
   await services.stop();
 
   // eventDebug(events);

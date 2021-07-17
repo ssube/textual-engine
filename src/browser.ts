@@ -2,7 +2,7 @@
 
 import { main } from './main';
 
-main([
+const args = [
   '--config',
   'page://data-config',
   '--data',
@@ -23,7 +23,14 @@ main([
   'create a test with test and with 20',
   '--input',
   'help',
-]).then((exitCode) => {
+];
+
+const query = new URLSearchParams(window.location.search);
+query.forEach((value, key) => {
+  args.push(`--${key}`, value);
+});
+
+main(args).then((exitCode) => {
   // eslint-disable-next-line no-console
   console.log('main exited with status', exitCode);
 }).catch((err) => {

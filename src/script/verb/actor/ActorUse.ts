@@ -1,12 +1,14 @@
-import { mustExist, Optional } from '@apextoaster/js-utils';
+import { isNil, mustExist, Optional } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { Actor, ACTOR_TYPE, isActor } from '../../../model/entity/Actor';
+import { WorldEntity } from '../../../model/entity';
+import { isActor, ReadonlyActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { head } from '../../../util/collection/array';
 import { SIGNAL_USE } from '../../../util/constants';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
+import { Immutable } from '../../../util/types';
 
 export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -27,36 +29,33 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
   const item = indexEntity(itemResults, command.index, isItem);
 
   if (!isItem(item)) {
-    await context.state.show(context.source, 'actor.step.use.type', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.use.type', { command });
   }
 
-  const actor = await getUseTarget(this, context);
-  if (!isActor(actor)) {
-    await context.state.show(context.source, 'actor.step.use.target', { command });
-    return;
+  const target = await getUseTarget(this, context);
+  if (isNil(target)) {
+    return context.state.show(context.source, 'actor.verb.use.target', { command });
   }
 
-  await context.script.invoke(item, SIGNAL_USE, {
+  await context.script.invoke(target, SIGNAL_USE, {
     ...context,
-    actor,
+    item,
   });
 }
 
-export async function getUseTarget(actor: Actor, context: ScriptContext): Promise<Optional<Actor>> {
+export async function getUseTarget(actor: ReadonlyActor, context: ScriptContext): Promise<Optional<Immutable<WorldEntity>>> {
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 
   if (command.targets.length > 1) {
-    const actorResults = await context.state.find<typeof ACTOR_TYPE>({
+    const actorResults = await context.state.find({
       matchers: createFuzzyMatcher(),
       meta: {
-        name: head(command.targets),
+        name: command.targets[1],
       },
       room: {
         id: room.meta.id,
       },
-      type: ACTOR_TYPE,
     });
 
     return actorResults[0];

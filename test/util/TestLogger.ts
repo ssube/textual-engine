@@ -16,5 +16,16 @@ describe('logger utils', () => {
       expect(entityMeta(portal)).to.equal(portal.meta);
       expect(entityMeta(room)).to.equal(room.meta);
     });
+
+    it('should return the value when it is not an entity', async () => {
+      const obj = {};
+      expect(entityMeta(obj)).to.equal(obj);
+
+      const arr = [0];
+      expect(entityMeta(arr)).to.equal(arr);
+
+      const str = '';
+      expect(entityMeta(str)).to.equal(str);
+    });
   });
 });

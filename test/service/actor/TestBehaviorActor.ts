@@ -1,10 +1,10 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { BaseOptions, Container, NullLogger } from 'noicejs';
-import { createStubInstance } from 'sinon';
+import { BaseOptions } from 'noicejs';
+import { createStubInstance, stub } from 'sinon';
 
-import { Actor, ActorSource } from '../../../src/model/entity/Actor';
-import { Room } from '../../../src/model/entity/Room';
+import { ConfigError } from '../../../src/error/ConfigError';
+import { ActorSource } from '../../../src/model/entity/Actor';
 import { INJECT_EVENT, INJECT_RANDOM } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
 import { BehaviorActorService } from '../../../src/service/actor/BehaviorActor';
@@ -30,33 +30,8 @@ describe('behavior actor', () => {
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     const pending = onceEvent<ActorCommandEvent>(events, EVENT_ACTOR_COMMAND);
 
-    const actor: Actor = {
-      items: [],
-      meta: {
-        desc: '',
-        id: '',
-        name: '',
-        template: '',
-      },
-      scripts: new Map(),
-      slots: new Map(),
-      source: ActorSource.BEHAVIOR,
-      stats: new Map(),
-      type: 'actor',
-    };
-    const room: Room = {
-      actors: [],
-      items: [],
-      meta: {
-        desc: '',
-        id: '',
-        name: '',
-        template: '',
-      },
-      portals: [],
-      scripts: new Map(),
-      type: 'room',
-    };
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '');
     events.emit(EVENT_STATE_ROOM, {
       actor,
       room,
@@ -154,5 +129,44 @@ describe('behavior actor', () => {
     const commandEvent = await pendingCommand;
     expect(commandEvent.command.targets, 'targets').to.include(portal.meta.id);
     expect(commandEvent.command.verb).to.equal(VERB_MOVE);
+  });
+
+  it('should ignore room events for player actors', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const actorService = await container.create(BehaviorActorService, {
+      config: {
+        attack: 0.5,
+        wander: 0.5,
+      },
+    });
+    await actorService.start();
+
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+
+    const actorCommandStub = stub();
+    events.on(EVENT_ACTOR_COMMAND, actorCommandStub);
+
+    const actor = makeTestActor('', '', '');
+    actor.source = ActorSource.PLAYER;
+
+    const room = makeTestRoom('', '', '');
+    events.emit(EVENT_STATE_ROOM, {
+      actor,
+      room,
+    });
+
+    expect(actorCommandStub).to.have.callCount(0);
+  });
+
+  it('should validate the provided config', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    return expect(container.create(BehaviorActorService, {
+      config: {
+        attack: 'test',
+        wander: undefined,
+      },
+    })).to.eventually.be.rejectedWith(ConfigError);
   });
 });

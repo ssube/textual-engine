@@ -17,7 +17,7 @@ const DEFAULT_NUMBER: TemplateNumber = {
 };
 
 const DEFAULT_STRING: TemplateString = {
-  base: '(foo|bar)',
+  base: '((foo|bar))',
   type: 'string',
 };
 
@@ -74,8 +74,61 @@ describe('chain template service', () => {
     });
   });
 
-  describe('modify number lists', () => { });
-  describe('modify string lists', () => { });
+  describe('modify number lists', () => {
+    it('should apply modifiers piecewise', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const template = await container.create(ChainTemplateService);
+      const result = template.modifyNumberList([
+        1,
+        2,
+        3,
+      ], [{
+        max: 10,
+        min: 10,
+        step: 1,
+        type: 'number',
+      }, {
+        max: 10,
+        min: 10,
+        step: 1,
+        type: 'number',
+      }, {
+        max: 10,
+        min: 10,
+        step: 1,
+        type: 'number',
+      }]);
+
+      expect(result).to.deep.equal([11, 12, 13]);
+    });
+  });
+
+  describe('modify string lists', () => {
+    it('should apply modifiers piecewise', async () => {
+      const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
+      const template = await container.create(ChainTemplateService);
+      const result = template.modifyStringList([
+        'a',
+        'b',
+        'c',
+      ], [{
+        base: '{{base}} foo',
+        type: 'string',
+      }, {
+        base: '{{base}} foo',
+        type: 'string',
+      }, {
+        base: '{{base}} foo',
+        type: 'string',
+      }]);
+
+      expect(result).to.deep.equal(['a foo', 'b foo', 'c foo']);
+    });
+  });
 
   describe('modify number maps', () => {
     it('should modify keys that exist in the modifier', async () => {
@@ -269,7 +322,18 @@ describe('chain template service', () => {
       expect(rendered.size).to.equal(2);
     });
 
-    xit('should render mixed-type maps');
-    xit('should render template verb maps');
+    it('should render mixed-type maps', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const template = await container.create(ChainTemplateService);
+      const map = new Map<string, TemplateNumber | TemplateString>([
+        ['foo', DEFAULT_STRING],
+        ['bar', DEFAULT_NUMBER],
+      ]);
+
+      const rendered = template.renderPrimitiveMap(map);
+      expect(rendered.size).to.equal(2);
+      expect(rendered.get('foo')).to.be.a('string');
+      expect(rendered.get('bar')).to.be.a('number');
+    });
   });
 });

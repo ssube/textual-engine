@@ -1,4 +1,4 @@
-import { isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { doesExist, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { ActorSource, isActor } from '../../../model/entity/Actor';
@@ -6,7 +6,9 @@ import { isPortal } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { head } from '../../../util/collection/array';
+import { setKey } from '../../../util/collection/map';
 import { SIGNAL_LOOK } from '../../../util/constants';
+import { getPortalStats } from '../../../util/entity';
 import { indexEntity } from '../../../util/entity/match';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -29,8 +31,12 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetPortal = indexEntity(portals, command.index, isPortal);
 
   if (isNil(targetPortal)) {
-    await context.state.show(context.source, 'actor.step.move.missing', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.move.missing', { command });
+  }
+
+  const { locked } = getPortalStats(targetPortal);
+  if (locked) {
+    return context.state.show(context.source, 'actor.verb.move.locked', { command, portal: targetPortal });
   }
 
   const rooms = await context.state.find({
@@ -46,21 +52,27 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
     throw new NotFoundError('destination room not found');
   }
 
+  await context.state.show(context.source, 'actor.verb.move.portal', {
+    actor: this,
+    portal: targetPortal,
+  });
+
+  // leader movement flags
+  const pathKey = this.flags.get('leader');
+  if (doesExist(pathKey)) {
+    const flags = setKey(currentRoom.flags, pathKey, targetPortal.meta.id);
+    await context.state.update(currentRoom, { flags });
+  }
+
   // move the actor and focus
-  await context.transfer.moveActor({
+  await context.state.move({
     moving: this,
     source: currentRoom,
     target: targetRoom,
   }, context);
 
-  await context.state.show(context.source, 'actor.step.move.portal', {
-    actor: this,
-    portal: targetPortal,
-  });
-
   if (this.source === ActorSource.PLAYER) {
     context.logger.debug({ actor: this, room: targetRoom }, 'player entered room');
-    await context.state.enter({ actor: this, room: targetRoom });
     await context.script.invoke(targetRoom, SIGNAL_LOOK, context);
   }
 }

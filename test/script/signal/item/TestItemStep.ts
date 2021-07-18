@@ -1,27 +1,25 @@
 import { expect } from 'chai';
-import { createStubInstance } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalItemStep } from '../../../../src/script/signal/item/ItemStep';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestActor, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
+import { createTestContext } from '../../../helper';
 
-describe('item step scripts', () => {
-  describe('item step command', () => {
-    it('should require the script target be an item', async () => {
-      const state = getStubHelper();
-      const context = createTestContext({
-        command: makeCommand(VERB_WAIT),
-        random: createStubInstance(MathRandomService),
-        room: makeTestRoom('', '', '', [], []),
-        state,
-      });
-
-      await expect(SignalItemStep.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
-      await expect(SignalItemStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+describe('item step signal', () => {
+  it('should require the script target be an item', async () => {
+    const context = createTestContext({
+      command: makeCommand(VERB_WAIT),
+      room: makeTestRoom('', '', '', [], []),
     });
+
+    await expect(SignalItemStep.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+    await expect(SignalItemStep.call(makeTestRoom('', '', '', [], []), context)).to.eventually.be.rejectedWith(ScriptTargetError);
+  });
+
+  it('should otherwise be an empty example', async () => {
+    const context = createTestContext();
+    await expect(SignalItemStep.call(makeTestItem('', '', ''), context)).to.eventually.equal(undefined);
   });
 });

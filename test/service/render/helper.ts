@@ -82,6 +82,8 @@ export class TestReadLine extends EventEmitter implements ReadLine {
     } else {
       this.writeLine = data.toString('utf-8');
     }
+
+    this.emit('line', this.writeLine);
   }
 
   public getCursorPos(): CursorPos {

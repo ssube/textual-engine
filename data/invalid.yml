@@ -1,0 +1,6 @@
+config:
+  logger: {}
+  locale:
+    current: en
+    languages: {}
+  services: {}

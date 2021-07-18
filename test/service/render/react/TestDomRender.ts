@@ -12,11 +12,12 @@ import { ReactDomRender } from '../../../../src/service/render/react/DomRender';
 import { onceEvent } from '../../../../src/util/async/event';
 import {
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
-  EVENT_COMMON_QUIT,
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
 } from '../../../../src/util/constants';
+import { zeroStep } from '../../../../src/util/entity';
 import { makeTestActor, makeTestRoom } from '../../../entity';
 import { getTestContainer } from '../../../helper';
 
@@ -51,10 +52,7 @@ describe('react dom render', () => {
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_ACTOR_OUTPUT, {
       line: '',
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     await mustExist(clock).tickAsync(THROTTLE_WAIT);
@@ -99,10 +97,7 @@ describe('react dom render', () => {
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_STATE_STEP, {
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     expect(update).to.have.callCount(2); // once at start, once on step
@@ -121,7 +116,10 @@ describe('react dom render', () => {
     await render.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    events.emit(EVENT_COMMON_QUIT);
+    events.emit(EVENT_ACTOR_QUIT, {
+      line: 'meta.quit',
+      stats: [],
+    });
 
     expect(update).to.have.callCount(2); // once at start, once at stop
   });
@@ -140,7 +138,10 @@ describe('react dom render', () => {
     await render.stop();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    events.emit(EVENT_COMMON_QUIT);
+    events.emit(EVENT_ACTOR_QUIT, {
+      line: 'meta.quit',
+      stats: [],
+    });
 
     expect(update).to.have.callCount(1);
   });
@@ -169,7 +170,7 @@ describe('react dom render', () => {
         throttle: THROTTLE_TIME,
       },
     });
-    const update = stub(render, 'update');
+    stub(render, 'update');
 
     await render.start();
 
@@ -194,7 +195,7 @@ describe('react dom render', () => {
         throttle: THROTTLE_TIME,
       },
     });
-    const update = stub(render, 'update');
+    stub(render, 'update');
 
     await render.start();
 

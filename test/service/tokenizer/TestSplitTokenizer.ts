@@ -1,7 +1,12 @@
 import { expect } from 'chai';
+import { BaseOptions } from 'noicejs';
 
+import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { EventBus } from '../../../src/service/event';
+import { LocaleService } from '../../../src/service/locale';
 import { SplitTokenizer } from '../../../src/service/tokenizer/SplitTokenizer';
+import { EVENT_LOCALE_BUNDLE } from '../../../src/util/constants';
 import { getTestContainer } from '../../helper';
 
 describe('split tokenizer', () => {
@@ -31,5 +36,44 @@ describe('split tokenizer', () => {
     }]);
   });
 
-  xit('should translate and cache verbs');
+  it('should translate and cache verbs', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+    await locale.start();
+
+    const token = await container.create(SplitTokenizer);
+    await token.start();
+
+    const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    event.emit(EVENT_LOCALE_BUNDLE, {
+      name: 'world',
+      bundle: {
+        languages: {
+          en: {
+            articles: ['art'],
+            prepositions: ['pre'],
+            strings: {
+              verbs: {
+                foo: 'fin',
+              },
+            },
+            verbs: ['verbs.foo'],
+          },
+        },
+      }
+    });
+
+    // use translated verbs
+    const input = 'fin art bar pre bin';
+    const commands = await token.parse(input);
+
+    expect(commands).to.have.lengthOf(1);
+    expect(commands[0]).to.deep.equal({
+      index: 0,
+      input,
+      targets: ['bar', 'bin'],
+      verb: 'verbs.foo',
+    });
+  });
 });

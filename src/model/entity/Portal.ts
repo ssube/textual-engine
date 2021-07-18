@@ -2,8 +2,10 @@ import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
+import { makeConstStringSchema } from '../../util/schema';
+import { Immutable, NumberMap, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
-import { BaseTemplate, Template, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
+import { Template, TEMPLATE_NUMBER_SCHEMA, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
 import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
 import { ScriptMap } from '../Script';
 import { Entity } from './Base';
@@ -23,6 +25,8 @@ export interface Portal {
    */
   dest: string;
 
+  flags: StringMap;
+
   group: {
     key: string;
     source: string;
@@ -35,14 +39,15 @@ export interface Portal {
 
   scripts: ScriptMap;
 
+  stats: NumberMap;
+
   type: PortalType;
 }
 
-export type PortalGroups = Map<string, {
-  dests: Set<string>;
-  portals: Set<BaseTemplate<Portal>>;
-}>;
+export type ReadonlyPortal = Immutable<Portal>;
 
+export function isPortal(it: Optional<Immutable<Entity>>): it is ReadonlyPortal;
+export function isPortal(it: Optional<Entity>): it is Portal;
 export function isPortal(it: Optional<Entity>): it is Portal {
   return doesExist(it) && it.type === PORTAL_TYPE;
 }
@@ -53,9 +58,24 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
     base: {
       type: 'object',
       properties: {
-        dest: TEMPLATE_STRING_SCHEMA,
+        dest: {
+          ...TEMPLATE_STRING_SCHEMA,
+          nullable: true,
+        },
+        flags: {
+          type: 'object',
+          nullable: true,
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
+          required: [],
+        },
         group: {
           type: 'object',
+          nullable: true,
           properties: {
             key: TEMPLATE_STRING_SCHEMA,
             source: TEMPLATE_STRING_SCHEMA,
@@ -65,14 +85,19 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
         },
         link: {
           ...TEMPLATE_STRING_SCHEMA,
+          nullable: true,
           default: {
             base: 'both',
             type: 'string',
           },
         },
-        meta: MODIFIER_METADATA_SCHEMA,
+        meta: {
+          ...MODIFIER_METADATA_SCHEMA,
+          nullable: true,
+        },
         scripts: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -81,22 +106,23 @@ export const PORTAL_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Portal>> = {
           },
           required: [],
         },
-        type: {
+        stats: {
           type: 'object',
-          properties: {
-            base: {
-              default: PORTAL_TYPE,
+          nullable: true,
+          map: {
+            keys: {
               type: 'string',
             },
-            type: {
-              default: 'string',
-              type: 'string',
-            },
+            values: TEMPLATE_NUMBER_SCHEMA,
           },
-          required: ['base', 'type'],
+          required: [],
+        },
+        type: {
+          ...makeConstStringSchema(PORTAL_TYPE),
+          nullable: true,
         },
       },
-      required: ['dest', 'group', 'meta', 'scripts'],
+      required: [],
     },
     chance: {
       type: 'number',
@@ -123,6 +149,16 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
       type: 'object',
       properties: {
         dest: TEMPLATE_STRING_SCHEMA,
+        flags: {
+          type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
+          required: [],
+        },
         group: {
           type: 'object',
           properties: {
@@ -150,22 +186,19 @@ export const PORTAL_TEMPLATE_SCHEMA: JSONSchemaType<Template<Portal>> = {
           },
           required: [],
         },
-        type: {
+        stats: {
           type: 'object',
-          properties: {
-            base: {
-              default: PORTAL_TYPE,
+          map: {
+            keys: {
               type: 'string',
             },
-            type: {
-              default: 'string',
-              type: 'string',
-            },
+            values: TEMPLATE_NUMBER_SCHEMA,
           },
-          required: ['base', 'type'],
+          required: [],
         },
+        type: makeConstStringSchema(PORTAL_TYPE),
       },
-      required: ['dest', 'group', 'meta', 'scripts'],
+      required: ['dest', 'flags', 'group', 'meta', 'scripts', 'stats'],
     },
     mods: {
       type: 'array',

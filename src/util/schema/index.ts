@@ -29,6 +29,7 @@ export function makeConstStringSchema<TValue extends string>(value: TValue): JSO
 
 export function makeSchema<TType>(type: JSONSchemaType<TType>): ValidateFunction<TType> {
   const ajv = new Ajv({
+    discriminator: true,
     keywords: [
       KEYWORD_MAP,
     ],

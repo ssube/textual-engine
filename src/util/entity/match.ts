@@ -1,7 +1,6 @@
 import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
 
 import { EntityForType, WorldEntityType } from '../../model/entity';
-import { Actor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
 import { isPortal } from '../../model/entity/Portal';
 import { Metadata } from '../../model/Metadata';

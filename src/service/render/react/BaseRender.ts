@@ -3,29 +3,30 @@ import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
-import { ShortcutData, ShortcutItem, StatusItem } from '../../../component/shared';
+import { ShortcutData, StatusItem } from '../../../component/shared';
 import { ConfigError } from '../../../error/ConfigError';
-import { Entity } from '../../../model/entity/Base';
+import { TemplateMetadata } from '../../../model/mapped/Template';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
 import { onceEvent } from '../../../util/async/event';
 import { ClearResult, debounce } from '../../../util/async/Throttle';
-import { remove } from '../../../util/collection/array';
 import {
-  COMMON_STATS,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
   EVENT_COMMON_QUIT,
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
+  EVENT_STATE_WORLD,
 } from '../../../util/constants';
+import { zeroStep } from '../../../util/entity';
+import { getEventShortcuts } from '../../../util/render';
 import { makeSchema } from '../../../util/schema';
-import { getVerbScripts } from '../../../util/script';
 import { makeServiceLogger } from '../../../util/service';
-import { ActorOutputEvent, ActorRoomEvent } from '../../actor/events';
+import { ActorOutputEvent, ActorQuitEvent, ActorRoomEvent } from '../../actor/events';
 import { EventBus } from '../../event';
 import { LocaleService } from '../../locale';
 import { StepResult } from '../../state';
-import { StateStepEvent } from '../../state/events';
+import { StateStepEvent, StateWorldEvent } from '../../state/events';
 
 export interface BaseRenderConfig {
   shortcuts: boolean;
@@ -67,6 +68,7 @@ export abstract class BaseReactRender implements RenderService {
   protected shortcuts: ShortcutData;
   protected step: StepResult;
   protected stats: Array<StatusItem>;
+  protected worlds: Array<TemplateMetadata>;
 
   protected queueUpdate: ClearResult;
 
@@ -97,10 +99,8 @@ export abstract class BaseReactRender implements RenderService {
       verbs: [],
     };
     this.stats = [];
-    this.step = {
-      turn: 0,
-      time: 0,
-    };
+    this.step = zeroStep();
+    this.worlds = [];
   }
 
   public async start(): Promise<void> {
@@ -109,8 +109,9 @@ export abstract class BaseReactRender implements RenderService {
 
     this.event.on(EVENT_ACTOR_OUTPUT, (output) => this.onOutput(output), this);
     this.event.on(EVENT_ACTOR_ROOM, (room) => this.onRoom(room), this);
-    this.event.on(EVENT_COMMON_QUIT, () => this.onQuit(), this);
+    this.event.on(EVENT_ACTOR_QUIT, (event) => this.onQuit(event), this);
     this.event.on(EVENT_STATE_STEP, (step) => this.onStep(step), this);
+    this.event.on(EVENT_STATE_WORLD, (event) => this.onWorlds(event));
   }
 
   public async stop(): Promise<void> {
@@ -143,10 +144,19 @@ export abstract class BaseReactRender implements RenderService {
   /**
    * Handler for quit events received from state service.
    */
-  public onQuit(): void {
+  public onQuit(event: ActorQuitEvent): void {
     this.logger.debug('handling quit event from state');
     this.quit = true;
+
+    this.output.push(event.line);
+
+    for (const { name, value } of event.stats) {
+      this.output.push(`${name}: ${value}`);
+    }
+
     this.update();
+
+    this.event.emit(EVENT_COMMON_QUIT);
   }
 
   /**
@@ -155,28 +165,9 @@ export abstract class BaseReactRender implements RenderService {
   public onRoom(result: ActorRoomEvent): void {
     this.logger.debug(result, 'handling room event from state');
 
-    function extractShortcut(entity: Entity): ShortcutItem {
-      return {
-        id: entity.meta.id,
-        name: entity.meta.name,
-      };
-    }
-
-    this.shortcuts.actors = remove(result.room.actors, (it) => it.meta.id === result.pid).map(extractShortcut);
-    this.shortcuts.items = result.room.items.map(extractShortcut);
-    this.shortcuts.portals = result.room.portals.map((it) => ({
-      id: it.meta.id,
-      name: `${it.group.source} ${it.meta.name}`,
-    }));
-    this.shortcuts.verbs = Array.from(getVerbScripts(result).keys()).map((it) => ({
-      id: it,
-      name: it,
-    }));
-
-    this.stats = Array.from(result.actor.stats.entries()).map((it) => ({
-      name: it[0],
-      value: it[1],
-    })).filter((it) => COMMON_STATS.includes(it.name));
+    const { shortcuts, stats } = getEventShortcuts(result);
+    this.shortcuts = shortcuts;
+    this.stats = stats;
 
     this.setPrompt(`turn ${this.step.turn}`);
     this.queueUpdate.call();
@@ -188,6 +179,10 @@ export abstract class BaseReactRender implements RenderService {
     this.step = event.step;
     this.setPrompt(`turn ${this.step.turn}`);
     this.update();
+  }
+
+  public onWorlds(event: StateWorldEvent): void {
+    this.worlds = event.worlds;
   }
 
   /**

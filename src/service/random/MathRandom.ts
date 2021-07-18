@@ -11,6 +11,7 @@ export class MathRandomService implements RandomService {
     return Math.floor(Math.random() * range) + min;
   }
 
+  /* istanbul ignore next */
   public reseed(_initial: string): void {
     // noop
   }

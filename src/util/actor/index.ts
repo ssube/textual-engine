@@ -1,7 +1,7 @@
 import { doesExist } from '@apextoaster/js-utils';
+import { ReadonlyActor } from '../../model/entity/Actor';
 
-import { Actor } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
+import { ReadonlyRoom } from '../../model/entity/Room';
 
 export enum ShowVolume {
   SELF = 'self', // narrowest scope
@@ -10,8 +10,9 @@ export enum ShowVolume {
 }
 
 export interface StateSource {
-  actor?: Actor;
-  room: Room;
+  actor?: ReadonlyActor;
+  room: ReadonlyRoom;
+  // TODO: add world ID
 }
 
 export function checkVolume(source: StateSource, target: StateSource, volume: ShowVolume): boolean {

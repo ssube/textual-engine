@@ -8,12 +8,8 @@ import { CoreModule } from '../../../../src/module/CoreModule';
 import { NodeModule } from '../../../../src/module/NodeModule';
 import { EventBus } from '../../../../src/service/event';
 import { InkRender } from '../../../../src/service/render/react/InkRender';
-import {
-  EVENT_ACTOR_OUTPUT,
-  EVENT_ACTOR_ROOM,
-  EVENT_COMMON_QUIT,
-  EVENT_STATE_STEP,
-} from '../../../../src/util/constants';
+import { EVENT_ACTOR_OUTPUT, EVENT_ACTOR_QUIT, EVENT_ACTOR_ROOM, EVENT_STATE_STEP } from '../../../../src/util/constants';
+import { zeroStep } from '../../../../src/util/entity';
 import { makeTestActor, makeTestRoom } from '../../../entity';
 import { getTestContainer } from '../../../helper';
 
@@ -48,10 +44,7 @@ describe('react ink render', () => {
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_ACTOR_OUTPUT, {
       line: '',
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     await mustExist(clock).tickAsync(THROTTLE_WAIT);
@@ -96,10 +89,7 @@ describe('react ink render', () => {
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_STATE_STEP, {
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     expect(update).to.have.callCount(2); // once at start, once on step
@@ -118,7 +108,10 @@ describe('react ink render', () => {
     await render.start();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    events.emit(EVENT_COMMON_QUIT);
+    events.emit(EVENT_ACTOR_QUIT, {
+      line: 'test.quit',
+      stats: [],
+    });
 
     expect(update).to.have.callCount(2); // once at start, once at stop
   });
@@ -137,7 +130,10 @@ describe('react ink render', () => {
     await render.stop();
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
-    events.emit(EVENT_COMMON_QUIT);
+    events.emit(EVENT_ACTOR_QUIT, {
+      line: 'test.quit',
+      stats: [],
+    });
 
     expect(update).to.have.callCount(1);
   });

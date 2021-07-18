@@ -13,11 +13,11 @@ import { parseArgs } from './util/config/args';
 import { loadConfig } from './util/config/file';
 import {
   EVENT_ACTOR_OUTPUT,
+  EVENT_COMMON_QUIT,
   EVENT_LOADER_READ,
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_INPUT,
-  EVENT_STATE_STEP,
 } from './util/constants';
 import { ServiceManager } from './util/service/ServiceManager';
 
@@ -92,7 +92,7 @@ export async function main(args: Array<string>): Promise<number> {
     await pending;
   }
 
-  const quit = onceEvent(events, 'quit');
+  const quit = onceEvent(events, EVENT_COMMON_QUIT);
 
   // emit input args
   for (const input of arg.input) {
@@ -101,18 +101,12 @@ export async function main(args: Array<string>): Promise<number> {
     events.emit(EVENT_RENDER_INPUT, {
       line: input,
     });
-    await pending;
+
+    // handle very early quit events from state
+    await Promise.race([pending, quit]);
   }
 
-  // trigger the first render
-  events.emit(EVENT_STATE_STEP, {
-    step: {
-      time: 0,
-      turn: 0,
-    },
-  });
-
-  // wait for something to quit
+  // wait for render to quit (because actor quit, because state quit)
   await quit;
   await services.stop();
 

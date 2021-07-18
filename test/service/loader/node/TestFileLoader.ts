@@ -7,7 +7,7 @@ import { CoreModule } from '../../../../src/module/CoreModule';
 import { EventBus } from '../../../../src/service/event';
 import { NodeFileLoader } from '../../../../src/service/loader/node/FileLoader';
 import { onceEvent } from '../../../../src/util/async/event';
-import { EVENT_LOADER_DONE, EVENT_LOADER_SAVE } from '../../../../src/util/constants';
+import { EVENT_LOADER_DONE, EVENT_LOADER_READ, EVENT_LOADER_SAVE } from '../../../../src/util/constants';
 import { makeTestState } from '../../../entity';
 import { getTestContainer } from '../../../helper';
 
@@ -66,5 +66,47 @@ describe('file loader', () => {
 
     await pendingDone;
   });
-});
 
+  it('should ignore reads whose protocol does not match', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const fetch = stub();
+    const loader = await container.create(NodeFileLoader, {}, fetch);
+    await loader.start();
+
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+
+    const doneStub = stub();
+    events.on(EVENT_LOADER_DONE, doneStub);
+
+    events.emit(EVENT_LOADER_READ, {
+      path: 'none://out/test.yml',
+    });
+
+    expect(doneStub).to.have.callCount(0);
+  });
+
+  it('should ignore saves whose protocol does not match', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const fetch = stub();
+    const loader = await container.create(NodeFileLoader, {}, fetch);
+    await loader.start();
+
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+
+    const doneStub = stub();
+    events.on(EVENT_LOADER_DONE, doneStub);
+
+    const state = makeTestState('', []);
+    events.emit(EVENT_LOADER_SAVE, {
+      data: {
+        state,
+        worlds: [],
+      },
+      path: 'none://out/test.yml',
+    });
+
+    expect(doneStub).to.have.callCount(0);
+  });
+});

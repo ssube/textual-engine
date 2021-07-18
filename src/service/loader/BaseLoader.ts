@@ -6,7 +6,6 @@ import { DataFile } from '../../model/file/Data';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import {
-  EVENT_LOADER_CONFIG,
   EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,
@@ -55,24 +54,19 @@ export abstract class BaseLoader implements LoaderService {
 
     const data = await this.loadData(path);
 
-    if (doesExist(data.config)) {
-      this.events.emit(EVENT_LOADER_CONFIG, {
-        config: data.config,
-      });
+    // reloading config is not supported yet
 
-      return;
+    if (doesExist(data.worlds)) {
+      for (const world of data.worlds) {
+        this.events.emit(EVENT_LOADER_WORLD, {
+          world,
+        });
+      }
     }
 
-    for (const world of data.worlds) {
-      this.events.emit(EVENT_LOADER_WORLD, {
-        world,
-      });
-    }
-
-    const { state } = data;
-    if (doesExist(state)) {
+    if (doesExist(data.state)) {
       this.events.emit(EVENT_LOADER_STATE, {
-        state,
+        state: data.state,
       });
     }
 

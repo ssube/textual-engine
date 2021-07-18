@@ -4,21 +4,16 @@ import { createStubInstance, match, SinonStub } from 'sinon';
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalRoomLook } from '../../../../src/script/signal/room/RoomLook';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
 import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
 import { createTestContext, getStubHelper } from '../../../helper';
 
-describe('room look scripts', () => {
+describe('room look signal', () => {
   it('should require the script target be a room', async () => {
-    const stateHelper = getStubHelper();
-
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room: makeTestRoom('', '', '', [], []),
-      state: stateHelper,
     });
 
     await expect(SignalRoomLook.call(makeTestActor('', '', ''), context)).to.eventually.be.rejectedWith(ScriptTargetError);
@@ -26,21 +21,18 @@ describe('room look scripts', () => {
   });
 
   it('should describe the room', async () => {
-    const script = createStubInstance(LocalScriptService);
     const stateHelper = getStubHelper();
 
     const room = makeTestRoom('', '', '', [], []);
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
-      script,
       state: stateHelper,
     });
 
     await SignalRoomLook.call(room, context);
 
-    expect(stateHelper.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.seen');
+    expect(stateHelper.show).to.have.been.calledWithMatch(match.object, 'room.signal.look.seen');
   });
 
   it('should describe actors in the room', async () => {
@@ -52,7 +44,6 @@ describe('room look scripts', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       script,
       state,
@@ -61,6 +52,26 @@ describe('room look scripts', () => {
     await SignalRoomLook.call(room, context);
 
     expect(script.invoke).to.have.been.calledWithMatch(actor, SIGNAL_LOOK, match.object);
+  });
+
+  it('should skip the context actor', async () => {
+    const script = createStubInstance(LocalScriptService);
+    const state = getStubHelper();
+
+    const actor = makeTestActor('', '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+
+    const context = createTestContext({
+      actor,
+      command: makeCommand(VERB_LOOK),
+      room,
+      script,
+      state,
+    });
+
+    await SignalRoomLook.call(room, context);
+
+    expect(script.invoke).to.have.callCount(0);
   });
 
   it('should describe items in the room', async () => {
@@ -72,7 +83,6 @@ describe('room look scripts', () => {
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       script,
       state,
@@ -91,11 +101,10 @@ describe('room look scripts', () => {
     const portal = makeTestPortal('', 'door', 'west', 'east', 'foo');
     room.portals.push(portal);
 
-    (state.find as SinonStub).returns(Promise.resolve([room]));
+    (state.find as SinonStub).resolves([room]);
 
     const context = createTestContext({
       command: makeCommand(VERB_LOOK),
-      random: createStubInstance(MathRandomService),
       room,
       script,
       state,

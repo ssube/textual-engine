@@ -1,24 +1,25 @@
 import { doesExist } from '@apextoaster/js-utils';
 
-import { WorldEntity } from '../../model/entity';
-import { Actor, isActor } from '../../model/entity/Actor';
-import { isItem, Item } from '../../model/entity/Item';
-import { isRoom, Room } from '../../model/entity/Room';
-import { ScriptMap } from '../../model/Script';
+import { isActor, ReadonlyActor } from '../../model/entity/Actor';
+import { isItem, ReadonlyItem } from '../../model/entity/Item';
+import { isRoom, ReadonlyRoom } from '../../model/entity/Room';
+import { ImmutableScriptMap, ScriptMap, ScriptRef } from '../../model/Script';
+import { ScriptTarget } from '../../service/script';
 import { SIGNAL_PREFIX, VERB_PREFIX } from '../constants';
+import { Immutable } from '../types';
 
 export interface VerbTarget {
-  actor?: Actor;
-  item?: Item;
-  room?: Room;
+  actor?: ReadonlyActor;
+  item?: ReadonlyItem;
+  room?: ReadonlyRoom;
 }
 
-export function getSignalScripts(target: WorldEntity): ScriptMap {
+export function getSignalScripts(target: ScriptTarget): ScriptMap {
   const scripts: ScriptMap = new Map();
 
   for (const [name, script] of target.scripts) {
     if (name.startsWith(SIGNAL_PREFIX)) {
-      scripts.set(name, script);
+      scripts.set(name, script as ScriptRef);
     }
   }
 
@@ -28,8 +29,8 @@ export function getSignalScripts(target: WorldEntity): ScriptMap {
 /**
  * @todo optimize, currently on a hot path
  */
-export function getVerbScripts(target: VerbTarget): ScriptMap {
-  const scripts: ScriptMap = new Map();
+export function getVerbScripts(target: VerbTarget): ImmutableScriptMap {
+  const scripts: ImmutableScriptMap = new Map();
 
   if (isActor(target.actor)) {
     mergeVerbScripts(scripts, target.actor.scripts);
@@ -60,7 +61,7 @@ export function getVerbScripts(target: VerbTarget): ScriptMap {
   return scripts;
 }
 
-export function mergeVerbScripts(target: ScriptMap, source: ScriptMap): void {
+export function mergeVerbScripts(target: ImmutableScriptMap, source: Immutable<ScriptMap>): void {
   for (const [name, script] of source) {
     if (name.startsWith(VERB_PREFIX)) {
       target.set(name, script);

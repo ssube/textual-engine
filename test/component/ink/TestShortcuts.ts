@@ -5,7 +5,7 @@ import { stub } from 'sinon';
 
 import { Shortcuts } from '../../../src/component/ink/Shortcuts';
 import { KEY_ARROW_DOWN, KEY_ENTER, KEY_TAB } from '../../constants';
-import { sendKeys, removeEscapes, FocusWrapper } from '../helper';
+import { FocusWrapper, removeEscapes, sendKeys } from './helper';
 
 describe('ink shortcut component', () => {
   it('should show categories', async () => {
@@ -97,6 +97,37 @@ describe('ink shortcut component', () => {
 
     expect(targetStub, 'target').to.have.callCount(0);
     expect(verbStub, 'verb').to.have.callCount(1).and.been.calledWith('bar');
+  });
+
+  it('should handle selections without an item', async () => {
+    const targetStub = stub();
+    const verbStub = stub();
+    const shortcuts = React.createElement(Shortcuts, {
+      actors: [],
+      items: [],
+      portals: [],
+      verbs: [],
+      onTarget: targetStub,
+      onVerb: verbStub,
+    });
+
+    const { lastFrame, stdin } = render(React.createElement(FocusWrapper, {}, shortcuts));
+
+    await sendKeys(stdin, 10, [
+      KEY_TAB,        // initial
+      KEY_TAB,        // tabs
+      KEY_ARROW_DOWN, // items tab
+      KEY_ENTER,      // submit
+      KEY_TAB,        // items
+      KEY_ARROW_DOWN, // next
+      KEY_ENTER,      // submit
+    ]);
+
+    const frame = removeEscapes(lastFrame());
+    expect(frame).to.include('> Items');
+
+    expect(targetStub, 'target').to.have.callCount(0);
+    expect(verbStub, 'verb').to.have.callCount(0);
   });
 
   xit('should highlight the selected category');

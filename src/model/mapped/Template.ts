@@ -70,6 +70,7 @@ export const TEMPLATE_NUMBER_SCHEMA: JSONSchemaType<TemplateNumber> = {
     },
     type: {
       type: 'string',
+      const: 'number',
       default: 'number',
     },
   },
@@ -84,6 +85,7 @@ export const TEMPLATE_STRING_SCHEMA: JSONSchemaType<TemplateString> = {
     },
     type: {
       type: 'string',
+      const: 'string',
       default: 'string',
     },
   },
@@ -102,6 +104,7 @@ export const TEMPLATE_REF_SCHEMA: JSONSchemaType<TemplateRef> = {
     },
     type: {
       type: 'string',
+      const: 'id',
       default: 'id',
     },
   },
@@ -117,7 +120,17 @@ export const TEMPLATE_SCRIPT_SCHEMA: JSONSchemaType<BaseTemplate<ScriptRef>> = {
         keys: {
           type: 'string',
         },
-        values: TEMPLATE_STRING_SCHEMA, // TODO: should be number | string, but ajv cannot do defaults on oneOf
+        values: {
+          type: 'object',
+          discriminator: {
+            propertyName: 'type',
+          },
+          required: ['type'],
+          oneOf: [
+            TEMPLATE_NUMBER_SCHEMA,
+            TEMPLATE_STRING_SCHEMA,
+          ],
+        },
       },
       required: [],
     },

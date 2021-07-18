@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { WatchableMap } from '../../../src/lib';
 import { onceWithRemove } from '../../../src/util/async/event';
+import { WatchableMap } from '../../../src/util/async/WatchableMap';
 
 describe('watchable map', () => {
   it('should emit the key being set', async () => {

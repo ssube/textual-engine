@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 
 import { WorldState } from '../../../src/model/world/State';
+import { zeroStep } from '../../../src/util/entity';
 import { debugState, graphState } from '../../../src/util/entity/debug';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../entity';
 
@@ -15,9 +16,11 @@ describe('state debug utils', () => {
       },
       rooms: [
         makeTestRoom('room-1', '', '', [
-          makeTestActor('actor-1', '', ''),
+          makeTestActor('actor-1', '', '', makeTestItem('actor-1-item-1', '', '')),
         ], [
           makeTestItem('item-1', '', ''),
+        ], [
+          makeTestPortal('portal-1', '', '', '', ''),
         ]),
         makeTestRoom('room-2', '', '', [
           makeTestActor('actor-2', '', ''),
@@ -28,10 +31,7 @@ describe('state debug utils', () => {
       start: {
         room: '',
       },
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
       world: {
         depth: 0,
         id: '',
@@ -68,10 +68,7 @@ describe('state debug utils', () => {
       start: {
         room: '',
       },
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
       world: {
         depth: 0,
         id: '',

@@ -1,24 +1,31 @@
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { WorldEntity } from '../../../model/entity';
 import { isPortal } from '../../../model/entity/Portal';
 import { ROOM_TYPE } from '../../../model/entity/Room';
-import { ScriptContext } from '../../../service/script';
+import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { getPortalStats } from '../../../util/entity';
 
-export async function SignalPortalLook(this: WorldEntity, context: ScriptContext): Promise<void> {
+export async function SignalPortalLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isPortal(this)) {
-    throw new ScriptTargetError('target must be a portal');
+    throw new ScriptTargetError('script target must be a portal');
   }
 
-  await context.state.show(context.source, 'actor.step.look.room.portal', { portal: this });
+  await context.state.show(context.source, 'portal.signal.look.seen', { portal: this });
 
-  if (this.dest.length > 0) {
-    const [room] = await context.state.find({
-      meta: {
-        id: this.dest,
-      },
-      type: ROOM_TYPE,
-    });
-
-    await context.state.show(context.source, 'actor.step.look.room.dest', { portal: this, room });
+  if (this.dest.length === 0) {
+    return context.state.show(context.source, 'portal.signal.look.dest.missing', { portal: this });
   }
+
+  const { closed } = getPortalStats(this);
+  if (closed) {
+    return context.state.show(context.source, 'portal.signal.look.closed', { portal: this });
+  }
+
+  const [room] = await context.state.find({
+    meta: {
+      id: this.dest,
+    },
+    type: ROOM_TYPE,
+  });
+
+  return context.state.show(context.source, 'portal.signal.look.dest.room', { portal: this, room });
 }

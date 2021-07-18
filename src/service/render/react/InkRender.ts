@@ -44,6 +44,7 @@ export class InkRender extends BaseReactRender implements RenderService {
       },
       stats: this.stats,
       step: this.step,
+      worlds: this.worlds,
     });
 
     const locale = React.createElement(I18nextProvider, {

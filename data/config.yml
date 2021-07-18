@@ -1,121 +1,140 @@
-logger:
-  level: debug
-  name: textual-engine
-  streams:
-    - level: debug
-      path: out/debug.log
-    - level: error
-      stream: !stream stderr
-locale:
-  bundles:
-    en:
-      debug:
-        graph:
-          summary: 'wrote {{size}} node graph to {{-path}}'
-      meta:
-        create: 'created new world {{state.name}} ({{state.id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
-        debug:
-          none: 'no world state to debug'
-        graph:
-          none: 'no world state to graph'
-        help: 'available verbs: {{verbs}}'
-        load:
-          none: 'no world states loaded from {{-path}}'
-          state: 'loaded world state {{meta.id}} from {{-path}}'
-        quit: 'quitting'
-        save:
-          none: 'no world state to save'
-          state: 'saved world state {{meta.id}} from {{-path}}'
-        step:
-          none: 'please create a world before using any verbs'
-        world: '{{name}} ({{id}})'
-      verbs:
-        common:
-          drop: drop
-          equip: equip
-          hit: hit
-          look: look
-          move: move
-          take: take
-          use: use
-          wait: wait
-        meta:
-          create: create
-          debug: debug
-          graph: graph
-          help: help
-          load: load
-          quit: quit
-          save: save
-          worlds: worlds
-  current: en
-  words:
-    articles:
-      - a
-      - an
-      - and
-      - as
-      - but
-      - for
-      - nor
-      - not
-      - of
-      - or
-      - so
-      - some
-      - the
-    prepositions:
-      - above
-      - across
-      - against
-      - at
-      - behind
-      - below
-      - beside
-      - by
-      - down
-      - from
-      - in
-      - inside
-      - into
-      - on
-      - onto
-      - out
-      - outside
-      - over
-      - through
-      - to
-      - toward
-      - under
-      - up
-      - with
-      - within
-      - without
-    verbs: []
-services:
-  actors:
-    - name: player-actor
-      kind: core-player-actor
-    - name: enemy-actor
-      kind: core-behavior-actor
-      data:
-        attack: 1.00
-        wander: 0.25
-  loaders:
-    - name: file-loader
-      kind: node-file-loader
-    - name: url-loader
-      kind: node-fetch-loader
-  renders:
-    - name: local-render
-      kind: node-ink-render
-      data:
-        shortcuts: true
-        throttle: 50
-  states:
-    - name: local-state
-      kind: core-local-state
-  tokenizers:
-    - name: local-tokenizer
-      kind: core-split-tokenizer
-      # kind: core-compromise-tokenizer
+config:
+  logger:
+    level: debug
+    name: textual-engine
+    streams:
+      - level: debug
+        path: out/debug.log
+      - level: error
+        stream: !stream stderr
+  locale:
+    current: en
+    languages:
+      en:
+        strings:
+          debug:
+            graph:
+              summary: 'wrote {{size}} node graph to {{-path}}'
+          meta:
+            create: 'created new world {{state.name}} ({{state.id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
+            debug:
+              missing: 'no world state to debug'
+            graph:
+              missing: 'no world state to graph'
+            help: 'available verbs: {{verbs}}'
+            load:
+              missing: 'no world states loaded from {{-path}}'
+              state: 'loaded world state {{meta.id}} from {{-path}}'
+            quit: 'exiting the game'
+            save:
+              missing: 'no world state to save'
+              state: 'saved world state {{meta.id}} from {{-path}}'
+            step:
+              missing: 'please create a world before using any verbs'
+            world: '{{name}} ({{id}})'
+          verbs:
+            common:
+              drop: drop
+              equip: equip
+              hit: hit
+              look: look
+              move: move
+              open: open
+              take: take
+              use: use
+              wait: wait
+            meta:
+              create: create
+              debug: debug
+              graph: graph
+              help: help
+              load: load
+              quit: quit
+              save: save
+              worlds: worlds
+        articles:
+          - a
+          - an
+          - and
+          - as
+          - but
+          - for
+          - nor
+          - not
+          - of
+          - or
+          - so
+          - some
+          - the
+        prepositions:
+          - above
+          - across
+          - against
+          - at
+          - behind
+          - below
+          - beside
+          - by
+          - down
+          - from
+          - in
+          - inside
+          - into
+          - on
+          - onto
+          - out
+          - outside
+          - over
+          - through
+          - to
+          - toward
+          - under
+          - up
+          - with
+          - within
+          - without
+        verbs:
+          - verbs.common.drop
+          - verbs.common.equip
+          - verbs.common.hit
+          - verbs.common.look
+          - verbs.common.move
+          - verbs.common.open
+          - verbs.common.take
+          - verbs.common.use
+          - verbs.common.wait
+          - verbs.meta.create
+          - verbs.meta.debug
+          - verbs.meta.graph
+          - verbs.meta.help
+          - verbs.meta.load
+          - verbs.meta.quit
+          - verbs.meta.save
+          - verbs.meta.worlds
+  services:
+    actors:
+      - name: player-actor
+        kind: core-player-actor
+      - name: enemy-actor
+        kind: core-behavior-actor
+        data:
+          attack: 1.00
+          wander: 0.25
+    loaders:
+      - name: file-loader
+        kind: node-file-loader
+      - name: url-loader
+        kind: node-fetch-loader
+    renders:
+      - name: local-render
+        kind: node-ink-render
+        data:
+          shortcuts: true
+          throttle: 50
+    states:
+      - name: local-state
+        kind: core-local-state
+    tokenizers:
+      - name: local-tokenizer
+        kind: core-split-tokenizer
+        # kind: core-compromise-tokenizer

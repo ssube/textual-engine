@@ -2,17 +2,19 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
+import { stub } from 'sinon';
 
-import { LocaleService } from '../../../src/lib';
 import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
-import { Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
+import { isPortal, Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
 import { isRoom, Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Modifier } from '../../../src/model/mapped/Modifier';
 import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
-import { INJECT_LOCALE } from '../../../src/module';
+import { INJECT_COUNTER, INJECT_LOCALE } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { Counter } from '../../../src/service/counter';
+import { LocaleService } from '../../../src/service/locale';
 import { PORTAL_DEPTH, TEMPLATE_CHANCE } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
 import { getTestContainer } from '../../helper';
@@ -20,6 +22,7 @@ import { getTestContainer } from '../../helper';
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
+    flags: new Map(),
     items: [{
       chance: TEMPLATE_CHANCE,
       id: 'item-foo',
@@ -53,6 +56,7 @@ const TEST_ACTOR: Template<Actor> = {
 
 const TEST_ITEM: Template<Item> = {
   base: {
+    flags: new Map(),
     meta: {
       desc: {
         base: 'foo',
@@ -92,6 +96,7 @@ const TEST_ROOM: Template<Room> = {
       id: 'actor-foo',
       type: 'id',
     }],
+    flags: new Map(),
     items: [],
     meta: {
       desc: {
@@ -120,6 +125,7 @@ const TEST_PORTAL_EAST: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    flags: new Map(),
     group: {
       key: {
         base: 'door',
@@ -150,6 +156,7 @@ const TEST_PORTAL_EAST: Template<Portal> = {
       },
     },
     scripts: new Map(),
+    stats: new Map(),
     type: {
       base: PORTAL_TYPE,
       type: 'string',
@@ -164,9 +171,10 @@ const TEST_PORTAL_WEST: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    flags: new Map(),
     group: {
       key: {
-        base: 'door',
+        base: 'window',
         type: 'string',
       },
       source: {
@@ -187,13 +195,14 @@ const TEST_PORTAL_WEST: Template<Portal> = {
         base: '',
         type: 'string',
       },
-      id: 'portal-door-west',
+      id: 'portal-window-west',
       name: {
         base: 'door',
         type: 'string',
       },
     },
     scripts: new Map(),
+    stats: new Map(),
     type: {
       base: PORTAL_TYPE,
       type: 'string',
@@ -209,6 +218,7 @@ const TEST_ROOM_PORTALS: Template<Room> = {
       id: 'actor-foo',
       type: 'id',
     }],
+    flags: new Map(),
     items: [],
     meta: {
       desc: {
@@ -227,7 +237,7 @@ const TEST_ROOM_PORTALS: Template<Room> = {
       type: 'id',
     }, {
       chance: TEMPLATE_CHANCE,
-      id: 'portal-door-west',
+      id: 'portal-window-west',
       type: 'id',
     }],
     scripts: new Map(),
@@ -242,6 +252,7 @@ const TEST_ROOM_PORTALS: Template<Room> = {
 const TEST_WORLD: WorldTemplate = {
   defaults: {
     actor: {
+      flags: new Map(),
       items: [],
       meta: {
         desc: {
@@ -267,6 +278,7 @@ const TEST_WORLD: WorldTemplate = {
       },
     },
     item: {
+      flags: new Map(),
       meta: {
         desc: {
           base: '',
@@ -294,6 +306,21 @@ const TEST_WORLD: WorldTemplate = {
         base: '',
         type: 'string',
       },
+      flags: new Map(),
+      group: {
+        key: {
+          base: '',
+          type: 'string',
+        },
+        source: {
+          base: '',
+          type: 'string',
+        },
+        target: {
+          base: '',
+          type: 'string',
+        },
+      },
       link: {
         base: PortalLinkage.BOTH,
         type: 'string',
@@ -309,21 +336,8 @@ const TEST_WORLD: WorldTemplate = {
           type: 'string',
         },
       },
-      group: {
-        key: {
-          base: '',
-          type: 'string',
-        },
-        source: {
-          base: '',
-          type: 'string',
-        },
-        target: {
-          base: '',
-          type: 'string',
-        },
-      },
       scripts: new Map(),
+      stats: new Map(),
       type: {
         base: PORTAL_TYPE,
         type: 'string',
@@ -331,6 +345,7 @@ const TEST_WORLD: WorldTemplate = {
     },
     room: {
       actors: [],
+      flags: new Map(),
       items: [],
       meta: {
         desc: {
@@ -352,12 +367,7 @@ const TEST_WORLD: WorldTemplate = {
     },
   },
   locale: {
-    bundles: {},
-    words: {
-      articles: [],
-      prepositions: [],
-      verbs: [],
-    },
+    languages: {},
   },
   meta: {
     desc: {
@@ -384,6 +394,7 @@ const TEST_WORLD: WorldTemplate = {
 
 const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
   base: {
+    flags: new Map(),
     items: [{
       chance: TEMPLATE_CHANCE,
       id: TEST_ITEM.base.meta.id,
@@ -418,6 +429,7 @@ const TEST_ACTOR_MODS: Array<Modifier<Actor>> = [{
 
 const TEST_ITEM_MODS: Array<Modifier<Item>> = [{
   base: {
+    flags: new Map(),
     meta: {
       desc: {
         base: '',
@@ -444,6 +456,45 @@ const TEST_ITEM_MODS: Array<Modifier<Item>> = [{
   id: 'test',
 }];
 
+const TEST_PORTAL_MODS: Array<Modifier<Portal>> = [{
+  base: {
+    flags: new Map(),
+    group: {
+      key: {
+        base: '{{base}}',
+        type: 'string',
+      },
+      source: {
+        base: '{{base}}',
+        type: 'string',
+      },
+      target: {
+        base: '{{base}}',
+        type: 'string',
+      },
+    },
+    link: {
+      base: '{{base}}',
+      type: 'string',
+    },
+    meta: {
+      desc: {
+        base: '',
+        type: 'string',
+      },
+      name: {
+        base: 'foo {{base}}',
+        type: 'string',
+      },
+    },
+    scripts: new Map(),
+    stats: new Map(),
+  },
+  chance: TEMPLATE_CHANCE,
+  excludes: [],
+  id: 'test',
+}];
+
 const TEST_ROOM_MODS: Array<Modifier<Room>> = [{
   base: {
     actors: [{
@@ -451,6 +502,7 @@ const TEST_ROOM_MODS: Array<Modifier<Room>> = [{
       id: TEST_ACTOR.base.meta.id,
       type: 'id',
     }],
+    flags: new Map(),
     items: [{
       chance: TEMPLATE_CHANCE,
       id: TEST_ITEM.base.meta.id,
@@ -523,9 +575,7 @@ describe('state entity generator', () => {
     it('should throw when the start room does not exist', async () => {
       const container = await getTestContainer(new CoreModule());
       const generator = await container.create(StateEntityGenerator);
-      generator.setWorld(TEST_WORLD);
-
-      return expect(generator.createState({
+      generator.setWorld({
         ...TEST_WORLD,
         start: {
           actors: TEST_WORLD.start.actors,
@@ -535,7 +585,9 @@ describe('state entity generator', () => {
             type: 'id',
           }],
         },
-      }, {
+      });
+
+      return expect(generator.createState({
         depth: 0,
         id: 'test',
         seed: 'test',
@@ -658,6 +710,31 @@ describe('state entity generator', () => {
       await generator.modifyActor(actor, TEST_ACTOR_MODS);
       expect(actor.items).to.have.lengthOf(2);
     });
+
+    it('should accept empty modifiers', async () => {
+      const container = await getTestContainer(new CoreModule());
+
+      const counter = await container.create<Counter, BaseOptions>(INJECT_COUNTER);
+      stub(counter, 'next').returns(0);
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const source = await generator.createActor(TEST_ACTOR);
+      const next = await generator.createActor(TEST_ACTOR);
+
+      await generator.modifyActor(next, [{
+        base: {},
+        chance: TEMPLATE_CHANCE,
+        excludes: [],
+        id: 'empty',
+      }]);
+
+      expect(next.meta).to.deep.equal(source.meta);
+    });
   });
 
   describe('modify item', () => {
@@ -677,13 +754,78 @@ describe('state entity generator', () => {
       await generator.modifyItem(item, TEST_ITEM_MODS);
       expect(original).not.to.equal(item.meta.name);
     });
+
+    it('should accept empty modifiers', async () => {
+      const container = await getTestContainer(new CoreModule());
+
+      const counter = await container.create<Counter, BaseOptions>(INJECT_COUNTER);
+      stub(counter, 'next').returns(0);
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const source = await generator.createItem(TEST_ITEM);
+      const next = await generator.createItem(TEST_ITEM);
+
+      await generator.modifyItem(next, [{
+        base: {},
+        chance: TEMPLATE_CHANCE,
+        excludes: [],
+        id: 'foo',
+      }]);
+
+      expect(next.meta).to.deep.equal(source.meta);
+    });
   });
 
   describe('modify portal', () => {
-    xit('should update meta fields');
+    it('should update meta fields', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const portal = await generator.createPortal(TEST_PORTAL_EAST);
+      expect(isPortal(portal)).to.equal(true);
+
+      const original = portal.meta.name;
+      await generator.modifyPortal(portal, TEST_PORTAL_MODS);
+      expect(original).not.to.equal(portal.meta.name);
+    });
+
     xit('should update group fields');
     xit('should update link type');
     xit('should update script map');
+
+    it('should accept empty modifiers', async () => {
+      const container = await getTestContainer(new CoreModule());
+
+      const counter = await container.create<Counter, BaseOptions>(INJECT_COUNTER);
+      stub(counter, 'next').returns(0);
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const source = await generator.createPortal(TEST_PORTAL_EAST);
+      const next = await generator.createPortal(TEST_PORTAL_EAST);
+
+      await generator.modifyPortal(next, [{
+        base: {},
+        chance: TEMPLATE_CHANCE,
+        excludes: [],
+        id: 'foo',
+      }]);
+
+      expect(next.meta).to.deep.equal(source.meta);
+    });
   });
 
   describe('modify room', () => {
@@ -721,12 +863,53 @@ describe('state entity generator', () => {
       expect(room.items).to.have.lengthOf(1);
     });
 
-    xit('should update meta fields');
+    it('should update meta fields', async () => {
+      const container = await getTestContainer(new CoreModule());
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const room = await generator.createRoom(TEST_ROOM);
+      expect(isRoom(room)).to.equal(true);
+
+      const original = room.meta.name;
+      await generator.modifyRoom(room, TEST_ROOM_MODS);
+      expect(original).not.to.equal(room.meta.name);
+    });
+
+    it('should accept empty modifiers', async () => {
+      const container = await getTestContainer(new CoreModule());
+
+      const counter = await container.create<Counter, BaseOptions>(INJECT_COUNTER);
+      stub(counter, 'next').returns(0);
+
+      const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+      await locale.start();
+
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld(TEST_WORLD);
+
+      const source = await generator.createRoom(TEST_ROOM);
+      const next = await generator.createRoom(TEST_ROOM);
+
+      await generator.modifyRoom(next, [{
+        base: {},
+        chance: TEMPLATE_CHANCE,
+        excludes: [],
+        id: 'foo',
+      }]);
+
+      expect(next.meta).to.deep.equal(source.meta);
+    });
   });
 
   describe('modify meta', () => {
     xit('should not update id');
     xit('should update name');
+    xit('should update desc');
   });
 
   describe('select modifiers', () => {
@@ -766,7 +949,10 @@ describe('state entity generator', () => {
         base: {
           ...mod.base,
           meta: {
-            ...mod.base.meta,
+            desc: {
+              base: '{{base}}',
+              type: 'string',
+            },
             name: {
               base: 'second {{base}}',
               type: 'string',
@@ -807,8 +993,43 @@ describe('state entity generator', () => {
       }
     });
 
+    it('should link back portals in rooms with a matching portal', async () => {
+      const container = await getTestContainer(new CoreModule());
+
+      const generator = await container.create(StateEntityGenerator);
+      generator.setWorld({
+        ...TEST_WORLD,
+        templates: {
+          ...TEST_WORLD.templates,
+          portals: [
+            TEST_PORTAL_EAST,
+            {
+              base: {
+                ...TEST_PORTAL_WEST.base,
+                group: {
+                  ...TEST_PORTAL_WEST.base.group,
+                  key: {
+                    base: 'door',
+                    type: 'string',
+                  },
+                },
+              },
+              mods: [],
+            },
+          ],
+          rooms: [TEST_ROOM_PORTALS],
+        },
+      });
+
+      const startRoom = await generator.createRoom(TEST_ROOM_PORTALS);
+      expect(startRoom.portals, 'start room portals').to.have.lengthOf(2);
+
+      const newRooms = await generator.populateRoom(startRoom, [], PORTAL_DEPTH);
+      expect(newRooms, 'new rooms').to.have.lengthOf(1);
+      expect(newRooms[0].portals).to.have.lengthOf(2);
+    });
+
     xit('should not generate rooms for already filled portals');
-    xit('should link back portals in rooms with a matching portal');
     xit('should add new back portals to rooms without a matching target group');
     xit('should not generate back portals for unidirectional portals');
   });

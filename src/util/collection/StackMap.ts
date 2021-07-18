@@ -1,4 +1,4 @@
-import { doesExist } from '@apextoaster/js-utils';
+import { doesExist, mustExist } from '@apextoaster/js-utils';
 
 export class StackMap<TKey, TValue> {
   protected data: Map<TKey, Array<TValue>>;
@@ -9,6 +9,14 @@ export class StackMap<TKey, TValue> {
 
   public clear(): void {
     return this.data.clear();
+  }
+
+  public depth(key: TKey): number {
+    if (this.has(key)) {
+      return this.getOrThrow(key).length;
+    } else {
+      return 0;
+    }
   }
 
   public get(key: TKey): Array<TValue> {
@@ -43,5 +51,9 @@ export class StackMap<TKey, TValue> {
     this.data.set(key, stack);
 
     return stack;
+  }
+
+  protected getOrThrow(key: TKey): Array<TValue> {
+    return mustExist(this.data.get(key));
   }
 }

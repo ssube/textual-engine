@@ -4,6 +4,7 @@ import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { setKey } from '../../../util/collection/map';
 import { findActorSlots } from '../../../util/entity/find';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
 
@@ -27,8 +28,7 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
 
   const item = indexEntity(results, command.index, isItem);
   if (isNil(item)) {
-    await context.state.show(context.source, 'actor.step.equip.none', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.equip.missing', { command });
   }
 
   // use the requested slot or default to the item's preferred slot
@@ -36,11 +36,10 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
   const [slot] = findActorSlots(this, slotName);
 
   if (this.slots.has(slot)) {
-    // TODO: should not be mutable
-    this.slots.set(slot, item.meta.id);
-
-    await context.state.show(context.source, 'actor.step.equip.item', { item, slot });
+    const slots = setKey(this.slots, slot, item.meta.id);
+    await context.state.update(this, { slots });
+    await context.state.show(context.source, 'actor.verb.equip.item', { item, slot });
   } else {
-    await context.state.show(context.source, 'actor.step.equip.slot', { item, slot });
+    await context.state.show(context.source, 'actor.verb.equip.slot', { item, slot });
   }
 }

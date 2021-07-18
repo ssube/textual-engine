@@ -1,10 +1,17 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { stub } from 'sinon';
+import { spy, stub } from 'sinon';
 
-import { CoreModule, EventBus, LineRender, NodeModule, onceEvent, RenderInputEvent } from '../../../src/lib';
+import { ConfigError } from '../../../src/error/ConfigError';
 import { INJECT_EVENT } from '../../../src/module';
+import { CoreModule } from '../../../src/module/CoreModule';
+import { NodeModule } from '../../../src/module/NodeModule';
+import { EventBus } from '../../../src/service/event';
+import { RenderInputEvent } from '../../../src/service/render/events';
+import { LineRender } from '../../../src/service/render/LineRender';
+import { onceEvent } from '../../../src/util/async/event';
 import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../../src/util/constants';
+import { zeroStep } from '../../../src/util/entity';
 import { getTestContainer } from '../../helper';
 import { TestReadLine } from './helper';
 
@@ -27,10 +34,7 @@ describe('readline render', () => {
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_ACTOR_OUTPUT, {
       line: 'foo',
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     expect(instance.write).to.have.been.calledWith('foo');
@@ -93,13 +97,76 @@ describe('readline render', () => {
 
     const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
     events.emit(EVENT_STATE_STEP, {
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
     });
 
     expect(instance.getPrompt()).to.include('turn 0');
+  });
+
+  it('should not emit its own output', async () => {
+    const instance = new TestReadLine();
+    const writeSpy = spy(instance, 'write');
+
+    const readline = stub().returns(instance);
+
+    const container = await getTestContainer(new CoreModule(), new NodeModule());
+    const render = await container.create(LineRender, {
+      config: {
+        shortcuts: true,
+        throttle: THROTTLE_TIME,
+      },
+    }, readline);
+    await render.start();
+
+    render.show('foo');
+
+    expect(writeSpy).to.have.been.calledWith('foo');
+  });
+
+  it('should close the line interface when stopping', async () => {
+    const instance = TestReadLine.createStub();
+    const readline = stub().returns(instance);
+
+    const container = await getTestContainer(new CoreModule(), new NodeModule());
+    const render = await container.create(LineRender, {
+      config: {
+        shortcuts: true,
+        throttle: THROTTLE_TIME,
+      },
+    }, readline);
+    await render.start();
+    await render.stop();
+
+    expect(instance.close).to.have.callCount(1);
+  });
+
+  it('should validate the provided config', async () => {
+    const instance = TestReadLine.createStub();
+    const readline = stub().returns(instance);
+
+    const container = await getTestContainer(new CoreModule(), new NodeModule());
+    return expect(container.create(LineRender, {
+      config: {
+        shortcuts: 'yes',
+        throttle: 'no',
+      },
+    }, readline)).to.eventually.be.rejectedWith(ConfigError);
+  });
+
+  it('should handle being stopped without being started', async () => {
+    const instance = TestReadLine.createStub();
+    const readline = stub().returns(instance);
+
+    const container = await getTestContainer(new CoreModule(), new NodeModule());
+    const render = await container.create(LineRender, {
+      config: {
+        shortcuts: true,
+        throttle: THROTTLE_TIME,
+      },
+    }, readline);
+    await render.stop();
+
+    expect(instance.close).to.have.callCount(0);
   });
 
   xit('should show a newline between the prompt and output');

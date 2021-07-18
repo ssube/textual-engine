@@ -1,15 +1,17 @@
 import { Actor, ACTOR_TYPE, ActorSource } from '../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../src/model/entity/Item';
-import { PORTAL_TYPE, PortalLinkage, Portal } from '../src/model/entity/Portal';
+import { Portal, PORTAL_TYPE, PortalLinkage } from '../src/model/entity/Portal';
 import { Room, ROOM_TYPE } from '../src/model/entity/Room';
 import { Template } from '../src/model/mapped/Template';
 import { Metadata } from '../src/model/Metadata';
 import { WorldState } from '../src/model/world/State';
 import { WorldTemplate } from '../src/model/world/Template';
 import { TEMPLATE_CHANCE } from '../src/util/constants';
+import { zeroStep } from '../src/util/entity';
 
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {
+    flags: new Map(),
     items,
     meta: {
       desc: '',
@@ -27,6 +29,7 @@ export function makeTestActor(id: string, name: string, template: string, ...ite
 
 export function makeTestItem(id: string, name: string, template: string): Item {
   return {
+    flags: new Map(),
     meta: {
       desc: '',
       id,
@@ -50,6 +53,7 @@ export function makeTestRoom(
 ): Room {
   return {
     actors,
+    flags: new Map(),
     items,
     meta: {
       desc: '',
@@ -66,6 +70,7 @@ export function makeTestRoom(
 export function makeTestPortal(id: string, name: string, source: string, target: string, dest: string): Portal {
   return {
     dest,
+    flags: new Map(),
     group: {
       key: name,
       source: source,
@@ -79,6 +84,7 @@ export function makeTestPortal(id: string, name: string, source: string, target:
       template: '',
     },
     scripts: new Map(),
+    stats: new Map(),
     type: PORTAL_TYPE,
   };
 }
@@ -104,10 +110,7 @@ export function makeTestState(id: string, rooms: Array<Room>): WorldState {
     start: {
       room: '',
     },
-    step: {
-      time: 0,
-      turn: 0,
-    },
+    step: zeroStep(),
     world: {
       depth: 0,
       id: '',
@@ -130,12 +133,7 @@ export function makeTestWorld(actors: Array<Template<Actor>>, items: Array<Templ
       room: defaultRoom.base,
     },
     locale: {
-      bundles: {},
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
-      },
+      languages: {},
     },
     meta: {
       id: 'foo',

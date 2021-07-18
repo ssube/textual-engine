@@ -41,11 +41,10 @@ export async function VerbActorTake(this: ScriptTarget, context: ScriptContext):
   const moving = indexEntity(results, command.index, isItem);
 
   if (isNil(moving)) {
-    await context.state.show(context.source, 'actor.step.take.type', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.take.type', { command });
   }
 
-  await context.transfer.moveItem({
+  await context.state.move({
     moving,
     source: room,
     target: this

@@ -15,12 +15,10 @@ describe('yaml parser', () => {
 
     const parser = await container.create(YamlParser);
     const data = parser.load(`
-states: []
 worlds: []
     `);
 
     expect(data).to.deep.equal({
-      states: [],
       worlds: [],
     });
   });

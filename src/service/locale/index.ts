@@ -1,12 +1,14 @@
 import { i18n } from 'i18next';
+
 import { Service } from '..';
 import { Command } from '../../model/Command';
 import { WorldEntity } from '../../model/entity';
-import { Portal } from '../../model/entity/Portal';
 import { LocaleBundle } from '../../model/file/Locale';
 import { Metadata } from '../../model/Metadata';
+import { Immutable } from '../../util/types';
 
-export type LocaleContext = Record<string, number | string | WorldEntity | Portal | Command | Metadata>;
+export type LocaleContextValue = number | string | Command | Metadata | WorldEntity;
+export type LocaleContext = Record<string, LocaleContextValue | Immutable<LocaleContextValue>>;
 
 /**
  * Localization and translation service.
@@ -30,6 +32,8 @@ export interface LocaleService extends Service {
    * @todo look into passing the entire service as context
    */
   getInstance(): i18n;
+
+  getLocale(): string;
 
   /**
    * Translate a string with one or more keys, using the given context.

@@ -3,7 +3,7 @@ import { JSONSchemaType } from 'ajv';
 
 import { TEMPLATE_CHANCE } from '../../util/constants';
 import { makeConstStringSchema } from '../../util/schema';
-import { NumberMap, StringMap } from '../../util/types';
+import { Immutable, NumberMap, StringMap } from '../../util/types';
 import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
 import {
   Template,
@@ -28,15 +28,21 @@ export const ACTOR_TYPE = 'actor' as const;
 export type ActorType = typeof ACTOR_TYPE;
 
 export interface Actor {
-  type: ActorType;
+  flags: StringMap;
   items: Array<Item>;
   meta: Metadata;
   scripts: ScriptMap;
   slots: StringMap;
   source: ActorSource;
   stats: NumberMap;
+  type: ActorType;
 }
 
+export type ReadonlyActor = Immutable<Actor>;
+
+// Immutable overload needs to come first
+export function isActor(entity: Optional<Immutable<Entity>>): entity is ReadonlyActor;
+export function isActor(entity: Optional<Entity>): entity is Actor;
 export function isActor(entity: Optional<Entity>): entity is Actor {
   return doesExist(entity) && entity.type === ACTOR_TYPE;
 }
@@ -47,13 +53,29 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
     base: {
       type: 'object',
       properties: {
+        flags: {
+          type: 'object',
+          nullable: true,
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
+          required: [],
+        },
         items: {
           type: 'array',
+          nullable: true,
           items: TEMPLATE_REF_SCHEMA,
         },
-        meta: MODIFIER_METADATA_SCHEMA,
+        meta: {
+          ...MODIFIER_METADATA_SCHEMA,
+          nullable: true,
+        },
         scripts: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -64,6 +86,7 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
         },
         slots: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -72,9 +95,13 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
           },
           required: [],
         },
-        source: TEMPLATE_STRING_SCHEMA,
+        source: {
+          ...TEMPLATE_STRING_SCHEMA,
+          nullable: true,
+        },
         stats: {
           type: 'object',
+          nullable: true,
           map: {
             keys: {
               type: 'string',
@@ -83,9 +110,12 @@ export const ACTOR_MODIFIER_SCHEMA: JSONSchemaType<Modifier<Actor>> = {
           },
           required: [],
         },
-        type: makeConstStringSchema(ACTOR_TYPE),
+        type: {
+          ...makeConstStringSchema(ACTOR_TYPE),
+          nullable: true,
+        },
       },
-      required: ['items', 'meta', 'scripts', 'slots', 'stats'],
+      required: [],
     },
     chance: {
       type: 'number',
@@ -111,6 +141,16 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
     base: {
       type: 'object',
       properties: {
+        flags: {
+          type: 'object',
+          map: {
+            keys: {
+              type: 'string',
+            },
+            values: TEMPLATE_STRING_SCHEMA,
+          },
+          required: [],
+        },
         items: {
           type: 'array',
           items: TEMPLATE_REF_SCHEMA,
@@ -149,7 +189,7 @@ export const ACTOR_TEMPLATE_SCHEMA: JSONSchemaType<Template<Actor>> = {
         },
         type: makeConstStringSchema(ACTOR_TYPE),
       },
-      required: ['items', 'meta', 'type', 'scripts', 'stats'],
+      required: ['flags', 'items', 'meta', 'type', 'scripts', 'stats'],
     },
     mods: {
       type: 'array',

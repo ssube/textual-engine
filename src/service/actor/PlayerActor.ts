@@ -3,8 +3,8 @@ import { Inject, Logger } from 'noicejs';
 
 import { ActorService } from '.';
 import { Command } from '../../model/Command';
-import { Actor } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
+import { ReadonlyActor } from '../../model/entity/Actor';
+import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { checkVolume, StateSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
@@ -12,11 +12,12 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
-  EVENT_COMMON_QUIT,
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_QUIT,
   EVENT_STATE_ROOM,
   EVENT_TOKEN_COMMAND,
 } from '../../util/constants';
@@ -25,7 +26,7 @@ import { Counter } from '../counter';
 import { EventBus } from '../event';
 import { LocaleContext, LocaleService } from '../locale';
 import { StepResult } from '../state';
-import { StateJoinEvent, StateOutputEvent, StateRoomEvent } from '../state/events';
+import { StateJoinEvent, StateOutputEvent, StateQuitEvent, StateRoomEvent } from '../state/events';
 import { TokenCommandEvent } from '../tokenizer/events';
 
 /**
@@ -40,8 +41,8 @@ export class PlayerActorService implements ActorService {
   protected logger: Logger;
 
   // old focus
-  protected actor?: Actor;
-  protected room?: Room;
+  protected actor?: ReadonlyActor;
+  protected room?: ReadonlyRoom;
   protected history: Array<Command>;
 
   /**
@@ -77,8 +78,8 @@ export class PlayerActorService implements ActorService {
     this.event.on(EVENT_STATE_OUTPUT, (event) => {
       catchAndLog(this.onStateOutput(event), this.logger, 'error during state output');
     }, this);
-    this.event.on(EVENT_COMMON_QUIT, () => {
-      catchAndLog(this.showLine({ time: 0, turn: 0 }, 'meta.quit'), this.logger, 'error sending quit output');
+    this.event.on(EVENT_STATE_QUIT, (event) => {
+      this.onQuit(event);
     }, this);
   }
 
@@ -104,6 +105,26 @@ export class PlayerActorService implements ActorService {
     } else {
       this.logger.debug({ event }, 'actor joined state');
     }
+  }
+
+  public onQuit(event: StateQuitEvent): void {
+    const stats = [];
+
+    if (doesExist(this.actor)) {
+      for (const [key, value] of this.actor.stats) {
+        if (event.stats.includes(key)) {
+          stats.push({
+            name: this.locale.translate(key),
+            value,
+          });
+        }
+      }
+    }
+
+    this.event.emit(EVENT_ACTOR_QUIT, {
+      line: this.locale.translate(event.line, event.context),
+      stats,
+    });
   }
 
   public onRoom(event: StateRoomEvent): void {

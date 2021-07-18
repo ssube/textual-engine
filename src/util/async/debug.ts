@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import { AsyncHook, createHook } from 'async_hooks';
 import { EventEmitter } from 'events';
 

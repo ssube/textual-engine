@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { isActor } from '../../../src/model/entity/Actor';
 import { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy } from '../../../src/util/entity/match';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../entity';
 
 describe('entity match utils', () => {
   describe('index entity helper', () => {
@@ -86,6 +86,20 @@ describe('entity match utils', () => {
       expect(matchMetadataFuzzy(entity, {
         name: 'bar',
       })).to.equal(true);
+    });
+
+    it('should match portal by group', async () => {
+      const entity = makeTestPortal('foo', 'bar', 'north', 'south', 'bin');
+
+      expect(matchMetadataFuzzy(entity, {
+        name: 'north',
+      })).to.equal(true);
+      expect(matchMetadataFuzzy(entity, {
+        name: 'north bar',
+      })).to.equal(true);
+      expect(matchMetadataFuzzy(entity, {
+        name: 'south bar',
+      })).to.equal(false);
     });
   });
 });

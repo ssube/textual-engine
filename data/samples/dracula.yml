@@ -1,0 +1,1720 @@
+worlds:
+  - defaults:
+      actor:
+        meta:
+          id: actor-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        flags: !map {}
+        items: []
+        scripts: !map
+          signal.get:
+            data: !map {}
+            name:
+              base: signal-actor-get
+          signal.hit:
+            data: !map {}
+            name:
+              base: signal-actor-hit
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-actor-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-actor-step
+          verbs.common.drop:
+            data: !map {}
+            name:
+              base: verb-actor-drop
+          verbs.common.equip:
+            data: !map {}
+            name:
+              base: verb-actor-equip
+          verbs.common.hit:
+            data: !map {}
+            name:
+              base: verb-actor-hit
+          verbs.common.look:
+            data: !map {}
+            name:
+              base: verb-actor-look
+          verbs.common.move:
+            data: !map {}
+            name:
+              base: verb-actor-move
+          verbs.common.take:
+            data: !map {}
+            name:
+              base: verb-actor-take
+          verbs.common.use:
+            data: !map {}
+            name:
+              base: verb-actor-use
+          verbs.common.wait:
+            data: !map {}
+            name:
+              base: verb-actor-wait
+          verbs.world.swing:
+            data: !map {}
+            name:
+              base: verb-actor-hit
+        slots: !map {}
+        stats: !map {}
+      item:
+        meta:
+          id: item-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        flags: !map {}
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-item-look
+        slot:
+          base: ''
+        stats: !map {}
+      portal:
+        meta:
+          id: portal-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        dest:
+          base: room-none
+        flags: !map {}
+        link:
+          base: both
+        group:
+          key:
+            base: ''
+          source:
+            base: ''
+          target:
+            base: ''
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-portal-look
+        stats: !map {}
+      room:
+        meta:
+          id: room-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        actors: []
+        flags: !map {}
+        items: []
+        portals: []
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-room-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-room-step
+    locale:
+      languages:
+        en:
+          articles: []
+          prepositions: []
+          verbs: []
+          strings:
+            actor:
+              signal:
+                get:
+                  item: |-
+                    You have picked up a {{item.meta.name}}: {{item.meta.desc}}.
+                hit:
+                  dead: |-
+                    {{actor.meta.name}} has died!
+                  health: |-
+                    {{actor.meta.name}} took {{damage}} damage and has {{health}} health left.
+                  item: |-
+                    {{attacker.meta.name}} has hit {{actor.meta.name}} with a {{item.meta.name}}!
+                look:
+                  dead: |-
+                    The {{actor.meta.name}} is dead!
+                  health: |-
+                    You have {{health}} health.
+                  item: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}}.
+                  self: |-
+                    You are a {{actor.meta.name}}: {{actor.meta.desc}}.
+                step:
+                  dead: |-
+                    You are dead!
+                  verb:
+                    missing: |-
+                      {{actor.meta.name}} does not know how to $t({{command.verb}})!
+                    player: |-
+                      You will $t({{command.verb}}) the next turn.
+                    target: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+              verb:
+                drop:
+                  type: |-
+                    {{command.targets}} is not an item!
+                equip:
+                  item: |-
+                    You equip the {{item.meta.name}} in your {{slot}}.
+                  missing: |-
+                    {{command.targets}} is not an item!
+                  slot: |-
+                    You are not able to equip {{item.meta.name}} in {{slot}}!
+                hit:
+                  item: |-
+                    You cannot hit {{target.meta.name}}, you are not holding anything!
+                  self: |-
+                    You cannot hit yourself!
+                  type: |-
+                    {{command.targets}} is not an actor!
+                look:
+                  missing: |-
+                    You see nothing.
+                move:
+                  locked: |-
+                    {{portal.meta.name}} is locked!
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+                take:
+                  type: |-
+                    {{command.targets}} is not an item!
+                use:
+                  target: |-
+                    You cannot use items on {{command.targets}}!
+                  type: |-
+                    {{command.targets}} is not a usable item!
+            item:
+              signal:
+                look:
+                  held: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    You see a {{item.meta.name}}: {{item.meta.desc}}.
+              verb:
+                use:
+                  self: |-
+                    You have used {{item.meta.name}} on yourself!
+            portal:
+              signal:
+                look:
+                  closed: |-
+                    The {{portal.meta.name}} is closed.
+                  dest:
+                    missing: |-
+                      There is nothing on the other side.
+                    room: |-
+                      You catch a glimpse of a {{room.meta.name}} through the {{portal.meta.name}}.
+                  seen: |-
+                    A {{portal.meta.name}} leads to the {{portal.group.source}}.
+            room:
+              signal:
+                look:
+                  seen: |-
+                    You are in a {{room.meta.name}}: {{room.meta.desc}}.
+    meta:
+      id: sample-dracula
+      name:
+        base: Dracula
+      desc:
+        base: Chapter XII from Dracula by Bram Stoker
+    start:
+      actors:
+        - id: actor-seward
+      rooms:
+        - id: room-intro
+    templates:
+      actors:
+        - base:
+            meta:
+              id: actor-seward
+              name:
+                base: Doctor Seward
+              desc:
+                base: a doctor
+            flags: !map {}
+            items:
+              - id: item-telegram-van-helsing
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                min: 10
+                max: 10
+        - base:
+            meta:
+              id: actor-van-helsing
+              name:
+                base: Doctor Van Helsing
+              desc:
+                base: a solemn doctor
+            flags: !map {}
+            items:
+              - id: item-knife
+              - id: item-saw
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                min: 20
+                max: 20
+        - base:
+            meta:
+              id: actor-lucy
+              name:
+                base: Lucy Westenra
+              desc:
+                base: that character
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                min: 1
+                max: 1
+        - base:
+            meta:
+              id: actor-mother
+              name:
+                base: Lucy's Mother
+              desc:
+                base: Lucy Westenra's dead mother
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                min: 0
+                max: 0
+        - base:
+            meta:
+              id: actor-quincey
+              name:
+                base: Quincey Morris
+              desc:
+                base: that character
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                min: 20
+                max: 20
+        - base:
+            meta:
+              id: actor-cab
+              name:
+                base: Cab Driver
+              desc:
+                base: horse and cab and driver
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                min: 20
+                max: 20
+        - base:
+            meta:
+              id: actor-cook
+              name:
+                base: Cook
+              desc:
+                base: the cook
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                min: 10
+                max: 10
+        - base:
+            meta:
+              id: actor-maid
+              name:
+                base: Maid
+              desc:
+                base: a maid
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                min: 10
+                max: 15
+        - base:
+            meta:
+              id: actor-maid-young
+              name:
+                base: Young Maid
+              desc:
+                base: a young maid
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                min: 5
+                max: 10
+      items:
+        - base:
+            meta:
+              id: item-telegram-van-helsing
+              name:
+                base: Telegram from Dr. Van Helsing
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-knife
+              name:
+                base: Long Knife
+              desc:
+                base: long thin knife
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-saw
+              name:
+                base: Surgical Saw
+              desc:
+                base: for bones
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-sheet
+              name:
+                base: White Sheet
+              desc:
+                base: for a bed
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-necklace
+              name:
+                base: Flower Necklace
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-brandy
+              name:
+                base: Bottle of Brandy
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-sherry
+              name:
+                base: Decanter of Sherry
+              desc:
+                base: drugged
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-glass-empty
+              name:
+                base: Wine Glass
+              desc:
+                base: empty wine glass
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-glass-wine
+              name:
+                base: Glass of Wine
+              desc:
+                base: glass of wine
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-kettle-empty
+              name:
+                base: Kettle
+              desc:
+                base: empty kettle
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-kettle-cold
+              name:
+                base: Kettle
+              desc:
+                base: kettle of cold water
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-kettle-hot
+              name:
+                base: Hot Kettle
+              desc:
+                base: kettle of hot water
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-telegram-holmwood
+              name:
+                base: Telegram from Arthur Holmwood
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-stethoscope
+              name:
+                base: Stethoscope
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-handkerchief
+              name:
+                base: Silk Handkerchief
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-certificate-empty
+              name:
+                base: Death Certificate
+              desc:
+                base: unfilled death certificate
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-certificate-filled
+              name:
+                base: Death Certificate for Mrs. Westenra
+              desc:
+                base: death certificate filled out for Lucy's mother
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+        - base:
+            meta:
+              id: item-note
+              name:
+                base: Breast Note
+              desc:
+                base: some words
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: none
+            stats: !map {}
+      portals:
+        - base:
+            meta:
+              id: portal-intro-gate
+              name:
+                base: Start
+              desc:
+                base: start the story
+            dest:
+              base: room-gate
+            flags: !map {}
+            group:
+              key:
+                base: start
+              source:
+                base: intro
+              target:
+                base: intro
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-gate-avenue
+              name:
+                base: Gate
+              desc:
+                base: iron gate
+            dest:
+              base: room-avenue
+            flags: !map {}
+            group:
+              key:
+                base: gate
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-avenue-front
+              name:
+                base: Path
+              desc:
+                base: path to front door
+            dest:
+              base: room-house-front
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-front-entry
+              name:
+                base: Front Door
+              desc:
+                base: heavy wooden door
+            dest:
+              base: room-house-entry
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-front-left
+              name:
+                base: Path
+              desc:
+                base: path to left side of house
+            dest:
+              base: room-house-left
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: west
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-front-right
+              name:
+                base: Path
+              desc:
+                base: path to right side of house
+            dest:
+              base: room-house-right
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-left-back
+              name:
+                base: Path
+              desc:
+                base: path to back of house
+            dest:
+              base: room-house-back
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-left-front
+              name:
+                base: Path
+              desc:
+                base: path to front of house
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-right-back
+              name:
+                base: Path
+              desc:
+                base: path to back of house
+            dest:
+              base: room-house-back
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-right-front
+              name:
+                base: Path
+              desc:
+                base: path to front of house
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-back-kitchen
+              name:
+                base: Window
+              desc:
+                base: barred window
+            dest:
+              base: room-house-kitchen
+            flags: !map {}
+            group:
+              key:
+                base: window
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-kitchen-back
+              name:
+                base: Window
+              desc:
+                base: barred window
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: window
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-kitchen-dining
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: room-house-dining
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-kitchen-downhall
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: room-house-downhall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-kitchen-bathroom
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: room-house-bathroom
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-downhall-kitchen
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: room-house-kitchen
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-downhall-entry
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-downhall-servant
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: room-house-servant
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-downhall-stairs
+              name:
+                base: Door
+              desc:
+                base: doorway
+            dest:
+              base: room-house-stairs
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-stairs-uphall
+              name:
+                base: Stairs
+              desc:
+                base: stairs up
+            dest:
+              base: room-house-uphall
+            flags: !map {}
+            group:
+              key:
+                base: stairs
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-uphall-lucy
+              name:
+                base: Door
+              desc:
+                base: door
+            dest:
+              base: room-house-lucy
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-uphall-bedroom
+              name:
+                base: Door
+              desc:
+                base: door
+            dest:
+              base: room-house-bedroom
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-lucy-garden
+              name:
+                base: Window
+              desc:
+                base: broken window
+            dest:
+              base: room-garden
+            flags: !map {}
+            group:
+              key:
+                base: window
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-garden-avenue
+              name:
+                base: Gap in the Bushes
+              desc:
+                base: small gap in the hedge
+            dest:
+              base: room-avenue
+            flags: !map {}
+            group:
+              key:
+                base: hedge
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-entry-front
+              name:
+                base: Front Door
+              desc:
+                base: front door
+            dest:
+              base: room-house-front
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-stairs-downhall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-downhall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-uphall-stairs
+              name:
+                base: Stairs
+              desc:
+                base: stairs down
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-back-left
+              name:
+                base: Path
+              desc:
+                base: path to left side of house
+            dest:
+              base: room-house-left
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: west
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-back-right
+              name:
+                base: Path
+              desc:
+                base: path to right side of house
+            dest:
+              base: room-house-right
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-entry-downhall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-downhall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-kitchen-bathroom
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-bathroom
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-servant-downhall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-servant-bathroom
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-bathroom
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-bathroom-kitchen
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-kitchen
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-bathroom-servant
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-servant
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-lucy-uphall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-uphall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-garden-lucy
+              name:
+                base: Window
+              desc:
+                base: broken window
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: window
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-dining-kitchen
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-bedroom-uphall
+              name:
+                base: Doorway
+              desc:
+                base: doorway
+            dest:
+              base: room-house-uphall
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-avenue-garden
+              name:
+                base: Bushes
+              desc:
+                base: bushes
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: hedge
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+      rooms:
+        - base:
+            meta:
+              id: room-intro
+              name:
+                base: Intro
+              desc:
+                base: intro room for players
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-intro-gate
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-gate
+              name:
+                base: Gate
+              desc:
+                base: a metal gate onto the property
+            actors:
+              - id: actor-cab
+              - id: actor-van-helsing
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-gate-avenue
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-avenue
+              name:
+                base: Avenue
+              desc:
+                base: the avenue to the house
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-avenue-garden
+              - id: portal-avenue-front
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-front
+              name:
+                base: Front of House
+              desc:
+                base: the front of the house
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-front-entry
+              - id: portal-front-left
+              - id: portal-front-right
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-left
+              name:
+                base: Left Side of House
+              desc:
+                base: the left side of the house
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-left-front
+              - id: portal-left-back
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-right
+              name:
+                base: Right Side of House
+              desc:
+                base: the right side of the house
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-right-front
+              - id: portal-right-back
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-back
+              name:
+                base: Back of House
+              desc:
+                base: the back of the house
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-back-kitchen
+              - id: portal-back-left
+              - id: portal-back-right
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-kitchen
+              name:
+                base: Kitchen
+              desc:
+                base: the kitchen
+            actors:
+              - id: actor-cook
+            flags: !map {}
+            items:
+              - id: item-brandy
+              - id: item-kettle-empty
+            portals:
+              - id: portal-kitchen-bathroom
+              - id: portal-kitchen-back
+              - id: portal-kitchen-dining
+              - id: portal-kitchen-downhall
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-servant
+              name:
+                base: Servant's Quarters
+              desc:
+                base: the servant's quarters within the house
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-servant-bathroom
+              - id: portal-servant-downhall
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-dining
+              name:
+                base: Dining Room
+              desc:
+                base: the dining room
+            actors:
+              - id: actor-maid
+              - id: actor-maid
+              - id: actor-maid
+              - id: actor-maid-young
+            flags: !map {}
+            items:
+              - id: item-sherry
+              - id: item-glass-empty
+              - id: item-glass-empty
+              - id: item-glass-wine
+            portals:
+              - id: portal-dining-kitchen
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-downhall
+              name:
+                base: Downstairs Hallway
+              desc:
+                base: the downstairs hallway
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-downhall-entry
+              - id: portal-downhall-kitchen
+              - id: portal-downhall-servant
+              - id: portal-downhall-stairs
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-entry
+              name:
+                base: Entryway
+              desc:
+                base: the entryway
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-entry-front
+              - id: portal-entry-downhall
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-bathroom
+              name:
+                base: Bathroom
+              desc:
+                base: the bathroom
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-bathroom-kitchen
+              - id: portal-bathroom-servant
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-stairs
+              name:
+                base: Stairs
+              desc:
+                base: the stairs to the upper floor
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-stairs-downhall
+              - id: portal-stairs-uphall
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-uphall
+              name:
+                base: Upstairs Hallway
+              desc:
+                base: the upstairs hallway
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-uphall-lucy
+              - id: portal-uphall-bedroom
+              # id: portal-uphall-stairs
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-lucy
+              name:
+                base: Lucy's Bedroom
+              desc:
+                base: Lucy Westenra's bedroom
+            actors:
+              - id: actor-lucy
+              - id: actor-mother
+            flags: !map {}
+            items:
+              - id: item-sheet
+            portals:
+              - id: portal-lucy-garden
+              - id: portal-lucy-uphall
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-house-bedroom
+              name:
+                base: Another Bedroom
+              desc:
+                base: the other bedroom
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-bedroom-uphall
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-garden
+              name:
+                base: Hidden Garden
+              desc:
+                base: the hidden garden between Lucy's room and the avenue
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-garden-avenue
+              - id: portal-garden-lucy
+            scripts: !map {}

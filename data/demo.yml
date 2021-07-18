@@ -1,13 +1,14 @@
 worlds:
   - defaults:
       actor:
+        flags: !map {}
+        items: []
         meta:
           id: actor-none
           name:
             base: ''
           desc:
             base: ''
-        items: []
         scripts: !map
           signal.get:
             data: !map {}
@@ -45,6 +46,10 @@ worlds:
             data: !map {}
             name:
               base: verb-actor-move
+          verbs.common.open:
+            data: !map {}
+            name:
+              base: verb-actor-open
           verbs.common.take:
             data: !map {}
             name:
@@ -64,6 +69,7 @@ worlds:
         slots: !map {}
         stats: !map {}
       item:
+        flags: !map {}
         meta:
           id: item-none
           name:
@@ -75,20 +81,17 @@ worlds:
             data: !map {}
             name:
               base: signal-item-look
+          signal.use:
+            data: !map {}
+            name:
+              base: signal-item-use
         slot:
           base: ''
         stats: !map {}
       portal:
-        meta:
-          id: portal-none
-          name:
-            base: ''
-          desc:
-            base: ''
         dest:
           base: room-none
-        link:
-          base: both
+        flags: !map {}
         group:
           key:
             base: ''
@@ -96,19 +99,33 @@ worlds:
             base: ''
           target:
             base: ''
+        link:
+          base: both
+        meta:
+          id: portal-none
+          name:
+            base: ''
+          desc:
+            base: ''
         scripts: !map
           signal.look:
             data: !map {}
             name:
               base: signal-portal-look
+          signal.use:
+            data: !map {}
+            name:
+              base: signal-portal-use
+        stats: !map {}
       room:
+        actors: []
+        flags: !map {}
         meta:
           id: room-none
           name:
             base: ''
           desc:
             base: ''
-        actors: []
         items: []
         portals: []
         scripts: !map
@@ -121,94 +138,124 @@ worlds:
             name:
               base: signal-room-step
     locale:
-      bundles:
+      languages:
         en:
-          actor:
-            get:
-              player: |-
-                You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-            hit:
-              dead: '{{actor.meta.name}} has died!'
-              health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
-              hit: |-
-                {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
-            step:
-              command:
-                dead: |-
-                  You are dead!
-                player:
-                  verb: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the next turn.
-                  target: |-
-                    {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
-                unknown: |-
-                  {{actor.meta.name}} does not know how to $t({{command.verb}})!
-              drop:
-                type: |-
-                  {{command.targets}} is not an item!
-              equip:
-                item: |-
-                  You equip the {{item.meta.name}} in your {{slot}}.
-                none: |-
-                  {{command.targets}} is not an item!
-                slot: |-
-                  You are not able to equip {{item.meta.name}} in {{slot}}!
-              hit:
-                item: |-
-                  You cannot hit {{target.meta.name}}, you are not holding anything!
-                self: |-
-                  You cannot hit yourself!
-                type: |-
-                  {{command.targets}} is not an actor!
-              look:
-                none: |-
-                  You see nothing.
-                room:
-                  you: |-
-                    You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
+          articles: []
+          prepositions: []
+          verbs:
+            - verbs.world.slog
+            - verbs.world.swing
+          strings:
+            actor:
+              signal:
+                get:
+                  item: |-
+                    You have picked up a {{item.meta.name}}: {{item.meta.desc}}.
+                hit:
+                  dead: |-
+                    {{actor.meta.name}} has died!
                   health: |-
-                    You have {{health}} health.
-                  seen: |-
-                    You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
-                  inventory: |-
-                    You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-                  portal: |-
-                    A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
-                  dest: |-
-                    You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
-                actor:
-                  seen: |-
-                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
+                    {{actor.meta.name}} took {{damage}} damage and has {{health}} health left.
+                  item: |-
+                    {{attacker.meta.name}} has hit {{actor.meta.name}} with a {{item.meta.name}}!
+                look:
                   dead: |-
                     The {{actor.meta.name}} is dead!
-                item:
+                  health: |-
+                    You have {{health}} health.
+                  item: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
                   seen: |-
-                    You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-              move:
-                missing: |-
-                  {{command.targets}} is not a portal!
-                portal: |-
-                  {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
-              take:
-                type: |-
-                  {{command.targets}} is not an item!
-              use:
-                type: |-
-                  {{command.targets}} is not a usable item!
-          item:
-            use:
-              any: |-
-                {{item.meta.name}} has been used by {{actor.meta.name}}!
-          verbs:
-            world:
-              slog: slog
-              swing: swing
-      words:
-        articles: []
-        prepositions: []
-        verbs:
-          - verbs.world.slog
-          - verbs.world.swing
+                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}}.
+                  self: |-
+                    You are a {{actor.meta.name}}: {{actor.meta.desc}}.
+                step:
+                  dead: |-
+                    You are dead!
+                  verb:
+                    missing: |-
+                      {{actor.meta.name}} does not know how to $t({{command.verb}})!
+                    player: |-
+                      You will $t({{command.verb}}) the next turn.
+                    target: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+              verb:
+                drop:
+                  owner: |-
+                    You are not holding {{item.meta.name}}!
+                  type: |-
+                    {{command.targets}} is not an item!
+                equip:
+                  item: |-
+                    You equip the {{item.meta.name}} in your {{slot}}.
+                  missing: |-
+                    {{command.targets}} is not an item!
+                  slot: |-
+                    You are not able to equip {{item.meta.name}} in {{slot}}!
+                hit:
+                  item: |-
+                    You cannot hit {{target.meta.name}}, you are not holding anything!
+                  self: |-
+                    You cannot hit yourself!
+                  type: |-
+                    {{command.targets}} is not an actor!
+                look:
+                  missing: |-
+                    You see nothing.
+                move:
+                  locked: |-
+                    {{portal.meta.name}} is locked!
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+                open:
+                  already: |-
+                    {{portal.meta.name}} is already open.
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    You open {{portal.meta.name}}.
+                take:
+                  type: |-
+                    {{command.targets}} is not an item!
+                use:
+                  target: |-
+                    You cannot use items on {{command.targets}}!
+                  type: |-
+                    {{command.targets}} is not a usable item!
+            item:
+              signal:
+                look:
+                  held: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    You see a {{item.meta.name}}: {{item.meta.desc}}.
+              verb:
+                use:
+                  self: |-
+                    You have used {{item.meta.name}} on yourself!
+            portal:
+              signal:
+                look:
+                  closed: |-
+                    The {{portal.meta.name}} is closed.
+                  dest:
+                    missing: |-
+                      There is nothing on the other side.
+                    room: |-
+                      You catch a glimpse of a {{room.meta.name}} through the {{portal.meta.name}}.
+                  seen: |-
+                    A {{portal.meta.name}} leads to the {{portal.group.source}}.
+            room:
+              signal:
+                look:
+                  seen: |-
+                    You are in a {{room.meta.name}}: {{room.meta.desc}}.
+            verbs:
+              world:
+                slog: slog
+                swing: swing
     meta:
       id: test
       name:
@@ -231,6 +278,7 @@ worlds:
                 base: Bat
               desc:
                 base: flying bat
+            flags: !map {}
             items:
               - id: item-bat-teeth
             scripts: !map {}
@@ -241,6 +289,9 @@ worlds:
               health:
                 max: 50
                 min: 30
+              score:
+                max: 0
+                min: 0
               stamina:
                 max: 5
                 min: 1
@@ -264,7 +315,8 @@ worlds:
               name:
                 base: Goblin
               desc:
-                base: ((slimy|smelly)|goblin)
+                base: (slimy|smelly) goblin
+            flags: !map {}
             items:
               - id: item-sword
                 chance: 20
@@ -278,6 +330,9 @@ worlds:
               health:
                 max: 20
                 min: 14
+              score:
+                max: 0
+                min: 0
               stamina:
                 max: 5
                 min: 1
@@ -304,6 +359,7 @@ worlds:
                 base: Bat Teeth
               desc:
                 base: bat teeth
+            flags: !map {}
             scripts: !map {}
             slot:
               base: weapon-teeth
@@ -318,6 +374,7 @@ worlds:
                 base: Sword
               desc:
                 base: short sword
+            flags: !map {}
             scripts: !map {}
             slot:
               base: weapon-hand
@@ -380,62 +437,81 @@ worlds:
                     max: 5
       portals:
         - base:
-            dest:
-              base: ((room-cave|room-cave|room-marsh))
-            group:
-              key:
-                base: window
-              source:
-                base: west
-              target:
-                base: east
             meta:
               desc:
                 base: ''
               id: window-west
               name:
                 base: window
-            scripts: !map {}
-          mods: []
-        - base:
             dest:
-              base: ((room-cave|room-cave|room-marsh))
+              base: (room-cave|room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
-                base: door
+                base: window
               source:
-                base: east
-              target:
                 base: west
+              target:
+                base: east
+            scripts: !map {}
+            stats: !map {}
+          mods: []
+        - base:
             meta:
               desc:
                 base: ''
               id: door-east
               name:
                 base: door
-            scripts: !map {}
-          mods: []
-        - base:
             dest:
-              base: ((room-cave|room-marsh))
+              base: (room-cave|room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
                 base: door
               source:
-                base: west
-              target:
                 base: east
+              target:
+                base: west
+            scripts: !map {}
+            stats: !map
+              closed:
+                max: 1
+                min: 1
+          mods: []
+        - base:
             meta:
               desc:
                 base: ''
               id: door-west
               name:
                 base: door
+            dest:
+              base: (room-cave|room-marsh)
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
             scripts: !map {}
+            stats: !map
+              closed:
+                max: 1
+                min: 1
           mods: []
         - base:
+            meta:
+              desc:
+                base: ''
+              id: window-east
+              name:
+                base: window
             dest:
-              base: ((room-dungeon|room-dungeon|room-cave|room-marsh))
+              base: (room-dungeon|room-dungeon|room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
                 base: window
@@ -443,17 +519,19 @@ worlds:
                 base: east
               target:
                 base: west
+            scripts: !map {}
+            stats: !map {}
+          mods: []
+        - base:
             meta:
               desc:
                 base: ''
-              id: window-east
+              id: door-west-forward
               name:
-                base: window
-            scripts: !map {}
-          mods: []
-        - base:
+                base: locked door
             dest:
-              base: ((room-cave|room-cave|room-marsh))
+              base: (room-cave|room-cave|room-marsh)
+            flags: !map {}
             group:
               key:
                 base: door
@@ -463,13 +541,14 @@ worlds:
                 base: east
             link:
               base: forward
-            meta:
-              desc:
-                base: ''
-              id: door-west-forward
-              name:
-                base: locked door
             scripts: !map {}
+            stats: !map
+              closed:
+                max: 1
+                min: 1
+              locked:
+                max: 2
+                min: 0
           mods: []
       rooms:
         - base:
@@ -483,6 +562,7 @@ worlds:
               - id: actor-goblin
               - id: actor-goblin
                 chance: 10
+            flags: !map {}
             items: []
             portals:
               - id: window-west
@@ -498,6 +578,7 @@ worlds:
             actors:
               - id: actor-bat
                 chance: 25
+            flags: !map {}
             items:
               - id: item-sword
                 chance: 50
@@ -513,6 +594,7 @@ worlds:
               desc:
                 base: moist marsh
             actors: []
+            flags: !map {}
             items: []
             portals:
               - id: door-west-forward

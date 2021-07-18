@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { equipItems } from '../../../src/util/entity';
+import { equipItems, filterEquipped } from '../../../src/util/entity';
 import { makeTestActor, makeTestItem } from '../../entity';
 
 describe('entity utils', () => {
@@ -109,6 +109,31 @@ describe('entity utils', () => {
 
       expect(actor.slots.get('foot')).to.equal(footItem.meta.id);
       expect(actor.slots.get('hand')).to.equal('bin');
+    });
+  });
+
+  describe('filter equipped items helper', () => {
+    it('should only return equipped items', async () => {
+      const footItem = makeTestItem('foo', '', '');
+      footItem.slot = 'foot';
+
+      const handItem = makeTestItem('bar', '', '');
+      handItem.slot = 'hand';
+
+      const actor = makeTestActor('', '', '',
+        footItem,
+        handItem,
+        makeTestItem('other1', '', ''),
+        makeTestItem('other2', '', ''),
+      );
+      actor.slots.set('foot', '').set('hand', '');
+
+      equipItems(actor, new Map([
+        ['foot', footItem.meta.id],
+        ['hand', handItem.meta.id],
+      ]));
+
+      expect(filterEquipped(actor)).to.have.lengthOf(2);
     });
   });
 });

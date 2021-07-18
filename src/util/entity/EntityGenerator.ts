@@ -1,7 +1,7 @@
 import { doesExist, mergeMap, mustExist, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { equipItems } from '.';
+import { equipItems, isDestPortal, zeroStep } from '.';
 import { WorldEntityType } from '../../model/entity';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../model/entity/Item';
@@ -21,7 +21,7 @@ import { TemplateService } from '../../service/template';
 import { randomItem } from '../collection/array';
 import { TEMPLATE_CHANCE } from '../constants';
 import { makeServiceLogger } from '../service';
-import { matchIdSegments } from '../string';
+import { hasText, matchIdSegments } from '../string';
 import { findByBaseId } from '../template';
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
@@ -40,10 +40,6 @@ export class StateEntityGenerator {
     this.template = mustExist(options[INJECT_TEMPLATE]);
   }
 
-  public getWorld(): WorldTemplate {
-    return mustExist(this.world);
-  }
-
   public setWorld(world: WorldTemplate): void {
     this.world = world;
   }
@@ -52,6 +48,7 @@ export class StateEntityGenerator {
   public async createActor(template: Template<Actor>, source = ActorSource.BEHAVIOR): Promise<Actor> {
     const slots = this.template.renderStringMap(template.base.slots);
     const actor: Actor = {
+      flags: this.template.renderStringMap(template.base.flags),
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ACTOR_TYPE),
       scripts: await this.createScripts(template.base.scripts, ACTOR_TYPE),
@@ -77,12 +74,11 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByBaseId(world.templates.actors, templateRef.id);
       this.logger.debug({
-        template,
         templateRef,
       }, 'create actor for list');
 
+      const template = findByBaseId(world.templates.actors, templateRef.id);
       const item = await this.createActor(template);
       actors.push(item);
     }
@@ -92,6 +88,7 @@ export class StateEntityGenerator {
 
   public async createItem(template: Template<Item>): Promise<Item> {
     const item: Item = {
+      flags: this.template.renderStringMap(template.base.flags),
       meta: await this.createMetadata(template.base.meta, ITEM_TYPE),
       scripts: await this.createScripts(template.base.scripts, ITEM_TYPE),
       slot: this.template.renderString(template.base.slot),
@@ -113,12 +110,11 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByBaseId(world.templates.items, templateRef.id);
       this.logger.debug({
-        template,
         templateRef,
       }, 'create item for list');
 
+      const template = findByBaseId(world.templates.items, templateRef.id);
       const item = await this.createItem(template);
       items.push(item);
     }
@@ -138,6 +134,7 @@ export class StateEntityGenerator {
   public async createPortal(template: Template<Portal>): Promise<Portal> {
     const portal: Portal = {
       dest: '',
+      flags: this.template.renderStringMap(template.base.flags),
       group: {
         key: this.template.renderString(template.base.group.key),
         source: this.template.renderString(template.base.group.source),
@@ -146,6 +143,7 @@ export class StateEntityGenerator {
       link: this.template.renderString(template.base.link) as PortalLinkage,
       meta: await this.createMetadata(template.base.meta, PORTAL_TYPE),
       scripts: await this.createScripts(template.base.scripts, PORTAL_TYPE),
+      stats: this.template.renderNumberMap(template.base.stats),
       type: PORTAL_TYPE,
     };
 
@@ -163,12 +161,11 @@ export class StateEntityGenerator {
         continue;
       }
 
-      const template = findByBaseId(world.templates.portals, templateRef.id);
       this.logger.debug({
-        template,
         templateRef,
       }, 'create portal for list');
 
+      const template = findByBaseId(world.templates.portals, templateRef.id);
       const portal = await this.createPortal(template);
       portals.push(portal);
     }
@@ -178,12 +175,13 @@ export class StateEntityGenerator {
 
   public async createRoom(template: Template<Room>): Promise<Room> {
     const room: Room = {
-      type: ROOM_TYPE,
       actors: await this.createActorList(template.base.actors),
+      flags: this.template.renderStringMap(template.base.flags),
       items: await this.createItemList(template.base.items),
       meta: await this.createMetadata(template.base.meta, ROOM_TYPE),
       portals: await this.createPortalList(template.base.portals),
       scripts: await this.createScripts(template.base.scripts, ROOM_TYPE),
+      type: ROOM_TYPE,
     };
 
     await this.modifyRoom(room, template.mods);
@@ -198,7 +196,9 @@ export class StateEntityGenerator {
     return mergeMap(baseScripts, scripts);
   }
 
-  public async createState(world: WorldTemplate, params: CreateParams): Promise<WorldState> {
+  public async createState(params: CreateParams): Promise<WorldState> {
+    const world = mustExist(this.world);
+
     // reseed the prng
     this.random.reseed(params.seed); // TODO: fast-forward to last state
 
@@ -222,10 +222,7 @@ export class StateEntityGenerator {
       start: {
         room: startRoom.meta.id,
       },
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
       world: {
         ...params,
       },
@@ -239,14 +236,24 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      await this.modifyMetadata(target.meta, mod.meta);
       // target.source cannot be modified
 
-      target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
-      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      if (doesExist(mod.meta)) {
+        await this.modifyMetadata(target.meta, mod.meta);
+      }
 
-      const items = await this.createItemList(mod.items);
-      target.items.push(...items);
+      if (doesExist(mod.stats)) {
+        target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+      }
+
+      if (doesExist(mod.scripts)) {
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
+
+      if (doesExist(mod.items)) {
+        const items = await this.createItemList(mod.items);
+        target.items.push(...items);
+      }
     }
   }
 
@@ -257,10 +264,17 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      await this.modifyMetadata(target.meta, mod.meta);
+      if (doesExist(mod.meta)) {
+        await this.modifyMetadata(target.meta, mod.meta);
+      }
 
-      target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
-      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      if (doesExist(mod.stats)) {
+        target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+      }
+
+      if (doesExist(mod.scripts)) {
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
     }
   }
 
@@ -273,13 +287,27 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      await this.modifyMetadata(target.meta, mod.meta);
+      if (doesExist(mod.meta)) {
+        await this.modifyMetadata(target.meta, mod.meta);
+      }
 
-      target.group.key = this.template.modifyString(target.group.key, mod.group.key);
-      target.group.source = this.template.modifyString(target.group.source, mod.group.source);
-      target.group.target = this.template.modifyString(target.group.target, mod.group.target);
-      target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
-      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      if (doesExist(mod.group)) {
+        target.group.key = this.template.modifyString(target.group.key, mod.group.key);
+        target.group.source = this.template.modifyString(target.group.source, mod.group.source);
+        target.group.target = this.template.modifyString(target.group.target, mod.group.target);
+      }
+
+      if (doesExist(mod.link)) {
+        target.link = this.template.modifyString(target.link, mod.link) as PortalLinkage;
+      }
+
+      if (doesExist(mod.scripts)) {
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
+
+      if (doesExist(mod.stats)) {
+        target.stats = this.template.modifyNumberMap(target.stats, mod.stats);
+      }
     }
   }
 
@@ -290,22 +318,32 @@ export class StateEntityGenerator {
     const selected = this.selectModifiers(available);
 
     for (const mod of selected) {
-      await this.modifyMetadata(target.meta, mod.meta);
+      if (doesExist(mod.meta)) {
+        await this.modifyMetadata(target.meta, mod.meta);
+      }
 
-      target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      if (doesExist(mod.scripts)) {
+        target.scripts = this.template.modifyScriptMap(target.scripts, mod.scripts);
+      }
 
-      const actors = await this.createActorList(mod.actors);
-      target.actors.push(...actors);
+      if (doesExist(mod.actors)) {
+        const actors = await this.createActorList(mod.actors);
+        target.actors.push(...actors);
+      }
 
-      const items = await this.createItemList(mod.items);
-      target.items.push(...items);
+      if (doesExist(mod.items)) {
+        const items = await this.createItemList(mod.items);
+        target.items.push(...items);
+      }
 
-      const portals = await this.createPortalList(mod.portals);
-      target.portals.push(...portals);
+      if (doesExist(mod.portals)) {
+        const portals = await this.createPortalList(mod.portals);
+        target.portals.push(...portals);
+      }
     }
   }
 
-  public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<BaseModifier<TBase>> {
+  public selectModifiers<TBase>(mods: Array<Modifier<TBase>>): Array<Partial<BaseModifier<TBase>>> {
     const excluded = new Set<string>();
     const selected = [];
 
@@ -329,7 +367,7 @@ export class StateEntityGenerator {
     return selected;
   }
 
-  // eslint-disable-next-line sonarjs/cognitive-complexity
+  // eslint-disable-next-line complexity, sonarjs/cognitive-complexity
   public async populateRoom(firstRoom: Room, searchRooms: Array<Room>, max: number): Promise<Array<Room>> {
     if (max <= 0) {
       return [];
@@ -360,15 +398,22 @@ export class StateEntityGenerator {
       for (const [group, portals] of sourceGroups) {
         // pick a random destination room
         const groupTemplates = portals.map((it) => findByBaseId(world.templates.portals, it.meta.template));
-        const potentialDests = groupTemplates.map((it) => it.base.dest);
+        const potentialDests = groupTemplates.map((it) => it.base.dest).filter((it) => hasText(it.base));
+
+        if (potentialDests.length === 0) {
+          continue;
+        }
+
         const destId = this.template.renderString(randomItem(potentialDests, this.random));
 
         this.logger.debug({
           destId,
           group,
-        }, 'selected destination for portal group');
+          room,
+        }, 'finding destination for portal group');
 
         // look for an existing room
+        const groupKeys = new Set(portals.map((it) => it.group.key));
         const existingRoom = [
           ...searchRooms,
           ...addedRooms,
@@ -380,22 +425,40 @@ export class StateEntityGenerator {
           }
 
           // if room is a valid dest
-          if (matchIdSegments(it.meta.id, destId)) {
-            // find unlinked portal in opposing group
-            return it.portals.some((p) => p.dest === '' && p.group.target === group);
-          } else {
+          if (matchIdSegments(it.meta.id, destId) === false) {
             return false;
           }
+
+          // find unlinked portal in opposing group
+          return it.portals.some((p) => {
+            if (p.dest === '' && groupKeys.has(p.group.key) && p.group.target === group) {
+              this.logger.debug({ destId, portal: p, room }, 'found unlinked destination portal');
+              return true;
+            } else {
+              return false;
+            }
+          });
         });
 
         if (doesExist(existingRoom)) {
           this.logger.debug({
-            existingRoom,
+            room: existingRoom,
             group,
           }, 'linking portal group to existing room');
 
           for (const portal of portals) {
             portal.dest = existingRoom.meta.id;
+
+            if (portal.link === PortalLinkage.BOTH) {
+              // find existing portal
+              const existingPortal = existingRoom.portals.find((it) => isDestPortal(portal, it));
+
+              if (doesExist(existingPortal)) {
+                existingPortal.dest = room.meta.id;
+              } else {
+                this.logger.debug({ portal, room }, 'portal does not have destination in existing room');
+              }
+            }
           }
 
           continue;
@@ -406,7 +469,7 @@ export class StateEntityGenerator {
         const destRoom = await this.createRoom(destTemplate);
 
         this.logger.debug({
-          destRoom,
+          room: destRoom,
           group,
         }, 'linking portal group to new room');
 
@@ -415,10 +478,18 @@ export class StateEntityGenerator {
           portal.dest = destRoom.meta.id;
 
           if (portal.link === PortalLinkage.BOTH) {
-            // create reverse link
-            const destPortal = await this.reversePortal(portal);
-            destPortal.dest = room.meta.id;
-            destRoom.portals.push(destPortal);
+            // find existing portal
+            const existingPortal = destRoom.portals.find((it) => isDestPortal(portal, it));
+
+            if (doesExist(existingPortal)) {
+              existingPortal.dest = room.meta.id;
+            } else {
+              // or create reverse link
+              const destPortal = await this.reversePortal(portal, room);
+              destPortal.dest = room.meta.id;
+              destRoom.portals.push(destPortal);
+              this.logger.debug({ portal: destPortal, room }, 'inserting destination portal for new room without match');
+            }
           }
         }
 
@@ -431,20 +502,19 @@ export class StateEntityGenerator {
     return addedRooms;
   }
 
-  public async reversePortal(portal: Portal): Promise<Portal> {
-    return {
-      ...portal,
-      group: {
-        key: portal.group.key,
-        source: portal.group.target,
-        target: portal.group.source,
-      },
-      meta: {
-        desc: portal.meta.desc,
-        id: `${portal.meta.template}-${this.counter.next(PORTAL_TYPE)}`,
-        name: portal.meta.name,
-        template: portal.meta.template,
-      },
-    };
+  public async reversePortal(portal: Portal, room: Room): Promise<Portal> {
+    const template = findByBaseId(this.getWorld().templates.portals, portal.meta.template);
+    const reverse = await this.createPortal(template);
+
+    reverse.dest = room.meta.id;
+    reverse.link = PortalLinkage.BOTH;
+    reverse.group.source = portal.group.target;
+    reverse.group.target = portal.group.source;
+
+    return reverse;
+  }
+
+  protected getWorld(): WorldTemplate {
+    return mustExist(this.world);
   }
 }

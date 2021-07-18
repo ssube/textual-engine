@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { EventEmitter } from 'events';
 import { stub } from 'sinon';
+import { AbortEventError } from '../../../src/error/AbortEventError';
 
-import { AbortEventError } from '../../../src/lib';
 import { catchAndLog, onceWithRemove } from '../../../src/util/async/event';
 import { getTestLogger } from '../../helper';
 

@@ -1,12 +1,13 @@
 import * as React from 'react';
 
-import { HISTORY_SIZE } from '../../util/constants';
+import { HISTORY_SIZE, META_CREATE } from '../../util/constants';
 import { FrameProps } from '../shared';
 import { Input } from './Input';
 import { Output } from './Output';
-import { Status } from './Status';
 import { Quit } from './Quit';
 import { Shortcuts } from './Shortcuts';
+import { Status } from './Status';
+import { Worlds } from './Worlds';
 
 const { useState } = React;
 
@@ -37,5 +38,6 @@ export const Frame = (props: FrameProps): JSX.Element => {
       onTarget={(id) => setLine(`${line} ${id}`)}
       onVerb={(verb) => setLine(verb)}
     />}
+    <Worlds worlds={props.worlds} onClick={(id) => setLine(`${META_CREATE} ${id} with test seed and 10`)} />
   </div>;
 };

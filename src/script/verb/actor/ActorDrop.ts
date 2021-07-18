@@ -30,11 +30,14 @@ export async function VerbActorDrop(this: ScriptTarget, context: ScriptContext):
 
   const moving = indexEntity(results, command.index, isItem);
   if (isNil(moving)) {
-    await context.state.show(context.source, 'actor.step.drop.type', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.drop.type', { command });
   }
 
-  await context.transfer.moveItem({
+  if (this.items.includes(moving) === false) {
+    return context.state.show(context.source, 'actor.verb.drop.owner', { command, item: moving });
+  }
+
+  return context.state.move({
     moving,
     source: this,
     target: room,

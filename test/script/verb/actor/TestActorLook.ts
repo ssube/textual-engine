@@ -2,16 +2,16 @@ import { expect } from 'chai';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { CoreModule } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
 import { VerbActorLook } from '../../../../src/script/verb/actor/ActorLook';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
 import { LocalScriptService } from '../../../../src/service/script/LocalScript';
-import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
+import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper, getTestContainer } from '../../../helper';
 
-describe('actor look scripts', () => {
-  describe('actor look command without a target', () => {
+describe('actor look verb', () => {
+  describe('actor look verb without a target', () => {
     it('should require the script target be an actor', async () => {
       const context = createTestContext({
         command: makeCommand(VERB_LOOK),
@@ -29,48 +29,60 @@ describe('actor look scripts', () => {
       const room = makeTestRoom('', '', '', [], []);
       const context = createTestContext({
         command: makeCommand(VERB_LOOK),
-        random: createStubInstance(MathRandomService),
         room,
         script,
         state,
       });
 
-      await VerbActorLook.call(makeTestActor('', '', ''), context);
+      await VerbActorLook.call(makeTestActor('', '', '', makeTestItem('', '', '')), context);
 
       expect(script.invoke).to.have.been.calledWithMatch(room, SIGNAL_LOOK, match.object);
     });
 
-    it('should not include the player when looking at a target', async () => {
+    it('should not include the player', async () => {
+      const container = await getTestContainer(new CoreModule());
       const state = getStubHelper();
 
       const actor = makeTestActor('', '', '');
+      actor.scripts.set(SIGNAL_LOOK, {
+        data: new Map(),
+        name: 'signal-actor-look',
+      });
+      actor.stats.set(STAT_HEALTH, 5);
+
+      const room = makeTestRoom('', '', '', [actor], []);
+      room.scripts.set(SIGNAL_LOOK, {
+        data: new Map(),
+        name: 'signal-room-look',
+      });
+
       const context = createTestContext({
         command: makeCommand(VERB_LOOK),
-        random: createStubInstance(MathRandomService),
-        room: makeTestRoom('', '', '', [actor], []),
+        room,
         state,
+        script: await container.create(LocalScriptService),
       });
 
       await VerbActorLook.call(actor, context);
 
-      expect(state.show).to.have.callCount(2);
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.you');
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.health');
+      expect(state.show).to.have.callCount(3);
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.signal.look.self');
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.signal.look.health');
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'room.signal.look.seen');
     });
   });
 
-  describe('actor look command with target', () => {
+  describe('actor look verb with target', () => {
     it('should describe the target', async () => {
       const script = createStubInstance(LocalScriptService);
       const state = getStubHelper();
 
       const actor = makeTestActor('bar', '', '');
       const room = makeTestRoom('foo', '', '', [actor], []);
-      (state.find as SinonStub).returns(Promise.resolve([actor]));
+      (state.find as SinonStub).resolves([actor]);
 
       const context = createTestContext({
         command: makeCommand(VERB_LOOK, actor.meta.id),
-        random: createStubInstance(MathRandomService),
         room,
         script,
         state,
@@ -84,14 +96,13 @@ describe('actor look scripts', () => {
     it('should warn when the target does not exist', async () => {
       const script = createStubInstance(LocalScriptService);
       const state = getStubHelper();
-      (state.find as SinonStub).returns(Promise.resolve([]));
+      (state.find as SinonStub).resolves([]);
 
       const actor = makeTestActor('bar', '', '');
       const room = makeTestRoom('foo', '', '', [actor], []);
 
       const context = createTestContext({
         command: makeCommand(VERB_LOOK, 'none'),
-        random: createStubInstance(MathRandomService),
         room,
         script,
         state,
@@ -99,7 +110,7 @@ describe('actor look scripts', () => {
 
       await VerbActorLook.call(actor, context);
 
-      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.none');
+      expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.look.missing');
       expect(script.invoke).to.have.callCount(0);
     });
   });

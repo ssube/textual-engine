@@ -1,15 +1,15 @@
 import { mustExist } from '@apextoaster/js-utils';
 import { RandomService } from '../../service/random';
 
-export function randomItem<TValue>(items: Array<TValue>, random: RandomService): TValue {
+export function randomItem<TValue>(items: ReadonlyArray<TValue>, random: RandomService): TValue {
   return items[random.nextInt(items.length)];
 }
 
-export function remove<TValue>(items: Array<TValue>, pred: (value: TValue, index: number, list: Array<TValue>) => boolean): Array<TValue> {
+export function remove<TValue>(items: ReadonlyArray<TValue>, pred: (value: TValue, index: number, list: ReadonlyArray<TValue>) => boolean): Array<TValue> {
   return items.filter((value, index, list) => pred(value, index, list) === false);
 }
 
-export function groupOn<TValue>(items: Array<TValue>, delimiters: Set<TValue>): Array<Array<TValue>> {
+export function groupOn<TValue>(items: ReadonlyArray<TValue>, delimiters: Set<TValue>): Array<Array<TValue>> {
   const groups = [];
   const buffer = [];
 
@@ -31,6 +31,6 @@ export function groupOn<TValue>(items: Array<TValue>, delimiters: Set<TValue>): 
   return groups;
 }
 
-export function head<TValue>(list: Array<TValue>): TValue {
+export function head<TValue>(list: ReadonlyArray<TValue>): TValue {
   return mustExist(list[0]);
 }

@@ -3,11 +3,10 @@ import { expect } from 'chai';
 
 import { CoreModule } from '../../../src/module/CoreModule';
 import { MathRandomService } from '../../../src/service/random/MathRandom';
-import { ScriptContext } from '../../../src/service/script';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity';
-import { createTestContext, getStubHelper, getTestContainer, getTestLogger } from '../../helper';
+import { createTestContext, getTestContainer } from '../../helper';
 
 describe('state transfer utils', () => {
   describe('move actor helper', () => {
@@ -17,13 +16,12 @@ describe('state transfer utils', () => {
       const targetRoom = makeTestRoom('bar', 'bar', 'bar', [], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await transfer.moveActor({
         moving: actor,
         source: sourceRoom,
@@ -43,19 +41,19 @@ describe('state transfer utils', () => {
       const targetRoom = makeTestRoom('bar', 'bar', 'bar', [], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
 
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await expect(transfer.moveActor({
         moving: item as any,
         source: sourceRoom,
         target: targetRoom,
       }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
+
       await expect(transfer.moveActor({
         moving: sourceRoom as any,
         source: sourceRoom,
@@ -68,13 +66,12 @@ describe('state transfer utils', () => {
       const targetRoom = makeTestRoom('foo', 'foo', 'foo', [actor], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await expect(transfer.moveActor({
         moving: actor,
         source: actor as any,
@@ -87,13 +84,12 @@ describe('state transfer utils', () => {
       const sourceRoom = makeTestRoom('foo', 'foo', 'foo', [actor], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await expect(transfer.moveActor({
         moving: actor,
         source: sourceRoom,
@@ -107,13 +103,12 @@ describe('state transfer utils', () => {
       const targetRoom = makeTestRoom('bar', 'bar', 'bar', [], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await expect(transfer.moveActor({
         moving: actor,
         source: sourceRoom,
@@ -126,13 +121,12 @@ describe('state transfer utils', () => {
       const room = makeTestRoom('foo', 'foo', 'foo', [actor], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await expect(transfer.moveActor({
         moving: actor,
         source: room,
@@ -150,14 +144,12 @@ describe('state transfer utils', () => {
       const targetRoom = makeTestRoom('bar', 'bar', 'bar', [], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
-
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await transfer.moveItem({
         moving: item,
         source: sourceRoom,
@@ -174,14 +166,12 @@ describe('state transfer utils', () => {
       const targetRoom = makeTestRoom('bar', 'bar', 'bar', [], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
-
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await expect(transfer.moveItem({
         moving: actor as any,
         source: sourceRoom,
@@ -199,14 +189,12 @@ describe('state transfer utils', () => {
       const room = makeTestRoom('foo', 'foo', 'foo', [], [item]);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
-
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       await transfer.moveItem({
         moving: item,
         source: room,
@@ -232,14 +220,12 @@ describe('state transfer utils', () => {
       const room = makeTestRoom('foo', 'foo', 'foo', [], [moving]);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
-
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer: await container.create(StateEntityTransfer),
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       return expect(transfer.moveItem({
         moving,
         source: source as any,
@@ -254,10 +240,7 @@ describe('state transfer utils', () => {
 
       const container = await getTestContainer(new CoreModule());
       const transfer = await container.create(StateEntityTransfer);
-
-      const context = createTestContext({
-        transfer,
-      });
+      const context = createTestContext();
 
       return expect(transfer.moveItem({
         moving,
@@ -272,14 +255,12 @@ describe('state transfer utils', () => {
       const room = makeTestRoom('foo', 'foo', 'foo', [], []);
 
       const container = await getTestContainer(new CoreModule());
-      const transfer = await container.create(StateEntityTransfer);
-
       const context = createTestContext({
         random: await container.create(MathRandomService),
         script: await container.create(LocalScriptService),
-        transfer,
       });
 
+      const transfer = await container.create(StateEntityTransfer);
       return expect(transfer.moveItem({
         moving: item,
         source: room,
@@ -287,7 +268,87 @@ describe('state transfer utils', () => {
       }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
     });
 
+    it('should not invoke scripts when the source and target are the same', async () => {
+      const item = makeTestItem('bun', 'bun', 'bun');
+      const room = makeTestRoom('foo', 'foo', 'foo', [], []);
+
+      const container = await getTestContainer(new CoreModule());
+      const transfer = await container.create(StateEntityTransfer);
+      const context = createTestContext();
+
+      await transfer.moveItem({
+        moving: item,
+        source: room,
+        target: room,
+      }, context);
+
+      expect(context.script.invoke).to.have.callCount(0);
+    });
+
     xit('should invoke the get script on the destination entity');
-    xit('should not invoke scripts when the source and target are the same');
+  });
+
+  describe('move room helper', () => {
+    it('should move the contents of the room', async () => {
+      const actor = makeTestActor('', '', '');
+      const item = makeTestItem('bun', 'bun', 'bun');
+      const sourceRoom = makeTestRoom('foo', 'foo', 'foo', [actor], [item]);
+      const targetRoom = makeTestRoom('bar', 'bar', 'bar', [], []);
+
+      const container = await getTestContainer(new CoreModule());
+      const context = createTestContext({
+        random: await container.create(MathRandomService),
+        script: await container.create(LocalScriptService),
+      });
+
+      const transfer = await container.create(StateEntityTransfer);
+      await transfer.moveRoom({
+        moving: undefined,
+        source: sourceRoom,
+        target: targetRoom,
+      }, context);
+
+      expect(sourceRoom.actors).to.have.lengthOf(0);
+      expect(sourceRoom.items).to.have.lengthOf(0);
+
+      expect(targetRoom.actors).to.have.lengthOf(1);
+      expect(targetRoom.items).to.have.lengthOf(1);
+    });
+
+    it('should only allow source rooms', async () => {
+      const actor = makeTestActor('bun', 'bun', 'bun');
+      const targetRoom = makeTestRoom('foo', 'foo', 'foo', [actor], []);
+
+      const container = await getTestContainer(new CoreModule());
+      const context = createTestContext({
+        random: await container.create(MathRandomService),
+        script: await container.create(LocalScriptService),
+      });
+
+      const transfer = await container.create(StateEntityTransfer);
+      await expect(transfer.moveRoom({
+        moving: undefined,
+        source: actor as any,
+        target: targetRoom,
+      }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
+    });
+
+    it('should only allow target rooms', async () => {
+      const actor = makeTestActor('bun', 'bun', 'bun');
+      const sourceRoom = makeTestRoom('foo', 'foo', 'foo', [actor], []);
+
+      const container = await getTestContainer(new CoreModule());
+      const context = createTestContext({
+        random: await container.create(MathRandomService),
+        script: await container.create(LocalScriptService),
+      });
+
+      const transfer = await container.create(StateEntityTransfer);
+      await expect(transfer.moveRoom({
+        moving: undefined,
+        source: sourceRoom,
+        target: actor as any,
+      }, context)).to.eventually.be.rejectedWith(InvalidArgumentError);
+    });
   });
 });

@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
-import { mustExist } from '@apextoaster/js-utils';
+import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { createStubInstance, match, stub } from 'sinon';
+import { createStubInstance, match, spy, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
@@ -13,11 +13,12 @@ import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../../src/model/entity/Room';
 import { Template } from '../../../src/model/mapped/Template';
 import { WorldTemplate } from '../../../src/model/world/Template';
-import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
 import { CoreModule } from '../../../src/module/CoreModule';
+import { Counter } from '../../../src/service/counter';
 import { EventBus } from '../../../src/service/event';
 import { LoaderSaveEvent } from '../../../src/service/loader/events';
-import { MathRandomService } from '../../../src/service/random/MathRandom';
+import { ScriptService } from '../../../src/service/script';
 import { LocalScriptService } from '../../../src/service/script/LocalScript';
 import {
   StateJoinEvent,
@@ -25,6 +26,7 @@ import {
   StateOutputEvent,
   StateRoomEvent,
   StateStepEvent,
+  StateWorldEvent,
 } from '../../../src/service/state/events';
 import { LocalStateService } from '../../../src/service/state/LocalState';
 import { ShowVolume } from '../../../src/util/actor';
@@ -41,6 +43,7 @@ import {
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
+  EVENT_STATE_WORLD,
   META_CREATE,
   META_DEBUG,
   META_GRAPH,
@@ -55,13 +58,13 @@ import {
   VERB_WAIT,
 } from '../../../src/util/constants';
 import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
-import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
-import { makeTestActor, makeTestItem, makeTestRoom, makeTestState } from '../../entity';
-import { createTestContext, getStubHelper, getTestContainer, getTestLogger } from '../../helper';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity';
+import { createTestContext, getTestContainer } from '../../helper';
 
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {
+    flags: new Map(),
     items: [],
     meta: {
       id: 'bar',
@@ -99,6 +102,7 @@ const TEST_ACTOR: Template<Actor> = {
 
 const TEST_ITEM: Template<Item> = {
   base: {
+    flags: new Map(),
     meta: {
       id: 'bin',
       name: {
@@ -130,6 +134,7 @@ const TEST_PORTAL: Template<Portal> = {
       base: 'room-foo',
       type: 'string',
     },
+    flags: new Map(),
     group: {
       key: {
         base: 'door',
@@ -159,7 +164,7 @@ const TEST_PORTAL: Template<Portal> = {
         type: 'string',
       },
     },
-
+    stats: new Map(),
     scripts: new Map(),
     type: {
       base: PORTAL_TYPE,
@@ -172,6 +177,7 @@ const TEST_PORTAL: Template<Portal> = {
 const TEST_ROOM: Template<Room> = {
   base: {
     actors: [],
+    flags: new Map(),
     items: [],
     meta: {
       id: 'room-foo',
@@ -210,12 +216,7 @@ const TEST_WORLD: WorldTemplate = {
     room: TEST_ROOM.base,
   },
   locale: {
-    bundles: {},
-    words: {
-      articles: [],
-      prepositions: [],
-      verbs: [],
-    },
+    languages: {},
   },
   meta: {
     id: 'foo',
@@ -335,7 +336,22 @@ describe('local state service', () => {
   });
 
   describe('world load event', () => {
-    xit('should register world templates when they load');
+    it('should register world templates when they load', async () => {
+      const container = await getTestContainer(new CoreModule());
+      const localState = await container.create(LocalStateService);
+      await localState.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      const pendingWorlds = onceEvent<StateWorldEvent>(events, EVENT_STATE_WORLD);
+
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const worlds = await pendingWorlds;
+
+      expect(worlds.worlds).to.have.lengthOf(1);
+    });
   });
 
   describe('create command', () => {
@@ -405,7 +421,7 @@ describe('local state service', () => {
       });
       const output = await pending;
 
-      expect(output.line).to.equal('meta.debug.none');
+      expect(output.line).to.equal('meta.debug.missing');
     });
   });
 
@@ -425,14 +441,22 @@ describe('local state service', () => {
         command,
       });
 
-      const pending = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
-      await localState.onCommand({
-        command: makeCommand(META_GRAPH, 'test://url'),
+      const path = 'test://url';
+      const pendingSave = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
+      const pendingCommand = localState.onCommand({
+        command: makeCommand(META_GRAPH, path),
       });
 
-      const output = await pending;
+      events.emit(EVENT_LOADER_DONE, {
+        path,
+      });
+
+      await pendingCommand;
+
+      const output = await pendingSave;
+
       expect(output.data).to.include('strict digraph');
-      expect(output.path).to.equal('test://url');
+      expect(output.path).to.equal(path);
     });
 
     it('should print an error without state', async () => {
@@ -447,7 +471,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.graph.none');
+      expect(output.line).to.equal('meta.graph.missing');
     });
   });
 
@@ -568,7 +592,7 @@ describe('local state service', () => {
       });
 
       const output = await pendingOutput;
-      expect(output.line).to.equal('meta.load.none');
+      expect(output.line).to.equal('meta.load.missing');
       expect(loadStub).to.have.callCount(0);
     });
   });
@@ -648,7 +672,7 @@ describe('local state service', () => {
       });
 
       await expect(pendingOutput).to.eventually.deep.include({
-        line: 'meta.save.none',
+        line: 'meta.save.missing',
       });
     });
   });
@@ -699,7 +723,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.step.none');
+      expect(output.line).to.equal('meta.step.missing');
     });
 
     it('should error without state', async () => {
@@ -717,7 +741,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.step.none');
+      expect(output.line).to.equal('meta.step.missing');
     });
 
     xit('should step after all actors have submitted a command');
@@ -826,8 +850,218 @@ describe('local state service', () => {
       return expect(state.step()).to.eventually.be.rejectedWith(NotInitializedError);
     });
 
-    xit('should error when some actors are missing commands');
-    xit('should only step entities once even when they move');
+    it('should only step each entity ID once', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const counter = await container.create<Counter, BaseOptions>(INJECT_COUNTER);
+      stub(counter, 'next').returns(0);
+
+      const generator = createStubInstance(StateEntityGenerator);
+      generator.createState.resolves(makeTestState('', [
+        makeTestRoom('room-0', '', '', [
+          makeTestActor('actor-0', '', '', makeTestItem('item-0', '', '')),
+        ], [
+          makeTestItem('item-1', '', ''),
+        ], [
+          makeTestPortal('portal-0', '', '', '', ''),
+        ]),
+        makeTestRoom('room-0', '', ''),
+        makeTestRoom('room-1', '', '', [
+          // TODO: this makes step throw internally because it is currently difficult to queue two commands for the same actor
+          // makeTestActor('actor-0', '', ''),
+          makeTestActor('actor-1', '', '', makeTestItem('item-0', '', '')),
+        ], [
+          makeTestItem('item-1', '', ''),
+        ], [
+          makeTestPortal('portal-0', '', '', '', ''),
+        ]),
+      ]));
+      module.bind(StateEntityGenerator).toInstance(generator as any);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const script = await container.create<ScriptService, BaseOptions>(INJECT_SCRIPT);
+      const scriptSpy = spy(script, 'invoke');
+
+      const rooms = await state.stepFind({
+        type: ROOM_TYPE,
+      });
+
+      let broadcast = true;
+      for (const room of rooms) {
+        for (const actor of room.actors) {
+          if (broadcast) {
+            broadcast = false;
+            await state.stepEnter({ room, actor });
+          }
+
+          await state.onCommand({
+            actor,
+            command: makeCommand(VERB_WAIT),
+          });
+        }
+      }
+
+      expect(scriptSpy).to.have.callCount(7); // 2 rooms, 2 actors, 2 items, 1 portal
+    });
+
+    it('should error when some actors are missing commands', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const counter = await container.create<Counter, BaseOptions>(INJECT_COUNTER);
+      stub(counter, 'next').returns(0);
+
+      const generator = createStubInstance(StateEntityGenerator);
+      generator.createState.resolves(makeTestState('', [
+        makeTestRoom('room-0', '', '', [
+          makeTestActor('actor-0', '', ''),
+        ]),
+        makeTestRoom('room-0', '', '', [
+          makeTestActor('actor-0', '', ''),
+        ]),
+      ]));
+      module.bind(StateEntityGenerator).toInstance(generator as any);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      return expect(state.step()).to.eventually.be.rejectedWith(Error);
+    });
+  });
+
+  describe('step create helper', () => {
+    it('should create actors and add them to the target room', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const [room] = await state.stepFind({
+        type: ROOM_TYPE,
+      });
+
+      const actor = makeTestActor('', '', '');
+      await state.stepCreate('bar', ACTOR_TYPE, {
+        actor,
+        room,
+      });
+
+      expect(room.actors).to.have.lengthOf(1);
+    });
+
+    it('should create items and add them to the target room', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const actor = makeTestActor('', '', '');
+      const room = makeTestRoom('', '', '', [actor]);
+
+      await state.stepCreate('bin', ITEM_TYPE, {
+        room,
+      });
+
+      expect(actor.items, 'actor items').to.have.lengthOf(0);
+      expect(room.items, 'room items').to.have.lengthOf(1);
+    });
+
+    it('should create items and add them to the target actor', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const actor = makeTestActor('', '', '');
+      const room = makeTestRoom('', '', '', [actor]);
+
+      await state.stepCreate('bin', ITEM_TYPE, {
+        actor,
+        room,
+      });
+
+      expect(actor.items, 'actor items').to.have.lengthOf(1);
+      expect(room.items, 'room items').to.have.lengthOf(0);
+    });
+
+    it('should only create actors and items', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      await state.doCreate({
+        command: makeCommand(META_CREATE, 'foo', '4'),
+      });
+
+      const actor = makeTestActor('', '', '');
+      const room = makeTestRoom('', '', '', [actor]);
+
+      await expect(state.stepCreate('door', PORTAL_TYPE, {
+        room,
+      })).to.eventually.be.rejectedWith(InvalidArgumentError);
+
+      await expect(state.stepCreate('foo', ROOM_TYPE, {
+        room,
+      })).to.eventually.be.rejectedWith(InvalidArgumentError);
+    });
   });
 
   describe('step enter helper', () => {
@@ -945,6 +1179,37 @@ describe('local state service', () => {
 
       return expect(state.stepMove(transfer, createTestContext())).to.eventually.be.rejectedWith(ScriptTargetError);
     });
+
+    it('should move everything', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
+
+      const transfer = {
+        moving: undefined,
+        source: makeTestRoom('', '', '', [makeTestActor('', '', '')], [makeTestItem('', '', '')]),
+        target: makeTestRoom('', '', '', [], []),
+      };
+      await state.stepMove(transfer, createTestContext());
+
+      expect(transfer.source.actors, 'source actors').to.have.lengthOf(0);
+      expect(transfer.target.actors, 'target actors').to.have.lengthOf(1);
+
+      expect(transfer.source.items, 'source items').to.have.lengthOf(0);
+      expect(transfer.target.items, 'target items').to.have.lengthOf(1);
+    });
   });
 
   describe('step show helper', () => {
@@ -975,6 +1240,24 @@ describe('local state service', () => {
       const output = await pending;
       expect(output.line).to.equal('foo');
       expect(output.volume).to.equal(ShowVolume.SELF);
+    });
+  });
+
+  describe('step update helper', () => {
+    it('should be a noop for local state', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const entity = makeTestActor('', '', '');
+      return expect(state.stepUpdate(entity, {})).to.eventually.equal(undefined);
     });
   });
 });

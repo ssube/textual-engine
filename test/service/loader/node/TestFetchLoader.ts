@@ -53,6 +53,7 @@ describe('node fetch loader', () => {
     const state = makeTestState('', []);
     const world = makeTestWorld([{
       base: {
+        flags: new Map(),
         items: [],
         meta: {
           id: '',
@@ -80,6 +81,7 @@ describe('node fetch loader', () => {
       mods: [],
     }], [{
       base: {
+        flags: new Map(),
         meta: {
           id: '',
           desc: {
@@ -109,6 +111,7 @@ describe('node fetch loader', () => {
           base: '',
           type: 'string',
         },
+        flags: new Map(),
         link: {
           base: '',
           type: 'string',
@@ -139,6 +142,7 @@ describe('node fetch loader', () => {
           },
         },
         scripts: new Map(),
+        stats: new Map(),
         type: {
           base: PORTAL_TYPE,
           type: 'string',
@@ -148,6 +152,7 @@ describe('node fetch loader', () => {
     }], [{
       base: {
         actors: [],
+        flags: new Map(),
         items: [],
         meta: {
           id: '',
@@ -175,7 +180,6 @@ describe('node fetch loader', () => {
       state,
       worlds: [world]
     });
-    console.log(payload);
 
     const fetch = stub().returns({
       text: () => Promise.resolve(payload),

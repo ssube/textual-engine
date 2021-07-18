@@ -5,9 +5,10 @@ import { Inject, Logger } from 'noicejs';
 import { ActorService } from '.';
 import { ConfigError } from '../../error/ConfigError';
 import { Command, makeCommand } from '../../model/Command';
-import { Actor, ActorSource } from '../../model/entity/Actor';
-import { Room } from '../../model/entity/Room';
+import { ActorSource, ReadonlyActor } from '../../model/entity/Actor';
+import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module';
+import { catchAndLog } from '../../util/async/event';
 import { randomItem } from '../../util/collection/array';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
 import { makeSchema } from '../../util/schema';
@@ -69,7 +70,7 @@ export class BehaviorActorService implements ActorService {
   public async start(): Promise<void> {
     this.event.on(EVENT_STATE_ROOM, (event) => {
       if (event.actor.source === ActorSource.BEHAVIOR) {
-        this.onRoom(event);
+        catchAndLog(this.onRoom(event), this.logger, 'error during room event');
       }
     }, this);
   }
@@ -82,7 +83,7 @@ export class BehaviorActorService implements ActorService {
     throw new NotImplementedError();
   }
 
-  public onRoom(event: StateRoomEvent): void {
+  public async onRoom(event: StateRoomEvent): Promise<void> {
     const behavior = this.random.nextFloat();
     this.logger.debug({ event, which: behavior }, 'received room event from state');
 
@@ -90,8 +91,7 @@ export class BehaviorActorService implements ActorService {
     const player = event.room.actors.find((it) => it.source === ActorSource.PLAYER);
     if (behavior < this.config.attack && doesExist(player)) {
       this.logger.debug({ event, player }, 'attacking visible player');
-      this.queue(event.room, event.actor, makeCommand(VERB_HIT, player.meta.id));
-      return;
+      return this.queue(event.room, event.actor, makeCommand(VERB_HIT, player.meta.id));
     }
 
     // or randomly move
@@ -104,14 +104,13 @@ export class BehaviorActorService implements ActorService {
         portalCount: portals.length,
       }, 'moving through random portal');
 
-      this.queue(event.room, event.actor, makeCommand(VERB_MOVE, portal.meta.id));
-      return;
+      return this.queue(event.room, event.actor, makeCommand(VERB_MOVE, portal.meta.id));
     }
 
-    this.queue(event.room, event.actor, WAIT_CMD);
+    return this.queue(event.room, event.actor, WAIT_CMD);
   }
 
-  protected queue(room: Room, actor: Actor, command: Command): void {
+  protected async queue(room: ReadonlyRoom, actor: ReadonlyActor, command: Command): Promise<void> {
     this.next.set(actor.meta.id, command);
 
     this.event.emit(EVENT_ACTOR_COMMAND, {

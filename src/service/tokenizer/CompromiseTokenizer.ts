@@ -19,6 +19,7 @@ export class CompromiseTokenizer extends SplitTokenizer implements TokenizerServ
     const doc = this.nlp(input);
 
     const indexTerm = doc.terms()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .filter((it: any) => it.has('#Cardinal'))
       .first();
     const verbTerm = doc.verbs()

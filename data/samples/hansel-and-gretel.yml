@@ -1,0 +1,1043 @@
+worlds:
+  - defaults:
+      actor:
+        meta:
+          id: actor-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        flags: !map {}
+        items: []
+        scripts: !map
+          signal.get:
+            data: !map {}
+            name:
+              base: signal-actor-get
+          signal.hit:
+            data: !map {}
+            name:
+              base: signal-actor-hit
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-actor-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-actor-step
+          verbs.common.drop:
+            data: !map {}
+            name:
+              base: verb-actor-drop
+          verbs.common.equip:
+            data: !map {}
+            name:
+              base: verb-actor-equip
+          verbs.common.hit:
+            data: !map {}
+            name:
+              base: verb-actor-hit
+          verbs.common.look:
+            data: !map {}
+            name:
+              base: verb-actor-look
+          verbs.common.move:
+            data: !map {}
+            name:
+              base: verb-actor-move
+          verbs.common.take:
+            data: !map {}
+            name:
+              base: verb-actor-take
+          verbs.common.use:
+            data: !map {}
+            name:
+              base: verb-actor-use
+          verbs.common.wait:
+            data: !map {}
+            name:
+              base: verb-actor-wait
+          verbs.world.swing:
+            data: !map {}
+            name:
+              base: verb-actor-hit
+        slots: !map {}
+        stats: !map {}
+      item:
+        meta:
+          id: item-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        flags: !map {}
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-item-look
+        slot:
+          base: ''
+        stats: !map {}
+      portal:
+        meta:
+          id: portal-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        dest:
+          base: room-none
+        link:
+          base: both
+        flags: !map {}
+        group:
+          key:
+            base: ''
+          source:
+            base: ''
+          target:
+            base: ''
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-portal-look
+        stats: !map {}
+      room:
+        meta:
+          id: room-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        actors: []
+        flags: !map {}
+        items: []
+        portals: []
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-room-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-room-step
+    locale:
+      languages:
+        en:
+          articles: []
+          prepositions: []
+          verbs: []
+          strings:
+            actor:
+              signal:
+                get:
+                  item: |-
+                    You have picked up a {{item.meta.name}}: {{item.meta.desc}}.
+                hit:
+                  dead: |-
+                    {{actor.meta.name}} has died!
+                  health: |-
+                    {{actor.meta.name}} took {{damage}} damage and has {{health}} health left.
+                  item: |-
+                    {{attacker.meta.name}} has hit {{actor.meta.name}} with a {{item.meta.name}}!
+                look:
+                  dead: |-
+                    The {{actor.meta.name}} is dead!
+                  health: |-
+                    You have {{health}} health.
+                  item: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}}.
+                  self: |-
+                    You are a {{actor.meta.name}}: {{actor.meta.desc}}.
+                step:
+                  dead: |-
+                    You are dead!
+                  verb:
+                    missing: |-
+                      {{actor.meta.name}} does not know how to $t({{command.verb}})!
+                    player: |-
+                      You will $t({{command.verb}}) the next turn.
+                    target: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+              verb:
+                drop:
+                  type: |-
+                    {{command.targets}} is not an item!
+                equip:
+                  item: |-
+                    You equip the {{item.meta.name}} in your {{slot}}.
+                  missing: |-
+                    {{command.targets}} is not an item!
+                  slot: |-
+                    You are not able to equip {{item.meta.name}} in {{slot}}!
+                hit:
+                  item: |-
+                    You cannot hit {{target.meta.name}}, you are not holding anything!
+                  self: |-
+                    You cannot hit yourself!
+                  type: |-
+                    {{command.targets}} is not an actor!
+                look:
+                  missing: |-
+                    You see nothing.
+                move:
+                  locked: |-
+                    {{portal.meta.name}} is locked!
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+                take:
+                  type: |-
+                    {{command.targets}} is not an item!
+                use:
+                  target: |-
+                    You cannot use items on {{command.targets}}!
+                  type: |-
+                    {{command.targets}} is not a usable item!
+            item:
+              signal:
+                look:
+                  held: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    You see a {{item.meta.name}}: {{item.meta.desc}}.
+              verb:
+                use:
+                  self: |-
+                    You have used {{item.meta.name}} on yourself!
+            portal:
+              signal:
+                look:
+                  closed: |-
+                    The {{portal.meta.name}} is closed.
+                  dest:
+                    missing: |-
+                      There is nothing on the other side.
+                    room: |-
+                      You catch a glimpse of a {{room.meta.name}} through the {{portal.meta.name}}.
+                  seen: |-
+                    A {{portal.meta.name}} leads to the {{portal.group.source}}.
+            room:
+              signal:
+                look:
+                  seen: |-
+                    You are in a {{room.meta.name}}: {{room.meta.desc}}.
+    meta:
+      id: sample-hansel-and-gretel
+      name:
+        base: Hansel and Gretel
+      desc:
+        base: Hansel and Gretel from Grimms' Fairy Tales by The Brothers Grimm
+    start:
+      actors:
+        - id: actor-hansel
+        - id: actor-gretel
+      rooms:
+        - id: room-intro
+    templates:
+      actors:
+        - base:
+            meta:
+              id: actor-hansel
+              name:
+                base: Hansel
+              desc:
+                base: a young boy named Hansel; Gretel's brother
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              pocket-left:
+                base: ''
+              pocket-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+              hunger:
+                max: 10
+                min: 0
+        - base:
+            meta:
+              id: actor-gretel
+              name:
+                base: Gretel
+              desc:
+                base: a young girl named Gretel; Hansel's sister
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              pocket-left:
+                base: ''
+              pocket-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+              hunger:
+                max: 10
+                min: 0
+        - base:
+            meta:
+                id: actor-woodcutter
+                name:
+                  base: The Woodcutter
+                desc:
+                  base: a woodcutter; Hansel and Gretel's father
+            flags: !map {}
+            items:
+              - id: item-ax
+            scripts: !map {}
+            slots: !map
+              weapon-hand-right:
+                base: item-ax
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+        - base:
+            meta:
+                id: actor-stepmother
+                name:
+                  base: Stepmother
+                desc:
+                  base: Hansel and Gretel's stepmother; an unpleasant woman
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+        - base:
+            meta:
+                id: actor-witch
+                name:
+                  base: A Witch
+                desc:
+                  base: An evil witch that lives in the candy house; her favorite meal is fat children
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+        - base:
+            meta:
+                id: actor-duck
+                name:
+                  base: A Duck
+                desc:
+                  base: A cute duck
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 0
+              stamina:
+                max: 5
+                min: 1
+      items:
+        - base:
+            meta:
+              id: item-bread
+              name:
+                base: bread
+              desc:
+                  base: A loaf of stale bread. It breaks into crumbs easily.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-crumbs
+              name:
+                base: crumbs
+              desc:
+                base: Some pale bread crumbs.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-pebbles
+              name:
+                base: pebbles
+              desc:
+                base: Smooth, white pebbles
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-brushwood
+              name:
+                base: brushwood
+              desc:
+                base: Some brushwood. This would make a nice fire.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-woodaxe
+              name:
+                base: woodaxe
+              desc:
+                base: A worn woodaxe.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-pearls
+              name:
+                base: pearls
+              desc:
+                base: Perfectly round pearls; they gleam in the light
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-jewels
+              name:
+                base: jewels
+              desc:
+                base: Magnificent rubies, sapphires, and emeralds.
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+      portals:
+        - base:
+            meta:
+              id: portal-intro-house
+              name:
+                base: Start
+              desc:
+                base: start the story
+            dest:
+              base: room-woodcutters-house
+            flags: !map {}
+            group:
+              key: 
+                base: start
+              source:
+                base: intro
+              target:
+                base: house
+            link: 
+              base: forward
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-house-bedroom
+              name:
+                base: Bedroom Door
+              desc:
+                base: A wooden door leading to the bedroom. It creaks a lot.
+            dest:
+              base: room-bedroom
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-bedroom-house
+              name:
+                base: Bedroom Door
+              desc:
+                base: A wooden door leading back to the main room of the house. It creaks a lot.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: east
+              target: 
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-house-yard
+              name:
+                base: Front Door
+              desc:
+                base: The cottage's front door.
+            dest:
+              base: room-yard
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-yard-house
+              name:
+                base: Front Door
+              desc:
+                base: The cottage's front door.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-yard-edge
+              name:
+                base: Forest path
+              desc:
+                base: A path to the edge of the forest.
+            dest:
+              base: room-forest-edge
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-edge-yard
+              name:
+                base: Forest path
+              desc:
+                base: A path leading to the woodcutter's yard.
+            dest:
+                base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-edge-forest
+              name:
+                base: Forest path
+              desc:
+                base: A path leading deeper into the forest; it's starting to become overgrown.
+            dest:
+              base: room-forest
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-forest-edge
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest; it seems like it's starting to become more visible.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base: 
+            meta:
+              id: portal-forest-stream
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-stream
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-stream-forest
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base: 
+            meta:
+              id: portal-forest-hill
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-hill
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-hill-forest
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-hill-great
+              name:
+                base: Forest path
+              desc:
+                base: A path leading deeper into the forest; it's getting harder to keep track of where the path is.
+            dest:
+              base: room-great-forest
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-hill
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest; it's starting to thin out, but not much.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-gingerbread
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-gingerbread-house
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-gingerbread-great
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-north
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-great-forest
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-south
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target: 
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+      rooms:
+        - base:
+            meta:
+                id: room-intro
+                name: 
+                  base: Introductory Scene
+                desc:
+                  base: The intro cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-intro-house
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-woodcutters-house
+                name: 
+                  base: The Woodcutter's House
+                desc:
+                  base: A small cottage where Hansel and Gretel live with their father - a Woodcutter - and their mother.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-house-bedroom
+              - id: portal-house-yard
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-bedroom
+              name:
+                base: The Bedroom
+              desc:
+                base: The cottage's bedroom; the whole family sleeps in here. It's pretty cramped.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-bedroom-house
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-yard
+                name: 
+                  base: Yard
+                desc:
+                  base: A yard outside the woodcutter's house. It has a meager garden with a few shriveled carrots.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-yard-house
+              - id: portal-yard-edge
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-forest-edge
+                name: 
+                  base: The forest edge
+                desc:
+                  base: A edge of the forest; the path through the forest is hard to see.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+               - id: portal-edge-yard
+               - id: portal-edge-forest
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-forest
+              name:
+                base: Forest
+              desc:
+                base: A dense forest; it's hard to see the path.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-forest-edge
+              - id: portal-forest-stream
+              - id: portal-forest-hill
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-stream
+              name:
+                base: Stream
+              desc:
+                base: A bubbling forest stream.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-stream-forest
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-hill
+                name: 
+                  base: The Hill
+                desc:
+                  base: It's a hill.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-hill-forest
+              - id: portal-hill-great
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-leaving-scene
+                name: 
+                  base: Cutscene
+                desc:
+                  base: The father leaving cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-great-forest
+                name: 
+                  base: Great Forest
+                desc:
+                  base: The forest; there's no sign of the Woodcutter's house from here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-great-hill
+              - id: portal-great-gingerbread
+              - id: portal-great-north
+              - id: portal-great-south
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-gingerbread-house
+                name: 
+                  base: A Gingerbread House
+                desc:
+                  base: A quaint cottage made of gingerbread, icing, and other confections. It looks good enough to eat.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-gingerbread-great
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-witch-intro
+                name: 
+                  base: Cutscene
+                desc:
+                  base: The witch's intro cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-oven
+                name: 
+                  base: Oven
+                desc:
+                  base: The witch's oven. The bottom is littered with ashes and fragments of bone.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+                id: room-outro
+                name: 
+                  base: Final Scene
+                desc:
+                  base: The outro cutscene will go here.
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}

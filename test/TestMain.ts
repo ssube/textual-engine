@@ -15,6 +15,8 @@ describe('main entry point', () => {
   it('should exit when quit is given as an input', async () => expect(main([
     '--config',
     'data/test.yml',
+    '--data',
+    'file://data/demo.yml',
     '--input',
     META_QUIT,
   ])).to.eventually.equal(0));

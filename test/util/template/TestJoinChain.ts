@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { createStubInstance } from 'sinon';
 
 import { MathRandomService } from '../../../src/service/random/MathRandom';
 import { JoinChain } from '../../../src/util/template/JoinChain';
@@ -41,5 +42,18 @@ describe('string join chain util', () => {
       'a', [['m', 'n']], 'c',
     ];
     expect(chain.render(data)).to.equal('a1m3n1c');
+  });
+
+  it('should handle single strings at any level', async () => {
+    const random = createStubInstance(MathRandomService);
+    random.nextInt.returns(1);
+
+    const chain = new JoinChain({
+      joiners: ['-'],
+      random,
+    });
+
+    const data = ['a', /* and */ ['b', /* or */ ['c', /* and */ ['d', /* or */ 'e']]]];
+    expect(chain.render(data)).to.equal('a-c-e');
   });
 });

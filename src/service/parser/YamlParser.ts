@@ -1,11 +1,11 @@
 import { ValidateFunction } from 'ajv';
-import { DEFAULT_SCHEMA, dump, load, Schema } from 'js-yaml';
+import { dump, load, Schema } from 'js-yaml';
 
 import { Parser } from '.';
 import { DataLoadError } from '../../error/DataLoadError';
 import { DATA_SCHEMA, DataFile } from '../../model/file/Data';
+import { makeParserSchema } from '../../util/parser';
 import { makeSchema } from '../../util/schema';
-import { mapType } from './yaml/MapType';
 
 /**
  * Parser for JSON and YAML text, using js-yaml.
@@ -15,9 +15,7 @@ export class YamlParser implements Parser {
   protected validate: ValidateFunction<DataFile>;
 
   constructor() {
-    this.schema = DEFAULT_SCHEMA.extend([
-      mapType,
-    ]);
+    this.schema = makeParserSchema();
     this.validate = makeSchema(DATA_SCHEMA);
   }
 

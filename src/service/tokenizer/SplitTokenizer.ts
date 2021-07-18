@@ -1,4 +1,4 @@
-import { getOrDefault, mustExist } from '@apextoaster/js-utils';
+import { getOrDefault, isNil, mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { TokenizerService } from '.';
@@ -7,17 +7,12 @@ import { LocaleBundle } from '../../model/file/Locale';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
 import { catchAndLog } from '../../util/async/event';
 import { groupOn } from '../../util/collection/array';
-import {
-  COMMON_VERBS,
-  EVENT_LOCALE_BUNDLE,
-  EVENT_RENDER_INPUT,
-  EVENT_TOKEN_COMMAND,
-  SPLIT_CHAR,
-} from '../../util/constants';
+import { EVENT_LOCALE_BUNDLE, EVENT_RENDER_INPUT, EVENT_TOKEN_COMMAND, SPLIT_CHAR } from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
 import { trim } from '../../util/string';
 import { EventBus } from '../event';
 import { LocaleService } from '../locale';
+import { LocaleBundleEvent } from '../locale/events';
 import { RenderInputEvent } from '../render/events';
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
@@ -43,12 +38,19 @@ export class SplitTokenizer implements TokenizerService {
 
   public async start(): Promise<void> {
     this.event.on(EVENT_LOCALE_BUNDLE, (event) => {
-      catchAndLog(this.translate(event.bundle), this.logger, 'error translating verbs');
+      catchAndLog(this.onLocaleBundle(event), this.logger, 'error translating verbs');
     }, this);
 
     this.event.on(EVENT_RENDER_INPUT, (event) => {
       catchAndLog(this.onRenderInput(event), this.logger, 'error during render output');
     }, this);
+  }
+
+  public async onLocaleBundle(event: LocaleBundleEvent): Promise<void> {
+    this.locale.deleteBundle(event.name);
+    this.locale.addBundle(event.name, event.bundle);
+
+    return this.translate(event.bundle);
   }
 
   public async onRenderInput(event: RenderInputEvent): Promise<void> {
@@ -100,27 +102,38 @@ export class SplitTokenizer implements TokenizerService {
   }
 
   public async translate(bundle: LocaleBundle): Promise<void> {
-    // TODO: old world words should be removed, not config words
+    const current = this.locale.getLocale();
+    const lng = bundle.languages[current];
+
+    if (isNil(lng)) {
+      this.logger.debug({ bundle }, 'bundle does not include current language');
+      return;
+    }
+
+    // TODO: old world words should be removed, but not config words
     /*
     this.articles.clear();
     this.prepositions.clear();
     this.verbs.clear();
     */
 
-    this.logger.debug({ bundle }, 'translating bundle');
-
-    for (const article of bundle.words.articles) {
+    this.logger.debug({ count: lng.articles.length }, 'translating articles');
+    for (const article of lng.articles) {
       this.articles.add(article);
     }
 
-    for (const preposition of bundle.words.prepositions) {
+    this.logger.debug({ count: lng.prepositions.length }, 'translating prepositions');
+    for (const preposition of lng.prepositions) {
       this.prepositions.add(preposition);
     }
 
-    const verbs = [...COMMON_VERBS, ...bundle.words.verbs];
-    for (const verb of verbs) {
+    this.logger.debug({ count: lng.verbs.length }, 'translating verbs');
+    for (const verb of lng.verbs) {
       const translated = this.locale.translate(verb);
+      this.logger.debug({ translated, verb }, 'adding translated verb pair');
       this.verbs.set(translated, verb); // trick i18next into translating them back
     }
+
+    this.logger.debug({ lng }, 'translated bundle for current language');
   }
 }

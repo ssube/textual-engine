@@ -2,8 +2,8 @@ import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { LogLevel } from 'noicejs';
 import { stub } from 'sinon';
-import { ConfigError } from '../../../src/lib';
 
+import { ConfigError } from '../../../src/error/ConfigError';
 import { loadConfig } from '../../../src/util/config/page';
 
 describe('page config', () => {
@@ -11,20 +11,20 @@ describe('page config', () => {
     const doc = {
       getElementById: stub().returns({
         textContent: `
-logger:
-  level: debug
-  name: test
-  streams: []
-locale:
-  bundles: {}
-  current: en
-  verbs: []
-services:
-  actors: []
-  loaders: []
-  renders: []
-  states: []
-  tokenizers: []`,
+config:
+  logger:
+    level: debug
+    name: test
+    streams: []
+  locale:
+    current: en
+    languages: {}
+  services:
+    actors: []
+    loaders: []
+    renders: []
+    states: []
+    tokenizers: []`,
       }),
     } as any;
     const config = await loadConfig('foo', doc);
@@ -49,14 +49,15 @@ services:
     const doc = {
       getElementById: stub().returns({
         textContent: `
-logger: {}
-locale: {}
-services:
-  actors: []
-  loaders: []
-  renders: []
-  states: []
-  tokenizers: []`,
+config:
+  logger: {}
+  locale: {}
+  services:
+    actors: []
+    loaders: []
+    renders: []
+    states: []
+    tokenizers: []`,
       }),
     } as any;
     return expect(loadConfig('foo', doc)).to.eventually.be.rejectedWith(ConfigError);

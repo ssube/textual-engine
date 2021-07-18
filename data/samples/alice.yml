@@ -1,0 +1,832 @@
+worlds:
+  - defaults:
+      actor:
+        meta:
+          id: actor-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        flags: !map {}
+        items: []
+        scripts: !map
+          signal.get:
+            data: !map {}
+            name:
+              base: signal-actor-get
+          signal.hit:
+            data: !map {}
+            name:
+              base: signal-actor-hit
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-actor-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-actor-step
+          verbs.common.drop:
+            data: !map {}
+            name:
+              base: verb-actor-drop
+          verbs.common.equip:
+            data: !map {}
+            name:
+              base: verb-actor-equip
+          verbs.common.hit:
+            data: !map {}
+            name:
+              base: verb-actor-hit
+          verbs.common.look:
+            data: !map {}
+            name:
+              base: verb-actor-look
+          verbs.common.move:
+            data: !map {}
+            name:
+              base: verb-actor-move
+          verbs.common.take:
+            data: !map {}
+            name:
+              base: verb-actor-take
+          verbs.common.use:
+            data: !map {}
+            name:
+              base: verb-actor-use
+          verbs.common.wait:
+            data: !map {}
+            name:
+              base: verb-actor-wait
+          verbs.world.push:
+            data: !map {}
+            name:
+              base: verb-actor-push
+        slots: !map {}
+        stats: !map {}
+      item:
+        meta:
+          id: item-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        flags: !map {}
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-item-look
+        slot:
+          base: ''
+        stats: !map {}
+      portal:
+        meta:
+          id: portal-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        dest:
+          base: room-none
+        flags: !map {}
+        link:
+          base: both
+        group:
+          key:
+            base: ''
+          source:
+            base: ''
+          target:
+            base: ''
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-portal-look
+        stats: !map {}
+      room:
+        meta:
+          id: room-none
+          name:
+            base: ''
+          desc:
+            base: ''
+        actors: []
+        flags: !map {}
+        items: []
+        portals: []
+        scripts: !map
+          signal.look:
+            data: !map {}
+            name:
+              base: signal-room-look
+          signal.step:
+            data: !map {}
+            name:
+              base: signal-room-step
+    locale:
+      languages:
+        en:
+          articles: []
+          prepositions: []
+          verbs:
+            - verbs.world.push
+          strings:
+            actor:
+              signal:
+                get:
+                  item: |-
+                    You have picked up a {{item.meta.name}}: {{item.meta.desc}}.
+                hit:
+                  dead: |-
+                    {{actor.meta.name}} has died!
+                  health: |-
+                    {{actor.meta.name}} took {{damage}} damage and has {{health}} health left.
+                  item: |-
+                    {{attacker.meta.name}} has hit {{actor.meta.name}} with a {{item.meta.name}}!
+                look:
+                  dead: |-
+                    The {{actor.meta.name}} is dead!
+                  health: |-
+                    You have {{health}} health.
+                  item: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}}.
+                  self: |-
+                    You are a {{actor.meta.name}}: {{actor.meta.desc}}.
+                step:
+                  dead: |-
+                    You are dead!
+                  verb:
+                    missing: |-
+                      {{actor.meta.name}} does not know how to $t({{command.verb}})!
+                    player: |-
+                      You will $t({{command.verb}}) the next turn.
+                    target: |-
+                      {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+              verb:
+                drop:
+                  type: |-
+                    {{command.targets}} is not an item!
+                equip:
+                  item: |-
+                    You equip the {{item.meta.name}} in your {{slot}}.
+                  missing: |-
+                    {{command.targets}} is not an item!
+                  slot: |-
+                    You are not able to equip {{item.meta.name}} in {{slot}}!
+                hit:
+                  item: |-
+                    You cannot hit {{target.meta.name}}, you are not holding anything!
+                  self: |-
+                    You cannot hit yourself!
+                  type: |-
+                    {{command.targets}} is not an actor!
+                look:
+                  missing: |-
+                    You see nothing.
+                move:
+                  locked: |-
+                    {{portal.meta.name}} is locked!
+                  missing: |-
+                    {{command.targets}} is not a portal!
+                  portal: |-
+                    {{actor.meta.name}} moved through the {{portal.group.source}} {{portal.meta.name}}.
+                take:
+                  type: |-
+                    {{command.targets}} is not an item!
+                use:
+                  target: |-
+                    You cannot use items on {{command.targets}}!
+                  type: |-
+                    {{command.targets}} is not a usable item!
+            item:
+              signal:
+                look:
+                  held: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    You see a {{item.meta.name}}: {{item.meta.desc}}.
+              verb:
+                use:
+                  self: |-
+                    You have used {{item.meta.name}} on yourself!
+            portal:
+              signal:
+                look:
+                  closed: |-
+                    The {{portal.meta.name}} is closed.
+                  dest:
+                    missing: |-
+                      There is nothing on the other side.
+                    room: |-
+                      You catch a glimpse of a {{room.meta.name}} through the {{portal.meta.name}}.
+                  seen: |-
+                    A {{portal.meta.name}} leads to the {{portal.group.source}}.
+            room:
+              signal:
+                look:
+                  seen: |-
+                    You are in a {{room.meta.name}}: {{room.meta.desc}}.
+            verbs:
+              world:
+                push: push
+    meta:
+      id: sample-alice
+      name:
+        base: Alice in Wonderland
+      desc:
+        base: |-
+          Chapter VIII: The Queen's Croquet Ground from Alice's Adventures in Wonderland by Lewis Carroll
+    start:
+      actors:
+        - id: actor-alice
+      rooms:
+        - id: room-intro
+    templates:
+      actors:
+        - base:
+            meta:
+              id: actor-alice
+              name:
+                base: Alice
+              desc:
+                base: Alice in Wonderland
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 20
+                min: 20
+        - base:
+            meta:
+              id: actor-gardener-seven
+              name:
+                base: Seven of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-gardener-five
+              name:
+                base: Five of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-gardener-two
+              name:
+                base: Two of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-queen
+              name:
+                base: Queen of Hearts
+              desc:
+                base: the queen of hearts
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-cheshire
+              name:
+                base: Cheshire Cat
+              desc:
+                base: the Cheshire Cat
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-rabbit
+              name:
+                base: White Rabbit
+              desc:
+                base: the White Rabbit, (nervously checking his pocket watch|adjusting his vest)
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-hedgehog
+              name:
+                base: Hedgehog
+              desc:
+                base: one of the Queen's croquet hedgehogs
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
+      items:
+        - base:
+            meta:
+              id: item-rose
+              name:
+                base: Rose
+              desc:
+                base: (red|white) rose with sharp thorns
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map
+              damage:
+                max: 1
+                min: 1
+          mods:
+            - chance: 50
+              excludes: []
+              id: painted
+              base:
+                meta:
+                  desc:
+                    base: 'painted {{base}}'
+                  name:
+                    base: 'Painted {{base}}'
+                stats: !map
+                  damage:
+                    max: 2
+                    min: 1
+        - base:
+            meta:
+              id: item-flamingo
+              name:
+                base: Flamingo
+              desc:
+                base: a flamingo mallet
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-paint
+              name:
+                base: Bucket of Paint
+              desc:
+                base: a bucket of (white|red|pink) paint
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-brush
+              name:
+                base: Paint Brush
+              desc:
+                base: a paint brush
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-flower
+              name:
+                base: Garden Flower
+              desc:
+                base: a flower from the garden
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-crown
+              name:
+                base: King's Crown
+              desc:
+                base: the king's crown on a cushion
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-cookie
+              name:
+                base: Frosted Cookies
+              desc:
+                base: fancy frosted cookies
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+      portals:
+        - base:
+            meta:
+              id: portal-intro-garden
+              name:
+                base: 'Gateway'
+              desc:
+                base: 'flowered arch'
+            dest:
+              base: room-garden-entrance
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-entrance-main
+              name:
+                base: 'Garden Path'
+              desc:
+                base: 'flowered path'
+            dest:
+              base: room-garden-main
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-main-repeat
+              name:
+                base: 'Garden Path'
+              desc:
+                base: 'flowered path'
+            dest:
+              base: room-garden-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: west
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-main-branch
+              name:
+                base: 'Garden Path'
+              desc:
+                base: 'flowered path'
+            dest:
+              base: room-garden-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: (north|east|south|west)
+              target:
+                base: (north|east|south|west)
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-main-grounds
+              name:
+                base: 'Path'
+              desc:
+                base: 'path out of the garden'
+            dest:
+              base: room-croquet-main
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-grounds-repeat
+              name:
+                base: 'Path'
+              desc:
+                base: 'path through the grounds'
+            dest:
+              base: room-croquet-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: west
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-grounds-branch
+              name:
+                base: 'Path'
+              desc:
+                base: 'path through the grounds'
+            dest:
+              base: room-croquet-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: (north|east|south|west)
+              target:
+                base: (north|east|south|west)
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-garden-rose
+              name:
+                base: 'Path'
+              desc:
+                base: 'path to the rose grove'
+            dest:
+              base: room-rose-tree
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: west
+              target:
+                base: east
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-rose-pot
+              name:
+                base: 'Flower Pot'
+              desc:
+                base: 'the open top of the flower pot'
+            dest:
+              base: room-flower-pot
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            scripts: !map {}
+            stats: !map {}
+      rooms:
+        - base:
+            meta:
+              id: room-intro
+              name:
+                base: Introduction
+              desc:
+                base: the introduction to the garden
+            actors: []
+            flags: !map {}
+            items:
+              - id: item-rose
+              - id: item-rose
+              - id: item-rose
+                chance: 40
+              - id: item-rose
+                chance: 40
+            portals:
+              - id: portal-intro-garden
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-garden-entrance
+              name:
+                base: Garden Entrance
+              desc:
+                base: a garden with a gateway
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+            - id: portal-entrance-main
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-garden-main
+              name:
+                base: Garden
+              desc:
+                base: a garden with some flowers
+            actors: []
+            flags: !map {}
+            items:
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
+            portals:
+              - id: portal-garden-rose
+              - id: portal-main-repeat
+              - id: portal-main-grounds
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-garden-repeat
+              name:
+                base: Garden
+              desc:
+                base: a garden with some suspiciously familiar flowers
+            actors: []
+            flags: !map {}
+            items:
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
+            portals:
+              - id: portal-main-branch
+                chance: 90
+              - id: portal-main-repeat
+                chance: 80
+              - id: portal-main-branch
+                chance: 50
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-croquet-main
+              name:
+                base: Croquet Ground
+              desc:
+                base: the Queen's croquet ground
+            actors:
+              - id: actor-hedgehog
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-grounds-repeat
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-croquet-repeat
+              name:
+                base: Croquet Ground
+              desc:
+                base: the Queen's croquet ground
+            actors:
+              - id: actor-hedgehog
+                chance: 10
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-grounds-branch
+                chance: 90
+              - id: portal-grounds-repeat
+                chance: 80
+              - id: portal-grounds-branch
+                chance: 50
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-queen-entrance
+              name:
+                base: Queen's Entrance
+              desc:
+                base: the Queen's path to the gardens
+            actors:
+              - id: actor-queen
+              - id: actor-rabbit
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-cat-entrance
+              name:
+                base: Cheshire Cat's Entrance
+              desc:
+                base: the Cheshire Cat's path to the grounds
+            actors:
+              - id: actor-cheshire
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-rose-tree
+              name:
+                base: Rose Tree
+              desc:
+                base: a rose tree in the garden
+            actors:
+              - id: actor-gardener-seven
+              - id: actor-gardener-five
+              - id: actor-gardener-two
+            flags: !map {}
+            items:
+              - id: item-brush
+              - id: item-paint
+            portals:
+              - id: portal-rose-pot
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-flower-pot
+              name:
+                base: Flower Pot
+              desc:
+                base: a large flower pot in the garden
+            actors: []
+            flags: !map {}
+            items: []
+            portals: []
+            scripts: !map {}

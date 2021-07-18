@@ -53,13 +53,13 @@ interface SelectedProps {
   isSelected?: boolean;
 }
 
-export const FocusedIndicator = ({ isSelected = false }: SelectedProps): JSX.Element => (
+export const FocusedIndicator = ({ isSelected }: SelectedProps): JSX.Element => (
   <Box marginRight={1}>
     {isSelected ? <Text color="green">&gt;</Text> : <Text> </Text>}
   </Box>
 );
 
-export const UnfocusedIndicator = ({ isSelected = false }: SelectedProps): JSX.Element => (
+export const UnfocusedIndicator = ({ isSelected }: SelectedProps): JSX.Element => (
   <Box marginRight={1}>
     {isSelected ? <Text color="blue">&gt;</Text> : <Text> </Text>}
   </Box>

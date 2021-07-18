@@ -8,7 +8,7 @@ import { BaseLoader } from '../BaseLoader';
 export class NodeFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;
 
-  constructor(options: InjectedOptions, f = fetch) {
+  constructor(options: InjectedOptions, /* istanbul ignore next */ f = fetch) {
     super(options, ['http', 'https']);
 
     this.fetch = f;

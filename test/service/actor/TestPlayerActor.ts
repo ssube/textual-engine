@@ -15,14 +15,19 @@ import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
   EVENT_ACTOR_OUTPUT,
+  EVENT_ACTOR_QUIT,
   EVENT_ACTOR_ROOM,
   EVENT_STATE_JOIN,
   EVENT_STATE_LOAD,
   EVENT_STATE_OUTPUT,
+  EVENT_STATE_QUIT,
   EVENT_STATE_ROOM,
   EVENT_TOKEN_COMMAND,
+  STAT_HEALTH,
+  STAT_SCORE,
   VERB_WAIT,
 } from '../../../src/util/constants';
+import { zeroStep } from '../../../src/util/entity';
 import { makeTestActor, makeTestRoom } from '../../entity';
 import { getTestContainer } from '../../helper';
 
@@ -50,15 +55,15 @@ describe('player actor', () => {
     const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
     await locale.start();
     locale.addBundle('world', {
-      bundles: {
+      languages: {
         en: {
-          'meta.help': 'foo',
+          articles: [],
+          prepositions: [],
+          strings: {
+            'meta.help': 'foo',
+          },
+          verbs: [],
         },
-      },
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
       },
     });
 
@@ -70,10 +75,7 @@ describe('player actor', () => {
 
     event.emit(EVENT_STATE_OUTPUT, {
       line: 'meta.help',
-      step: {
-        time: 0,
-        turn: 0,
-      },
+      step: zeroStep(),
       volume: ShowVolume.SELF,
     });
 
@@ -231,5 +233,108 @@ describe('player actor', () => {
     expect(actorRoomStub).to.have.callCount(1);
   });
 
-  xit('should test output volume when source is set');
+  it('should test output volume when source is set', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+    await locale.start();
+
+    const player = await container.create(PlayerActorService);
+    await player.start();
+
+    const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    const actorOutputStub = stub();
+    event.on(EVENT_ACTOR_OUTPUT, actorOutputStub);
+
+    const pendingJoin = onceEvent<ActorJoinEvent>(event, EVENT_ACTOR_JOIN);
+    event.emit(EVENT_STATE_LOAD, {
+      state: '',
+      world: '',
+    });
+    const { pid } = await pendingJoin;
+
+    const actor = makeTestActor(pid, '', '');
+    const room = makeTestRoom('', '', '', [actor], []);
+    event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid,
+      room,
+    });
+
+    const line = 'foo';
+    const step = zeroStep();
+
+    // should be filtered out
+    const other = makeTestActor('', '', '');
+    event.emit(EVENT_STATE_OUTPUT, {
+      line,
+      source: {
+        actor: other,
+        room,
+      },
+      step,
+      volume: ShowVolume.SELF,
+    });
+
+    // should be passed on
+    event.emit(EVENT_STATE_OUTPUT, {
+      line,
+      source: {
+        actor,
+        room,
+      },
+      step,
+      volume: ShowVolume.SELF,
+    });
+
+    expect(actorOutputStub).to.have.callCount(1).and.been.calledWith({
+      line,
+      step,
+    });
+  });
+
+  it('should include values from the current actor values for quit stats', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const locale = await container.create<LocaleService, BaseOptions>(INJECT_LOCALE);
+    await locale.start();
+
+    const player = await container.create(PlayerActorService);
+    await player.start();
+
+    const event = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    const pendingJoin = onceEvent<ActorJoinEvent>(event, EVENT_ACTOR_JOIN);
+    event.emit(EVENT_STATE_LOAD, {
+      state: '',
+      world: '',
+    });
+    const { pid } = await pendingJoin;
+
+    const actor = makeTestActor(pid, '', '');
+    actor.stats.set(STAT_HEALTH, 20);
+    actor.stats.set(STAT_SCORE, 10);
+
+    const room = makeTestRoom('', '', '', [actor], []);
+    event.emit(EVENT_STATE_JOIN, {
+      actor,
+      pid,
+      room,
+    });
+
+    const actorQuitStub = stub();
+    event.on(EVENT_ACTOR_QUIT, actorQuitStub);
+
+    event.emit(EVENT_STATE_QUIT, {
+      line: 'foo',
+      stats: [STAT_SCORE],
+    });
+
+    expect(actorQuitStub).to.have.been.calledWith({
+      line: 'foo',
+      stats: [{
+        name: STAT_SCORE,
+        value: 10,
+      }],
+    });
+  });
 });

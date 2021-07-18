@@ -30,24 +30,21 @@ export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): 
   const target = indexEntity(results, command.index, isActor);
 
   if (isNil(target)) {
-    await context.state.show(context.source, 'actor.step.hit.type', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.hit.type', { command });
   }
 
   if (this === target) {
-    await context.state.show(context.source, 'actor.step.hit.self', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.hit.self', { command });
   }
 
   const [slot] = findActorSlots(this, 'weapon');
   const item = findSlotItem(actor, slot);
 
   if (isNil(item)) {
-    await context.state.show(context.source, 'actor.step.hit.item', { target });
-    return;
+    return context.state.show(context.source, 'actor.verb.hit.item', { target });
   }
 
-  await context.script.invoke(target, SIGNAL_HIT, {
+  return context.script.invoke(target, SIGNAL_HIT, {
     ...context,
     actor,
     item,

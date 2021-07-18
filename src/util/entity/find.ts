@@ -1,10 +1,10 @@
 import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
 
 import { EntityForType, WorldEntityType } from '../../model/entity';
-import { Actor, ActorType } from '../../model/entity/Actor';
+import { Actor, ActorType, ReadonlyActor } from '../../model/entity/Actor';
 import { Entity } from '../../model/entity/Base';
-import { Item } from '../../model/entity/Item';
-import { isRoom, Room, RoomType } from '../../model/entity/Room';
+import { ReadonlyItem } from '../../model/entity/Item';
+import { isRoom, ReadonlyRoom, Room, RoomType } from '../../model/entity/Room';
 import { Metadata } from '../../model/Metadata';
 import { WorldState } from '../../model/world/State';
 import { hasText, matchIdSegments } from '../string';
@@ -30,11 +30,11 @@ export interface SearchFilter<TType extends WorldEntityType> {
  * Search state for any matching entities, including actors and their inventories.
  */
 // eslint-disable-next-line complexity,sonarjs/cognitive-complexity
-export function findMatching<TType extends WorldEntityType>(state: WorldState, search: SearchFilter<TType>): Array<EntityForType<TType>> {
+export function findMatching<TType extends WorldEntityType>(rooms: ReadonlyArray<ReadonlyRoom>, search: SearchFilter<TType>): Array<Immutable<EntityForType<TType>>> {
   const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
   const results: Array<EntityForType<TType>> = [];
 
-  for (const room of state.rooms) {
+  for (const room of rooms) {
     if (doesExist(search.room) && matchers.metadata(room, search.room) === false) {
       continue;
     }
@@ -72,7 +72,7 @@ export function findMatching<TType extends WorldEntityType>(state: WorldState, s
     }
   }
 
-  return results;
+  return results as Array<Immutable<EntityForType<TType>>>;
 }
 
 /**
@@ -132,7 +132,7 @@ export function findContainer<TType extends ActorType | RoomType>(state: WorldSt
 /**
  * Find the item equipped in a particular slot.
  */
-export function findSlotItem(actor: Actor, slot: string): Optional<Item> {
+export function findSlotItem(actor: ReadonlyActor, slot: string): Optional<ReadonlyItem> {
   const id = actor.slots.get(slot);
   if (doesExist(id) && hasText(id)) {
     return actor.items.find((it) => it.meta.id === id);
@@ -141,6 +141,6 @@ export function findSlotItem(actor: Actor, slot: string): Optional<Item> {
   }
 }
 
-export function findActorSlots(actor: Actor, filter: string): Array<string> {
+export function findActorSlots(actor: ReadonlyActor, filter: string): Array<string> {
   return Array.from(actor.slots.keys()).filter((it) => matchIdSegments(it, filter));
 }

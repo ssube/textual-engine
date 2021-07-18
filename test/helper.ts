@@ -1,10 +1,13 @@
 import { ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
 import { createStubInstance, stub } from 'sinon';
 
-import { LocalScriptService, MathRandomService, StateEntityTransfer } from '../src/lib';
 import { ConfigFile } from '../src/model/file/Config';
 import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
-import { ScriptContext, StateHelper } from '../src/service/script';
+import { MathRandomService } from '../src/service/random/MathRandom';
+import { CommandHelper, ScriptContext, StateHelper } from '../src/service/script';
+import { LocalScriptService } from '../src/service/script/LocalScript';
+import { zeroStep } from '../src/util/entity';
+import { StateEntityTransfer } from '../src/util/entity/EntityTransfer';
 import { makeTestRoom } from './entity';
 
 export function getTestLogger(): Logger {
@@ -23,13 +26,8 @@ export function getTestConfig(): ConfigFile {
       streams: [],
     },
     locale: {
-      bundles: {},
+      languages: {},
       current: 'en',
-      words: {
-        articles: [],
-        prepositions: [],
-        verbs: [],
-      },
     },
     services: {
       actors: [],
@@ -58,11 +56,23 @@ export async function getTestContainer(...modules: Array<Module>): Promise<Conta
 
 export function getStubHelper(): StateHelper {
   return {
+    create: stub(),
     enter: stub(),
     find: stub(),
     move: stub(),
     quit: stub(),
     show: stub(),
+    update: async (entity, changes) => {
+      Object.assign(entity, changes);
+    },
+  };
+}
+
+export function createStubBehavior(): CommandHelper {
+  return {
+    depth: stub(),
+    queue: stub(),
+    ready: stub(),
   };
 }
 
@@ -75,6 +85,7 @@ export function createTestTransfer(): StateEntityTransfer {
 
 export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptContext {
   return {
+    behavior: createStubBehavior(),
     data: new Map(),
     logger: getTestLogger(),
     random: createStubInstance(MathRandomService),
@@ -83,7 +94,7 @@ export function createTestContext(parts: Partial<ScriptContext> = {}): ScriptCon
       room: makeTestRoom('', '', ''),
     },
     state: getStubHelper(),
-    transfer: createTestTransfer(),
+    step: zeroStep(),
     ...parts,
   };
 }

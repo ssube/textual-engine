@@ -623,6 +623,216 @@ worlds:
               base: both
             scripts: !map {}
             stats: !map {}
+        - base: 
+            meta:
+              id: portal-forest-stream
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-stream
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: west
+              target:
+                base: east
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-stream-forest
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: east
+              target:
+                base: west
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base: 
+            meta:
+              id: portal-forest-hill
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-hill
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-hill-forest
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-hill-great
+              name:
+                base: Forest path
+              desc:
+                base: A path leading deeper into the forest; it's getting harder to keep track of where the path is.
+            dest:
+              base: room-great-forest
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-hill
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest; it's starting to thin out, but not much.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-gingerbread
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-gingerbread-house
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-gingerbread-great
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-north
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-great-forest
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-south
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target: 
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
       rooms:
         - base:
             meta:
@@ -704,6 +914,21 @@ worlds:
             items: []
             portals:
               - id: portal-forest-edge
+              - id: portal-forest-stream
+              - id: portal-forest-hill
+            scripts: !map {}
+        - base:
+            meta:
+              id: room-stream
+              name:
+                base: Stream
+              desc:
+                base: A bubbling forest stream.
+            actors: []
+            flags: !map {}
+            items: []
+            portals:
+              - id: portal-stream-forest
             scripts: !map {}
         - base:
             meta:
@@ -715,7 +940,9 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-hill-forest
+              - id: portal-hill-great
             scripts: !map {}
         - base:
             meta:
@@ -731,7 +958,7 @@ worlds:
             scripts: !map {}
         - base:
             meta:
-                id: room-forest
+                id: room-great-forest
                 name: 
                   base: Great Forest
                 desc:
@@ -739,7 +966,11 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-great-hill
+              - id: portal-great-gingerbread
+              - id: portal-great-north
+              - id: portal-great-south
             scripts: !map {}
         - base:
             meta:
@@ -751,7 +982,8 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-gingerbread-great
             scripts: !map {}
         - base:
             meta:

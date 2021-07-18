@@ -1,12 +1,14 @@
-import { isNil, mustCoalesce, mustExist } from '@apextoaster/js-utils';
+import { countOf, defaultWhen, isNil, mustExist, mustFind } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
 import { isItem } from '../../../model/entity/Item';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { head } from '../../../util/collection/array';
 import { setKey } from '../../../util/collection/map';
 import { findActorSlots } from '../../../util/entity/find';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
+import { hasText, matchIdSegments } from '../../../util/string';
 
 export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {
@@ -32,14 +34,20 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
   }
 
   // use the requested slot or default to the item's preferred slot
-  const slotName = mustCoalesce(targetSlot, item.slot);
-  const [slot] = findActorSlots(this, slotName);
+  const slotName = defaultWhen(hasText(targetSlot), targetSlot, item.slot);
+  context.logger.debug({ item, slotName, targetSlot }, 'testing target slot for item');
 
-  if (this.slots.has(slot)) {
-    const slots = setKey(this.slots, slot, item.meta.id);
-    await context.state.update(this, { slots });
-    await context.state.show(context.source, 'actor.verb.equip.item', { item, slot });
-  } else {
-    await context.state.show(context.source, 'actor.verb.equip.slot', { item, slot });
+  if (matchIdSegments(slotName, item.slot) === false) {
+    return context.state.show(context.source, 'actor.verb.equip.slot.invalid', { item, slot: slotName });
   }
+
+  const validSlots = findActorSlots(this, slotName);
+  if (countOf(validSlots) === 0) {
+    return context.state.show(context.source, 'actor.verb.equip.slot.missing', { item, slot: slotName });
+  }
+
+  const slot = head(validSlots);
+  const slots = setKey(this.slots, slot, item.meta.id);
+  await context.state.update(this, { slots });
+  return context.state.show(context.source, 'actor.verb.equip.item', { item, slot });
 }

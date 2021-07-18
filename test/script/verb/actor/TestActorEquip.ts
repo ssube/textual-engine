@@ -1,4 +1,5 @@
 import { expect } from 'chai';
+import { ConsoleLogger } from 'noicejs';
 import { match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
@@ -62,7 +63,7 @@ describe('actor equip verb', () => {
 
     await VerbActorEquip.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.equip.slot');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.equip.slot.missing');
   });
 
   it('should show a message when the item does not exist', async () => {
@@ -82,6 +83,28 @@ describe('actor equip verb', () => {
     await VerbActorEquip.call(actor, context);
 
     expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.equip.missing');
+  });
+
+  it('should show a message when the target slot does not match the item slot', async () => {
+    const slot = 'hand';
+    const item = makeTestItem('foo', '', '');
+    item.slot = slot;
+
+    const state = getStubHelper();
+    (state.find as SinonStub).resolves([item]);
+
+    const context = createTestContext({
+      command: makeCommand(VERB_EQUIP, 'foo', 'teeth'),
+      room: makeTestRoom('', '', '', [], []),
+      state,
+    });
+
+    const actor = makeTestActor('', '', '', item);
+    actor.slots.set(slot, '');
+
+    await VerbActorEquip.call(actor, context);
+
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.equip.slot.invalid');
   });
 
   xit('should equip items into the target slot');

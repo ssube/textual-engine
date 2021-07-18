@@ -180,6 +180,7 @@ worlds:
                     target: |-
                       {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
               slot:
+                weapon-hand: hand
                 weapon-hand-left: left hand
                 weapon-hand-right: right hand
                 weapon-teeth: mouth
@@ -194,8 +195,11 @@ worlds:
                     You equip the {{item.meta.name}} in your $t(actor.slot.{{slot}}).
                   missing: |-
                     {{command.targets}} is not an item!
-                  slot: |-
-                    You are not able to equip {{item.meta.name}} in $t(actor.slot.{{slot}})!
+                  slot:
+                    invalid: |-
+                      {{item.meta.name}} does not fit in your $t(actor.slot.{{slot}})!
+                    missing: |-
+                      You do not have a $t(actor.slot.{{slot}}) to hold {{item.meta.name}}!
                 hit:
                   item: |-
                     You cannot hit {{target.meta.name}}, you are not holding anything!

@@ -79,7 +79,7 @@ describe('actor hit verb', () => {
     await VerbActorHit.call(actor, context);
 
     expect(script.invoke).to.have.callCount(0);
-    expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.hit.self');
+    expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.verb.hit.self');
   });
 
   it('should show an error if the actor does not have any items', async () => {
@@ -99,6 +99,6 @@ describe('actor hit verb', () => {
     await VerbActorHit.call(makeTestActor('', '', ''), context);
 
     expect(script.invoke).to.have.callCount(0);
-    expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.hit.item');
+    expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.verb.hit.item');
   });
 });

@@ -23,7 +23,6 @@ import { StackMap } from '../../util/collection/StackMap';
 import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
-  EVENT_COMMON_QUIT,
   EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,
@@ -92,7 +91,7 @@ export class LocalStateService implements StateService {
 
   protected commandBuffer: StackMap<ReadonlyActor, Command>;
   protected commandQueue: CompletionSet<ReadonlyActor>;
-  protected loadedWorlds: Array<WorldTemplate>;
+  protected loadedWorlds: Map<string, WorldTemplate>;
 
   protected generator?: StateEntityGenerator;
   protected state?: WorldState;
@@ -109,7 +108,7 @@ export class LocalStateService implements StateService {
 
     this.commandBuffer = new StackMap();
     this.commandQueue = new CompletionSet();
-    this.loadedWorlds = [];
+    this.loadedWorlds = new Map();
   }
 
   public async start(): Promise<void> {
@@ -251,10 +250,10 @@ export class LocalStateService implements StateService {
    */
   public async onWorld(world: WorldTemplate): Promise<void> {
     this.logger.debug({ world: world.meta.id }, 'registering loaded world');
-    this.loadedWorlds.push(world);
+    this.loadedWorlds.set(world.meta.id, world);
 
     this.event.emit(EVENT_STATE_WORLD, {
-      worlds: this.loadedWorlds.map((it) => it.meta),
+      worlds: Array.from(this.loadedWorlds.values()).map((it) => it.meta),
     });
   }
   // #endregion event handlers
@@ -272,11 +271,11 @@ export class LocalStateService implements StateService {
       depth,
       id,
       seed,
-      worlds: this.loadedWorlds.map((it) => it.meta.id),
+      worlds: this.loadedWorlds.keys(),
     }, 'creating new world state');
 
     // find the world, prep the generator
-    const world = mustFind(this.loadedWorlds, (it) => it.meta.id === id);
+    const world = mustExist(this.loadedWorlds.get(id));
 
     // load the world locale
     this.event.emit(EVENT_LOCALE_BUNDLE, {
@@ -317,7 +316,7 @@ export class LocalStateService implements StateService {
   public async doDebug(): Promise<void> {
     if (isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.debug.none',
+        line: 'meta.debug.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -341,7 +340,7 @@ export class LocalStateService implements StateService {
   public async doGraph(event: ActorCommandEvent): Promise<void> {
     if (isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.graph.none',
+        line: 'meta.graph.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -353,10 +352,14 @@ export class LocalStateService implements StateService {
     const data = lines.join('\n');
     const [path] = event.command.targets;
 
+    const doneEvent = onceEvent<LoaderReadEvent>(this.event, EVENT_LOADER_DONE);
+
     this.event.emit(EVENT_LOADER_SAVE, {
       data,
       path,
     });
+
+    await doneEvent;
 
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
@@ -413,7 +416,7 @@ export class LocalStateService implements StateService {
         context: {
           path,
         },
-        line: 'meta.load.none',
+        line: 'meta.load.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -422,7 +425,7 @@ export class LocalStateService implements StateService {
 
     // was a state event
     const { state } = loadEvent;
-    const world = mustFind(this.loadedWorlds, (it) => it.meta.id === state.meta.template);
+    const world = mustExist(this.loadedWorlds.get(state.meta.template));
 
     this.logger.debug({ bundle: world.locale }, 'loading world locale bundle');
     this.event.emit(EVENT_LOCALE_BUNDLE, {
@@ -455,13 +458,13 @@ export class LocalStateService implements StateService {
    * Leave the state step loop.
    */
   public async doQuit(): Promise<void> {
-    return this.stepQuit('quit.meta', {}, [STAT_SCORE]);
+    return this.stepQuit('meta.quit', {}, [STAT_SCORE]);
   }
 
   public async doSave(event: ActorCommandEvent): Promise<void> {
     if (isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.save.none',
+        line: 'meta.save.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -469,7 +472,7 @@ export class LocalStateService implements StateService {
     }
 
     const state = this.state;
-    const world = mustFind(this.loadedWorlds, (it) => it.meta.id === state.meta.template);
+    const world = mustExist(this.loadedWorlds.get(state.meta.template));
 
     const data: DataFile = {
       state,
@@ -506,7 +509,7 @@ export class LocalStateService implements StateService {
     // if there is no world state, there won't be an actor, but this error is more informative
     if (isNil(actor) || isNil(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
-        line: 'meta.step.none',
+        line: 'meta.step.missing',
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
@@ -536,7 +539,7 @@ export class LocalStateService implements StateService {
   }
 
   public async doWorlds(): Promise<void> {
-    for (const world of this.loadedWorlds) {
+    for (const [_key, world] of this.loadedWorlds) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
           id: world.meta.id,

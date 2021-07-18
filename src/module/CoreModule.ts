@@ -25,6 +25,7 @@ import { Parser } from '../service/parser';
 import { YamlParser } from '../service/parser/YamlParser';
 import { RandomService } from '../service/random';
 import { AleaRandomService } from '../service/random/AleaRandom';
+import { ScriptRender } from '../service/render/ScriptRender';
 import { ScriptService } from '../service/script';
 import { LocalScriptService } from '../service/script/LocalScript';
 import { LocalStateService } from '../service/state/LocalState';
@@ -66,6 +67,8 @@ export class CoreModule extends Module {
     this.bind('core-player-actor').toConstructor(PlayerActorService);
 
     this.bind('core-local-state').toConstructor(LocalStateService);
+
+    this.bind('core-script-render').toConstructor(ScriptRender);
 
     this.bind('core-compromise-tokenizer').toConstructor(CompromiseTokenizer);
     this.bind('core-split-tokenizer').toConstructor(SplitTokenizer);

@@ -12,7 +12,7 @@ export async function SignalItemReplace(this: ScriptTarget, context: ScriptConte
 
   const replaceStr = this.flags.get('replace');
   if (isNil(replaceStr)) {
-    return context.state.show(context.source, 'item.replace.none', { item: this });
+    return context.state.show(context.source, 'item.replace.missing', { item: this });
   }
 
   // TODO: use join helper and respect normal ordering of and/or groups

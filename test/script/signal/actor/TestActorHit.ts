@@ -61,8 +61,8 @@ describe('actor hit signal', () => {
     await SignalActorHit.call(actor, context);
 
     const showStub = stateHelper.show as SinonStub;
-    expect(showStub.getCall(0)).to.have.been.calledWithMatch(match.object, 'actor.hit.hit');
-    expect(showStub.getCall(1)).to.have.been.calledWithMatch(match.object, 'actor.hit.health');
+    expect(showStub.getCall(0)).to.have.been.calledWithMatch(match.object, 'actor.signal.hit.item');
+    expect(showStub.getCall(1)).to.have.been.calledWithMatch(match.object, 'actor.signal.hit.health');
   });
 
   it('should note when the target dies', async () => {
@@ -81,7 +81,7 @@ describe('actor hit signal', () => {
     await SignalActorHit.call(actor, context);
 
     const showStub = stateHelper.show as SinonStub;
-    expect(showStub.getCall(0)).to.have.been.calledWithMatch(match.object, 'actor.hit.hit');
-    expect(showStub.getCall(1)).to.have.been.calledWithMatch(match.object, 'actor.hit.dead');
+    expect(showStub.getCall(0)).to.have.been.calledWithMatch(match.object, 'actor.signal.hit.item');
+    expect(showStub.getCall(1)).to.have.been.calledWithMatch(match.object, 'actor.signal.hit.dead');
   });
 });

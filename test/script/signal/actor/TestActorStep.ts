@@ -121,7 +121,7 @@ describe('actor step signal', () => {
     });
     await SignalActorStep.call(player, context);
 
-    expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWithMatch(match.object, 'actor.step.command.player.verb');
+    expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWithMatch(match.object, 'actor.signal.step.verb.player');
   });
 
   it('should show the targets to player actors', async () => {
@@ -145,7 +145,7 @@ describe('actor step signal', () => {
     });
     await SignalActorStep.call(player, context);
 
-    expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWithMatch(match.object, 'actor.step.command.player.target');
+    expect(stateHelper.show).to.have.callCount(1).and.have.been.calledWithMatch(match.object, 'actor.signal.step.verb.target');
   });
 
   it('should not invoke any scripts without a command', async () => {
@@ -199,6 +199,6 @@ describe('actor step signal', () => {
     await SignalActorStep.call(player, context);
 
     expect(script.invoke).to.have.callCount(0);
-    expect(state.show).to.have.callCount(1).and.have.been.calledWithMatch(match.object, 'actor.step.command.unknown');
+    expect(state.show).to.have.callCount(1).and.have.been.calledWithMatch(match.object, 'actor.signal.step.verb.missing');
   });
 });

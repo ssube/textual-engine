@@ -1,12 +1,13 @@
 import { expect } from 'chai';
-import { match } from 'sinon';
+import { stub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
+import { CoreModule, LocalScriptService } from '../../../../src/lib';
 import { makeCommand } from '../../../../src/model/Command';
 import { SignalActorLook } from '../../../../src/script/signal/actor/ActorLook';
-import { STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants';
+import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { createTestContext, getStubHelper, getTestContainer } from '../../../helper';
 
 describe('actor look signal', () => {
   it('should require the script target be an actor', async () => {
@@ -39,20 +40,55 @@ describe('actor look signal', () => {
     actor.stats.set(STAT_HEALTH, 1);
     await SignalActorLook.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.actor.seen');
+    expect(state.show).to.have.been.calledWith(context.source, 'actor.signal.look.seen');
   });
 
   it('should note if the actor is dead', async () => {
     const state = getStubHelper();
 
+    const actor = makeTestActor('', '', '');
     const context = createTestContext({
+      actor,
       command: makeCommand(VERB_LOOK),
       room: makeTestRoom('', '', '', [], []),
       state,
     });
 
-    await SignalActorLook.call(makeTestActor('', '', ''), context);
+    await SignalActorLook.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.actor.seen');
+    expect(state.show).to.have.callCount(2);
+    expect(state.show).to.have.been.calledWith(context.source, 'actor.signal.look.self');
+    expect(state.show).to.have.been.calledWith(context.source, 'actor.signal.look.dead');
+  });
+
+  it('should describe inventory items', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const items = [
+      makeTestItem('foo-1', 'foo bob', ''),
+      makeTestItem('foo-2', 'foo bin', ''),
+      makeTestItem('bar-1', 'bar bin', ''),
+    ];
+
+    const actor = makeTestActor('', '', '', ...items);
+    actor.stats.set(STAT_HEALTH, 1);
+
+    const script = await container.create(LocalScriptService);
+    const invokeStub = stub(script, 'invoke');
+
+    const state = getStubHelper();
+    const context = createTestContext({
+      actor,
+      command: makeCommand(VERB_LOOK),
+      room: makeTestRoom('', '', '', [], []),
+      script,
+      state,
+    });
+
+    await SignalActorLook.call(actor, context);
+
+    for (const item of items) {
+      expect(invokeStub, item.meta.id).to.have.been.calledWith(item, SIGNAL_LOOK, context);
+    }
   });
 });

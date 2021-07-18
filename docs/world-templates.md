@@ -498,19 +498,19 @@ languages:
       meta:
         create: 'created new world {{state.name}} ({{state.id}}) from {{world}} with seed of {{seed}} and room depth of {{depth}}'
         debug:
-          none: 'no world state to debug'
+          missing: 'no world state to debug'
         graph:
-          none: 'no world state to graph'
+          missing: 'no world state to graph'
         help: 'available verbs: {{verbs}}'
         load:
-          none: 'no world states loaded from {{-path}}'
+          missing: 'no world states loaded from {{-path}}'
           state: 'loaded world state {{meta.id}} from {{-path}}'
         quit: 'quitting'
         save:
-          none: 'no world state to save'
+          missing: 'no world state to save'
           state: 'saved world state {{meta.id}} from {{-path}}'
         step:
-          none: 'please create a world before using any verbs'
+          missing: 'please create a world before using any verbs'
         world: '{{name}} ({{id}})'
 ```
 

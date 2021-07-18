@@ -6,7 +6,6 @@ import { createStubInstance, match, spy, stub } from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
-import { ConfigError } from '../../../src/lib';
 import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
 import { Actor, ACTOR_TYPE, ActorSource } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
@@ -422,7 +421,7 @@ describe('local state service', () => {
       });
       const output = await pending;
 
-      expect(output.line).to.equal('meta.debug.none');
+      expect(output.line).to.equal('meta.debug.missing');
     });
   });
 
@@ -442,14 +441,22 @@ describe('local state service', () => {
         command,
       });
 
-      const pending = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
-      await localState.onCommand({
-        command: makeCommand(META_GRAPH, 'test://url'),
+      const path = 'test://url';
+      const pendingSave = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
+      const pendingCommand = localState.onCommand({
+        command: makeCommand(META_GRAPH, path),
       });
 
-      const output = await pending;
+      events.emit(EVENT_LOADER_DONE, {
+        path,
+      });
+
+      await pendingCommand;
+
+      const output = await pendingSave;
+
       expect(output.data).to.include('strict digraph');
-      expect(output.path).to.equal('test://url');
+      expect(output.path).to.equal(path);
     });
 
     it('should print an error without state', async () => {
@@ -464,7 +471,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.graph.none');
+      expect(output.line).to.equal('meta.graph.missing');
     });
   });
 
@@ -585,7 +592,7 @@ describe('local state service', () => {
       });
 
       const output = await pendingOutput;
-      expect(output.line).to.equal('meta.load.none');
+      expect(output.line).to.equal('meta.load.missing');
       expect(loadStub).to.have.callCount(0);
     });
   });
@@ -665,7 +672,7 @@ describe('local state service', () => {
       });
 
       await expect(pendingOutput).to.eventually.deep.include({
-        line: 'meta.save.none',
+        line: 'meta.save.missing',
       });
     });
   });
@@ -716,7 +723,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.step.none');
+      expect(output.line).to.equal('meta.step.missing');
     });
 
     it('should error without state', async () => {
@@ -734,7 +741,7 @@ describe('local state service', () => {
       });
 
       const output = await pending;
-      expect(output.line).to.equal('meta.step.none');
+      expect(output.line).to.equal('meta.step.missing');
     });
 
     xit('should step after all actors have submitted a command');
@@ -899,7 +906,6 @@ describe('local state service', () => {
             await state.stepEnter({ room, actor });
           }
 
-          console.log('test command for', actor.meta);
           await state.onCommand({
             actor,
             command: makeCommand(VERB_WAIT),
@@ -936,7 +942,6 @@ describe('local state service', () => {
         world: TEST_WORLD,
       });
 
-      // TODO: create duplicate IDs
       await state.doCreate({
         command: makeCommand(META_CREATE, 'foo', '4'),
       });

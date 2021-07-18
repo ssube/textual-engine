@@ -5,6 +5,7 @@ import { ACTOR_TYPE, isActor } from '../../../model/entity/Actor';
 import { isPortal, PORTAL_TYPE } from '../../../model/entity/Portal';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { getPortalStats } from '../../../util/entity';
 import { createFuzzyMatcher } from '../../../util/entity/match';
 
 export async function VerbActorPush(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -24,7 +25,7 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
   });
 
   if (!isActor(actor)) {
-    return context.state.show(context.source, 'actor.push.target', { command });
+    return context.state.show(context.source, 'actor.verb.push.target', { command });
   }
 
   const [portal] = await context.state.find({
@@ -36,10 +37,17 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
   });
 
   if (!isPortal(portal)) {
-    return context.state.show(context.source, 'actor.push.portal', { actor, command });
+    return context.state.show(context.source, 'actor.verb.push.portal', { actor, command });
   }
 
-  // TODO: check whether the portal is closed or locked
+  const { closed, locked } = getPortalStats(portal);
+  if (closed) {
+    return context.state.show(context.source, 'actor.verb.push.closed', { actor, command, portal });
+  }
+
+  if (locked) {
+    return context.state.show(context.source, 'actor.verb.push.locked', { actor, command, portal });
+  }
 
   const [target] = await context.state.find({
     meta: {
@@ -49,7 +57,7 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
   });
 
   if (!isRoom(target)) {
-    return context.state.show(context.source, 'actor.push.dest', { actor, command, portal });
+    return context.state.show(context.source, 'actor.verb.push.dest.missing', { actor, command, portal });
   }
 
   const source = mustExist(context.room);
@@ -60,5 +68,5 @@ export async function VerbActorPush(this: ScriptTarget, context: ScriptContext):
     target,
   }, context);
 
-  return context.state.show(context.source, 'actor.push.dest', { actor, command, portal, room: target });
+  return context.state.show(context.source, 'actor.verb.push.dest.room', { actor, command, portal, room: target });
 }

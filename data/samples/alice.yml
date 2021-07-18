@@ -130,34 +130,50 @@ worlds:
         en:
           articles: []
           prepositions: []
+          verbs:
+            - verbs.world.push
           strings:
             actor:
-              get:
-                player: |-
-                  You have picked up a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-              hit:
-                dead: '{{actor.meta.name}} has died!'
-                health: '{{actor.meta.name}} took {{damage}} damage and has {{health}} health left.'
-                hit: |-
-                  {{attacker.meta.name}} ({{attacker.meta.id}}) has hit {{actor.meta.name}} ({{actor.meta.id}}) with a {{item.meta.name}}!
-              step:
-                command:
+              signal:
+                get:
+                  item: |-
+                    You have picked up a {{item.meta.name}}: {{item.meta.desc}}.
+                hit:
+                  dead: |-
+                    {{actor.meta.name}} has died!
+                  health: |-
+                    {{actor.meta.name}} took {{damage}} damage and has {{health}} health left.
+                  item: |-
+                    {{attacker.meta.name}} has hit {{actor.meta.name}} with a {{item.meta.name}}!
+                look:
+                  dead: |-
+                    The {{actor.meta.name}} is dead!
+                  health: |-
+                    You have {{health}} health.
+                  item: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    A {{actor.meta.name}} is in the room: {{actor.meta.desc}}.
+                  self: |-
+                    You are a {{actor.meta.name}}: {{actor.meta.desc}}.
+                step:
                   dead: |-
                     You are dead!
-                  player:
-                    verb: |-
-                      {{actor.meta.name}} will $t({{command.verb}}) the next turn.
+                  verb:
+                    missing: |-
+                      {{actor.meta.name}} does not know how to $t({{command.verb}})!
+                    player: |-
+                      You will $t({{command.verb}}) the next turn.
                     target: |-
                       {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
-                  unknown: |-
-                    {{actor.meta.name}} does not know how to $t({{command.verb}})!
+              verb:
                 drop:
                   type: |-
                     {{command.targets}} is not an item!
                 equip:
                   item: |-
                     You equip the {{item.meta.name}} in your {{slot}}.
-                  none: |-
+                  missing: |-
                     {{command.targets}} is not an item!
                   slot: |-
                     You are not able to equip {{item.meta.name}} in {{slot}}!
@@ -169,30 +185,11 @@ worlds:
                   type: |-
                     {{command.targets}} is not an actor!
                 look:
-                  none: |-
+                  missing: |-
                     You see nothing.
-                  room:
-                    you: |-
-                      You are a {{actor.meta.name}}: {{actor.meta.desc}} ({{actor.meta.id}}).
-                    health: |-
-                      You have {{health}} health.
-                    seen: |-
-                      You are in a {{room.meta.name}}: {{room.meta.desc}} ({{room.meta.id}}).
-                    inventory: |-
-                      You are holding a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
-                    portal: |-
-                      A {{portal.meta.name}} leads to the {{portal.group.source}} ({{portal.meta.id}}).
-                    dest: |-
-                      You catch a glimpse of a {{room.meta.name}} ({{portal.dest}}) through the {{portal.meta.name}}.
-                  actor:
-                    seen: |-
-                      A {{actor.meta.name}} is in the room: {{actor.meta.desc}} ({{actor.meta.id}}).
-                    dead: |-
-                      The {{actor.meta.name}} is dead!
-                  item:
-                    seen: |-
-                      You see a {{item.meta.name}}: {{item.meta.desc}} ({{item.meta.id}}).
                 move:
+                  locked: |-
+                    {{portal.meta.name}} is locked!
                   missing: |-
                     {{command.targets}} is not a portal!
                   portal: |-
@@ -201,17 +198,41 @@ worlds:
                   type: |-
                     {{command.targets}} is not an item!
                 use:
+                  target: |-
+                    You cannot use items on {{command.targets}}!
                   type: |-
                     {{command.targets}} is not a usable item!
             item:
-              use:
-                any: |-
-                  {{item.meta.name}} has been used by {{actor.meta.name}}!
+              signal:
+                look:
+                  held: |-
+                    You are holding a {{item.meta.name}}: {{item.meta.desc}}.
+                  seen: |-
+                    You see a {{item.meta.name}}: {{item.meta.desc}}.
+              verb:
+                use:
+                  self: |-
+                    You have used {{item.meta.name}} on yourself!
+            portal:
+              signal:
+                look:
+                  closed: |-
+                    The {{portal.meta.name}} is closed.
+                  dest:
+                    missing: |-
+                      There is nothing on the other side.
+                    room: |-
+                      You catch a glimpse of a {{room.meta.name}} through the {{portal.meta.name}}.
+                  seen: |-
+                    A {{portal.meta.name}} leads to the {{portal.group.source}}.
+            room:
+              signal:
+                look:
+                  seen: |-
+                    You are in a {{room.meta.name}}: {{room.meta.desc}}.
             verbs:
               world:
                 push: push
-          verbs:
-            - verbs.world.push
     meta:
       id: sample-alice
       name:
@@ -245,7 +266,127 @@ worlds:
               health:
                 max: 20
                 min: 20
-          mods: []
+        - base:
+            meta:
+              id: actor-gardener-seven
+              name:
+                base: Seven of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-gardener-five
+              name:
+                base: Five of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-gardener-two
+              name:
+                base: Two of Spades
+              desc:
+                base: a gardener
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-queen
+              name:
+                base: Queen of Hearts
+              desc:
+                base: the queen of hearts
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map
+              weapon-hand-left:
+                base: ''
+              weapon-hand-right:
+                base: ''
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-cheshire
+              name:
+                base: Cheshire Cat
+              desc:
+                base: the Cheshire Cat
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-rabbit
+              name:
+                base: White Rabbit
+              desc:
+                base: the White Rabbit, (nervously checking his pocket watch|adjusting his vest)
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
+        - base:
+            meta:
+              id: actor-hedgehog
+              name:
+                base: Hedgehog
+              desc:
+                base: one of the Queen's croquet hedgehogs
+            flags: !map {}
+            items: []
+            scripts: !map {}
+            slots: !map {}
+            stats: !map
+              health:
+                max: 10
+                min: 10
       items:
         - base:
             meta:
@@ -276,6 +417,78 @@ worlds:
                   damage:
                     max: 2
                     min: 1
+        - base:
+            meta:
+              id: item-flamingo
+              name:
+                base: Flamingo
+              desc:
+                base: a flamingo mallet
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-paint
+              name:
+                base: Bucket of Paint
+              desc:
+                base: a bucket of (white|red|pink) paint
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-brush
+              name:
+                base: Paint Brush
+              desc:
+                base: a paint brush
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: weapon-hand
+            stats: !map {}
+        - base:
+            meta:
+              id: item-flower
+              name:
+                base: Garden Flower
+              desc:
+                base: a flower from the garden
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-crown
+              name:
+                base: King's Crown
+              desc:
+                base: the king's crown on a cushion
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
+        - base:
+            meta:
+              id: item-cookie
+              name:
+                base: Frosted Cookies
+              desc:
+                base: fancy frosted cookies
+            flags: !map {}
+            scripts: !map {}
+            slot:
+              base: ''
+            stats: !map {}
       portals:
         - base:
             meta:
@@ -336,6 +549,25 @@ worlds:
             stats: !map {}
         - base:
             meta:
+              id: portal-main-branch
+              name:
+                base: 'Garden Path'
+              desc:
+                base: 'flowered path'
+            dest:
+              base: room-garden-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: (north|east|south|west)
+              target:
+                base: (north|east|south|west)
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
               id: portal-main-grounds
               name:
                 base: 'Path'
@@ -370,6 +602,25 @@ worlds:
                 base: east
               target:
                 base: west
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-grounds-branch
+              name:
+                base: 'Path'
+              desc:
+                base: 'path through the grounds'
+            dest:
+              base: room-croquet-repeat
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: (north|east|south|west)
+              target:
+                base: (north|east|south|west)
             scripts: !map {}
             stats: !map {}
         - base:
@@ -410,7 +661,6 @@ worlds:
                 base: north
             scripts: !map {}
             stats: !map {}
-
       rooms:
         - base:
             meta:
@@ -453,7 +703,13 @@ worlds:
                 base: a garden with some flowers
             actors: []
             flags: !map {}
-            items: []
+            items:
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
             portals:
               - id: portal-garden-rose
               - id: portal-main-repeat
@@ -468,10 +724,20 @@ worlds:
                 base: a garden with some suspiciously familiar flowers
             actors: []
             flags: !map {}
-            items: []
+            items:
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
+              - id: item-flower
+                chance: 50
             portals:
+              - id: portal-main-branch
+                chance: 90
               - id: portal-main-repeat
                 chance: 80
+              - id: portal-main-branch
+                chance: 50
             scripts: !map {}
         - base:
             meta:
@@ -480,7 +746,8 @@ worlds:
                 base: Croquet Ground
               desc:
                 base: the Queen's croquet ground
-            actors: []
+            actors:
+              - id: actor-hedgehog
             flags: !map {}
             items: []
             portals:
@@ -493,12 +760,18 @@ worlds:
                 base: Croquet Ground
               desc:
                 base: the Queen's croquet ground
-            actors: []
+            actors:
+              - id: actor-hedgehog
+                chance: 10
             flags: !map {}
             items: []
             portals:
+              - id: portal-grounds-branch
+                chance: 90
               - id: portal-grounds-repeat
                 chance: 80
+              - id: portal-grounds-branch
+                chance: 50
             scripts: !map {}
         - base:
             meta:
@@ -507,7 +780,9 @@ worlds:
                 base: Queen's Entrance
               desc:
                 base: the Queen's path to the gardens
-            actors: []
+            actors:
+              - id: actor-queen
+              - id: actor-rabbit
             flags: !map {}
             items: []
             portals: []
@@ -519,7 +794,8 @@ worlds:
                 base: Cheshire Cat's Entrance
               desc:
                 base: the Cheshire Cat's path to the grounds
-            actors: []
+            actors:
+              - id: actor-cheshire
             flags: !map {}
             items: []
             portals: []
@@ -531,9 +807,14 @@ worlds:
                 base: Rose Tree
               desc:
                 base: a rose tree in the garden
-            actors: []
+            actors:
+              - id: actor-gardener-seven
+              - id: actor-gardener-five
+              - id: actor-gardener-two
             flags: !map {}
-            items: []
+            items:
+              - id: item-brush
+              - id: item-paint
             portals:
               - id: portal-rose-pot
             scripts: !map {}

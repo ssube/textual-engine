@@ -5,7 +5,7 @@ import { isActor } from '../../../model/entity/Actor';
 import { isPortal, PORTAL_TYPE } from '../../../model/entity/Portal';
 import { ScriptContext, ScriptTarget } from '../../../service/script';
 import { getKey, setKey } from '../../../util/collection/map';
-import { STAT_CLOSED } from '../../../util/constants';
+import { SIGNAL_LOOK, STAT_CLOSED } from '../../../util/constants';
 import { createFuzzyMatcher } from '../../../util/entity/match';
 
 export async function VerbActorOpen(this: ScriptTarget, context: ScriptContext): Promise<void> {
@@ -24,18 +24,17 @@ export async function VerbActorOpen(this: ScriptTarget, context: ScriptContext):
   });
 
   if (!isPortal(portal)) {
-    await context.state.show(context.source, 'actor.open.missing', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.open.missing', { command });
   }
 
   const closed = getKey(portal.stats, STAT_CLOSED, 0);
   if (closed === 0) {
-    await context.state.show(context.source, 'actor.open.already', { portal });
-    return;
+    return context.state.show(context.source, 'actor.verb.open.already', { portal });
   }
 
   const stats = setKey(portal.stats, STAT_CLOSED, 0);
   await context.state.update(portal, { stats });
 
-  await context.state.show(context.source, 'actor.open.opened', { portal });
+  await context.state.show(context.source, 'actor.verb.open.portal', { portal });
+  return context.script.invoke(portal, SIGNAL_LOOK, context);
 }

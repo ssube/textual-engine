@@ -29,14 +29,12 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
   const item = indexEntity(itemResults, command.index, isItem);
 
   if (!isItem(item)) {
-    await context.state.show(context.source, 'actor.step.use.type', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.use.type', { command });
   }
 
   const target = await getUseTarget(this, context);
   if (isNil(target)) {
-    await context.state.show(context.source, 'actor.step.use.target', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.use.target', { command });
   }
 
   await context.script.invoke(target, SIGNAL_USE, {

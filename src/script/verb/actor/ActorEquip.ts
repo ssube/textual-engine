@@ -28,8 +28,7 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
 
   const item = indexEntity(results, command.index, isItem);
   if (isNil(item)) {
-    await context.state.show(context.source, 'actor.step.equip.none', { command });
-    return;
+    return context.state.show(context.source, 'actor.verb.equip.missing', { command });
   }
 
   // use the requested slot or default to the item's preferred slot
@@ -39,8 +38,8 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
   if (this.slots.has(slot)) {
     const slots = setKey(this.slots, slot, item.meta.id);
     await context.state.update(this, { slots });
-    await context.state.show(context.source, 'actor.step.equip.item', { item, slot });
+    await context.state.show(context.source, 'actor.verb.equip.item', { item, slot });
   } else {
-    await context.state.show(context.source, 'actor.step.equip.slot', { item, slot });
+    await context.state.show(context.source, 'actor.verb.equip.slot', { item, slot });
   }
 }

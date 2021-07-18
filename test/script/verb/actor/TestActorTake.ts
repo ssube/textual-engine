@@ -33,7 +33,7 @@ describe('actor take verb', () => {
 
     await VerbActorTake.call(makeTestActor('', '', ''), context);
 
-    expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.take.type');
+    expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.verb.take.type');
   });
 
   it('should transfer items from the target room', async () => {
@@ -85,6 +85,6 @@ describe('actor take verb', () => {
       state,
     }));
 
-    expect(showStub, 'from other actor inventory').to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.take.type');
+    expect(showStub, 'from other actor inventory').to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.verb.take.type');
   });
 });

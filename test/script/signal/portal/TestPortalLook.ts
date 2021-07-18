@@ -30,7 +30,7 @@ describe('portal look scripts', () => {
 
     await SignalPortalLook.call(makeTestPortal('', '', '', '', ''), context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.portal');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'portal.signal.look.seen');
   });
 
   it('should describe the portal destination room for open portals', async () => {
@@ -48,7 +48,7 @@ describe('portal look scripts', () => {
 
     await SignalPortalLook.call(portal, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.portal');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'portal.signal.look.dest.room');
   });
 
   it('should show a message for closed portals', async () => {
@@ -68,6 +68,6 @@ describe('portal look scripts', () => {
 
     await SignalPortalLook.call(portal, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.look.room.closed');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'portal.signal.look.closed');
   });
 });

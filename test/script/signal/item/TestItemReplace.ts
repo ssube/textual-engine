@@ -51,6 +51,6 @@ describe('item replace signal', () => {
     const item = makeTestItem('', '', '');
     await SignalItemReplace.call(item, context);
 
-    expect(state.show).to.have.been.calledWith(context.source, 'item.replace.none');
+    expect(state.show).to.have.been.calledWith(context.source, 'item.replace.missing');
   });
 });

@@ -33,7 +33,7 @@ describe('actor use verb', () => {
 
     await VerbActorUse.call(makeTestActor('', '', ''), context);
 
-    expect(stateHelper.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.use.type');
+    expect(stateHelper.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.verb.use.type');
   });
 
   it('should invoke the use signal on the item', async () => {
@@ -96,6 +96,6 @@ describe('actor use verb', () => {
     const actor = makeTestActor('', '', '');
     await VerbActorUse.call(actor, context);
 
-    expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.step.use.target');
+    expect(state.show).to.have.callCount(1).and.been.calledWithMatch(match.object, 'actor.verb.use.target');
   });
 });

@@ -37,7 +37,7 @@ describe('actor get signal', () => {
     });
     await SignalActorGet.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.get.player');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.signal.get.item');
   });
 
   it('should only show the item to player actors', async () => {

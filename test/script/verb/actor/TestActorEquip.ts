@@ -39,7 +39,7 @@ describe('actor equip verb', () => {
     await VerbActorEquip.call(actor, context);
 
     expect(actor.slots.get(slot)).to.equal(item.meta.id);
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.equip.item');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.equip.item');
   });
 
   it('should show a message when the slot does not exist', async () => {
@@ -62,7 +62,7 @@ describe('actor equip verb', () => {
 
     await VerbActorEquip.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.equip.slot');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.equip.slot');
   });
 
   it('should show a message when the item does not exist', async () => {
@@ -81,7 +81,7 @@ describe('actor equip verb', () => {
 
     await VerbActorEquip.call(actor, context);
 
-    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.step.equip.none');
+    expect(state.show).to.have.been.calledWithMatch(match.object, 'actor.verb.equip.missing');
   });
 
   xit('should equip items into the target slot');

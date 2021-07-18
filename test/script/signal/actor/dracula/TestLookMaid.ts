@@ -41,7 +41,7 @@ describe('actor look signal for maid characters', () => {
 
     maid.stats.set('awaken', 20);
     await SignalActorLookMaid.call(maid, context);
-    expect(showStub).to.have.been.calledWith(context.source, 'actor.step.look.actor.asleep');
+    expect(showStub).to.have.been.calledWith(context.source, 'actor.signal.look.asleep');
     showStub.resetHistory();
 
     maid.stats.set('awaken', 0);
@@ -52,7 +52,7 @@ describe('actor look signal for maid characters', () => {
         turn: 10,
       },
     });
-    expect(showStub).to.have.been.calledWith(context.source, 'actor.step.look.actor.awake');
+    expect(showStub).to.have.been.calledWith(context.source, 'actor.signal.look.awake');
     showStub.resetHistory();
   });
 });

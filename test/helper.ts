@@ -71,6 +71,7 @@ export function getStubHelper(): StateHelper {
 export function createStubBehavior(): CommandHelper {
   return {
     depth: stub(),
+    output: stub(),
     queue: stub(),
     ready: stub(),
   };

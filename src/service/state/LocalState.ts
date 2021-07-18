@@ -565,10 +565,11 @@ export class LocalStateService implements StateService {
     const scope: StateScope = {
       behavior: {
         depth: async (actor) => this.commandBuffer.depth(actor),
+        output: /* istanbul ignore next */ () => Promise.resolve<Array<string>>([]),
         queue: async (actor, command) => {
           this.commandBuffer.push(actor, command);
         },
-        ready: async (actor) => this.commandBuffer.depth(actor) > 0,
+        ready: async (actor) => (this.commandBuffer.depth(actor) > 0),
       },
       data: new Map(),
       random: this.random,

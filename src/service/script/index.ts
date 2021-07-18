@@ -20,6 +20,7 @@ export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Pro
 
 export interface CommandHelper {
   depth(actor: ReadonlyActor): Promise<number>;
+  output(target: StateSource): Promise<Array<string>>;
   queue(actor: ReadonlyActor, command: Command): Promise<void>; // TODO: add append/prepend/replace flag
   ready(actor: ReadonlyActor): Promise<boolean>;
 }

@@ -34,10 +34,11 @@ import { SearchFilter } from '../../util/entity/find';
 import { getSignalScripts, getVerbScripts } from '../../util/script';
 import { makeServiceLogger } from '../../util/service';
 
+export type ScriptPairs = Array<[string, ScriptFunction]>;
 /**
  * Common scripts, built into the engine and always available.
  */
-const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
+const COMMON_SCRIPTS: ScriptPairs = [
   // behavior scripts
   ['signal-behavior-enemy', SignalBehaviorEnemy],
   // signal scripts
@@ -74,7 +75,7 @@ export class LocalScriptService implements ScriptService {
   protected logger: Logger;
   protected scripts: Map<string, ScriptFunction>;
 
-  constructor(options: InjectedOptions, scripts = COMMON_SCRIPTS) {
+  constructor(options: InjectedOptions, scripts: ScriptPairs = COMMON_SCRIPTS) {
     this.logger = makeServiceLogger(options[INJECT_LOGGER], this);
     this.scripts = new Map(scripts);
   }

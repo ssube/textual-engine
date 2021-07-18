@@ -179,6 +179,10 @@ worlds:
                       You will $t({{command.verb}}) the next turn.
                     target: |-
                       {{actor.meta.name}} will $t({{command.verb}}) the {{command.targets}}.
+              slot:
+                weapon-hand-left: left hand
+                weapon-hand-right: right hand
+                weapon-teeth: mouth
               verb:
                 drop:
                   owner: |-
@@ -187,11 +191,11 @@ worlds:
                     {{command.targets}} is not an item!
                 equip:
                   item: |-
-                    You equip the {{item.meta.name}} in your {{slot}}.
+                    You equip the {{item.meta.name}} in your $t(actor.slot.{{slot}}).
                   missing: |-
                     {{command.targets}} is not an item!
                   slot: |-
-                    You are not able to equip {{item.meta.name}} in {{slot}}!
+                    You are not able to equip {{item.meta.name}} in $t(actor.slot.{{slot}})!
                 hit:
                   item: |-
                     You cannot hit {{target.meta.name}}, you are not holding anything!

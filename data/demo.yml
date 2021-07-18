@@ -50,6 +50,10 @@ worlds:
             data: !map {}
             name:
               base: verb-actor-open
+          verbs.common.say:
+            data: !map {}
+            name:
+              base: verb-actor-say
           verbs.common.take:
             data: !map {}
             name:
@@ -224,6 +228,9 @@ worlds:
                     {{command.targets}} is not a portal!
                   portal: |-
                     You open {{portal.meta.name}}.
+                say:
+                  line: |-
+                    {{actor.meta.name}} says: {{line}}
                 take:
                   type: |-
                     {{command.targets}} is not an item!

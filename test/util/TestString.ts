@@ -44,6 +44,10 @@ describe('string utils', () => {
     it('should respect quotes', async () => {
       expect(splitWords('foo "bar bin"')).to.deep.equal(['foo', 'bar bin']);
     });
+
+    it('should handle empty strings', async () => {
+      expect(splitWords('')).to.deep.equal(['']); // TODO: should this return an empty array instead?
+    });
   });
 
   describe('trim helper', () => {

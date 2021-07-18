@@ -103,6 +103,7 @@ export const VERB_EQUIP = 'verbs.common.equip';
 export const VERB_HIT = 'verbs.common.hit';
 export const VERB_LOOK = 'verbs.common.look';
 export const VERB_MOVE = 'verbs.common.move';
+export const VERB_SAY = 'verbs.common.say';
 export const VERB_TAKE = 'verbs.common.take';
 export const VERB_USE = 'verbs.common.use';
 export const VERB_WAIT = 'verbs.common.wait';
@@ -119,6 +120,7 @@ export const COMMON_VERBS: ReadonlyArray<string> = [
   VERB_HIT,
   VERB_LOOK,
   VERB_MOVE,
+  VERB_SAY,
   VERB_TAKE,
   VERB_USE,
   VERB_WAIT,

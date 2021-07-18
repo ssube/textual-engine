@@ -26,6 +26,7 @@ import { VerbActorMove } from '../../script/verb/actor/ActorMove';
 import { VerbActorOpen } from '../../script/verb/actor/ActorOpen';
 import { VerbActorPush } from '../../script/verb/actor/ActorPush';
 import { VerbActorReplace } from '../../script/verb/actor/ActorReplace';
+import { VerbActorSay } from '../../script/verb/actor/ActorSay';
 import { VerbActorTake } from '../../script/verb/actor/ActorTake';
 import { VerbActorUse } from '../../script/verb/actor/ActorUse';
 import { VerbActorWait } from '../../script/verb/actor/ActorWait';
@@ -62,6 +63,7 @@ const COMMON_SCRIPTS: Array<[string, ScriptFunction]> = [
   ['verb-actor-open', VerbActorOpen],
   ['verb-actor-push', VerbActorPush],
   ['verb-actor-replace', VerbActorReplace],
+  ['verb-actor-say', VerbActorSay],
   ['verb-actor-take', VerbActorTake],
   ['verb-actor-use', VerbActorUse],
   ['verb-actor-wait', VerbActorWait],

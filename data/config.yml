@@ -40,6 +40,7 @@ config:
               look: look
               move: move
               open: open
+              say: say
               take: take
               use: use
               wait: wait
@@ -100,6 +101,7 @@ config:
           - verbs.common.look
           - verbs.common.move
           - verbs.common.open
+          - verbs.common.say
           - verbs.common.take
           - verbs.common.use
           - verbs.common.wait

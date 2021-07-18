@@ -9,7 +9,7 @@ import { catchAndLog } from '../../util/async/event';
 import { groupOn } from '../../util/collection/array';
 import { EVENT_LOCALE_BUNDLE, EVENT_RENDER_INPUT, EVENT_TOKEN_COMMAND, SPLIT_CHAR } from '../../util/constants';
 import { makeServiceLogger } from '../../util/service';
-import { trim } from '../../util/string';
+import { splitWords, trim } from '../../util/string';
 import { EventBus } from '../event';
 import { LocaleService } from '../locale';
 import { LocaleBundleEvent } from '../locale/events';
@@ -71,9 +71,7 @@ export class SplitTokenizer implements TokenizerService {
   }
 
   public async split(input: string): Promise<Array<string>> {
-    return trim(input)
-      .toLocaleLowerCase()
-      .split(SPLIT_CHAR)
+    return splitWords(trim(input).toLocaleLowerCase())
       .map(trim)
       .filter((it) => it.length > 0)
       .filter((it) => this.articles.has(it) === false);

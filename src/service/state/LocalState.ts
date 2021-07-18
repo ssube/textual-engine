@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { doesExist, InvalidArgumentError, isNil, mustExist, mustFind } from '@apextoaster/js-utils';
+import { defaultWhen, doesExist, InvalidArgumentError, isNil, mustCoalesce, mustExist, mustFind } from '@apextoaster/js-utils';
 import { Container, Inject, Logger } from 'noicejs';
 
 import { StateService, StepResult } from '.';
@@ -701,16 +701,11 @@ export class LocalStateService implements StateService {
       case ITEM_TYPE: {
         const template = findByBaseId(world.templates.items, id);
         const item = await generator.createItem(template);
+        const targetEntity = mustCoalesce<Immutable<Actor | Room>>(target.actor, target.room);
 
-        if (doesExist(target.actor)) {
-          await this.stepUpdate(target.actor, {
-            items: [...target.actor.items, item],
-          });
-        } else {
-          await this.stepUpdate(target.room, {
-            items: [...target.room.items, item],
-          });
-        }
+        await this.stepUpdate(targetEntity, {
+          items: [...targetEntity.items, item],
+        });
 
         // TODO: fire get signal
 
@@ -737,7 +732,7 @@ export class LocalStateService implements StateService {
       }
     }
 
-    await this.broadcastChanges(state.rooms);
+    return this.broadcastChanges(state.rooms);
   }
 
   public async stepFind<TType extends WorldEntityType>(search: SearchFilter<TType>): Promise<Array<Immutable<EntityForType<TType>>>> {

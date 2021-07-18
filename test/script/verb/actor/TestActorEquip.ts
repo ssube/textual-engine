@@ -1,5 +1,4 @@
 import { expect } from 'chai';
-import { ConsoleLogger } from 'noicejs';
 import { match, SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';

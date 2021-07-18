@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { hasText, matchIdSegments } from '../../src/util/string';
+import { hasText, matchIdSegments, splitWords, trim } from '../../src/util/string';
 
 describe('string utils', () => {
   describe('match ID helper', () => {
@@ -33,6 +33,22 @@ describe('string utils', () => {
       expect(hasText('\n')).to.equal(false);
       expect(hasText('\t')).to.equal(false);
       expect(hasText('   ')).to.equal(false);
+    });
+  });
+
+  describe('split words helper', () => {
+    it('should split on whitespace', async () => {
+      expect(splitWords('foo bar bin')).to.deep.equal(['foo', 'bar', 'bin']);
+    });
+
+    it('should respect quotes', async () => {
+      expect(splitWords('foo "bar bin"')).to.deep.equal(['foo', 'bar bin']);
+    });
+  });
+
+  describe('trim helper', () => {
+    it('should remove whitespace from both ends', async () => {
+      expect(trim('  foo\t')).to.equal('foo');
     });
   });
 });

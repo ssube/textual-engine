@@ -1,4 +1,5 @@
 import { doesExist } from '@apextoaster/js-utils';
+import { alt, createLanguage, regexp, optWhitespace, whitespace } from 'parsimmon';
 
 import { SPLIT_HEAD_TAIL } from './constants';
 
@@ -35,8 +36,29 @@ export function splitPath(path: string): {
   };
 }
 
+export function splitWords(input: string): Array<string> {
+  const lang = createLanguage<{
+    Empty: string;
+    Phrase: string;
+    Quote: string;
+    Top: string | Array<string>;
+    Word: string;
+  }>({
+    Empty: () => regexp(/^$/),
+    Phrase: (r) => alt(r.Word.sepBy(whitespace).wrap(r.Quote, r.Quote).tieWith(' '), r.Word),
+    Quote: () => regexp(/['"]/),
+    Top: (r) => alt(r.Empty, r.Phrase.sepBy1(optWhitespace)),
+    Word: () => regexp(/[^'"\s]+/),
+  });
+
+  const result = lang.Top.tryParse(input);
+  if (Array.isArray(result)) {
+    return result.flat(Infinity);
+  } else {
+    return [result];
+  }
+}
+
 export function trim(str: string): string {
-  return str
-    .replace(/^\s+/, '')
-    .replace(/\s+$/, '');
+  return str.replace(/^\s*(\S*)\s*$/, '$1');
 }

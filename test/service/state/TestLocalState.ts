@@ -7,7 +7,7 @@ import { createStubInstance, match, spy, stub } from 'sinon';
 import { NotInitializedError } from '../../../src/error/NotInitializedError';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
 import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
-import { Actor, ACTOR_TYPE, ActorSource } from '../../../src/model/entity/Actor';
+import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
 import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
 import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal';
 import { Room, ROOM_TYPE } from '../../../src/model/entity/Room';
@@ -948,6 +948,105 @@ describe('local state service', () => {
 
       return expect(state.step()).to.eventually.be.rejectedWith(Error);
     });
+
+    it('should provide script access to the command buffer', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      const showSpy = spy(state, 'stepShow');
+      await state.start();
+
+      const world: WorldTemplate = {
+        ...TEST_WORLD,
+        templates: {
+          actors: [{
+            base: {
+              ...TEST_ACTOR.base,
+              items: [{
+                chance: TEMPLATE_CHANCE,
+                id: TEST_ITEM.base.meta.id,
+                type: 'id',
+              }],
+            },
+            mods: [],
+          }],
+          items: TEST_WORLD.templates.items,
+          portals: TEST_WORLD.templates.portals,
+          rooms: [{
+            base: {
+              ...TEST_ROOM.base,
+              actors: [{
+                chance: TEMPLATE_CHANCE,
+                id: TEST_ACTOR.base.meta.id,
+                type: 'id',
+              }],
+              items: [{
+                chance: TEMPLATE_CHANCE,
+                id: TEST_ITEM.base.meta.id,
+                type: 'id',
+              }],
+              portals: [{
+                chance: TEMPLATE_CHANCE,
+                id: TEST_PORTAL.base.meta.id,
+                type: 'id',
+              }],
+            },
+            mods: TEST_ROOM.mods,
+          }],
+        }
+      };
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, { world });
+
+      const pendingLoad = onceEvent<StateLoadEvent>(events, EVENT_STATE_LOAD);
+
+      const command = makeCommand(META_CREATE, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
+
+      await pendingLoad;
+
+      const script = await container.create<LocalScriptService, BaseOptions>(INJECT_SCRIPT);
+      const invokeStub = stub(script, 'invoke').callsFake(async (target, _slot, scope) => {
+        if (isActor(target)) {
+          await scope.behavior.queue(target, makeCommand(''));
+          const depth = await scope.behavior.depth(target);
+          await scope.state.show(scope.source, depth.toString(10));
+          const ready = await scope.behavior.ready(target);
+          await scope.state.show(scope.source, ready.toString());
+        }
+        return Promise.resolve();
+      });
+
+      const pendingStep = onceEvent<StateStepEvent>(events, EVENT_STATE_STEP);
+
+      const rooms = await state.stepFind({
+        type: ROOM_TYPE,
+      });
+
+      let broadcast = true;
+      for (const room of rooms) {
+        for (const actor of room.actors) {
+          if (broadcast) {
+            broadcast = false;
+            await state.stepEnter({ room, actor });
+          }
+
+          await state.onCommand({
+            actor,
+            command: makeCommand(VERB_WAIT),
+          });
+        }
+      }
+
+      await pendingStep;
+
+      expect(invokeStub).to.have.callCount(5);
+      expect(showSpy).to.have.been.calledWithMatch(match.object, '1');
+      expect(showSpy).to.have.been.calledWithMatch(match.object, 'true');
+    });
   });
 
   describe('step create helper', () => {
@@ -1067,6 +1166,7 @@ describe('local state service', () => {
   describe('step enter helper', () => {
     xit('should populate portals with new rooms');
     xit('should notify the actor of their new room');
+    xit('should add new rooms to world state');
   });
 
   describe('step find helper', () => {
@@ -1239,6 +1339,34 @@ describe('local state service', () => {
 
       const output = await pending;
       expect(output.line).to.equal('foo');
+      expect(output.volume).to.equal(ShowVolume.SELF);
+    });
+
+    it('should default to self volume', async () => {
+      const module = new CoreModule();
+      const container = await getTestContainer(module);
+
+      const state = await container.create(LocalStateService);
+      await state.start();
+
+      const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+      events.emit(EVENT_LOADER_WORLD, {
+        world: TEST_WORLD,
+      });
+
+      const command = makeCommandIndex(META_CREATE, 1, TEST_WORLD.meta.id);
+      await state.doCreate({
+        command,
+      });
+
+      const pending = onceEvent<StateOutputEvent>(events, EVENT_STATE_OUTPUT);
+
+      const source = {
+        room: makeTestRoom('', '', ''),
+      };
+      await state.stepShow(source, 'foo', {});
+
+      const output = await pending;
       expect(output.volume).to.equal(ShowVolume.SELF);
     });
   });

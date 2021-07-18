@@ -209,4 +209,38 @@ describe('node fetch loader', () => {
       match.hasNested('world.meta.id', world.meta.id)
     ).and.calledBefore(doneStub);
   });
+
+  it('should load state-only data files', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const state = makeTestState('', []);
+    const parser = await container.create(YamlParser);
+    const payload = parser.save({
+      state,
+    });
+
+    const fetch = stub().returns({
+      text: () => Promise.resolve(payload),
+    });
+    const loader = await container.create(NodeFetchLoader, {}, fetch);
+    await loader.start();
+
+    const events = await container.create<EventBus, BaseOptions>(INJECT_EVENT);
+    const pendingDone = onceEvent(events, EVENT_LOADER_DONE);
+
+    const doneStub = stub();
+    const stateStub = stub();
+    const worldStub = stub();
+    events.on(EVENT_LOADER_DONE, doneStub);
+    events.on(EVENT_LOADER_STATE, stateStub);
+    events.on(EVENT_LOADER_WORLD, worldStub);
+
+    events.emit(EVENT_LOADER_READ, {
+      path: 'https://foo',
+    });
+
+    await pendingDone;
+    expect(stateStub, 'loaded state').to.have.callCount(1).and.been.calledWith({ state }).and.calledBefore(doneStub);
+    expect(worldStub, 'loaded world').to.have.callCount(0);
+  });
 });

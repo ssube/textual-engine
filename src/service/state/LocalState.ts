@@ -763,7 +763,7 @@ export class LocalStateService implements StateService {
     throw new ScriptTargetError('move target must be an actor or item');
   }
 
-  public async stepQuit(line: string, context?: LocaleContext, stats: Array<string> = []): Promise<void> {
+  public async stepQuit(line: string, context?: LocaleContext, /* istanbul ignore next */ stats: Array<string> = []): Promise<void> {
     this.event.emit(EVENT_STATE_QUIT, {
       line,
       context,

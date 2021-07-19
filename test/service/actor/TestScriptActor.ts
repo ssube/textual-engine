@@ -31,8 +31,7 @@ describe('script actor', () => {
 
     const actorService = await container.create(ScriptActorService, {
       config: {
-        attack: 0.5,
-        wander: 0.5,
+        data: new Map(),
       },
     });
     await actorService.start();
@@ -64,7 +63,9 @@ describe('script actor', () => {
     const container = await getTestContainer(new CoreModule());
 
     const actorService = await container.create(ScriptActorService, {
-      config: {},
+      config: {
+        data: new Map(),
+      },
     });
     await actorService.start();
     await actorService.stop();
@@ -77,7 +78,9 @@ describe('script actor', () => {
     const container = await getTestContainer(new CoreModule());
 
     const actorService = await container.create(ScriptActorService, {
-      config: {},
+      config: {
+        data: new Map(),
+      },
     });
     await actorService.start();
 
@@ -91,7 +94,9 @@ describe('script actor', () => {
     const invokeStub = stub(script, 'invoke');
 
     const actorService = await container.create(ScriptActorService, {
-      config: {},
+      config: {
+        data: new Map(),
+      },
     });
     await actorService.start();
 
@@ -117,8 +122,7 @@ describe('script actor', () => {
 
     const actorService = await container.create(ScriptActorService, {
       config: {
-        attack: 0.5,
-        wander: 0.5,
+        data: new Map(),
       },
     });
     await actorService.start();
@@ -145,8 +149,10 @@ describe('script actor', () => {
 
     return expect(container.create(ScriptActorService, {
       config: {
-        attack: 'test',
-        wander: undefined,
+        data: new Map([
+          ['attack', 'test'],
+          ['wander', undefined],
+        ]),
       },
     })).to.eventually.be.rejectedWith(ConfigError);
   });
@@ -154,11 +160,20 @@ describe('script actor', () => {
   it('should inform scripts of buffered output', async () => {
     const container = await getTestContainer(new CoreModule());
 
-    const room = makeTestRoom('foo', '', '');
+    const actor = makeTestActor('actor-foo', '', '');
+    actor.scripts.set(SIGNAL_BEHAVIOR, {
+      data: new Map(),
+      name: 'output-length',
+    });
+    const otherActor = makeTestActor('actor-bar', '', '');
+
+    const room = makeTestRoom('room-foo', '', '');
+    const otherRoom = makeTestRoom('room-bar', '', '');
+
     const lengthSpy = spy();
     const testScripts: ScriptPairs = [
       ['output-length', async (context: ScriptContext) => {
-        const output = await context.behavior.output({ room });
+        const output = await context.behavior.output({ actor, room });
         lengthSpy(output.length);
       }],
     ];
@@ -166,7 +181,9 @@ describe('script actor', () => {
     const script = await container.create(LocalScriptService, {}, testScripts);
     const actorService = await container.create(ScriptActorService, {
       [INJECT_SCRIPT]: script,
-      config: {},
+      config: {
+        data: new Map(),
+      },
     });
     await actorService.start();
 
@@ -177,24 +194,63 @@ describe('script actor', () => {
     for (let i = 0; i < length; ++i) {
       events.emit(EVENT_STATE_OUTPUT, {
         line: 'foo',
-        source: { room },
+        source: {
+          room,
+        },
         step,
         volume: ShowVolume.ROOM,
       });
     }
 
-    const actor = makeTestActor('', '', '');
-    actor.scripts.set(SIGNAL_BEHAVIOR, {
-      data: new Map(),
-      name: 'output-length',
-    });
+    for (let i = 0; i < length; ++i) {
+      events.emit(EVENT_STATE_OUTPUT, {
+        line: 'foo',
+        source: {
+          actor,
+          room,
+        },
+        step,
+        volume: ShowVolume.ROOM,
+      });
+    }
+
+    for (let i = 0; i < length; ++i) {
+      events.emit(EVENT_STATE_OUTPUT, {
+        line: 'foo',
+        source: {
+          actor: otherActor,
+          room,
+        },
+        step,
+        volume: ShowVolume.ROOM,
+      });
+    }
+
+    for (let i = 0; i < length; ++i) {
+      events.emit(EVENT_STATE_OUTPUT, {
+        line: 'foo',
+        source: {
+          room: otherRoom,
+        },
+        step,
+        volume: ShowVolume.ROOM,
+      });
+    }
+
+    for (let i = 0; i < length; ++i) {
+      events.emit(EVENT_STATE_OUTPUT, {
+        line: 'foo',
+        step,
+        volume: ShowVolume.ROOM,
+      });
+    }
 
     await actorService.onRoom({
       actor,
-      room: makeTestRoom('', '', ''),
+      room,
     });
 
-    expect(lengthSpy).to.have.been.calledWith(length);
+    expect(lengthSpy).to.have.been.calledWith(length * 2); // length for room + length for room w/ actor
   });
 
   it('should inform scripts of buffered commands', async () => {
@@ -218,7 +274,9 @@ describe('script actor', () => {
     const script = await container.create(LocalScriptService, {}, testScripts);
     const actorService = await container.create(ScriptActorService, {
       [INJECT_SCRIPT]: script,
-      config: {},
+      config: {
+        data: new Map(),
+      },
     });
     await actorService.start();
 

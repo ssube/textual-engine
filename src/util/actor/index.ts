@@ -1,6 +1,6 @@
 import { doesExist } from '@apextoaster/js-utils';
-import { ReadonlyActor } from '../../model/entity/Actor';
 
+import { ReadonlyActor } from '../../model/entity/Actor';
 import { ReadonlyRoom } from '../../model/entity/Room';
 
 export enum ShowVolume {

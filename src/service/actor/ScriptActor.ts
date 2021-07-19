@@ -1,4 +1,4 @@
-import { doesExist, mustExist, NotImplementedError } from '@apextoaster/js-utils';
+import { doesExist, isNil, mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
@@ -10,7 +10,6 @@ import { ReadonlyRoom } from '../../model/entity/Room';
 import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
 import { StateSource } from '../../util/actor';
 import { catchAndLog } from '../../util/async/event';
-import { StackMap } from '../../util/collection/StackMap';
 import {
   EVENT_ACTOR_COMMAND,
   EVENT_STATE_OUTPUT,
@@ -29,23 +28,26 @@ import { StepResult } from '../state';
 import { StateOutputEvent, StateRoomEvent, StateStepEvent } from '../state/events';
 
 export interface ScriptActorConfig {
-  attack: number;
-  wander: number;
+  data: Map<string, number>;
 }
 
 export const SCRIPT_ACTOR_SCHEMA: JSONSchemaType<ScriptActorConfig> = {
   type: 'object',
   properties: {
-    attack: {
-      type: 'number',
-      default: 1.00,
-    },
-    wander: {
-      type: 'number',
-      default: 0.25,
+    data: {
+      type: 'object',
+      map: {
+        keys: {
+          type: 'string',
+        },
+        values: {
+          type: 'number',
+        },
+      },
+      required: [],
     },
   },
-  required: [],
+  required: ['data'],
 };
 
 /**
@@ -59,7 +61,7 @@ export class ScriptActorService implements ActorService {
   protected random: RandomService;
   protected script: ScriptService;
 
-  protected output: StackMap<string, StateOutputEvent>;
+  protected output: Array<StateOutputEvent>;
   protected step: StepResult;
 
   constructor(options: InjectedOptions) {
@@ -75,16 +77,14 @@ export class ScriptActorService implements ActorService {
     this.random = mustExist(options[INJECT_RANDOM]);
     this.script = mustExist(options[INJECT_SCRIPT]);
 
-    this.output = new StackMap();
+    this.output = [];
     this.step = zeroStep();
   }
 
   public async start(): Promise<void> {
     this.event.on(EVENT_STATE_OUTPUT, (event) => {
       this.logger.debug({ event }, 'actor output');
-      if (doesExist(event.source)) {
-        this.output.push(event.source.room.meta.id, event);
-      }
+      this.output.push(event);
     }, this);
 
     this.event.on(EVENT_STATE_ROOM, (event) => {
@@ -115,10 +115,7 @@ export class ScriptActorService implements ActorService {
         queue: (actor, command) => this.queue(event.room, actor, command),
         ready: (actor) => this.getReady(actor),
       },
-      data: new Map([
-        ['attack', this.config.attack],
-        ['wander', this.config.wander],
-      ]),
+      data: new Map(this.config.data),
       random: this.random,
       room: event.room,
       state: {
@@ -148,11 +145,24 @@ export class ScriptActorService implements ActorService {
   }
 
   /**
-   * @todo implement
    * @todo return line with step
    */
   public async getOutput(target: StateSource): Promise<Array<string>> {
-    return this.output.get(target.room.meta.id).map((it) => it.line);
+    return this.output.filter((event) => {
+      if (isNil(event.source)) {
+        return false;
+      }
+
+      if (event.source.room !== target.room) {
+        return false;
+      }
+
+      if (doesExist(event.source.actor) && doesExist(target.actor) && event.source.actor !== target.actor) {
+        return false;
+      }
+
+      return true;
+    }).map((event) => event.line);
   }
 
   /**

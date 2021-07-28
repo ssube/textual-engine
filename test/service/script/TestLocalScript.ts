@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import { SinonStub, spy, stub } from 'sinon';
 
-import { Item } from '../../../src/model/entity/Item';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { LocalScriptService } from '../../../src/service/script/LocalScript';
-import { makeTestItem } from '../../entity';
-import { createTestContext, getStubHelper, getTestContainer } from '../../helper';
+import { Item } from '../../../src/model/entity/Item.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { LocalScriptService } from '../../../src/service/script/LocalScript.js';
+import { makeTestItem } from '../../entity.js';
+import { createTestContext, getStubHelper, getTestContainer } from '../../helper.js';
 
 describe('local script service', () => {
   it('should gracefully skip unknown scripts', async () => {

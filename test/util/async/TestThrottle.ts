@@ -2,7 +2,7 @@ import { doesExist, mustExist, Optional } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { SinonFakeTimers, stub, useFakeTimers } from 'sinon';
 
-import { debounce, throttle } from '../../../src/util/async/Throttle';
+import { debounce, throttle } from '../../../src/util/async/Throttle.js';
 
 describe('throttle utils', () => {
   let clock: Optional<SinonFakeTimers>;

@@ -3,8 +3,8 @@ import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
 import { stub } from 'sinon';
 
-import { Worlds } from '../../../src/component/react/Worlds';
-import { getReactStrings } from './helper';
+import { Worlds } from '../../../src/component/react/Worlds.js';
+import { getReactStrings } from './helper.js';
 
 describe('react worlds component', () => {
   it('should show available worlds', async () => {

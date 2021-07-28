@@ -1,14 +1,14 @@
 import { countOf, defaultWhen, isNil, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isActor } from '../../../model/entity/Actor';
-import { isItem } from '../../../model/entity/Item';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { head } from '../../../util/collection/array';
-import { setKey } from '../../../util/collection/map';
-import { findActorSlots } from '../../../util/entity/find';
-import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
-import { hasText, matchIdSegments } from '../../../util/string';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isActor } from '../../../model/entity/Actor.js';
+import { isItem } from '../../../model/entity/Item.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { head } from '../../../util/collection/array.js';
+import { setKey } from '../../../util/collection/map.js';
+import { findActorSlots } from '../../../util/entity/find.js';
+import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match.js';
+import { hasText, matchIdSegments } from '../../../util/string.js';
 
 export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

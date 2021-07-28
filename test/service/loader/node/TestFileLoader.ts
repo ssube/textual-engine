@@ -2,14 +2,14 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { stub } from 'sinon';
 
-import { INJECT_EVENT } from '../../../../src/module';
-import { CoreModule } from '../../../../src/module/CoreModule';
-import { EventBus } from '../../../../src/service/event';
-import { NodeFileLoader } from '../../../../src/service/loader/node/FileLoader';
-import { onceEvent } from '../../../../src/util/async/event';
-import { EVENT_LOADER_DONE, EVENT_LOADER_READ, EVENT_LOADER_SAVE } from '../../../../src/util/constants';
-import { makeTestState } from '../../../entity';
-import { getTestContainer } from '../../../helper';
+import { INJECT_EVENT } from '../../../../src/module/index.js';
+import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { EventBus } from '../../../../src/service/event/index.js';
+import { NodeFileLoader } from '../../../../src/service/loader/node/FileLoader.js';
+import { onceEvent } from '../../../../src/util/async/event.js';
+import { EVENT_LOADER_DONE, EVENT_LOADER_READ, EVENT_LOADER_SAVE } from '../../../../src/util/constants.js';
+import { makeTestState } from '../../../entity.js';
+import { getTestContainer } from '../../../helper.js';
 
 describe('file loader', () => {
   it('should read from paths', async () => {

@@ -1,6 +1,6 @@
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { isActor } from '../../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../../service/script';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { isActor } from '../../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
 
 /**
  * The hedgehogs in the croquet ground should:

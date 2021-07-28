@@ -1,6 +1,6 @@
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isItem } from '../../../model/entity/Item';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isItem } from '../../../model/entity/Item.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 
 export async function SignalItemStep(this: ScriptTarget, _context: ScriptContext): Promise<void> {
   if (!isItem(this)) {

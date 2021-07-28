@@ -1,10 +1,10 @@
 import { mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 
-import { CoreModule } from '../../src/module/CoreModule';
-import { NodeFileLoader } from '../../src/service/loader/node/FileLoader';
-import { StateEntityGenerator } from '../../src/util/entity/EntityGenerator';
-import { getTestContainer } from '../helper';
+import { CoreModule } from '../../src/module/CoreModule.js';
+import { NodeFileLoader } from '../../src/service/loader/node/FileLoader.js';
+import { StateEntityGenerator } from '../../src/util/entity/EntityGenerator.js';
+import { getTestContainer } from '../helper.js';
 
 describe('Dracula sample world', () => {
   it('should generate a closed map', async () => {

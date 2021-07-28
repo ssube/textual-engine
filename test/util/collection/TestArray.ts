@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { MathRandomService } from '../../../src/service/random/MathRandom';
-import { groupOn, randomItem, remove } from '../../../src/util/collection/array';
+import { MathRandomService } from '../../../src/service/random/MathRandom.js';
+import { groupOn, randomItem, remove } from '../../../src/util/collection/array.js';
 
 describe('array utils', () => {
   describe('random item helper', () => {

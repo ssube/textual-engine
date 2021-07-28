@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { createStubInstance } from 'sinon';
 
-import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../../src/model/Command';
-import { SignalBehaviorFollow } from '../../../../../src/script/signal/behavior/common/BehaviorFollow';
-import { MathRandomService } from '../../../../../src/service/random/MathRandom';
-import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
-import { createStubBehavior, createTestContext } from '../../../../helper';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../../src/model/Command.js';
+import { SignalBehaviorFollow } from '../../../../../src/script/signal/behavior/common/BehaviorFollow.js';
+import { MathRandomService } from '../../../../../src/service/random/MathRandom.js';
+import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
+import { createStubBehavior, createTestContext } from '../../../../helper.js';
 
 describe('actor behavior signal for followers', () => {
   it('should require the script target be an actor', async () => {

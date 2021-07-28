@@ -2,15 +2,15 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { stub } from 'sinon';
 
-import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
-import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent } from '../../../src/service/actor/events';
-import { PlayerActorService } from '../../../src/service/actor/PlayerActor';
-import { EventBus } from '../../../src/service/event';
-import { LocaleService } from '../../../src/service/locale';
-import { ShowVolume } from '../../../src/util/actor';
-import { onceEvent } from '../../../src/util/async/event';
+import { makeCommand, makeCommandIndex } from '../../../src/model/Command.js';
+import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module/index.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent } from '../../../src/service/actor/events.js';
+import { PlayerActorService } from '../../../src/service/actor/PlayerActor.js';
+import { EventBus } from '../../../src/service/event/index.js';
+import { LocaleService } from '../../../src/service/locale/index.js';
+import { ShowVolume } from '../../../src/util/actor/index.js';
+import { onceEvent } from '../../../src/util/async/event.js';
 import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
@@ -26,10 +26,10 @@ import {
   STAT_HEALTH,
   STAT_SCORE,
   VERB_WAIT,
-} from '../../../src/util/constants';
-import { zeroStep } from '../../../src/util/entity';
-import { makeTestActor, makeTestRoom } from '../../entity';
-import { getTestContainer } from '../../helper';
+} from '../../../src/util/constants.js';
+import { zeroStep } from '../../../src/util/entity/index.js';
+import { makeTestActor, makeTestRoom } from '../../entity.js';
+import { getTestContainer } from '../../helper.js';
 
 describe('player actor', () => {
   it('should parse render output into commands', async () => {

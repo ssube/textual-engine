@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { SignalRoomStep } from '../../../../src/script/signal/room/RoomStep';
-import { VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { SignalRoomStep } from '../../../../src/script/signal/room/RoomStep.js';
+import { VERB_WAIT } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../helper.js';
 
 describe('room step signal', () => {
   it('should require the script target be an item', async () => {

@@ -2,18 +2,18 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { spy, stub } from 'sinon';
 
-import { ConfigError } from '../../../src/error/ConfigError';
-import { INJECT_EVENT } from '../../../src/module';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { NodeModule } from '../../../src/module/NodeModule';
-import { EventBus } from '../../../src/service/event';
-import { RenderInputEvent } from '../../../src/service/render/events';
-import { LineRender } from '../../../src/service/render/LineRender';
-import { onceEvent } from '../../../src/util/async/event';
-import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../../src/util/constants';
-import { zeroStep } from '../../../src/util/entity';
-import { getTestContainer } from '../../helper';
-import { TestReadLine } from './helper';
+import { ConfigError } from '../../../src/error/ConfigError.js';
+import { INJECT_EVENT } from '../../../src/module/index.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { NodeModule } from '../../../src/module/NodeModule.js';
+import { EventBus } from '../../../src/service/event/index.js';
+import { RenderInputEvent } from '../../../src/service/render/events.js';
+import { LineRender } from '../../../src/service/render/LineRender.js';
+import { onceEvent } from '../../../src/util/async/event.js';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../../src/util/constants.js';
+import { zeroStep } from '../../../src/util/entity/index.js';
+import { getTestContainer } from '../../helper.js';
+import { TestReadLine } from './helper.js';
 
 const THROTTLE_TIME = 10;
 

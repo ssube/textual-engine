@@ -2,30 +2,30 @@ import { doesExist, isNil, mustExist, NotImplementedError } from '@apextoaster/j
 import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
-import { ActorService } from '.';
-import { ConfigError } from '../../error/ConfigError';
-import { Command } from '../../model/Command';
-import { ActorSource, ReadonlyActor } from '../../model/entity/Actor';
-import { ReadonlyRoom } from '../../model/entity/Room';
-import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
-import { StateSource } from '../../util/actor';
-import { catchAndLog } from '../../util/async/event';
+import { ActorService } from './index.js';
+import { ConfigError } from '../../error/ConfigError.js';
+import { Command } from '../../model/Command.js';
+import { ActorSource, ReadonlyActor } from '../../model/entity/Actor.js';
+import { ReadonlyRoom } from '../../model/entity/Room.js';
+import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module/index.js';
+import { StateSource } from '../../util/actor/index.js';
+import { catchAndLog } from '../../util/async/event.js';
 import {
   EVENT_ACTOR_COMMAND,
   EVENT_STATE_OUTPUT,
   EVENT_STATE_ROOM,
   EVENT_STATE_STEP,
   SIGNAL_BEHAVIOR,
-} from '../../util/constants';
-import { zeroStep } from '../../util/entity';
-import { findMatching } from '../../util/entity/find';
-import { makeSchema } from '../../util/schema';
-import { makeServiceLogger } from '../../util/service';
-import { EventBus } from '../event';
-import { RandomService } from '../random';
-import { ScriptService } from '../script';
-import { StepResult } from '../state';
-import { StateOutputEvent, StateRoomEvent, StateStepEvent } from '../state/events';
+} from '../../util/constants.js';
+import { zeroStep } from '../../util/entity/index.js';
+import { findMatching } from '../../util/entity/find.js';
+import { makeSchema } from '../../util/schema/index.js';
+import { makeServiceLogger } from '../../util/service/index.js';
+import { EventBus } from '../event/index.js';
+import { RandomService } from '../random/index.js';
+import { ScriptService } from '../script/index.js';
+import { StepResult } from '../state/index.js';
+import { StateOutputEvent, StateRoomEvent, StateStepEvent } from '../state/events.js';
 
 export interface ScriptActorConfig {
   data: Map<string, number>;

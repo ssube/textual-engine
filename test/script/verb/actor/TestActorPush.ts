@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import { SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { VerbActorPush } from '../../../../src/script/verb/actor/ActorPush';
-import { STAT_CLOSED, STAT_LOCKED, VERB_LOOK } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { VerbActorPush } from '../../../../src/script/verb/actor/ActorPush.js';
+import { STAT_CLOSED, STAT_LOCKED, VERB_LOOK } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../helper.js';
 
 describe('actor push verb', () => {
   it('should require the script target be an actor', async () => {

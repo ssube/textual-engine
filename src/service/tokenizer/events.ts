@@ -1,4 +1,4 @@
-import { Command } from '../../model/Command';
+import { Command } from '../../model/Command.js';
 
 /**
  * A parsed command without actor.

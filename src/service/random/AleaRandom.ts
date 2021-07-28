@@ -1,7 +1,7 @@
 import { alea } from 'seedrandom';
 
-import { RandomService } from '.';
-import { BYTE_RANGE } from '../../util/constants';
+import { RandomService } from './index.js';
+import { BYTE_RANGE } from '../../util/constants.js';
 
 export class AleaRandomService implements RandomService {
   protected source: ReturnType<typeof alea>; // this should be imported above, but... that is an error, this works

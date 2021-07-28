@@ -1,9 +1,9 @@
-import { StepResult } from '.';
-import { ReadonlyActor } from '../../model/entity/Actor';
-import { ReadonlyRoom } from '../../model/entity/Room';
-import { TemplateMetadata } from '../../model/mapped/Template';
-import { ShowVolume, StateSource } from '../../util/actor';
-import { LocaleContext } from '../locale';
+import { StepResult } from './index.js';
+import { ReadonlyActor } from '../../model/entity/Actor.js';
+import { ReadonlyRoom } from '../../model/entity/Room.js';
+import { TemplateMetadata } from '../../model/mapped/Template.js';
+import { ShowVolume, StateSource } from '../../util/actor/index.js';
+import { LocaleContext } from '../locale/index.js';
 
 export interface StateJoinEvent {
   actor: ReadonlyActor;

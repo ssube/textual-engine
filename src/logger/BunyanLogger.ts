@@ -2,7 +2,7 @@ import { constructorName } from '@apextoaster/js-utils';
 import { createLogger, LoggerOptions, stdSerializers } from 'bunyan';
 import { Logger } from 'noicejs';
 
-import { entityMeta } from '../util/logger';
+import { entityMeta } from '../util/logger.js';
 
 /**
  * Attach bunyan to the Logger. Does very little, since bunyan matches the Logger interface.

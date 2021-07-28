@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import { LogLevel } from 'noicejs';
 import { stub } from 'sinon';
 
-import { ConfigError } from '../../../src/error/ConfigError';
-import { loadConfig } from '../../../src/util/config/page';
+import { ConfigError } from '../../../src/error/ConfigError.js';
+import { loadConfig } from '../../../src/util/config/page.js';
 
 describe('page config', () => {
   it('should load config from element text', async () => {

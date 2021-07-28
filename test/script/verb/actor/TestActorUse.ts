@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { VerbActorUse } from '../../../../src/script/verb/actor/ActorUse';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
-import { SIGNAL_USE, VERB_USE } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { VerbActorUse } from '../../../../src/script/verb/actor/ActorUse.js';
+import { LocalScriptService } from '../../../../src/service/script/LocalScript.js';
+import { SIGNAL_USE, VERB_USE } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../helper.js';
 
 describe('actor use verb', () => {
   it('should require the script target be an actor', async () => {

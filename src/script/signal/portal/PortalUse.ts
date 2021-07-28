@@ -1,11 +1,11 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isPortal } from '../../../model/entity/Portal';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { setKey } from '../../../util/collection/map';
-import { STAT_LOCKED } from '../../../util/constants';
-import { matchIdSegments } from '../../../util/string';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isPortal } from '../../../model/entity/Portal.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { setKey } from '../../../util/collection/map.js';
+import { STAT_LOCKED } from '../../../util/constants.js';
+import { matchIdSegments } from '../../../util/string.js';
 
 export async function SignalPortalUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isPortal(this)) {

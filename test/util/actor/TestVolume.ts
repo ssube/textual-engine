@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { checkVolume, ShowVolume } from '../../../src/util/actor';
-import { makeTestActor, makeTestRoom } from '../../entity';
+import { checkVolume, ShowVolume } from '../../../src/util/actor/index.js';
+import { makeTestActor, makeTestRoom } from '../../entity.js';
 
 describe('actor utils', () => {
   describe('show volume helper', () => {

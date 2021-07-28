@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import { createStubInstance } from 'sinon';
 
-import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../../src/model/Command';
-import { ActorSource } from '../../../../../src/model/entity/Actor';
-import { SignalBehaviorEnemy } from '../../../../../src/script/signal/behavior/common/BehaviorEnemy';
-import { MathRandomService } from '../../../../../src/service/random/MathRandom';
-import { VERB_HIT, VERB_LOOK, VERB_MOVE } from '../../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../../entity';
-import { createStubBehavior, createTestContext } from '../../../../helper';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../../src/model/Command.js';
+import { ActorSource } from '../../../../../src/model/entity/Actor.js';
+import { SignalBehaviorEnemy } from '../../../../../src/script/signal/behavior/common/BehaviorEnemy.js';
+import { MathRandomService } from '../../../../../src/service/random/MathRandom.js';
+import { VERB_HIT, VERB_LOOK, VERB_MOVE } from '../../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../../entity.js';
+import { createStubBehavior, createTestContext } from '../../../../helper.js';
 
 describe('actor behavior signal for common enemies', () => {
   it('should require the script target be an actor', async () => {

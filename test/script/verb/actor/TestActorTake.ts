@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { match, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { VerbActorTake } from '../../../../src/script/verb/actor/ActorTake';
-import { VERB_TAKE } from '../../../../src/util/constants';
-import { findMatching } from '../../../../src/util/entity/find';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { VerbActorTake } from '../../../../src/script/verb/actor/ActorTake.js';
+import { VERB_TAKE } from '../../../../src/util/constants.js';
+import { findMatching } from '../../../../src/util/entity/find.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../helper.js';
 
 describe('actor take verb', () => {
   it('should require the script target be an actor', async () => {

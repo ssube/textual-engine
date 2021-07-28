@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
 
-import { Output } from '../../../src/component/react/Output';
-import { getReactStrings } from './helper';
+import { Output } from '../../../src/component/react/Output.js';
+import { getReactStrings } from './helper.js';
 
 describe('react output component', () => {
   it('should show the provided output', async () => {

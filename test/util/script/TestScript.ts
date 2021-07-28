@@ -1,6 +1,6 @@
 import { expect } from 'chai';
-import { getVerbScripts } from '../../../src/util/script';
-import { makeTestActor, makeTestRoom } from '../../entity';
+import { getVerbScripts } from '../../../src/util/script/index.js';
+import { makeTestActor, makeTestRoom } from '../../entity.js';
 
 describe('script utils', () => {
   describe('verb script helper', () => {

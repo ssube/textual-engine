@@ -50,7 +50,7 @@ export { Service } from './service/index';
 
 export { BehaviorActorService } from './service/actor/BehaviorActor';
 export { PlayerActorService } from './service/actor/PlayerActor';
-export { ActorJoinEvent, ActorCommandEvent, ActorRoomEvent, ActorOutputEvent } from './service/actor/events';
+export { ActorJoinEvent, ActorCommandEvent, ActorRoomEvent, ActorOutputEvent } from './service/actor/events.js';
 export { ActorService } from './service/actor/index';
 
 export { LocalCounter } from './service/counter/LocalCounter';
@@ -61,13 +61,13 @@ export { EventBus, EventGroup } from './service/event/index';
 
 export { BrowserFetchLoader } from './service/loader/browser/FetchLoader';
 export { BrowserPageLoader } from './service/loader/browser/PageLoader';
-export { LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent, LoaderSaveEvent, LoaderConfigEvent } from './service/loader/events';
+export { LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent, LoaderSaveEvent, LoaderConfigEvent } from './service/loader/events.js';
 export { LoaderService } from './service/loader/index';
 export { NodeFetchLoader } from './service/loader/node/FetchLoader';
 export { NodeFileLoader } from './service/loader/node/FileLoader';
 
 export { NextLocaleService } from './service/locale/NextLocale';
-export { LocaleBundleEvent } from './service/locale/events';
+export { LocaleBundleEvent } from './service/locale/events.js';
 export { LocaleContext, LocaleService } from './service/locale/index';
 
 export { YamlParser } from './service/parser/YamlParser';
@@ -78,7 +78,7 @@ export { MathRandomService } from './service/random/MathRandom';
 export { RandomService } from './service/random/index';
 
 export { LineRender } from './service/render/LineRender';
-export { RenderInputEvent } from './service/render/events';
+export { RenderInputEvent } from './service/render/events.js';
 export { RenderService } from './service/render/index';
 export { ReactDomRender } from './service/render/react/DomRender';
 export { InkRender } from './service/render/react/InkRender';
@@ -87,7 +87,7 @@ export { LocalScriptService } from './service/script/LocalScript';
 export { ScriptContext, ScriptFunction, ScriptService, ScriptTarget, StateHelper, SuppliedScope } from './service/script/index';
 
 export { LocalStateService } from './service/state/LocalState';
-export { StateJoinEvent, StateStepEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent } from './service/state/events';
+export { StateJoinEvent, StateStepEvent, StateLoadEvent, StateOutputEvent, StateRoomEvent } from './service/state/events.js';
 export { StateService, StepParams, StepResult, CreateParams } from './service/state/index';
 
 export { ChainTemplateService } from './service/template/ChainTemplateService';
@@ -99,7 +99,7 @@ export { TokenizerService } from './service/tokenizer/index';
 
 export { ShowVolume, StateSource, checkVolume } from './util/actor/index';
 
-export { TEMPLATE_CHANCE, META_VERBS, COMMON_VERBS, EVENT_NAMES } from './util/constants';
+export { TEMPLATE_CHANCE, META_VERBS, COMMON_VERBS, EVENT_NAMES } from './util/constants.js';
 export { Singleton, SingletonConstructor } from './util/container';
 export { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy, createFuzzyMatcher, createStrictMatcher } from './util/entity/match';
 export { makeConstStringSchema, makeSchema } from './util/schema';

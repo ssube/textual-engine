@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../../src/model/Command';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../../src/model/Command.js';
 import { SignalBehaviorHGWitch } from '../../../../../src/script/signal/behavior/hansel-gretel/BehaviorWitch';
-import { VERB_LOOK } from '../../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
-import { createTestContext, getStubHelper } from '../../../../helper';
+import { VERB_LOOK } from '../../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../../helper.js';
 
 describe('actor behavior signal for the witch', () => {
   it('should require the script target be an actor', async () => {

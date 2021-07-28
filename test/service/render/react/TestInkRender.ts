@@ -3,15 +3,15 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { SinonFakeTimers, stub, useFakeTimers } from 'sinon';
 
-import { INJECT_EVENT } from '../../../../src/module';
-import { CoreModule } from '../../../../src/module/CoreModule';
-import { NodeModule } from '../../../../src/module/NodeModule';
-import { EventBus } from '../../../../src/service/event';
-import { InkRender } from '../../../../src/service/render/react/InkRender';
-import { EVENT_ACTOR_OUTPUT, EVENT_ACTOR_QUIT, EVENT_ACTOR_ROOM, EVENT_STATE_STEP } from '../../../../src/util/constants';
-import { zeroStep } from '../../../../src/util/entity';
-import { makeTestActor, makeTestRoom } from '../../../entity';
-import { getTestContainer } from '../../../helper';
+import { INJECT_EVENT } from '../../../../src/module/index.js';
+import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { NodeModule } from '../../../../src/module/NodeModule.js';
+import { EventBus } from '../../../../src/service/event/index.js';
+import { InkRender } from '../../../../src/service/render/react/InkRender.js';
+import { EVENT_ACTOR_OUTPUT, EVENT_ACTOR_QUIT, EVENT_ACTOR_ROOM, EVENT_STATE_STEP } from '../../../../src/util/constants.js';
+import { zeroStep } from '../../../../src/util/entity/index.js';
+import { makeTestActor, makeTestRoom } from '../../../entity.js';
+import { getTestContainer } from '../../../helper.js';
 
 const THROTTLE_TIME = 10;
 const THROTTLE_WAIT = THROTTLE_TIME * 2;

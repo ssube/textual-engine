@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { NodeModule } from '../../src/module/NodeModule';
-import { getTestContainer } from '../helper';
+import { NodeModule } from '../../src/module/NodeModule.js';
+import { getTestContainer } from '../helper.js';
 
 describe('browser module', () => {
   it('should provide browser services', async () => {

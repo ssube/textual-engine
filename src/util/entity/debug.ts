@@ -1,5 +1,5 @@
-import { WorldState } from '../../model/world/State';
-import { hasText } from '../string';
+import { WorldState } from '../../model/world/State.js';
+import { hasText } from '../string.js';
 
 export function debugState(state: WorldState): Array<string> {
   const lines = [

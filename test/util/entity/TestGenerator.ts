@@ -4,20 +4,20 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { stub } from 'sinon';
 
-import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
-import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item';
-import { isPortal, Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal';
-import { isRoom, Room, ROOM_TYPE } from '../../../src/model/entity/Room';
-import { Modifier } from '../../../src/model/mapped/Modifier';
-import { Template } from '../../../src/model/mapped/Template';
-import { WorldTemplate } from '../../../src/model/world/Template';
-import { INJECT_COUNTER, INJECT_LOCALE } from '../../../src/module';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { Counter } from '../../../src/service/counter';
-import { LocaleService } from '../../../src/service/locale';
-import { PORTAL_DEPTH, TEMPLATE_CHANCE } from '../../../src/util/constants';
-import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
-import { getTestContainer } from '../../helper';
+import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor.js';
+import { isItem, Item, ITEM_TYPE } from '../../../src/model/entity/Item.js';
+import { isPortal, Portal, PORTAL_TYPE, PortalLinkage } from '../../../src/model/entity/Portal.js';
+import { isRoom, Room, ROOM_TYPE } from '../../../src/model/entity/Room.js';
+import { Modifier } from '../../../src/model/mapped/Modifier.js';
+import { Template } from '../../../src/model/mapped/Template.js';
+import { WorldTemplate } from '../../../src/model/world/Template.js';
+import { INJECT_COUNTER, INJECT_LOCALE } from '../../../src/module/index.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { Counter } from '../../../src/service/counter/index.js';
+import { LocaleService } from '../../../src/service/locale/index.js';
+import { PORTAL_DEPTH, TEMPLATE_CHANCE } from '../../../src/util/constants.js';
+import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator.js';
+import { getTestContainer } from '../../helper.js';
 
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {

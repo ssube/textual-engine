@@ -1,9 +1,10 @@
 {
   "name": "text-adventure",
   "version": "1.4.0",
-  "main": "index.js",
   "author": "ssube <seansube@gmail.com>",
   "license": "MIT",
+  "type": "module",
+  "main": "index.js",
   "dependencies": {
     "@apextoaster/js-utils": "0.3.0",
     "@apextoaster/js-yaml-schema": "0.4.0",
@@ -49,6 +50,7 @@
     "@types/yargs-parser": "20.2.1",
     "@typescript-eslint/eslint-plugin": "4.28.5",
     "@typescript-eslint/parser": "4.28.5",
+    "c8": "^7.7.3",
     "chai": "4.3.4",
     "chai-as-promised": "7.1.1",
     "esbuild": "0.12.15",
@@ -64,7 +66,6 @@
     "eslint-plugin-sonarjs": "0.9.1",
     "ink-testing-library": "2.1.0",
     "mocha": "9.0.3",
-    "nyc": "15.1.0",
     "react-test-renderer": "17.0.2",
     "sinon": "11.1.2",
     "sinon-chai": "3.7.0",

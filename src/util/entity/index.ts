@@ -1,13 +1,13 @@
 import { doesExist } from '@apextoaster/js-utils';
 
-import { Actor } from '../../model/entity/Actor';
-import { Item } from '../../model/entity/Item';
-import { Portal } from '../../model/entity/Portal';
-import { StepResult } from '../../service/state';
-import { getKey } from '../collection/map';
-import { STAT_CLOSED, STAT_LOCKED } from '../constants';
-import { matchIdSegments } from '../string';
-import { Immutable, StringMap } from '../types';
+import { Actor } from '../../model/entity/Actor.js';
+import { Item } from '../../model/entity/Item.js';
+import { Portal } from '../../model/entity/Portal.js';
+import { StepResult } from '../../service/state/index.js';
+import { getKey } from '../collection/map.js';
+import { STAT_CLOSED, STAT_LOCKED } from '../constants.js';
+import { matchIdSegments } from '../string.js';
+import { Immutable, StringMap } from '../types.js';
 
 export function equipItems(actor: Actor, items: StringMap): void {
   for (const [slot, id] of items) {

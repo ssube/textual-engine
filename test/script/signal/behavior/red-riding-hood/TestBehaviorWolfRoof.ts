@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../../src/model/Command';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../../src/model/Command.js';
 import { SignalBehaviorRRHWolfRoof } from '../../../../../src/script/signal/behavior/red-riding-hood/BehaviorWolfRoof';
-import { VERB_LOOK } from '../../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
-import { createTestContext } from '../../../../helper';
+import { VERB_LOOK } from '../../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
+import { createTestContext } from '../../../../helper.js';
 
 describe('actor behavior signal for the forest wolf', () => {
   it('should require the script target be an actor', async () => {

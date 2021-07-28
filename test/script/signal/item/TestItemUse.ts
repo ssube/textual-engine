@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import { match } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { SignalItemUse } from '../../../../src/script/signal/item/ItemUse';
-import { VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { SignalItemUse } from '../../../../src/script/signal/item/ItemUse.js';
+import { VERB_WAIT } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../helper.js';
 
 describe('item use signal', () => {
   it('should require the script target be an item', async () => {

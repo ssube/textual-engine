@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 import { SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../../src/model/Command';
-import { SignalActorLookLucy } from '../../../../../src/script/signal/actor/dracula/LookLucy';
-import { STAT_HEALTH, VERB_LOOK } from '../../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
-import { createTestContext, getStubHelper } from '../../../../helper';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../../src/model/Command.js';
+import { SignalActorLookLucy } from '../../../../../src/script/signal/actor/dracula/LookLucy.js';
+import { STAT_HEALTH, VERB_LOOK } from '../../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../../helper.js';
 
 describe('actor look signal for Lucy character', () => {
   it('should require the script target be an actor', async () => {

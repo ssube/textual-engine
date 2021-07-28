@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { StackMap } from '../../../src/util/collection/StackMap';
+import { StackMap } from '../../../src/util/collection/StackMap.js';
 
 describe('stack map', () => {
   it('should push items onto the existing list for existing keys', async () => {

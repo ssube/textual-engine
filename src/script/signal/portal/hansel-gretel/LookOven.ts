@@ -1,8 +1,8 @@
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { ACTOR_TYPE } from '../../../../model/entity/Actor';
-import { isPortal } from '../../../../model/entity/Portal';
-import { ScriptContext, ScriptTarget } from '../../../../service/script';
-import { SignalPortalLook } from '../PortalLook';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { ACTOR_TYPE } from '../../../../model/entity/Actor.js';
+import { isPortal } from '../../../../model/entity/Portal.js';
+import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { SignalPortalLook } from '../PortalLook.js';
 
 /**
  * Describe the room on the other side, and whether it contains one of the siblings.

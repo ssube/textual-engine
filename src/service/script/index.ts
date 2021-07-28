@@ -1,19 +1,19 @@
 import { Logger } from 'noicejs';
 
-import { Command } from '../../model/Command';
-import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
-import { ReadonlyActor } from '../../model/entity/Actor';
-import { ReadonlyItem } from '../../model/entity/Item';
-import { ReadonlyPortal } from '../../model/entity/Portal';
-import { ReadonlyRoom } from '../../model/entity/Room';
-import { ScriptData } from '../../model/Script';
-import { ShowVolume, StateSource } from '../../util/actor';
-import { ActorTransfer, ItemTransfer } from '../../util/entity/EntityTransfer';
-import { SearchFilter } from '../../util/entity/find';
-import { Immutable } from '../../util/types';
-import { LocaleContext } from '../locale';
-import { RandomService } from '../random';
-import { StepResult } from '../state';
+import { Command } from '../../model/Command.js';
+import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity/index.js';
+import { ReadonlyActor } from '../../model/entity/Actor.js';
+import { ReadonlyItem } from '../../model/entity/Item.js';
+import { ReadonlyPortal } from '../../model/entity/Portal.js';
+import { ReadonlyRoom } from '../../model/entity/Room.js';
+import { ScriptData } from '../../model/Script.js';
+import { ShowVolume, StateSource } from '../../util/actor/index.js';
+import { ActorTransfer, ItemTransfer } from '../../util/entity/EntityTransfer.js';
+import { SearchFilter } from '../../util/entity/find.js';
+import { Immutable } from '../../util/types.js';
+import { LocaleContext } from '../locale/index.js';
+import { RandomService } from '../random/index.js';
+import { StepResult } from '../state/index.js';
 
 export type ScriptTarget = Immutable<WorldEntity>;
 export type ScriptFunction = (this: ScriptTarget, context: ScriptContext) => Promise<void>;

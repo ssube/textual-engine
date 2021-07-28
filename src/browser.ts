@@ -1,6 +1,6 @@
 /* istanbul ignore file */
 
-import { main } from './main';
+import { main } from './main.js';
 
 const args = [
   '--config',

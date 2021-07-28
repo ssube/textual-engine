@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { createStubInstance, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../../src/model/Command';
-import { SignalBehaviorFlee } from '../../../../../src/script/signal/behavior/common/BehaviorFlee';
-import { MathRandomService } from '../../../../../src/service/random/MathRandom';
-import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../../entity';
-import { createStubBehavior, createTestContext, getStubHelper } from '../../../../helper';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../../src/model/Command.js';
+import { SignalBehaviorFlee } from '../../../../../src/script/signal/behavior/common/BehaviorFlee.js';
+import { MathRandomService } from '../../../../../src/service/random/MathRandom.js';
+import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../../entity.js';
+import { createStubBehavior, createTestContext, getStubHelper } from '../../../../helper.js';
 
 describe('actor behavior signal for fleeing critters', () => {
   it('should require the script target be an actor', async () => {

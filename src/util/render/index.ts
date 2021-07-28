@@ -1,9 +1,9 @@
-import { ShortcutData, ShortcutItem, StatusItem } from '../../component/shared';
-import { Entity } from '../../model/entity/Base';
-import { ActorRoomEvent } from '../../service/actor/events';
-import { remove } from '../collection/array';
-import { COMMON_STATS } from '../constants';
-import { getVerbScripts } from '../script';
+import { ShortcutData, ShortcutItem, StatusItem } from '../../component/shared.js';
+import { Entity } from '../../model/entity/Base.js';
+import { ActorRoomEvent } from '../../service/actor/events.js';
+import { remove } from '../collection/array.js';
+import { COMMON_STATS } from '../constants.js';
+import { getVerbScripts } from '../script/index.js';
 
 export function extractShortcut(entity: Entity): ShortcutItem {
   return {

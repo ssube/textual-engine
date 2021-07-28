@@ -1,12 +1,12 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { makeCommand } from '../../../../model/Command';
-import { ACTOR_TYPE, isActor } from '../../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../../service/script';
-import { randomItem } from '../../../../util/collection/array';
-import { VERB_MOVE } from '../../../../util/constants';
-import { SignalBehaviorEnemy } from './BehaviorEnemy';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { makeCommand } from '../../../../model/Command.js';
+import { ACTOR_TYPE, isActor } from '../../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { randomItem } from '../../../../util/collection/array.js';
+import { VERB_MOVE } from '../../../../util/constants.js';
+import { SignalBehaviorEnemy } from './BehaviorEnemy.js';
 
 export async function SignalBehaviorFlee(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

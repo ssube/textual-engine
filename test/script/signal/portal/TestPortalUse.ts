@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { SignalPortalUse } from '../../../../src/script/signal/portal/PortalUse';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { STAT_LOCKED, VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
-import { createTestContext } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { SignalPortalUse } from '../../../../src/script/signal/portal/PortalUse.js';
+import { MathRandomService } from '../../../../src/service/random/MathRandom.js';
+import { STAT_LOCKED, VERB_WAIT } from '../../../../src/util/constants.js';
+import { makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity.js';
+import { createTestContext } from '../../../helper.js';
 
 describe('portal use signal', () => {
   it('should require the script target be a portal', async () => {

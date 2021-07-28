@@ -1,5 +1,5 @@
-import { InputChain } from '.';
-import { RandomService } from '../../service/random';
+import { InputChain } from './index.js';
+import { RandomService } from '../../service/random/index.js';
 
 export interface JoinOptions {
   joiners: Array<string>;

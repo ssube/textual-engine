@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/indent */
-import { Actor, ActorType } from './Actor';
-import { Item, ItemType } from './Item';
-import { Portal, PortalType } from './Portal';
-import { Room, RoomType } from './Room';
+import { Actor, ActorType } from './Actor.js';
+import { Item, ItemType } from './Item.js';
+import { Portal, PortalType } from './Portal.js';
+import { Room, RoomType } from './Room.js';
 
 export type WorldEntity = Room | Portal | Item | Actor;
 

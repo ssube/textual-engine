@@ -2,12 +2,12 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { stub } from 'sinon';
 
-import { INJECT_EVENT } from '../../../../src/module';
-import { CoreModule } from '../../../../src/module/CoreModule';
-import { EventBus } from '../../../../src/service/event';
-import { BrowserLocalLoader } from '../../../../src/service/loader/browser/LocalLoader';
-import { EVENT_LOADER_SAVE } from '../../../../src/util/constants';
-import { getTestContainer } from '../../../helper';
+import { INJECT_EVENT } from '../../../../src/module/index.js';
+import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { EventBus } from '../../../../src/service/event/index.js';
+import { BrowserLocalLoader } from '../../../../src/service/loader/browser/LocalLoader.js';
+import { EVENT_LOADER_SAVE } from '../../../../src/util/constants.js';
+import { getTestContainer } from '../../../helper.js';
 
 describe('browser local loader', () => {
   it('should read from storage', async () => {

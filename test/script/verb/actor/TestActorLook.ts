@@ -1,14 +1,14 @@
 import { expect } from 'chai';
 import { createStubInstance, match, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { CoreModule } from '../../../../src/lib';
-import { makeCommand } from '../../../../src/model/Command';
-import { VerbActorLook } from '../../../../src/script/verb/actor/ActorLook';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
-import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper, getTestContainer } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { VerbActorLook } from '../../../../src/script/verb/actor/ActorLook.js';
+import { LocalScriptService } from '../../../../src/service/script/LocalScript.js';
+import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper, getTestContainer } from '../../../helper.js';
 
 describe('actor look verb', () => {
   describe('actor look verb without a target', () => {

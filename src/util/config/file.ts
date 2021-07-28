@@ -2,11 +2,11 @@ import { mustExist } from '@apextoaster/js-utils';
 import { promises } from 'fs';
 import { load } from 'js-yaml';
 
-import { ConfigError } from '../../error/ConfigError';
-import { ConfigFile } from '../../model/file/Config';
-import { DATA_SCHEMA } from '../../model/file/Data';
-import { makeParserSchema } from '../parser';
-import { makeSchema } from '../schema';
+import { ConfigError } from '../../error/ConfigError.js';
+import { ConfigFile } from '../../model/file/Config.js';
+import { DATA_SCHEMA } from '../../model/file/Data.js';
+import { makeParserSchema } from '../parser/index.js';
+import { makeSchema } from '../schema/index.js';
 
 /**
  * Specialized config-loading function.

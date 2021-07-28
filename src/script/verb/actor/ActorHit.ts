@@ -1,12 +1,12 @@
 import { isNil, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isActor } from '../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { head } from '../../../util/collection/array';
-import { SIGNAL_HIT } from '../../../util/constants';
-import { findActorSlots, findSlotItem } from '../../../util/entity/find';
-import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isActor } from '../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { head } from '../../../util/collection/array.js';
+import { SIGNAL_HIT } from '../../../util/constants.js';
+import { findActorSlots, findSlotItem } from '../../../util/entity/find.js';
+import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match.js';
 
 export async function VerbActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

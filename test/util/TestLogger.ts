@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { entityMeta } from '../../src/util/logger';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../entity';
+import { entityMeta } from '../../src/util/logger.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../entity.js';
 
 describe('logger utils', () => {
   describe('entity serializer', () => {

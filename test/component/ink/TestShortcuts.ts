@@ -3,9 +3,9 @@ import { render } from 'ink-testing-library';
 import * as React from 'react';
 import { stub } from 'sinon';
 
-import { Shortcuts } from '../../../src/component/ink/Shortcuts';
-import { KEY_ARROW_DOWN, KEY_ENTER, KEY_TAB } from '../../constants';
-import { FocusWrapper, removeEscapes, sendKeys } from './helper';
+import { Shortcuts } from '../../../src/component/ink/Shortcuts.js';
+import { KEY_ARROW_DOWN, KEY_ENTER, KEY_TAB } from '../../constants.js';
+import { FocusWrapper, removeEscapes, sendKeys } from './helper.js';
 
 describe('ink shortcut component', () => {
   it('should show categories', async () => {

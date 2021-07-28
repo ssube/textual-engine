@@ -1,9 +1,9 @@
 import { Module, ModuleOptions } from 'noicejs';
 
-import { NodeFetchLoader } from '../service/loader/node/FetchLoader';
-import { NodeFileLoader } from '../service/loader/node/FileLoader';
-import { LineRender } from '../service/render/LineRender';
-import { InkRender } from '../service/render/react/InkRender';
+import { NodeFetchLoader } from '../service/loader/node/FetchLoader.js';
+import { NodeFileLoader } from '../service/loader/node/FileLoader.js';
+import { LineRender } from '../service/render/LineRender.js';
+import { InkRender } from '../service/render/react/InkRender.js';
 
 export class NodeModule extends Module {
   public async configure(options: ModuleOptions): Promise<void> {

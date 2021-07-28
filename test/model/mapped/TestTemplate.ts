@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { TEMPLATE_NUMBER_SCHEMA, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../../../src/model/mapped/Template';
-import { makeSchema } from '../../../src/util/schema';
+import { TEMPLATE_NUMBER_SCHEMA, TEMPLATE_REF_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../../../src/model/mapped/Template.js';
+import { makeSchema } from '../../../src/util/schema/index.js';
 
 describe('template mapped model', () => {
   it('should validate template numbers', async () => {

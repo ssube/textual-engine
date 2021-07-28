@@ -1,9 +1,9 @@
 import { promises } from 'fs';
 
-import { LoaderService } from '..';
-import { InjectedOptions } from '../../../module';
-import { splitPath } from '../../../util/string';
-import { BaseLoader } from '../BaseLoader';
+import { InjectedOptions } from '../../../module/index.js';
+import { splitPath } from '../../../util/string.js';
+import { BaseLoader } from '../BaseLoader.js';
+import { LoaderService } from '../index.js';
 
 export class NodeFileLoader extends BaseLoader implements LoaderService {
   protected fs: typeof promises;

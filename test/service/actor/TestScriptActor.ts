@@ -3,17 +3,17 @@ import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 import { match, spy, stub } from 'sinon';
 
-import { ConfigError } from '../../../src/error/ConfigError';
-import { ActorSource } from '../../../src/model/entity/Actor';
-import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { ActorCommandEvent } from '../../../src/service/actor/events';
-import { ScriptActorService } from '../../../src/service/actor/ScriptActor';
-import { EventBus } from '../../../src/service/event';
-import { ScriptContext, ScriptService } from '../../../src/service/script';
-import { LocalScriptService, ScriptPairs } from '../../../src/service/script/LocalScript';
-import { ShowVolume } from '../../../src/util/actor';
-import { onceEvent } from '../../../src/util/async/event';
+import { ConfigError } from '../../../src/error/ConfigError.js';
+import { ActorSource } from '../../../src/model/entity/Actor.js';
+import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module/index.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { ActorCommandEvent } from '../../../src/service/actor/events.js';
+import { ScriptActorService } from '../../../src/service/actor/ScriptActor.js';
+import { EventBus } from '../../../src/service/event/index.js';
+import { ScriptContext, ScriptService } from '../../../src/service/script/index.js';
+import { LocalScriptService, ScriptPairs } from '../../../src/service/script/LocalScript.js';
+import { ShowVolume } from '../../../src/util/actor/index.js';
+import { onceEvent } from '../../../src/util/async/event.js';
 import {
   EVENT_ACTOR_COMMAND,
   EVENT_STATE_OUTPUT,
@@ -21,9 +21,9 @@ import {
   EVENT_STATE_STEP,
   SIGNAL_BEHAVIOR,
   VERB_WAIT,
-} from '../../../src/util/constants';
-import { makeTestActor, makeTestRoom } from '../../entity';
-import { getTestContainer } from '../../helper';
+} from '../../../src/util/constants.js';
+import { makeTestActor, makeTestRoom } from '../../entity.js';
+import { getTestContainer } from '../../helper.js';
 
 describe('script actor', () => {
   it('should invoke the behavior signal on room events', async () => {

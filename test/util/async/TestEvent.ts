@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import { EventEmitter } from 'events';
 import { stub } from 'sinon';
-import { AbortEventError } from '../../../src/error/AbortEventError';
+import { AbortEventError } from '../../../src/error/AbortEventError.js';
 
-import { catchAndLog, onceWithRemove } from '../../../src/util/async/event';
-import { getTestLogger } from '../../helper';
+import { catchAndLog, onceWithRemove } from '../../../src/util/async/event.js';
+import { getTestLogger } from '../../helper.js';
 
 describe('event utils', () => {
   describe('once with removal helper', () => {

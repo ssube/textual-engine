@@ -1,19 +1,19 @@
 import { getOrDefault, isNil, mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { TokenizerService } from '.';
-import { Command } from '../../model/Command';
-import { LocaleBundle } from '../../model/file/Locale';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
-import { catchAndLog } from '../../util/async/event';
-import { groupOn } from '../../util/collection/array';
-import { EVENT_LOCALE_BUNDLE, EVENT_RENDER_INPUT, EVENT_TOKEN_COMMAND, SPLIT_CHAR } from '../../util/constants';
-import { makeServiceLogger } from '../../util/service';
-import { splitWords, trim } from '../../util/string';
-import { EventBus } from '../event';
-import { LocaleService } from '../locale';
-import { LocaleBundleEvent } from '../locale/events';
-import { RenderInputEvent } from '../render/events';
+import { TokenizerService } from './index.js';
+import { Command } from '../../model/Command.js';
+import { LocaleBundle } from '../../model/file/Locale.js';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
+import { catchAndLog } from '../../util/async/event.js';
+import { groupOn } from '../../util/collection/array.js';
+import { EVENT_LOCALE_BUNDLE, EVENT_RENDER_INPUT, EVENT_TOKEN_COMMAND, SPLIT_CHAR } from '../../util/constants.js';
+import { makeServiceLogger } from '../../util/service/index.js';
+import { splitWords, trim } from '../../util/string.js';
+import { EventBus } from '../event/index.js';
+import { LocaleService } from '../locale/index.js';
+import { LocaleBundleEvent } from '../locale/events.js';
+import { RenderInputEvent } from '../render/events.js';
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export class SplitTokenizer implements TokenizerService {

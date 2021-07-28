@@ -2,10 +2,10 @@ import { doesExist, getOrDefault } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { Inject, Logger } from 'noicejs';
 
-import { AnyHandler, EventBus, EventGroup } from '.';
-import { INJECT_LOGGER, InjectedOptions } from '../../module';
-import { ErrorHandler, EventHandler } from '../../util/async/event';
-import { makeServiceLogger } from '../../util/service';
+import { AnyHandler, EventBus, EventGroup } from './index.js';
+import { INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
+import { ErrorHandler, EventHandler } from '../../util/async/event.js';
+import { makeServiceLogger } from '../../util/service/index.js';
 
 @Inject(INJECT_LOGGER)
 export class NodeEventBus extends EventEmitter implements EventBus {

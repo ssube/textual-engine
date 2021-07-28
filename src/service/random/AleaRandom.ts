@@ -1,10 +1,12 @@
-import { alea } from 'seedrandom';
+import seedrandom from 'seedrandom';
 
-import { RandomService } from './index.js';
 import { BYTE_RANGE } from '../../util/constants.js';
+import { RandomGenerator, RandomService } from './index.js';
+
+const { alea } = seedrandom;
 
 export class AleaRandomService implements RandomService {
-  protected source: ReturnType<typeof alea>; // this should be imported above, but... that is an error, this works
+  protected source: RandomGenerator;
 
   constructor() {
     this.source = alea();

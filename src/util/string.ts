@@ -1,7 +1,9 @@
 import { doesExist } from '@apextoaster/js-utils';
-import { alt, createLanguage, regexp, optWhitespace, whitespace } from 'parsimmon';
+import parsimmon from 'parsimmon';
 
 import { SPLIT_HEAD_TAIL } from './constants.js';
+
+const { alt, createLanguage, regexp, optWhitespace, whitespace } = parsimmon;
 
 /**
  * String has non-whitespace characters.

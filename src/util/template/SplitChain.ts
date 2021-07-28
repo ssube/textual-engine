@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { alt, createLanguage, optWhitespace, regexp, string } from 'parsimmon';
+import parsimmon from 'parsimmon';
 
 import { InputChain } from './index.js';
+
+const { alt, createLanguage, optWhitespace, regexp, string } = parsimmon;
 
 /**
  * Unnecessarily customizable delimiters. Must be regex safe, may be multiple characters.

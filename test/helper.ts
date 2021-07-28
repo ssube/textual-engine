@@ -58,7 +58,7 @@ export function getStubHelper(): StateHelper {
   return {
     create: stub(),
     enter: stub(),
-    find: stub(),
+    find: stub().resolves([]),
     move: stub(),
     quit: stub(),
     show: stub(),

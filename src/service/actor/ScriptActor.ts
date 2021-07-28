@@ -88,6 +88,7 @@ export class ScriptActorService implements ActorService {
     }, this);
 
     this.event.on(EVENT_STATE_ROOM, (event) => {
+      this.logger.debug({ event }, 'script actor state room');
       if (event.actor.source === ActorSource.BEHAVIOR) {
         catchAndLog(this.onRoom(event), this.logger, 'error during room event');
       }

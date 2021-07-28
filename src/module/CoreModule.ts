@@ -15,6 +15,7 @@ import {
 import { ConfigFile } from '../model/file/Config';
 import { BehaviorActorService } from '../service/actor/BehaviorActor';
 import { PlayerActorService } from '../service/actor/PlayerActor';
+import { ScriptActorService } from '../service/actor/ScriptActor';
 import { Counter } from '../service/counter';
 import { LocalCounter } from '../service/counter/LocalCounter';
 import { EventBus } from '../service/event';
@@ -65,6 +66,7 @@ export class CoreModule extends Module {
 
     this.bind('core-behavior-actor').toConstructor(BehaviorActorService);
     this.bind('core-player-actor').toConstructor(PlayerActorService);
+    this.bind('core-script-actor').toConstructor(ScriptActorService);
 
     this.bind('core-local-state').toConstructor(LocalStateService);
 

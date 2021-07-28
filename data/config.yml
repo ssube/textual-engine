@@ -118,10 +118,11 @@ config:
       - name: player-actor
         kind: core-player-actor
       - name: enemy-actor
-        kind: core-behavior-actor
+        kind: core-script-actor
         data:
-          attack: 1.00
-          wander: 0.25
+          data: !map
+            attack: 1.00
+            wander: 0.25
     loaders:
       - name: file-loader
         kind: node-file-loader

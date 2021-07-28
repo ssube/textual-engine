@@ -10,6 +10,7 @@ import { SignalActorLook } from '../../script/signal/actor/ActorLook';
 import { SignalActorStep } from '../../script/signal/actor/ActorStep';
 import { SignalActorUse } from '../../script/signal/actor/ActorUse';
 import { SignalBehaviorEnemy } from '../../script/signal/behavior/common/BehaviorEnemy';
+import { SignalBehaviorDraculaVanHelsing } from '../../script/signal/behavior/dracula/BehaviorVanHelsing';
 import { SignalItemLook } from '../../script/signal/item/ItemLook';
 import { SignalItemReplace } from '../../script/signal/item/ItemReplace';
 import { SignalItemStep } from '../../script/signal/item/ItemStep';
@@ -68,6 +69,8 @@ const COMMON_SCRIPTS: ScriptPairs = [
   ['verb-actor-take', VerbActorTake],
   ['verb-actor-use', VerbActorUse],
   ['verb-actor-wait', VerbActorWait],
+  // sample worlds
+  ['signal-behavior-dracula-van-helsing', SignalBehaviorDraculaVanHelsing],
 ];
 
 @Inject(INJECT_LOGGER)

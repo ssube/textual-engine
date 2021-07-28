@@ -10,6 +10,10 @@ worlds:
         flags: !map {}
         items: []
         scripts: !map
+          signal.behavior:
+            data: !map {}
+            name:
+              base: signal-behavior-enemy
           signal.get:
             data: !map {}
             name:
@@ -273,7 +277,11 @@ worlds:
             items:
               - id: item-knife
               - id: item-saw
-            scripts: !map {}
+            scripts: !map
+              signal.behavior:
+                data: !map {}
+                name:
+                  base: signal-behavior-dracula-van-helsing
             slots: !map
               weapon-hand-left:
                 base: ''
@@ -1470,7 +1478,9 @@ worlds:
             actors:
               - id: actor-cab
               - id: actor-van-helsing
-            flags: !map {}
+            flags: !map
+              path-van-helsing:
+                base: gate
             items: []
             portals:
               - id: portal-gate-avenue
@@ -1483,7 +1493,9 @@ worlds:
               desc:
                 base: the avenue to the house
             actors: []
-            flags: !map {}
+            flags: !map
+              path-van-helsing:
+                base: south path
             items: []
             portals:
               - id: portal-avenue-garden

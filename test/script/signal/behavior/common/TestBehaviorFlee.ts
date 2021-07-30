@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStubInstance, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../../src/model/Command.js';
@@ -8,6 +8,8 @@ import { MathRandomService } from '../../../../../src/service/random/MathRandom.
 import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../../entity.js';
 import { createStubBehavior, createTestContext, getStubHelper } from '../../../../helper.js';
+
+const { createStubInstance } = sinon;
 
 describe('actor behavior signal for fleeing critters', () => {
   it('should require the script target be an actor', async () => {

@@ -2,7 +2,7 @@
 import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { createStubInstance, match, spy, stub } from 'sinon';
+import sinon from 'sinon';
 
 import { NotInitializedError } from '../../../src/error/NotInitializedError.js';
 import { ScriptTargetError } from '../../../src/error/ScriptTargetError.js';
@@ -13,8 +13,8 @@ import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal.js';
 import { Room, ROOM_TYPE } from '../../../src/model/entity/Room.js';
 import { Template } from '../../../src/model/mapped/Template.js';
 import { WorldTemplate } from '../../../src/model/world/Template.js';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module/index.js';
 import { CoreModule } from '../../../src/module/CoreModule.js';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module/index.js';
 import { Counter } from '../../../src/service/counter/index.js';
 import { EventBus } from '../../../src/service/event/index.js';
 import { LoaderSaveEvent } from '../../../src/service/loader/events.js';
@@ -61,6 +61,7 @@ import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator.j
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity.js';
 import { createTestContext, getTestContainer } from '../../helper.js';
 
+const { createStubInstance, match, spy, stub } = sinon;
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
   base: {

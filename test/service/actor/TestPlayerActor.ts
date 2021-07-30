@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { makeCommand, makeCommandIndex } from '../../../src/model/Command.js';
-import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module/index.js';
 import { CoreModule } from '../../../src/module/CoreModule.js';
+import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module/index.js';
 import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent } from '../../../src/service/actor/events.js';
 import { PlayerActorService } from '../../../src/service/actor/PlayerActor.js';
 import { EventBus } from '../../../src/service/event/index.js';
@@ -31,6 +31,7 @@ import { zeroStep } from '../../../src/util/entity/index.js';
 import { makeTestActor, makeTestRoom } from '../../entity.js';
 import { getTestContainer } from '../../helper.js';
 
+const { stub } = sinon;
 describe('player actor', () => {
   it('should parse render output into commands', async () => {
     const container = await getTestContainer(new CoreModule());

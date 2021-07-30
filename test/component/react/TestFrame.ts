@@ -1,13 +1,14 @@
 import { expect } from 'chai';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { Frame } from '../../../src/component/react/Frame.js';
 import { META_CREATE } from '../../../src/util/constants.js';
 import { zeroStep } from '../../../src/util/entity/index.js';
 import { getReactStrings } from './helper.js';
 
+const { stub } = sinon;
 describe('react frame component', () => {
   it('should show the prompt', async () => {
     const prompt = 'foo';

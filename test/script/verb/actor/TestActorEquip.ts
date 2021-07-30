@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../src/model/Command.js';
@@ -7,6 +7,8 @@ import { VerbActorEquip } from '../../../../src/script/verb/actor/ActorEquip.js'
 import { VERB_EQUIP, VERB_WAIT } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { match } = sinon;
 
 describe('actor equip verb', () => {
   it('should require the target be an actor', async () => {

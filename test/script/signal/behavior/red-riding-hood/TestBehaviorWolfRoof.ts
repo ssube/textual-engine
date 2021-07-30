@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../../src/model/Command.js';
-import { SignalBehaviorRRHWolfRoof } from '../../../../../src/script/signal/behavior/red-riding-hood/BehaviorWolfRoof';
+import { SignalBehaviorRRHWolfRoof } from '../../../../../src/script/signal/behavior/red-riding-hood/BehaviorWolfRoof.js';
 import { VERB_LOOK } from '../../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
 import { createTestContext } from '../../../../helper.js';

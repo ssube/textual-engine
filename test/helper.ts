@@ -1,5 +1,5 @@
 import { ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
-import { createStubInstance, stub } from 'sinon';
+import sinon from 'sinon';
 
 import { ConfigFile } from '../src/model/file/Config.js';
 import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module/index.js';
@@ -9,6 +9,8 @@ import { LocalScriptService } from '../src/service/script/LocalScript.js';
 import { zeroStep } from '../src/util/entity/index.js';
 import { StateEntityTransfer } from '../src/util/entity/EntityTransfer.js';
 import { makeTestRoom } from './entity.js';
+
+const { createStubInstance, stub } = sinon;
 
 export function getTestLogger(): Logger {
   if (process.env.DEBUG === 'TRUE') {

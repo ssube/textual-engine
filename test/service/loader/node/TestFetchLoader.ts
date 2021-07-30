@@ -1,14 +1,14 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { match, stub } from 'sinon';
+import sinon from 'sinon';
 
 import { ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor.js';
 import { ITEM_TYPE } from '../../../../src/model/entity/Item.js';
 import { PORTAL_TYPE } from '../../../../src/model/entity/Portal.js';
 import { ROOM_TYPE } from '../../../../src/model/entity/Room.js';
-import { INJECT_EVENT } from '../../../../src/module/index.js';
 import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { INJECT_EVENT } from '../../../../src/module/index.js';
 import { EventBus } from '../../../../src/service/event/index.js';
 import { NodeFetchLoader } from '../../../../src/service/loader/node/FetchLoader.js';
 import { YamlParser } from '../../../../src/service/parser/YamlParser.js';
@@ -22,6 +22,7 @@ import {
 import { makeTestState, makeTestWorld } from '../../../entity.js';
 import { getTestContainer } from '../../../helper.js';
 
+const { match, stub } = sinon;
 describe('node fetch loader', () => {
   it('should read from URLs', async () => {
     const container = await getTestContainer(new CoreModule());

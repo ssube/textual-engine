@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
-import { INJECT_EVENT } from '../../../../src/module/index.js';
 import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { INJECT_EVENT } from '../../../../src/module/index.js';
 import { EventBus } from '../../../../src/service/event/index.js';
 import { NodeFileLoader } from '../../../../src/service/loader/node/FileLoader.js';
 import { onceEvent } from '../../../../src/util/async/event.js';
@@ -11,6 +11,7 @@ import { EVENT_LOADER_DONE, EVENT_LOADER_READ, EVENT_LOADER_SAVE } from '../../.
 import { makeTestState } from '../../../entity.js';
 import { getTestContainer } from '../../../helper.js';
 
+const { stub } = sinon;
 describe('file loader', () => {
   it('should read from paths', async () => {
     const container = await getTestContainer(new CoreModule());

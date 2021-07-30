@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { CoreModule } from '../../../../src/module/CoreModule.js';
@@ -9,6 +9,8 @@ import { LocalScriptService } from '../../../../src/service/script/LocalScript.j
 import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper, getTestContainer } from '../../../helper.js';
+
+const { createStubInstance, match } = sinon;
 
 describe('actor look verb', () => {
   describe('actor look verb without a target', () => {

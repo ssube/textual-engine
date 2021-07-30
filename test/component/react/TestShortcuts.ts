@@ -1,11 +1,12 @@
 import { expect } from 'chai';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { Shortcuts } from '../../../src/component/react/Shortcuts.js';
 import { getReactStrings } from './helper.js';
 
+const { stub } = sinon;
 describe('react shortcut component', () => {
   it('should show categories', async () => {
     const targetStub = stub();

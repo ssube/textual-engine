@@ -1,12 +1,12 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { match, spy, stub } from 'sinon';
+import sinon from 'sinon';
 
 import { ConfigError } from '../../../src/error/ConfigError.js';
 import { ActorSource } from '../../../src/model/entity/Actor.js';
-import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module/index.js';
 import { CoreModule } from '../../../src/module/CoreModule.js';
+import { INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module/index.js';
 import { ActorCommandEvent } from '../../../src/service/actor/events.js';
 import { ScriptActorService } from '../../../src/service/actor/ScriptActor.js';
 import { EventBus } from '../../../src/service/event/index.js';
@@ -25,6 +25,7 @@ import {
 import { makeTestActor, makeTestRoom } from '../../entity.js';
 import { getTestContainer } from '../../helper.js';
 
+const { match, spy, stub } = sinon;
 describe('script actor', () => {
   it('should invoke the behavior signal on room events', async () => {
     const container = await getTestContainer(new CoreModule());

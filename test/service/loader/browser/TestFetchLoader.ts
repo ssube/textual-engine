@@ -1,11 +1,12 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { CoreModule } from '../../../../src/module/CoreModule.js';
 import { BrowserFetchLoader } from '../../../../src/service/loader/browser/FetchLoader.js';
 import { getTestContainer } from '../../../helper.js';
 
+const { stub } = sinon;
 describe('browser fetch loader', () => {
   it('should read from URLs', async () => {
     const container = await getTestContainer(new CoreModule());

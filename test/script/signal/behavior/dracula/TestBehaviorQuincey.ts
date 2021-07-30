@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../../src/model/Command.js';
@@ -7,6 +7,8 @@ import { SignalBehaviorDraculaQuincey } from '../../../../../src/script/signal/b
 import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
 import { createStubBehavior, createTestContext, getStubHelper } from '../../../../helper.js';
+
+const { match } = sinon;
 
 describe('actor behavior signal for Quincey Morris', () => {
   it('should require the script target be an actor', async () => {

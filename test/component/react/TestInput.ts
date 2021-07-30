@@ -1,11 +1,12 @@
 import { expect } from 'chai';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { Input } from '../../../src/component/react/Input.js';
 import { getReactStrings } from './helper.js';
 
+const { stub } = sinon;
 describe('react output component', () => {
   it('should show the provided output', async () => {
     const prompt = 'foo';

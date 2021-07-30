@@ -1,11 +1,12 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { LogLevel } from 'noicejs';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { ConfigError } from '../../../src/error/ConfigError.js';
 import { loadConfig } from '../../../src/util/config/page.js';
 
+const { stub } = sinon;
 describe('page config', () => {
   it('should load config from element text', async () => {
     const doc = {

@@ -1,13 +1,14 @@
 import { expect } from 'chai';
 import { render } from 'ink-testing-library';
 import * as React from 'react';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { Frame } from '../../../src/component/ink/Frame.js';
 import { zeroStep } from '../../../src/util/entity/index.js';
 import { KEY_ARROW_DOWN, KEY_ENTER, KEY_TAB } from '../../constants.js';
 import { sendKeys } from './helper.js';
 
+const { stub } = sinon;
 describe('ink frame component', () => {
   it('should show the prompt', async () => {
     const prompt = 'foo';

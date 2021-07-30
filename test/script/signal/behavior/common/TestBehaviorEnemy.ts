@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStubInstance } from 'sinon';
+import sinon from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../../src/model/Command.js';
@@ -9,6 +9,8 @@ import { MathRandomService } from '../../../../../src/service/random/MathRandom.
 import { VERB_HIT, VERB_LOOK, VERB_MOVE } from '../../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../../entity.js';
 import { createStubBehavior, createTestContext } from '../../../../helper.js';
+
+const { createStubInstance } = sinon;
 
 describe('actor behavior signal for common enemies', () => {
   it('should require the script target be an actor', async () => {

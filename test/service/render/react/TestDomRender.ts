@@ -1,7 +1,7 @@
 import { doesExist, mustExist, Optional } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { SinonFakeTimers, stub, useFakeTimers } from 'sinon';
+import sinon, { SinonFakeTimers } from 'sinon';
 
 import { INJECT_EVENT } from '../../../../src/module/index.js';
 import { CoreModule } from '../../../../src/module/CoreModule.js';
@@ -20,6 +20,8 @@ import {
 import { zeroStep } from '../../../../src/util/entity/index.js';
 import { makeTestActor, makeTestRoom } from '../../../entity.js';
 import { getTestContainer } from '../../../helper.js';
+
+const { stub, useFakeTimers } = sinon;
 
 const THROTTLE_TIME = 10;
 const THROTTLE_WAIT = THROTTLE_TIME * 2;

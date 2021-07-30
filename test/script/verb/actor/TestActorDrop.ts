@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand, makeCommandIndex } from '../../../../src/model/Command.js';
@@ -7,6 +7,8 @@ import { VerbActorDrop } from '../../../../src/script/verb/actor/ActorDrop.js';
 import { VERB_DROP, VERB_WAIT } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { match } = sinon;
 
 describe('actor drop verb', () => {
   it('should require the target be an actor', async () => {

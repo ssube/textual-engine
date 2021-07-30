@@ -1,12 +1,14 @@
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../../src/model/Command.js';
-import { SignalPortalLookHGOven } from '../../../../../src/script/signal/portal/hansel-gretel/LookOven';
+import { SignalPortalLookHGOven } from '../../../../../src/script/signal/portal/hansel-gretel/LookOven.js';
 import { VERB_LOOK } from '../../../../../src/util/constants.js';
 import { makeTestActor, makeTestPortal, makeTestRoom } from '../../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../../helper.js';
+
+const { match } = sinon;
 
 describe('portal look scripts for oven door', () => {
   it('should require the script target be a portal', async () => {

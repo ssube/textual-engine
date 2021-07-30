@@ -1,11 +1,12 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { spy, stub } from 'sinon';
+import sinon from 'sinon';
 
 import { CoreModule } from '../../../../src/module/CoreModule.js';
 import { BrowserPageLoader } from '../../../../src/service/loader/browser/PageLoader.js';
 import { getTestContainer } from '../../../helper.js';
 
+const { spy, stub } = sinon;
 describe('page loader', () => {
   it('should load strings from element contents', async () => {
     const container = await getTestContainer(new CoreModule());

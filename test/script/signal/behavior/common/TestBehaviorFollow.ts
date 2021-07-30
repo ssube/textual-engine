@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStubInstance } from 'sinon';
+import sinon from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../../src/model/Command.js';
@@ -9,6 +9,7 @@ import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constan
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
 import { createStubBehavior, createTestContext } from '../../../../helper.js';
 
+const { createStubInstance } = sinon;
 describe('actor behavior signal for followers', () => {
   it('should require the script target be an actor', async () => {
     const room = makeTestRoom('', '', '', [], []);

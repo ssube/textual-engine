@@ -1,11 +1,12 @@
 import { expect } from 'chai';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { Worlds } from '../../../src/component/react/Worlds.js';
 import { getReactStrings } from './helper.js';
 
+const { stub } = sinon;
 describe('react worlds component', () => {
   it('should show available worlds', async () => {
     const clickStub = stub();

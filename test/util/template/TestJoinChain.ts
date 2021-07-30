@@ -1,8 +1,10 @@
 import { expect } from 'chai';
-import { createStubInstance } from 'sinon';
+import sinon from 'sinon';
 
 import { MathRandomService } from '../../../src/service/random/MathRandom.js';
 import { JoinChain } from '../../../src/util/template/JoinChain.js';
+
+const { createStubInstance } = sinon;
 
 describe('string join chain util', () => {
   it('should AND the first level', async () => {

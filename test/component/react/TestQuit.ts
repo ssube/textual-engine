@@ -1,11 +1,12 @@
 import { expect } from 'chai';
 import * as React from 'react';
 import TestRenderer from 'react-test-renderer';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { Quit } from '../../../src/component/react/Quit.js';
 import { getReactStrings } from './helper.js';
 
+const { stub } = sinon;
 describe('react quit component', () => {
   it('should show game over message', async () => {
     const select = stub();

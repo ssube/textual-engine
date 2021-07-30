@@ -1,7 +1,7 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { SinonFakeTimers, stub, useFakeTimers } from 'sinon';
+import sinon, { SinonFakeTimers } from 'sinon';
 
 import { ConfigError } from '../../../src/error/ConfigError.js';
 import { INJECT_EVENT } from '../../../src/module/index.js';
@@ -11,6 +11,8 @@ import { ScriptRender } from '../../../src/service/render/ScriptRender.js';
 import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP } from '../../../src/util/constants.js';
 import { zeroStep } from '../../../src/util/entity/index.js';
 import { getTestContainer } from '../../helper.js';
+
+const { stub, useFakeTimers } = sinon;
 
 describe('script render', () => {
   let clock: SinonFakeTimers;

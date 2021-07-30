@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { match } from 'sinon';
+import sinon from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../src/model/Command.js';
@@ -8,6 +8,7 @@ import { VERB_WAIT } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
 
+const { match } = sinon;
 describe('item use signal', () => {
   it('should require the script target be an item', async () => {
     const context = createTestContext({

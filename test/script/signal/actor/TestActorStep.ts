@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { createStubInstance, match } from 'sinon';
+import sinon from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../src/model/Command.js';
@@ -12,6 +12,8 @@ import { LocalScriptService } from '../../../../src/service/script/LocalScript.j
 import { STAT_HEALTH, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants.js';
 import { makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { createStubInstance, match } = sinon;
 
 const TEST_ACTOR: Actor = {
   flags: new Map(),

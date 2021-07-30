@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { SinonStub } from 'sinon';
+import type { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../../src/model/Command.js';

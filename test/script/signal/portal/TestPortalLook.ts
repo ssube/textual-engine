@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../src/model/Command.js';
@@ -7,6 +7,8 @@ import { SignalPortalLook } from '../../../../src/script/signal/portal/PortalLoo
 import { STAT_CLOSED, VERB_LOOK } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestPortal, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { match } = sinon;
 
 describe('portal look scripts', () => {
   it('should require the script target be a portal', async () => {

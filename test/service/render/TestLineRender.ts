@@ -1,10 +1,10 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { spy, stub } from 'sinon';
+import sinon from 'sinon';
 
 import { ConfigError } from '../../../src/error/ConfigError.js';
-import { INJECT_EVENT } from '../../../src/module/index.js';
 import { CoreModule } from '../../../src/module/CoreModule.js';
+import { INJECT_EVENT } from '../../../src/module/index.js';
 import { NodeModule } from '../../../src/module/NodeModule.js';
 import { EventBus } from '../../../src/service/event/index.js';
 import { RenderInputEvent } from '../../../src/service/render/events.js';
@@ -15,6 +15,7 @@ import { zeroStep } from '../../../src/util/entity/index.js';
 import { getTestContainer } from '../../helper.js';
 import { TestReadLine } from './helper.js';
 
+const { spy, stub } = sinon;
 const THROTTLE_TIME = 10;
 
 describe('readline render', () => {

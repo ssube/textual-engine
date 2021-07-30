@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../src/model/Command.js';
@@ -9,6 +9,8 @@ import { LocalScriptService } from '../../../../src/service/script/LocalScript.j
 import { SIGNAL_HIT, VERB_HIT, VERB_WAIT } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { createStubInstance, match } = sinon;
 
 describe('actor hit verb', () => {
   it('should require the script target be an actor', async () => {

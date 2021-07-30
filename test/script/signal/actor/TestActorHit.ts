@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { SignalActorHit } from '../../../../src/script/signal/actor/ActorHit.js';
@@ -7,6 +7,8 @@ import { MathRandomService } from '../../../../src/service/random/MathRandom.js'
 import { STAT_DAMAGE, STAT_HEALTH } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { createStubInstance, match } = sinon;
 
 describe('actor hit signal', () => {
   it('should remove some health', async () => {

@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../src/model/Command.js';
@@ -8,6 +8,8 @@ import { VERB_TAKE } from '../../../../src/util/constants.js';
 import { findMatching } from '../../../../src/util/entity/find.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { match } = sinon;
 
 describe('actor take verb', () => {
   it('should require the script target be an actor', async () => {

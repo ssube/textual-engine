@@ -1,12 +1,13 @@
 import { expect } from 'chai';
 import { render } from 'ink-testing-library';
 import * as React from 'react';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { Shortcuts } from '../../../src/component/ink/Shortcuts.js';
 import { KEY_ARROW_DOWN, KEY_ENTER, KEY_TAB } from '../../constants.js';
 import { FocusWrapper, removeEscapes, sendKeys } from './helper.js';
 
+const { stub } = sinon;
 describe('ink shortcut component', () => {
   it('should show categories', async () => {
     const targetStub = stub();

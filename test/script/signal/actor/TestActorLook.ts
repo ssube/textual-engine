@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../src/model/Command.js';
@@ -9,6 +9,8 @@ import { LocalScriptService } from '../../../../src/service/script/LocalScript.j
 import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper, getTestContainer } from '../../../helper.js';
+
+const { stub } = sinon;
 
 describe('actor look signal', () => {
   it('should require the script target be an actor', async () => {

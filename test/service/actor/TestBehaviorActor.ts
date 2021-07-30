@@ -1,7 +1,7 @@
 import { mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { createStubInstance, stub } from 'sinon';
+import sinon from 'sinon';
 
 import { ConfigError } from '../../../src/error/ConfigError.js';
 import { ActorSource } from '../../../src/model/entity/Actor.js';
@@ -15,6 +15,8 @@ import { onceEvent } from '../../../src/util/async/event.js';
 import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../../src/util/constants.js';
 import { makeTestActor, makeTestPortal, makeTestRoom } from '../../entity.js';
 import { getTestContainer } from '../../helper.js';
+
+const { createStubInstance, stub } = sinon;
 
 describe('behavior actor', () => {
   it('should respond to room events for non-player actors with a command for the same actor', async () => {

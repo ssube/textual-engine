@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../../src/model/Command.js';
-import { SignalActorStepHGStepmother } from '../../../../../src/script/signal/actor/hansel-gretel/StepStepmother';
+import { SignalActorStepHGStepmother } from '../../../../../src/script/signal/actor/hansel-gretel/StepStepmother.js';
 import { STAT_HEALTH, VERB_LOOK } from '../../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
 import { createTestContext } from '../../../../helper.js';

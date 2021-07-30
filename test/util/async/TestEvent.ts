@@ -1,11 +1,12 @@
 import { expect } from 'chai';
 import { EventEmitter } from 'events';
-import { stub } from 'sinon';
-import { AbortEventError } from '../../../src/error/AbortEventError.js';
+import sinon from 'sinon';
 
+import { AbortEventError } from '../../../src/error/AbortEventError.js';
 import { catchAndLog, onceWithRemove } from '../../../src/util/async/event.js';
 import { getTestLogger } from '../../helper.js';
 
+const { stub } = sinon;
 describe('event utils', () => {
   describe('once with removal helper', () => {
     it('should reject the promise with an abort error if it has not been settled', async () => {

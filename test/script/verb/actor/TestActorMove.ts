@@ -1,6 +1,6 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
+import sinon, { SinonStub } from 'sinon';
 
 import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
 import { makeCommand } from '../../../../src/model/Command.js';
@@ -10,6 +10,8 @@ import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove.js';
 import { SIGNAL_LOOK, STAT_LOCKED, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants.js';
 import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity.js';
 import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { match } = sinon;
 
 describe('actor move verb', () => {
   it('should require the script target be an actor', async () => {

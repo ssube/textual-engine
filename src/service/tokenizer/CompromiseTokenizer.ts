@@ -1,10 +1,10 @@
 import { defaultWhen, getOrDefault } from '@apextoaster/js-utils';
 import nlp from 'compromise';
 
-import { TokenizerService } from '.';
-import { Command } from '../../model/Command';
-import { InjectedOptions } from '../../module';
-import { SplitTokenizer } from './SplitTokenizer';
+import { TokenizerService } from './index.js';
+import { Command } from '../../model/Command.js';
+import { InjectedOptions } from '../../module/index.js';
+import { SplitTokenizer } from './SplitTokenizer.js';
 
 export class CompromiseTokenizer extends SplitTokenizer implements TokenizerService {
   protected nlp: typeof nlp;

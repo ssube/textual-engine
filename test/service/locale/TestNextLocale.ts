@@ -1,9 +1,9 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 
-import { CoreModule } from '../../../src/module/CoreModule';
-import { NextLocaleService } from '../../../src/service/locale/NextLocale';
-import { getTestContainer } from '../../helper';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { NextLocaleService } from '../../../src/service/locale/NextLocale.js';
+import { getTestContainer } from '../../helper.js';
 
 describe('next locale service', () => {
   it('should have an i18next instance after being started', async () => {

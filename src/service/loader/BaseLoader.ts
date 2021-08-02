@@ -1,21 +1,21 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { LoaderService } from '.';
-import { DataFile } from '../../model/file/Data';
-import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER, InjectedOptions } from '../../module';
-import { catchAndLog } from '../../util/async/event';
+import { LoaderService } from './index.js';
+import { DataFile } from '../../model/file/Data.js';
+import { INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER, InjectedOptions } from '../../module/index.js';
+import { catchAndLog } from '../../util/async/event.js';
 import {
   EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_SAVE,
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
-} from '../../util/constants';
-import { splitPath } from '../../util/string';
-import { EventBus } from '../event';
-import { Parser } from '../parser';
-import { LoaderSaveEvent } from './events';
+} from '../../util/constants.js';
+import { splitPath } from '../../util/string.js';
+import { EventBus } from '../event/index.js';
+import { Parser } from '../parser/index.js';
+import { LoaderSaveEvent } from './events.js';
 
 @Inject(INJECT_EVENT, INJECT_LOGGER, INJECT_PARSER)
 export abstract class BaseLoader implements LoaderService {

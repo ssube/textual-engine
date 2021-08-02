@@ -1,7 +1,9 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 import { EventEmitter } from 'events';
 import { CursorPos, Key, ReadLine } from 'readline';
-import { createStubInstance, SinonStubbedInstance } from 'sinon';
+import sinon, { SinonStubbedInstance } from 'sinon';
+
+const {createStubInstance} = sinon;
 
 export enum PromptState {
   START = 'start',

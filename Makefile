@@ -70,13 +70,13 @@ RUN_ARGS ?= --config data/config.yml \
 
 run: ## run app with demo data
 run: build
-	node $(NODE_ARGS) --require esm out/src/index.js $(RUN_ARGS)
+	node $(NODE_ARGS) out/src/index.js $(RUN_ARGS)
 
 run-debug: ## run app and wait for debugger
 	NODE_ARGS=--inspect-brk $(MAKE) run
 
 run-graph: build
-	node $(NODE_ARGS) --require esm out/src/index.js $(RUN_ARGS) --depth 13
+	node $(NODE_ARGS) out/src/index.js $(RUN_ARGS) --depth 13
 	$(MAKE) graph
 
 run-image: ## run app from docker image
@@ -86,7 +86,6 @@ run-image: image
 MOCHA_ARGS := --async-only \
 	--check-leaks \
 	--forbid-only \
-	--require esm \
 	--require source-map-support \
 	--require out/test/setup.js \
 	--recursive \
@@ -96,7 +95,7 @@ test: ## run tests
 test: node_modules out
 	yarn mocha $(MOCHA_ARGS) "out/src/lib.js" "out/**/Test*.js"
 
-NYC_ARGS := --all \
+COVER_ARGS := --all \
 	--check-coverage \
 	--exclude ".eslintrc.js" \
 	--exclude "bundle/**" \
@@ -111,7 +110,7 @@ NYC_ARGS := --all \
 
 cover: ## run tests with coverage
 cover: node_modules out
-	yarn nyc $(NYC_ARGS) yarn mocha $(MOCHA_ARGS) "out/**/Test*.js"
+	yarn c8 $(COVER_ARGS) yarn mocha $(MOCHA_ARGS) "out/**/Test*.js"
 
 # from https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## print this help

@@ -2,7 +2,7 @@ import { Box, Text, useFocus } from 'ink';
 import TextInput from 'ink-text-input';
 import * as React from 'react';
 
-import { InputProps } from '../shared';
+import { InputProps } from '../shared.js';
 
 /**
  * Wrapper for focus handling.

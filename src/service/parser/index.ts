@@ -1,4 +1,4 @@
-import { DataFile } from '../../model/file/Data';
+import { DataFile } from '../../model/file/Data.js';
 
 /**
  * Data file parser.

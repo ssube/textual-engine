@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { CompletionSet } from '../../../src/util/async/CompletionSet';
+import { CompletionSet } from '../../../src/util/async/CompletionSet.js';
 
 describe('completion set', () => {
   it('should complete when empty', async () => {

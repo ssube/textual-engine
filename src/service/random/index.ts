@@ -19,3 +19,9 @@ export interface RandomService {
    */
   reseed(seed: string): void;
 }
+
+
+export interface RandomGenerator {
+  double(): number;
+  int32(): number;
+}

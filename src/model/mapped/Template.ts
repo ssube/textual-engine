@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/indent */
 import { JSONSchemaType } from 'ajv';
 
-import { TEMPLATE_CHANCE } from '../../util/constants';
-import { Replace } from '../../util/types';
-import { Entity } from '../entity/Base';
-import { Metadata } from '../Metadata';
-import { ScriptRef } from '../Script';
-import { Modifier } from './Modifier';
+import { TEMPLATE_CHANCE } from '../../util/constants.js';
+import { Replace } from '../../util/types.js';
+import { Entity } from '../entity/Base.js';
+import { Metadata } from '../Metadata.js';
+import { ScriptRef } from '../Script.js';
+import { Modifier } from './Modifier.js';
 
 export interface TemplateNumber {
   type: 'number';

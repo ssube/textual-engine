@@ -1,14 +1,14 @@
 import { isNil, mustExist, Optional } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { WorldEntity } from '../../../model/entity';
-import { isActor, ReadonlyActor } from '../../../model/entity/Actor';
-import { isItem } from '../../../model/entity/Item';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { head } from '../../../util/collection/array';
-import { SIGNAL_USE } from '../../../util/constants';
-import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
-import { Immutable } from '../../../util/types';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { WorldEntity } from '../../../model/entity/index.js';
+import { isActor, ReadonlyActor } from '../../../model/entity/Actor.js';
+import { isItem } from '../../../model/entity/Item.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { head } from '../../../util/collection/array.js';
+import { SIGNAL_USE } from '../../../util/constants.js';
+import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match.js';
+import { Immutable } from '../../../util/types.js';
 
 export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

@@ -1,11 +1,11 @@
 import { isNil, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { makeCommand } from '../../../../model/Command';
-import { isActor } from '../../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../../service/script';
-import { VERB_MOVE } from '../../../../util/constants';
-import { SignalBehaviorEnemy } from './BehaviorEnemy';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { makeCommand } from '../../../../model/Command.js';
+import { isActor } from '../../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { VERB_MOVE } from '../../../../util/constants.js';
+import { SignalBehaviorEnemy } from './BehaviorEnemy.js';
 
 /**
  * The children and soldiers in the Queen's croquet party should:

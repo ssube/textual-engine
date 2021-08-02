@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
 
-import { CoreModule } from '../../../src/module/CoreModule';
-import { LocalCounter } from '../../../src/service/counter/LocalCounter';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { LocalCounter } from '../../../src/service/counter/LocalCounter.js';
 
 describe('local counter', () => {
   it('should issue consecutive IDs', async () => {

@@ -1,6 +1,6 @@
 import { isNil } from '@apextoaster/js-utils';
 
-import { Counter } from '.';
+import { Counter } from './index.js';
 
 const INITIAL_VALUE = 0;
 

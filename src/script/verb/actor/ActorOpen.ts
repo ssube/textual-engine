@@ -1,12 +1,12 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isActor } from '../../../model/entity/Actor';
-import { isPortal, PORTAL_TYPE } from '../../../model/entity/Portal';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { getKey, setKey } from '../../../util/collection/map';
-import { SIGNAL_LOOK, STAT_CLOSED } from '../../../util/constants';
-import { createFuzzyMatcher } from '../../../util/entity/match';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isActor } from '../../../model/entity/Actor.js';
+import { isPortal, PORTAL_TYPE } from '../../../model/entity/Portal.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { getKey, setKey } from '../../../util/collection/map.js';
+import { SIGNAL_LOOK, STAT_CLOSED } from '../../../util/constants.js';
+import { createFuzzyMatcher } from '../../../util/entity/match.js';
 
 export async function VerbActorOpen(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

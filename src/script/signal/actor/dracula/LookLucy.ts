@@ -1,9 +1,9 @@
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { WorldEntity } from '../../../../model/entity';
-import { isActor } from '../../../../model/entity/Actor';
-import { ScriptContext } from '../../../../service/script';
-import { getKey } from '../../../../util/collection/map';
-import { STAT_HEALTH } from '../../../../util/constants';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { WorldEntity } from '../../../../model/entity/index.js';
+import { isActor } from '../../../../model/entity/Actor.js';
+import { ScriptContext } from '../../../../service/script/index.js';
+import { getKey } from '../../../../util/collection/map.js';
+import { STAT_HEALTH } from '../../../../util/constants.js';
 
 /**
  * Looking at the character of Lucy should:

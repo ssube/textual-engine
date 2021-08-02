@@ -1,13 +1,13 @@
 import * as React from 'react';
 
-import { HISTORY_SIZE, META_CREATE } from '../../util/constants';
-import { FrameProps } from '../shared';
-import { Input } from './Input';
-import { Output } from './Output';
-import { Quit } from './Quit';
-import { Shortcuts } from './Shortcuts';
-import { Status } from './Status';
-import { Worlds } from './Worlds';
+import { HISTORY_SIZE, META_CREATE } from '../../util/constants.js';
+import { FrameProps } from '../shared.js';
+import { Input } from './Input.js';
+import { Output } from './Output.js';
+import { Quit } from './Quit.js';
+import { Shortcuts } from './Shortcuts.js';
+import { Status } from './Status.js';
+import { Worlds } from './Worlds.js';
 
 const { useState } = React;
 

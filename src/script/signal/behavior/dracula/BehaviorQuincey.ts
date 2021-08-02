@@ -1,11 +1,11 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { makeCommand } from '../../../../model/Command';
-import { isActor } from '../../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../../service/script';
-import { VERB_MOVE, VERB_WAIT } from '../../../../util/constants';
-import { matchIdSegments } from '../../../../util/string';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { makeCommand } from '../../../../model/Command.js';
+import { isActor } from '../../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { VERB_MOVE, VERB_WAIT } from '../../../../util/constants.js';
+import { matchIdSegments } from '../../../../util/string.js';
 
 /**
  * The character of Quincey Morris should:

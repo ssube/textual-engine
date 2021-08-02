@@ -1,10 +1,10 @@
 import { mustExist } from '@apextoaster/js-utils';
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isActor } from '../../../model/entity/Actor';
-import { isItem, ITEM_TYPE } from '../../../model/entity/Item';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { SIGNAL_REPLACE } from '../../../util/constants';
-import { createFuzzyMatcher } from '../../../util/entity/match';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isActor } from '../../../model/entity/Actor.js';
+import { isItem, ITEM_TYPE } from '../../../model/entity/Item.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { SIGNAL_REPLACE } from '../../../util/constants.js';
+import { createFuzzyMatcher } from '../../../util/entity/match.js';
 
 export async function VerbActorReplace(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { WorldProps } from '../shared';
+import { WorldProps } from '../shared.js';
 
 export const Worlds = (props: WorldProps): JSX.Element => <div>
   <select id="world-menu" onChange={(event) => props.onClick(event.target.value)}>

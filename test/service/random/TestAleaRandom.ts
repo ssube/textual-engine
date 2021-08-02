@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Container } from 'noicejs';
 
-import { AleaRandomService } from '../../../src/service/random/AleaRandom';
+import { AleaRandomService } from '../../../src/service/random/AleaRandom.js';
 
 describe('alea random generator', () => {
   it('should generate random integers', async () => {

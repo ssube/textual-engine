@@ -1,13 +1,15 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
+import sinon from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { VerbActorUse } from '../../../../src/script/verb/actor/ActorUse';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
-import { SIGNAL_USE, VERB_USE } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { VerbActorUse } from '../../../../src/script/verb/actor/ActorUse.js';
+import { LocalScriptService } from '../../../../src/service/script/LocalScript.js';
+import { SIGNAL_USE, VERB_USE } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../helper.js';
+
+const { createStubInstance, match } = sinon;
 
 describe('actor use verb', () => {
   it('should require the script target be an actor', async () => {
@@ -21,7 +23,7 @@ describe('actor use verb', () => {
 
   it('should show an error if the target is not an item', async () => {
     const stateHelper = getStubHelper();
-    (stateHelper.find as SinonStub).resolves([
+    (stateHelper.find as sinon.SinonStub).resolves([
       makeTestActor('', '', ''),
     ]);
 
@@ -41,7 +43,7 @@ describe('actor use verb', () => {
     const state = getStubHelper();
 
     const item = makeTestItem('foo', '', '');
-    (state.find as SinonStub).resolves([item]);
+    (state.find as sinon.SinonStub).resolves([item]);
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo'),
@@ -61,10 +63,10 @@ describe('actor use verb', () => {
     const state = getStubHelper();
 
     const item = makeTestItem('foo', '', '');
-    (state.find as SinonStub).onFirstCall().resolves([item]);
+    (state.find as sinon.SinonStub).onFirstCall().resolves([item]);
 
     const target = makeTestActor('bar', '', '');
-    (state.find as SinonStub).onSecondCall().resolves([target]);
+    (state.find as sinon.SinonStub).onSecondCall().resolves([target]);
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo', 'bar'),
@@ -83,9 +85,9 @@ describe('actor use verb', () => {
     const state = getStubHelper();
 
     const item = makeTestItem('foo', '', '');
-    (state.find as SinonStub).onFirstCall().resolves([item]);
+    (state.find as sinon.SinonStub).onFirstCall().resolves([item]);
 
-    (state.find as SinonStub).onSecondCall().resolves([]);
+    (state.find as sinon.SinonStub).onSecondCall().resolves([]);
 
     const context = createTestContext({
       command: makeCommand(VERB_USE, 'foo', 'bar'),

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/indent */
 import { JSONSchemaType } from 'ajv';
 
-import { Entity } from '../entity/Base';
-import { Metadata } from '../Metadata';
-import { BaseTemplate, TEMPLATE_STRING_SCHEMA, TemplateNumber, TemplateRef, TemplateString } from './Template';
+import { Entity } from '../entity/Base.js';
+import { Metadata } from '../Metadata.js';
+import { BaseTemplate, TEMPLATE_STRING_SCHEMA, TemplateNumber, TemplateRef, TemplateString } from './Template.js';
 
 export type ModifierMetadata = BaseTemplate<Omit<Metadata, 'id' | 'template'>>;
 

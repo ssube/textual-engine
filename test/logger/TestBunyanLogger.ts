@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { LogLevel } from 'noicejs';
 
-import { BunyanLogger } from '../../src/logger/BunyanLogger';
+import { BunyanLogger } from '../../src/logger/BunyanLogger.js';
 
 describe('bunyan logger', () => {
   it('should create children', async () => {

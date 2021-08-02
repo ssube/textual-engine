@@ -1,11 +1,11 @@
 import { doesExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { isActor } from '../../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../../service/script';
-import { setKey } from '../../../../util/collection/map';
-import { STAT_HEALTH } from '../../../../util/constants';
-import { SignalActorStep } from '../ActorStep';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { isActor } from '../../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { setKey } from '../../../../util/collection/map.js';
+import { STAT_HEALTH } from '../../../../util/constants.js';
+import { SignalActorStep } from '../ActorStep.js';
 
 export async function SignalActorStepHGStepmother(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

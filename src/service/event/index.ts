@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/unified-signatures */
 import { EventEmitter } from 'events';
 
-import { Service } from '..';
-import { ErrorHandler, EventHandler } from '../../util/async/event';
-import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent, ActorQuitEvent, ActorRoomEvent } from '../actor/events';
-import { LoaderConfigEvent, LoaderReadEvent, LoaderSaveEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
-import { LocaleBundleEvent } from '../locale/events';
-import { RenderInputEvent } from '../render/events';
+import { Service } from '../index.js';
+import { ErrorHandler, EventHandler } from '../../util/async/event.js';
+import { ActorCommandEvent, ActorJoinEvent, ActorOutputEvent, ActorQuitEvent, ActorRoomEvent } from '../actor/events.js';
+import { LoaderConfigEvent, LoaderReadEvent, LoaderSaveEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events.js';
+import { LocaleBundleEvent } from '../locale/events.js';
+import { RenderInputEvent } from '../render/events.js';
 import {
   StateJoinEvent,
   StateLoadEvent,
@@ -15,8 +15,8 @@ import {
   StateRoomEvent,
   StateStepEvent,
   StateWorldEvent,
-} from '../state/events';
-import { TokenCommandEvent } from '../tokenizer/events';
+} from '../state/events.js';
+import { TokenCommandEvent } from '../tokenizer/events.js';
 
 export type EventGroup = Service;
 

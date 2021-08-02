@@ -1,13 +1,13 @@
-import { Actor, ACTOR_TYPE, ActorSource } from '../src/model/entity/Actor';
-import { Item, ITEM_TYPE } from '../src/model/entity/Item';
-import { Portal, PORTAL_TYPE, PortalLinkage } from '../src/model/entity/Portal';
-import { Room, ROOM_TYPE } from '../src/model/entity/Room';
-import { Template } from '../src/model/mapped/Template';
-import { Metadata } from '../src/model/Metadata';
-import { WorldState } from '../src/model/world/State';
-import { WorldTemplate } from '../src/model/world/Template';
-import { TEMPLATE_CHANCE } from '../src/util/constants';
-import { zeroStep } from '../src/util/entity';
+import { Actor, ACTOR_TYPE, ActorSource } from '../src/model/entity/Actor.js';
+import { Item, ITEM_TYPE } from '../src/model/entity/Item.js';
+import { Portal, PORTAL_TYPE, PortalLinkage } from '../src/model/entity/Portal.js';
+import { Room, ROOM_TYPE } from '../src/model/entity/Room.js';
+import { Template } from '../src/model/mapped/Template.js';
+import { Metadata } from '../src/model/Metadata.js';
+import { WorldState } from '../src/model/world/State.js';
+import { WorldTemplate } from '../src/model/world/Template.js';
+import { TEMPLATE_CHANCE } from '../src/util/constants.js';
+import { zeroStep } from '../src/util/entity/index.js';
 
 export function makeTestActor(id: string, name: string, template: string, ...items: Array<Item>): Actor {
   return {

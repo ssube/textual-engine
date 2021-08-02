@@ -1,8 +1,8 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 
-import { LoaderService } from '..';
-import { InjectedOptions } from '../../../module';
-import { BaseLoader } from '../BaseLoader';
+import { InjectedOptions } from '../../../module/index.js';
+import { BaseLoader } from '../BaseLoader.js';
+import { LoaderService } from '../index.js';
 
 export class BrowserFetchLoader extends BaseLoader implements LoaderService {
   protected fetch: typeof fetch;

@@ -2,12 +2,12 @@ import { doesExist, mustExist } from '@apextoaster/js-utils';
 import i18next, { i18n } from 'i18next';
 import { Inject, Logger } from 'noicejs';
 
-import { LocaleContext, LocaleService } from '.';
-import { ConfigFile } from '../../model/file/Config';
-import { LocaleBundle } from '../../model/file/Locale';
-import { INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER, InjectedOptions } from '../../module';
-import { makeServiceLogger } from '../../util/service';
-import { EventBus } from '../event';
+import { LocaleContext, LocaleService } from './index.js';
+import { ConfigFile } from '../../model/file/Config.js';
+import { LocaleBundle } from '../../model/file/Locale.js';
+import { INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
+import { makeServiceLogger } from '../../util/service/index.js';
+import { EventBus } from '../event/index.js';
 
 @Inject(INJECT_CONFIG, INJECT_EVENT, INJECT_LOGGER)
 export class NextLocaleService implements LocaleService {

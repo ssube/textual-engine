@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 
-import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { EventBus } from '../../../src/service/event';
-import { LocaleService } from '../../../src/service/locale';
-import { SplitTokenizer } from '../../../src/service/tokenizer/SplitTokenizer';
-import { EVENT_LOCALE_BUNDLE } from '../../../src/util/constants';
-import { getTestContainer } from '../../helper';
+import { INJECT_EVENT, INJECT_LOCALE } from '../../../src/module/index.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { EventBus } from '../../../src/service/event/index.js';
+import { LocaleService } from '../../../src/service/locale/index.js';
+import { SplitTokenizer } from '../../../src/service/tokenizer/SplitTokenizer.js';
+import { EVENT_LOCALE_BUNDLE } from '../../../src/util/constants.js';
+import { getTestContainer } from '../../helper.js';
 
 describe('split tokenizer', () => {
   it('should parse token lines', async () => {

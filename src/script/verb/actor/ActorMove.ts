@@ -1,15 +1,15 @@
 import { doesExist, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { ActorSource, isActor } from '../../../model/entity/Actor';
-import { isPortal } from '../../../model/entity/Portal';
-import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { head } from '../../../util/collection/array';
-import { setKey } from '../../../util/collection/map';
-import { SIGNAL_LOOK } from '../../../util/constants';
-import { getPortalStats } from '../../../util/entity';
-import { indexEntity } from '../../../util/entity/match';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { ActorSource, isActor } from '../../../model/entity/Actor.js';
+import { isPortal } from '../../../model/entity/Portal.js';
+import { isRoom, ROOM_TYPE } from '../../../model/entity/Room.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { head } from '../../../util/collection/array.js';
+import { setKey } from '../../../util/collection/map.js';
+import { SIGNAL_LOOK } from '../../../util/constants.js';
+import { getPortalStats } from '../../../util/entity/index.js';
+import { indexEntity } from '../../../util/entity/match.js';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

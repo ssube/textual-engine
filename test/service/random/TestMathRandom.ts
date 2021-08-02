@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { Container } from 'noicejs';
 
-import { MathRandomService } from '../../../src/service/random/MathRandom';
+import { MathRandomService } from '../../../src/service/random/MathRandom.js';
 
 describe('math random generator', () => {
   it('should generate random integers', async () => {

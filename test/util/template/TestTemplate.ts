@@ -1,7 +1,7 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 
-import { findByBaseId } from '../../../src/util/template';
+import { findByBaseId } from '../../../src/util/template/index.js';
 
 describe('template helpers', () => {
   describe('find template by id', () => {

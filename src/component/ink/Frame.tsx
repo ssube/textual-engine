@@ -1,13 +1,13 @@
 import { Box, useFocusManager } from 'ink';
 import * as React from 'react';
 
-import { HISTORY_SIZE } from '../../util/constants';
-import { FrameProps } from '../shared';
-import { Input } from './Input';
-import { Output } from './Output';
-import { Quit } from './Quit';
-import { Shortcuts } from './Shortcuts';
-import { Status } from './Status';
+import { HISTORY_SIZE } from '../../util/constants.js';
+import { FrameProps } from '../shared.js';
+import { Input } from './Input.js';
+import { Output } from './Output.js';
+import { Quit } from './Quit.js';
+import { Shortcuts } from './Shortcuts.js';
+import { Status } from './Status.js';
 
 const { useState } = React;
 

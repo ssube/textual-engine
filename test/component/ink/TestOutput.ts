@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { render } from 'ink-testing-library';
 import * as React from 'react';
 
-import { Output } from '../../../src/component/ink/Output';
+import { Output } from '../../../src/component/ink/Output.js';
 
 describe('ink output component', () => {
   it('should show the provided output', async () => {

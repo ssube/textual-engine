@@ -1,10 +1,10 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isActor } from '../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { ShowVolume } from '../../../util/actor';
-import { head } from '../../../util/collection/array';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isActor } from '../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { ShowVolume } from '../../../util/actor/index.js';
+import { head } from '../../../util/collection/array.js';
 
 export async function VerbActorSay(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

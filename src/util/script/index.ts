@@ -1,12 +1,12 @@
 import { doesExist } from '@apextoaster/js-utils';
 
-import { isActor, ReadonlyActor } from '../../model/entity/Actor';
-import { isItem, ReadonlyItem } from '../../model/entity/Item';
-import { isRoom, ReadonlyRoom } from '../../model/entity/Room';
-import { ImmutableScriptMap, ScriptMap, ScriptRef } from '../../model/Script';
-import { ScriptTarget } from '../../service/script';
-import { SIGNAL_PREFIX, VERB_PREFIX } from '../constants';
-import { Immutable } from '../types';
+import { isActor, ReadonlyActor } from '../../model/entity/Actor.js';
+import { isItem, ReadonlyItem } from '../../model/entity/Item.js';
+import { isRoom, ReadonlyRoom } from '../../model/entity/Room.js';
+import { ImmutableScriptMap, ScriptMap, ScriptRef } from '../../model/Script.js';
+import { ScriptTarget } from '../../service/script/index.js';
+import { SIGNAL_PREFIX, VERB_PREFIX } from '../constants.js';
+import { Immutable } from '../types.js';
 
 export interface VerbTarget {
   actor?: ReadonlyActor;

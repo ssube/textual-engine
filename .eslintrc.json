@@ -1,4 +1,4 @@
-module.exports = {
+{
   "env": {
     "es6": true
   },
@@ -20,7 +20,7 @@ module.exports = {
   ],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
     "@typescript-eslint/adjacent-overload-signatures": "error",
@@ -171,7 +171,7 @@ module.exports = {
         "leadingUnderscore": "forbid",
         "selector": "default",
         "trailingUnderscore": "forbid"
-      },
+      }
     ],
     "@typescript-eslint/no-empty-function": "error",
     "@typescript-eslint/no-empty-interface": "error",

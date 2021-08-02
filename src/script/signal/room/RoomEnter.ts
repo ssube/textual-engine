@@ -1,9 +1,9 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { setKey } from '../../../util/collection/map';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isRoom, ROOM_TYPE } from '../../../model/entity/Room.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { setKey } from '../../../util/collection/map.js';
 
 export async function SignalRoomEnter(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isRoom(this)) {

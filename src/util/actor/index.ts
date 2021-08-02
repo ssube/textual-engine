@@ -1,7 +1,7 @@
 import { doesExist } from '@apextoaster/js-utils';
 
-import { ReadonlyActor } from '../../model/entity/Actor';
-import { ReadonlyRoom } from '../../model/entity/Room';
+import { ReadonlyActor } from '../../model/entity/Actor.js';
+import { ReadonlyRoom } from '../../model/entity/Room.js';
 
 export enum ShowVolume {
   SELF = 'self', // narrowest scope

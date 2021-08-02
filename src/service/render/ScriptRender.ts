@@ -2,19 +2,19 @@ import { defer, doesExist, mustExist } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
-import { ConfigError } from '../../error/ConfigError';
-import { INJECT_EVENT, INJECT_LOGGER, InjectedOptions } from '../../module';
-import { catchAndLog, onceEvent } from '../../util/async/event';
+import { ConfigError } from '../../error/ConfigError.js';
+import { INJECT_EVENT, INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
+import { catchAndLog, onceEvent } from '../../util/async/event.js';
 import {
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_QUIT,
   EVENT_COMMON_QUIT,
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
-} from '../../util/constants';
-import { makeSchema } from '../../util/schema';
-import { makeServiceLogger } from '../../util/service';
-import { EventBus } from '../event';
+} from '../../util/constants.js';
+import { makeSchema } from '../../util/schema/index.js';
+import { makeServiceLogger } from '../../util/service/index.js';
+import { EventBus } from '../event/index.js';
 
 export interface ScriptInput {
   line: string;

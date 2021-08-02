@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { equipItems, filterEquipped } from '../../../src/util/entity';
-import { makeTestActor, makeTestItem } from '../../entity';
+import { equipItems, filterEquipped } from '../../../src/util/entity/index.js';
+import { makeTestActor, makeTestItem } from '../../entity.js';
 
 describe('entity utils', () => {
   describe('equip items helper', () => {

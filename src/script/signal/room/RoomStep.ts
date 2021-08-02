@@ -1,6 +1,6 @@
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isRoom } from '../../../model/entity/Room';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isRoom } from '../../../model/entity/Room.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 
 export async function SignalRoomStep(this: ScriptTarget, _context: ScriptContext): Promise<void> {
   if (!isRoom(this)) {

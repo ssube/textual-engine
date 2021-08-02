@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { splitChain } from '../../../src/util/template/SplitChain';
+import { splitChain } from '../../../src/util/template/SplitChain.js';
 
 describe('group chain split helper', () => {
   it('should split groups', async () => {

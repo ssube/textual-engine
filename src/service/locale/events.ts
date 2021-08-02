@@ -1,4 +1,4 @@
-import { LocaleBundle } from '../../model/file/Locale';
+import { LocaleBundle } from '../../model/file/Locale.js';
 
 /**
  * Event when a locale bundle should be added for use.

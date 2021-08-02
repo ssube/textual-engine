@@ -4,20 +4,20 @@ import { Inject, Logger } from 'noicejs';
 import { stdin, stdout } from 'process';
 import { createInterface, Interface as LineInterface } from 'readline';
 
-import { RenderService } from '.';
-import { ConfigError } from '../../error/ConfigError';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
-import { onceEvent } from '../../util/async/event';
-import { ClearResult, debounce } from '../../util/async/Throttle';
-import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../util/constants';
-import { zeroStep } from '../../util/entity';
-import { makeSchema } from '../../util/schema';
-import { makeServiceLogger } from '../../util/service';
-import { ActorOutputEvent } from '../actor/events';
-import { EventBus } from '../event';
-import { LocaleService } from '../locale';
-import { StepResult } from '../state';
-import { StateStepEvent } from '../state/events';
+import { RenderService } from './index.js';
+import { ConfigError } from '../../error/ConfigError.js';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
+import { onceEvent } from '../../util/async/event.js';
+import { ClearResult, debounce } from '../../util/async/Throttle.js';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP, META_QUIT } from '../../util/constants.js';
+import { zeroStep } from '../../util/entity/index.js';
+import { makeSchema } from '../../util/schema/index.js';
+import { makeServiceLogger } from '../../util/service/index.js';
+import { ActorOutputEvent } from '../actor/events.js';
+import { EventBus } from '../event/index.js';
+import { LocaleService } from '../locale/index.js';
+import { StepResult } from '../state/index.js';
+import { StateStepEvent } from '../state/events.js';
 
 export interface LineRenderConfig {
   throttle: number;

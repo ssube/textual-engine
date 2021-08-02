@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { hasText, matchIdSegments, splitWords, trim } from '../../src/util/string';
+import { hasText, matchIdSegments, splitWords, trim } from '../../src/util/string.js';
 
 describe('string utils', () => {
   describe('match ID helper', () => {

@@ -1,11 +1,13 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { stub } from 'sinon';
+import sinon from 'sinon';
 
-import { CoreModule } from '../../../src/module/CoreModule';
-import { Service } from '../../../src/service';
-import { ServiceManager } from '../../../src/util/service/ServiceManager';
-import { getTestContainer } from '../../helper';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { Service } from '../../../src/service/index.js';
+import { ServiceManager } from '../../../src/util/service/ServiceManager.js';
+import { getTestContainer } from '../../helper.js';
+
+const { stub } = sinon;
 
 const TEST_SERVICES = {
       actors: [{

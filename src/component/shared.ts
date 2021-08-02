@@ -1,6 +1,6 @@
-import { TemplateMetadata } from '../model/mapped/Template';
-import { StepResult } from '../service/state';
-import { Filter, FilterKeys } from '../util/types';
+import { TemplateMetadata } from '../model/mapped/Template.js';
+import { StepResult } from '../service/state/index.js';
+import { Filter, FilterKeys } from '../util/types.js';
 
 // shared props used by multiple React renders
 

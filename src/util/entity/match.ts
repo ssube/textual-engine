@@ -1,12 +1,12 @@
 import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
 
-import { EntityForType, WorldEntityType } from '../../model/entity';
-import { Entity } from '../../model/entity/Base';
-import { isPortal } from '../../model/entity/Portal';
-import { Metadata } from '../../model/Metadata';
-import { matchIdSegments } from '../string';
-import { Immutable } from '../types';
-import { SearchFilter, StateMatchers } from './find';
+import { EntityForType, WorldEntityType } from '../../model/entity/index.js';
+import { Entity } from '../../model/entity/Base.js';
+import { isPortal } from '../../model/entity/Portal.js';
+import { Metadata } from '../../model/Metadata.js';
+import { matchIdSegments } from '../string.js';
+import { Immutable } from '../types.js';
+import { SearchFilter, StateMatchers } from './find.js';
 
 export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<Entity>>, index: number, guard: (it: Optional<Entity>) => it is TEntity): Optional<TEntity> {
   if (entities.length <= index) {

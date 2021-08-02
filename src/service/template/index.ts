@@ -1,6 +1,6 @@
-import { ModifierPrimitive } from '../../model/mapped/Modifier';
-import { TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/mapped/Template';
-import { ScriptMap } from '../../model/Script';
+import { ModifierPrimitive } from '../../model/mapped/Modifier.js';
+import { TemplateNumber, TemplatePrimitive, TemplateString } from '../../model/mapped/Template.js';
+import { ScriptMap } from '../../model/Script.js';
 
 export interface TemplateService {
   modifyNumber(base: number, mod: TemplateNumber): number;

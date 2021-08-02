@@ -1,21 +1,21 @@
 import { doesExist, Optional } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
-import { TEMPLATE_CHANCE } from '../../util/constants';
-import { makeConstStringSchema } from '../../util/schema';
-import { Immutable, NumberMap, StringMap } from '../../util/types';
-import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
+import { TEMPLATE_CHANCE } from '../../util/constants.js';
+import { makeConstStringSchema } from '../../util/schema/index.js';
+import { Immutable, NumberMap, StringMap } from '../../util/types.js';
+import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier.js';
 import {
   Template,
   TEMPLATE_NUMBER_SCHEMA,
   TEMPLATE_REF_SCHEMA,
   TEMPLATE_SCRIPT_SCHEMA,
   TEMPLATE_STRING_SCHEMA,
-} from '../mapped/Template';
-import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
-import { ScriptMap } from '../Script';
-import { Entity } from './Base';
-import { Item } from './Item';
+} from '../mapped/Template.js';
+import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata.js';
+import { ScriptMap } from '../Script.js';
+import { Entity } from './Base.js';
+import { Item } from './Item.js';
 
 export enum ActorSource {
   BEHAVIOR = 'behavior',

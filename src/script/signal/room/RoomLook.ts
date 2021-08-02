@@ -1,7 +1,7 @@
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isRoom } from '../../../model/entity/Room';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { SIGNAL_LOOK } from '../../../util/constants';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isRoom } from '../../../model/entity/Room.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { SIGNAL_LOOK } from '../../../util/constants.js';
 
 export async function SignalRoomLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isRoom(this)) {

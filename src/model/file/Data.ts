@@ -1,8 +1,8 @@
 import { JSONSchemaType } from 'ajv';
 
-import { WorldState, WORLD_STATE_SCHEMA } from '../world/State';
-import { WorldTemplate, WORLD_TEMPLATE_SCHEMA } from '../world/Template';
-import { ConfigFile, CONFIG_SCHEMA } from './Config';
+import { WorldState, WORLD_STATE_SCHEMA } from '../world/State.js';
+import { WorldTemplate, WORLD_TEMPLATE_SCHEMA } from '../world/Template.js';
+import { ConfigFile, CONFIG_SCHEMA } from './Config.js';
 
 export interface DataFile {
   config?: ConfigFile;

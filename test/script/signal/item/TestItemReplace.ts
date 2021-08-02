@@ -1,13 +1,13 @@
 import { expect } from 'chai';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { ACTOR_TYPE } from '../../../../src/model/entity/Actor';
-import { ITEM_TYPE } from '../../../../src/model/entity/Item';
-import { SignalItemReplace } from '../../../../src/script/signal/item/ItemReplace';
-import { VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { ACTOR_TYPE } from '../../../../src/model/entity/Actor.js';
+import { ITEM_TYPE } from '../../../../src/model/entity/Item.js';
+import { SignalItemReplace } from '../../../../src/script/signal/item/ItemReplace.js';
+import { VERB_WAIT } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../helper.js';
 
 describe('item replace signal', () => {
   it('should require the script target be an item', async () => {

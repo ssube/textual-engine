@@ -1,16 +1,16 @@
 import { InvalidArgumentError, isNil } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Module } from 'noicejs';
 
-import { BunyanLogger } from './logger/BunyanLogger';
-import { INJECT_EVENT, INJECT_LOCALE } from './module';
-import { BrowserModule } from './module/BrowserModule';
-import { CoreModule } from './module/CoreModule';
-import { NodeModule } from './module/NodeModule';
-import { EventBus } from './service/event';
-import { LocaleService } from './service/locale';
-import { onceEvent } from './util/async/event';
-import { parseArgs } from './util/config/args';
-import { loadConfig } from './util/config/file';
+import { BunyanLogger } from './logger/BunyanLogger.js';
+import { INJECT_EVENT, INJECT_LOCALE } from './module/index.js';
+import { BrowserModule } from './module/BrowserModule.js';
+import { CoreModule } from './module/CoreModule.js';
+import { NodeModule } from './module/NodeModule.js';
+import { EventBus } from './service/event/index.js';
+import { LocaleService } from './service/locale/index.js';
+import { onceEvent } from './util/async/event.js';
+import { parseArgs } from './util/config/args.js';
+import { loadConfig } from './util/config/file.js';
 import {
   EVENT_ACTOR_OUTPUT,
   EVENT_COMMON_QUIT,
@@ -18,8 +18,8 @@ import {
   EVENT_LOADER_WORLD,
   EVENT_LOCALE_BUNDLE,
   EVENT_RENDER_INPUT,
-} from './util/constants';
-import { ServiceManager } from './util/service/ServiceManager';
+} from './util/constants.js';
+import { ServiceManager } from './util/service/ServiceManager.js';
 
 // collect modules
 export const LOADED_MODULES = new Map<string, new () => Module>([

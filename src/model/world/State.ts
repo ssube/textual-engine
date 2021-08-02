@@ -1,7 +1,7 @@
 import { JSONSchemaType } from 'ajv';
 
-import { Room } from '../entity/Room';
-import { Metadata } from '../Metadata';
+import { Room } from '../entity/Room.js';
+import { Metadata } from '../Metadata.js';
 
 export enum ReactionConfig {
   PLAYER_FIRST = 'player',

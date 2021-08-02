@@ -31,7 +31,7 @@
     "@esbuild-plugins/node-globals-polyfill": "0.1.0",
     "@esbuild-plugins/node-modules-polyfill": "0.1.1",
     "@istanbuljs/nyc-config-typescript": "1.0.1",
-    "@microsoft/api-documenter": "7.13.33",
+    "@microsoft/api-documenter": "7.13.34",
     "@microsoft/api-extractor": "7.18.4",
     "@types/bunyan": "1.8.7",
     "@types/chai": "4.2.21",

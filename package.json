@@ -78,5 +78,8 @@
     "lines": 98,
     "functions": 98,
     "statements": 98
+  },
+  "resolutions": {
+    "@types/react": "17.0.15"
   }
 }

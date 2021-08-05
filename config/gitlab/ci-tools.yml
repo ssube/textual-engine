@@ -1,5 +1,5 @@
 .build-base:
-  image: docker.artifacts.apextoaster.com/apextoaster/base:1.4
+  image: docker.artifacts.apextoaster.com/apextoaster/base:1.5
   tags:
     - platform:k8s
     - runner:shared

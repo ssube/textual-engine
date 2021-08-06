@@ -24,7 +24,7 @@
     GIT_COMMIT_SHA: "${CI_COMMIT_SHA}"
 
 .build-docker:
-  image: docker.artifacts.apextoaster.com/apextoaster/docker:18.09
+  image: docker.artifacts.apextoaster.com/apextoaster/docker:20.10
   services:
     - docker.artifacts.apextoaster.com/apextoaster/docker-dind:18.09
   tags:

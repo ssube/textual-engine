@@ -26,7 +26,7 @@
 .build-docker:
   image: docker.artifacts.apextoaster.com/apextoaster/docker:18.09
   services:
-    - docker.artifacts.apextoaster.com/apextoaster/docker-dind:18.09
+    - docker.artifacts.apextoaster.com/apextoaster/docker-dind:20.10
   tags:
     - platform:k8s
     - runner:shared

@@ -27,7 +27,7 @@ export function matchEntity<TType extends WorldEntityType>(entity: Immutable<Ent
   let matched = true;
 
   if (doesExist(search.type)) {
-    matched = matched && entity.type === search.type;
+    matched = matched && entity.type === search.type; // lgtm [js/trivial-conditional]
   }
 
   if (doesExist(search.meta)) {

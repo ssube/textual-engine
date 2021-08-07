@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { defaultWhen, doesExist, InvalidArgumentError, isNil, mustCoalesce, mustExist, mustFind } from '@apextoaster/js-utils';
+import { doesExist, InvalidArgumentError, isNil, mustCoalesce, mustExist, mustFind } from '@apextoaster/js-utils';
 import { Container, Inject, Logger } from 'noicejs';
 
 import { StateService, StepResult } from '.';

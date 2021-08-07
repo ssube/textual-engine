@@ -1,7 +1,5 @@
 import parser from 'yargs-parser';
 
-import { PORTAL_DEPTH } from '../constants';
-
 export interface ParsedArgs {
   config: string;
   data: Array<string>;
@@ -22,7 +20,6 @@ export function parseArgs(args: Array<string>): ParsedArgs {
       data: [],
       module: ['core', 'node'],
     },
-    // envPrefix: 'TEXTUAL_',
     string: ['config'],
   });
 

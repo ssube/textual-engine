@@ -24,9 +24,9 @@
     GIT_COMMIT_SHA: "${CI_COMMIT_SHA}"
 
 .build-docker:
-  image: docker.artifacts.apextoaster.com/apextoaster/docker:18.09
+  image: docker.artifacts.apextoaster.com/apextoaster/docker:20.10
   services:
-    - docker.artifacts.apextoaster.com/apextoaster/docker-dind:18.09
+    - docker.artifacts.apextoaster.com/apextoaster/docker-dind:20.10
   tags:
     - platform:k8s
     - runner:shared
@@ -41,8 +41,11 @@
     - rm -rfv ${HOME}/.docker
 
   variables:
+    DOCKER_CERT_PATH: "/shared/docker/client"
     DOCKER_DRIVER: overlay2
-    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_HOST: tcp://localhost:2376
+    DOCKER_TLS_CERTDIR: "/shared/docker"
+    DOCKER_TLS_VERIFY: 1
 
 .build-node:
   image: docker.artifacts.apextoaster.com/apextoaster/node:16.6

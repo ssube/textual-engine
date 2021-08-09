@@ -51,7 +51,7 @@
     "@typescript-eslint/parser": "4.29.0",
     "chai": "4.3.4",
     "chai-as-promised": "7.1.1",
-    "esbuild": "0.12.17",
+    "esbuild": "0.12.19",
     "esbuild-plugin-alias": "0.1.2",
     "esbuild-plugin-ignore": "1.1.0",
     "eslint": "7.32.0",

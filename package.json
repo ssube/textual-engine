@@ -58,7 +58,7 @@
     "eslint-plugin-chai": "0.0.1",
     "eslint-plugin-chai-expect": "2.2.0",
     "eslint-plugin-chai-expect-keywords": "2.1.0",
-    "eslint-plugin-import": "2.24.0",
+    "eslint-plugin-import": "2.24.1",
     "eslint-plugin-mocha": "9.0.0",
     "eslint-plugin-no-null": "1.0.2",
     "eslint-plugin-sonarjs": "0.10.0",

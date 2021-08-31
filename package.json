@@ -17,7 +17,7 @@
     "ink-select-input": "4.2.0",
     "ink-text-input": "4.0.1",
     "js-yaml": "4.1.0",
-    "node-fetch": "3.0.0-beta.9",
+    "node-fetch": "3.0.0",
     "noicejs": "4.0.0",
     "parsimmon": "1.18.0",
     "react": "17.0.2",

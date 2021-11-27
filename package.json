@@ -36,7 +36,7 @@
     "@types/bunyan": "1.8.7",
     "@types/chai": "4.2.22",
     "@types/chai-as-promised": "7.1.4",
-    "@types/js-yaml": "4.0.3",
+    "@types/js-yaml": "4.0.5",
     "@types/mocha": "8.2.3",
     "@types/node": "16.3.3",
     "@types/parsimmon": "1.10.6",

@@ -9,7 +9,7 @@
     "@apextoaster/js-yaml-schema": "0.4.0",
     "ajv": "8.6.2",
     "bunyan": "1.8.15",
-    "compromise": "13.11.3",
+    "compromise": "13.11.4",
     "compromise-numbers": "1.4.0",
     "esm": "3.2.25",
     "i18next": "21.6.3",

@@ -1708,10 +1708,10 @@ compromise-numbers@1.4.0:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/compromise-numbers/-/compromise-numbers-1.4.0.tgz#22e545923243333bc1e8a2e82da2e922afb50400"
   integrity sha512-3ceRpwZIWduVSMYn54ET1ELdI7bvXQk42uDwxffxiJBxgKCwcCfVbiLuTG62cI+qTHchwLDh4vp9i3WARXROFQ==
 
-compromise@13.11.3:
-  version "13.11.3"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/compromise/-/compromise-13.11.3.tgz#3f6b687fbefdbd1ef674f263f6e5c06b29c324d9"
-  integrity sha512-oKYButHtXcDyEe2et5XlniFWyFTpDOy3z7zB501EEgTN9xeZHIib1Xq4AOSJw6HCZmwGHh1nx3MGy/MbGHFtWQ==
+compromise@13.11.4:
+  version "13.11.4"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/compromise/-/compromise-13.11.4.tgz#3136e6d2c2cca822ba7cebd140c9f27f405b67f1"
+  integrity sha512-nBITcNdqIHSVDDluaG6guyFFCSNXN+Hu87fU8VlhkE5Z0PwTZN1nro2O7a8JcUH88nB5EOzrxd9zKfXLSNFqcg==
   dependencies:
     efrt-unpack "2.2.0"
 

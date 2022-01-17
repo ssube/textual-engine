@@ -3287,10 +3287,10 @@ ini@^1.3.2:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
-ink-select-input@4.2.0:
-  version "4.2.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-select-input/-/ink-select-input-4.2.0.tgz#a03dc1cae81f09c29cdd4612ae0be610c65c269f"
-  integrity sha512-pNpVNNlvbERKKj7yFZcNCecnz6RA7Lc6UZVfwYe1a3e56LPQmTYL0mbtfENQ9PBeMagny1tCtg0pQwr9y7NtVw==
+ink-select-input@4.2.1:
+  version "4.2.1"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-select-input/-/ink-select-input-4.2.1.tgz#121108ccbcb42aa619f9f0baedb796c24c971a2a"
+  integrity sha512-WvlrYdwmdnD6/nE/9mNhaaanTQOKmwy/hT/vuAqbDec3PUQBQ8Pkwszii/8eGvDTx5bGiUHu18P9D5IoB/ERaw==
   dependencies:
     arr-rotate "^1.0.0"
     figures "^3.2.0"

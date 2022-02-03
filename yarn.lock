@@ -2378,10 +2378,10 @@ ink-testing-library@2.1.0:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-testing-library/-/ink-testing-library-2.1.0.tgz#b5ffd1ef1049550ae4d2f008b8770e7ece6e0313"
   integrity sha512-7TNlOjJlJXB33vG7yVa+MMO7hCjaC1bCn+zdpSjknWoLbOWMaFdKc7LJvqVkZ0rZv2+akhjXPrcR/dbxissjUw==
 
-ink-text-input@4.0.2:
-  version "4.0.2"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-text-input/-/ink-text-input-4.0.2.tgz#59b41604058b29bc2b8c1335838c213076308205"
-  integrity sha512-euuugcNExOx5E+qNM1c+pDF7V8yw/xzCRWEfFk1KjQT9CYtaVAYre13YbMFsYPkGD26dvX6XAffUgkwXme/p5Q==
+ink-text-input@4.0.3:
+  version "4.0.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-text-input/-/ink-text-input-4.0.3.tgz#6348fef942e74b06a465f98851706516a1e2be8d"
+  integrity sha512-eQD01ik9ltmNoHmkeQ2t8LszYkv2XwuPSUz3ie/85qer6Ll/j0QSlSaLNl6ENHZakBHdCBVZY04iOXcLLXA0PQ==
   dependencies:
     chalk "^4.1.0"
     type-fest "^0.15.1"

@@ -116,7 +116,11 @@ export class LocalScriptService implements ScriptService {
         script: this,
       });
     } catch (err) {
-      this.logger.error(err, 'error invoking script');
+      if (err instanceof Error) {
+        this.logger.error(err, 'error invoking script');
+      } else {
+        this.logger.error('unknown error invoking script');
+      }
     }
   }
 

@@ -28,6 +28,10 @@ export async function loadConfig(url: string, /* istanbul ignore next */ doc = d
       throw new ConfigError('invalid config data');
     }
   } catch (err) {
-    throw new ConfigError('could not load config file', err);
+    if (err instanceof Error) {
+      throw new ConfigError('error loading config from page', err);
+    } else {
+      throw new ConfigError('unknown error loading config from page');
+    }
   }
 }

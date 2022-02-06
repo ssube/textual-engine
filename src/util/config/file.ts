@@ -34,6 +34,10 @@ export async function loadConfig(path: string): Promise<ConfigFile> {
       throw new ConfigError('invalid config data');
     }
   } catch (err) {
-    throw new ConfigError('could not load config file', err);
+    if (err instanceof Error) {
+      throw new ConfigError('error loading config file', err);
+    } else {
+      throw new ConfigError('unknown error loading config file');
+    }
   }
 }

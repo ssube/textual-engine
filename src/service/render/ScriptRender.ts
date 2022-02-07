@@ -20,6 +20,7 @@ export interface ScriptInput {
   line: string;
 
   // triggers
+  delay?: number;
   step?: number;
   time?: number;
 }

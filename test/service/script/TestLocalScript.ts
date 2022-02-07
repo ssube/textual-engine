@@ -124,4 +124,27 @@ describe('local script service', () => {
 
     expect(scriptStub).to.have.callCount(1);
   });
+
+  it('should contain non-errors thrown by invoked scripts', async () => {
+    const container = await getTestContainer(new CoreModule());
+
+    const target: Item = makeTestItem('', '', '');
+    target.scripts.set('verbs.foo', {
+      data: new Map(),
+      name: 'foo',
+    });
+
+    const scriptStub = spy(() => {
+      throw 'script broke'; // stub.throws auto-wraps in an Error, which is undesirable here
+    });
+    const script = await container.create(LocalScriptService, {}, new Map([
+      ['foo', scriptStub],
+    ]));
+
+    await script.invoke(target, 'verbs.foo', createTestContext({
+      item: target,
+    }));
+
+    expect(scriptStub).to.have.callCount(1);
+  });
 });

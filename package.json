@@ -46,7 +46,7 @@
     "@types/seedrandom": "3.0.2",
     "@types/sinon": "10.0.11",
     "@types/sinon-chai": "3.2.8",
-    "@types/yargs-parser": "20.2.1",
+    "@types/yargs-parser": "20.2.2",
     "@typescript-eslint/eslint-plugin": "5.12.1",
     "@typescript-eslint/parser": "5.12.1",
     "chai": "4.3.6",

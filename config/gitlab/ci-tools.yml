@@ -48,7 +48,7 @@
     DOCKER_TLS_VERIFY: 1
 
 .build-node:
-  image: docker.artifacts.apextoaster.com/apextoaster/node:16.6
+  image: docker.artifacts.apextoaster.com/apextoaster/node:16.14
   tags:
     - platform:k8s
     - runner:shared

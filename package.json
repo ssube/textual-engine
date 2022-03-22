@@ -7,7 +7,7 @@
   "dependencies": {
     "@apextoaster/js-utils": "0.3.0",
     "@apextoaster/js-yaml-schema": "0.4.0",
-    "ajv": "8.10.0",
+    "ajv": "8.11.0",
     "bunyan": "1.8.15",
     "compromise": "13.11.4",
     "compromise-numbers": "1.4.0",

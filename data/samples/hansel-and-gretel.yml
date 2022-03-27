@@ -771,48 +771,6 @@ worlds:
             stats: !map {}
         - base:
             meta:
-              id: portal-great-gingerbread
-              name:
-                base: Forest path
-              desc:
-                base: A path through the forest.
-            dest:
-              base: room-gingerbread-house
-            flags: !map {}
-            group:
-              key:
-                base: path
-              source:
-                base: north
-              target:
-                base: south
-            link:
-              base: both
-            scripts: !map {}
-            stats: !map {}
-        - base:
-            meta:
-              id: portal-gingerbread-great
-              name:
-                base: Forest path
-              desc:
-                base: A path through the forest.
-            dest:
-              base: ''
-            flags: !map {}
-            group:
-              key:
-                base: path
-              source:
-                base: south
-              target:
-                base: north
-            link:
-              base: both
-            scripts: !map {}
-            stats: !map {}
-        - base:
-            meta:
               id: portal-great-north
               name:
                 base: Forest path
@@ -850,6 +808,132 @@ worlds:
               target: 
                 base: north
             link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-great-gingerbread
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: room-gingerbread-ext
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-gingerbread-great
+              name:
+                base: Forest path
+              desc:
+                base: A path through the forest.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: path
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-ginger-in
+              name:
+                base: Gingerbread Door
+              desc:
+                base: The front door of the gingerbread house. The knob is made out of a gumdrop, and the window is made of sugar.
+            dest:
+              base: 'room-gingerbread-int'
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-ginger-out
+              name:
+                base: Gingerbread Door
+              desc:
+                base: The front door of the gingerbread house. The knob is made out of a gumdrop, and the window is made of sugar.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            link:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+                id: portal-ginger-oven
+                name:
+                  base: Oven Door
+                desc:
+                  base: The oven door. It's made of heavy iron and covered in soot.
+            dest:
+              base: room-oven
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: north
+              target:
+                base: south
+            links:
+              base: both
+            scripts: !map {}
+            stats: !map {}
+        - base:
+            meta:
+              id: portal-oven-ginger
+              name:
+                base: Oven Door
+              desc:
+                base: The oven door. It's made of heavy iron and covered in soot.
+            dest:
+              base: ''
+            flags: !map {}
+            group:
+              key:
+                base: door
+              source:
+                base: south
+              target:
+                base: north
+            links:
               base: both
             scripts: !map {}
             stats: !map {}
@@ -994,7 +1078,7 @@ worlds:
             scripts: !map {}
         - base:
             meta:
-                id: room-gingerbread-house
+                id: room-gingerbread-ext
                 name: 
                   base: A Gingerbread House
                 desc:
@@ -1004,18 +1088,21 @@ worlds:
             items: []
             portals:
               - id: portal-gingerbread-great
+              - id: portal-ginger-in
             scripts: !map {}
         - base:
             meta:
-                id: room-witch-intro
-                name: 
-                  base: Cutscene
-                desc:
-                  base: The witch's intro cutscene will go here.
+              id: room-gingerbread-int
+              name:
+                base: Gingerbread House
+              desc:
+                base: The interior of the gingerbread house. Unlike it's outer appearance, the inside is dark and dingy. There is a large oven that takes up most of one wall.
             actors: []
             flags: !map {}
             items: []
-            portals: []
+            portals:
+              - id: portal-ginger-out
+              - id: portal-ginger-oven
             scripts: !map {}
         - base:
             meta:
@@ -1027,17 +1114,6 @@ worlds:
             actors: []
             flags: !map {}
             items: []
-            portals: []
-            scripts: !map {}
-        - base:
-            meta:
-                id: room-outro
-                name: 
-                  base: Final Scene
-                desc:
-                  base: The outro cutscene will go here.
-            actors: []
-            flags: !map {}
-            items: []
-            portals: []
+            portals:
+              - id: portal-oven-ginger
             scripts: !map {}

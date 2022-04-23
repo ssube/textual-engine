@@ -42,7 +42,7 @@
     "@types/parsimmon": "1.10.6",
     "@types/react": "17.0.44",
     "@types/react-dom": "18.0.2",
-    "@types/react-test-renderer": "17.0.2",
+    "@types/react-test-renderer": "18.0.0",
     "@types/seedrandom": "3.0.2",
     "@types/sinon": "10.0.11",
     "@types/sinon-chai": "3.2.8",

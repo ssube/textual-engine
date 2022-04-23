@@ -576,10 +576,10 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/sinonjs__fake-timers/-/sinonjs__fake-timers-8.1.1.tgz#b49c2c70150141a15e0fa7e79cf1f92a72934ce3"
   integrity sha512-0kSuKjAS0TrGLJ0M/+8MaFkGsQhZpB6pxOmvS3K8FYI72K//YmdfoW9X2qPsAKh1mkwxGD5zib9s1FIFed6E8g==
 
-"@types/yargs-parser@20.2.2":
-  version "20.2.2"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/yargs-parser/-/yargs-parser-20.2.2.tgz#c3924f56e32ae39ce713a1d5dec5872fedf85f6d"
-  integrity sha512-sUWMriymrSqTvxCmCkf+7k392TNDcMJBHI1/rysWJxKnWAan/Zk4gZ/GEieSRo4EqIEPpbGU3Sd/0KTRoIA3pA==
+"@types/yargs-parser@21.0.0":
+  version "21.0.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/yargs-parser/-/yargs-parser-21.0.0.tgz#0c60e537fa790f5f9472ed2776c2b71ec117351b"
+  integrity sha512-iO9ZQHkZxHn4mSakYV0vFHAVDyEOIJQrV2uZ06HxEPcx+mt8swXoZHIbaaJ2crJYFfErySgktuTZ3BeLz+XmFA==
 
 "@types/yoga-layout@1.9.2":
   version "1.9.2"
@@ -4466,10 +4466,10 @@ yargs-parser@20.2.4:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/yargs-parser/-/yargs-parser-20.2.4.tgz#b42890f14566796f85ae8e3a25290d205f154a54"
   integrity sha512-WOkpgNhPTlE73h4VFAFsOnomJVaovO8VqLDzy5saChRBFQFBoMYirowyW+Q9HB4HFF4Z7VZTiG3iSzJJA29yRA==
 
-yargs-parser@20.2.9, yargs-parser@^20.2.2, yargs-parser@^20.2.3:
-  version "20.2.9"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/yargs-parser/-/yargs-parser-20.2.9.tgz#2eb7dc3b0289718fc295f362753845c41a0c94ee"
-  integrity sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==
+yargs-parser@21.0.1:
+  version "21.0.1"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/yargs-parser/-/yargs-parser-21.0.1.tgz#0267f286c877a4f0f728fceb6f8a3e4cb95c6e35"
+  integrity sha512-9BK1jFpLzJROCI5TzwZL/TU4gqjK5xiHV/RfWLOahrjAko/e4DJkRDZQXfvqAsiZzzYhgAzbgz6lg48jcm4GLg==
 
 yargs-parser@^18.1.2, yargs-parser@^18.1.3:
   version "18.1.3"
@@ -4478,6 +4478,11 @@ yargs-parser@^18.1.2, yargs-parser@^18.1.3:
   dependencies:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
+
+yargs-parser@^20.2.2, yargs-parser@^20.2.3:
+  version "20.2.9"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/yargs-parser/-/yargs-parser-20.2.9.tgz#2eb7dc3b0289718fc295f362753845c41a0c94ee"
+  integrity sha512-y11nGElTIV+CT3Zv9t7VKl+Q3hTQoT9a1Qzezhhl6Rp21gJ/IVTW7Z3y9EWXhuUBC2Shnf+DX0antecpAwSP8w==
 
 yargs-unparser@2.0.0:
   version "2.0.0"

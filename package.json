@@ -25,7 +25,7 @@
     "react-i18next": "11.16.7",
     "seedrandom": "3.0.5",
     "tslib": "2.4.0",
-    "yargs-parser": "20.2.9"
+    "yargs-parser": "21.0.1"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "0.1.1",
@@ -46,7 +46,7 @@
     "@types/seedrandom": "3.0.2",
     "@types/sinon": "10.0.11",
     "@types/sinon-chai": "3.2.8",
-    "@types/yargs-parser": "20.2.2",
+    "@types/yargs-parser": "21.0.0",
     "@typescript-eslint/eslint-plugin": "5.16.0",
     "@typescript-eslint/parser": "5.16.0",
     "chai": "4.3.6",

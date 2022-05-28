@@ -59,7 +59,7 @@
     "eslint-plugin-chai-expect": "3.0.0",
     "eslint-plugin-chai-expect-keywords": "2.1.0",
     "eslint-plugin-import": "2.26.0",
-    "eslint-plugin-mocha": "10.0.4",
+    "eslint-plugin-mocha": "10.0.5",
     "eslint-plugin-no-null": "1.0.2",
     "eslint-plugin-sonarjs": "0.13.0",
     "ink-testing-library": "2.1.0",

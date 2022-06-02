@@ -1,4 +1,4 @@
-import { countOf, defaultWhen, isNil, mustExist } from '@apextoaster/js-utils';
+import { defaultWhen, isNone, lengthOf, mustExist } from '@apextoaster/js-utils';
 
 import { ScriptTargetError } from '../../../error/ScriptTargetError';
 import { isActor } from '../../../model/entity/Actor';
@@ -29,7 +29,7 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
   });
 
   const item = indexEntity(results, command.index, isItem);
-  if (isNil(item)) {
+  if (isNone(item)) {
     return context.state.show(context.source, 'actor.verb.equip.missing', { command });
   }
 
@@ -42,7 +42,7 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
   }
 
   const validSlots = findActorSlots(this, slotName);
-  if (countOf(validSlots) === 0) {
+  if (lengthOf(validSlots) === 0) {
     return context.state.show(context.source, 'actor.verb.equip.slot.missing', { item, slot: slotName });
   }
 

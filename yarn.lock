@@ -2330,10 +2330,10 @@ html-parse-stringify@^3.0.1:
   dependencies:
     void-elements "3.1.0"
 
-i18next@21.8.5:
-  version "21.8.5"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/i18next/-/i18next-21.8.5.tgz#b7615f107d9a1492c771dc0e0b8742a80c1d9bec"
-  integrity sha512-uI5LVG10SBHLVOclr6yY1aCimmrzeZ0dwD73Sio61E8gQEwRmKI7/M8RKM084mNNy7VscKtxzSwELrso8BKv1g==
+i18next@21.8.6:
+  version "21.8.6"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/i18next/-/i18next-21.8.6.tgz#eff7d033db97baabc6541a3ef73e8361176122a8"
+  integrity sha512-tD0umB5lcYXJiD06m/XOEgdvDkFD17m13BP2tmSLralYhGPdmmPK6rErcmhc37t/6mubKdso30NLpPIomHaKnw==
   dependencies:
     "@babel/runtime" "^7.17.2"
 

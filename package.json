@@ -22,7 +22,7 @@
     "parsimmon": "1.18.1",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "react-i18next": "11.16.11",
+    "react-i18next": "11.17.0",
     "seedrandom": "3.0.5",
     "tslib": "2.4.0",
     "yargs-parser": "21.0.1"

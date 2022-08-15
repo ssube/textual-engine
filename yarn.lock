@@ -238,10 +238,10 @@
     escape-string-regexp "^4.0.0"
     rollup-plugin-node-polyfills "^0.2.1"
 
-"@esbuild/linux-loong64@0.15.0":
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/@esbuild/linux-loong64/-/linux-loong64-0.15.0.tgz#7ca859765361a92a60669a1794e9c1837d427d97"
-  integrity sha512-7ChD3qsxRPIPp9bfjspZiM/x8B1UZL7IKwp0YdnC1kKsDCB5Q8/TexedeeEbkI9inlunu8Lll2lP2wnkiXTCLA==
+"@esbuild/linux-loong64@0.15.3":
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/@esbuild/linux-loong64/-/linux-loong64-0.15.3.tgz#0a39aa5c8a7639828914e6edc064ded72ff68d3a"
+  integrity sha512-pe7L+LnITFHUSUnuhSQRyYN2E5Anl0r7x/jW+ufc+4fBcaK3Q51b/3ufFWWhmIiuCkr7oKtmVSpaJ1DxbtSfuw==
 
 "@eslint/eslintrc@^1.3.0":
   version "1.3.0"
@@ -1574,85 +1574,85 @@ es6-error@^4.0.1:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/es6-error/-/es6-error-4.1.1.tgz#9e3af407459deed47e9a91f9b885a84eb05c561d"
   integrity sha512-Um/+FxMr9CISWh0bi5Zv0iOD+4cFh5qLeks1qhAopKVAJw3drgKbKySikp7wGhDL0HPeaja0P5ULZrxLkniUVg==
 
-esbuild-android-64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-android-64/-/esbuild-android-64-0.15.0.tgz#4f708e4185c6995aeba7c7042c5d6b77eeb1f779"
-  integrity sha512-A9wa6quw4nYIhCDH6rudxSTOAIfSOYU3eME8ZkfP21P+WTxz0pFORFDuBjVAcLhkora3bDc23C8UeloKiiQPOg==
+esbuild-android-64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-android-64/-/esbuild-android-64-0.15.3.tgz#8096ff8bd80ac855a35e28ad04a67e76f18754ba"
+  integrity sha512-sHGQ50Bb80ow+DZ8s6mabWn/j+vgfsNDMhipv4v410O++C6gpEcR9A5jR9bTkMsVbr46Id0MMhUGpBasq8H92A==
 
-esbuild-android-arm64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-android-arm64/-/esbuild-android-arm64-0.15.0.tgz#136c5a3565801c3719b51b05975b2598ab782965"
-  integrity sha512-ujdverhuFUfW99HdF+L9n1wzG950lVL1AJVc1SEbJRaQC22tVq9xXNXkLLq7v4hSZWrdz/MT3hwhnQF0KTMxNg==
+esbuild-android-arm64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-android-arm64/-/esbuild-android-arm64-0.15.3.tgz#70fea382b5eea6f033a42c2d19fa70f8fde2d31e"
+  integrity sha512-+Oiwzgp7HTyeNkgpQySGLCq3zFmvVVyBiNz8bO+7Tc6tlnxSYf8jjQBThRTUsy6vrrjG91h9vZNlYkiikzzWUg==
 
-esbuild-darwin-64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-darwin-64/-/esbuild-darwin-64-0.15.0.tgz#338d3baa1cd575ba79f2269aedb70711fd036f62"
-  integrity sha512-aA5SVtXCetQ9ChREG8xDdzv43XGbdz+u4AxQgQZrRu0gXD3yJfawfZgquaej3CxVAlrOgBPbu5z+tA5SVhXAxQ==
+esbuild-darwin-64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-darwin-64/-/esbuild-darwin-64-0.15.3.tgz#4902b82c23c91795b40af1341bf73d03f28c7706"
+  integrity sha512-n2BkxzCPHv6OOOs9gxp4AYsccawuw9bDeW9rpSASHao0zQ/u0kP6bjD4ATf2G4A3cml8HGwp18aROl4ws+4Ytg==
 
-esbuild-darwin-arm64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-darwin-arm64/-/esbuild-darwin-arm64-0.15.0.tgz#a162b90f588bdab8c2733bfbcd3ffa34a9fc2e33"
-  integrity sha512-CaxPS5JUQpldeIMVqw0K+vlGfyMphvtIWugPMyXPGTDmUAcWXSha1QRgJ5Fxa9d/cC4DKeC8L8/q7ClzinXxfA==
+esbuild-darwin-arm64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-darwin-arm64/-/esbuild-darwin-arm64-0.15.3.tgz#7143f443c9a5da355cdb2fbfbf129708d75902ab"
+  integrity sha512-fSk5M1vQ+y48csVJ4QxweT//DdDytDAb0AvU1gYITqZGA1kL1/i4C5fjKDNZMjB7dkg2a+rfkMyrpZUli+To/w==
 
-esbuild-freebsd-64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-freebsd-64/-/esbuild-freebsd-64-0.15.0.tgz#6fc8d24d2e16e4915066b8ec8b0ddbccd5f6429d"
-  integrity sha512-O9yvjry2bmX8sxx42JfwW6g/usZ0e3ndfb3+bquu20qkuEfDodqHNzotOjaKSREvxpw+Ub1zNtXvA/FFekSaOA==
+esbuild-freebsd-64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-freebsd-64/-/esbuild-freebsd-64-0.15.3.tgz#fb28355d9a59dff40427d74602b452597a031601"
+  integrity sha512-b21XfM0Wrxu0CzFQN7B4xuAMGUNLT3F3J2NMeLxbUq6lcl2N3Isho1q2AF5bOCpCXVM04k1+PgoQLwNzGYtnjw==
 
-esbuild-freebsd-arm64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-freebsd-arm64/-/esbuild-freebsd-arm64-0.15.0.tgz#e665dcc66c83ccfbd092c0e9c47a472db3ff23e3"
-  integrity sha512-Zv8bNAG1lYyCtWi+PVndgys6KRBe5hQgD81tK3zdZ6XEitpCPwF8QShYbV8RacG1YBD7aHKSoWKGkT9+5bMGhw==
+esbuild-freebsd-arm64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-freebsd-arm64/-/esbuild-freebsd-arm64-0.15.3.tgz#c5542f88b48bfef1dbb910d224a9c1dd7f6d86ff"
+  integrity sha512-E0LkWSz7Ch1B2WFXbGvfN3q9uUlQCahBi3S7wTSJO2T41x0BPnIFHw79/RuGKVyA17mX/I7RVOSRnrla2D4tag==
 
-esbuild-linux-32@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-32/-/esbuild-linux-32-0.15.0.tgz#6ab8cd8088bea63830105d29bd49bfbd471aa060"
-  integrity sha512-QZqCG55D5Wof1WmBJMuihNroLM9S2oDXGkqB0ZHMA67CQw+3cAwWxOKW36n6VFaKiE4MhvUuW7jI+lr2D7nXQQ==
+esbuild-linux-32@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-32/-/esbuild-linux-32-0.15.3.tgz#0b127edc535540e96df1df5007764a03018d1157"
+  integrity sha512-af7BhXXKwzXL83bfJX8vkxsyDbOr9T5auxyBJnBfkd2w7VwXC1heDT2TQ1cWCWyjqVatyKudW5RCSAySDKDW2Q==
 
-esbuild-linux-64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-64/-/esbuild-linux-64-0.15.0.tgz#9ce7dfc0fb899b3123f096622c18438fbb1cc73d"
-  integrity sha512-cmB2vAUWf9W8768H0DuOi6VUrQPCinx/oYhRbuR1TZj873vg1GTqc55LAh1cYCC0xEMd9MjO4YfI43OX4ewI1w==
+esbuild-linux-64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-64/-/esbuild-linux-64-0.15.3.tgz#53949de49ffd4b079c234aecc936a9a5ada977db"
+  integrity sha512-Wwq+5ZF2IPE/6W2kJLPnh7eXqtz5XtdPBRB77nhm02my6PsZR3aa/q/fRkJhwO6ExM+t9l3kFhWL4pMwk3wREA==
 
-esbuild-linux-arm64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-arm64/-/esbuild-linux-arm64-0.15.0.tgz#a01ffaff475a2fd43ab7c7d266f3b60ad0e03ada"
-  integrity sha512-bJc8k64Lss+2V8yx9kh4Q48SYPR/k0kxyep2pmvzaGm+AreeMnXI0J33zF4tU/OW9r3pwa74F3/MxF6x275Yhg==
+esbuild-linux-arm64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-arm64/-/esbuild-linux-arm64-0.15.3.tgz#b6bf7ebbc453f71dc96f535a466cd144edf81748"
+  integrity sha512-qNvYyYjNm4JPXJcCJv7gXEnyqw2k9W+SeYMoG7RiwWHWv1cMX6xlxPLGz5yIxjH9+VBXkA1nrY/YohaiKq2O3g==
 
-esbuild-linux-arm@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-arm/-/esbuild-linux-arm-0.15.0.tgz#e332122fbfd560c505c76e5fb1a803818801c1da"
-  integrity sha512-UyY0Vqd9ngfeWBeJrrqHiXf4ozqXxzNT8ebdNt1ay5hfu/uXes3eVkt1YHP2dcxG/APPE4XDxvKlx0SoSwHP6Q==
+esbuild-linux-arm@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-arm/-/esbuild-linux-arm-0.15.3.tgz#01d75bd360f7b96243e1c13e389e2e1a514b8b00"
+  integrity sha512-88ycpH4GrbOzaZIIXIzljbeCUkzoaJ5luP6+LATa5hk/Wl+OHkAieDfjAHdH8KuHkGYTojKE1npQq9gll9efUA==
 
-esbuild-linux-mips64le@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-mips64le/-/esbuild-linux-mips64le-0.15.0.tgz#e68062e43d62e610ba9a45796ff558f5ac2fab56"
-  integrity sha512-NoOxC4a1XfM4/zGBIujIuxhPVWvS6UgqE/ksyjZ6qgHQD9lWVjcEv3iPEKKIuHXPE1s+YHvJrdXVup96aVvflQ==
+esbuild-linux-mips64le@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-mips64le/-/esbuild-linux-mips64le-0.15.3.tgz#687e6acfa6b8818a67398ac18615a4fac18647d9"
+  integrity sha512-t5TXW6Cw8S9Lts7SDZ8rlx/dqPJx8hndYKL6xEgA2vdlrE60eIYTAYWJqsGN0dgePtFC1RPyH6To15l7s9WdYA==
 
-esbuild-linux-ppc64le@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-ppc64le/-/esbuild-linux-ppc64le-0.15.0.tgz#25779293a9cb81408bbc1c0ad47f9d2f55849a31"
-  integrity sha512-OUkEhJAYPaYPvHZxjgnJhWB0qD8q8l1q8CnGLngmPAxb9WZrFwPYmykWBTSqGXeG08stScpkIQXy4HTSF8rH+w==
+esbuild-linux-ppc64le@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-ppc64le/-/esbuild-linux-ppc64le-0.15.3.tgz#0c502cdf48a635460c80c95e620676a78a2f60e6"
+  integrity sha512-TXxPgEWOPCY4F6ZMf7+915+H0eOB6AlcZBwjeBs+78ULpzvcmMzZ2ujF2IejKZXYWuMTORPNoG+MuVGBuyUysA==
 
-esbuild-linux-riscv64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-riscv64/-/esbuild-linux-riscv64-0.15.0.tgz#363736a80491f9ef50d2fcb8f26510a67e3f6ee4"
-  integrity sha512-DuSujKNrdCN+kvA0+BBS/ULaINuOeI0iU9XzhIRtTCR5cFJWd6aQTHluKEc3C/a/ib2KTVNjM21cUHi4Tj0NZA==
+esbuild-linux-riscv64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-riscv64/-/esbuild-linux-riscv64-0.15.3.tgz#ee99fe2c1636f0e7127e13fd21783ec7b350e2f6"
+  integrity sha512-04tvrbHA83N+tg+qQeJmUQ3jWStUP7+rw+v/l2h3PsNGbcH3WmsgR0Tf0e1ext09asV4x2PX2b2Nm/gBIOrpqg==
 
-esbuild-linux-s390x@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-s390x/-/esbuild-linux-s390x-0.15.0.tgz#26fc8a255b333da7b8ae41e591ccca3e1a1ea328"
-  integrity sha512-ttGGhgXRpJbsD+XXS2NIBThuEh8EvAJEnVQ9vzXviniPuvpuwKLFNBRPqtX3gE5o2bUQnh5ZugmDVuD9GW2ROg==
+esbuild-linux-s390x@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-linux-s390x/-/esbuild-linux-s390x-0.15.3.tgz#2e3491e04ad8108f928c94291b38e8529370f5e1"
+  integrity sha512-LHxnvvFMhA/uy9CSrnlCtPZnTfWahR9NPLKwXBgfg16YqpKbRHty+mek1o7l+2G5qLeFEEvhB0a7c+hYgbW/3w==
 
-esbuild-netbsd-64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-netbsd-64/-/esbuild-netbsd-64-0.15.0.tgz#0590f6c8cbdfccb87e7b0aeba066466427c01886"
-  integrity sha512-rb6sIQ/gZeQNrgplSLJ0zLirLwr3vQCzbL1jb0Ypay83Uup2s+OEI+Vw+oJ2SomrhVyOPwk/R4AY713bJKdLsQ==
+esbuild-netbsd-64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-netbsd-64/-/esbuild-netbsd-64-0.15.3.tgz#8f41cb1c0c26befbf0bcd50e89580f66ec45bb32"
+  integrity sha512-8W0UxNuNsgBBa1SLjwqbbDLJF9mf+lvytaYPt5kXbBrz0DI4mKYFlujLQrxLKh8tvs2zRdFNy9HVqmMdbZ1OIQ==
 
-esbuild-openbsd-64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-openbsd-64/-/esbuild-openbsd-64-0.15.0.tgz#a6219c343d2b69d153713f5e9bef69a6196f432e"
-  integrity sha512-CeU7hw291UJQpNg/oJLefmM9Rdeddo2ya9Vw9hdDrUyZAAZckqVRLDh9t4OdqJuXFdlo6BM2qhZCcY22O7wfGg==
+esbuild-openbsd-64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-openbsd-64/-/esbuild-openbsd-64-0.15.3.tgz#fa2e84480fe043480401c73fdfb944ba2d21826d"
+  integrity sha512-QL7xYQ4noukuqh8UGnsrk1m+ShPMYIXjOnAQl3siA7VV6cjuUoCxx6cThgcUDzih8iL5u2xgsGRhsviQIMsUuA==
 
 esbuild-plugin-alias@0.2.1:
   version "0.2.1"
@@ -1664,52 +1664,52 @@ esbuild-plugin-ignore@1.1.1:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-plugin-ignore/-/esbuild-plugin-ignore-1.1.1.tgz#a83be27a9a1b742700b547c1e50a9f2ec3775f02"
   integrity sha512-RVh45nlpiFiBJuw687Qh935VQvSzIA4rkBBytYYb5M3bTQcxokULQFQW6Sj0YHbFR6thNWmQYFkBghEQt5D3jg==
 
-esbuild-sunos-64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-sunos-64/-/esbuild-sunos-64-0.15.0.tgz#8343576a515f5278f1b5ada1819067e67a79dd29"
-  integrity sha512-nE7EcgDw9RT4fR+GJZ5a0spPb2HKT77viCjrGl6GSeb/n3RhxGgVGwPQDI/KRwyVeQMqEOTtHQMNPwNr9TKDDQ==
+esbuild-sunos-64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-sunos-64/-/esbuild-sunos-64-0.15.3.tgz#23b8904294344075ce5020155ddd4e28d079cc10"
+  integrity sha512-vID32ZCZahWDqlEoq9W7OAZDtofAY8aW0V58V5l+kXEvaKvR0m99FLNRuGGY3IDNwjUoOkvoFiMMiy+ONnN7GA==
 
-esbuild-windows-32@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-windows-32/-/esbuild-windows-32-0.15.0.tgz#0be1d82343b86a6150516d23d06dd33ca7ca75e7"
-  integrity sha512-FUPwJmPwBoqe8ShhOMfHtSElh1Nyc3s+Kru3m7lDJCjNr3ctx9YJKuzRsz4UXow6Wo79LMQGNyjysQ7UuKgvHQ==
+esbuild-windows-32@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-windows-32/-/esbuild-windows-32-0.15.3.tgz#472a5d09bcf4c1ebf2761c73214f15f6c5a16583"
+  integrity sha512-dnrlwu6T85QU9fO0a35HAzgAXm3vVqg+3Kr9EXkmnf5PHv9t7hT/EYW6g/8YYu91DDyGTk9JSyN32YzQ3OS9Lw==
 
-esbuild-windows-64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-windows-64/-/esbuild-windows-64-0.15.0.tgz#f1fb7f5087dff3117700eb205b0c23a34e6f8841"
-  integrity sha512-zNM5bSVOY0SzMFB6k3ZdMwg4JmLVLpEmgVd2fU2STDmEOXdY1APAFPVWkbWMtLF/nfLfaJLfps7+IIJgGyQbGA==
+esbuild-windows-64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-windows-64/-/esbuild-windows-64-0.15.3.tgz#77438af8bd79df722d5af6e4e527bd7d1c48dc57"
+  integrity sha512-HUSlVCpTtOnIKeIn05zz0McNCfZhnu5UgUypmpNrv4Ff1XTvl6vBpQwIZ49eIAkY9zI6oe1Mu6N5ZG7u6X4s7A==
 
-esbuild-windows-arm64@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-windows-arm64/-/esbuild-windows-arm64-0.15.0.tgz#58d27c7fd3709a97a26ee3db09784889bd8b25b0"
-  integrity sha512-sqhmDwUhUULUnViLD7jAqo4FaOhLN/FMW+dFVSvxSTA9pZSr2w6efky91vTWOcTUmspvYyHyOrJmtktp1ffIaw==
+esbuild-windows-arm64@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild-windows-arm64/-/esbuild-windows-arm64-0.15.3.tgz#68810c8ba6ab93e42e3aa323f37f6538f0379df6"
+  integrity sha512-sk6fVXCzGB0uW089+8LdeanZkQUZ+3/xdbWshgLGRawV0NyjSFH4sZPIy+DJnhEnT0pPt1DabZtqrq2DT0FWNw==
 
-esbuild@0.15.0:
-  version "0.15.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild/-/esbuild-0.15.0.tgz#54466825ac2b44c4caccef0bf0e260a1535d97d6"
-  integrity sha512-UUDSelGc/EOhzn0zpkdhLA3iB+jq2OS5gnMUMz/BqAKBIsWR2fTHqrddNPt2PNj3OUchqcMcTHSUBr+VpYpcsQ==
+esbuild@0.15.3:
+  version "0.15.3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/esbuild/-/esbuild-0.15.3.tgz#d4180ef567a4563de425e2b2166f871467cc2b0b"
+  integrity sha512-D1qLizJTYlGIOK5m/1ckH8vR2U573eLMMA57qvWg/9jj8jPIhjpafv4kxb6ra2eeTlVq8tISxjsyRKbTaeF6PA==
   optionalDependencies:
-    "@esbuild/linux-loong64" "0.15.0"
-    esbuild-android-64 "0.15.0"
-    esbuild-android-arm64 "0.15.0"
-    esbuild-darwin-64 "0.15.0"
-    esbuild-darwin-arm64 "0.15.0"
-    esbuild-freebsd-64 "0.15.0"
-    esbuild-freebsd-arm64 "0.15.0"
-    esbuild-linux-32 "0.15.0"
-    esbuild-linux-64 "0.15.0"
-    esbuild-linux-arm "0.15.0"
-    esbuild-linux-arm64 "0.15.0"
-    esbuild-linux-mips64le "0.15.0"
-    esbuild-linux-ppc64le "0.15.0"
-    esbuild-linux-riscv64 "0.15.0"
-    esbuild-linux-s390x "0.15.0"
-    esbuild-netbsd-64 "0.15.0"
-    esbuild-openbsd-64 "0.15.0"
-    esbuild-sunos-64 "0.15.0"
-    esbuild-windows-32 "0.15.0"
-    esbuild-windows-64 "0.15.0"
-    esbuild-windows-arm64 "0.15.0"
+    "@esbuild/linux-loong64" "0.15.3"
+    esbuild-android-64 "0.15.3"
+    esbuild-android-arm64 "0.15.3"
+    esbuild-darwin-64 "0.15.3"
+    esbuild-darwin-arm64 "0.15.3"
+    esbuild-freebsd-64 "0.15.3"
+    esbuild-freebsd-arm64 "0.15.3"
+    esbuild-linux-32 "0.15.3"
+    esbuild-linux-64 "0.15.3"
+    esbuild-linux-arm "0.15.3"
+    esbuild-linux-arm64 "0.15.3"
+    esbuild-linux-mips64le "0.15.3"
+    esbuild-linux-ppc64le "0.15.3"
+    esbuild-linux-riscv64 "0.15.3"
+    esbuild-linux-s390x "0.15.3"
+    esbuild-netbsd-64 "0.15.3"
+    esbuild-openbsd-64 "0.15.3"
+    esbuild-sunos-64 "0.15.3"
+    esbuild-windows-32 "0.15.3"
+    esbuild-windows-64 "0.15.3"
+    esbuild-windows-arm64 "0.15.3"
 
 escalade@^3.1.1:
   version "3.1.1"

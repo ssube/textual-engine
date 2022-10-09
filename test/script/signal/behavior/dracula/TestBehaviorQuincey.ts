@@ -1,12 +1,11 @@
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../../src/model/Command';
-import { SignalBehaviorDraculaQuincey } from '../../../../../src/script/signal/behavior/dracula/BehaviorQuincey';
-import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
-import { createStubBehavior, createTestContext, getStubHelper } from '../../../../helper';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../../src/model/Command.js';
+import { SignalBehaviorDraculaQuincey } from '../../../../../src/script/signal/behavior/dracula/BehaviorQuincey.js';
+import { VERB_LOOK, VERB_MOVE, VERB_WAIT } from '../../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
+import { createStubBehavior, createTestContext, getStubHelper, match, SinonStub } from '../../../../helper.js';
 
 describe('actor behavior signal for Quincey Morris', () => {
   it('should require the script target be an actor', async () => {

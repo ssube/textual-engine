@@ -1,5 +1,5 @@
-import { RandomService } from '.';
-import { BYTE_RANGE } from '../../util/constants';
+import { RandomService } from './index.js';
+import { BYTE_RANGE } from '../../util/constants.js';
 
 export class MathRandomService implements RandomService {
   public nextFloat(): number {

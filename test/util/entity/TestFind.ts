@@ -1,12 +1,12 @@
 import { expect } from 'chai';
 
-import { ACTOR_TYPE } from '../../../src/model/entity/Actor';
-import { ITEM_TYPE } from '../../../src/model/entity/Item';
-import { PORTAL_TYPE } from '../../../src/model/entity/Portal';
-import { ROOM_TYPE } from '../../../src/model/entity/Room';
-import { WorldState } from '../../../src/model/world/State';
-import { findContainer, findMatching, findRoom, findSlotItem } from '../../../src/util/entity/find';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity';
+import { ACTOR_TYPE } from '../../../src/model/entity/Actor.js';
+import { ITEM_TYPE } from '../../../src/model/entity/Item.js';
+import { PORTAL_TYPE } from '../../../src/model/entity/Portal.js';
+import { ROOM_TYPE } from '../../../src/model/entity/Room.js';
+import { WorldState } from '../../../src/model/world/State.js';
+import { findContainer, findMatching, findRoom, findSlotItem } from '../../../src/util/entity/find.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity.js';
 
 const TEST_STATE: WorldState = makeTestState('', [
   makeTestRoom('foo', 'foo', 'foo', [

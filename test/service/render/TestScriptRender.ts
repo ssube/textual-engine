@@ -1,16 +1,16 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { SinonFakeTimers, stub, useFakeTimers } from 'sinon';
+import { SinonFakeTimers } from 'sinon';
 
-import { ConfigError } from '../../../src/error/ConfigError';
-import { INJECT_EVENT } from '../../../src/module';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { EventBus } from '../../../src/service/event';
-import { ScriptRender } from '../../../src/service/render/ScriptRender';
-import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP } from '../../../src/util/constants';
-import { zeroStep } from '../../../src/util/entity';
-import { getTestContainer } from '../../helper';
+import { ConfigError } from '../../../src/error/ConfigError.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { INJECT_EVENT } from '../../../src/module/index.js';
+import { EventBus } from '../../../src/service/event/index.js';
+import { ScriptRender } from '../../../src/service/render/ScriptRender.js';
+import { EVENT_ACTOR_OUTPUT, EVENT_RENDER_INPUT, EVENT_STATE_STEP } from '../../../src/util/constants.js';
+import { zeroStep } from '../../../src/util/entity/index.js';
+import { getTestContainer, stub, useFakeTimers } from '../../helper.js';
 
 describe('script render', () => {
   let clock: SinonFakeTimers;

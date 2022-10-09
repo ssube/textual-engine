@@ -5,8 +5,8 @@ import * as React from 'react';
 import { I18nextProvider } from 'react-i18next';
 
 import { RenderService } from '..';
-import { Frame } from '../../../component/ink/Frame';
-import { BaseReactRender } from './BaseRender';
+import { Frame } from '../../../component/ink/Frame.js';
+import { BaseReactRender } from './BaseRender.js';
 
 /**
  * Interface with Ink's React tree using an event emitter.

@@ -1,12 +1,12 @@
 import { JSONSchemaType } from 'ajv';
 
-import { Actor, ACTOR_TEMPLATE_SCHEMA } from '../entity/Actor';
-import { Item, ITEM_TEMPLATE_SCHEMA } from '../entity/Item';
-import { Portal, PORTAL_TEMPLATE_SCHEMA } from '../entity/Portal';
-import { Room, ROOM_TEMPLATE_SCHEMA } from '../entity/Room';
-import { LOCALE_SCHEMA, LocaleBundle } from '../file/Locale';
-import { Template, TEMPLATE_REF_SCHEMA, TemplateMetadata, TemplateRef, BaseTemplate } from '../mapped/Template';
-import { TEMPLATE_METADATA_SCHEMA } from '../Metadata';
+import { Actor, ACTOR_TEMPLATE_SCHEMA } from '../entity/Actor.js';
+import { Item, ITEM_TEMPLATE_SCHEMA } from '../entity/Item.js';
+import { Portal, PORTAL_TEMPLATE_SCHEMA } from '../entity/Portal.js';
+import { Room, ROOM_TEMPLATE_SCHEMA } from '../entity/Room.js';
+import { LOCALE_SCHEMA, LocaleBundle } from '../file/Locale.js';
+import { Template, TEMPLATE_REF_SCHEMA, TemplateMetadata, TemplateRef, BaseTemplate } from '../mapped/Template.js';
+import { TEMPLATE_METADATA_SCHEMA } from '../Metadata.js';
 
 export interface WorldTemplate {
   defaults: {

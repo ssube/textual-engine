@@ -1,8 +1,8 @@
 import { doesExist } from '@apextoaster/js-utils';
-import { ConfigFile } from '../../model/file/Config';
-import { DataFile } from '../../model/file/Data';
-import { WorldState } from '../../model/world/State';
-import { WorldTemplate } from '../../model/world/Template';
+import { ConfigFile } from '../../model/file/Config.js';
+import { DataFile } from '../../model/file/Data.js';
+import { WorldState } from '../../model/world/State.js';
+import { WorldTemplate } from '../../model/world/Template.js';
 
 export interface LoaderReadEvent {
   path: string;

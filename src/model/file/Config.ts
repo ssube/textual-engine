@@ -2,7 +2,7 @@ import { JSONSchemaType } from 'ajv';
 import { LogLevel } from 'noicejs';
 import { Writable } from 'stream';
 
-import { LOCALE_SCHEMA, LocaleBundle } from './Locale';
+import { LOCALE_SCHEMA, LocaleBundle } from './Locale.js';
 
 export interface ConfigLogger {
   level: LogLevel;

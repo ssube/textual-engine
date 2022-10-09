@@ -3,12 +3,12 @@ import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
 import { RenderService } from '..';
-import { ShortcutData, StatusItem } from '../../../component/shared';
-import { ConfigError } from '../../../error/ConfigError';
-import { TemplateMetadata } from '../../../model/mapped/Template';
-import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module';
-import { onceEvent } from '../../../util/async/event';
-import { ClearResult, debounce } from '../../../util/async/Throttle';
+import { ShortcutData, StatusItem } from '../../../component/shared.js';
+import { ConfigError } from '../../../error/ConfigError.js';
+import { TemplateMetadata } from '../../../model/mapped/Template.js';
+import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../../module/index.js';
+import { onceEvent } from '../../../util/async/event.js';
+import { ClearResult, debounce } from '../../../util/async/Throttle.js';
 import {
   EVENT_ACTOR_OUTPUT,
   EVENT_ACTOR_QUIT,
@@ -17,16 +17,16 @@ import {
   EVENT_RENDER_INPUT,
   EVENT_STATE_STEP,
   EVENT_STATE_WORLD,
-} from '../../../util/constants';
-import { zeroStep } from '../../../util/entity';
-import { getEventShortcuts } from '../../../util/render';
-import { makeSchema } from '../../../util/schema';
-import { makeServiceLogger } from '../../../util/service';
-import { ActorOutputEvent, ActorQuitEvent, ActorRoomEvent } from '../../actor/events';
-import { EventBus } from '../../event';
-import { LocaleService } from '../../locale';
-import { StepResult } from '../../state';
-import { StateStepEvent, StateWorldEvent } from '../../state/events';
+} from '../../../util/constants.js';
+import { zeroStep } from '../../../util/entity/index.js';
+import { getEventShortcuts } from '../../../util/render/index.js';
+import { makeSchema } from '../../../util/schema/index.js';
+import { makeServiceLogger } from '../../../util/service/index.js';
+import { ActorOutputEvent, ActorQuitEvent, ActorRoomEvent } from '../../actor/events.js';
+import { EventBus } from '../../event/index.js';
+import { LocaleService } from '../../locale/index.js';
+import { StepResult } from '../../state/index.js';
+import { StateStepEvent, StateWorldEvent } from '../../state/events.js';
 
 export interface BaseRenderConfig {
   shortcuts: boolean;

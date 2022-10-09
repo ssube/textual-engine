@@ -2,12 +2,12 @@ import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
 
-import { TemplateNumber, TemplateString } from '../../../src/model/mapped/Template';
-import { INJECT_LOCALE } from '../../../src/module';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { LocaleService } from '../../../src/service/locale';
-import { ChainTemplateService } from '../../../src/service/template/ChainTemplateService';
-import { getTestContainer } from '../../helper';
+import { TemplateNumber, TemplateString } from '../../../src/model/mapped/Template.js';
+import { INJECT_LOCALE } from '../../../src/module/index.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { LocaleService } from '../../../src/service/locale/index.js';
+import { ChainTemplateService } from '../../../src/service/template/ChainTemplateService.js';
+import { getTestContainer } from '../../helper.js';
 
 const DEFAULT_NUMBER: TemplateNumber = {
   min: 0,

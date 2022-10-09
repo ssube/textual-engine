@@ -1,13 +1,13 @@
 import { InvalidArgumentError, mustCoalesce } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject } from 'noicejs';
 
-import { ConfigServices } from '../../model/file/Config';
-import { Service } from '../../service';
-import { ActorService } from '../../service/actor';
-import { LoaderService } from '../../service/loader';
-import { RenderService } from '../../service/render';
-import { StateService } from '../../service/state';
-import { TokenizerService } from '../../service/tokenizer';
+import { ConfigServices } from '../../model/file/Config.js';
+import { Service } from '../../service/index.js';
+import { ActorService } from '../../service/actor/index.js';
+import { LoaderService } from '../../service/loader/index.js';
+import { RenderService } from '../../service/render/index.js';
+import { StateService } from '../../service/state/index.js';
+import { TokenizerService } from '../../service/tokenizer/index.js';
 
 @Inject()
 export class ServiceManager {

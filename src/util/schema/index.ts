@@ -1,7 +1,7 @@
 import Ajv, { JSONSchemaType, ValidateFunction } from 'ajv';
 
-import { TemplateString } from '../../model/mapped/Template';
-import { KEYWORD_MAP } from './MapKeyword';
+import { TemplateString } from '../../model/mapped/Template.js';
+import { KEYWORD_MAP } from './MapKeyword.js';
 
 /**
  * @todo: make this typesafe for literal string types

@@ -1,8 +1,8 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 
-import { main } from '../src/main';
-import { META_QUIT } from '../src/util/constants';
+import { main } from '../src/main.js';
+import { META_QUIT } from '../src/util/constants.js';
 
 describe('main entry point', () => {
   it('should throw when invalid modules are requested', async () => expect(main([

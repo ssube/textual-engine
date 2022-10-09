@@ -1,11 +1,11 @@
 import { i18n } from 'i18next';
 
 import { Service } from '..';
-import { Command } from '../../model/Command';
-import { WorldEntity } from '../../model/entity';
-import { LocaleBundle } from '../../model/file/Locale';
-import { Metadata } from '../../model/Metadata';
-import { Immutable } from '../../util/types';
+import { Command } from '../../model/Command.js';
+import { WorldEntity } from '../../model/entity/index.js';
+import { LocaleBundle } from '../../model/file/Locale.js';
+import { Metadata } from '../../model/Metadata.js';
+import { Immutable } from '../../util/types.js';
 
 export type LocaleContextValue = number | string | Command | Metadata | WorldEntity;
 export type LocaleContext = Record<string, LocaleContextValue | Immutable<LocaleContextValue>>;

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 
-import { CoreModule } from '../../../src/module/CoreModule';
-import { CompromiseTokenizer } from '../../../src/service/tokenizer/CompromiseTokenizer';
-import { getTestContainer } from '../../helper';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { CompromiseTokenizer } from '../../../src/service/tokenizer/CompromiseTokenizer.js';
+import { getTestContainer } from '../../helper.js';
 
 describe('compromise tokenizer', () => {
   it('should use first verb', async () => {

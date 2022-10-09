@@ -1,12 +1,12 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 
-import { CoreModule } from '../../../src/module/CoreModule';
-import { MathRandomService } from '../../../src/service/random/MathRandom';
-import { LocalScriptService } from '../../../src/service/script/LocalScript';
-import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity';
-import { createTestContext, getTestContainer } from '../../helper';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { MathRandomService } from '../../../src/service/random/MathRandom.js';
+import { LocalScriptService } from '../../../src/service/script/LocalScript.js';
+import { StateEntityTransfer } from '../../../src/util/entity/EntityTransfer.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../entity.js';
+import { createTestContext, getTestContainer } from '../../helper.js';
 
 describe('state transfer utils', () => {
   describe('move actor helper', () => {

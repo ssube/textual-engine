@@ -1,13 +1,13 @@
 import { isNil, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { ActorSource, isActor } from '../../../model/entity/Actor';
-import { LocaleContext } from '../../../service/locale';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { StateSource } from '../../../util/actor';
-import { getKey } from '../../../util/collection/map';
-import { STAT_HEALTH, STAT_SCORE } from '../../../util/constants';
-import { getVerbScripts } from '../../../util/script';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { ActorSource, isActor } from '../../../model/entity/Actor.js';
+import { LocaleContext } from '../../../service/locale/index.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { StateSource } from '../../../util/actor/index.js';
+import { getKey } from '../../../util/collection/map.js';
+import { STAT_HEALTH, STAT_SCORE } from '../../../util/constants.js';
+import { getVerbScripts } from '../../../util/script/index.js';
 
 export async function SignalActorStep(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

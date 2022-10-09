@@ -1,17 +1,17 @@
-import { doesExist, Optional } from '@apextoaster/js-utils';
+import { doesExist, Maybe } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 
-import { TEMPLATE_CHANCE } from '../../util/constants';
-import { makeConstStringSchema } from '../../util/schema';
-import { Immutable, StringMap } from '../../util/types';
-import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier';
-import { Template, TEMPLATE_REF_SCHEMA, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template';
-import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata';
-import { ScriptMap } from '../Script';
-import { Actor } from './Actor';
-import { Entity } from './Base';
-import { Item } from './Item';
-import { Portal } from './Portal';
+import { TEMPLATE_CHANCE } from '../../util/constants.js';
+import { makeConstStringSchema } from '../../util/schema/index.js';
+import { Immutable, StringMap } from '../../util/types.js';
+import { Modifier, MODIFIER_METADATA_SCHEMA } from '../mapped/Modifier.js';
+import { Template, TEMPLATE_REF_SCHEMA, TEMPLATE_SCRIPT_SCHEMA, TEMPLATE_STRING_SCHEMA } from '../mapped/Template.js';
+import { Metadata, TEMPLATE_METADATA_SCHEMA } from '../Metadata.js';
+import { ScriptMap } from '../Script.js';
+import { Actor } from './Actor.js';
+import { Entity } from './Base.js';
+import { Item } from './Item.js';
+import { Portal } from './Portal.js';
 
 export const ROOM_TYPE = 'room' as const;
 
@@ -29,9 +29,9 @@ export interface Room {
 
 export type ReadonlyRoom = Immutable<Room>;
 
-export function isRoom(entity: Optional<Immutable<Entity>>): entity is ReadonlyRoom;
-export function isRoom(entity: Optional<Entity>): entity is Room;
-export function isRoom(entity: Optional<Entity>): entity is Room {
+export function isRoom(entity: Maybe<Immutable<Entity>>): entity is ReadonlyRoom;
+export function isRoom(entity: Maybe<Entity>): entity is Room;
+export function isRoom(entity: Maybe<Entity>): entity is Room {
   return doesExist(entity) && entity.type === ROOM_TYPE;
 }
 

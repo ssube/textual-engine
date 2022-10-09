@@ -1,5 +1,5 @@
 import { Service } from '..';
-import { DataFile } from '../../model/file/Data';
+import { DataFile } from '../../model/file/Data.js';
 
 export interface LoaderService extends Service {
   /**

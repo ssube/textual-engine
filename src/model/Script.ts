@@ -1,4 +1,4 @@
-import { Immutable } from '../util/types';
+import { Immutable } from '../util/types.js';
 
 export type ScriptData = Map<string, number | string>;
 

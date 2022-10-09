@@ -1,9 +1,10 @@
 import { isNil } from '@apextoaster/js-utils';
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { WorldEntityType } from '../../../model/entity';
-import { isItem } from '../../../model/entity/Item';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { splitChain } from '../../../util/template/SplitChain';
+
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { WorldEntityType } from '../../../model/entity/index.js';
+import { isItem } from '../../../model/entity/Item.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { splitChain } from '../../../util/template/SplitChain.js';
 
 export async function SignalItemReplace(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isItem(this)) {

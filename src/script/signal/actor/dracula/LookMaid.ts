@@ -1,7 +1,7 @@
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { isActor } from '../../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../../service/script';
-import { getKey } from '../../../../util/collection/map';
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { isActor } from '../../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { getKey } from '../../../../util/collection/map.js';
 
 /**
  * The maids should:

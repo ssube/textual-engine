@@ -1,14 +1,19 @@
 import { ConsoleLogger, Container, Logger, LogLevel, Module, NullLogger } from 'noicejs';
-import { createStubInstance, stub } from 'sinon';
+import sinon from 'sinon';
 
-import { ConfigFile } from '../src/model/file/Config';
-import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module';
-import { MathRandomService } from '../src/service/random/MathRandom';
-import { CommandHelper, ScriptContext, StateHelper } from '../src/service/script';
-import { LocalScriptService } from '../src/service/script/LocalScript';
-import { zeroStep } from '../src/util/entity';
-import { StateEntityTransfer } from '../src/util/entity/EntityTransfer';
-import { makeTestRoom } from './entity';
+import { ConfigFile } from '../src/model/file/Config.js';
+import { INJECT_CONFIG, INJECT_LOGGER } from '../src/module/index.js';
+import { MathRandomService } from '../src/service/random/MathRandom.js';
+import { CommandHelper, ScriptContext, StateHelper } from '../src/service/script/index.js';
+import { LocalScriptService } from '../src/service/script/LocalScript.js';
+import { zeroStep } from '../src/util/entity/index.js';
+import { StateEntityTransfer } from '../src/util/entity/EntityTransfer.js';
+import { makeTestRoom } from './entity.js';
+
+export { SinonStub } from 'sinon';
+
+// eslint-disable-next-line @typescript-eslint/unbound-method
+export const { createStubInstance, stub, spy, match, useFakeTimers } = sinon;
 
 export function getTestLogger(): Logger {
   if (process.env.DEBUG === 'TRUE') {

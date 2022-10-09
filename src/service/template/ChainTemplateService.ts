@@ -1,15 +1,15 @@
 import { doesExist, InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { Inject } from 'noicejs';
 
-import { TemplateService } from '.';
-import { ModifierPrimitive } from '../../model/mapped/Modifier';
-import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/mapped/Template';
-import { ScriptMap, ScriptRef } from '../../model/Script';
-import { INJECT_LOCALE, INJECT_RANDOM, InjectedOptions } from '../../module';
-import { JoinChain } from '../../util/template/JoinChain';
-import { splitChain } from '../../util/template/SplitChain';
-import { LocaleService } from '../locale';
-import { RandomService } from '../random';
+import { TemplateService } from './index.js';
+import { ModifierPrimitive } from '../../model/mapped/Modifier.js';
+import { BaseTemplate, TemplateNumber, TemplateString } from '../../model/mapped/Template.js';
+import { ScriptMap, ScriptRef } from '../../model/Script.js';
+import { INJECT_LOCALE, INJECT_RANDOM, InjectedOptions } from '../../module/index.js';
+import { JoinChain } from '../../util/template/JoinChain.js';
+import { splitChain } from '../../util/template/SplitChain.js';
+import { LocaleService } from '../locale/index.js';
+import { RandomService } from '../random/index.js';
 
 @Inject(INJECT_LOCALE, INJECT_RANDOM)
 export class ChainTemplateService implements TemplateService {

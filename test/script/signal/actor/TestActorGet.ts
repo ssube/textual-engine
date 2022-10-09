@@ -1,11 +1,10 @@
 import { expect } from 'chai';
-import { match } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { ActorSource } from '../../../../src/model/entity/Actor';
-import { SignalActorGet } from '../../../../src/script/signal/actor/ActorGet';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { ActorSource } from '../../../../src/model/entity/Actor.js';
+import { SignalActorGet } from '../../../../src/script/signal/actor/ActorGet.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper, match } from '../../../helper.js';
 
 describe('actor get signal', () => {
   it('should require the script target be an actor', async () => {

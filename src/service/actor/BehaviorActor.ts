@@ -2,20 +2,20 @@ import { doesExist, mustExist, NotImplementedError } from '@apextoaster/js-utils
 import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
-import { ActorService } from '.';
-import { ConfigError } from '../../error/ConfigError';
-import { Command, makeCommand } from '../../model/Command';
-import { ActorSource, ReadonlyActor } from '../../model/entity/Actor';
-import { ReadonlyRoom } from '../../model/entity/Room';
-import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module';
-import { catchAndLog } from '../../util/async/event';
-import { randomItem } from '../../util/collection/array';
-import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants';
-import { makeSchema } from '../../util/schema';
-import { makeServiceLogger } from '../../util/service';
-import { EventBus } from '../event';
-import { RandomService } from '../random';
-import { StateRoomEvent } from '../state/events';
+import { ActorService } from './index.js';
+import { ConfigError } from '../../error/ConfigError.js';
+import { Command, makeCommand } from '../../model/Command.js';
+import { ActorSource, ReadonlyActor } from '../../model/entity/Actor.js';
+import { ReadonlyRoom } from '../../model/entity/Room.js';
+import { INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, InjectedOptions } from '../../module/index.js';
+import { catchAndLog } from '../../util/async/event.js';
+import { randomItem } from '../../util/collection/array.js';
+import { EVENT_ACTOR_COMMAND, EVENT_STATE_ROOM, VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../util/constants.js';
+import { makeSchema } from '../../util/schema/index.js';
+import { makeServiceLogger } from '../../util/service/index.js';
+import { EventBus } from '../event/index.js';
+import { RandomService } from '../random/index.js';
+import { StateRoomEvent } from '../state/events.js';
 
 export interface BehaviorActorConfig {
   attack: number;

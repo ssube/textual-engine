@@ -1,11 +1,12 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
-import { ScriptTargetError } from '../../../../error/ScriptTargetError';
-import { makeCommand } from '../../../../model/Command';
-import { ActorSource, isActor } from '../../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../../service/script';
-import { randomItem } from '../../../../util/collection/array';
-import { getKey } from '../../../../util/collection/map';
-import { VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../../../util/constants';
+
+import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
+import { makeCommand } from '../../../../model/Command.js';
+import { ActorSource, isActor } from '../../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { randomItem } from '../../../../util/collection/array.js';
+import { getKey } from '../../../../util/collection/map.js';
+import { VERB_HIT, VERB_MOVE, VERB_WAIT } from '../../../../util/constants.js';
 
 export async function SignalBehaviorEnemy(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

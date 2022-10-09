@@ -1,12 +1,11 @@
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { SignalPortalLook } from '../../../../src/script/signal/portal/PortalLook';
-import { STAT_CLOSED, VERB_LOOK } from '../../../../src/util/constants';
-import { makeTestActor, makeTestPortal, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { SignalPortalLook } from '../../../../src/script/signal/portal/PortalLook.js';
+import { STAT_CLOSED, VERB_LOOK } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestPortal, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper, match, SinonStub } from '../../../helper.js';
 
 describe('portal look scripts', () => {
   it('should require the script target be a portal', async () => {

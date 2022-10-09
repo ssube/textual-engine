@@ -1,15 +1,15 @@
 import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
 
-import { EntityForType, WorldEntityType } from '../../model/entity';
-import { Actor, ActorType, ReadonlyActor } from '../../model/entity/Actor';
-import { Entity } from '../../model/entity/Base';
-import { ReadonlyItem } from '../../model/entity/Item';
-import { isRoom, ReadonlyRoom, Room, RoomType } from '../../model/entity/Room';
-import { Metadata } from '../../model/Metadata';
-import { WorldState } from '../../model/world/State';
-import { hasText, matchIdSegments } from '../string';
-import { Immutable } from '../types';
-import { createStrictMatcher } from './match';
+import { EntityForType, WorldEntityType } from '../../model/entity/index.js';
+import { Actor, ActorType, ReadonlyActor } from '../../model/entity/Actor.js';
+import { Entity } from '../../model/entity/Base.js';
+import { ReadonlyItem } from '../../model/entity/Item.js';
+import { isRoom, ReadonlyRoom, Room, RoomType } from '../../model/entity/Room.js';
+import { Metadata } from '../../model/Metadata.js';
+import { WorldState } from '../../model/world/State.js';
+import { hasText, matchIdSegments } from '../string.js';
+import { Immutable } from '../types.js';
+import { createStrictMatcher } from './match.js';
 
 export interface StateMatchers<TEntity extends WorldEntityType> {
   entity: (entity: Immutable<Entity>, search: SearchFilter<TEntity>) => entity is EntityForType<TEntity>;

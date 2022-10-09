@@ -1,10 +1,10 @@
-import { doesExist, Optional } from '@apextoaster/js-utils';
+import { doesExist, Maybe } from '@apextoaster/js-utils';
 import { Box, Text, useFocus } from 'ink';
 import SelectInput from 'ink-select-input';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SHORTCUT_TABS, ShortcutKeys, ShortcutProps } from '../shared';
+import { SHORTCUT_TABS, ShortcutKeys, ShortcutProps } from '../shared.js';
 
 const { useState } = React;
 
@@ -14,7 +14,7 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
   const { isFocused: tabFocus } = useFocus();
   const { isFocused: itemFocus } = useFocus();
 
-  function selectItem(item: Optional<{ label: string; value: string }>) {
+  function selectItem(item: Maybe<{ label: string; value: string }>) {
     if (doesExist(item)) {
       if (tab === 'verbs') {
         props.onVerb(item.value);

@@ -1,15 +1,14 @@
 import { NotFoundError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { match, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { ActorSource } from '../../../../src/model/entity/Actor';
-import { ROOM_TYPE } from '../../../../src/model/entity/Room';
-import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove';
-import { SIGNAL_LOOK, STAT_LOCKED, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { ActorSource } from '../../../../src/model/entity/Actor.js';
+import { ROOM_TYPE } from '../../../../src/model/entity/Room.js';
+import { VerbActorMove } from '../../../../src/script/verb/actor/ActorMove.js';
+import { SIGNAL_LOOK, STAT_LOCKED, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper, match, SinonStub } from '../../../helper.js';
 
 describe('actor move verb', () => {
   it('should require the script target be an actor', async () => {

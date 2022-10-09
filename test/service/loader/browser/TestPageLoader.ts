@@ -1,10 +1,9 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { spy, stub } from 'sinon';
 
-import { CoreModule } from '../../../../src/module/CoreModule';
-import { BrowserPageLoader } from '../../../../src/service/loader/browser/PageLoader';
-import { getTestContainer } from '../../../helper';
+import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { BrowserPageLoader } from '../../../../src/service/loader/browser/PageLoader.js';
+import { getTestContainer, spy, stub } from '../../../helper.js';
 
 describe('page loader', () => {
   it('should load strings from element contents', async () => {

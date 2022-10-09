@@ -1,7 +1,7 @@
-import { isActor } from '../model/entity/Actor';
-import { isItem } from '../model/entity/Item';
-import { isPortal } from '../model/entity/Portal';
-import { isRoom } from '../model/entity/Room';
+import { isActor } from '../model/entity/Actor.js';
+import { isItem } from '../model/entity/Item.js';
+import { isPortal } from '../model/entity/Portal.js';
+import { isRoom } from '../model/entity/Room.js';
 
 // eslint-disable-next-line @typescript-eslint/ban-types,@typescript-eslint/explicit-module-boundary-types,@typescript-eslint/no-explicit-any
 export function entityMeta(entity: any): object {

@@ -5,9 +5,9 @@ import { render, unmountComponentAtNode } from 'react-dom';
 import { I18nextProvider } from 'react-i18next';
 
 import { RenderService } from '..';
-import { Frame } from '../../../component/react/Frame';
-import { InjectedOptions } from '../../../module';
-import { BaseReactRender } from './BaseRender';
+import { Frame } from '../../../component/react/Frame.js';
+import { InjectedOptions } from '../../../module/index.js';
+import { BaseReactRender } from './BaseRender.js';
 
 /**
  * Interface with React tree using an event emitter.

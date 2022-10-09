@@ -1,6 +1,6 @@
 import { Service } from '..';
-import { Command } from '../../model/Command';
-import { LocaleBundle } from '../../model/file/Locale';
+import { Command } from '../../model/Command.js';
+import { LocaleBundle } from '../../model/file/Locale.js';
 
 export interface TokenizerService extends Service {
   /**

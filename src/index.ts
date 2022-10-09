@@ -2,7 +2,7 @@
 
 import { argv } from 'process';
 
-import { main } from './main';
+import { main } from './main.js';
 
 main(argv).then((exitCode: number) => {
   process.exitCode = exitCode;

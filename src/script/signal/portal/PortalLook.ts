@@ -1,8 +1,8 @@
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isPortal } from '../../../model/entity/Portal';
-import { ROOM_TYPE } from '../../../model/entity/Room';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { getPortalStats } from '../../../util/entity';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isPortal } from '../../../model/entity/Portal.js';
+import { ROOM_TYPE } from '../../../model/entity/Room.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { getPortalStats } from '../../../util/entity/index.js';
 
 export async function SignalPortalLook(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isPortal(this)) {

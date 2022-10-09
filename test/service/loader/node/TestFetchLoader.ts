@@ -1,26 +1,25 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { match, stub } from 'sinon';
 
-import { ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
-import { ITEM_TYPE } from '../../../../src/model/entity/Item';
-import { PORTAL_TYPE } from '../../../../src/model/entity/Portal';
-import { ROOM_TYPE } from '../../../../src/model/entity/Room';
-import { INJECT_EVENT } from '../../../../src/module';
-import { CoreModule } from '../../../../src/module/CoreModule';
-import { EventBus } from '../../../../src/service/event';
-import { NodeFetchLoader } from '../../../../src/service/loader/node/FetchLoader';
-import { YamlParser } from '../../../../src/service/parser/YamlParser';
-import { onceEvent } from '../../../../src/util/async/event';
+import { ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor.js';
+import { ITEM_TYPE } from '../../../../src/model/entity/Item.js';
+import { PORTAL_TYPE } from '../../../../src/model/entity/Portal.js';
+import { ROOM_TYPE } from '../../../../src/model/entity/Room.js';
+import { INJECT_EVENT } from '../../../../src/module/index.js';
+import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { EventBus } from '../../../../src/service/event/index.js';
+import { NodeFetchLoader } from '../../../../src/service/loader/node/FetchLoader.js';
+import { YamlParser } from '../../../../src/service/parser/YamlParser.js';
+import { onceEvent } from '../../../../src/util/async/event.js';
 import {
   EVENT_LOADER_DONE,
   EVENT_LOADER_READ,
   EVENT_LOADER_STATE,
   EVENT_LOADER_WORLD,
-} from '../../../../src/util/constants';
-import { makeTestState, makeTestWorld } from '../../../entity';
-import { getTestContainer } from '../../../helper';
+} from '../../../../src/util/constants.js';
+import { makeTestState, makeTestWorld } from '../../../entity.js';
+import { getTestContainer, match, stub } from '../../../helper.js';
 
 describe('node fetch loader', () => {
   it('should read from URLs', async () => {

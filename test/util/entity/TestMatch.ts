@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 
-import { isActor } from '../../../src/model/entity/Actor';
-import { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy } from '../../../src/util/entity/match';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../entity';
+import { isActor } from '../../../src/model/entity/Actor.js';
+import { indexEntity, matchEntity, matchMetadata, matchMetadataFuzzy } from '../../../src/util/entity/match.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../entity.js';
 
 describe('entity match utils', () => {
   describe('index entity helper', () => {

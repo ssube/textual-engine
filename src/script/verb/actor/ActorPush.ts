@@ -1,12 +1,12 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { ACTOR_TYPE, isActor } from '../../../model/entity/Actor';
-import { isPortal, PORTAL_TYPE } from '../../../model/entity/Portal';
-import { isRoom, ROOM_TYPE } from '../../../model/entity/Room';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { getPortalStats } from '../../../util/entity';
-import { createFuzzyMatcher } from '../../../util/entity/match';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { ACTOR_TYPE, isActor } from '../../../model/entity/Actor.js';
+import { isPortal, PORTAL_TYPE } from '../../../model/entity/Portal.js';
+import { isRoom, ROOM_TYPE } from '../../../model/entity/Room.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { getPortalStats } from '../../../util/entity/index.js';
+import { createFuzzyMatcher } from '../../../util/entity/match.js';
 
 export async function VerbActorPush(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

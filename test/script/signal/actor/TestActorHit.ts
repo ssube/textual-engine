@@ -1,12 +1,11 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { SignalActorHit } from '../../../../src/script/signal/actor/ActorHit';
-import { MathRandomService } from '../../../../src/service/random/MathRandom';
-import { STAT_DAMAGE, STAT_HEALTH } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { SignalActorHit } from '../../../../src/script/signal/actor/ActorHit.js';
+import { MathRandomService } from '../../../../src/service/random/MathRandom.js';
+import { STAT_DAMAGE, STAT_HEALTH } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createStubInstance, createTestContext, getStubHelper, match, SinonStub } from '../../../helper.js';
 
 describe('actor hit signal', () => {
   it('should remove some health', async () => {

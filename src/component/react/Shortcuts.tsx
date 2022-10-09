@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ShortcutKeys, ShortcutProps, SHORTCUT_TABS } from '../shared';
+import { ShortcutKeys, ShortcutProps, SHORTCUT_TABS } from '../shared.js';
 
 const { useState } = React;
 

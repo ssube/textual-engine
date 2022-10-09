@@ -1,10 +1,10 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isActor } from '../../../model/entity/Actor';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { getKey, incrementKey } from '../../../util/collection/map';
-import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isActor } from '../../../model/entity/Actor.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { getKey, incrementKey } from '../../../util/collection/map.js';
+import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants.js';
 
 export async function SignalActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

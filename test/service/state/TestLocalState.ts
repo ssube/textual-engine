@@ -2,24 +2,23 @@
 import { InvalidArgumentError, mustExist } from '@apextoaster/js-utils';
 import { expect } from 'chai';
 import { BaseOptions } from 'noicejs';
-import { createStubInstance, match, spy, stub } from 'sinon';
 
-import { NotInitializedError } from '../../../src/error/NotInitializedError';
-import { ScriptTargetError } from '../../../src/error/ScriptTargetError';
-import { makeCommand, makeCommandIndex } from '../../../src/model/Command';
-import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor';
-import { Item, ITEM_TYPE } from '../../../src/model/entity/Item';
-import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal';
-import { Room, ROOM_TYPE } from '../../../src/model/entity/Room';
-import { Template } from '../../../src/model/mapped/Template';
-import { WorldTemplate } from '../../../src/model/world/Template';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module';
-import { CoreModule } from '../../../src/module/CoreModule';
-import { Counter } from '../../../src/service/counter';
-import { EventBus } from '../../../src/service/event';
-import { LoaderSaveEvent } from '../../../src/service/loader/events';
-import { ScriptService } from '../../../src/service/script';
-import { LocalScriptService } from '../../../src/service/script/LocalScript';
+import { NotInitializedError } from '../../../src/error/NotInitializedError.js';
+import { ScriptTargetError } from '../../../src/error/ScriptTargetError.js';
+import { makeCommand, makeCommandIndex } from '../../../src/model/Command.js';
+import { Actor, ACTOR_TYPE, ActorSource, isActor } from '../../../src/model/entity/Actor.js';
+import { Item, ITEM_TYPE } from '../../../src/model/entity/Item.js';
+import { Portal, PORTAL_TYPE } from '../../../src/model/entity/Portal.js';
+import { Room, ROOM_TYPE } from '../../../src/model/entity/Room.js';
+import { Template } from '../../../src/model/mapped/Template.js';
+import { WorldTemplate } from '../../../src/model/world/Template.js';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_SCRIPT } from '../../../src/module/index.js';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { Counter } from '../../../src/service/counter/index.js';
+import { EventBus } from '../../../src/service/event/index.js';
+import { LoaderSaveEvent } from '../../../src/service/loader/events.js';
+import { ScriptService } from '../../../src/service/script/index.js';
+import { LocalScriptService } from '../../../src/service/script/LocalScript.js';
 import {
   StateJoinEvent,
   StateLoadEvent,
@@ -27,10 +26,10 @@ import {
   StateRoomEvent,
   StateStepEvent,
   StateWorldEvent,
-} from '../../../src/service/state/events';
-import { LocalStateService } from '../../../src/service/state/LocalState';
-import { ShowVolume } from '../../../src/util/actor';
-import { onceEvent } from '../../../src/util/async/event';
+} from '../../../src/service/state/events.js';
+import { LocalStateService } from '../../../src/service/state/LocalState.js';
+import { ShowVolume } from '../../../src/util/actor/index.js';
+import { onceEvent } from '../../../src/util/async/event.js';
 import {
   EVENT_ACTOR_JOIN,
   EVENT_LOADER_DONE,
@@ -56,10 +55,10 @@ import {
   SIGNAL_STEP,
   TEMPLATE_CHANCE,
   VERB_WAIT,
-} from '../../../src/util/constants';
-import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity';
-import { createTestContext, getTestContainer } from '../../helper';
+} from '../../../src/util/constants.js';
+import { StateEntityGenerator } from '../../../src/util/entity/EntityGenerator.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom, makeTestState } from '../../entity.js';
+import { createStubInstance, createTestContext, getTestContainer, match, spy, stub } from '../../helper.js';
 
 // #region fixtures
 const TEST_ACTOR: Template<Actor> = {
@@ -441,7 +440,7 @@ describe('local state service', () => {
         command,
       });
 
-      const path = 'test://url';
+      const path = 'test://url.js';
       const pendingSave = onceEvent<LoaderSaveEvent>(events, EVENT_LOADER_SAVE);
       const pendingCommand = localState.onCommand({
         command: makeCommand(META_GRAPH, path),

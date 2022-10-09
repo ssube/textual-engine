@@ -3,7 +3,7 @@
 import { AsyncHook, createHook } from 'async_hooks';
 import { EventEmitter } from 'events';
 
-import { EVENT_NAMES } from '../constants';
+import { EVENT_NAMES } from '../constants.js';
 
 export function asyncTrack(): {
   asyncHook: AsyncHook;

@@ -1,13 +1,13 @@
 import { BaseOptions, Logger } from 'noicejs';
 
-import { ConfigFile } from '../model/file/Config';
-import { Counter } from '../service/counter';
-import { EventBus } from '../service/event';
-import { LocaleService } from '../service/locale';
-import { Parser } from '../service/parser';
-import { RandomService } from '../service/random';
-import { ScriptService } from '../service/script';
-import { TemplateService } from '../service/template';
+import { ConfigFile } from '../model/file/Config.js';
+import { Counter } from '../service/counter/index.js';
+import { EventBus } from '../service/event/index.js';
+import { LocaleService } from '../service/locale/index.js';
+import { Parser } from '../service/parser/index.js';
+import { RandomService } from '../service/random/index.js';
+import { ScriptService } from '../service/script/index.js';
+import { TemplateService } from '../service/template/index.js';
 
 // service symbols
 export const INJECT_CONFIG = Symbol('inject-config');

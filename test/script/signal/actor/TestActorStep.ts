@@ -1,17 +1,16 @@
 import { expect } from 'chai';
 import { Container, NullLogger } from 'noicejs';
-import { createStubInstance, match } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor';
-import { ITEM_TYPE } from '../../../../src/model/entity/Item';
-import { CoreModule } from '../../../../src/module/CoreModule';
-import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
-import { STAT_HEALTH, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { Actor, ACTOR_TYPE, ActorSource } from '../../../../src/model/entity/Actor.js';
+import { ITEM_TYPE } from '../../../../src/model/entity/Item.js';
+import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { SignalActorStep } from '../../../../src/script/signal/actor/ActorStep.js';
+import { LocalScriptService } from '../../../../src/service/script/LocalScript.js';
+import { STAT_HEALTH, VERB_MOVE, VERB_WAIT } from '../../../../src/util/constants.js';
+import { makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createStubInstance, createTestContext, getStubHelper, match } from '../../../helper.js';
 
 const TEST_ACTOR: Actor = {
   flags: new Map(),

@@ -1,7 +1,7 @@
 import { doesExist } from '@apextoaster/js-utils';
 import { Logger } from 'noicejs';
 
-import { AbortEventError } from '../../error/AbortEventError';
+import { AbortEventError } from '../../error/AbortEventError.js';
 
 export type EventHandler<TEvent> = (event: TEvent) => void;
 export type ErrorHandler = (err?: Error) => void;

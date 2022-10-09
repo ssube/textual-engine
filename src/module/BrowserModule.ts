@@ -1,9 +1,9 @@
 import { Module, ModuleOptions } from 'noicejs';
 
-import { BrowserFetchLoader } from '../service/loader/browser/FetchLoader';
-import { BrowserLocalLoader } from '../service/loader/browser/LocalLoader';
-import { BrowserPageLoader } from '../service/loader/browser/PageLoader';
-import { ReactDomRender } from '../service/render/react/DomRender';
+import { BrowserFetchLoader } from '../service/loader/browser/FetchLoader.js';
+import { BrowserLocalLoader } from '../service/loader/browser/LocalLoader.js';
+import { BrowserPageLoader } from '../service/loader/browser/PageLoader.js';
+import { ReactDomRender } from '../service/render/react/DomRender.js';
 
 export class BrowserModule extends Module {
   public async configure(options: ModuleOptions): Promise<void> {

@@ -1,11 +1,11 @@
 import { isNil, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError';
-import { isActor } from '../../../model/entity/Actor';
-import { isItem, Item } from '../../../model/entity/Item';
-import { ScriptContext, ScriptTarget } from '../../../service/script';
-import { head } from '../../../util/collection/array';
-import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match';
+import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { isActor } from '../../../model/entity/Actor.js';
+import { isItem, Item } from '../../../model/entity/Item.js';
+import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { head } from '../../../util/collection/array.js';
+import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match.js';
 
 export async function VerbActorTake(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isActor(this)) {

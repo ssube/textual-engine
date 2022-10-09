@@ -1,11 +1,10 @@
 import { InvalidArgumentError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { stub } from 'sinon';
 
-import { CoreModule } from '../../../src/module/CoreModule';
-import { Service } from '../../../src/service';
-import { ServiceManager } from '../../../src/util/service/ServiceManager';
-import { getTestContainer } from '../../helper';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { Service } from '../../../src/service/index.js';
+import { ServiceManager } from '../../../src/util/service/ServiceManager.js';
+import { getTestContainer, stub } from '../../helper.js';
 
 const TEST_SERVICES = {
       actors: [{
@@ -28,7 +27,7 @@ const TEST_SERVICES = {
         kind: 'foo',
         name: 'foo-tokenizer',
       }],
- 
+
 };
 
 describe('service manager', () => {

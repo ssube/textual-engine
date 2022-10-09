@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { render } from 'ink-testing-library';
 import * as React from 'react';
-import { stub } from 'sinon';
 
-import { Quit } from '../../../src/component/ink/Quit';
+import { Quit } from '../../../src/component/ink/Quit.js';
+import { stub } from '../../helper.js';
 
 describe('ink quit component', () => {
   it('should show game over message', async () => {

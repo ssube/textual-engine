@@ -1,7 +1,7 @@
-import { Command } from '../../model/Command';
-import { ReadonlyActor } from '../../model/entity/Actor';
-import { ReadonlyRoom } from '../../model/entity/Room';
-import { StepResult } from '../state';
+import { Command } from '../../model/Command.js';
+import { ReadonlyActor } from '../../model/entity/Actor.js';
+import { ReadonlyRoom } from '../../model/entity/Room.js';
+import { StepResult } from '../state/index.js';
 
 export interface ActorCommandEvent {
   command: Command;

@@ -1,13 +1,12 @@
 import { expect } from 'chai';
-import { createStubInstance, match, SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { SignalRoomLook } from '../../../../src/script/signal/room/RoomLook';
-import { LocalScriptService } from '../../../../src/service/script/LocalScript';
-import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { SignalRoomLook } from '../../../../src/script/signal/room/RoomLook.js';
+import { LocalScriptService } from '../../../../src/service/script/LocalScript.js';
+import { SIGNAL_LOOK, VERB_LOOK } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../../entity.js';
+import { createStubInstance, createTestContext, getStubHelper, match, SinonStub } from '../../../helper.js';
 
 describe('room look signal', () => {
   it('should require the script target be a room', async () => {

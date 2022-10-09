@@ -1,13 +1,12 @@
 import { expect } from 'chai';
-import { stub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { CoreModule, LocalScriptService } from '../../../../src/lib';
-import { makeCommand } from '../../../../src/model/Command';
-import { SignalActorLook } from '../../../../src/script/signal/actor/ActorLook';
-import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper, getTestContainer } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { CoreModule, LocalScriptService } from '../../../../src/lib.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { SignalActorLook } from '../../../../src/script/signal/actor/ActorLook.js';
+import { SIGNAL_LOOK, STAT_HEALTH, VERB_LOOK } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper, getTestContainer, stub } from '../../../helper.js';
 
 describe('actor look signal', () => {
   it('should require the script target be an actor', async () => {

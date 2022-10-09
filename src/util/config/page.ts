@@ -1,12 +1,12 @@
 import { mustExist } from '@apextoaster/js-utils';
 import { load } from 'js-yaml';
 
-import { ConfigError } from '../../error/ConfigError';
-import { ConfigFile } from '../../model/file/Config';
-import { DATA_SCHEMA } from '../../model/file/Data';
-import { makeParserSchema } from '../parser';
-import { makeSchema } from '../schema';
-import { splitPath } from '../string';
+import { ConfigError } from '../../error/ConfigError.js';
+import { ConfigFile } from '../../model/file/Config.js';
+import { DATA_SCHEMA } from '../../model/file/Data.js';
+import { makeParserSchema } from '../parser/index.js';
+import { makeSchema } from '../schema/index.js';
+import { splitPath } from '../string.js';
 
 export async function loadConfig(url: string, /* istanbul ignore next */ doc = document): Promise<ConfigFile> {
   const { path } = splitPath(url);

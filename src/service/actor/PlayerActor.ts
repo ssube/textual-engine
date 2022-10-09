@@ -1,13 +1,13 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { ActorService } from '.';
-import { Command } from '../../model/Command';
-import { ReadonlyActor } from '../../model/entity/Actor';
-import { ReadonlyRoom } from '../../model/entity/Room';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module';
-import { checkVolume, StateSource } from '../../util/actor';
-import { catchAndLog } from '../../util/async/event';
+import { ActorService } from './index.js';
+import { Command } from '../../model/Command.js';
+import { ReadonlyActor } from '../../model/entity/Actor.js';
+import { ReadonlyRoom } from '../../model/entity/Room.js';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
+import { checkVolume, StateSource } from '../../util/actor/index.js';
+import { catchAndLog } from '../../util/async/event.js';
 import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
@@ -20,14 +20,14 @@ import {
   EVENT_STATE_QUIT,
   EVENT_STATE_ROOM,
   EVENT_TOKEN_COMMAND,
-} from '../../util/constants';
-import { makeServiceLogger } from '../../util/service';
-import { Counter } from '../counter';
-import { EventBus } from '../event';
-import { LocaleContext, LocaleService } from '../locale';
-import { StepResult } from '../state';
-import { StateJoinEvent, StateOutputEvent, StateQuitEvent, StateRoomEvent } from '../state/events';
-import { TokenCommandEvent } from '../tokenizer/events';
+} from '../../util/constants.js';
+import { makeServiceLogger } from '../../util/service/index.js';
+import { Counter } from '../counter/index.js';
+import { EventBus } from '../event/index.js';
+import { LocaleContext, LocaleService } from '../locale/index.js';
+import { StepResult } from '../state/index.js';
+import { StateJoinEvent, StateOutputEvent, StateQuitEvent, StateRoomEvent } from '../state/events.js';
+import { TokenCommandEvent } from '../tokenizer/events.js';
 
 /**
  * Behavioral input generates commands based on the actor's current

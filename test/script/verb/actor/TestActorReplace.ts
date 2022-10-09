@@ -1,12 +1,11 @@
 import { expect } from 'chai';
-import { SinonStub } from 'sinon';
 
-import { ScriptTargetError } from '../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../src/model/Command';
-import { VerbActorReplace } from '../../../../src/script/verb/actor/ActorReplace';
-import { SIGNAL_REPLACE, VERB_WAIT } from '../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity';
-import { createTestContext, getStubHelper } from '../../../helper';
+import { ScriptTargetError } from '../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../src/model/Command.js';
+import { VerbActorReplace } from '../../../../src/script/verb/actor/ActorReplace.js';
+import { SIGNAL_REPLACE, VERB_WAIT } from '../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../entity.js';
+import { createTestContext, getStubHelper, SinonStub } from '../../../helper.js';
 
 describe('actor replace verb', () => {
   it('should require the script target be an actor', async () => {

@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 
-import { WorldState } from '../../../src/model/world/State';
-import { zeroStep } from '../../../src/util/entity';
-import { debugState, graphState } from '../../../src/util/entity/debug';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../entity';
+import { WorldState } from '../../../src/model/world/State.js';
+import { zeroStep } from '../../../src/util/entity/index.js';
+import { debugState, graphState } from '../../../src/util/entity/debug.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../../entity.js';
 
 describe('state debug utils', () => {
   it('should include all rooms in tree output', async () => {

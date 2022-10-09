@@ -1,11 +1,11 @@
 import { ValidateFunction } from 'ajv';
 import { dump, load, Schema } from 'js-yaml';
 
-import { Parser } from '.';
-import { DataLoadError } from '../../error/DataLoadError';
-import { DATA_SCHEMA, DataFile } from '../../model/file/Data';
-import { makeParserSchema } from '../../util/parser';
-import { makeSchema } from '../../util/schema';
+import { Parser } from './index.js';
+import { DataLoadError } from '../../error/DataLoadError.js';
+import { DATA_SCHEMA, DataFile } from '../../model/file/Data.js';
+import { makeParserSchema } from '../../util/parser/index.js';
+import { makeSchema } from '../../util/schema/index.js';
 
 /**
  * Parser for JSON and YAML text, using js-yaml.

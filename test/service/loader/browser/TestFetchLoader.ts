@@ -1,10 +1,9 @@
 import { NotImplementedError } from '@apextoaster/js-utils';
 import { expect } from 'chai';
-import { stub } from 'sinon';
 
-import { CoreModule } from '../../../../src/module/CoreModule';
-import { BrowserFetchLoader } from '../../../../src/service/loader/browser/FetchLoader';
-import { getTestContainer } from '../../../helper';
+import { CoreModule } from '../../../../src/module/CoreModule.js';
+import { BrowserFetchLoader } from '../../../../src/service/loader/browser/FetchLoader.js';
+import { getTestContainer, stub } from '../../../helper.js';
 
 describe('browser fetch loader', () => {
   it('should read from URLs', async () => {

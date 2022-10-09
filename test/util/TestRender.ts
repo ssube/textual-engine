@@ -1,9 +1,9 @@
 import { expect } from 'chai';
-import { ScriptRef } from '../../src/model/Script';
-import { SIGNAL_ENTER, SIGNAL_REPLACE, STAT_HEALTH, VERB_DROP, VERB_EQUIP, VERB_WAIT } from '../../src/util/constants';
+import { ScriptRef } from '../../src/model/Script.js';
+import { SIGNAL_ENTER, SIGNAL_REPLACE, STAT_HEALTH, VERB_DROP, VERB_EQUIP, VERB_WAIT } from '../../src/util/constants.js';
 
-import { getEventShortcuts } from '../../src/util/render';
-import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../entity';
+import { getEventShortcuts } from '../../src/util/render/index.js';
+import { makeTestActor, makeTestItem, makeTestPortal, makeTestRoom } from '../entity.js';
 
 describe('render shortcuts helper', () => {
   it('should include actors and items by name', async () => {

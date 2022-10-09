@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 
-import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError';
-import { makeCommand } from '../../../../../src/model/Command';
-import { SignalBehaviorAliceCat } from '../../../../../src/script/signal/behavior/alice/BehaviorCat';
-import { VERB_LOOK } from '../../../../../src/util/constants';
-import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity';
-import { createTestContext, getStubHelper } from '../../../../helper';
+import { ScriptTargetError } from '../../../../../src/error/ScriptTargetError.js';
+import { makeCommand } from '../../../../../src/model/Command.js';
+import { SignalBehaviorAliceCat } from '../../../../../src/script/signal/behavior/alice/BehaviorCat.js';
+import { VERB_LOOK } from '../../../../../src/util/constants.js';
+import { makeTestActor, makeTestItem, makeTestRoom } from '../../../../entity.js';
+import { createTestContext, getStubHelper } from '../../../../helper.js';
 
 describe('actor behavior signal for the Cheshire Cat', () => {
   it('should require the script target be an actor', async () => {

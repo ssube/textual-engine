@@ -1,11 +1,10 @@
 import { expect } from 'chai';
-import { stub } from 'sinon';
 
-import { CoreModule } from '../../../src/module/CoreModule';
-import { Service } from '../../../src/service';
-import { NodeEventBus } from '../../../src/service/event/NodeEventBus';
-import { onceEvent } from '../../../src/util/async/event';
-import { getTestContainer } from '../../helper';
+import { CoreModule } from '../../../src/module/CoreModule.js';
+import { Service } from '../../../src/service/index.js';
+import { NodeEventBus } from '../../../src/service/event/NodeEventBus.js';
+import { onceEvent } from '../../../src/util/async/event.js';
+import { getTestContainer, stub } from '../../helper.js';
 
 describe('node event bus', () => {
   /**

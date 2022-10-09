@@ -11,30 +11,30 @@ import {
   INJECT_RANDOM,
   INJECT_SCRIPT,
   INJECT_TEMPLATE,
-} from '.';
-import { ConfigFile } from '../model/file/Config';
-import { BehaviorActorService } from '../service/actor/BehaviorActor';
-import { PlayerActorService } from '../service/actor/PlayerActor';
-import { ScriptActorService } from '../service/actor/ScriptActor';
-import { Counter } from '../service/counter';
-import { LocalCounter } from '../service/counter/LocalCounter';
-import { EventBus } from '../service/event';
-import { NodeEventBus } from '../service/event/NodeEventBus';
-import { LocaleService } from '../service/locale';
-import { NextLocaleService } from '../service/locale/NextLocale';
-import { Parser } from '../service/parser';
-import { YamlParser } from '../service/parser/YamlParser';
-import { RandomService } from '../service/random';
-import { AleaRandomService } from '../service/random/AleaRandom';
-import { ScriptRender } from '../service/render/ScriptRender';
-import { ScriptService } from '../service/script';
-import { LocalScriptService } from '../service/script/LocalScript';
-import { LocalStateService } from '../service/state/LocalState';
-import { TemplateService } from '../service/template';
-import { ChainTemplateService } from '../service/template/ChainTemplateService';
-import { CompromiseTokenizer } from '../service/tokenizer/CompromiseTokenizer';
-import { SplitTokenizer } from '../service/tokenizer/SplitTokenizer';
-import { Singleton } from '../util/container';
+} from './index.js';
+import { ConfigFile } from '../model/file/Config.js';
+import { BehaviorActorService } from '../service/actor/BehaviorActor.js';
+import { PlayerActorService } from '../service/actor/PlayerActor.js';
+import { ScriptActorService } from '../service/actor/ScriptActor.js';
+import { Counter } from '../service/counter/index.js';
+import { LocalCounter } from '../service/counter/LocalCounter.js';
+import { EventBus } from '../service/event/index.js';
+import { NodeEventBus } from '../service/event/NodeEventBus.js';
+import { LocaleService } from '../service/locale/index.js';
+import { NextLocaleService } from '../service/locale/NextLocale.js';
+import { Parser } from '../service/parser/index.js';
+import { YamlParser } from '../service/parser/YamlParser.js';
+import { RandomService } from '../service/random/index.js';
+import { AleaRandomService } from '../service/random/AleaRandom.js';
+import { ScriptRender } from '../service/render/ScriptRender.js';
+import { ScriptService } from '../service/script/index.js';
+import { LocalScriptService } from '../service/script/LocalScript.js';
+import { LocalStateService } from '../service/state/LocalState.js';
+import { TemplateService } from '../service/template/index.js';
+import { ChainTemplateService } from '../service/template/ChainTemplateService.js';
+import { CompromiseTokenizer } from '../service/tokenizer/CompromiseTokenizer.js';
+import { SplitTokenizer } from '../service/tokenizer/SplitTokenizer.js';
+import { Singleton } from '../util/container.js';
 
 export class CoreModule extends Module {
   protected counter: Singleton<Counter>;

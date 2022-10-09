@@ -2,24 +2,24 @@
 import { doesExist, InvalidArgumentError, isNil, mustCoalesce, mustExist, mustFind } from '@apextoaster/js-utils';
 import { Container, Inject, Logger } from 'noicejs';
 
-import { StateService, StepResult } from '.';
-import { NotInitializedError } from '../../error/NotInitializedError';
-import { ScriptTargetError } from '../../error/ScriptTargetError';
-import { Command } from '../../model/Command';
-import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity';
-import { Actor, ACTOR_TYPE, ActorSource, isActor, ReadonlyActor } from '../../model/entity/Actor';
-import { ITEM_TYPE } from '../../model/entity/Item';
-import { PORTAL_TYPE } from '../../model/entity/Portal';
-import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { DataFile } from '../../model/file/Data';
-import { WorldState } from '../../model/world/State';
-import { WorldTemplate } from '../../model/world/Template';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module';
-import { ShowVolume, StateSource } from '../../util/actor';
-import { CompletionSet } from '../../util/async/CompletionSet';
-import { catchAndLog, onceEvent } from '../../util/async/event';
-import { randomItem } from '../../util/collection/array';
-import { StackMap } from '../../util/collection/StackMap';
+import { StateService, StepResult } from './index.js';
+import { NotInitializedError } from '../../error/NotInitializedError.js';
+import { ScriptTargetError } from '../../error/ScriptTargetError.js';
+import { Command } from '../../model/Command.js';
+import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity/index.js';
+import { Actor, ACTOR_TYPE, ActorSource, isActor, ReadonlyActor } from '../../model/entity/Actor.js';
+import { ITEM_TYPE } from '../../model/entity/Item.js';
+import { PORTAL_TYPE } from '../../model/entity/Portal.js';
+import { Room, ROOM_TYPE } from '../../model/entity/Room.js';
+import { DataFile } from '../../model/file/Data.js';
+import { WorldState } from '../../model/world/State.js';
+import { WorldTemplate } from '../../model/world/Template.js';
+import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module/index.js';
+import { ShowVolume, StateSource } from '../../util/actor/index.js';
+import { CompletionSet } from '../../util/async/CompletionSet.js';
+import { catchAndLog, onceEvent } from '../../util/async/event.js';
+import { randomItem } from '../../util/collection/array.js';
+import { StackMap } from '../../util/collection/StackMap.js';
 import {
   EVENT_ACTOR_COMMAND,
   EVENT_ACTOR_JOIN,
@@ -48,29 +48,29 @@ import {
   SIGNAL_STEP,
   STAT_SCORE,
   VERB_PREFIX,
-} from '../../util/constants';
-import { zeroStep } from '../../util/entity';
-import { debugState, graphState } from '../../util/entity/debug';
-import { StateEntityGenerator } from '../../util/entity/EntityGenerator';
+} from '../../util/constants.js';
+import { zeroStep } from '../../util/entity/index.js';
+import { debugState, graphState } from '../../util/entity/debug.js';
+import { StateEntityGenerator } from '../../util/entity/EntityGenerator.js';
 import {
   EntityTransfer,
   isActorTransfer,
   isItemTransfer,
   isRoomTransfer,
   StateEntityTransfer,
-} from '../../util/entity/EntityTransfer';
-import { findMatching, findRoom, SearchFilter } from '../../util/entity/find';
-import { getVerbScripts } from '../../util/script';
-import { makeServiceLogger } from '../../util/service';
-import { findByBaseId } from '../../util/template';
-import { Immutable } from '../../util/types';
-import { ActorCommandEvent, ActorJoinEvent } from '../actor/events';
-import { Counter } from '../counter';
-import { EventBus } from '../event';
-import { hasState, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events';
-import { LocaleContext } from '../locale';
-import { RandomService } from '../random';
-import { ScriptContext, ScriptService, SuppliedScope } from '../script';
+} from '../../util/entity/EntityTransfer.js';
+import { findMatching, findRoom, SearchFilter } from '../../util/entity/find.js';
+import { getVerbScripts } from '../../util/script/index.js';
+import { makeServiceLogger } from '../../util/service/index.js';
+import { findByBaseId } from '../../util/template/index.js';
+import { Immutable } from '../../util/types.js';
+import { ActorCommandEvent, ActorJoinEvent } from '../actor/events.js';
+import { Counter } from '../counter/index.js';
+import { EventBus } from '../event/index.js';
+import { hasState, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '../loader/events.js';
+import { LocaleContext } from '../locale/index.js';
+import { RandomService } from '../random/index.js';
+import { ScriptContext, ScriptService, SuppliedScope } from '../script/index.js';
 
 type StateScope = Omit<SuppliedScope, 'source'>;
 

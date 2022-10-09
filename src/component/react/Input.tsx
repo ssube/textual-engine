@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { InputProps } from '../shared';
+import { InputProps } from '../shared.js';
 
 export const Input = (props: InputProps): React.ReactElement => {
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {

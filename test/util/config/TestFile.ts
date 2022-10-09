@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { ConfigError } from '../../../src/error/ConfigError';
-import { loadConfig } from '../../../src/util/config/file';
+import { ConfigError } from '../../../src/error/ConfigError.js';
+import { loadConfig } from '../../../src/util/config/file.js';
 
 describe('file config', () => {
   /**

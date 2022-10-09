@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { ACTOR_TYPE, isActor } from '../../../src/model/entity/Actor';
+import { ACTOR_TYPE, isActor } from '../../../src/model/entity/Actor.js';
 
 describe('actor entity model', () => {
   it('should guard on the entity type', async () => {

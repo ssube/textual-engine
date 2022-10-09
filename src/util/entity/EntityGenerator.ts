@@ -1,28 +1,28 @@
 import { doesExist, mergeMap, mustExist, setOrPush } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { equipItems, isDestPortal, zeroStep } from '.';
-import { WorldEntityType } from '../../model/entity';
-import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor';
-import { Item, ITEM_TYPE } from '../../model/entity/Item';
-import { Portal, PORTAL_TYPE, PortalLinkage } from '../../model/entity/Portal';
-import { Room, ROOM_TYPE } from '../../model/entity/Room';
-import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier';
-import { Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template';
-import { Metadata } from '../../model/Metadata';
-import { ScriptMap } from '../../model/Script';
-import { WorldState } from '../../model/world/State';
-import { WorldTemplate } from '../../model/world/Template';
-import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE, InjectedOptions } from '../../module';
-import { Counter } from '../../service/counter';
-import { RandomService } from '../../service/random';
-import { CreateParams } from '../../service/state';
-import { TemplateService } from '../../service/template';
-import { randomItem } from '../collection/array';
-import { TEMPLATE_CHANCE } from '../constants';
-import { makeServiceLogger } from '../service';
-import { hasText, matchIdSegments } from '../string';
-import { findByBaseId } from '../template';
+import { equipItems, isDestPortal, zeroStep } from './index.js';
+import { WorldEntityType } from '../../model/entity/index.js';
+import { Actor, ACTOR_TYPE, ActorSource } from '../../model/entity/Actor.js';
+import { Item, ITEM_TYPE } from '../../model/entity/Item.js';
+import { Portal, PORTAL_TYPE, PortalLinkage } from '../../model/entity/Portal.js';
+import { Room, ROOM_TYPE } from '../../model/entity/Room.js';
+import { BaseModifier, Modifier, ModifierMetadata } from '../../model/mapped/Modifier.js';
+import { Template, TemplateMetadata, TemplatePrimitive, TemplateRef } from '../../model/mapped/Template.js';
+import { Metadata } from '../../model/Metadata.js';
+import { ScriptMap } from '../../model/Script.js';
+import { WorldState } from '../../model/world/State.js';
+import { WorldTemplate } from '../../model/world/Template.js';
+import { INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE, InjectedOptions } from '../../module/index.js';
+import { Counter } from '../../service/counter/index.js';
+import { RandomService } from '../../service/random/index.js';
+import { CreateParams } from '../../service/state/index.js';
+import { TemplateService } from '../../service/template/index.js';
+import { randomItem } from '../collection/array.js';
+import { TEMPLATE_CHANCE } from '../constants.js';
+import { makeServiceLogger } from '../service/index.js';
+import { hasText, matchIdSegments } from '../string.js';
+import { findByBaseId } from '../template/index.js';
 
 @Inject(INJECT_COUNTER, INJECT_LOGGER, INJECT_RANDOM, INJECT_TEMPLATE)
 export class StateEntityGenerator {

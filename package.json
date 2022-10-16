@@ -18,7 +18,7 @@
     "ink-text-input": "4.0.3",
     "js-yaml": "4.1.0",
     "node-fetch": "3.0.0-beta.9",
-    "noicejs": "4.0.0",
+    "noicejs": "5.0.0-2",
     "parsimmon": "1.18.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -70,7 +70,7 @@
     "sinon-chai": "3.7.0",
     "source-map-support": "0.5.21",
     "standard-version": "9.5.0",
-    "typescript": "4.5.5"
+    "typescript": "4.8.4"
   },
   "nyc": {
     "cache": false,

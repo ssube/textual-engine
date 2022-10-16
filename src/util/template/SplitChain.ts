@@ -5,6 +5,12 @@ import { InputChain } from './index.js';
 const { alt, createLanguage, optWhitespace, regexp, string } = parsimmon;
 
 /**
+ * Avoid infinitely deep types by limiting recursion when that becomes an issue.
+ * This provides a consistent limit for predictable results.
+ */
+export const SPLIT_LIMIT = 8;
+
+/**
  * Unnecessarily customizable delimiters. Must be regex safe, may be multiple characters.
  */
 export interface SplitOptions {

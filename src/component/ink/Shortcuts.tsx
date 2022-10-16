@@ -1,11 +1,13 @@
 import { doesExist, Maybe } from '@apextoaster/js-utils';
 import { Box, Text, useFocus } from 'ink';
-import SelectInput from 'ink-select-input';
+import SelectInputModule from 'ink-select-input';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { LegacyModule } from '../../util/types.js';
 
 import { SHORTCUT_TABS, ShortcutKeys, ShortcutProps } from '../shared.js';
 
+const { default: SelectInput } = (SelectInputModule as unknown as LegacyModule<typeof SelectInputModule>);
 const { useState } = React;
 
 export const Shortcuts = (props: ShortcutProps): JSX.Element => {

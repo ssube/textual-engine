@@ -1,9 +1,9 @@
-import { InvalidArgumentError, mustCoalesce } from '@apextoaster/js-utils';
+import { InvalidArgumentError, mustDefault } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Inject } from 'noicejs';
 
 import { ConfigServices } from '../../model/file/Config.js';
-import { Service } from '../../service/index.js';
 import { ActorService } from '../../service/actor/index.js';
+import { Service } from '../../service/index.js';
 import { LoaderService } from '../../service/loader/index.js';
 import { RenderService } from '../../service/render/index.js';
 import { StateService } from '../../service/state/index.js';
@@ -30,7 +30,7 @@ export class ServiceManager {
       }
 
       const svc = await this.container.create<StateService, BaseOptions>(state.kind, {
-        config: mustCoalesce(state.data, {}),
+        config: mustDefault(state.data, {}),
       });
       await svc.start();
 
@@ -43,7 +43,7 @@ export class ServiceManager {
       }
 
       const svc = await this.container.create<LoaderService, BaseOptions>(loader.kind, {
-        config: mustCoalesce(loader.data, {}),
+        config: mustDefault(loader.data, {}),
       });
       await svc.start();
 
@@ -56,7 +56,7 @@ export class ServiceManager {
       }
 
       const svc = await this.container.create<RenderService, BaseOptions>(render.kind, {
-        config: mustCoalesce(render.data, {}),
+        config: mustDefault(render.data, {}),
       });
       await svc.start();
 
@@ -69,7 +69,7 @@ export class ServiceManager {
       }
 
       const svc = await this.container.create<TokenizerService, BaseOptions>(tokenizer.kind, {
-        config: mustCoalesce(tokenizer.data, {}),
+        config: mustDefault(tokenizer.data, {}),
       });
       await svc.start();
 
@@ -82,7 +82,7 @@ export class ServiceManager {
       }
 
       const svc = await this.container.create<ActorService, BaseOptions>(actor.kind, {
-        config: mustCoalesce(actor.data, {}),
+        config: mustDefault(actor.data, {}),
       });
       await svc.start();
 

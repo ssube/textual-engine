@@ -1,19 +1,17 @@
-import { isNil, mustExist, Optional } from '@apextoaster/js-utils';
+import { isNone, Maybe, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
+import { ReadonlyActor } from '../../../model/entity/Actor.js';
 import { WorldEntity } from '../../../model/entity/index.js';
-import { isActor, ReadonlyActor } from '../../../model/entity/Actor.js';
 import { isItem } from '../../../model/entity/Item.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 import { head } from '../../../util/collection/array.js';
 import { SIGNAL_USE } from '../../../util/constants.js';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match.js';
+import { assertActor } from '../../../util/script/assert.js';
 import { Immutable } from '../../../util/types.js';
 
 export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  const actor = assertActor(this);
 
   const command = mustExist(context.command);
   const room = mustExist(context.room);
@@ -32,8 +30,8 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
     return context.state.show(context.source, 'actor.verb.use.type', { command });
   }
 
-  const target = await getUseTarget(this, context);
-  if (isNil(target)) {
+  const target = await getUseTarget(actor, context);
+  if (isNone(target)) {
     return context.state.show(context.source, 'actor.verb.use.target', { command });
   }
 
@@ -43,7 +41,7 @@ export async function VerbActorUse(this: ScriptTarget, context: ScriptContext): 
   });
 }
 
-export async function getUseTarget(actor: ReadonlyActor, context: ScriptContext): Promise<Optional<Immutable<WorldEntity>>> {
+export async function getUseTarget(actor: ReadonlyActor, context: ScriptContext): Promise<Maybe<Immutable<WorldEntity>>> {
   const command = mustExist(context.command);
   const room = mustExist(context.room);
 

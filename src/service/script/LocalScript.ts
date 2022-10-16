@@ -1,7 +1,6 @@
-import { isNil, mergeMap } from '@apextoaster/js-utils';
+import { isNone, mergeMap } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from './index.js';
 import { WorldEntity, WorldEntityType } from '../../model/entity/index.js';
 import { INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
 import { SignalActorGet } from '../../script/signal/actor/ActorGet.js';
@@ -34,6 +33,7 @@ import { VerbActorWait } from '../../script/verb/actor/ActorWait.js';
 import { SearchFilter } from '../../util/entity/find.js';
 import { getSignalScripts, getVerbScripts } from '../../util/script/index.js';
 import { makeServiceLogger } from '../../util/service/index.js';
+import { ScriptFunction, ScriptService, ScriptTarget, SuppliedScope } from './index.js';
 
 export type ScriptPairs = Array<[string, ScriptFunction]>;
 /**
@@ -90,14 +90,14 @@ export class LocalScriptService implements ScriptService {
     mergeMap(scripts, getSignalScripts(target));
 
     const scriptRef = scripts.get(slot);
-    if (isNil(scriptRef)) {
+    if (isNone(scriptRef)) {
       const scriptNames = Array.from(scripts.keys());
       this.logger.debug({ slot, scriptNames, target: target.meta.id }, 'target does not have a script defined for slot');
       return;
     }
 
     const scriptName = this.scripts.get(scriptRef.name);
-    if (isNil(scriptName)) {
+    if (isNone(scriptName)) {
       this.logger.error({
         scriptRef,
         scripts: Array.from(scripts.keys()),

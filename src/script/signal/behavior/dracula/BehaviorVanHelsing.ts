@@ -1,10 +1,10 @@
 import { doesExist, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
 import { makeCommand } from '../../../../model/Command.js';
-import { ACTOR_TYPE, ActorSource, isActor } from '../../../../model/entity/Actor.js';
+import { ACTOR_TYPE, ActorSource } from '../../../../model/entity/Actor.js';
 import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
 import { VERB_MOVE, VERB_WAIT } from '../../../../util/constants.js';
+import { assertActor } from '../../../../util/script/assert.js';
 import { matchIdSegments } from '../../../../util/string.js';
 
 /**
@@ -19,9 +19,7 @@ import { matchIdSegments } from '../../../../util/string.js';
  */
 // eslint-disable-next-line complexity
 export async function SignalBehaviorDraculaVanHelsing(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('target must be an actor');
-  }
+  const actor = assertActor(this);
 
   const room = mustExist(context.room);
   const actors = await context.state.find({
@@ -34,27 +32,27 @@ export async function SignalBehaviorDraculaVanHelsing(this: ScriptTarget, contex
   const player = actors.find((it) => it.source === ActorSource.PLAYER);
 
   if (doesExist(player) && matchIdSegments(room.meta.id, 'room-gate')) {
-    context.logger.debug({ actor: this }, 'intro trigger');
+    context.logger.debug({ actor }, 'intro trigger');
   }
 
   if (doesExist(player) && matchIdSegments(room.meta.id, 'room-house-back')) {
-    context.logger.debug({ actor: this }, 'back of house trigger');
+    context.logger.debug({ actor }, 'back of house trigger');
   }
 
   if (doesExist(player) && matchIdSegments(room.meta.id, 'room-house-dining')) {
-    context.logger.debug({ actor: this }, 'dining room trigger');
+    context.logger.debug({ actor }, 'dining room trigger');
   }
 
   if (doesExist(player) && matchIdSegments(room.meta.id, 'room-house-lucy')) {
-    context.logger.debug({ actor: this }, 'Lucy\'s bedroom trigger');
+    context.logger.debug({ actor }, 'Lucy\'s bedroom trigger');
   }
 
   // TODO: follow VH path
   const path = room.flags.get('path-van-helsing');
   if (doesExist(path)) {
-    context.logger.debug({ actor: this }, 'following VH path');
-    return context.behavior.queue(this, makeCommand(VERB_MOVE, path));
+    context.logger.debug({ actor }, 'following VH path');
+    return context.behavior.queue(actor, makeCommand(VERB_MOVE, path));
   }
 
-  return context.behavior.queue(this, makeCommand(VERB_WAIT));
+  return context.behavior.queue(actor, makeCommand(VERB_WAIT));
 }

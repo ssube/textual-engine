@@ -1,16 +1,13 @@
-import { isNil, mustExist } from '@apextoaster/js-utils';
+import { isNone, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { isActor } from '../../../model/entity/Actor.js';
 import { isItem, Item } from '../../../model/entity/Item.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 import { head } from '../../../util/collection/array.js';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match.js';
+import { assertActor } from '../../../util/script/assert.js';
 
 export async function VerbActorTake(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  const actor = assertActor(this);
 
   const command = mustExist(context.command);
   const room = mustExist(context.room);
@@ -40,13 +37,13 @@ export async function VerbActorTake(this: ScriptTarget, context: ScriptContext):
 
   const moving = indexEntity(results, command.index, isItem);
 
-  if (isNil(moving)) {
+  if (isNone(moving)) {
     return context.state.show(context.source, 'actor.verb.take.type', { command });
   }
 
   await context.state.move({
     moving,
     source: room,
-    target: this
+    target: actor,
   }, context);
 }

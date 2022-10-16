@@ -1,10 +1,10 @@
-import { InvalidArgumentError, isNil } from '@apextoaster/js-utils';
+import { InvalidArgumentError, isNone } from '@apextoaster/js-utils';
 import { BaseOptions, Container, Module } from 'noicejs';
 
 import { BunyanLogger } from './logger/BunyanLogger.js';
-import { INJECT_EVENT, INJECT_LOCALE } from './module/index.js';
 import { BrowserModule } from './module/BrowserModule.js';
 import { CoreModule } from './module/CoreModule.js';
+import { INJECT_EVENT, INJECT_LOCALE } from './module/index.js';
 import { NodeModule } from './module/NodeModule.js';
 import { EventBus } from './service/event/index.js';
 import { LocaleService } from './service/locale/index.js';
@@ -47,7 +47,7 @@ export async function main(args: Array<string>): Promise<number> {
   // create DI modules
   const modules = arg.module.map((it) => {
     const ctor = LOADED_MODULES.get(it);
-    if (isNil(ctor)) {
+    if (isNone(ctor)) {
       throw new InvalidArgumentError('module not found');
     }
     const module = new ctor();

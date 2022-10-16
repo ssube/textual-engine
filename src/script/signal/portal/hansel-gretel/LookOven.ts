@@ -1,22 +1,19 @@
-import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
 import { ACTOR_TYPE } from '../../../../model/entity/Actor.js';
-import { isPortal } from '../../../../model/entity/Portal.js';
 import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { assertPortal } from '../../../../util/script/assert.js';
 import { SignalPortalLook } from '../PortalLook.js';
 
 /**
  * Describe the room on the other side, and whether it contains one of the siblings.
  */
 export async function SignalPortalLookHGOven(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isPortal(this)) {
-    throw new ScriptTargetError('script target must be a portal');
-  }
+  const portal = assertPortal(this);
 
-  await SignalPortalLook.call(this, context);
+  await SignalPortalLook.call(portal, context);
 
   const actors = await context.state.find({
     room: {
-      id: this.meta.id,
+      id: portal.meta.id,
     },
     type: ACTOR_TYPE,
   });

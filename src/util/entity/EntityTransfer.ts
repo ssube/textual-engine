@@ -1,4 +1,4 @@
-import { InvalidArgumentError, isNil } from '@apextoaster/js-utils';
+import { InvalidArgumentError, isNone } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
 import { isActor, ReadonlyActor } from '../../model/entity/Actor.js';
@@ -6,9 +6,9 @@ import { isItem, ReadonlyItem } from '../../model/entity/Item.js';
 import { isRoom, ReadonlyRoom } from '../../model/entity/Room.js';
 import { INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
 import { ScriptContext } from '../../service/script/index.js';
+import { remove } from '../collection/array.js';
 import { SIGNAL_ENTER, SIGNAL_GET } from '../constants.js';
 import { makeServiceLogger } from '../service/index.js';
-import { remove } from '../collection/array.js';
 
 export interface ActorTransfer {
   moving: ReadonlyActor;
@@ -39,7 +39,7 @@ export function isItemTransfer(tx: EntityTransfer): tx is ItemTransfer {
 }
 
 export function isRoomTransfer(tx: EntityTransfer): tx is RoomTransfer {
-  return isNil(tx.moving);
+  return isNone(tx.moving);
 }
 
 @Inject(INJECT_LOGGER)

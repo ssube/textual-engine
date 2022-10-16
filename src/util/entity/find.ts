@@ -1,8 +1,8 @@
-import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
+import { doesExist, Maybe, mustDefault } from '@apextoaster/js-utils';
 
-import { EntityForType, WorldEntityType } from '../../model/entity/index.js';
 import { Actor, ActorType, ReadonlyActor } from '../../model/entity/Actor.js';
 import { Entity } from '../../model/entity/Base.js';
+import { EntityForType, WorldEntityType } from '../../model/entity/index.js';
 import { ReadonlyItem } from '../../model/entity/Item.js';
 import { isRoom, ReadonlyRoom, Room, RoomType } from '../../model/entity/Room.js';
 import { Metadata } from '../../model/Metadata.js';
@@ -31,7 +31,7 @@ export interface SearchFilter<TType extends WorldEntityType> {
  */
 // eslint-disable-next-line complexity,sonarjs/cognitive-complexity
 export function findMatching<TType extends WorldEntityType>(rooms: ReadonlyArray<ReadonlyRoom>, search: SearchFilter<TType>): Array<Immutable<EntityForType<TType>>> {
-  const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
+  const matchers = mustDefault(search.matchers, createStrictMatcher<TType>());
   const results: Array<EntityForType<TType>> = [];
 
   for (const room of rooms) {
@@ -89,7 +89,7 @@ export function findRoom(state: WorldState, search: SearchFilter<RoomType>): Arr
  */
 // eslint-disable-next-line complexity,sonarjs/cognitive-complexity
 export function findContainer<TType extends ActorType | RoomType>(state: WorldState, search: SearchFilter<TType>): Array<Actor | Room> {
-  const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
+  const matchers = mustDefault(search.matchers, createStrictMatcher<TType>());
   const results = new Set<Actor | Room>();
 
   for (const room of state.rooms) {
@@ -132,7 +132,7 @@ export function findContainer<TType extends ActorType | RoomType>(state: WorldSt
 /**
  * Find the item equipped in a particular slot.
  */
-export function findSlotItem(actor: ReadonlyActor, slot: string): Optional<ReadonlyItem> {
+export function findSlotItem(actor: ReadonlyActor, slot: string): Maybe<ReadonlyItem> {
   const id = actor.slots.get(slot);
   if (doesExist(id) && hasText(id)) {
     return actor.items.find((it) => it.meta.id === id);

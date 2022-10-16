@@ -1,15 +1,12 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { isActor } from '../../../model/entity/Actor.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 import { getKey, incrementKey } from '../../../util/collection/map.js';
 import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants.js';
+import { assertActor } from '../../../util/script/assert.js';
 
 export async function SignalActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  const actor = assertActor(this);
 
   const item = mustExist(context.item);
 
@@ -18,12 +15,12 @@ export async function SignalActorUse(this: ScriptTarget, context: ScriptContext)
 
   const damageRoll = context.random.nextInt(maxDamage);
   const healthRoll = context.random.nextInt(maxHealth);
-  const [stats, health] = incrementKey(this.stats, STAT_HEALTH, healthRoll - damageRoll);
+  const [stats, health] = incrementKey(actor.stats, STAT_HEALTH, healthRoll - damageRoll);
 
-  await context.state.update(this, { stats });
+  await context.state.update(actor, { stats });
 
   await context.state.show(context.source, 'actor.use.item.health', {
-    actor: this,
+    actor,
     item,
     health,
   });

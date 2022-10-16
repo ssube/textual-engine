@@ -1,20 +1,26 @@
 /* eslint-disable max-lines */
-import { doesExist, InvalidArgumentError, isNil, mustCoalesce, mustExist, mustFind } from '@apextoaster/js-utils';
+import { doesExist, InvalidArgumentError, isNone, mustDefault, mustExist, mustFind } from '@apextoaster/js-utils';
 import { Container, Inject, Logger } from 'noicejs';
 
-import { StateService, StepResult } from './index.js';
 import { NotInitializedError } from '../../error/NotInitializedError.js';
 import { ScriptTargetError } from '../../error/ScriptTargetError.js';
 import { Command } from '../../model/Command.js';
-import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity/index.js';
 import { Actor, ACTOR_TYPE, ActorSource, isActor, ReadonlyActor } from '../../model/entity/Actor.js';
+import { EntityForType, WorldEntity, WorldEntityType } from '../../model/entity/index.js';
 import { ITEM_TYPE } from '../../model/entity/Item.js';
 import { PORTAL_TYPE } from '../../model/entity/Portal.js';
 import { Room, ROOM_TYPE } from '../../model/entity/Room.js';
 import { DataFile } from '../../model/file/Data.js';
 import { WorldState } from '../../model/world/State.js';
 import { WorldTemplate } from '../../model/world/Template.js';
-import { INJECT_COUNTER, INJECT_EVENT, INJECT_LOGGER, INJECT_RANDOM, INJECT_SCRIPT, InjectedOptions } from '../../module/index.js';
+import {
+  INJECT_COUNTER,
+  INJECT_EVENT,
+  INJECT_LOGGER,
+  INJECT_RANDOM,
+  INJECT_SCRIPT,
+  InjectedOptions,
+} from '../../module/index.js';
 import { ShowVolume, StateSource } from '../../util/actor/index.js';
 import { CompletionSet } from '../../util/async/CompletionSet.js';
 import { catchAndLog, onceEvent } from '../../util/async/event.js';
@@ -49,7 +55,6 @@ import {
   STAT_SCORE,
   VERB_PREFIX,
 } from '../../util/constants.js';
-import { zeroStep } from '../../util/entity/index.js';
 import { debugState, graphState } from '../../util/entity/debug.js';
 import { StateEntityGenerator } from '../../util/entity/EntityGenerator.js';
 import {
@@ -60,6 +65,7 @@ import {
   StateEntityTransfer,
 } from '../../util/entity/EntityTransfer.js';
 import { findMatching, findRoom, SearchFilter } from '../../util/entity/find.js';
+import { zeroStep } from '../../util/entity/index.js';
 import { getVerbScripts } from '../../util/script/index.js';
 import { makeServiceLogger } from '../../util/service/index.js';
 import { findByBaseId } from '../../util/template/index.js';
@@ -71,6 +77,7 @@ import { hasState, LoaderReadEvent, LoaderStateEvent, LoaderWorldEvent } from '.
 import { LocaleContext } from '../locale/index.js';
 import { RandomService } from '../random/index.js';
 import { ScriptContext, ScriptService, SuppliedScope } from '../script/index.js';
+import { StateService, StepResult } from './index.js';
 
 type StateScope = Omit<SuppliedScope, 'source'>;
 
@@ -314,7 +321,7 @@ export class LocalStateService implements StateService {
    * Print debug representation of the world state.
    */
   public async doDebug(): Promise<void> {
-    if (isNil(this.state)) {
+    if (isNone(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line: 'meta.debug.missing',
         step: zeroStep(),
@@ -338,7 +345,7 @@ export class LocalStateService implements StateService {
    * Print graphviz representation of the world state.
    */
   public async doGraph(event: ActorCommandEvent): Promise<void> {
-    if (isNil(this.state)) {
+    if (isNone(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line: 'meta.graph.missing',
         step: zeroStep(),
@@ -410,7 +417,37 @@ export class LocalStateService implements StateService {
     });
 
     const loadEvent = await Promise.race([doneEvent, stateEvent]);
-    if (!hasState(loadEvent)) {
+    if (hasState(loadEvent)) {
+      // was a state event
+      const { state } = loadEvent;
+      const world = mustExist(this.loadedWorlds.get(state.meta.template));
+
+      this.logger.debug({ bundle: world.locale }, 'loading world locale bundle');
+      this.event.emit(EVENT_LOCALE_BUNDLE, {
+        bundle: world.locale,
+        name: 'world',
+      });
+
+      this.state = state;
+      this.world = world;
+      mustExist(this.generator).setWorld(world);
+
+      this.logger.debug('emitting state loaded event');
+      this.event.emit(EVENT_STATE_OUTPUT, {
+        context: {
+          meta: state.meta,
+          path,
+        },
+        line: 'meta.load.state',
+        step: state.step,
+        volume: ShowVolume.WORLD,
+      });
+
+      this.event.emit(EVENT_STATE_LOAD, {
+        state: state.meta.name,
+        world: state.meta.template,
+      });
+    } else {
       this.logger.debug({ loadEvent }, 'path read event received first');
       this.event.emit(EVENT_STATE_OUTPUT, {
         context: {
@@ -420,38 +457,7 @@ export class LocalStateService implements StateService {
         step: zeroStep(),
         volume: ShowVolume.WORLD,
       });
-      return;
     }
-
-    // was a state event
-    const { state } = loadEvent;
-    const world = mustExist(this.loadedWorlds.get(state.meta.template));
-
-    this.logger.debug({ bundle: world.locale }, 'loading world locale bundle');
-    this.event.emit(EVENT_LOCALE_BUNDLE, {
-      bundle: world.locale,
-      name: 'world',
-    });
-
-    this.state = state;
-    this.world = world;
-    mustExist(this.generator).setWorld(world);
-
-    this.logger.debug('emitting state loaded event');
-    this.event.emit(EVENT_STATE_OUTPUT, {
-      context: {
-        meta: state.meta,
-        path,
-      },
-      line: 'meta.load.state',
-      step: state.step,
-      volume: ShowVolume.WORLD,
-    });
-
-    this.event.emit(EVENT_STATE_LOAD, {
-      state: state.meta.name,
-      world: state.meta.template,
-    });
   }
 
   /**
@@ -462,7 +468,7 @@ export class LocalStateService implements StateService {
   }
 
   public async doSave(event: ActorCommandEvent): Promise<void> {
-    if (isNil(this.state)) {
+    if (isNone(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line: 'meta.save.missing',
         step: zeroStep(),
@@ -507,7 +513,7 @@ export class LocalStateService implements StateService {
     const { actor, command } = event;
 
     // if there is no world state, there won't be an actor, but this error is more informative
-    if (isNil(actor) || isNil(this.state)) {
+    if (isNone(actor) || isNone(this.state)) {
       this.event.emit(EVENT_STATE_OUTPUT, {
         line: 'meta.step.missing',
         step: zeroStep(),
@@ -555,7 +561,7 @@ export class LocalStateService implements StateService {
 
   // eslint-disable-next-line sonarjs/cognitive-complexity
   public async step(): Promise<StepResult> {
-    if (isNil(this.state)) {
+    if (isNone(this.state)) {
       throw new NotInitializedError('state has not been initialized');
     }
 
@@ -702,7 +708,7 @@ export class LocalStateService implements StateService {
       case ITEM_TYPE: {
         const template = findByBaseId(world.templates.items, id);
         const item = await generator.createItem(template);
-        const targetEntity = mustCoalesce<Immutable<Actor | Room>>(target.actor, target.room);
+        const targetEntity = mustDefault<Immutable<Actor | Room>>(target.actor, target.room);
 
         await this.stepUpdate(targetEntity, {
           items: [...targetEntity.items, item],

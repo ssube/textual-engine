@@ -1,7 +1,7 @@
-import { doesExist, mustCoalesce, Optional } from '@apextoaster/js-utils';
+import { doesExist, mustDefault, Optional } from '@apextoaster/js-utils';
 
-import { EntityForType, WorldEntityType } from '../../model/entity/index.js';
 import { Entity } from '../../model/entity/Base.js';
+import { EntityForType, WorldEntityType } from '../../model/entity/index.js';
 import { isPortal } from '../../model/entity/Portal.js';
 import { Metadata } from '../../model/Metadata.js';
 import { matchIdSegments } from '../string.js';
@@ -22,7 +22,7 @@ export function indexEntity<TEntity extends Entity>(entities: Array<Immutable<En
 }
 
 export function matchEntity<TType extends WorldEntityType>(entity: Immutable<Entity>, search: SearchFilter<TType>): entity is EntityForType<TType> {
-  const matchers = mustCoalesce(search.matchers, createStrictMatcher<TType>());
+  const matchers = mustDefault(search.matchers, createStrictMatcher<TType>());
 
   let matched = true;
 

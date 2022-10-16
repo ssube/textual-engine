@@ -1,6 +1,5 @@
-import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
-import { isActor } from '../../../../model/entity/Actor.js';
 import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { assertActor } from '../../../../util/script/assert.js';
 
 /**
  * The guests in the Queen's croquet party should:
@@ -9,10 +8,8 @@ import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js
  * - play croquet once on the grounds
  * - gather around the Cheshire Cat
  */
-export async function SignalBehaviorAliceGuest(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('target must be an actor');
-  }
+export async function SignalBehaviorAliceGuest(this: ScriptTarget, _context: ScriptContext): Promise<void> {
+  assertActor(this);
 
   // TODO: behavior
 }

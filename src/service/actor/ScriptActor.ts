@@ -1,8 +1,7 @@
-import { doesExist, isNil, mustExist, NotImplementedError } from '@apextoaster/js-utils';
+import { doesExist, isNone, mustExist, NotImplementedError } from '@apextoaster/js-utils';
 import { JSONSchemaType } from 'ajv';
 import { Inject, Logger } from 'noicejs';
 
-import { ActorService } from './index.js';
 import { ConfigError } from '../../error/ConfigError.js';
 import { Command } from '../../model/Command.js';
 import { ActorSource, ReadonlyActor } from '../../model/entity/Actor.js';
@@ -17,15 +16,16 @@ import {
   EVENT_STATE_STEP,
   SIGNAL_BEHAVIOR,
 } from '../../util/constants.js';
-import { zeroStep } from '../../util/entity/index.js';
 import { findMatching } from '../../util/entity/find.js';
+import { zeroStep } from '../../util/entity/index.js';
 import { makeSchema } from '../../util/schema/index.js';
 import { makeServiceLogger } from '../../util/service/index.js';
 import { EventBus } from '../event/index.js';
 import { RandomService } from '../random/index.js';
 import { ScriptService } from '../script/index.js';
-import { StepResult } from '../state/index.js';
 import { StateOutputEvent, StateRoomEvent, StateStepEvent } from '../state/events.js';
+import { StepResult } from '../state/index.js';
+import { ActorService } from './index.js';
 
 export interface ScriptActorConfig {
   data: Map<string, number>;
@@ -150,7 +150,7 @@ export class ScriptActorService implements ActorService {
    */
   public async getOutput(target: StateSource): Promise<Array<string>> {
     return this.output.filter((event) => {
-      if (isNil(event.source)) {
+      if (isNone(event.source)) {
         return false;
       }
 

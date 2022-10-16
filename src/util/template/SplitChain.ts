@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import parsimmon from 'parsimmon';
 
 import { InputChain } from './index.js';

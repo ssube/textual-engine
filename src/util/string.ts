@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { doesExist } from '@apextoaster/js-utils';
 import parsimmon from 'parsimmon';
 

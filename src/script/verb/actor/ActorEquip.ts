@@ -1,26 +1,23 @@
 import { defaultWhen, isNone, lengthOf, mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { isActor } from '../../../model/entity/Actor.js';
 import { isItem } from '../../../model/entity/Item.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 import { head } from '../../../util/collection/array.js';
 import { setKey } from '../../../util/collection/map.js';
 import { findActorSlots } from '../../../util/entity/find.js';
 import { createFuzzyMatcher, indexEntity } from '../../../util/entity/match.js';
+import { assertActor } from '../../../util/script/assert.js';
 import { hasText, matchIdSegments } from '../../../util/string.js';
 
 export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  const actor = assertActor(this);
 
   const command = mustExist(context.command);
   const [targetName, targetSlot] = command.targets;
 
   const results = await context.state.find({
     actor: {
-      id: this.meta.id,
+      id: actor.meta.id,
     },
     meta: {
       name: targetName,
@@ -41,13 +38,13 @@ export async function VerbActorEquip(this: ScriptTarget, context: ScriptContext)
     return context.state.show(context.source, 'actor.verb.equip.slot.invalid', { item, slot: slotName });
   }
 
-  const validSlots = findActorSlots(this, slotName);
+  const validSlots = findActorSlots(actor, slotName);
   if (lengthOf(validSlots) === 0) {
     return context.state.show(context.source, 'actor.verb.equip.slot.missing', { item, slot: slotName });
   }
 
   const slot = head(validSlots);
-  const slots = setKey(this.slots, slot, item.meta.id);
-  await context.state.update(this, { slots });
+  const slots = setKey(actor.slots, slot, item.meta.id);
+  await context.state.update(actor, { slots });
   return context.state.show(context.source, 'actor.verb.equip.item', { item, slot });
 }

@@ -1,6 +1,5 @@
-import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
-import { isActor } from '../../../../model/entity/Actor.js';
 import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js';
+import { assertActor } from '../../../../util/script/assert.js';
 
 /**
  * The father character should:
@@ -8,10 +7,8 @@ import { ScriptContext, ScriptTarget } from '../../../../service/script/index.js
  * - lead the children into the woods
  * - go back to the house and wait
  */
-export async function SignalBehaviorHGFather(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('target must be an actor');
-  }
+export async function SignalBehaviorHGFather(this: ScriptTarget, _context: ScriptContext): Promise<void> {
+  assertActor(this);
 
   // if turn < A, wander normally
   // if turn > A, wait for children outside

@@ -1,15 +1,13 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { ActorSource, isActor } from '../../../model/entity/Actor.js';
+import { ActorSource } from '../../../model/entity/Actor.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { assertActor } from '../../../util/script/assert.js';
 
 export async function SignalActorGet(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  const actor = assertActor(this);
 
-  if (this.source === ActorSource.PLAYER) {
+  if (actor.source === ActorSource.PLAYER) {
     const item = mustExist(context.item);
     await context.state.show(context.source, 'actor.signal.get.item', { item });
   }

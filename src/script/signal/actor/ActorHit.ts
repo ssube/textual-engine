@@ -1,21 +1,18 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { isActor } from '../../../model/entity/Actor.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 import { decrementKey, getKey } from '../../../util/collection/map.js';
 import { STAT_DAMAGE, STAT_HEALTH } from '../../../util/constants.js';
+import { assertActor } from '../../../util/script/assert.js';
 
 export async function SignalActorHit(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  const actor = assertActor(this);
 
   const attacker = mustExist(context.actor);
   const item = mustExist(context.item);
 
   await context.state.show(context.source, 'actor.signal.hit.item', {
-    actor: this,
+    actor,
     attacker,
     item,
   });
@@ -23,21 +20,21 @@ export async function SignalActorHit(this: ScriptTarget, context: ScriptContext)
   const maxDamage = getKey(item.stats, STAT_DAMAGE, 1) + getKey(attacker.stats, STAT_DAMAGE, 0);
   const damage = context.random.nextInt(maxDamage);
 
-  const [stats, health] = decrementKey(this.stats, STAT_HEALTH, damage);
-  await context.state.update(this, { stats });
+  const [stats, health] = decrementKey(actor.stats, STAT_HEALTH, damage);
+  await context.state.update(actor, { stats });
 
   if (health > 0) {
-    await context.state.show(context.source, 'actor.signal.hit.health', { actor: this, damage, health });
+    await context.state.show(context.source, 'actor.signal.hit.health', { actor, damage, health });
   } else {
     // drop inventory
     const room = mustExist(context.room);
-    for (const dropItem of this.items) {
+    for (const dropItem of actor.items) {
       await context.state.move({
         moving: dropItem,
-        source: this,
+        source: actor,
         target: room,
       }, context);
     }
-    await context.state.show(context.source, 'actor.signal.hit.dead', { actor: this, damage });
+    await context.state.show(context.source, 'actor.signal.hit.dead', { actor, damage });
   }
 }

@@ -1,15 +1,13 @@
 import { mustExist } from '@apextoaster/js-utils';
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { isActor } from '../../../model/entity/Actor.js';
+
 import { isItem, ITEM_TYPE } from '../../../model/entity/Item.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 import { SIGNAL_REPLACE } from '../../../util/constants.js';
 import { createFuzzyMatcher } from '../../../util/entity/match.js';
+import { assertActor } from '../../../util/script/assert.js';
 
 export async function VerbActorReplace(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  assertActor(this);
 
   // find the target
   const command = mustExist(context.command);
@@ -23,7 +21,7 @@ export async function VerbActorReplace(this: ScriptTarget, context: ScriptContex
     type: ITEM_TYPE,
   });
 
-  if (!isItem(item)) {
+  if (isItem(item) === false) {
     return context.state.show(context.source, 'actor.verb.replace.missing', { command });
   }
 

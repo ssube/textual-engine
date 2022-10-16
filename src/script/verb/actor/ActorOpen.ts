@@ -1,17 +1,14 @@
 import { mustExist } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { isActor } from '../../../model/entity/Actor.js';
 import { isPortal, PORTAL_TYPE } from '../../../model/entity/Portal.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
 import { getKey, setKey } from '../../../util/collection/map.js';
 import { SIGNAL_LOOK, STAT_CLOSED } from '../../../util/constants.js';
 import { createFuzzyMatcher } from '../../../util/entity/match.js';
+import { assertActor } from '../../../util/script/assert.js';
 
 export async function VerbActorOpen(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  assertActor(this);
 
   const command = mustExist(context.command);
 

@@ -1,4 +1,4 @@
-import { isNil } from '@apextoaster/js-utils';
+import { isNone } from '@apextoaster/js-utils';
 
 export type SingletonConstructor<TValue> = () => Promise<TValue>;
 
@@ -12,9 +12,10 @@ export class Singleton<TValue> {
   }
 
   public async get(): Promise<TValue> {
-    if (isNil(this.value)) {
+    if (isNone(this.value)) {
       this.value = await this.ctor();
     }
+
     return this.value;
   }
 }

@@ -337,8 +337,7 @@ module.exports = {
       "MemberExpression[optional=true]",
       "IfStatement[alternate.type='IfStatement']",
       "UnaryExpression[operator='!']",
-      "BinaryExpression[operator='==='][right.value=true]",
-      "BinaryExpression[operator='!==']"
+      "BinaryExpression[operator='==='][right.value=true]"
     ],
     "no-return-await": "error",
     "no-sequences": "error",

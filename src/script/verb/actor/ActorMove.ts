@@ -1,7 +1,6 @@
-import { doesExist, isNil, mustExist, NotFoundError } from '@apextoaster/js-utils';
+import { doesExist, isNone, mustExist, NotFoundError } from '@apextoaster/js-utils';
 
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { ActorSource, isActor } from '../../../model/entity/Actor.js';
+import { ActorSource } from '../../../model/entity/Actor.js';
 import { isPortal } from '../../../model/entity/Portal.js';
 import { isRoom, ROOM_TYPE } from '../../../model/entity/Room.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
@@ -10,11 +9,10 @@ import { setKey } from '../../../util/collection/map.js';
 import { SIGNAL_LOOK } from '../../../util/constants.js';
 import { getPortalStats } from '../../../util/entity/index.js';
 import { indexEntity } from '../../../util/entity/match.js';
+import { assertActor } from '../../../util/script/assert.js';
 
 export async function VerbActorMove(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  const actor = assertActor(this);
 
   // find the new room
   const command = mustExist(context.command);
@@ -30,7 +28,7 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   });
   const targetPortal = indexEntity(portals, command.index, isPortal);
 
-  if (isNil(targetPortal)) {
+  if (isNone(targetPortal)) {
     return context.state.show(context.source, 'actor.verb.move.missing', { command });
   }
 
@@ -48,17 +46,17 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
   const targetRoom = indexEntity(rooms, command.index, isRoom);
 
   if (!isRoom(targetRoom)) {
-    context.logger.warn({ actor: this, command, rooms, targetPortal }, 'destination room not found');
+    context.logger.warn({ actor, command, rooms, targetPortal }, 'destination room not found');
     throw new NotFoundError('destination room not found');
   }
 
   await context.state.show(context.source, 'actor.verb.move.portal', {
-    actor: this,
+    actor,
     portal: targetPortal,
   });
 
   // leader movement flags
-  const pathKey = this.flags.get('leader');
+  const pathKey = actor.flags.get('leader');
   if (doesExist(pathKey)) {
     const flags = setKey(currentRoom.flags, pathKey, targetPortal.meta.id);
     await context.state.update(currentRoom, { flags });
@@ -66,13 +64,13 @@ export async function VerbActorMove(this: ScriptTarget, context: ScriptContext):
 
   // move the actor and focus
   await context.state.move({
-    moving: this,
+    moving: actor,
     source: currentRoom,
     target: targetRoom,
   }, context);
 
-  if (this.source === ActorSource.PLAYER) {
-    context.logger.debug({ actor: this, room: targetRoom }, 'player entered room');
+  if (actor.source === ActorSource.PLAYER) {
+    context.logger.debug({ actor, room: targetRoom }, 'player entered room');
     await context.script.invoke(targetRoom, SIGNAL_LOOK, context);
   }
 }

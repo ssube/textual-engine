@@ -1,8 +1,8 @@
 import { Box, Text, useFocus } from 'ink';
 import TextInputModule from 'ink-text-input';
 import * as React from 'react';
-import { LegacyModule } from '../../util/types.js';
 
+import { LegacyModule } from '../../util/types.js';
 import { InputProps } from '../shared.js';
 
 const { default: TextInput } = (TextInputModule as unknown as LegacyModule<typeof TextInputModule>);

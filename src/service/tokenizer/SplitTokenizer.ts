@@ -1,7 +1,6 @@
-import { getOrDefault, isNil, mustExist } from '@apextoaster/js-utils';
+import { getOrDefault, isNone, mustExist } from '@apextoaster/js-utils';
 import { Inject, Logger } from 'noicejs';
 
-import { TokenizerService } from './index.js';
 import { Command } from '../../model/Command.js';
 import { LocaleBundle } from '../../model/file/Locale.js';
 import { INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER, InjectedOptions } from '../../module/index.js';
@@ -11,9 +10,10 @@ import { EVENT_LOCALE_BUNDLE, EVENT_RENDER_INPUT, EVENT_TOKEN_COMMAND, SPLIT_CHA
 import { makeServiceLogger } from '../../util/service/index.js';
 import { splitWords, trim } from '../../util/string.js';
 import { EventBus } from '../event/index.js';
-import { LocaleService } from '../locale/index.js';
 import { LocaleBundleEvent } from '../locale/events.js';
+import { LocaleService } from '../locale/index.js';
 import { RenderInputEvent } from '../render/events.js';
+import { TokenizerService } from './index.js';
 
 @Inject(INJECT_EVENT, INJECT_LOCALE, INJECT_LOGGER)
 export class SplitTokenizer implements TokenizerService {
@@ -103,7 +103,7 @@ export class SplitTokenizer implements TokenizerService {
     const current = this.locale.getLocale();
     const lng = bundle.languages[current];
 
-    if (isNil(lng)) {
+    if (isNone(lng)) {
       this.logger.debug({ bundle }, 'bundle does not include current language');
       return;
     }

@@ -1,11 +1,8 @@
-import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
-import { isItem } from '../../../model/entity/Item.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
+import { assertItem } from '../../../util/script/assert.js';
 
 export async function SignalItemUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
-  if (!isItem(this)) {
-    throw new ScriptTargetError('script target must be an item');
-  }
+  const item = assertItem(this);
 
-  await context.state.show(context.source, 'item.use.any', { item: this });
+  await context.state.show(context.source, 'item.use.any', { item });
 }

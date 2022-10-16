@@ -1,9 +1,8 @@
-import { ScriptTargetError } from '../../../../error/ScriptTargetError.js';
 import { WorldEntity } from '../../../../model/entity/index.js';
-import { isActor } from '../../../../model/entity/Actor.js';
 import { ScriptContext } from '../../../../service/script/index.js';
 import { getKey } from '../../../../util/collection/map.js';
 import { STAT_HEALTH } from '../../../../util/constants.js';
+import { assertActor } from '../../../../util/script/assert.js';
 
 /**
  * Looking at the character of Lucy should:
@@ -11,19 +10,17 @@ import { STAT_HEALTH } from '../../../../util/constants.js';
  * - note her condition
  */
 export async function SignalActorLookLucy(this: WorldEntity, context: ScriptContext): Promise<void> {
-  if (!isActor(this)) {
-    throw new ScriptTargetError('script target must be an actor');
-  }
+  const actor = assertActor(this);
 
-  await context.state.show(context.source, 'actor.signal.look.seen', { actor: this });
+  await context.state.show(context.source, 'actor.signal.look.seen', { actor });
 
-  const health = getKey(this.stats, STAT_HEALTH, 0);
+  const health = getKey(actor.stats, STAT_HEALTH, 0);
   switch (true) {
     case (health <= 0):
-      return context.state.show(context.source, 'actor.signal.look.dead', { actor: this });
+      return context.state.show(context.source, 'actor.signal.look.dead', { actor });
     case (health <= 10):
-      return context.state.show(context.source, 'actor.signal.look.pale', { actor: this });
+      return context.state.show(context.source, 'actor.signal.look.pale', { actor });
     default:
-      return context.state.show(context.source, 'actor.signal.look.healthy', { actor: this });
+      return context.state.show(context.source, 'actor.signal.look.healthy', { actor });
   }
 }

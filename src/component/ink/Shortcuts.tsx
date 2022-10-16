@@ -3,8 +3,8 @@ import { Box, Text, useFocus } from 'ink';
 import SelectInputModule from 'ink-select-input';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { LegacyModule } from '../../util/types.js';
 
+import { LegacyModule } from '../../util/types.js';
 import { SHORTCUT_TABS, ShortcutKeys, ShortcutProps } from '../shared.js';
 
 const { default: SelectInput } = (SelectInputModule as unknown as LegacyModule<typeof SelectInputModule>);

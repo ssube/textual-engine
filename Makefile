@@ -95,7 +95,7 @@ test: ## run tests
 test: node_modules out
 	yarn mocha $(MOCHA_ARGS) "out/src/lib.js" "out/**/Test*.js"
 
-NYC_ARGS := --all \
+COVER_ARGS := --all \
 	--check-coverage \
 	--exclude ".eslintrc.js" \
 	--exclude "bundle/**" \
@@ -110,7 +110,7 @@ NYC_ARGS := --all \
 
 cover: ## run tests with coverage
 cover: node_modules out
-	yarn nyc $(NYC_ARGS) yarn mocha $(MOCHA_ARGS) "out/**/Test*.js"
+	yarn c8 $(COVER_ARGS) yarn mocha $(MOCHA_ARGS) "out/**/Test*.js"
 
 # from https://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## print this help

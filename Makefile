@@ -145,6 +145,10 @@ git-stats: ## print git contributor line counts (approx, for fun)
 	git ls-files | while read f; do git blame -w -M -C -C --line-porcelain "$$f" |\
 		grep -I '^author '; done | sort -f | uniq -ic | sort -n
 
+git-push: ## push to both Github and Gitlab
+	git push github
+	git push gitlab
+
 upload-climate:
 	cc-test-reporter format-coverage -t lcov -o out/coverage/codeclimate.json -p . out/coverage/lcov.info
 	cc-test-reporter upload-coverage --debug -i out/coverage/codeclimate.json -r "$(shell echo "${CODECLIMATE_SECRET}" | base64 -d)"

@@ -2835,10 +2835,10 @@ node-fetch@3.0.0-beta.9:
     data-uri-to-buffer "^3.0.1"
     fetch-blob "^2.1.1"
 
-noicejs@4.0.0:
-  version "4.0.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/noicejs/-/noicejs-4.0.0.tgz#00a916bbcd6fd6f9866bce3fba60569088c706b6"
-  integrity sha512-VubFRhr0iir5wFP8yUmsQOw6kCKHNwtB8yyRz9DHcKt64N0Yu/k4vdYwHYGN2ruvPLJer90XWrTSK5rbUUmimQ==
+noicejs@5.0.0-2:
+  version "5.0.0-2"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/noicejs/-/noicejs-5.0.0-2.tgz#afcf33b511c1586e85245c8a0fdea5b3896c76e9"
+  integrity sha512-d7iPduQlHBQFAnxbvC/RvvfMsC8ifjBs77g5yXeNvbxgPFZLtUQfn/KyzczUzZil6gkcqqRXxjn+n1vPIGaR9A==
 
 normalize-package-data@^2.3.2, normalize-package-data@^2.5.0:
   version "2.5.0"
@@ -3858,12 +3858,7 @@ typedarray@^0.0.6:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@4.5.5:
-  version "4.5.5"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/typescript/-/typescript-4.5.5.tgz#d8c953832d28924a9e3d37c73d729c846c5896f3"
-  integrity sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==
-
-typescript@~4.8.4:
+typescript@4.8.4, typescript@~4.8.4:
   version "4.8.4"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/typescript/-/typescript-4.8.4.tgz#c464abca159669597be5f96b8943500b238e60e6"
   integrity sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==

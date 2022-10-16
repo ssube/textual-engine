@@ -4,7 +4,7 @@ import { ScriptTargetError } from '../../../error/ScriptTargetError.js';
 import { WorldEntityType } from '../../../model/entity/index.js';
 import { isItem } from '../../../model/entity/Item.js';
 import { ScriptContext, ScriptTarget } from '../../../service/script/index.js';
-import { splitChain } from '../../../util/template/SplitChain.js';
+import { splitChain, SPLIT_LIMIT } from '../../../util/template/SplitChain.js';
 
 export async function SignalItemReplace(this: ScriptTarget, context: ScriptContext): Promise<void> {
   if (!isItem(this)) {
@@ -23,7 +23,7 @@ export async function SignalItemReplace(this: ScriptTarget, context: ScriptConte
       start: '(',
     },
     split: '|',
-  }).flat(Infinity) as Array<string>;
+  }).flat(SPLIT_LIMIT) as Array<string>;
 
   context.logger.debug({ item: this, replaceGroups }, 'replace groups for item');
 

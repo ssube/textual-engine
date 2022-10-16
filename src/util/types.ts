@@ -35,3 +35,10 @@ export type NumberMap = Map<string, number>;
 
 export type StringMap = Map<string, string>;
 
+/**
+ * Wrapper for default exports in pre-ES module libraries, otherwise React will complain about
+ * the default component not being a function.
+ */
+export interface LegacyModule<T> {
+  default: T;
+}

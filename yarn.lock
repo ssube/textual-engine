@@ -2846,10 +2846,10 @@ node-fetch@3.2.10:
     fetch-blob "^3.1.4"
     formdata-polyfill "^4.0.10"
 
-noicejs@5.0.0-2:
-  version "5.0.0-2"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/noicejs/-/noicejs-5.0.0-2.tgz#afcf33b511c1586e85245c8a0fdea5b3896c76e9"
-  integrity sha512-d7iPduQlHBQFAnxbvC/RvvfMsC8ifjBs77g5yXeNvbxgPFZLtUQfn/KyzczUzZil6gkcqqRXxjn+n1vPIGaR9A==
+noicejs@5.0.0-3:
+  version "5.0.0-3"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/noicejs/-/noicejs-5.0.0-3.tgz#cbc2df81925c68f3cbc4de3fcb93092e891b6967"
+  integrity sha512-It1PoStKHaOhzKeQUBJD/Ct0Ywy3ooPNlQwYSeT/SEvpP2QBGV25zrzCpW5x/vAkjDvga+a5NbvpOERvRF/ZzA==
 
 normalize-package-data@^2.3.2, normalize-package-data@^2.5.0:
   version "2.5.0"

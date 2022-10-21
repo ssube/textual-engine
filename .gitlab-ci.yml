@@ -10,7 +10,7 @@ stages:
   - status-post
 
 # build jobs
-build-node:
+build-cli:
   stage: build
   extends:
     - .build-node
@@ -33,9 +33,35 @@ build-node:
       - out/cache/
       - out/tmp/
 
+build-bundle:
+  stage: build
+  extends:
+    - .build-node
+
+  script:
+    - make bundle
+
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths:
+      - out/
+
+  cache:
+    key: "${CI_COMMIT_REF_SLUG}"
+    policy: pull-push
+    paths:
+      - node_modules/
+      - out/api/
+      - out/cache/
+      - out/tmp/
+
+
 build-image-cli-branch:
   stage: image
   extends: [.build-docker]
+  needs:
+    - build-cli
   except:
     - tags
   script:
@@ -47,6 +73,8 @@ build-image-cli-tag:
   stage: image
   extends:
     - .build-docker
+  needs:
+    - build-cli
   only:
     - tags
   script:
@@ -57,6 +85,8 @@ build-image-cli-tag:
 build-image-server-branch:
   stage: image
   extends: [.build-docker]
+  needs:
+    - build-bundle
   except:
     - tags
   script:
@@ -68,6 +98,8 @@ build-image-server-tag:
   stage: image
   extends:
     - .build-docker
+  needs:
+    - build-bundle
   only:
     - tags
   script:
@@ -81,6 +113,8 @@ publish-npm:
   extends:
     - .build-node
     - .deploy-tags
+  needs:
+    - build-cli
 
   dependencies:
     - build-node
@@ -92,6 +126,8 @@ climate-success:
   stage: status-post
   extends:
     - .build-climate
+  needs:
+    - build-cli
 
   dependencies:
     - build-node
@@ -117,6 +153,8 @@ github-success:
   stage: status-post
   extends:
     - .build-curl
+  needs:
+    - build-cli
   when: on_success
   script:
     - ./scripts/github-status.sh success
@@ -125,6 +163,8 @@ sonar-success:
   stage: status-post
   extends:
     - .build-sonar
+  needs:
+    - build-cli
 
   when: on_success
   script:

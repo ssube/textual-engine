@@ -115,9 +115,6 @@ publish-npm:
     - .deploy-tags
   needs:
     - build-cli
-
-  dependencies:
-    - build-node
   script:
     - npm publish
 
@@ -128,9 +125,6 @@ climate-success:
     - .build-climate
   needs:
     - build-cli
-
-  dependencies:
-    - build-node
   script:
     - make upload-climate
 

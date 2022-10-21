@@ -1,0 +1,4 @@
+FROM docker.io/nginx:1.22
+
+COPY ./out/index.html /usr/share/nginx/html
+COPY ./out/bundle /usr/share/nginx/html/bundle

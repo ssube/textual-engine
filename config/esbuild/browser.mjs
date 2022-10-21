@@ -40,12 +40,12 @@ build({
             resourceRegExp: /module\/NodeModule/,
             contextRegExp: /./,
         }, {
-            resourceRegExp: /index/,
+            resourceRegExp: /cli/,
             contextRegExp: /./,
         }]),
         alias({
             'yargs-parser': join(root, 'node_modules/yargs-parser/browser.js'),
-            './util/config/file': join(root, 'out/src/util/config/page.js'),
+            './util/config/file.js': join(root, 'out/src/util/config/page.js'),
         }),
     ],
 }).catch(() => process.exit(1));

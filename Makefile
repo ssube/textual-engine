@@ -32,8 +32,11 @@ GRAPH_LAYOUT ?= dot
 graph: ## render any debug graphs
 	cat out/debug-graph | $(GRAPH_LAYOUT) -Tpng -oout/debug-graph.png && sensible-browser out/debug-graph.png
 
-image: ## build the docker image
-	docker build $(DOCKER_ARGS) -f Dockerfile -t $(DOCKER_IMAGE) .
+image-cli: ## build the CLI image
+	docker build $(DOCKER_ARGS) -f Dockerfile.cli -t $(DOCKER_IMAGE) .
+
+image-server: ## build the nginx server image
+	docker build $(DOCKER_ARGS) -f Dockerfile.server -t $(DOCKER_IMAGE) .
 
 install:
 	yarn

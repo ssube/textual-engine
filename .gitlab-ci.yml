@@ -33,7 +33,7 @@ build-node:
       - out/cache/
       - out/tmp/
 
-build-image-stretch-branch:
+build-image-cli-branch:
   stage: image
   extends: [.build-docker]
   except:
@@ -41,9 +41,9 @@ build-image-stretch-branch:
   script:
     - ./scripts/docker-build.sh --push
   variables:
-    IMAGE_ARCH: stretch
+    IMAGE_ARCH: cli
 
-build-image-stretch-tag:
+build-image-cli-tag:
   stage: image
   extends:
     - .build-docker
@@ -52,7 +52,28 @@ build-image-stretch-tag:
   script:
     - ./scripts/docker-build.sh --push
   variables:
-    IMAGE_ARCH: stretch
+    IMAGE_ARCH: cli
+
+build-image-server-branch:
+  stage: image
+  extends: [.build-docker]
+  except:
+    - tags
+  script:
+    - ./scripts/docker-build.sh --push
+  variables:
+    IMAGE_ARCH: server
+
+build-image-server-tag:
+  stage: image
+  extends:
+    - .build-docker
+  only:
+    - tags
+  script:
+    - ./scripts/docker-build.sh --push
+  variables:
+    IMAGE_ARCH: server
 
 # publish jobs
 publish-npm:

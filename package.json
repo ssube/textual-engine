@@ -1,7 +1,7 @@
 {
-  "name": "text-adventure",
+  "name": "textual-engine",
   "version": "1.4.0",
-  "main": "index.js",
+  "main": "out/src/cli.js",
   "type": "module",
   "author": "ssube <seansube@gmail.com>",
   "license": "MIT",

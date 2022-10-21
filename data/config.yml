@@ -21,7 +21,7 @@ config:
               missing: 'no world state to debug'
             graph:
               missing: 'no world state to graph'
-            help: 'available verbs: {{verbs}}'
+            help: 'available verbs: {{helpVerbs}}'
             load:
               missing: 'no world states loaded from {{-path}}'
               state: 'loaded world state {{meta.id}} from {{-path}}'

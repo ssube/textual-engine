@@ -30,6 +30,9 @@ export class NextLocaleService implements LocaleService {
     const inst = i18next.createInstance({
       defaultNS: 'world',
       fallbackNS: ['common'],
+      interpolation: {
+        skipOnVariables: false,
+      },
       lng: this.config.current,
     });
     await inst.init();

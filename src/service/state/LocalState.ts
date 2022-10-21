@@ -387,7 +387,7 @@ export class LocalStateService implements StateService {
     const worldVerbs = Array.from(scripts.keys()).filter((it) => it.startsWith(VERB_PREFIX));
 
     this.logger.debug({ event, worldVerbs }, 'collected world verbs for help');
-    const verbs = [
+    const helpVerbs = [
       ...worldVerbs,
       ...META_VERBS,
     ].sort()
@@ -396,7 +396,7 @@ export class LocalStateService implements StateService {
 
     this.event.emit(EVENT_STATE_OUTPUT, {
       context: {
-        verbs,
+        helpVerbs,
       },
       line: 'meta.help',
       step: zeroStep(),

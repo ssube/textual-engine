@@ -3,7 +3,6 @@ include:
   - local: /config/gitlab/ci-rules.yml
 
 stages:
-  - status-pre
   - build
   - image
   - publish
@@ -124,12 +123,13 @@ climate-success:
   extends:
     - .build-climate
   needs:
+    - build-bundle
     - build-cli
   script:
     - make upload-climate
 
 github-pending:
-  stage: status-pre
+  stage: build
   extends:
     - .build-curl
   script:
@@ -139,6 +139,9 @@ github-failure:
   stage: status-post
   extends:
     - .build-curl
+  needs:
+    - build-bundle
+    - build-cli
   when: on_failure
   script:
     - ./scripts/github-status.sh failure
@@ -148,6 +151,7 @@ github-success:
   extends:
     - .build-curl
   needs:
+    - build-bundle
     - build-cli
   when: on_success
   script:
@@ -158,8 +162,8 @@ sonar-success:
   extends:
     - .build-sonar
   needs:
+    - build-bundle
     - build-cli
-
   when: on_success
   script:
     - make node_modules

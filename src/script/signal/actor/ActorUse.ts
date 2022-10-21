@@ -7,15 +7,23 @@ import { assertActor } from '../../../util/script/assert.js';
 
 export async function SignalActorUse(this: ScriptTarget, context: ScriptContext): Promise<void> {
   const actor = assertActor(this);
-
   const item = mustExist(context.item);
 
-  const maxDamage = getKey(item.stats, STAT_DAMAGE, 0);
-  const maxHealth = getKey(item.stats, STAT_HEALTH, 0);
+  let change = 0;
 
-  const damageRoll = context.random.nextInt(maxDamage);
-  const healthRoll = context.random.nextInt(maxHealth);
-  const [stats, health] = incrementKey(actor.stats, STAT_HEALTH, healthRoll - damageRoll);
+  if (item.stats.has(STAT_DAMAGE)) {
+    const maxDamage = getKey(item.stats, STAT_DAMAGE, 1);
+    const damageRoll = context.random.nextInt(maxDamage);
+    change -= damageRoll;
+  }
+
+  if (item.stats.has(STAT_HEALTH)) {
+    const maxHealth = getKey(item.stats, STAT_HEALTH, 0);
+    const healthRoll = context.random.nextInt(maxHealth);
+    change += healthRoll;
+  }
+
+  const [stats, health] = incrementKey(actor.stats, STAT_HEALTH, change);
 
   await context.state.update(actor, { stats });
 

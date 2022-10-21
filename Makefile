@@ -73,13 +73,13 @@ RUN_ARGS ?= --config data/config.yml \
 
 run: ## run app with demo data
 run: build
-	node $(NODE_ARGS) out/src/index.js $(RUN_ARGS)
+	node $(NODE_ARGS) out/src/cli.js $(RUN_ARGS)
 
 run-debug: ## run app and wait for debugger
 	NODE_ARGS=--inspect-brk $(MAKE) run
 
 run-graph: build
-	node $(NODE_ARGS) out/src/index.js $(RUN_ARGS) --depth 13
+	node $(NODE_ARGS) out/src/cli.js $(RUN_ARGS) --depth 13
 	$(MAKE) graph
 
 run-image: ## run app from docker image

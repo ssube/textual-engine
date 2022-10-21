@@ -25,7 +25,7 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
             id={`tab-${it.value}`}
             onClick={() => setTab(it.value as ShortcutKeys)}
           >
-            {t(it.label)}
+            {t<string>(it.label)}
           </button>
         </li>)}
       </ol>
@@ -37,7 +37,7 @@ export const Shortcuts = (props: ShortcutProps): JSX.Element => {
             id={`item-${it.id}`}
             onClick={() => selectItem(it.id)}
           >
-            {t(it.name)}
+            {t<string>(it.name)}
           </a>
         </li>)}
       </ol>

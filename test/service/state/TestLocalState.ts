@@ -491,7 +491,7 @@ describe('local state service', () => {
 
       const context = mustExist(output.context);
       for (const verb of META_VERBS) {
-        expect(context.verbs, `context verb: ${verb}`).to.include(verb);
+        expect(context.helpVerbs, `context verb: ${verb}`).to.include(verb);
       }
     });
 
@@ -527,8 +527,8 @@ describe('local state service', () => {
       expect(output.line).to.equal('meta.help');
 
       const context = mustExist(output.context);
-      expect(context.verbs, 'room verb foo').to.include('verbs.world.foo');
-      expect(context.verbs, 'room verb bar').to.include('verbs.world.bar');
+      expect(context.helpVerbs, 'room verb foo').to.include('verbs.world.foo');
+      expect(context.helpVerbs, 'room verb bar').to.include('verbs.world.bar');
     });
   });
 

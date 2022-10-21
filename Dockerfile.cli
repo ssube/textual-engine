@@ -10,4 +10,4 @@ WORKDIR /app
 # install native modules
 RUN yarn install --production
 
-ENTRYPOINT [ "node", "--require", "esm", "/app/out/src/index.js" ]
+ENTRYPOINT [ "node", "/app/out/src/cli.js" ]

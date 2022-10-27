@@ -13,13 +13,13 @@ export async function SignalActorUse(this: ScriptTarget, context: ScriptContext)
 
   if (item.stats.has(STAT_DAMAGE)) {
     const maxDamage = getKey(item.stats, STAT_DAMAGE, 1);
-    const damageRoll = context.random.nextInt(maxDamage);
+    const damageRoll = context.random.nextInt(maxDamage, 1);
     change -= damageRoll;
   }
 
   if (item.stats.has(STAT_HEALTH)) {
-    const maxHealth = getKey(item.stats, STAT_HEALTH, 0);
-    const healthRoll = context.random.nextInt(maxHealth);
+    const maxHealth = getKey(item.stats, STAT_HEALTH, 1);
+    const healthRoll = context.random.nextInt(maxHealth, 1);
     change += healthRoll;
   }
 

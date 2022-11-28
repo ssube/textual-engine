@@ -52,7 +52,7 @@
     "c8": "7.12.0",
     "chai": "4.3.7",
     "chai-as-promised": "7.1.1",
-    "esbuild": "0.15.15",
+    "esbuild": "0.15.16",
     "esbuild-plugin-alias": "0.2.1",
     "esbuild-plugin-ignore": "1.1.1",
     "eslint": "8.28.0",

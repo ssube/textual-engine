@@ -64,7 +64,7 @@
     "eslint-plugin-no-null": "1.0.2",
     "eslint-plugin-sonarjs": "0.16.0",
     "ink-testing-library": "2.1.0",
-    "mocha": "10.1.0",
+    "mocha": "10.2.0",
     "react-test-renderer": "18.2.0",
     "sinon": "14.0.2",
     "sinon-chai": "3.7.0",

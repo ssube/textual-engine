@@ -404,10 +404,10 @@
   resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/scheduler/-/scheduler-0.16.2.tgz#1a62f89525723dde24ba1b01b092bf5df8ad4d39"
   integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
-"@types/seedrandom@3.0.2":
-  version "3.0.2"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/seedrandom/-/seedrandom-3.0.2.tgz#7f30db28221067a90b02e73ffd46b6685b18df1a"
-  integrity sha512-YPLqEOo0/X8JU3rdiq+RgUKtQhQtrppE766y7vMTu8dGML7TVtZNiiiaC/hhU9Zqw9UYopXxhuWWENclMVBwKQ==
+"@types/seedrandom@3.0.4":
+  version "3.0.4"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/@types/seedrandom/-/seedrandom-3.0.4.tgz#e4a8d0fca0168cacc7dba2af0e4a4ea645d3a190"
+  integrity sha512-/rWdxeiuZenlawrHU+XV6ZHMTKOqrC2hMfeDfLTIWJhDZP5aVqXRysduYHBbhD7CeJO6FJr/D2uBVXB7GT6v7w==
 
 "@types/semver@^7.3.12":
   version "7.3.12"

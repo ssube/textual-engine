@@ -1,4 +1,4 @@
-FROM apextoaster/node:16.14
+FROM apextoaster/node:16.19
 
 # copy build output
 COPY package.json yarn.lock /app/

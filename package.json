@@ -28,8 +28,8 @@
     "yargs-parser": "21.1.1"
   },
   "devDependencies": {
-    "@esbuild-plugins/node-globals-polyfill": "0.1.1",
-    "@esbuild-plugins/node-modules-polyfill": "0.1.4",
+    "@esbuild-plugins/node-globals-polyfill": "0.2.3",
+    "@esbuild-plugins/node-modules-polyfill": "0.2.2",
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@microsoft/api-documenter": "7.21.5",
     "@microsoft/api-extractor": "7.34.4",
@@ -52,7 +52,7 @@
     "c8": "7.12.0",
     "chai": "4.3.7",
     "chai-as-promised": "7.1.1",
-    "esbuild": "0.15.16",
+    "esbuild": "0.17.10",
     "esbuild-plugin-alias": "0.2.1",
     "esbuild-plugin-ignore": "1.1.1",
     "eslint": "8.31.0",

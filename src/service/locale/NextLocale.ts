@@ -72,7 +72,10 @@ export class NextLocaleService implements LocaleService {
   }
 
   public translate(key: string, scope?: LocaleContext): string {
-    return this.getInstance().t(key, scope);
+    if (doesExist(scope)) {
+      return this.getInstance().t(key, scope);
+    }
+    return this.getInstance().t(key);
   }
 
   public getInstance(): i18n {

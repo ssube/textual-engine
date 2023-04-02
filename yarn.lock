@@ -936,6 +936,11 @@ chalk@^4.0.0, chalk@^4.1.0:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
 
+chalk@^5.2.0:
+  version "5.2.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/chalk/-/chalk-5.2.0.tgz#249623b7d66869c673699fb66d65723e54dfcfb3"
+  integrity sha512-ree3Gqw/nazQAPuJJEy+avdl7QfZMcUvmHIKgEZkGL+xOBzRvup5Hxo6LHuMceSxOabuJLJm5Yp/92R9eMmMvA==
+
 check-error@^1.0.2:
   version "1.0.2"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/check-error/-/check-error-1.0.2.tgz#574d312edd88bb5dd8912e9286dd6c0aed4aac82"
@@ -2261,13 +2266,13 @@ ink-testing-library@2.1.0:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-testing-library/-/ink-testing-library-2.1.0.tgz#b5ffd1ef1049550ae4d2f008b8770e7ece6e0313"
   integrity sha512-7TNlOjJlJXB33vG7yVa+MMO7hCjaC1bCn+zdpSjknWoLbOWMaFdKc7LJvqVkZ0rZv2+akhjXPrcR/dbxissjUw==
 
-ink-text-input@4.0.3:
-  version "4.0.3"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-text-input/-/ink-text-input-4.0.3.tgz#6348fef942e74b06a465f98851706516a1e2be8d"
-  integrity sha512-eQD01ik9ltmNoHmkeQ2t8LszYkv2XwuPSUz3ie/85qer6Ll/j0QSlSaLNl6ENHZakBHdCBVZY04iOXcLLXA0PQ==
+ink-text-input@5.0.1:
+  version "5.0.1"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/ink-text-input/-/ink-text-input-5.0.1.tgz#983013d35d893326e885b752cc020f34526a4710"
+  integrity sha512-crnsYJalG4EhneOFnr/q+Kzw1RgmXI2KsBaLFE6mpiIKxAtJLUnvygOF2IUKO8z4nwkSkveGRBMd81RoYdRSag==
   dependencies:
-    chalk "^4.1.0"
-    type-fest "^0.15.1"
+    chalk "^5.2.0"
+    type-fest "^3.6.1"
 
 ink@3.2.0:
   version "3.2.0"
@@ -3896,11 +3901,6 @@ type-fest@^0.12.0:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/type-fest/-/type-fest-0.12.0.tgz#f57a27ab81c68d136a51fd71467eff94157fa1ee"
   integrity sha512-53RyidyjvkGpnWPMF9bQgFtWp+Sl8O2Rp13VavmJgfAP9WWG6q6TkrKU8iyJdnwnfgHI6k2hTlgqH4aSdjoTbg==
 
-type-fest@^0.15.1:
-  version "0.15.1"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/type-fest/-/type-fest-0.15.1.tgz#d2c4e73d3e4a53cf1a906396dd460a1c5178ca00"
-  integrity sha512-n+UXrN8i5ioo7kqT/nF8xsEzLaqFra7k32SEsSPwvXVGyAcRgV/FUQN/sgfptJTR1oRmmq7z4IXMFSM7im7C9A==
-
 type-fest@^0.18.0:
   version "0.18.1"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/type-fest/-/type-fest-0.18.1.tgz#db4bc151a4a2cf4eebf9add5db75508db6cc841f"
@@ -3925,6 +3925,11 @@ type-fest@^0.8.1:
   version "0.8.1"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
+
+type-fest@^3.6.1:
+  version "3.7.2"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/type-fest/-/type-fest-3.7.2.tgz#08f83ee3229b63077e95c9035034d32905969457"
+  integrity sha512-f9BHrLjRJ4MYkfOsnC/53PNDzZJcVo14MqLp2+hXE39p5bgwqohxR5hDZztwxlbxmIVuvC2EFAKrAkokq23PLA==
 
 typed-array-length@^1.0.4:
   version "1.0.4"

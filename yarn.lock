@@ -1058,12 +1058,14 @@ compromise-numbers@1.4.0:
   resolved "https://artifacts.apextoaster.com/repository/group-npm/compromise-numbers/-/compromise-numbers-1.4.0.tgz#22e545923243333bc1e8a2e82da2e922afb50400"
   integrity sha512-3ceRpwZIWduVSMYn54ET1ELdI7bvXQk42uDwxffxiJBxgKCwcCfVbiLuTG62cI+qTHchwLDh4vp9i3WARXROFQ==
 
-compromise@13.11.4:
-  version "13.11.4"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/compromise/-/compromise-13.11.4.tgz#3136e6d2c2cca822ba7cebd140c9f27f405b67f1"
-  integrity sha512-nBITcNdqIHSVDDluaG6guyFFCSNXN+Hu87fU8VlhkE5Z0PwTZN1nro2O7a8JcUH88nB5EOzrxd9zKfXLSNFqcg==
+compromise@14.10.0:
+  version "14.10.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/compromise/-/compromise-14.10.0.tgz#832570faed00aee84c917131ac45e20e8162f9a6"
+  integrity sha512-ViDNmO4N8xezb6NKYWUUcOckWE9tYEi5Yr2AYN2L5MaJCSMmwLRmgdajpN5u1snNOmg/RdJ37fONQ2+fd4UPfQ==
   dependencies:
-    efrt-unpack "2.2.0"
+    efrt "2.7.0"
+    grad-school "0.0.5"
+    suffix-thumb "5.0.2"
 
 concat-map@0.0.1:
   version "0.0.1"
@@ -1402,10 +1404,10 @@ dtrace-provider@~0.8:
   dependencies:
     nan "^2.14.0"
 
-efrt-unpack@2.2.0:
-  version "2.2.0"
-  resolved "https://artifacts.apextoaster.com/repository/group-npm/efrt-unpack/-/efrt-unpack-2.2.0.tgz#b05dbec0fb8cb346a27840e00c969df9c72fee52"
-  integrity sha512-9xUSSj7qcUxz+0r4X3+bwUNttEfGfK5AH+LVa1aTpqdAfrN5VhROYCfcF+up4hp5OL7IUKcZJJrzAGipQRDoiQ==
+efrt@2.7.0:
+  version "2.7.0"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/efrt/-/efrt-2.7.0.tgz#8b021e69f75cfeed3f81ee058aa0c78265793324"
+  integrity sha512-/RInbCy1d4P6Zdfa+TMVsf/ufZVotat5hCw3QXmWtjU+3pFEOvOQ7ibo3aIxyCJw2leIeAMjmPj+1SLJiCpdrQ==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -2109,6 +2111,11 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.2.10"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/graceful-fs/-/graceful-fs-4.2.10.tgz#147d3a006da4ca3ce14728c7aefc287c367d7a6c"
   integrity sha512-9ByhssR2fPVsNZj478qUUbKfmL0+t5BDVyjShtyZZLiK7ZDAArFFfopyOTj0M05wE2tJPisA4iTnnXl2YoPvOA==
+
+grad-school@0.0.5:
+  version "0.0.5"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/grad-school/-/grad-school-0.0.5.tgz#9e7b2084f3e137965c19b63ef0dfe49867194f43"
+  integrity sha512-rXunEHF9M9EkMydTBux7+IryYXEZinRk6g8OBOGDBzo/qWJjhTxy86i5q7lQYpCLHN8Sqv1XX3OIOc7ka2gtvQ==
 
 grapheme-splitter@^1.0.4:
   version "1.0.4"
@@ -3787,6 +3794,11 @@ strip-json-comments@3.1.1, strip-json-comments@^3.1.0, strip-json-comments@^3.1.
   version "3.1.1"
   resolved "https://artifacts.apextoaster.com/repository/group-npm/strip-json-comments/-/strip-json-comments-3.1.1.tgz#31f1281b3832630434831c310c01cccda8cbe006"
   integrity sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==
+
+suffix-thumb@5.0.2:
+  version "5.0.2"
+  resolved "https://artifacts.apextoaster.com/repository/group-npm/suffix-thumb/-/suffix-thumb-5.0.2.tgz#b38940faddb3ae8b5fd281c7ec5830c25a6b2c9c"
+  integrity sha512-I5PWXAFKx3FYnI9a+dQMWNqTxoRt6vdBdb0O+BJ1sxXCWtSoQCusc13E58f+9p4MYx/qCnEMkD5jac6K2j3dgA==
 
 supports-color@8.1.1:
   version "8.1.1"

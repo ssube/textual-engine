@@ -33,7 +33,7 @@
     "@istanbuljs/nyc-config-typescript": "1.0.2",
     "@microsoft/api-documenter": "7.21.7",
     "@microsoft/api-extractor": "7.34.4",
-    "@types/bunyan": "1.8.8",
+    "@types/bunyan": "1.8.11",
     "@types/chai": "4.3.5",
     "@types/chai-as-promised": "7.1.5",
     "@types/js-yaml": "4.0.5",
